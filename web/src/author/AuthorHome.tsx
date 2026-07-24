@@ -157,34 +157,11 @@ export function AuthorHome() {
 
   return (
     <AuthorLayoutProvider headerRef={headerRef} siderRef={siderRef} contentRef={contentRef}>
-    <Layout style={{ minHeight: "100vh", background: token.colorBgLayout }}>
-      <Header
-        ref={headerRef}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 20px",
-          background: token.colorBgContainer,
-          borderBottom: `1px solid ${token.colorBorderSecondary}`,
-          height: 56,
-          lineHeight: "56px",
-        }}
-      >
+    <Layout className="author-shell" style={{ minHeight: "100vh", background: token.colorBgLayout }}>
+      <Header ref={headerRef} className="author-topbar">
         <Space size="middle">
           <BrandLogo to="/" name="青山在" />
-          <Typography.Text
-            style={{
-              background: `${token.colorPrimary}18`,
-              color: token.colorPrimary,
-              borderRadius: 999,
-              padding: "2px 10px",
-              fontSize: 12,
-              fontWeight: 500,
-            }}
-          >
-            教研台
-          </Typography.Text>
+          <span className="author-topbar-badge">教研台</span>
         </Space>
         <Space size="middle">
           {campOptions.length > 1 ? (
@@ -230,8 +207,8 @@ export function AuthorHome() {
         <Sider
           ref={siderRef}
           breakpoint="lg"
-          collapsedWidth={64}
-          width={232}
+          collapsedWidth={72}
+          width={236}
           collapsible
           collapsed={collapsed}
           onCollapse={(nextCollapsed) => {
@@ -240,24 +217,28 @@ export function AuthorHome() {
               setOpenKeys((prev) => (prev.length ? prev : defaultOpen));
             }
           }}
-          style={{ background: token.colorBgContainer, borderRight: `1px solid ${token.colorBorderSecondary}` }}
+          className="author-sider"
+          style={{ background: "transparent", borderRight: "none" }}
         >
-          <Menu
-            mode="inline"
-            selectedKeys={[selected]}
-            openKeys={collapsed ? [] : openKeys.length ? openKeys : defaultOpen}
-            onOpenChange={(keys) => setOpenKeys(keys as string[])}
-            items={MENU_ITEMS}
-            style={{ height: "100%", borderInlineEnd: 0, paddingTop: 8 }}
-            onClick={({ key }) => {
-              if (String(key).startsWith("/")) nav(String(key));
-            }}
-            className="author-side-menu"
-            getPopupContainer={() => siderRef.current || document.body}
-          />
+          <div className="author-sider-inner">
+            <Menu
+              mode="inline"
+              selectedKeys={[selected]}
+              openKeys={collapsed ? [] : openKeys.length ? openKeys : defaultOpen}
+              onOpenChange={(keys) => setOpenKeys(keys as string[])}
+              items={MENU_ITEMS}
+              style={{ height: "100%", borderInlineEnd: 0, paddingTop: 8, background: "transparent" }}
+              onClick={({ key }) => {
+                if (String(key).startsWith("/")) nav(String(key));
+              }}
+              className="author-side-menu"
+              getPopupContainer={() => siderRef.current || document.body}
+            />
+          </div>
         </Sider>
         <Content
           ref={contentRef}
+          className="author-content"
           style={{
             padding: typeof window !== "undefined" && window.innerWidth < 768 ? 16 : 24,
             maxWidth: 1280,
@@ -267,16 +248,6 @@ export function AuthorHome() {
           <Outlet />
         </Content>
       </Layout>
-      <style>{`
-        .author-side-menu .ant-menu-item-selected {
-          background: ${token.colorPrimary}14 !important;
-          color: ${token.colorText} !important;
-          border-inline-start: 3px solid ${token.colorPrimary};
-        }
-        .author-side-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
-          color: ${token.colorPrimary};
-        }
-      `}</style>
     </Layout>
     </AuthorLayoutProvider>
   );

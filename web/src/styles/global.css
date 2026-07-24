@@ -6239,3 +6239,251 @@ a.passport-recent-item__title:hover {
     align-items: flex-start;
   }
 }
+
+/* ================= 教研台（Author Console）视觉升级 ================= */
+/* 顶栏：毛玻璃 */
+.author-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  height: 58px;
+  line-height: 58px;
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.author-topbar-badge {
+  background: linear-gradient(150deg, var(--color-accent), var(--color-accent-strong));
+  color: #fff;
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-accent);
+}
+
+/* 深色侧栏 */
+.author-sider {
+  background: linear-gradient(180deg, #0f2e2a 0%, #123f39 60%, #0f2e2a 100%) !important;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+}
+.author-sider-inner {
+  height: 100%;
+  padding: 10px 10px 16px;
+  overflow-y: auto;
+}
+.author-sider .ant-layout-sider-trigger {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.author-sider .ant-layout-sider-trigger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* 侧栏菜单：深色 + teal active 光带 */
+.author-side-menu.ant-menu {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+}
+.author-side-menu .ant-menu-submenu-title,
+.author-side-menu .ant-menu-item {
+  color: rgba(255, 255, 255, 0.72) !important;
+  border-radius: 10px !important;
+  margin: 2px 4px !important;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.author-side-menu .ant-menu-submenu-title:hover,
+.author-side-menu .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+.author-side-menu .ant-menu-submenu-title .ant-menu-item-icon,
+.author-side-menu .ant-menu-item .ant-menu-item-icon {
+  color: rgba(255, 255, 255, 0.6);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.author-side-menu .ant-menu-submenu-title:hover .ant-menu-item-icon,
+.author-side-menu .ant-menu-item:hover .ant-menu-item-icon {
+  color: #99f6e4;
+}
+.author-side-menu .ant-menu-sub {
+  background: transparent !important;
+}
+.author-side-menu .ant-menu-sub .ant-menu-item {
+  padding-left: 44px !important;
+}
+/* 选中项：teal 光带 */
+.author-side-menu .ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(13, 148, 136, 0.28), rgba(13, 148, 136, 0.12)) !important;
+  color: #fff !important;
+  box-shadow: inset 3px 0 0 #2dd4bf, 0 2px 10px -2px rgba(13, 148, 136, 0.4);
+}
+.author-side-menu .ant-menu-item-selected .ant-menu-item-icon {
+  color: #99f6e4 !important;
+}
+.author-side-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #99f6e4 !important;
+}
+.author-side-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .ant-menu-item-icon {
+  color: #99f6e4 !important;
+}
+
+/* 内容区：入场级联 + 页面节奏 */
+.author-content > * {
+  animation: qsz-fade-up var(--dur-slow) var(--ease-out) both;
+}
+.author-content .ant-card,
+.author-content .ant-table-wrapper,
+.author-content .author-search-toolbar {
+  animation: qsz-fade-up var(--dur-slow) var(--ease-out) both;
+}
+.author-content .ant-card:nth-of-type(2) { animation-delay: 60ms; }
+.author-content .ant-card:nth-of-type(3) { animation-delay: 120ms; }
+
+/* 卡片提升 */
+.author-content .ant-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+.author-content .ant-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-accent-ring);
+}
+.author-content .ant-statistic-title {
+  color: var(--color-muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.author-content .ant-statistic-content {
+  color: var(--color-ink-strong);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 表格：行 hover + 选中 teal */
+.author-content .ant-table {
+  border-radius: var(--radius-md);
+}
+.author-content .ant-table-thead > tr > th {
+  background: var(--color-bg-tint) !important;
+  color: var(--color-ink-strong);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.author-content .ant-table-tbody > tr {
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.author-content .ant-table-tbody > tr:hover > td {
+  background: var(--color-accent-soft) !important;
+}
+.author-content .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* 按钮：主按钮 teal 渐变 */
+.author-content .ant-btn-primary {
+  background: linear-gradient(150deg, var(--color-accent), var(--color-accent-strong));
+  border-color: transparent;
+  box-shadow: var(--shadow-accent);
+  font-weight: 600;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.author-content .ant-btn-primary:hover {
+  background: linear-gradient(150deg, var(--color-accent-hover), var(--color-accent-strong));
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px -6px rgba(13, 148, 136, 0.5);
+}
+.author-content .ant-btn-primary:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* 标签页 ink bar teal */
+.author-content .ant-tabs-ink-bar {
+  background: var(--color-accent);
+}
+.author-content .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--color-accent-strong);
+}
+
+/* 搜索工具条 */
+.author-content .author-search-toolbar {
+  padding: 4px 0;
+}
+
+/* 弹窗圆角统一 */
+.author-content .ant-modal-content,
+.ant-modal-content {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* 概览 KPI 与快捷入口 */
+.author-kpi {
+  position: relative;
+  overflow: hidden;
+}
+.author-kpi__icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  font-size: 16px;
+}
+.author-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.author-shortcut .ant-card-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+.author-shortcut__icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(150deg, var(--color-accent-soft), var(--color-accent-muted));
+  color: var(--color-accent-strong);
+  font-size: 20px;
+  transition: transform var(--dur) var(--ease-spring);
+}
+.author-shortcut:hover .author-shortcut__icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+.author-shortcut__body {
+  flex: 1;
+  min-width: 0;
+}
+.author-shortcut__arrow {
+  color: var(--color-faint);
+  transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.author-shortcut:hover .author-shortcut__arrow {
+  transform: translateX(4px);
+  color: var(--color-accent-strong);
+}

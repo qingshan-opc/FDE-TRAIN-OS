@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="zju-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b4ea2"/>
+      <stop offset="100%" stop-color="#003f88"/>
+    </linearGradient>
+  </defs>
+  <circle cx="48" cy="48" r="44" fill="url(#zju-bg)"/>
+  <circle cx="48" cy="48" r="36" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.35"/>
+  <path fill="#ffffff" d="M48 18c-11 0-20 7-20 16 0 7 5 13 12 16l-7 24h30l-7-24c7-3 12-9 12-16 0-9-9-16-20-16zm0 7c6 0 11 4 11 9s-5 9-11 9-11-4-11-9 5-9 11-9z"/>
+  <text x="48" y="54" text-anchor="middle" fill="#ffffff" font-size="16" font-family="Georgia, serif" font-weight="700">ZJU</text>
+</svg>

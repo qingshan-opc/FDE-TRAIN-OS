@@ -1,0 +1,12 @@
+apiVersion: v2
+name: fde-platform
+description: FDE Learning OS — API, worker (anyCode sidecar), and web static frontends
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - fde
+  - learning
+  - agent
+maintainers:
+  - name: FDE Platform

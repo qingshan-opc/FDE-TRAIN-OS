@@ -1,0 +1,333 @@
+camp_version: v0.3
+day: 1
+title: FDE角色认知与「武器」分发
+week: 1
+project: 企业库存管理系统
+project_brief: |
+  向「老板」交付一张可预览的库存列表页：标题清晰，表格含 SKU / 名称 / 库存 / 警戒线，
+  至少 3 行示例数据。先做能用的躯体，再谈漂亮。
+  提交前请补一段简短反思（3-5 句）：今天你把「老板的一句话」翻译成了什么系统动作？
+  Prompt 是怎么写的、改过几次？如果 rubric 没过，卡在哪一步——这段反思与产物一起作为
+  企业任务的交付内容。
+review_checklist:
+- 产物 index.html 存在且可在预览里打开
+- rubric 三条以上自检全部通过（含「库存」「警戒」）
+- 能向导师用 1 分钟说清：页面解决什么业务问题、为什么先做列表页
+resources:
+- id: agent-lab-guide
+  title: Agent Lab 使用说明
+  kind: guide
+  summary: 浏览器内完成生成/保存/运行/评测，无需本机安装
+- id: cursor-optional
+  title: Cursor 可选增强（本机）
+  kind: guide
+  summary: 可选本地 IDE；主路径仍是学员台 Agent Lab
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:1
+  - topic:fde-role
+  estimated_minutes: 100
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: FDE 是谁：懂业务的技术落地者
+    minutes: 15
+    content: |
+      【一句话】
+      FDE（Forward Deployed Engineer）不是「只会敲代码的程序员」，也不是「只开会的顾问」。
+      你是驻场/贴身的技术落地者：听得懂老板要什么，拆得成系统能做什么，带着 AI 工具把东西做出来。
+
+      【企业数字化常见五阶段】
+      1. 纸质 / 口头：库存写在本子上、微信里问「还有货吗」。
+      2. 表单化：Excel / 共享表格，能算但难协作、易出错。
+      3. 信息化：上了进销存或 ERP，流程固化，改一次很贵。
+      4. 数字化：数据在线、可查询、可对接，业务规则进系统。
+      5. AI 驱动：用模型做检索、生成、推荐、异常预警——但必须踩在可靠数据与接口上。
+
+      【FDE 的核心价值】
+      - 落地交付：今天就能给老板点开看的页面 / 接口 / 报表。
+      - 翻译能力：把「库存太乱」翻译成「列表 + 警戒线 + 入库 API」。
+      - 指挥 AI：工具是枪，瞄准与验收标准在你手里。
+      背语法可以交给 AI；判断「做对没有」必须是你。
+
+      【今日对照】
+      老板说「我要能看库存」。FDE 不会先争论微服务，而是先交一张库存列表页。
+    practice: |
+      必填：用一句话写下你理解的 FDE 定义（建议格式：我是___，帮企业从___走到___，今天交付___）。
+      这句话稍后会用在项目反思里，先写下来。
+    media:
+    - kind: audio
+      title: 语音讲解 · FDE 是谁
+      object_key: documents/camp-v03/course-media/day01-c1-intro.mp3
+      duration_sec: 117
+      transcript: |
+        00:00 开场：FDE 不是只会敲代码的程序员，也不是只开会的顾问，是贴身落地的技术落地者。
+        00:25 五阶段：纸质口头 → 表单化 → 信息化 → 数字化 → AI 驱动，五阶段层层递进。
+        01:03 核心价值：落地交付、翻译能力、指挥 AI——判断做得对不对必须是你自己。
+        01:32 今日行动：老板要看库存，先交列表页；打开 Agent Lab 写下你的 FDE 定义并动手生成。
+    - kind: video
+      title: 讲解视频 · FDE 是谁
+      object_key: documents/camp-v03/course-media/day01-c1-explainer.mp4
+      poster_key: documents/camp-v03/course-media/day01-c1-poster.jpg
+      duration_sec: 117
+  - id: c2
+    title: 前后端数据库：全栈餐厅比喻
+    minutes: 20
+    content: |
+      【软件工程最小闭环】
+      需求 → 设计 → 开发 → 测试 → 部署 → 运维反馈。今天你要压缩走完一遍：从「老板一句话」
+      直接到「能打开的页面」。先做单体、先跑通，过早拆微服务是常见坑。
+
+      【餐厅模型】
+      - 前端 ≈ 服务员 + 菜单：客人（用户）看到什么、点什么、怎么反馈。
+      - 后端 ≈ 厨师 + 菜谱：规则、校验、权限、编排流程（入库是否允许负库存？）。
+      - 数据库 ≈ 仓库 + 台账：菜品（商品）真实还剩多少，必须可追溯。
+
+      【库存场景对照】
+      - 看列表页：客人看菜单（前端）——今天要交付的产物。
+      - 点「入库」：服务员把单子递给后厨（调用 API）——Day3 要做的事。
+      - 改库存数：仓库记账（写数据库）——Day2 要做的事。
+      三者缺一：只有菜单没有仓库 → 数字是假的；只有仓库没有菜单 → 业务用不起来。
+
+      【AI 加进来之后】
+      AI 可以帮你「写菜单 HTML」「写入库 API」「写建表 SQL」，但你要验收：
+      列对不对、警戒线有没有、SKU 会不会重复。不会分工，就无法指挥 AI，
+      只会得到一堆「看起来很炫但接不上」的碎片。
+    practice: |
+      必填：为「库存列表页」「入库 API」「商品表」各写一句映射（共三行），
+      说明它更像餐厅的哪一部分、为什么。例：库存列表页 → 前端（菜单），因为……
+  - id: c3
+    title: Prompt 准星：指挥 AI 的最小公式
+    minutes: 15
+    content: |
+      【Prompt 最小公式】
+      角色 + 背景 + 任务 + 约束。四要素越具体，AI 越能对齐你的验收标准。
+      例：你是前端工程师。背景：企业库存系统 Week1。任务：生成 index.html 库存列表。
+      约束：必须含 SKU/名称/库存/警戒线；至少 3 行；不要 Docker；中文标题。
+
+      【烂口令 vs 好口令】
+      - 烂：「帮我写个系统。」→ 范围无限，无法验收。
+      - 好：「生成库存列表页 index.html，列含警戒线，3 行示例，可本地打开。」→ 可对照 rubric。
+
+      【FDE 心法】
+      工具越强，验收标准越要写清楚。右侧 Rubric 就是今天的「准星」，Lab 里已经预填了一版
+      提示词模板——你可以直接用，也可以按下面的练习改写成更贴「老板话术」的版本。
+    practice: |
+      必填：写出你准备在 Agent Lab 使用的一版提示词（角色+背景+任务+约束）。
+      这段草稿会作为 Lab 节点的默认提示词，你可以直接用或稍作调整后生成 index.html。
+    media:
+    - kind: audio
+      title: 语音讲解 · Prompt 准星
+      object_key: documents/camp-v03/course-media/day01-c3-intro.mp3
+      duration_sec: 87
+      transcript: |
+        00:00 最小公式：角色+背景+任务+约束，四要素越具体 AI 越能对齐验收标准。
+        00:30 口令对比：烂口令范围无限没法验收，好口令能对照 Rubric 逐条检查。
+        00:52 准星比喻：工具越强，验收标准越要写清楚，Rubric 就是今天的准星。
+        01:09 今日行动：按角色/背景/任务/约束写出你的提示词草稿，用于生成 index.html。
+    - kind: video
+      title: 讲解视频 · Prompt 准星
+      object_key: documents/camp-v03/course-media/day01-c3-explainer.mp4
+      poster_key: documents/camp-v03/course-media/day01-c3-poster.jpg
+      duration_sec: 87
+  - id: c4
+    title: 工具与浏览器主路径：你会瞄准吗
+    minutes: 15
+    content: |
+      【今天会用到的武器】
+      - 学员台 Agent Lab（本日主路径）：浏览器内完成「生成 → 保存 → 运行 → 评测」，
+        全程在受控工作区里进行，不需要在本机安装任何东西。
+      - Cursor / Claude Code 等本地助手（可选增强）：适合你本机深入改代码，本课程不强制。
+      - 灵知知识库（后续 Days）：用于 RAG / 引用课件，教员上传资料后可检索。
+
+      【浏览器主路径怎么走】
+      1. 在 Lab 节点写好 / 确认提示词。
+      2. 点「生成」：任务进入队列并流式返回进度。
+      3. 生成完成后在左侧文件列表点开 index.html，右侧「运行」预览效果。
+      4. 觉得可以了，点「评测」，对照 Rubric 自动检查。
+      5. 全绿后点「完成」，再去企业任务节点提交。
+
+      【右下角的 AI 导师】
+      看不懂报错、卡在某一步，随时点右下角「问导师」，不必离开当前页面。
+    practice:
+      prompt: |
+        我知道 Agent Lab 是本日主路径，浏览器内就能完成生成/保存/运行/评测
+        我知道 Cursor 之类本地工具是可选增强，不是必须的
+        我知道右下角「问导师」可以随时用
+        我知道生成完成后要点「运行」预览，再点「评测」自检
+      input_type: checklist
+      required: true
+    media:
+    - kind: audio
+      title: 语音讲解 · 浏览器主路径
+      object_key: documents/camp-v03/course-media/day01-c4-intro.mp3
+      duration_sec: 93
+      transcript: |
+        00:00 三类武器：Agent Lab 是主路径，本地 IDE 是可选增强，灵知知识库留给后续几天。
+        00:34 主路径五步：写提示词 → 生成 → 运行预览 → 评测 → 完成提交。
+        01:07 求助入口：卡住了随时点右下角「问导师」，不用离开当前页面。
+        01:17 今日行动：工具是枪，标准在你手里，现在打开 Lab 节点走一遍流程。
+    - kind: video
+      title: 讲解视频 · 浏览器主路径
+      object_key: documents/camp-v03/course-media/day01-c4-explainer.mp4
+      poster_key: documents/camp-v03/course-media/day01-c4-poster.jpg
+      duration_sec: 93
+  - id: c5
+    title: 库存演示与测验准备
+    minutes: 15
+    content: |
+      回看 c1 的语音/视频演示位，确认你理解「库存列表页」长什么样、解决什么问题。
+      测验会考前后端/数据库职责划分与 FDE 核心价值，都来自前面几节的内容，
+      答不准就回去重听/重读对应小节，不需要死记硬背。
+    practice:
+      prompt: |
+        打开 c1 的音频/视频演示位复习一次；确认能一句话说出前端/后端/数据库分别对应
+        餐厅的哪个角色，再去做测验。
+      input_type: text
+      required: false
+  - id: c6
+    title: 今日交付规格：企业库存管理系统 Week1
+    minutes: 20
+    content: |
+      【老板原话（模拟）】
+      「我不管你们用什么框架，我要能打开一个页面，看到每个 SKU 还剩多少，
+      哪些已经低于警戒线。先给我能用的。」
+
+      【Week1 路线图（心里有数即可）】
+      Day1 列表页（今天）→ Day2 商品表 DDL → Day3 入库 API 说明页 →
+      Day4 前端联调页 → Day5 部署仿真 → Day6 Prompt 复盘。
+
+      【今天的最小可用产物】
+      文件：index.html
+      必须可见：标题「库存列表」；表头含 SKU、名称、库存、警戒线；≥3 行示例。
+      建议示例：
+      - A-100 办公用纸 库存 120 警戒 50
+      - B-200 硒鼓 库存 18 警戒 20（已低于警戒，便于后面讲预警）
+      - C-300 网线 库存 80 警戒 30
+
+      【完成定义】
+      不是「代码看起来高级」，而是：导师打开预览，10 秒内看懂这是库存列表，且 rubric 全绿。
+    practice: |
+      必填：用文字填写规格表（标题 / 四列表头 / 三行示例数据），格式参考：
+      标题：库存列表；表头：SKU、名称、库存、警戒线；
+      第1行：A-100、办公用纸、120、50；第2行：B-200、硒鼓、18、20；第3行：C-300、网线、80、30。
+      写完后去 Agent 节点生成真正的 index.html。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: |
+        你正在完成 FDE 训练营 Day 1 企业库存列表页任务。
+
+        企业背景：老板说「我要能打开一个页面，看到每个 SKU 还剩多少，哪些已经低于警戒线」。
+        任务：围绕经营目标、页面信息架构、示例数据与验收标准，帮助我形成初步判断。
+        要求：先向我提出 3 个澄清问题，不要直接给出完整 HTML。
+      checklist:
+        - 写清老板真正关心的经营结果（不是功能清单）
+        - 列出页面必须出现的字段（SKU / 名称 / 库存 / 警戒线）
+        - 准备至少 3 行示例数据（含一行低于警戒线）
+        - 说明 10 秒内导师能否看懂这是库存列表
+        - 识别一个可能的组织或流程阻力
+      template_resource_id: agent-lab-guide
+      suggested_questions:
+        - 我不知道表格里还必须有哪些列
+        - 示例数据怎样才算「能验收」
+        - 老板原话和页面标题应该怎么对应
+    media:
+    - kind: audio
+      title: 语音讲解 · 今日交付规格
+      object_key: documents/camp-v03/course-media/day01-c6-intro.mp3
+      duration_sec: 91
+      transcript: |
+        00:00 老板原话：不管用什么框架，先要能打开页面看到库存与警戒线。
+        00:15 路线图：列表页 → 商品表 DDL → 入库接口 → 前端联调 → 部署仿真 → Prompt 复盘。
+        00:37 最小产物：index.html，四列表头，至少三行示例，含一行低于警戒线。
+        01:12 完成定义：导师十秒看懂是库存列表、Rubric 全绿才算完成，现在去生成 index.html。
+    - kind: video
+      title: 讲解视频 · 今日交付规格
+      object_key: documents/camp-v03/course-media/day01-c6-explainer.mp4
+      poster_key: documents/camp-v03/course-media/day01-c6-poster.jpg
+      duration_sec: 91
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 前端在「餐厅比喻」里主要对应？
+    options:
+    - 界面与交互（服务员 / 菜单）
+    - 数据持久化（仓库台账）
+    - 容器编排与扩缩容
+    answer: 0
+    explain: 前端负责用户看见与操作的部分，像服务员和菜单。
+  - q: 数据库更像餐厅的哪一部分？
+    options:
+    - 服务员
+    - 仓库与台账
+    - 装修风格
+    answer: 1
+    explain: 数据库保存业务真实数据，类似仓库记账。
+  - q: FDE 相对「背语法选手」的核心差别是？
+    options:
+    - 模型参数调得更细
+    - 能把业务翻译成可验收的落地交付
+    - 只负责选云厂商
+    answer: 1
+    explain: FDE 强调贴业务的落地交付与验收，而不是堆术语。
+  - q: 指挥 AI 生成库存列表页时，哪条约束最关键？
+    options:
+    - 「随便做好看一点」
+    - 明确产物文件名、列字段与可验收标准（如含警戒线）
+    - 先要求上 Kubernetes
+    answer: 1
+    explain: 有文件名与 rubric 才能评测；空泛形容词无法验收。
+  - q: 今天的学员台主路径是？
+    options:
+    - 必须先在本机装好 Cursor 才能开始
+    - 浏览器内的 Agent Lab：生成/保存/运行/评测全部在线完成
+    - 必须先联系管理员开通服务器权限
+    answer: 1
+    explain: Agent Lab 是本日主路径，浏览器内即可完成全流程；本地工具是可选增强。
+nodes:
+- type: learn
+  title: FDE角色与全栈视野
+- type: quiz
+  title: 识别前后端职责
+- type: lab
+  title: Agent 生成库存列表页
+- type: project
+  title: 企业任务：Week1 启动
+- type: review
+  title: 产物自检
+lab:
+  runner: agent
+  workspace_mode: cumulative
+  primary_files:
+  - index.html
+  - styles.css
+  - app.js
+  - README.md
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  adapter_version: '1.0'
+  agent:
+    prompt_template: |
+      你是前端工程师。背景：企业库存管理系统 Week1 Day1。
+      任务：在工作区生成可预览的库存列表页 index.html。
+      要求：中文标题「库存列表」；表格列含 SKU、名称、库存、警戒线；至少 3 行示例数据；
+      其中一行库存低于警戒线以便后续讲解；不要使用 Docker/K8s；完成后列出文件路径。
+  rubric:
+  - check: file_exists
+    args:
+      path: index.html
+  - check: text_contains
+    args:
+      path: index.html
+      needle: 库存
+  - check: text_contains
+    args:
+      path: index.html
+      needle: 警戒
+  - check: text_contains
+    args:
+      path: index.html
+      needle: SKU

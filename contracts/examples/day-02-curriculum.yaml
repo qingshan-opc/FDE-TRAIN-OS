@@ -1,0 +1,108 @@
+camp_version: v0.3
+day: 2
+title: 数据库基础与 Vibe Coding 初体验
+project: 企业库存管理系统 · 数据层
+project_brief: 交付 products 表 DDL 与简要说明，支撑库存业务。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:2
+  - topic:database
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: Excel vs 数据库
+    minutes: 20
+    content: Excel 多人协作难、性能差；数据库用 SQL/DDL 支撑企业数据。
+    practice: 写一条企业用 Excel 踩过的坑。
+  - id: c2
+    title: 数据库全景选型
+    minutes: 20
+    content: 关系型(MySQL/PG)管业务；Redis/Mongo 管高性能/灵活；向量库(Milvus)管 AI 检索。
+    practice: 为库存主数据选一类库并说明理由。
+  - id: c3
+    title: 表、字段与主键
+    minutes: 20
+    content: 关系型核心：表、字段、主键。先设计「商品表」。
+    practice: 列出商品表至少 4 个字段。
+  - id: c4
+    title: AI 辅助设计库表
+    minutes: 20
+    content: 根据库存需求让 AI 出 DDL。指挥 AI：给场景与约束。
+    practice: 在脑中 rehears 一句 Prompt。
+  - id: c5
+    title: 初始化与查询
+    minutes: 20
+    content: INSERT + SELECT 跑通基本流程。
+    practice: 想一条查低库存的 SQL。
+  - id: c6
+    title: 复盘：数据如何撑系统
+    minutes: 20
+    content: 业务→数据库→后端→前端。为 Day3 API 铺路。
+    practice: 用一句话串起数据流。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: DDL 主要用于？
+    options:
+    - 定义表结构
+    - 渲染页面
+    - 编排 K8s
+    answer: 0
+    explain: DDL 定义库表结构。
+  - q: 向量库更适合？
+    options:
+    - 收银流水主存
+    - AI 知识检索
+    - 替换全部 SQL
+    answer: 1
+    explain: 向量库服务语义检索。
+  - q: 主键的作用？
+    options:
+    - 美化 UI
+    - 唯一标识一行
+    - 加速 CSS
+    answer: 1
+    explain: 主键唯一标识记录。
+nodes:
+- type: learn
+  title: 数据库心智
+- type: quiz
+  title: 库表速测
+- type: lab
+  title: Agent 生成 schema.sql
+- type: project
+  title: 企业任务：商品表 DDL
+- type: review
+  title: SQL 自检
+lab:
+  runner: agent
+  workspace_mode: cumulative
+  primary_files:
+  - schema.sql
+  inherited_files:
+  - index.html
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 schema.sql：含 CREATE TABLE products（id 主键, sku, name, qty,
+      warn_qty），并写 3 条 INSERT。另建 db-notes.html 简述为何用关系型库。不要 Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: schema.sql
+  - check: text_contains
+    args:
+      path: schema.sql
+      needle: products
+  - check: text_contains
+    args:
+      path: schema.sql
+      needle: CREATE

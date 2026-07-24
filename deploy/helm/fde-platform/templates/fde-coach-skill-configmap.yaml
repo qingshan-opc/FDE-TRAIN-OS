@@ -1,0 +1,11 @@
+{{- if and .Values.worker.anycode.enabled .Values.worker.anycode.skillsMount }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fde-platform.fullname" . }}-fde-coach-skill
+  labels:
+    {{- include "fde-platform.labels" . | nindent 4 }}
+data:
+  SKILL.md: |
+{{ .Files.Get "skills/fde-coach/SKILL.md" | indent 4 }}
+{{- end }}

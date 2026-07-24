@@ -1,0 +1,105 @@
+camp_version: v0.3
+day: 3
+title: 后端逻辑、API 与技术选型
+project: 企业库存管理系统 · API
+project_brief: 交付入库 API 说明页，含路径、方法与示例 JSON。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:3
+  - topic:api
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: API 与 HTTP/JSON
+    minutes: 20
+    content: API 是前后端翻译官；REST：GET 查、POST 增。
+    practice: 写出入库接口的方法与路径。
+  - id: c2
+    title: 业务逻辑与 ORM
+    minutes: 20
+    content: 流向：API→业务→ORM/驱动→库。ORM 少写 SQL。
+    practice: 解释驱动 vs ORM 各一句。
+  - id: c3
+    title: 语言选型
+    minutes: 20
+    content: Python 快落地/AI；Java 企业大系统；Go 高并发；Node 前后端统一。
+    practice: 为库存 MVP 选一门并说明。
+  - id: c4
+    title: AI 生成入库接口
+    minutes: 20
+    content: 基于选型生成 inbound API 契约/说明。
+    practice: 列出 JSON 字段 sku/qty/warehouse。
+  - id: c5
+    title: 接口测试思维
+    minutes: 20
+    content: 用工具验证写入；看状态码与响应体。
+    practice: 404 与 400 各代表什么。
+  - id: c6
+    title: 复盘与避坑
+    minutes: 20
+    content: 常见报错：连库失败、字段不对、方法错。遇错即问 AI。
+    practice: 记一条避坑。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 创建资源通常用？
+    options:
+    - GET
+    - POST
+    - OPTIONS
+    answer: 1
+    explain: POST 用于创建。
+  - q: JSON 常用于？
+    options:
+    - 前后端交换
+    - 替换数据库
+    - 替代 HTTPS
+    answer: 0
+    explain: JSON 是数据交换格式。
+  - q: FDE 选型优先看？
+    options:
+    - 只追新语言
+    - 场景与交付
+    - 背完语法
+    answer: 1
+    explain: 按场景选型。
+nodes:
+- type: learn
+  title: API 基础
+- type: quiz
+  title: HTTP 速测
+- type: lab
+  title: Agent 生成入库 API 页
+- type: project
+  title: 企业任务：入库契约
+- type: review
+  title: 契约自检
+- type: unlock
+  title: 解锁 Day4
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 api.html：说明库存「入库」API。含标题「入库 API」、路径 /api/inventory/inbound、方法
+      POST、示例 JSON 字段 sku、qty、warehouse。不要 Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: api.html
+  - check: text_contains
+    args:
+      path: api.html
+      needle: inbound
+  - check: text_contains
+    args:
+      path: api.html
+      needle: POST

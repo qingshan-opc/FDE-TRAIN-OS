@@ -1,0 +1,25 @@
+{{- /*
+NOTES after helm install/upgrade.
+*/ -}}
+FDE Learning OS deployed as release {{ .Release.Name }}.
+
+Components:
+  - API:    {{ include "fde-platform.fullname" . }}-api:{{ .Values.api.port }}
+  - Web:    {{ include "fde-platform.fullname" . }}-web:{{ .Values.web.port }}
+  - Worker: {{ include "fde-platform.fullname" . }}-worker (+ anyCode sidecar emptyDir)
+
+Probes:
+  - livez  → process only
+  - readyz → PostgreSQL + MinIO (LingZhi/anyCode do not gate readiness)
+
+Secrets: mount from {{ include "fde-platform.secretName" . }}
+  (JWT_SECRET, DATABASE_URL, S3_ACCESS_KEY, S3_SECRET_KEY)
+
+Prod notes:
+  - Postgres: CloudNativePG 3-replica + WAL/PITR → bucket fde-backups
+  - Object store: MinIO Operator Tenant
+  - E2E: values-e2e.yaml uses single-replica PG/MinIO
+
+Verify:
+  kubectl rollout status deploy/{{ include "fde-platform.fullname" . }}-api
+  curl -sf https://<host>/readyz

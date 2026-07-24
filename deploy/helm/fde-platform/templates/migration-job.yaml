@@ -1,0 +1,58 @@
+{{- if .Values.migration.enabled }}
+# Prefer CI / Argo gate: migration Job succeeds before API traffic.
+# Uses pre-install/pre-upgrade hooks; only needs DATABASE_URL from existingSecret
+# (ConfigMap may not exist yet during pre-install).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "fde-platform.fullname" . }}-migrate-{{ .Release.Revision }}
+  labels:
+    {{- include "fde-platform.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migrate
+  annotations:
+    helm.sh/hook: pre-upgrade,pre-install
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.migration.backoffLimit }}
+  ttlSecondsAfterFinished: {{ .Values.migration.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        {{- include "fde-platform.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migrate
+    spec:
+      # Use default SA: chart ServiceAccount is not a hook resource and may
+      # not exist yet during pre-install.
+      restartPolicy: Never
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      containers:
+        - name: migrate
+          image: "{{ .Values.image.migrate.repository }}:{{ .Values.image.migrate.tag }}"
+          imagePullPolicy: {{ .Values.image.migrate.pullPolicy }}
+          command: ["python", "-m", "services.migrations_runner"]
+          env:
+            - name: FDE_ENV
+              value: {{ .Values.config.FDE_ENV | quote }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fde-platform.secretName" . }}
+                  key: DATABASE_URL
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: tmp
+          emptyDir: {}
+{{- end }}

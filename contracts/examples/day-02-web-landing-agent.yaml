@@ -1,0 +1,50 @@
+# Day 02 — 线索落地页（Agent）
+camp_version: v0.3
+day: 2
+title: 页面交付与线索收集
+project: 销售线索页
+
+learn:
+  lingzhi_tags: ["camp:v0.3", "day:2", "topic:web-landing"]
+  steps:
+    - HTML 是骨架，CSS 是皮肤，JS 是动作。
+    - 落地页要有清晰 CTA 与线索表单。
+    - 交付需可预览，而不仅是「代码能跑」。
+
+quiz:
+  pass_rate: 0.5
+  questions:
+    - q: CTA 通常指？
+      options: ["调用栈", "行动号召按钮", "缓存穿透"]
+      answer: 1
+    - q: 线索表单至少需要？
+      options: ["提交入口", "K8s Service", "GPU"]
+      answer: 0
+
+nodes:
+  - type: learn
+    title: 语义化页面与转化漏斗
+  - type: quiz
+    title: 移动端验收清单
+  - type: lab
+    title: Agent 生成线索收集落地页
+  - type: project
+    title: 企业任务：销售部可访问预览页
+  - type: review
+    title: 自动检查 + AI 初审
+  - type: unlock
+    title: 解锁次日
+
+lab:
+  runner: agent
+  agent:
+    prompt_template: >
+      在工作区创建线索落地页 index.html：含标题、简介、form#lead（姓名/手机）、
+      button[type=submit]，以及 class 或文案含 cta 的行动号召。不要 Docker。
+  rubric:
+    - check: file_exists
+      args: { path: index.html }
+    - check: text_contains
+      args: { path: index.html, needle: "lead" }
+    - check: text_contains
+      args: { path: index.html, needle: "cta" }

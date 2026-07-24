@@ -1,0 +1,98 @@
+camp_version: v0.3
+day: 4
+title: 前端界面与前后端联调
+project: 企业库存管理系统 · 列表联调
+project_brief: 交付带 mock 的库存列表页，含刷新按钮与功能清单注释。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:4
+  - topic:fullstack
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 前端三件套
+    minutes: 20
+    content: HTML 骨架、CSS 皮肤、JS 动作。
+    practice: 各举一例。
+  - id: c2
+    title: 现代前端全景
+    minutes: 20
+    content: 基石层 / 框架层 / 通信层 / 工程化层。看懂 src、package.json。
+    practice: 解释 npm install 为何存在。
+  - id: c3
+    title: AI 生成列表页
+    minutes: 20
+    content: 快速产出可视化库存页。
+    practice: 页上至少要有表格。
+  - id: c4
+    title: 前后端联调
+    minutes: 20
+    content: 对齐路径与字段；可先用 mock。
+    practice: 列出两个常见联调坑。
+  - id: c5
+    title: AI 辅助 Debug
+    minutes: 20
+    content: 把 404/跨域报错丢给 AI。
+    practice: 写一句你的 Debug Prompt。
+  - id: c6
+    title: 交付标准
+    minutes: 20
+    content: 截图+功能清单；懂入口与配置。
+    practice: 列 3 条功能清单。
+quiz:
+  pass_rate: 0.5
+  questions:
+  - q: 联调首先对齐？
+    options:
+    - 字体
+    - 接口字段与路径
+    - K8s 版本
+    answer: 1
+    explain: 先对齐契约。
+  - q: 404 通常表示？
+    options:
+    - 密码错误
+    - 路径不存在
+    - 磁盘满
+    answer: 1
+    explain: 资源路径不对。
+nodes:
+- type: learn
+  title: 前端心智
+- type: quiz
+  title: 联调速测
+- type: lab
+  title: Agent 生成联调页
+- type: project
+  title: 企业任务：列表交付
+- type: review
+  title: 截图清单
+- type: unlock
+  title: 解锁 Day5
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 inventory.html：库存列表，表格含 SKU/名称/库存，JS mock 至少 3 行，按钮「刷新数据」。可另含线索表单
+      id=lead 作加分。不要 Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: inventory.html
+  - check: text_contains
+    args:
+      path: inventory.html
+      needle: SKU
+  - check: text_contains
+    args:
+      path: inventory.html
+      needle: 刷新

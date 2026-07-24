@@ -1,0 +1,19 @@
+{
+  "name": "fde-platform-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Playwright browser E2E for FDE Learning OS",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:headed": "playwright test --headed --project=chromium",
+    "test:a11y": "playwright test a11y.spec.ts --project=chromium",
+    "screenshots": "node scripts/save-screenshots.mjs",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.1",
+    "axe-core": "^4.10.2"
+  }
+}

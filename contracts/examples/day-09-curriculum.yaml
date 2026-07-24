@@ -1,0 +1,105 @@
+camp_version: v0.3
+day: 9
+title: 实战：企业智能客服（RAG）
+project: 售后知识库客服
+project_brief: 交付 cs-bot.html：FAQ + 简易对话区，文案含 RAG 与拒答策略。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:9
+  - topic:rag
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 需求拆解
+    minutes: 20
+    content: 人工慢、标准不一→RAG 知识库客服。
+    practice: 写老板原话背后的痛点。
+  - id: c2
+    title: 为何 RAG
+    minutes: 20
+    content: 对比微调：成本低、更新快。
+    practice: 一句话说明选型。
+  - id: c3
+    title: 知识库搭建
+    minutes: 20
+    content: 切片、向量化、入库（平台内用 FAQ 页模拟）。
+    practice: 列 3 条售后 FAQ。
+  - id: c4
+    title: Prompt 调优
+    minutes: 20
+    content: 人设、语气、拒答策略防胡说。
+    practice: 写一条拒答规则。
+  - id: c5
+    title: 接入前端
+    minutes: 20
+    content: 多轮对话壳联调。
+    practice: 设计欢迎语。
+  - id: c6
+    title: 维护成本
+    minutes: 20
+    content: 增量更新机制。
+    practice: 提出一种更新流程。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: RAG 中 R 指？
+    options:
+    - 检索
+    - 渲染
+    - 重启
+    answer: 0
+    explain: Retrieval。
+  - q: 企业知识首选 RAG 因？
+    options:
+    - 一定更准
+    - 更新快成本相对低
+    - 不需要文档
+    answer: 1
+    explain: 性价比与可更新。
+  - q: 无命中知识时应？
+    options:
+    - 编造
+    - 明确未知并转人工
+    - 直接 500
+    answer: 1
+    explain: 拒答与转人工。
+nodes:
+- type: learn
+  title: 客服需求
+- type: quiz
+  title: RAG 速测
+- type: lab
+  title: Agent 生成客服页
+- type: project
+  title: 企业任务：FAQ 客服壳
+- type: review
+  title: 联调自检
+- type: unlock
+  title: 解锁 Day10
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 cs-bot.html：标题「智能客服」，含 id=faq 至少 3 问答，对话输入框，文案出现 RAG 与「转人工」。不要
+      Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: cs-bot.html
+  - check: text_contains
+    args:
+      path: cs-bot.html
+      needle: RAG
+  - check: text_contains
+    args:
+      path: cs-bot.html
+      needle: faq

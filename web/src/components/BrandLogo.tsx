@@ -1,0 +1,40 @@
+import { Link } from "react-router-dom";
+
+const MARK = "/brand/qingshanzai-mark.svg";
+const MARK_LIGHT = "/brand/qingshanzai-mark-light.svg";
+
+export function BrandLogo({
+  name = "青山在",
+  to = "/",
+  variant = "default",
+  showText = true,
+  className = "",
+}: {
+  name?: string;
+  to?: string;
+  variant?: "default" | "light";
+  showText?: boolean;
+  className?: string;
+}) {
+  const markSrc = variant === "light" ? MARK_LIGHT : MARK;
+  const content = (
+    <>
+      <img className="brand-logo__mark" src={markSrc} alt="" aria-hidden="true" />
+      {showText ? <span className="brand-logo__name">{name}</span> : null}
+    </>
+  );
+
+  const cls = ["brand-logo", variant === "light" ? "brand-logo--light" : "", className]
+    .filter(Boolean)
+    .join(" ");
+
+  if (to) {
+    return (
+      <Link to={to} className={cls} aria-label={name}>
+        {content}
+      </Link>
+    );
+  }
+
+  return <span className={cls}>{content}</span>;
+}

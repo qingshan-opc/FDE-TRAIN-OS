@@ -1,0 +1,98 @@
+camp_version: v0.3
+day: 10
+title: 实战：企业经营驾驶舱
+project: AI 数据分析驾驶舱
+project_brief: 交付 cockpit.html：四张指标卡 + 问数输入框。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:10
+  - topic:cockpit
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 需求分析与设计
+    minutes: 20
+    content: 销售/订单/库存/利润模块。
+    practice: 草绘四卡片。
+  - id: c2
+    title: 数据准备
+    minutes: 20
+    content: 销售/订单/库存表与初始化。
+    practice: 各表写两个字段。
+  - id: c3
+    title: 后端统计接口
+    minutes: 20
+    content: 销量、库存、订单分析。
+    practice: 命名一个 API。
+  - id: c4
+    title: 前端可视化
+    minutes: 20
+    content: 卡片、趋势、排行。
+    practice: 选一个图表类型。
+  - id: c5
+    title: 自然语言问数
+    minutes: 20
+    content: 「哪个产品销量最高？」
+    practice: 写两个问句。
+  - id: c6
+    title: 传统 vs AI 驾驶舱
+    minutes: 20
+    content: 固定指标 vs 可问可析。
+    practice: 写一句对比。
+quiz:
+  pass_rate: 0.5
+  questions:
+  - q: AI 驾驶舱相对传统报表多了？
+    options:
+    - 仅更大字体
+    - 自然语言查询与分析
+    - 取消数据库
+    answer: 1
+    explain: 可问数。
+  - q: 驾驶舱数据应来自？
+    options:
+    - 随便编
+    - 业务库表/接口
+    - 桌面壁纸
+    answer: 1
+    explain: 真实业务数据。
+nodes:
+- type: learn
+  title: 驾驶舱设计
+- type: quiz
+  title: 数据速测
+- type: lab
+  title: Agent 生成驾驶舱页
+- type: project
+  title: 企业任务：可问数 Demo
+- type: review
+  title: 对比复盘
+- type: unlock
+  title: 解锁 Day11
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 cockpit.html：标题「经营驾驶舱」，含销售/订单/库存/利润四张卡片数字，以及输入框占位「问问 AI」。不要
+      Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: cockpit.html
+  - check: text_contains
+    args:
+      path: cockpit.html
+      needle: 驾驶舱
+  - check: text_contains
+    args:
+      path: cockpit.html
+      needle: 利润

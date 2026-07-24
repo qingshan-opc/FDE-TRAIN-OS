@@ -1,0 +1,46 @@
+# Day 07 — 架构权衡（arch_design 仿真）
+camp_version: v0.3
+day: 7
+title: 架构选型沙盘
+project: 经营驾驶舱技术方案
+
+learn:
+  lingzhi_tags: ["camp:v0.3", "day:7", "topic:arch"]
+  estimated_minutes: 16
+
+nodes:
+  - type: learn
+    title: Workflow vs Agent Loop 与非功能约束
+  - type: quiz
+    title: 高风险动作识别
+  - type: lab
+    title: 在约束画布上完成选型
+  - type: project
+    title: 企业任务：预算减半时的重做方案
+  - type: review
+  - type: unlock
+
+lab:
+  sim_kind: arch_design
+  adapter_version: "1.0"
+  seed:
+    canvas_fixture: cockpit-v1
+    constraints:
+      max_monthly_cost_usd: 800
+      data_residency: cn
+      p95_latency_ms: 400
+    diversify_by: learner_id
+  ui:
+    layout: constraint_canvas
+  rubric:
+    - check: constraints_satisfied
+      args: { all: true }
+    - check: decision_note_min_chars
+      args: { min: 120 }
+    - check: required_components
+      args: { includes: ["api", "warehouse", "auth"] }
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    allow_state_summary: true
+    max_help_level: 2

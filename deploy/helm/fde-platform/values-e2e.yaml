@@ -1,0 +1,69 @@
+# k3d / CI e2e profile — single-replica dependencies (not CNPG / MinIO Operator).
+# Spin up postgres+minio via compose or lightweight charts; keep app replicas low.
+
+api:
+  replicaCount: 1
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+worker:
+  replicaCount: 1
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+  anycode:
+    enabled: true
+
+web:
+  replicaCount: 1
+  pdb:
+    enabled: false
+
+config:
+  FDE_ENV: e2e
+  FDE_SEED_DEMO_USERS: "1"
+  AGENT_MODE: stub
+  # Point at single-replica MinIO in the e2e namespace
+  S3_ENDPOINT: http://minio:9000
+  LINGZHI_BASE_URL: http://lingzhi-mock:8230
+
+ingress:
+  enabled: true
+  hosts:
+    - host: fde.e2e.local
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /healthz
+          pathType: Exact
+          service: api
+        - path: /livez
+          pathType: Exact
+          service: api
+        - path: /readyz
+          pathType: Exact
+          service: api
+        - path: /app
+          pathType: Prefix
+          service: web
+        - path: /author
+          pathType: Prefix
+          service: web
+        - path: /
+          pathType: Prefix
+          service: web
+  tls: []
+
+networkPolicy:
+  enabled: false

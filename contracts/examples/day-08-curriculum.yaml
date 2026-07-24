@@ -1,0 +1,105 @@
+camp_version: v0.3
+day: 8
+title: AI 核心理论与武器库
+project: 理论锚点 · Agent 公式
+project_brief: 交付 agent-layers.html，写清公式与三层职责。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:8
+  - topic:llm
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: LLM：预测下一个字
+    minutes: 20
+    content: 训练 vs 推理；Token 计费；上下文与幻觉。
+    practice: 解释幻觉一例。
+  - id: c2
+    title: Agent 工程三层
+    minutes: 20
+    content: 回顾 Model/Scaffolding/Harness。
+    practice: 画三层图关键字。
+  - id: c3
+    title: 落地路径
+    minutes: 20
+    content: SQL/RAG/API 都是 Agent 工具。
+    practice: 纠正「RAG vs Agent」对立。
+  - id: c4
+    title: Prompt 进阶
+    minutes: 20
+    content: 从能用到好用；对比代码质量。
+    practice: 写一条编程 Prompt。
+  - id: c5
+    title: API 与工具链
+    minutes: 20
+    content: Key、Agent 模式、省钱选型。
+    practice: 列出你将用的模型。
+  - id: c6
+    title: 实战预告
+    minutes: 20
+    content: Day9 客服、Day10 驾驶舱、Day11 自动化。
+    practice: 选一个先预习。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 幻觉指？
+    options:
+    - 网速慢
+    - 模型瞎编
+    - 磁盘满
+    answer: 1
+    explain: 无依据编造。
+  - q: Token 主要影响？
+    options:
+    - 显示器分辨率
+    - 费用与上下文
+    - Git 分支名
+    answer: 1
+    explain: 计费与窗口。
+  - q: 技术选型本质是？
+    options:
+    - 用不用 Agent
+    - 给 Agent 配什么工具
+    - 换 logo
+    answer: 1
+    explain: 配工具。
+nodes:
+- type: learn
+  title: LLM 与 Agent
+- type: quiz
+  title: 理论速测
+- type: lab
+  title: Agent 生成分层说明页
+- type: project
+  title: 企业任务：对内培训页
+- type: review
+  title: 内容自检
+- type: unlock
+  title: 解锁 Day9
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 agent-layers.html：标题「Agent Runtime」，写清 Agent = Model + Scaffolding
+      + Harness，并解释 Tool Calling。不要 Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: agent-layers.html
+  - check: text_contains
+    args:
+      path: agent-layers.html
+      needle: Harness
+  - check: text_contains
+    args:
+      path: agent-layers.html
+      needle: Scaffolding

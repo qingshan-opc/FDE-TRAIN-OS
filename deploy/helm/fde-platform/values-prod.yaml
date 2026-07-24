@@ -1,0 +1,64 @@
+# Production profile.
+# PostgreSQL: CloudNativePG Cluster with 3 replicas + WAL/PITR into bucket fde-backups.
+# MinIO: MinIO Operator Tenant (multi-PVC, pod anti-affinity / topology spread).
+# This chart does NOT install CNPG/MinIO Operator — only consumes their Services.
+
+api:
+  replicaCount: 3
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 12
+  pdb:
+    enabled: true
+    minAvailable: 2
+
+worker:
+  replicaCount: 2
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+  pdb:
+    enabled: true
+    minAvailable: 1
+  anycode:
+    enabled: true
+
+web:
+  replicaCount: 3
+  pdb:
+    enabled: true
+    minAvailable: 2
+
+config:
+  FDE_ENV: prod
+  FDE_SEED_DEMO_USERS: "0"
+  FDE_ALLOW_DEV_HEADERS: "0"
+  # Never let a rolling app Pod silently run migrations on boot in prod —
+  # schema changes go through migration-job.yaml only. Also enforced in
+  # code (services/shared/__init__.py init_schema): FDE_ENV=prod + this "0"
+  # short-circuits to a no-op with a warning even if someone flips it.
+  FDE_ALLOW_RUNTIME_MIGRATE: "0"
+  AGENT_MODE: live
+  ANYCODE_COACH_SKILL_ID: fde-coach
+  # Replace with CNPG RW service DNS, e.g. fde-pg-rw.cnpg.svc:5432 (via Secret DATABASE_URL)
+  S3_ENDPOINT: http://minio.minio.svc:9000
+  # Requires a ClamAV daemon deployed alongside (not part of this chart yet) —
+  # confirm it's actually running before/while flipping this on, or every
+  # learner upload will fail closed (services/learner/app.py `_scan_clamav`).
+  CLAMAV_ENABLED: "1"
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  tls:
+    - secretName: fde-platform-tls
+      hosts:
+        - fde.example.com
+
+networkPolicy:
+  enabled: true

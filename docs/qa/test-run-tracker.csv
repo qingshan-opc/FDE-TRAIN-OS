@@ -1,0 +1,26 @@
+case_id,module,role,preconditions,steps,expected,automated_spec,status,screenshot,bugs,owner,date
+A1,三件套,learner,camp-v03 Day1 learn,登录→Day1→检查顶栏,第1周·Day1+进度+分钟,learner-coach.spec.ts,PASS,e2e/artifacts/learner-coach.png,,qa,2026-07-23
+A2,三件套,learner,camp-v03 Day1,停留30s+heartbeat+刷新,分钟递增持久,learner-learning-stats.spec.ts,PASS,e2e/artifacts/learner-learning-stats.png,,qa,2026-07-23
+A3,三件套,learner,Day1 learn,点击AI任务导师FAB,抽屉无重复入口,learner-coach.spec.ts,PASS,e2e/artifacts/learner-coach.png,,qa,2026-07-23
+A4,三件套,learner,c6 local_prep,打开本地实操→复制,toast已复制,learner-local-prep.spec.ts,PASS,,,qa,2026-07-23
+A5,三件套,learner,c6+c6 local_prep,打开导师FAB看chips,含suggested_questions,learner-coach.spec.ts,PASS,e2e/artifacts/learner-coach.png,,qa,2026-07-23
+B1,Day主路径,learner,已登录,课程选择→进入,/app大纲可见,learner-task-home.spec.ts,PASS,,,qa,2026-07-23
+B2,Day主路径,learner,已登录,?node=深链,直达节点,learner-task-home.spec.ts,PASS,,,qa,2026-07-23
+B3,Day主路径,learner,Day1,练习提交+完成learn,gate通过,learner-day1-full-chain.spec.ts,PASS,e2e/artifacts/learner-day1-full-chain.png,,qa,2026-07-23
+B4,Day主路径,learner,Day1 quiz,答题提交,测验通过,learner-day1-full-chain.spec.ts,PASS,,,qa,2026-07-23
+B5,Day主路径,learner,Day1 learn,检查audio/video,媒体可见,learner-media.spec.ts,PASS,e2e/artifacts/learner-media-day1.png,,qa,2026-07-23
+B6,Day主路径,learner,Day1 lab,stub生成+评测+完成,lab passed,learner-agent-lab.spec.ts,PASS,e2e/artifacts/learner-agent-lab-day1.png,,qa,2026-07-23
+B7,Day主路径,learner,Day5 sim,nginx终端评测,evaluate通过,learner-sim-lab.spec.ts,PASS,e2e/artifacts/learner-sim-day5.png,,qa,2026-07-23
+B8,Day主路径,learner,Day13 k8s,kubectl rollout,lab完成,learner-k8s-lab.spec.ts,PASS,e2e/artifacts/learner-k8s-day13.png,,qa,2026-07-23
+B9,Day主路径,learner,Day1完成,Day2 workspace,继承index.html,learner-day1-full-chain.spec.ts,PASS,,,qa,2026-07-23
+C-闭环-01,Lab Rubric,learner,Day1 lab,故意fail→修改→pass→完成,project解锁,learner-lab-rubric-loop.spec.ts,PASS,e2e/artifacts/learner-lab-rubric-loop.png,,qa,2026-07-23
+D-闭环-01,project_review,learner+author,Day1 lab passed,学员提交→author打回→重交→通过,学员见feedback+重交,grading-closed-loop.spec.ts,PASS,e2e/artifacts/grading-closed-loop.png,,qa,2026-07-23
+E-闭环-01,coach_handoff,learner+author,Day1 learn,提问→handoff→author resolved,学员见导师反馈,coach-handoff-loop.spec.ts,PASS,e2e/artifacts/coach-handoff-loop.png,,qa,2026-07-23
+F1,教研台,author,author登录,/author概览,统计可见,author-console-v2.spec.ts,PASS,e2e/artifacts/author-console-v2/00-overview.png,,qa,2026-07-23
+F2,教研台,author,draft版本,课纲+local_prep Tab,可编辑,author-curriculum.spec.ts,PASS,e2e/artifacts/author-console-v2/10-curriculum-workbench.png,,qa,2026-07-23
+F3,教研台,author,有submission,提交资料复核modal,feedback保存,grading-closed-loop.spec.ts,PASS,,,qa,2026-07-23
+F4,教研台,author,handoff pending,legacy导师队列,可结案,coach-handoff-loop.spec.ts,PASS,,,qa,2026-07-23
+F5,教研台,author,docx文件,文档库ingest,状态更新,author-docx-ingest.spec.ts,PASS,e2e/artifacts/author-docx-ingest.png,,qa,2026-07-23
+F6,教研台,author,YAML stub,版本上传,Day99创建,author-upload.spec.ts,PASS,e2e/artifacts/author-upload.png,,qa,2026-07-23
+F7,教研台,learner,学员登录,访问/author,403/重定向,permissions.spec.ts,PASS,,,qa,2026-07-23
+G1,公开站,anonymous,无,Landing/OpenCourses,页面可访问,public-landing.spec.ts,PASS,e2e/artifacts/public-landing-open-courses.png,,qa,2026-07-23

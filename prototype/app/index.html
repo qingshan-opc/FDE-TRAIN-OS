@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FDE 学员工作台 · 两周课</title>
+  <style>
+    :root {
+      --bg: #eef3f0;
+      --ink: #13201b;
+      --muted: #5c6d66;
+      --accent: #0f6a56;
+      --accent-soft: #e8f5f0;
+      --card: #fff;
+      --line: #d3ddd8;
+      --danger: #9b2c2c;
+      --warn: #8a5a00;
+      --week2: #1a4d6d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "PingFang SC", "Noto Sans SC", sans-serif;
+      background:
+        radial-gradient(ellipse at 0% 0%, #d8ebe3 0%, transparent 42%),
+        radial-gradient(ellipse at 100% 0%, #d6e4ef 0%, transparent 40%),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .hidden { display: none !important; }
+    button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.secondary { background: #fff; color: var(--accent); }
+    button.ghost { background: transparent; border-color: var(--line); color: var(--muted); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: inherit;
+      margin: 0.25rem 0 0.65rem;
+      background: #fff;
+    }
+    label { font-size: 12px; color: var(--muted); display: block; }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.5rem 0; }
+    .pill {
+      font-size: 11px;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .pill.locked { background: #ececec; color: #888; }
+    .pill.available { background: #dff5ea; }
+    .pill.passed { background: #c8efdc; }
+    .pill.sim { background: #e3eef6; color: var(--week2); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 1rem; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .err { color: var(--danger); font-size: 13px; }
+    .log {
+      background: #0f1a17;
+      color: #d7efe6;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 12px;
+      max-height: 220px;
+      overflow: auto;
+      white-space: pre-wrap;
+      margin: 0.5rem 0 0;
+    }
+    .log:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    iframe {
+      width: 100%;
+      height: 280px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      margin-top: 0.5rem;
+    }
+    #login-view {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+    }
+    #login-view .card { width: min(440px, 100%); }
+    #login-view h1 { margin: 0 0 0.35rem; font-size: 1.45rem; letter-spacing: -0.02em; }
+    .brand-bar { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+    header.app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { margin: 0; font-size: 1.1rem; }
+    main.workbench {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 1000px) {
+      main.workbench { grid-template-columns: 280px 1fr 300px; }
+    }
+    .timeline-week { margin: 0.65rem 0 0.25rem; font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; }
+    .day-chip {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.35rem;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 0.25rem 0;
+      cursor: pointer;
+      background: #fff;
+      font-size: 12px;
+    }
+    .day-chip.active { border-color: var(--accent); background: var(--accent-soft); }
+    .day-chip.week2.active { border-color: var(--week2); background: #e8f1f7; }
+    .node {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 0.35rem 0;
+      cursor: pointer;
+      background: #fff;
+    }
+    .node.active { border-color: var(--accent); background: var(--accent-soft); }
+    .node .title { font-size: 13px; }
+    .day-progress {
+      height: 6px;
+      background: #e5ebe8;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.5rem 0 0.75rem;
+    }
+    .day-progress > span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+    .cap-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 0.35rem 0;
+      cursor: pointer;
+      background: #fff;
+    }
+    .cap-item.read { border-color: var(--accent); background: var(--accent-soft); }
+    .cap-item.active { box-shadow: 0 0 0 2px rgba(15,106,86,0.25); }
+    .cap-body {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      background: linear-gradient(180deg, #f7fbf9, #fff);
+      margin-top: 0.75rem;
+      min-height: 140px;
+    }
+    .cap-body h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+    .practice {
+      margin-top: 0.75rem;
+      padding: 0.55rem 0.7rem;
+      background: #fff8e8;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .quiz-opt {
+      display: block;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 0.3rem 0;
+      cursor: pointer;
+      background: #fff;
+    }
+    .quiz-opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+    .quiz-opt.ok { border-color: #1a7a4c; background: #e5f7ee; }
+    .quiz-opt.bad { border-color: var(--danger); background: #fdeaea; }
+    .check-row { display: flex; gap: 0.5rem; align-items: flex-start; margin: 0.4rem 0; font-size: 14px; }
+    .term {
+      background: #0b1411;
+      color: #b6e2d2;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      min-height: 160px;
+      max-height: 240px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .arch-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+    .arch-grid button { font-size: 12px; }
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #13201b;
+      color: #fff;
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      font-size: 13px;
+      z-index: 50;
+      max-width: 320px;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-view">
+    <div class="card">
+      <div class="brand-bar">FDE Learning OS · 两周课（721）</div>
+      <h1>学员工作台</h1>
+      <p class="hint">Day1–12：点开知识胶囊 → 测验 → Agent/仿真实验 → 证据与 Passport。</p>
+      <label for="email">邮箱</label>
+      <input id="email" value="demo@fde.local" autocomplete="username" />
+      <label for="password">密码</label>
+      <input id="password" type="password" value="demo1234" autocomplete="current-password" />
+      <label for="camp">营期</label>
+      <input id="camp" value="camp-v03" />
+      <div class="row">
+        <button type="button" id="btn-login">登录</button>
+        <button type="button" class="secondary" id="btn-invite">邀请码 FDE-DEMO</button>
+      </div>
+      <p id="login-err" class="err hidden"></p>
+    </div>
+  </div>
+
+  <div id="app-view" class="hidden">
+    <header class="app-header">
+      <div>
+        <h1>FDE 学员工作台</h1>
+        <div class="hint" id="who"></div>
+      </div>
+      <div class="row">
+        <span class="pill" id="week-pill">Week —</span>
+        <button type="button" class="ghost" id="btn-logout">退出</button>
+      </div>
+    </header>
+
+    <main class="workbench">
+      <section class="card" aria-label="营期与节点">
+        <h2>营期时间线</h2>
+        <div id="timeline"></div>
+        <h2 style="margin-top:1rem">今日节点</h2>
+        <div class="hint" id="day-title">加载中…</div>
+        <div class="day-progress" aria-hidden="true"><span id="prog-bar"></span></div>
+        <div id="nodes"></div>
+        <p class="hint" id="gate-hint"></p>
+      </section>
+
+      <section class="card" aria-label="节点工作区">
+        <h2 id="panel-title">节点工作区</h2>
+        <p class="hint" id="panel-sub"></p>
+
+        <div id="panel-learn" class="hidden">
+          <div class="meta-tags row" id="learn-tags"></div>
+          <p class="hint" id="cap-progress">胶囊 0/6</p>
+          <div id="cap-list"></div>
+          <div id="cap-body" class="cap-body hidden"></div>
+          <div class="row">
+            <button type="button" id="btn-finish-learn">完成学习</button>
+          </div>
+        </div>
+
+        <div id="panel-quiz" class="hidden">
+          <div id="quiz-box"></div>
+          <div class="row">
+            <button type="button" id="btn-quiz">提交测验</button>
+          </div>
+          <div id="quiz-feedback" class="hint"></div>
+        </div>
+
+        <div id="panel-lab" class="hidden">
+          <p class="hint">Runner：<span id="lab-runner">—</span></p>
+          <label>Agent 提示词</label>
+          <label for="prompt">Agent Prompt</label>
+          <textarea id="prompt" rows="5"></textarea>
+          <div class="row">
+            <button type="button" id="btn-run">启动 Agent</button>
+            <button type="button" class="secondary" id="btn-eval">评测</button>
+            <button type="button" class="secondary" id="btn-finish-lab">通过并完成</button>
+          </div>
+          <p><span class="pill" id="job-pill">无任务</span></p>
+          <pre id="job-log" class="log" tabindex="0" role="log" aria-label="任务日志"></pre>
+          <iframe id="preview" title="产物预览" sandbox="allow-same-origin"></iframe>
+        </div>
+
+        <div id="panel-sim" class="hidden">
+          <p class="hint">仿真：<span id="sim-kind">—</span> · <span id="sim-sid" class="pill">未开会话</span></p>
+          <div class="row">
+            <button type="button" id="btn-sim-start">创建仿真会话</button>
+            <button type="button" class="secondary" id="btn-sim-eval">评测仿真</button>
+            <button type="button" class="secondary" id="btn-finish-sim">通过并完成</button>
+          </div>
+          <div id="sim-server" class="hidden">
+            <p class="hint">提示：写入含 proxy_pass 的配置 → <code>nginx -t</code> → <code>systemctl reload nginx</code></p>
+            <div id="term-out" class="term">$ ready\n</div>
+            <div class="row">
+              <label for="term-in" class="hint">终端命令</label>
+              <input id="term-in" placeholder="输入命令，回车执行" style="flex:1;margin:0" aria-label="终端命令" />
+              <button type="button" id="btn-term">执行</button>
+            </div>
+          </div>
+          <div id="sim-arch" class="hidden">
+            <p class="hint">添加组件、设置 NFR、写决策笔记（≥120 字）</p>
+            <div class="arch-grid">
+              <button type="button" class="secondary" data-comp="api">+ api</button>
+              <button type="button" class="secondary" data-comp="warehouse">+ warehouse</button>
+              <button type="button" class="secondary" data-comp="auth">+ auth</button>
+            </div>
+            <label for="nfr-cost">月成本 USD</label>
+            <input id="nfr-cost" type="number" value="600" />
+            <label for="nfr-lat">P95 延迟 ms</label>
+            <input id="nfr-lat" type="number" value="300" />
+            <label for="nfr-res">数据驻留</label>
+            <input id="nfr-res" value="cn" />
+            <div class="row"><button type="button" class="secondary" id="btn-nfr">写入 NFR</button></div>
+            <label for="arch-note">决策笔记</label>
+            <textarea id="arch-note" rows="5" placeholder="说明预算、延迟与驻留取舍…"></textarea>
+            <div class="row"><button type="button" class="secondary" id="btn-note">保存笔记</button></div>
+            <pre id="arch-state" class="log" tabindex="0" role="status" aria-label="架构状态">尚未操作</pre>
+          </div>
+          <pre id="sim-log" class="log" tabindex="0" role="log" aria-label="仿真日志"></pre>
+        </div>
+
+        <div id="panel-generic" class="hidden">
+          <p id="generic-desc" class="hint"></p>
+          <div id="check-list"></div>
+          <button type="button" id="btn-finish-generic">标记完成</button>
+        </div>
+
+        <div id="panel-empty" class="hidden">
+          <p class="hint">本日任务未配置或加载失败。</p>
+        </div>
+      </section>
+
+      <section class="card" aria-label="导师与护照">
+        <h2>AI 导师</h2>
+        <label for="coach-q">向导师提问</label>
+        <textarea id="coach-q" rows="3">今天这节课的关键验收是什么？</textarea>
+        <div class="row"><button type="button" id="btn-coach">提问</button></div>
+        <pre id="coach-out" class="log" tabindex="0" role="log" aria-label="导师回答"></pre>
+        <h2 style="margin-top:1rem">Passport</h2>
+        <pre id="passport" class="log" tabindex="0" role="region" aria-label="Passport">登录后显示</pre>
+      </section>
+    </main>
+  </div>
+
+  <script>
+const API = '';
+const $ = (id) => document.getElementById(id);
+
+let token = localStorage.getItem('fde_token') || '';
+let me = null;
+let campId = localStorage.getItem('fde_camp') || 'camp-v03';
+let dayPkg = null;
+let campDays = [];
+let activeNode = null;
+let activeCap = null;
+let rubric = [];
+let jobId = null;
+let simSessionId = null;
+let esRef = null;
+let quizResult = null;
+
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+async function api(path, opts = {}) {
+  const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(API + path, { ...opts, headers });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
+  if (!res.ok) {
+    const detail = data?.detail || data?.message || text || res.statusText;
+    throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
+  }
+  return data;
+}
+
+function showApp(on) {
+  $('login-view').classList.toggle('hidden', on);
+  $('app-view').classList.toggle('hidden', !on);
+}
+
+function setActionEnabled(btn, enabled, reason) {
+  if (!btn) return;
+  btn.disabled = !enabled;
+  btn.title = enabled ? '' : (reason || '请先完成上一节点');
+}
+
+function capKey() {
+  return `fde_caps_${campId}_${me?.id || 'x'}_${dayPkg?.day || 0}`;
+}
+
+function loadCapReads() {
+  try { return JSON.parse(localStorage.getItem(capKey()) || '[]'); } catch { return []; }
+}
+
+function saveCapReads(ids) {
+  localStorage.setItem(capKey(), JSON.stringify([...new Set(ids)]));
+}
+
+function hidePanels() {
+  ['panel-learn','panel-quiz','panel-lab','panel-sim','panel-generic','panel-empty']
+    .forEach((id) => $(id).classList.add('hidden'));
+}
+
+async function afterLogin(data) {
+  token = data.token;
+  localStorage.setItem('fde_token', token);
+  campId = data.camp_id || campId;
+  localStorage.setItem('fde_camp', campId);
+  me = data.user;
+  $('who').textContent = `${me.email} · ${campId}`;
+  showApp(true);
+  await loadCampDays();
+  await loadDay();
+  await refreshPassport();
+}
+
+$('btn-login').onclick = async () => {
+  $('login-err').classList.add('hidden');
+  try {
+    const data = await api('/api/v1/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: $('email').value.trim(),
+        password: $('password').value,
+        camp_id: $('camp').value.trim() || 'camp-v03',
+      }),
+    });
+    await afterLogin(data);
+  } catch (e) {
+    $('login-err').classList.remove('hidden');
+    $('login-err').textContent = e.message || String(e);
+  }
+};
+
+$('btn-invite').onclick = async () => {
+  try {
+    const data = await api('/api/v1/auth/invite', {
+      method: 'POST',
+      body: JSON.stringify({ invite_code: 'FDE-DEMO', display_name: '邀请学员' }),
+    });
+    await afterLogin(data);
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-logout').onclick = async () => {
+  try { await api('/api/v1/auth/logout', { method: 'POST' }); } catch {}
+  localStorage.removeItem('fde_token');
+  token = '';
+  me = null;
+  showApp(false);
+};
+
+function updateProgress() {
+  if (!dayPkg?.nodes?.length) { $('prog-bar').style.width = '0%'; return; }
+  const passed = dayPkg.nodes.filter((n) => n.status === 'passed').length;
+  $('prog-bar').style.width = Math.round((passed / dayPkg.nodes.length) * 100) + '%';
+}
+
+async function loadCampDays() {
+  try {
+    const data = await api(`/api/v1/camps/${campId}/days`);
+    campDays = data.days || [];
+  } catch {
+    campDays = [];
+  }
+  renderTimeline();
+}
+
+function renderTimeline() {
+  const box = $('timeline');
+  box.innerHTML = '';
+  const cur = dayPkg?.day || Number(localStorage.getItem('fde_day') || 1);
+  const weeks = [
+    { label: 'WEEK 1 · 躯体', days: campDays.filter((d) => d.day <= 5) },
+    { label: 'WEEK 2 · 灵魂', days: campDays.filter((d) => d.day >= 6) },
+  ];
+  weeks.forEach((w) => {
+    if (!w.days.length) return;
+    const h = document.createElement('div');
+    h.className = 'timeline-week';
+    h.textContent = w.label;
+    box.appendChild(h);
+    w.days.forEach((d) => {
+      const el = document.createElement('div');
+      el.className = 'day-chip' + (d.day === cur ? ' active' : '') + (d.day >= 6 ? ' week2' : '');
+      el.innerHTML = `<span>Day ${d.day} · ${d.title}</span><span class="pill ${d.runner === 'sim' ? 'sim' : ''}">${d.runner || '—'}</span>`;
+      el.onclick = async () => {
+        localStorage.setItem('fde_day', String(d.day));
+        activeNode = null;
+        await loadDay(d.day);
+      };
+      box.appendChild(el);
+    });
+  });
+}
+
+async function loadDay(forcedDay) {
+  const day = forcedDay || Number(localStorage.getItem('fde_day') || 1);
+  localStorage.setItem('fde_day', String(day));
+  try {
+    dayPkg = await api(`/api/v1/camps/${campId}/days/${day}?learner_id=${encodeURIComponent(me.id)}`);
+  } catch (e) {
+    dayPkg = null;
+    $('day-title').textContent = '本日任务未配置';
+    $('nodes').innerHTML = '';
+    hidePanels();
+    $('panel-empty').classList.remove('hidden');
+    toast(e.message);
+    return;
+  }
+  $('week-pill').textContent = `Week ${dayPkg.week || (day <= 5 ? 1 : 2)}`;
+  $('day-title').textContent = `${dayPkg.title}${dayPkg.project ? ' · ' + dayPkg.project : ''}`;
+  $('who').textContent = `${me.email} · ${campId} · Day ${dayPkg.day}`;
+  updateProgress();
+  renderTimeline();
+
+  const box = $('nodes');
+  box.innerHTML = '';
+  dayPkg.nodes.forEach((n) => {
+    const el = document.createElement('div');
+    el.className = 'node' + (activeNode?.id === n.id ? ' active' : '');
+    el.innerHTML = `<span class="title">${n.title || n.kind}</span><span class="pill ${n.status}">${n.status}</span>`;
+    el.onclick = () => selectNode(n);
+    box.appendChild(el);
+  });
+
+  const prefer = dayPkg.nodes.find((n) => n.id === activeNode?.id)
+    || dayPkg.nodes.find((n) => n.status === 'available')
+    || dayPkg.nodes[0];
+  if (prefer) selectNode(prefer);
+}
+
+function selectNode(n) {
+  activeNode = n;
+  quizResult = null;
+  [...$('nodes').children].forEach((el, i) => {
+    el.classList.toggle('active', dayPkg.nodes[i]?.id === n.id);
+  });
+  $('panel-title').textContent = n.title || n.kind;
+  $('panel-sub').textContent = `状态：${n.status} · ${n.id}`;
+  $('gate-hint').textContent = n.status === 'locked' ? '请先完成上一节点' : '';
+  hidePanels();
+
+  if (n.kind === 'learn') renderLearn(n);
+  else if (n.kind === 'quiz') renderQuiz(n);
+  else if (n.kind === 'lab') {
+    const runner = n.refs?.runner || dayPkg.lab?.runner;
+    if (runner === 'sim') renderSim(n);
+    else renderAgentLab(n);
+  } else if (n.kind === 'project' || n.kind === 'review' || n.kind === 'unlock') renderGeneric(n);
+  else $('panel-empty').classList.remove('hidden');
+
+  const canAct = n.status === 'available' || n.status === 'in_progress' || n.status === 'passed';
+  setActionEnabled($('btn-finish-learn'), canAct && n.status !== 'passed', '节点不可用');
+  setActionEnabled($('btn-quiz'), canAct && n.status !== 'passed');
+  setActionEnabled($('btn-run'), canAct);
+  setActionEnabled($('btn-sim-start'), canAct);
+  setActionEnabled($('btn-finish-generic'), canAct && n.status !== 'passed');
+}
+
+function renderLearn(n) {
+  $('panel-learn').classList.remove('hidden');
+  const tags = n.refs?.tags || dayPkg.learn?.lingzhi_tags || [];
+  $('learn-tags').innerHTML = tags.map((t) => `<span class="pill">${t}</span>`).join('');
+  const capsules = n.refs?.capsules || dayPkg.learn?.capsules || [];
+  const reads = loadCapReads();
+  $('cap-progress').textContent = `胶囊 ${reads.length}/${capsules.length || 0}（需全部点开后才能完成学习）`;
+  const list = $('cap-list');
+  list.innerHTML = '';
+  if (!capsules.length) {
+    const steps = n.refs?.steps || dayPkg.learn?.steps || [];
+    steps.forEach((s, i) => {
+      const el = document.createElement('div');
+      el.className = 'cap-item';
+      el.textContent = `${i + 1}. ${s}`;
+      list.appendChild(el);
+    });
+    $('cap-body').classList.add('hidden');
+    return;
+  }
+  capsules.forEach((c, i) => {
+    const id = c.id || `c${i + 1}`;
+    const el = document.createElement('div');
+    el.className = 'cap-item' + (reads.includes(id) ? ' read' : '') + (activeCap === id ? ' active' : '');
+    el.innerHTML = `<span>${i + 1}. ${c.title || id}</span><span class="pill">${c.minutes || 20}min</span>`;
+    el.onclick = () => {
+      activeCap = id;
+      const next = loadCapReads();
+      next.push(id);
+      saveCapReads(next);
+      renderLearn(n);
+      const body = $('cap-body');
+      body.classList.remove('hidden');
+      body.innerHTML = `<h3>${c.title || id}</h3>
+        <p class="hint">${c.minutes || 20} 分钟</p>
+        <p>${(c.content || '').replace(/\n/g, '<br/>')}</p>
+        ${c.practice ? `<div class="practice"><strong>小练</strong>：${c.practice}</div>` : ''}`;
+    };
+    list.appendChild(el);
+  });
+}
+
+function renderQuiz(n) {
+  $('panel-quiz').classList.remove('hidden');
+  $('quiz-feedback').textContent = '';
+  const qs = n.refs?.questions || dayPkg.quiz?.questions || [];
+  $('quiz-box').innerHTML = qs.map((q, i) => `
+    <div style="margin:0.85rem 0">
+      <div><strong>Q${i + 1}.</strong> ${q.q}</div>
+      ${(q.options || []).map((o, j) => `
+        <label class="quiz-opt" id="opt-${i}-${j}">
+          <input type="radio" name="q${i}" value="${j}" /> ${o}
+        </label>`).join('')}
+    </div>`).join('');
+}
+
+function renderAgentLab(n) {
+  $('panel-lab').classList.remove('hidden');
+  $('lab-runner').textContent = n.refs?.runner || dayPkg.lab?.runner || 'agent';
+  $('prompt').value = (n.refs?.agent?.prompt_template || dayPkg.lab?.agent?.prompt_template || '').trim();
+  rubric = n.refs?.rubric || dayPkg.lab?.rubric || [];
+  setActionEnabled($('btn-eval'), !!jobId);
+  setActionEnabled($('btn-finish-lab'), !!jobId);
+}
+
+function renderSim(n) {
+  $('panel-sim').classList.remove('hidden');
+  const kind = n.refs?.sim_kind || dayPkg.lab?.sim_kind || 'server';
+  $('sim-kind').textContent = kind;
+  rubric = n.refs?.rubric || dayPkg.lab?.rubric || [];
+  $('sim-server').classList.toggle('hidden', kind !== 'server');
+  $('sim-arch').classList.toggle('hidden', kind !== 'arch_design');
+  $('sim-sid').textContent = simSessionId ? simSessionId.slice(0, 8) : '未开会话';
+}
+
+function renderGeneric(n) {
+  $('panel-generic').classList.remove('hidden');
+  const map = {
+    project: dayPkg.project_brief || n.refs?.brief || '完成企业任务说明中的交付物。',
+    review: '对照清单自检后标记完成。',
+    unlock: '解锁次日能力；确认后可切换时间线中的下一日。',
+  };
+  $('generic-desc').textContent = map[n.kind] || '';
+  const checks = n.kind === 'review'
+    ? (n.refs?.checklist || dayPkg.review_checklist || [])
+    : (n.kind === 'project' ? ['已理解任务目标', 'Lab 产物已就绪', '能向老板复述价值'] : ['确认解锁']);
+  const box = $('check-list');
+  box.innerHTML = checks.map((c, i) => `
+    <label class="check-row"><input type="checkbox" class="gen-check" data-i="${i}" /> <span>${c}</span></label>`).join('');
+  $('btn-finish-generic').onclick = async () => {
+    const boxes = [...box.querySelectorAll('.gen-check')];
+    if (boxes.length && !boxes.every((b) => b.checked)) return toast('请勾选全部清单项');
+    try { await complete(activeNode.id); } catch (e) { toast(e.message); }
+  };
+}
+
+async function complete(nodeId) {
+  await api(`/api/v1/nodes/${nodeId}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({ camp_id: campId, day: dayPkg.day, learner_id: me.id }),
+  });
+  toast('节点已完成');
+  await loadDay(dayPkg.day);
+  await refreshPassport();
+}
+
+$('btn-finish-learn').onclick = async () => {
+  const capsules = activeNode?.refs?.capsules || dayPkg?.learn?.capsules || [];
+  const requireAll = activeNode?.refs?.require_capsules ?? dayPkg?.learn?.require_capsules;
+  if (requireAll && capsules.length) {
+    const reads = loadCapReads();
+    const ids = capsules.map((c, i) => c.id || `c${i + 1}`);
+    if (!ids.every((id) => reads.includes(id))) {
+      return toast(`请先点开全部 ${capsules.length} 个知识胶囊`);
+    }
+  }
+  try { await complete(activeNode.id); } catch (e) { toast(e.message); }
+};
+
+$('btn-quiz').onclick = async () => {
+  try {
+    const qs = activeNode.refs?.questions || dayPkg.quiz?.questions || [];
+    const answers = qs.map((_, i) => {
+      const el = document.querySelector(`input[name=q${i}]:checked`);
+      return el ? Number(el.value) : -1;
+    });
+    const res = await api('/api/v1/quiz/submit', {
+      method: 'POST',
+      body: JSON.stringify({
+        camp_id: campId,
+        day: dayPkg.day,
+        node_id: activeNode.id,
+        answers,
+        learner_id: me.id,
+      }),
+    });
+    quizResult = res;
+    (res.details || []).forEach((d) => {
+      const ans = answers[d.index];
+      const correct = d.answer;
+      if (ans >= 0) {
+        const el = document.getElementById(`opt-${d.index}-${ans}`);
+        if (el) el.classList.add(d.correct ? 'ok' : 'bad');
+      }
+      if (!d.correct && correct >= 0) {
+        const el = document.getElementById(`opt-${d.index}-${correct}`);
+        if (el) el.classList.add('ok');
+      }
+    });
+    const explains = (res.details || []).filter((d) => d.explain).map((d, i) => `Q${d.index + 1}: ${d.explain}`).join('\n');
+    $('quiz-feedback').textContent = (res.pass ? `通过 ${res.score}` : `未通过，需 ≥ ${res.pass_rate}`) + (explains ? '\n' + explains : '');
+    toast(res.pass ? '测验通过' : '未通过，请对照解析重试');
+    await loadDay(dayPkg.day);
+  } catch (e) { toast(e.message); }
+};
+
+function primaryArtifactPath() {
+  const checks = rubric?.length ? rubric : (activeNode?.refs?.rubric || dayPkg?.lab?.rubric || []);
+  const fe = checks.find((c) => c.check === 'file_exists' && c.args?.path);
+  return fe?.args?.path || 'index.html';
+}
+
+async function refreshPreview() {
+  const path = primaryArtifactPath();
+  try {
+    const f = await api(`/api/v1/agent/workspaces/${campId}/${me.id}/file?path=${encodeURIComponent(path)}`);
+    if (path.endsWith('.html')) $('preview').srcdoc = f.content;
+    else $('preview').srcdoc = `<pre style="padding:1rem;white-space:pre-wrap;font-family:monospace">${f.content.replace(/</g,'&lt;')}</pre>`;
+  } catch {
+    $('preview').srcdoc = `<p style="padding:1rem;color:#666">尚无 ${path}</p>`;
+  }
+}
+
+$('btn-run').onclick = async () => {
+  try {
+    if (esRef) { try { esRef.close(); } catch {} }
+    await api('/api/v1/agent/workspaces/ensure', {
+      method: 'POST',
+      body: JSON.stringify({ camp_id: campId, learner_id: me.id }),
+    });
+    const job = await api('/api/v1/agent/jobs', {
+      method: 'POST',
+      body: JSON.stringify({ camp_id: campId, learner_id: me.id, prompt: $('prompt').value }),
+    });
+    jobId = job.job_id;
+    $('job-pill').textContent = `${job.runner} · ${jobId.slice(0, 8)}`;
+    $('job-log').textContent = 'queued…\n';
+    setActionEnabled($('btn-eval'), true);
+    setActionEnabled($('btn-finish-lab'), true);
+    const es = new EventSource(`${API}/api/v1/agent/jobs/${jobId}/events`);
+    esRef = es;
+    es.onmessage = (ev) => {
+      $('job-log').textContent += ev.data + '\n';
+      try {
+        const d = JSON.parse(ev.data);
+        if (d.type === 'terminal' || d.type === 'done') { es.close(); refreshPreview(); toast('Agent 任务结束'); }
+      } catch {}
+    };
+    es.onerror = () => { es.close(); refreshPreview(); };
+    setTimeout(refreshPreview, 900);
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-eval').onclick = async () => {
+  if (!jobId) return toast('请先启动 Agent');
+  try {
+    const data = await api('/api/v1/eval/run', {
+      method: 'POST',
+      body: JSON.stringify({
+        runner: 'agent',
+        job_id: jobId,
+        learner_id: me.id,
+        day: dayPkg.day,
+        node_id: activeNode.id,
+        rubric,
+      }),
+    });
+    $('job-log').textContent += '\n' + JSON.stringify(data.result, null, 2);
+    toast(data.result?.pass ? '评测通过' : '评测未过');
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-finish-lab').onclick = async () => {
+  try {
+    if (jobId) {
+      await api('/api/v1/evidence', {
+        method: 'POST',
+        body: JSON.stringify({
+          learner_id: me.id,
+          day: dayPkg.day,
+          node_id: activeNode.id,
+          kind: 'agent',
+          capability_tags: ['agent:workspace', 'curriculum:721'],
+          payload: { job_id: jobId },
+        }),
+      });
+    }
+    await complete(activeNode.id);
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-sim-start').onclick = async () => {
+  try {
+    const lab = dayPkg.lab || {};
+    const res = await api('/api/v1/sim/sessions', {
+      method: 'POST',
+      body: JSON.stringify({
+        sim_kind: lab.sim_kind || activeNode.refs?.sim_kind,
+        task_spec: { lab },
+        learner_seed: { learner_id: me.id },
+      }),
+    });
+    simSessionId = res.session_id;
+    $('sim-sid').textContent = simSessionId.slice(0, 8);
+    $('sim-log').textContent = 'session created\n';
+    if ((lab.sim_kind || '') === 'server') $('term-out').textContent = '$ ready\n';
+    toast('仿真会话已创建');
+  } catch (e) { toast(e.message); }
+};
+
+async function simAction(type, payload) {
+  if (!simSessionId) throw new Error('请先创建仿真会话');
+  const r = await api(`/api/v1/sim/sessions/${simSessionId}/actions`, {
+    method: 'POST',
+    body: JSON.stringify({ type, payload }),
+  });
+  $('sim-log').textContent += JSON.stringify(r, null, 2) + '\n';
+  return r;
+}
+
+async function runTerm() {
+  const cmd = $('term-in').value.trim();
+  if (!cmd) return;
+  $('term-out').textContent += `$ ${cmd}\n`;
+  try {
+    const r = await simAction('terminal.exec', { cmd });
+    $('term-out').textContent += (r.stdout || '') + '\n';
+    $('term-in').value = '';
+  } catch (e) { toast(e.message); }
+}
+$('btn-term').onclick = runTerm;
+$('term-in').addEventListener('keydown', (e) => { if (e.key === 'Enter') runTerm(); });
+
+document.querySelectorAll('[data-comp]').forEach((btn) => {
+  btn.onclick = async () => {
+    try {
+      await simAction('canvas.add_node', { id: btn.dataset.comp, type: 'service' });
+      $('arch-state').textContent = `added ${btn.dataset.comp}`;
+    } catch (e) { toast(e.message); }
+  };
+});
+
+$('btn-nfr').onclick = async () => {
+  try {
+    await simAction('canvas.set_nfr', {
+      monthly_cost_usd: Number($('nfr-cost').value),
+      p95_latency_ms: Number($('nfr-lat').value),
+      data_residency: $('nfr-res').value.trim() || 'cn',
+    });
+    toast('NFR 已写入');
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-note').onclick = async () => {
+  try {
+    await simAction('canvas.set_decision_note', { text: $('arch-note').value });
+    toast('决策笔记已保存');
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-sim-eval').onclick = async () => {
+  if (!simSessionId) return toast('请先创建会话');
+  try {
+    const data = await api('/api/v1/eval/run', {
+      method: 'POST',
+      body: JSON.stringify({
+        runner: 'sim',
+        sim_session_id: simSessionId,
+        learner_id: me.id,
+        day: dayPkg.day,
+        node_id: activeNode.id,
+        rubric,
+      }),
+    });
+    $('sim-log').textContent += '\n' + JSON.stringify(data.result, null, 2);
+    toast(data.result?.pass ? '仿真评测通过' : '仿真评测未过');
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-finish-sim').onclick = async () => {
+  try {
+    if (simSessionId) {
+      await api('/api/v1/evidence', {
+        method: 'POST',
+        body: JSON.stringify({
+          learner_id: me.id,
+          day: dayPkg.day,
+          node_id: activeNode.id,
+          kind: 'sim',
+          capability_tags: ['sim:lab', 'curriculum:721'],
+          payload: { sim_session_id: simSessionId },
+        }),
+      });
+    }
+    await complete(activeNode.id);
+  } catch (e) { toast(e.message); }
+};
+
+$('btn-coach').onclick = async () => {
+  try {
+    const res = await api('/api/v1/coach/ask', {
+      method: 'POST',
+      body: JSON.stringify({
+        question: $('coach-q').value,
+        camp_id: campId,
+        day: dayPkg?.day,
+        learner_id: me.id,
+        fallback_steps: dayPkg?.learn?.steps || [],
+      }),
+    });
+    $('coach-out').textContent = JSON.stringify(res, null, 2);
+  } catch (e) { toast(e.message); }
+};
+
+async function refreshPassport() {
+  try {
+    const p = await api(`/api/v1/learners/${me.id}/passport`);
+    $('passport').textContent = JSON.stringify(p, null, 2);
+  } catch (e) {
+    $('passport').textContent = e.message;
+  }
+}
+
+(async () => {
+  if (!token) return;
+  try {
+    const meRes = await api('/api/v1/auth/me');
+    me = meRes.user || meRes;
+    campId = meRes.camp_id || campId;
+    showApp(true);
+    $('who').textContent = `${me.email} · ${campId}`;
+    await loadCampDays();
+    await loadDay();
+    await refreshPassport();
+  } catch {
+    localStorage.removeItem('fde_token');
+    token = '';
+  }
+})();
+  </script>
+</body>
+</html>

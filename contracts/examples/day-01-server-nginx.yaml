@@ -1,0 +1,46 @@
+# Day 01 — Nginx 基础（server 仿真）
+camp_version: v0.3
+day: 1
+title: 反向代理与静态站点
+project: 内部文档站入口
+
+learn:
+  lingzhi_tags: ["camp:v0.3", "day:1", "topic:nginx"]
+  estimated_minutes: 18
+
+nodes:
+  - type: learn
+    title: Nginx 反向代理基础
+  - type: quiz
+    title: 端口与 server_name
+  - type: lab
+    title: 在仿真服务器配置站点
+  - type: project
+    title: 企业任务：文档站 80 端口可访问
+  - type: review
+  - type: unlock
+
+lab:
+  sim_kind: server
+  adapter_version: "1.0"
+  seed:
+    host_fixture: ubuntu-mini
+    services: []
+    diversify_by: learner_id
+  ui:
+    layout: terminal_plus_panels
+  rubric:
+    - check: port_listening
+      args: { port: 80 }
+    - check: command_sequence
+      args:
+        contains:
+          - "nginx -t"
+          - "systemctl reload nginx"
+    - check: file_contains
+      args: { path: /etc/nginx/sites-enabled/docs, needle: "proxy_pass" }
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    allow_state_summary: true
+    max_help_level: 2

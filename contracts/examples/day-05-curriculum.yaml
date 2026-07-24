@@ -1,0 +1,111 @@
+camp_version: v0.3
+day: 5
+title: 部署交付与痛点复盘
+project: 企业库存管理系统 · 上线
+project_brief: 在仿真服务器配置站点：写含 proxy_pass 的配置，nginx -t 后 reload，使 80 端口监听。
+review_checklist:
+- 已执行 nginx -t
+- 已 reload 且端口 80 监听
+- 配置含 proxy_pass
+- 能向老板说明 .env 与 Git
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:5
+  - topic:deploy
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 通信与 DNS
+    minutes: 20
+    content: 浏览器↔服务器；IP/域名/服务器是家。
+    practice: 解释网址如何找到服务器。
+  - id: c2
+    title: 容器化 Docker
+    minutes: 20
+    content: 集装箱：一次构建到处跑；云原生认知。
+    practice: 用一句话比喻容器。
+  - id: c3
+    title: 上线流程观摩
+    minutes: 20
+    content: 本地到生产的最后一公里。
+    practice: 列出上线三步。
+  - id: c4
+    title: 环境与密钥
+    minutes: 20
+    content: 开发/生产隔离；.env 管理密钥，禁止硬编码。
+    practice: 举一个硬编码风险。
+  - id: c5
+    title: Git 交付
+    minutes: 20
+    content: 克隆、提交、推送；AI 改乱可回退。
+    practice: 写出三条 Git 动词。
+  - id: c6
+    title: 上线 SOP
+    minutes: 20
+    content: 关 Debug、查端口、确认库连接、交付文档。
+    practice: 补一条你的必查项。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 生产密钥应放？
+    options:
+    - 源码常量
+    - .env / 密钥管理
+    - 截图发客户
+    answer: 1
+    explain: 密钥进环境变量。
+  - q: 交付还应包含？
+    options:
+    - 只有 zip
+    - 部署文档与手册
+    - 仅口头
+    answer: 1
+    explain: 文档是交付物。
+  - q: Git 推送意义？
+    options:
+    - 好看
+    - 备份与协作交付
+    - 加快编译
+    answer: 1
+    explain: 远程才算交付完成。
+nodes:
+- type: learn
+  title: 部署认知
+- type: quiz
+  title: 交付速测
+- type: lab
+  title: 仿真机配置 Nginx
+- type: project
+  title: 企业任务：80 端口可访
+- type: review
+  title: 清单评审
+- type: unlock
+  title: 完成 Week1
+lab:
+  runner: sim
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  sim_kind: server
+  adapter_version: '1.0'
+  seed:
+    host_fixture: ubuntu-mini
+    services: []
+  ui:
+    layout: terminal_plus_panels
+  rubric:
+  - check: port_listening
+    args:
+      port: 80
+  - check: command_sequence
+    args:
+      contains:
+      - nginx -t
+      - systemctl reload nginx
+  - check: file_contains
+    args:
+      path: /etc/nginx/sites-enabled/docs
+      needle: proxy_pass

@@ -1,0 +1,98 @@
+camp_version: v0.3
+day: 6
+title: Week1 复盘与 Prompt 指挥入门
+project: 从躯体到灵魂 · 过渡
+project_brief: 交付 prompt-playbook.html，含公式与好坏对比示例。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:6
+  - topic:prompt
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: Week1 躯体复盘
+    minutes: 20
+    content: 已具备：库表、API、前端、部署认知。传统系统虽笨能用。
+    practice: 画出你的库存链路。
+  - id: c2
+    title: 传统 vs AI 将注入什么
+    minutes: 20
+    content: 第二周给系统加 RAG/Agent，对比体感。
+    practice: 写一句你对「变聪明」的期待。
+  - id: c3
+    title: Prompt 公式
+    minutes: 20
+    content: 角色+背景+任务+约束。烂指令 vs 好指令。
+    practice: 改写一句烂 Prompt。
+  - id: c4
+    title: 指挥 AI 写代码
+    minutes: 20
+    content: 给场景、验收标准、禁止项。
+    practice: 写一条带约束的 Prompt。
+  - id: c5
+    title: 算账与模型选型
+    minutes: 20
+    content: Token、场景：DeepSeek/Claude/GPT。帮老板省钱。
+    practice: 选一个省钱场景。
+  - id: c6
+    title: 本周路线图
+    minutes: 20
+    content: 客服 RAG、驾驶舱、自动化助理三案。
+    practice: 标出你最想练的一案。
+quiz:
+  pass_rate: 0.5
+  questions:
+  - q: 好 Prompt 通常包含？
+    options:
+    - 只有「帮我写」
+    - 角色背景任务约束
+    - 随机表情
+    answer: 1
+    explain: 结构化指令更稳。
+  - q: Week1 目标是？
+    options:
+    - 先上多智能体
+    - 做出能用的传统躯体
+    - 只学微调
+    answer: 1
+    explain: 先躯体后灵魂。
+nodes:
+- type: learn
+  title: 过渡心智
+- type: quiz
+  title: Prompt 速测
+- type: lab
+  title: Agent 生成指挥手册
+- type: project
+  title: 企业任务：团队 Prompt 规范
+- type: review
+  title: 手册自检
+- type: unlock
+  title: 解锁 Day7
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 prompt-playbook.html：标题「Prompt 指挥手册」，含「角色+背景+任务+约束」公式，以及烂指令/好指令对比各一例。不要
+      Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: prompt-playbook.html
+  - check: text_contains
+    args:
+      path: prompt-playbook.html
+      needle: 约束
+  - check: text_contains
+    args:
+      path: prompt-playbook.html
+      needle: 角色

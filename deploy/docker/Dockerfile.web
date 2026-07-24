@@ -1,0 +1,21 @@
+# Web (React SPA: /app, /author, /login) — multi-stage build, nginx non-root.
+# Build: docker build -f deploy/docker/Dockerfile.web -t fde-web:0.2.0 .
+
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY web/package*.json ./
+RUN npm ci
+COPY web/ ./
+RUN npm run build
+
+FROM nginxinc/nginx-unprivileged:1.27-alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY deploy/docker/nginx-web.conf /etc/nginx/conf.d/default.conf
+
+# nginx-web.conf serves /livez and /readyz inline (static 200) for kube probes.
+USER root
+RUN chown -R nginx:nginx /usr/share/nginx/html
+USER nginx
+
+EXPOSE 8080

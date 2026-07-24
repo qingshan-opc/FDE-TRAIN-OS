@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.git
+data
+.env
+*.db
+prototype 2
+prototype-gpt.zip
+.DS_Store

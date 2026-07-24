@@ -1,0 +1,107 @@
+camp_version: v0.3
+day: 7
+title: Agent 工程分层预热与选型沙盘
+project: 经营驾驶舱技术方案
+project_brief: 在约束内完成驾驶舱架构选型：包含 api/warehouse/auth，满足成本/延迟/驻留，决策笔记≥120字。
+review_checklist:
+- 组件齐全
+- NFR 满足约束
+- 决策笔记充分
+- 能讲清取舍
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:7
+  - topic:arch
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: Agent = Model + Scaffolding + Harness
+    minutes: 20
+    content: 脚手架塑造行为；Harness 真正跑循环与工具。
+    practice: 用自己的话解释 Harness。
+  - id: c2
+    title: Tool Calling
+    minutes: 20
+    content: 模型决定调什么；执行在 harness。
+    practice: 举一个库存工具名。
+  - id: c3
+    title: Skills 渐进披露
+    minutes: 20
+    content: 先给能力目录，用到再加载细节；对比 RAG。
+    practice: 写一句差异。
+  - id: c4
+    title: 先看病再抓药
+    minutes: 20
+    content: 无系统→先造系统；有文档→RAG；多系统→工具编排。
+    practice: 匹配一个企业场景。
+  - id: c5
+    title: 非功能约束
+    minutes: 20
+    content: 成本、延迟、数据驻留决定架构。
+    practice: 设一个预算上限。
+  - id: c6
+    title: 沙盘目标
+    minutes: 20
+    content: 在画布上放 api/warehouse/auth，写决策笔记。
+    practice: 草稿三句决策。
+quiz:
+  pass_rate: 0.5
+  questions:
+  - q: 真正执行工具的是？
+    options:
+    - 裸模型权重
+    - Harness
+    - 浏览器主题
+    answer: 1
+    explain: Harness 执行工具。
+  - q: 企业无系统时优先？
+    options:
+    - 强行多智能体
+    - AI 编码造传统系统
+    - 只买向量库
+    answer: 1
+    explain: 先数字化基建。
+nodes:
+- type: learn
+  title: Agent 分层
+- type: quiz
+  title: 工程速测
+- type: lab
+  title: 约束画布选型
+- type: project
+  title: 企业任务：预算内方案
+- type: review
+  title: 决策评审
+- type: unlock
+  title: 解锁 Day8
+lab:
+  runner: sim
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  sim_kind: arch_design
+  adapter_version: '1.0'
+  seed:
+    canvas_fixture: cockpit-v1
+    constraints:
+      max_monthly_cost_usd: 800
+      data_residency: cn
+      p95_latency_ms: 400
+  ui:
+    layout: constraint_canvas
+  rubric:
+  - check: constraints_satisfied
+    args:
+      all: true
+  - check: decision_note_min_chars
+    args:
+      min: 120
+  - check: required_components
+    args:
+      includes:
+      - api
+      - warehouse
+      - auth

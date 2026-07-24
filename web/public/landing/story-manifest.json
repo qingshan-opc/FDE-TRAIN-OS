@@ -1,0 +1,27 @@
+{
+  "slides": [
+    {
+      "id": "story-task",
+      "png": "/landing/story-task.png",
+      "mp4": "/landing/story-task.mp4",
+      "source": "agnes",
+      "title": "任务驱动课纲"
+    },
+    {
+      "id": "story-agent",
+      "png": "/landing/story-agent.png",
+      "mp4": "/landing/story-agent.mp4",
+      "source": "agnes",
+      "title": "Agent 实训环境"
+    },
+    {
+      "id": "story-cert",
+      "png": "/landing/story-cert.png",
+      "mp4": "/landing/story-cert.mp4",
+      "source": "agnes",
+      "title": "可核验结业证书"
+    }
+  ],
+  "generated_at": "2026-07-22T13:24:00.000Z",
+  "note": "Generated via Agnes video API (text-to-video, agnes-video-v2.0)"
+}

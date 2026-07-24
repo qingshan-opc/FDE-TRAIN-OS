@@ -1,0 +1,1059 @@
+import { toQuery, type ListQuery, type Paginated } from "./listQuery";
+
+export class ApiError extends Error {
+  status: number;
+  body: unknown;
+
+  constructor(status: number, message: string, body?: unknown) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.body = body;
+  }
+}
+
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function messageFromBody(body: unknown, fallback: string): string {
+  if (!body || typeof body !== "object") return fallback;
+  const detail = (body as { detail?: unknown }).detail;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail.map((d) => (typeof d === "object" && d && "msg" in d ? String((d as { msg: unknown }).msg) : String(d))).join("; ");
+  }
+  if ("message" in (body as object) && typeof (body as { message: unknown }).message === "string") {
+    return (body as { message: string }).message;
+  }
+  return fallback;
+}
+
+let refreshPromise: Promise<boolean> | null = null;
+
+async function tryRefresh(): Promise<boolean> {
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = (async () => {
+    try {
+      const csrf = getCookie("fde_csrf");
+      const res = await fetch("/api/v1/auth/refresh", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+        },
+        body: "{}",
+      });
+      return res.ok;
+    } catch {
+      return false;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+  return refreshPromise;
+}
+
+export type ApiOptions = Omit<RequestInit, "body"> & {
+  body?: unknown;
+  skipRefresh?: boolean;
+  formData?: FormData;
+};
+
+export async function api<T = unknown>(path: string, options: ApiOptions = {}): Promise<T> {
+  const { body, skipRefresh, formData, headers: extraHeaders, ...rest } = options;
+  const csrf = getCookie("fde_csrf");
+  const headers = new Headers(extraHeaders);
+
+  if (!formData && body !== undefined && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+  if (csrf && !headers.has("X-CSRF-Token")) {
+    headers.set("X-CSRF-Token", csrf);
+  }
+
+  const res = await fetch(path, {
+    ...rest,
+    credentials: "include",
+    headers,
+    body: formData ?? (body !== undefined ? JSON.stringify(body) : undefined),
+  });
+
+  if (res.status === 401 && !skipRefresh && !path.includes("/auth/login") && !path.includes("/auth/refresh")) {
+    const ok = await tryRefresh();
+    if (ok) return api<T>(path, { ...options, skipRefresh: true });
+  }
+
+  const text = await res.text();
+  let parsed: unknown = null;
+  if (text) {
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = text;
+    }
+  }
+
+  if (!res.ok) {
+    throw new ApiError(res.status, messageFromBody(parsed, res.statusText || `HTTP ${res.status}`), parsed);
+  }
+
+  return parsed as T;
+}
+
+export function openEventSource(
+  path: string,
+  handlers: {
+    onEvent: (data: Record<string, unknown>, id?: string) => void;
+    onError?: (err: Event) => void;
+  },
+  opts?: { after?: number | string },
+): EventSource {
+  let url = path;
+  if (opts?.after != null && opts.after !== "" && opts.after !== 0) {
+    const sep = path.includes("?") ? "&" : "?";
+    url = `${path}${sep}after=${encodeURIComponent(String(opts.after))}`;
+  }
+  const es = new EventSource(url, { withCredentials: true } as EventSourceInit);
+  es.onmessage = (ev) => {
+    try {
+      const data = JSON.parse(ev.data) as Record<string, unknown>;
+      handlers.onEvent(data, ev.lastEventId);
+    } catch {
+      handlers.onEvent({ type: "raw", message: ev.data }, ev.lastEventId);
+    }
+  };
+  es.onerror = (err) => {
+    handlers.onError?.(err);
+  };
+  return es;
+}
+
+/** Auth */
+export const authApi = {
+  login: (email: string, password: string, camp_id?: string) =>
+    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
+      "/api/v1/auth/login",
+      { method: "POST", body: { email, password, camp_id: camp_id || undefined }, skipRefresh: true },
+    ),
+  me: () => api<import("./types").AuthMe>("/api/v1/auth/me", { skipRefresh: true }),
+  logout: () => api<{ status: string }>("/api/v1/auth/logout", { method: "POST" }),
+  invite: (invite_code: string, display_name: string, email?: string) =>
+    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
+      "/api/v1/auth/invite",
+      { method: "POST", body: { invite_code, display_name, email: email || undefined }, skipRefresh: true },
+    ),
+  switchCamp: (camp_id: string) =>
+    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
+      "/api/v1/auth/switch-camp",
+      { method: "POST", body: { camp_id } },
+    ),
+  switchEnrollment: (enrollment_id: string) =>
+    api<{
+      token: string;
+      csrf: string;
+      user: import("./types").User;
+      camp_id: string | null;
+      camps: import("./types").Camp[];
+      active_enrollment_id: string;
+      enrollment: Record<string, unknown>;
+    }>("/api/v1/auth/switch-enrollment", { method: "POST", body: { enrollment_id } }),
+};
+
+/** Orchestrator */
+export const dayApi = {
+  list: (campId: string) =>
+    api<{ camp_id: string; days: import("./types").DaySummary[]; count: number; weeks: Record<string, number[]> }>(
+      `/api/v1/camps/${encodeURIComponent(campId)}/days`,
+    ),
+  get: (campId: string, day: number) =>
+    api<import("./types").DayPackage>(`/api/v1/camps/${encodeURIComponent(campId)}/days/${day}`),
+  completeNode: (nodeId: string, body: { camp_id: string; day: number; evidence_id?: string }) =>
+    api<import("./types").NodeCompleteResult>(`/api/v1/nodes/${encodeURIComponent(nodeId)}/complete`, {
+      method: "POST",
+      body,
+    }),
+  submitQuiz: (body: { camp_id: string; day: number; node_id: string; answers: number[] }) =>
+    api<{
+      attempt_id: string;
+      score: number;
+      pass: boolean;
+      pass_rate: number;
+      correct: number;
+      total: number;
+      details: { index: number; correct: boolean; answer: number; explain: string }[];
+    }>("/api/v1/quiz/submit", { method: "POST", body }),
+  /** Learner-facing supplementary materials (author-uploaded, DB-backed) — a
+   * day may have none yet (`placeholder: true`); the package's own
+   * `resources` (YAML, e.g. tool guides) ships on `DayPackage.resources`. */
+  resources: (campId: string, day: number) =>
+    api<{ camp_id: string; day: number; items: Record<string, unknown>[]; placeholder: boolean }>(
+      `/api/v1/camps/${encodeURIComponent(campId)}/days/${day}/resources`,
+    ),
+};
+
+/** Capsule progress — planned path; falls back to evidence */
+export const capsuleApi = {
+  list: (params: { camp_id: string; day?: number }) => {
+    const q = new URLSearchParams();
+    q.set("camp_id", params.camp_id);
+    if (params.day != null) q.set("day", String(params.day));
+    return api<{ items: { day: number; capsule_id: string; opened_at: string }[]; learner_id: string; camp_id: string }>(
+      `/api/v1/capsules/progress?${q.toString()}`,
+    );
+  },
+  markOpened: async (body: { camp_id: string; day: number; capsule_id: string; learner_id: string }) => {
+    try {
+      return await api("/api/v1/capsules/progress", { method: "POST", body });
+    } catch (err) {
+      if (err instanceof ApiError && (err.status === 404 || err.status === 405)) {
+        return api("/api/v1/evidence", {
+          method: "POST",
+          body: {
+            learner_id: body.learner_id,
+            camp_version: "v0.3",
+            day: body.day,
+            node_id: `d${body.day}-learn`,
+            kind: "capsule",
+            payload: { capsule_id: body.capsule_id },
+            capability_tags: [`capsule:${body.capsule_id}`],
+          },
+        });
+      }
+      throw err;
+    }
+  },
+};
+
+/** Per-capsule practice responses (M7) — draft autosave + explicit submit. */
+export const practiceApi = {
+  list: (params: { camp_id: string; day?: number }) => {
+    const q = new URLSearchParams();
+    q.set("camp_id", params.camp_id);
+    if (params.day != null) q.set("day", String(params.day));
+    return api<{ items: import("./types").PracticeResponse[]; learner_id: string; camp_id: string }>(
+      `/api/v1/practice?${q.toString()}`,
+    );
+  },
+  save: (body: {
+    camp_id: string;
+    day: number;
+    capsule_id: string;
+    response_text: string;
+    response_json?: Record<string, unknown>;
+    status?: "draft" | "submitted";
+    force_reopen?: boolean;
+  }) =>
+    api<import("./types").PracticeResponse & { id: string; learner_id: string }>("/api/v1/practice", {
+      method: "PUT",
+      body,
+    }),
+};
+
+/** AI 导师 */
+export interface CoachAskBody {
+  question: string;
+  camp_id?: string;
+  day?: number;
+  node_id?: string;
+  learner_id?: string;
+  help_mode?: "explain" | "debug" | "process" | "interview" | "review";
+  fail_count?: number;
+  fallback_steps?: string[];
+  agent_job_id?: string;
+  sim_summary?: string;
+  skill_id?: string;
+  max_help_level?: number;
+}
+
+export const coachApi = {
+  ask: (body: CoachAskBody) =>
+    api<{
+      reply: string;
+      level: number;
+      coach_mode: string;
+      citations: { id?: string; title?: string; snippet?: string }[];
+      kb_mode?: string;
+      diagnostics?: import("./types").CoachDiagnostics;
+    }>("/api/v1/coach/ask", { method: "POST", body }),
+
+  /** SSE: meta → delta* → done */
+  askStream: async (
+    body: CoachAskBody,
+    handlers: {
+      onMeta?: (meta: { level?: number; kb_mode?: string; citations?: { title?: string; id?: string }[] }) => void;
+      onDelta?: (text: string) => void;
+      onDone?: (done: {
+        reply: string;
+        level: number;
+        coach_mode: string;
+        kb_mode?: string;
+        citations?: { id?: string; title?: string; snippet?: string }[];
+        diagnostics?: import("./types").CoachDiagnostics;
+      }) => void;
+    },
+  ) => {
+    const csrf = getCookie("fde_csrf");
+    const res = await fetch("/api/v1/coach/ask/stream", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/event-stream",
+        ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      let parsed: unknown = null;
+      try {
+        parsed = await res.json();
+      } catch {
+        /* ignore */
+      }
+      throw new ApiError(res.status, messageFromBody(parsed, `HTTP ${res.status}`), parsed);
+    }
+    const reader = res.body?.getReader();
+    if (!reader) throw new ApiError(500, "无响应流");
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let eventName = "message";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split("\n");
+      buffer = parts.pop() || "";
+      for (const line of parts) {
+        const trimmed = line.replace(/\r$/, "");
+        if (!trimmed) {
+          eventName = "message";
+          continue;
+        }
+        if (trimmed.startsWith("event:")) {
+          eventName = trimmed.slice(6).trim() || "message";
+          continue;
+        }
+        if (trimmed.startsWith("data:")) {
+          const raw = trimmed.slice(5).trim();
+          try {
+            const data = JSON.parse(raw) as Record<string, unknown>;
+            if (eventName === "meta") handlers.onMeta?.(data as never);
+            else if (eventName === "delta" && typeof data.text === "string") handlers.onDelta?.(data.text);
+            else if (eventName === "done") handlers.onDone?.(data as never);
+          } catch {
+            /* ignore malformed chunk */
+          }
+        }
+      }
+    }
+  },
+
+  /** 基于最新失败测验/评测的确定性诊断（无需 LLM，anyCode/灵知不可用时仍可用）。 */
+  diagnose: (body: { camp_id?: string; day?: number; node_id?: string }) =>
+    api<import("./types").CoachDiagnostics & { mode: "offline" }>("/api/v1/coach/diagnose", {
+      method: "POST",
+      body,
+    }),
+
+  /** 申请导师复核 — 创建待处理的 mentor_reviews 记录。 */
+  handoff: (body: { camp_id?: string; day?: number; node_id?: string; question?: string; coach_turn_id?: string }) =>
+    api<{ ok: boolean; review_id: string; status: string; diagnostics: import("./types").CoachDiagnostics }>(
+      "/api/v1/coach/handoff",
+      { method: "POST", body },
+    ),
+
+  /** 学员查看当前课次/节点的导师复核结果。 */
+  listMentorReviews: (params: { camp_id?: string; day: number; node_id?: string; limit?: number }) => {
+    const q = new URLSearchParams();
+    q.set("day", String(params.day));
+    if (params.camp_id) q.set("camp_id", params.camp_id);
+    if (params.node_id) q.set("node_id", params.node_id);
+    if (params.limit != null) q.set("limit", String(params.limit));
+    return api<{ items: import("./types").MentorReview[] }>(`/api/v1/coach/mentor-reviews?${q.toString()}`);
+  },
+};
+
+/** EvalBridge */
+export const evalApi = {
+  run: (body: {
+    runner: "agent" | "sim";
+    rubric: import("./types").RubricCheck[];
+    job_id?: string;
+    sim_session_id?: string;
+    camp_id?: string;
+    day?: number;
+    node_id?: string;
+    write_evidence?: boolean;
+  }) =>
+    api<{
+      result?: import("./types").EvalResult;
+      evidence_id?: string;
+      learner_id?: string;
+    }>("/api/v1/eval/run", { method: "POST", body }),
+};
+
+/** Atomic lab completion (M3) — one call for submission + evidence + progress. */
+export const labApi = {
+  complete: (body: {
+    camp_id: string;
+    day: number;
+    node_id: string;
+    job_id?: string | null;
+    eval_result: Record<string, unknown>;
+    snapshot_id?: string | null;
+  }) => api<import("./types").LabCompleteResult>("/api/v1/labs/complete", { method: "POST", body }),
+};
+
+/** Course media playback */
+export const mediaApi = {
+  presign: (object_key: string, camp_id?: string) =>
+    api<{ url: string; expires_in: number; object_key: string; bucket: string }>(
+      `/api/v1/media/presign?object_key=${encodeURIComponent(object_key)}${
+        camp_id ? `&camp_id=${encodeURIComponent(camp_id)}` : ""
+      }`,
+    ),
+};
+
+/** Agent */
+export const agentApi = {
+  ensure: (camp_id?: string) =>
+    api<{ workspace: string; size_bytes: number; camp_id: string; learner_id: string }>(
+      "/api/v1/agent/workspaces/ensure",
+      { method: "POST", body: { camp_id } },
+    ),
+  createJob: (body: { prompt: string; node_id?: string; force_stub?: boolean; camp_id?: string }) =>
+    api<{ job_id: string; legacy_job_id?: string; runner: string; status: string }>("/api/v1/agent/jobs", {
+      method: "POST",
+      body,
+    }),
+  getJob: (jobId: string) => api<Record<string, unknown>>(`/api/v1/agent/jobs/${encodeURIComponent(jobId)}`),
+  evaluate: (jobId: string, rubric: import("./types").RubricCheck[]) =>
+    api<import("./types").EvalResult>(`/api/v1/agent/jobs/${encodeURIComponent(jobId)}/evaluate`, {
+      method: "POST",
+      body: { rubric },
+    }),
+  cancel: (jobId: string) =>
+    api<{ status: string }>(`/api/v1/agent/jobs/${encodeURIComponent(jobId)}/cancel`, { method: "POST" }),
+  listFiles: (campId: string, learnerId: string, opts?: { day?: number; view?: "primary" | "all" | "history" }) => {
+    const q = new URLSearchParams();
+    if (opts?.day != null) q.set("day", String(opts.day));
+    if (opts?.view) q.set("view", opts.view);
+    const qs = q.toString();
+    return api<{
+      files: import("./types").WorkspaceFile[];
+      size_bytes: number;
+      primary?: import("./types").WorkspaceFile[];
+      inherited?: import("./types").WorkspaceFile[];
+    }>(`/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/files${qs ? `?${qs}` : ""}`);
+  },
+  readFile: (campId: string, learnerId: string, path: string) =>
+    api<import("./types").WorkspaceEntry>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/file?path=${encodeURIComponent(path)}`,
+    ),
+  writeFile: (campId: string, learnerId: string, path: string, content: string) =>
+    api<{ ok: boolean; path: string; snapshot_id: string; size_bytes: number }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/files`,
+      { method: "PUT", body: { path, content } },
+    ),
+  mkdir: (campId: string, learnerId: string, path: string) =>
+    api<{ ok: boolean; path: string; snapshot_id: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/mkdir`,
+      { method: "POST", body: { path } },
+    ),
+  rename: (campId: string, learnerId: string, from_path: string, to_path: string) =>
+    api<{ ok: boolean; from_path: string; to_path: string; snapshot_id: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/rename`,
+      { method: "POST", body: { from_path, to_path } },
+    ),
+  deleteFile: (campId: string, learnerId: string, path: string) =>
+    api<{ ok: boolean; path: string; snapshot_id: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/files?path=${encodeURIComponent(path)}`,
+      { method: "DELETE" },
+    ),
+  evaluateWorkspace: (campId: string, learnerId: string, rubric: import("./types").RubricCheck[]) =>
+    api<import("./types").EvalResult>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/evaluate`,
+      { method: "POST", body: { rubric } },
+    ),
+  previewUrl: (campId: string, learnerId: string, path = "index.html") =>
+    api<{ url: string; expires_in: number; path: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/preview-url?path=${encodeURIComponent(path)}`,
+    ),
+  previewRenderUrl: (campId: string, learnerId: string, path = "index.html") =>
+    `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/preview-render?path=${encodeURIComponent(path)}`,
+  listSnapshots: (campId: string, learnerId: string) =>
+    api<{
+      items: {
+        id: string;
+        parent_id?: string;
+        size_bytes?: number;
+        file_count?: number;
+        created_at?: string;
+        created_by_job_id?: string;
+      }[];
+      head?: { snapshot_id?: string; version?: number };
+    }>(`/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/snapshots`),
+  readSnapshotFile: (campId: string, learnerId: string, snapshotId: string, path: string) =>
+    api<import("./types").WorkspaceEntry & { snapshot_id?: string; status?: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/snapshots/${encodeURIComponent(snapshotId)}/file?path=${encodeURIComponent(path)}`,
+    ),
+  restoreSnapshot: (campId: string, learnerId: string, snapshot_id: string) =>
+    api<{ ok: boolean; snapshot_id: string }>(
+      `/api/v1/agent/workspaces/${encodeURIComponent(campId)}/${encodeURIComponent(learnerId)}/restore?snapshot_id=${encodeURIComponent(snapshot_id)}`,
+      { method: "POST" },
+    ),
+  listJobs: (
+    learnerId: string,
+    opts?: { active_only?: boolean; camp_id?: string; node_id?: string; limit?: number },
+  ) => {
+    const q = new URLSearchParams();
+    if (opts?.active_only) q.set("active_only", "true");
+    if (opts?.camp_id) q.set("camp_id", opts.camp_id);
+    if (opts?.node_id) q.set("node_id", opts.node_id);
+    if (opts?.limit) q.set("limit", String(opts.limit));
+    const qs = q.toString();
+    return api<{
+      items: {
+        id: string;
+        status: string;
+        camp_id?: string;
+        node_id?: string;
+        created_at?: string;
+      }[];
+    }>(`/api/v1/agent/learners/${encodeURIComponent(learnerId)}/jobs${qs ? `?${qs}` : ""}`);
+  },
+  eventsUrl: (jobId: string) => `/api/v1/agent/jobs/${encodeURIComponent(jobId)}/events`,
+};
+
+/** Sim */
+export const simApi = {
+  create: (body: { sim_kind: string; task_spec?: Record<string, unknown>; learner_seed?: Record<string, unknown> }) =>
+    api<{ session_id: string; sim_kind: string }>("/api/v1/sim/sessions", { method: "POST", body }),
+  view: (sessionId: string) => api<Record<string, unknown>>(`/api/v1/sim/sessions/${encodeURIComponent(sessionId)}`),
+  action: (sessionId: string, type: string, payload: Record<string, unknown> = {}) =>
+    api(`/api/v1/sim/sessions/${encodeURIComponent(sessionId)}/actions`, {
+      method: "POST",
+      body: { type, payload },
+    }),
+  evaluate: (sessionId: string, rubric: import("./types").RubricCheck[]) =>
+    api(`/api/v1/sim/sessions/${encodeURIComponent(sessionId)}/evaluate`, { method: "POST", body: { rubric } }),
+  reset: (sessionId: string) =>
+    api(`/api/v1/sim/sessions/${encodeURIComponent(sessionId)}/reset`, { method: "POST" }),
+};
+
+/** SQL Lab (M4) — isolated Postgres sandbox sessions */
+export const sqlLabApi = {
+  create: (body: { camp_id?: string; day?: number; node_id?: string; seed_sql?: string[] }) =>
+    api<{ session_id: string; expires_in?: number; camp_id?: string; day?: number; node_id?: string }>(
+      "/api/v1/sql-lab/sessions",
+      { method: "POST", body },
+    ),
+  exec: (sessionId: string, sql: string) =>
+    api<{ columns: string[]; rows: Record<string, unknown>[]; rowcount: number; duration_ms: number }>(
+      `/api/v1/sql-lab/sessions/${encodeURIComponent(sessionId)}/exec`,
+      { method: "POST", body: { sql } },
+    ),
+  schema: (sessionId: string) =>
+    api<{ schema: string; tables: { name: string; columns: { column_name: string; data_type: string }[] }[] }>(
+      `/api/v1/sql-lab/sessions/${encodeURIComponent(sessionId)}/schema`,
+    ),
+  reset: (sessionId: string) =>
+    api<{ status: string }>(`/api/v1/sql-lab/sessions/${encodeURIComponent(sessionId)}/reset`, { method: "POST" }),
+  evaluate: (sessionId: string, rubric: import("./types").RubricCheck[]) =>
+    api<{ pass: boolean; checks: { id: string; ok: boolean; detail: string }[]; score: number }>(
+      `/api/v1/sql-lab/sessions/${encodeURIComponent(sessionId)}/evaluate`,
+      { method: "POST", body: { rubric } },
+    ),
+  destroy: (sessionId: string) =>
+    api<{ status: string }>(`/api/v1/sql-lab/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" }),
+};
+
+/** Learner lab attachments (M4) — bound to an attempt/submission, never
+ * auto-ingested into RAG (`rag_eligible=false` by default). */
+export const labAttachmentsApi = {
+  upload: (file: File, meta: { camp_id?: string; day?: number; node_id?: string; attempt_id?: string; submission_id?: string }) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    if (meta.camp_id) fd.append("camp_id", meta.camp_id);
+    if (meta.day != null) fd.append("day", String(meta.day));
+    if (meta.node_id) fd.append("node_id", meta.node_id);
+    if (meta.attempt_id) fd.append("attempt_id", meta.attempt_id);
+    if (meta.submission_id) fd.append("submission_id", meta.submission_id);
+    return api<{ id: string; filename: string; size_bytes: number; scan_status: string; rag_eligible: boolean }>(
+      "/api/v1/labs/attachments",
+      { method: "POST", formData: fd },
+    );
+  },
+  list: (params?: { attempt_id?: string; submission_id?: string; day?: number; node_id?: string; camp_id?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.attempt_id) q.set("attempt_id", params.attempt_id);
+    if (params?.submission_id) q.set("submission_id", params.submission_id);
+    if (params?.day != null) q.set("day", String(params.day));
+    if (params?.node_id) q.set("node_id", params.node_id);
+    if (params?.camp_id) q.set("camp_id", params.camp_id);
+    const qs = q.toString();
+    return api<{ items: Record<string, unknown>[] }>(`/api/v1/labs/attachments${qs ? `?${qs}` : ""}`);
+  },
+};
+
+/** Learner-facing submissions (project reflections, lab retries, etc). */
+export const submissionsApi = {
+  get: (params: { camp_id?: string; day: number; node_id: string }) => {
+    const q = new URLSearchParams();
+    q.set("day", String(params.day));
+    q.set("node_id", params.node_id);
+    if (params.camp_id) q.set("camp_id", params.camp_id);
+    return api<{ item: import("./types").Submission | null }>(`/api/v1/submissions?${q.toString()}`);
+  },
+  create: (body: {
+    camp_id?: string;
+    day: number;
+    node_id: string;
+    job_id?: string | null;
+    snapshot_id?: string | null;
+    eval?: Record<string, unknown>;
+  }) => api<{ id: string; snapshot_id?: string | null; status: string }>("/api/v1/submissions", { method: "POST", body }),
+};
+
+/** Progress */
+export const progressApi = {
+  evidence: (learnerId: string) =>
+    api<{ items: Record<string, unknown>[] }>(`/api/v1/learners/${encodeURIComponent(learnerId)}/evidence`),
+  passport: (learnerId: string) =>
+    api<import("./types").Passport>(`/api/v1/learners/${encodeURIComponent(learnerId)}/passport`),
+  writeEvidence: (body: {
+    learner_id: string;
+    camp_version?: string;
+    day: number;
+    node_id: string;
+    kind: string;
+    payload?: Record<string, unknown>;
+    capability_tags?: string[];
+  }) => api("/api/v1/evidence", { method: "POST", body }),
+};
+
+/** Learner workbench study time (per training day). */
+export const learningApi = {
+  dailySummary: (params: { camp_id: string; day: number }) => {
+    const q = new URLSearchParams();
+    q.set("camp_id", params.camp_id);
+    q.set("day", String(params.day));
+    return api<import("./types").LearningDailySummary>(`/api/v1/learning/daily-summary?${q.toString()}`);
+  },
+  heartbeat: (body: { camp_id: string; day: number; delta_seconds: number }) =>
+    api<{ ok: boolean; study_seconds: number; delta_seconds: number }>("/api/v1/learning/heartbeat", {
+      method: "POST",
+      body,
+    }),
+};
+
+/** Public site content (landing page) */
+export const siteApi = {
+  landing: () => api<import("./types").LandingPayload>("/api/v1/site/landing", { skipRefresh: true }),
+  contact: (body: import("./types").ContactLeadBody) =>
+    api<{ ok: boolean; id: string }>("/api/v1/site/contact", { method: "POST", body, skipRefresh: true }),
+};
+
+/** Learner profile / identity / certificates */
+export const meApi = {
+  profile: () => api<import("./types").LearnerProfile>("/api/v1/me/profile"),
+  updateProfile: (body: { display_name?: string; bio?: string }) =>
+    api<import("./types").LearnerProfile>("/api/v1/me/profile", { method: "PATCH", body }),
+  uploadAvatar: (file: File) => {
+    const fd = new FormData();
+    fd.append("avatar", file);
+    return api<{ ok: boolean; avatar_url: string; profile: import("./types").LearnerProfile }>(
+      "/api/v1/me/profile/avatar",
+      { method: "POST", formData: fd },
+    );
+  },
+  /** Served by services/auth/app.py (M1 enrollment_records model) */
+  enrollments: () =>
+    api<{ items: import("./types").EnrollmentRecord[]; active_enrollment_id: string | null }>(
+      "/api/v1/me/enrollments",
+    ),
+  certificates: () =>
+    api<{ items: import("./types").CertificateItem[]; source: string }>("/api/v1/me/certificates"),
+  startIdentity: (body: { real_name: string; id_number: string }) =>
+    api<import("./types").IdentityStartResult>("/api/v1/me/identity/start", { method: "POST", body }),
+};
+
+/** Public certificate verification (no auth) */
+export const certApi = {
+  verify: (certId: string) =>
+    api<import("./types").CertificateVerifyResult>(
+      `/api/v1/certificates/${encodeURIComponent(certId)}/verify`,
+      { skipRefresh: true },
+    ),
+  verifyChallenge: (body: import("./types").CertificateVerifyBody) =>
+    api<import("./types").CertificateVerifyResult>("/api/v1/certificates/verify", {
+      method: "POST",
+      body,
+      skipRefresh: true,
+    }),
+};
+
+/** Kb memories */
+export const kbApi = {
+  uploadMemory: (body: { content: string; title?: string; camp_id?: string; tags?: string[] }) =>
+    api<Record<string, unknown>>("/api/v1/kb/memories", { method: "POST", body }),
+};
+
+/** Author — mix of existing + planned production paths */
+export const authorApi = {
+  uploadContract: (file: File) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    return api("/api/v1/author/contracts/upload", { method: "POST", formData: fd });
+  },
+  evidence: (learnerId?: string) =>
+    api<{ items: Record<string, unknown>[] }>(
+      `/api/v1/author/evidence${learnerId ? `?learner_id=${encodeURIComponent(learnerId)}` : ""}`,
+    ),
+  jobs: (learnerId?: string) =>
+    api<{ items: Record<string, unknown>[] }>(
+      `/api/v1/author/jobs${learnerId ? `?learner_id=${encodeURIComponent(learnerId)}` : ""}`,
+    ),
+  /** Planned: POST /api/v1/author/documents */
+  uploadDocument: (file: File, campId: string) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("camp_id", campId);
+    return api<import("./types").AuthorDocument>("/api/v1/author/documents", { method: "POST", formData: fd });
+  },
+  listDocuments: (params?: ListQuery & { camp_id?: string; status?: string; bound?: string }) => {
+    const qs = toQuery(params);
+    return api<Paginated<import("./types").AuthorDocument>>(
+      `/api/v1/author/documents${qs ? `?${qs}` : ""}`,
+    );
+  },
+  getDocument: (docId: string) =>
+    api<import("./types").AuthorDocument>(`/api/v1/author/documents/${encodeURIComponent(docId)}`),
+  deleteDocument: (docId: string) =>
+    api<{ ok: boolean; id: string; bindings_cleared: number }>(
+      `/api/v1/author/documents/${encodeURIComponent(docId)}`,
+      { method: "DELETE" },
+    ),
+  unbindDocument: (docId: string, bindingId: string) =>
+    api<{ ok: boolean; binding_id: string }>(
+      `/api/v1/author/documents/${encodeURIComponent(docId)}/bindings/${encodeURIComponent(bindingId)}`,
+      { method: "DELETE" },
+    ),
+  bindDocument: (docId: string, body: { day: number; course_version_id?: string; capsule_id?: string }) =>
+    api(`/api/v1/author/documents/${encodeURIComponent(docId)}/bind`, { method: "POST", body }),
+  retryDocument: (docId: string) =>
+    api<{ ok: boolean; ingest_job_id: string }>(
+      `/api/v1/author/documents/${encodeURIComponent(docId)}/retry`,
+      { method: "POST", body: {} },
+    ),
+  documentDownloadUrl: (docId: string) =>
+    api<{ url: string; expires_in: number }>(
+      `/api/v1/author/documents/${encodeURIComponent(docId)}/download-url`,
+    ),
+  listCourseVersions: (campId: string) =>
+    api<{ items: import("./types").CourseVersion[] }>(
+      `/api/v1/author/course-versions?camp_id=${encodeURIComponent(campId)}`,
+    ),
+  publishCourseVersion: (body: { camp_id: string; version_tag: string; title?: string; note?: string }) =>
+    api("/api/v1/author/course-versions/publish", { method: "POST", body }),
+  listCourses: () => api<{ items: import("./types").AuthorCourse[] }>("/api/v1/author/courses"),
+  listCoursesPaged: (params?: ListQuery & { status?: string }) => {
+    const qs = toQuery(params);
+    return api<Paginated<import("./types").AuthorCourse>>(`/api/v1/author/courses${qs ? `?${qs}` : ""}`);
+  },
+  createCourse: (body: { title: string; slug: string; description?: string }) =>
+    api<{ ok: boolean; id: string }>("/api/v1/author/courses", { method: "POST", body }),
+  patchCourse: (courseId: string, body: { title?: string; description?: string; status?: string }) =>
+    api<{ ok: boolean }>(`/api/v1/author/courses/${encodeURIComponent(courseId)}`, { method: "PATCH", body }),
+  listCourseVersionsPaged: (params?: ListQuery & { camp_id?: string; course_id?: string; status?: string }) => {
+    const qs = toQuery(params);
+    return api<Paginated<import("./types").AuthorCourseVersion>>(
+      `/api/v1/author/course-versions${qs ? `?${qs}` : ""}`,
+    );
+  },
+  validateCourseYaml: (files: File[]) => {
+    const fd = new FormData();
+    for (const f of files) fd.append("files", f);
+    return api<{
+      ok: boolean;
+      days: number;
+      titles?: string[];
+      errors?: string[];
+      packages?: Record<string, unknown>[];
+    }>("/api/v1/author/course-versions/validate-yaml", { method: "POST", formData: fd });
+  },
+  listVersionsForCourse: (courseId: string) =>
+    api<{ items: import("./types").AuthorCourseVersion[] }>(
+      `/api/v1/author/courses/${encodeURIComponent(courseId)}/versions`,
+    ),
+  createCourseVersion: (
+    courseId: string,
+    body: { version_tag: string; title?: string; clone_from_version_id?: string; camp_id?: string; files?: File[] },
+  ) => {
+    const fd = new FormData();
+    fd.append("version_tag", body.version_tag);
+    fd.append("title", body.title || "");
+    if (body.clone_from_version_id) fd.append("clone_from_version_id", body.clone_from_version_id);
+    if (body.camp_id) fd.append("camp_id", body.camp_id);
+    for (const f of body.files || []) fd.append("files", f);
+    return api<{ ok: boolean; course_version_id: string; status: string; days: number }>(
+      `/api/v1/author/courses/${encodeURIComponent(courseId)}/versions`,
+      { method: "POST", formData: fd },
+    );
+  },
+  listCourseVersionDays: (versionId: string) =>
+    api<{ items: { day: number; title: string; project?: string | null }[] }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days`,
+    ),
+  getCourseVersion: (versionId: string) =>
+    api<{
+      id: string;
+      camp_id?: string | null;
+      course_id?: string | null;
+      version_tag: string;
+      status: string;
+      title: string;
+      source?: string | null;
+      published_at?: string | null;
+      created_at?: string;
+      course_title?: string | null;
+      course_slug?: string | null;
+      day_count?: number;
+    }>(`/api/v1/author/course-versions/${encodeURIComponent(versionId)}`),
+  getCourseVersionDay: (versionId: string, day: number) =>
+    api<{ day: number; title: string; project?: string | null; package_json: Record<string, unknown> }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days/${day}`,
+    ),
+  createCourseVersionDay: (
+    versionId: string,
+    body: { day?: number; title?: string; week?: number; clone_from_day?: number } = {},
+  ) =>
+    api<{ ok: boolean; course_version_id: string; day: number; title: string; package_json: Record<string, unknown> }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days`,
+      { method: "POST", body },
+    ),
+  deleteCourseVersionDay: (versionId: string, day: number) =>
+    api<{ ok: boolean; course_version_id: string; day: number }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days/${day}`,
+      { method: "DELETE" },
+    ),
+  uploadCourseMedia: (
+    versionId: string,
+    body: { file: File; day: number; capsule_id: string; kind: "video" | "audio" | "poster" | "image" },
+  ) => {
+    const fd = new FormData();
+    fd.append("file", body.file);
+    fd.append("day", String(body.day));
+    fd.append("capsule_id", body.capsule_id);
+    fd.append("kind", body.kind);
+    return api<{
+      ok: boolean;
+      object_key: string;
+      kind: string;
+      content_type: string;
+      size_bytes: number;
+      filename: string;
+      stream_url: string;
+    }>(`/api/v1/author/course-versions/${encodeURIComponent(versionId)}/media`, {
+      method: "POST",
+      formData: fd,
+    });
+  },
+  updateCourseVersionDay: (
+    versionId: string,
+    day: number,
+    body: { package_json: Record<string, unknown>; title?: string; project?: string | null },
+  ) =>
+    api<{ ok: boolean; course_version_id: string; day: number }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days/${day}`,
+      { method: "PUT", body },
+    ),
+  publishCourseVersionById: (versionId: string, note?: string) =>
+    api<{ ok: boolean; course_version_id: string; status: string }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/publish`,
+      { method: "POST", body: { note: note || "" } },
+    ),
+  rollbackCourseVersion: (versionId: string) =>
+    api<{ ok: boolean; course_version_id: string; status: string; rolled_back_from: string; days: number }>(
+      `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/rollback`,
+      { method: "POST", body: {} },
+    ),
+  listSubmissions: (params?: { camp_id?: string; day?: number }) => {
+    const q = new URLSearchParams();
+    if (params?.camp_id) q.set("camp_id", params.camp_id);
+    if (params?.day != null) q.set("day", String(params.day));
+    const qs = q.toString();
+    return api<{ items: import("./types").Submission[] }>(`/api/v1/author/submissions${qs ? `?${qs}` : ""}`);
+  },
+  setCampKey: (campId: string, lingzhi_api_key: string) =>
+    api<{ ok: boolean; camp_id: string; masked: string }>(
+      `/api/v1/author/camps/${encodeURIComponent(campId)}/key`,
+      { method: "PUT", body: { lingzhi_api_key } },
+    ),
+  /** M5 — 导师复核队列（AI 教练 handoff 之后由教研/导师处理）。 */
+  listMentorReviews: (params?: { status?: string; camp_id?: string; limit?: number }) => {
+    const q = new URLSearchParams();
+    if (params?.status !== undefined) q.set("status", params.status);
+    if (params?.camp_id) q.set("camp_id", params.camp_id);
+    if (params?.limit != null) q.set("limit", String(params.limit));
+    const qs = q.toString();
+    return api<{ items: import("./types").MentorReview[] }>(`/api/v1/author/reviews${qs ? `?${qs}` : ""}`);
+  },
+  submitMentorReviewFeedback: (
+    reviewId: string,
+    body: { feedback: string; score?: number; status?: "resolved" | "pending" },
+  ) =>
+    api<{ ok: boolean; id: string; status: string; submission_id?: string | null }>(
+      `/api/v1/author/reviews/${encodeURIComponent(reviewId)}/feedback`,
+      { method: "POST", body },
+    ),
+  listOpenCourses: () =>
+    api<{ items: import("./types").LandingOpenCourse[] }>("/api/v1/author/site/open-courses"),
+  upsertOpenCourse: (form: FormData | Record<string, unknown>) => {
+    if (form instanceof FormData) {
+      return api<{ item: import("./types").LandingOpenCourse; items: import("./types").LandingOpenCourse[] }>(
+        "/api/v1/author/site/open-courses",
+        { method: "POST", formData: form },
+      );
+    }
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(form)) {
+      if (v == null) continue;
+      if (v instanceof Blob) fd.append(k, v);
+      else fd.append(k, String(v));
+    }
+    return api<{ item: import("./types").LandingOpenCourse; items: import("./types").LandingOpenCourse[] }>(
+      "/api/v1/author/site/open-courses",
+      { method: "POST", formData: fd },
+    );
+  },
+  deleteOpenCourse: (courseId: string) =>
+    api<{ items: import("./types").LandingOpenCourse[] }>(
+      `/api/v1/author/site/open-courses/${encodeURIComponent(courseId)}`,
+      { method: "DELETE" },
+    ),
+  overview: (campId?: string) =>
+    api<{
+      courses: number;
+      draft_versions: number;
+      pending_submissions: number;
+      documents: number;
+      videos: number;
+      learners: number;
+      recent_actions?: { title: string; at?: string; href?: string }[];
+    }>(`/api/v1/author/overview${campId ? `?camp_id=${encodeURIComponent(campId)}` : ""}`),
+  getSiteLanding: () => api<Record<string, unknown>>("/api/v1/author/site/landing"),
+  patchSiteLanding: (body: Record<string, unknown>) =>
+    api<Record<string, unknown>>("/api/v1/author/site/landing", { method: "PATCH", body }),
+  uploadSiteHero: (form: FormData) =>
+    api<Record<string, unknown>>("/api/v1/author/site/hero", { method: "POST", formData: form }),
+  uploadMentorAvatar: (mentorId: string, file: File) => {
+    const fd = new FormData();
+    fd.append("avatar", file);
+    return api<Record<string, unknown>>(
+      `/api/v1/author/site/mentors/${encodeURIComponent(mentorId)}/avatar`,
+      { method: "POST", formData: fd },
+    );
+  },
+  listOpenCoursesPaged: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/site/open-courses${qs ? `?${qs}` : ""}`);
+  },
+  listContactLeads: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/site/contact-leads${qs ? `?${qs}` : ""}`);
+  },
+  listMediaAssets: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/media-assets${qs ? `?${qs}` : ""}`);
+  },
+  uploadMediaAsset: (body: FormData | Record<string, unknown>) => {
+    if (body instanceof FormData) {
+      return api<any>("/api/v1/author/media-assets", { method: "POST", formData: body });
+    }
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(body)) {
+      if (v == null) continue;
+      if (v instanceof Blob) fd.append(k, v);
+      else fd.append(k, String(v));
+    }
+    return api<any>("/api/v1/author/media-assets", { method: "POST", formData: fd });
+  },
+  patchMediaAsset: (id: string, body: Record<string, unknown>) =>
+    api<any>(`/api/v1/author/media-assets/${encodeURIComponent(id)}`, { method: "PATCH", body }),
+  deleteMediaAsset: (id: string) =>
+    api<any>(`/api/v1/author/media-assets/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  listResourcePacks: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/resource-packs${qs ? `?${qs}` : ""}`);
+  },
+  createResourcePack: (body: Record<string, unknown>) =>
+    api<any>("/api/v1/author/resource-packs", { method: "POST", body }),
+  patchResourcePack: (id: string, body: Record<string, unknown>) =>
+    api<any>(`/api/v1/author/resource-packs/${encodeURIComponent(id)}`, { method: "PATCH", body }),
+  deleteResourcePack: (id: string) =>
+    api<any>(`/api/v1/author/resource-packs/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  listEnrollments: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/enrollments${qs ? `?${qs}` : ""}`);
+  },
+  listOfferings: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/offerings${qs ? `?${qs}` : ""}`);
+  },
+  createEnrollment: (body: Record<string, unknown>) =>
+    api<any>("/api/v1/author/enrollments", { method: "POST", body }),
+  patchEnrollment: (id: string, body: Record<string, unknown>) =>
+    api<any>(`/api/v1/author/enrollments/${encodeURIComponent(id)}`, { method: "PATCH", body }),
+  issueCertificate: (body: {
+    enrollment_id: string;
+    allow_unverified?: boolean;
+    mentor_approved?: boolean;
+    min_completion_rate?: number;
+  }) => api<any>("/api/v1/author/certificates/issue", { method: "POST", body }),
+  revokeCertificate: (certId: string, reason: string) =>
+    api<any>(`/api/v1/author/certificates/${encodeURIComponent(certId)}/revoke`, {
+      method: "POST",
+      body: { reason },
+    }),
+  listSubmissionsPaged: (params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<any>(`/api/v1/author/submissions${qs ? `?${qs}` : ""}`);
+  },
+  getSubmission: (id: string) => api<any>(`/api/v1/author/submissions/${encodeURIComponent(id)}`),
+  getSubmissionAttachments: (id: string) =>
+    api<any>(`/api/v1/author/submissions/${encodeURIComponent(id)}/attachments`),
+  reviewSubmission: (id: string, body: Record<string, unknown>) =>
+    api<any>(`/api/v1/author/submissions/${encodeURIComponent(id)}/review`, { method: "POST", body }),
+};

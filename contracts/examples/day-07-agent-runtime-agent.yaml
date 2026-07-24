@@ -1,0 +1,53 @@
+# Day 07 — Agent Runtime 与技能调用（Agent）
+camp_version: v0.3
+day: 7
+title: Agent Runtime、技能与安全边界
+project: Agent 运行说明页
+
+learn:
+  lingzhi_tags: ["camp:v0.3", "day:7", "topic:agent-runtime"]
+  estimated_minutes: 45
+  steps:
+    - Agent 不是聊天框：它有工作区、工具与配额。
+    - Skill 是可复用动作；提示词要约束路径与禁止项。
+    - 沙箱：学员目录隔离，禁止扫盘与提权命令。
+    - 今日：写清「如何跑一次 Agent Job」的说明页。
+
+quiz:
+  pass_rate: 0.5
+  questions:
+    - q: FDE 学员 Agent 产物应落在？
+      options: ["宿主机任意目录", "学员 workspace", "导师本机桌面"]
+      answer: 1
+    - q: 提示词里写 rm -rf / 应？
+      options: ["鼓励尝试", "被拒绝/拦截", "默认执行"]
+      answer: 1
+
+nodes:
+  - type: learn
+    title: Runtime 与配额
+  - type: quiz
+    title: 安全边界速测
+  - type: lab
+    title: Agent 生成 Runtime 说明页
+  - type: project
+    title: 企业任务：可交接的 Agent 手册
+  - type: review
+    title: 安全清单评审
+  - type: unlock
+    title: 解锁评测日
+
+lab:
+  runner: agent
+  agent:
+    prompt_template: >
+      创建 agent-runtime.html：说明 Agent Job 流程。
+      标题「Agent Runtime」，包含 workspace、job、SSE、quota 四个关键词，
+      以及「禁止扫盘」。不要 Docker。
+  rubric:
+    - check: file_exists
+      args: { path: agent-runtime.html }
+    - check: text_contains
+      args: { path: agent-runtime.html, needle: "workspace" }
+    - check: text_contains
+      args: { path: agent-runtime.html, needle: "quota" }

@@ -1,0 +1,83 @@
+# Day 13 — Kubernetes 滚动发布（仿真）
+camp_version: v0.3
+day: 13
+title: 应用发布与滚动更新（K8s 仿真）
+project: api 服务发布
+project_brief: 在仿真集群中修复 CrashLoop，完成 Deployment 滚动发布并验证就绪。
+review_checklist:
+- 已 kubectl apply 合法 Deployment
+- rollout status 成功
+- Deployment/api Ready
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:13
+  - topic:k8s-rollout
+  estimated_minutes: 40
+  require_capsules: false
+  steps:
+  - Kubernetes Deployment 通过声明式 YAML 描述期望状态。
+  - 滚动更新用 kubectl apply + rollout status 观察就绪。
+  - 本平台提供仿真集群，不连接真实 kubeconfig。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 学员实训是否会连接真实集群？
+    options:
+    - 会，自动注入 kubeconfig
+    - 不会，仅仿真对象图
+    - 仅生产环境会
+    answer: 1
+    explain: 红线为零真环境。
+  - q: 滚动发布常用命令？
+    options:
+    - docker compose up
+    - kubectl apply 与 rollout status
+    - npm start
+    answer: 1
+    explain: apply 写入期望，rollout 观察进度。
+  - q: CrashLoop 常见原因？
+    options:
+    - 探针失败 / 启动崩溃
+    - CSS 写错
+    - Markdown 未渲染
+    answer: 0
+    explain: 容器反复崩溃常见于探针或启动错误。
+nodes:
+- type: learn
+  title: Deployment 与滚动更新
+- type: quiz
+  title: 就绪探针与故障识别
+- type: lab
+  title: 在仿真集群中完成滚动发布
+- type: project
+  title: 企业任务：修复 CrashLoop 并恢复服务
+- type: review
+  title: 发布自检
+- type: unlock
+  title: 解锁后续
+lab:
+  runner: sim
+  sim_kind: k8s
+  adapter_version: "1.1"
+  seed:
+    cluster_fixture: prod-like-mini
+    faults: [CrashLoop]
+    diversify_by: learner_id
+  ui:
+    layout: cli_plus_topology
+  rubric:
+  - check: resource_exists
+    args: { kind: Deployment, name: api }
+  - check: resource_ready
+    args: { kind: Deployment, name: api }
+  - check: command_sequence
+    args:
+      contains:
+        - "kubectl apply"
+        - "kubectl rollout status"
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    allow_state_summary: true
+    max_help_level: 2

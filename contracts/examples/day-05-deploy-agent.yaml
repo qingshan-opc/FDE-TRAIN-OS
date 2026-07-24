@@ -1,0 +1,56 @@
+# Day 05 — 部署交付认知（Agent 产出 SOP 页）
+camp_version: v0.3
+day: 5
+title: 部署交付与痛点复盘
+project: 企业库存管理系统 · 上线 SOP
+
+learn:
+  lingzhi_tags: ["camp:v0.3", "day:5", "topic:deploy"]
+  estimated_minutes: 40
+  steps:
+    - 服务器与域名是网站的「家」；容器像集装箱。
+    - 开发/生产环境隔离；密钥进 .env，禁止硬编码。
+    - Git 是 AI 时代的后悔药：提交、推送才算交付。
+    - 「能跑」≠「能交付」：需要部署文档与检查清单。
+
+quiz:
+  pass_rate: 0.67
+  questions:
+    - q: 生产密钥应放在？
+      options: ["源码常量", ".env / 密钥管理", "截图发给客户"]
+      answer: 1
+    - q: 交付给客户还应包含？
+      options: ["只有 zip", "部署文档与手册", "仅口头说明"]
+      answer: 1
+    - q: Git 推送到远程的意义？
+      options: ["好看", "备份与协作交付", "加快编译"]
+      answer: 1
+
+nodes:
+  - type: learn
+    title: 上线与安全配置
+  - type: quiz
+    title: 交付 SOP 速测
+  - type: lab
+    title: Agent 生成上线检查清单页
+  - type: project
+    title: 企业任务：Week1 交付包
+  - type: review
+    title: 清单评审
+  - type: unlock
+    title: 完成第一周躯体 · 进入 AI 周
+
+lab:
+  runner: agent
+  agent:
+    prompt_template: >
+      创建 deploy-checklist.html：上线必查清单页面。
+      标题「上线 SOP」，列表至少包含：关闭 Debug、检查端口、确认数据库连接、
+      .env 密钥、Git 已推送。不要 Docker 真启动。
+  rubric:
+    - check: file_exists
+      args: { path: deploy-checklist.html }
+    - check: text_contains
+      args: { path: deploy-checklist.html, needle: "SOP" }
+    - check: text_contains
+      args: { path: deploy-checklist.html, needle: ".env" }

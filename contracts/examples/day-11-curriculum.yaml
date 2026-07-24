@@ -1,0 +1,105 @@
+camp_version: v0.3
+day: 11
+title: 实战：自动化库存助理（Agent 工作流）
+project: 低于警戒线自动补货通知
+project_brief: 交付 workflow.html：展示 check_inventory/send_email 与阈值触发逻辑。
+review_checklist:
+- 产物文件存在且可预览
+- 对照 rubric 自检通过
+- 能向导师说清本日价值
+learn:
+  lingzhi_tags:
+  - camp:v0.3
+  - day:11
+  - topic:automation
+  estimated_minutes: 120
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 从被动到主动
+    minutes: 20
+    content: Agent + Tool Calling + 定时/触发。
+    practice: 写老板原话。
+  - id: c2
+    title: Function Calling
+    minutes: 20
+    content: 模型决定何时发邮件。
+    practice: 解释谁真正发信。
+  - id: c3
+    title: 工具箱
+    minutes: 20
+    content: check_inventory / send_email。
+    practice: 为两工具写一句话职责。
+  - id: c4
+    title: 工作流编排
+    minutes: 20
+    content: 查库存→阈值→是否发信。
+    practice: 画出三步。
+  - id: c5
+    title: 端到端测试
+    minutes: 20
+    content: 改库存观察触发。
+    practice: 设计一个测试用例。
+  - id: c6
+    title: 失控与兜底
+    minutes: 20
+    content: 死循环、发错信→人工审核。
+    practice: 写一条兜底规则。
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: check_inventory 属于？
+    options:
+    - 浏览器插件
+    - Agent 可调用工具
+    - 数据库引擎
+    answer: 1
+    explain: Tool。
+  - q: 高风险动作应？
+    options:
+    - 全自动无审
+    - 人工审核兜底
+    - 随机执行
+    answer: 1
+    explain: 兜底。
+  - q: 自动化相对问答多了？
+    options:
+    - 仅更长回复
+    - 主动执行动作
+    - 换字体
+    answer: 1
+    explain: 执行。
+nodes:
+- type: learn
+  title: 自动化需求
+- type: quiz
+  title: 工具速测
+- type: lab
+  title: Agent 生成工作流说明
+- type: project
+  title: 企业任务：补货助理页
+- type: review
+  title: 风控评审
+- type: unlock
+  title: 解锁 Day12
+lab:
+  runner: agent
+  coach:
+    help_mode: explain
+    skill_id: fde-coach
+    max_help_level: 2
+  agent:
+    prompt_template: 创建 workflow.html：标题「库存助理」，说明工具 check_inventory 与 send_email，以及低于警戒线触发补货邮件的流程，含「人工审核」。不要
+      Docker。
+  rubric:
+  - check: file_exists
+    args:
+      path: workflow.html
+  - check: text_contains
+    args:
+      path: workflow.html
+      needle: check_inventory
+  - check: text_contains
+    args:
+      path: workflow.html
+      needle: send_email

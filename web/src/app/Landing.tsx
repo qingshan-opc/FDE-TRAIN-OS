@@ -406,9 +406,12 @@ export function Landing() {
         <LandingHeroFocus src={LANDING_HERO} />
         <div className="landing-hero__content">
           <p className="landing-hero__eyebrow mono">{heroEyebrow}</p>
-          <h1 className="landing-hero__title">{data.title}</h1>
+          <h1 className="landing-hero__title">
+            让每一次学习
+            <br />
+            都留下<em>可验证</em>的证据
+          </h1>
           <p className="landing-hero__subtitle">{slogan}</p>
-          <p className="landing-hero__note">让每一次学习都留下可验证的证据</p>
           <div className="landing-hero__actions">
             <Link to={appHref} className="landing-hero-btn landing-hero-btn--primary">
               {user ? "进入学习平台" : "进入学习"}
@@ -416,6 +419,22 @@ export function Landing() {
             <button type="button" className="landing-hero-btn" onClick={() => scrollToSection("enterprise")}>
               了解企业培训
             </button>
+          </div>
+        </div>
+        <div className="landing-hero__proof" aria-hidden="false">
+          <div className="landing-hero__proof-item">
+            <strong className="num">21</strong>
+            <span>天任务驱动训练</span>
+          </div>
+          <span className="landing-hero__proof-divider" aria-hidden="true" />
+          <div className="landing-hero__proof-item">
+            <strong className="num">100%</strong>
+            <span>交付全程留痕</span>
+          </div>
+          <span className="landing-hero__proof-divider" aria-hidden="true" />
+          <div className="landing-hero__proof-item">
+            <strong className="num">3</strong>
+            <span>类机构同行验证</span>
           </div>
         </div>
       </section>

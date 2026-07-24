@@ -6241,14 +6241,14 @@ a.passport-recent-item__title:hover {
 }
 
 /* ================= 教研台（Author Console）视觉升级 ================= */
-/* 顶栏：毛玻璃 */
+/* 顶栏：毛玻璃 + 内容垂直居中（修复 logo 偏上） */
 .author-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 22px;
-  height: 58px;
-  line-height: 58px;
+  height: 60px;
+  line-height: normal;
   background: rgba(255, 255, 255, 0.82) !important;
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
@@ -6258,62 +6258,73 @@ a.passport-recent-item__title:hover {
   top: 0;
   z-index: 50;
 }
+.author-topbar__left,
+.author-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.author-topbar .brand-logo {
+  display: inline-flex;
+  align-items: center;
+}
 .author-topbar-badge {
-  background: linear-gradient(150deg, var(--color-accent), var(--color-accent-strong));
-  color: #fff;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  border: 1px solid var(--color-accent-ring);
   border-radius: var(--radius-pill);
   padding: 3px 12px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  box-shadow: var(--shadow-accent);
 }
 
-/* 深色侧栏 */
+/* 深色侧栏（降饱和，不压内容） */
 .author-sider {
-  background: linear-gradient(180deg, #0f2e2a 0%, #123f39 60%, #0f2e2a 100%) !important;
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, #17322d 0%, #1b3d37 55%, #17322d 100%) !important;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04);
 }
 .author-sider-inner {
   height: 100%;
-  padding: 10px 10px 16px;
+  padding: 12px 10px 16px;
   overflow-y: auto;
 }
 .author-sider .ant-layout-sider-trigger {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 .author-sider .ant-layout-sider-trigger:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
 }
 
-/* 侧栏菜单：深色 + teal active 光带 */
+/* 侧栏菜单：深色 + 柔和 teal active */
 .author-side-menu.ant-menu {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.62);
   font-size: 14px;
 }
 .author-side-menu .ant-menu-submenu-title,
 .author-side-menu .ant-menu-item {
-  color: rgba(255, 255, 255, 0.72) !important;
+  color: rgba(255, 255, 255, 0.62) !important;
   border-radius: 10px !important;
   margin: 2px 4px !important;
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 .author-side-menu .ant-menu-submenu-title:hover,
 .author-side-menu .ant-menu-item:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
 }
 .author-side-menu .ant-menu-submenu-title .ant-menu-item-icon,
 .author-side-menu .ant-menu-item .ant-menu-item-icon {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   transition: color var(--dur-fast) var(--ease-out);
 }
 .author-side-menu .ant-menu-submenu-title:hover .ant-menu-item-icon,
 .author-side-menu .ant-menu-item:hover .ant-menu-item-icon {
-  color: #99f6e4;
+  color: #7fd8cc;
 }
 .author-side-menu .ant-menu-sub {
   background: transparent !important;
@@ -6321,20 +6332,20 @@ a.passport-recent-item__title:hover {
 .author-side-menu .ant-menu-sub .ant-menu-item {
   padding-left: 44px !important;
 }
-/* 选中项：teal 光带 */
+/* 选中项：柔和 teal（降饱和，不刺眼） */
 .author-side-menu .ant-menu-item-selected {
-  background: linear-gradient(90deg, rgba(13, 148, 136, 0.28), rgba(13, 148, 136, 0.12)) !important;
-  color: #fff !important;
-  box-shadow: inset 3px 0 0 #2dd4bf, 0 2px 10px -2px rgba(13, 148, 136, 0.4);
+  background: rgba(13, 148, 136, 0.18) !important;
+  color: #d8f3ef !important;
+  box-shadow: inset 3px 0 0 rgba(45, 212, 191, 0.7);
 }
 .author-side-menu .ant-menu-item-selected .ant-menu-item-icon {
-  color: #99f6e4 !important;
+  color: #7fd8cc !important;
 }
 .author-side-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: #99f6e4 !important;
+  color: #7fd8cc !important;
 }
 .author-side-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .ant-menu-item-icon {
-  color: #99f6e4 !important;
+  color: #7fd8cc !important;
 }
 
 /* 内容区：入场级联 + 页面节奏 */
@@ -6349,17 +6360,16 @@ a.passport-recent-item__title:hover {
 .author-content .ant-card:nth-of-type(2) { animation-delay: 60ms; }
 .author-content .ant-card:nth-of-type(3) { animation-delay: 120ms; }
 
-/* 卡片提升 */
+/* 卡片提升（克制，不抢内容） */
 .author-content .ant-card {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-xs);
-  transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+  transition: box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
 }
 .author-content .ant-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--color-accent-ring);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-border-cold);
 }
 .author-content .ant-statistic-title {
   color: var(--color-muted);
@@ -6394,18 +6404,16 @@ a.passport-recent-item__title:hover {
   border-bottom: 1px solid var(--color-border);
 }
 
-/* 按钮：主按钮 teal 渐变 */
+/* 主按钮：柔和 teal（降饱和） */
 .author-content .ant-btn-primary {
-  background: linear-gradient(150deg, var(--color-accent), var(--color-accent-strong));
+  background: var(--color-accent);
   border-color: transparent;
-  box-shadow: var(--shadow-accent);
+  box-shadow: none;
   font-weight: 600;
-  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+  transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 .author-content .ant-btn-primary:hover {
-  background: linear-gradient(150deg, var(--color-accent-hover), var(--color-accent-strong));
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px -6px rgba(13, 148, 136, 0.5);
+  background: var(--color-accent-hover);
 }
 .author-content .ant-btn-primary:active {
   transform: translateY(1px) scale(0.99);
@@ -6467,7 +6475,7 @@ a.passport-recent-item__title:hover {
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: linear-gradient(150deg, var(--color-accent-soft), var(--color-accent-muted));
+  background: var(--color-accent-soft);
   color: var(--color-accent-strong);
   font-size: 20px;
   transition: transform var(--dur) var(--ease-spring);
@@ -6486,4 +6494,20 @@ a.passport-recent-item__title:hover {
 .author-shortcut:hover .author-shortcut__arrow {
   transform: translateX(4px);
   color: var(--color-accent-strong);
+}
+
+/* 下拉层级：挂在触发器父容器，z 低于 sticky 顶栏(50)与侧栏，避免遮挡 */
+.author-topbar .ant-select-dropdown,
+.author-sider .ant-select-dropdown,
+.author-shell .ant-select-dropdown,
+.author-shell .ant-dropdown .ant-dropdown-menu {
+  z-index: 40;
+}
+.ant-select-dropdown,
+.ant-dropdown {
+  z-index: 1050;
+}
+.author-shell .ant-select-dropdown,
+.author-shell .ant-dropdown {
+  z-index: 45;
 }

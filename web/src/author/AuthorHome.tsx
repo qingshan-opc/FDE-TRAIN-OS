@@ -159,11 +159,11 @@ export function AuthorHome() {
     <AuthorLayoutProvider headerRef={headerRef} siderRef={siderRef} contentRef={contentRef}>
     <Layout className="author-shell" style={{ minHeight: "100vh", background: token.colorBgLayout }}>
       <Header ref={headerRef} className="author-topbar">
-        <Space size="middle">
+        <div className="author-topbar__left">
           <BrandLogo to="/" name="青山在" />
           <span className="author-topbar-badge">教研台</span>
-        </Space>
-        <Space size="middle">
+        </div>
+        <div className="author-topbar__right">
           {campOptions.length > 1 ? (
             <Select
               aria-label="切换营期"
@@ -173,7 +173,8 @@ export function AuthorHome() {
               onChange={(v) => void onSwitchCamp(v)}
               style={{ minWidth: 140 }}
               size="small"
-              getPopupContainer={() => headerRef.current || document.body}
+              popupMatchSelectWidth={false}
+              getPopupContainer={(trigger) => trigger.parentElement || document.body}
             />
           ) : (
             campId && <Typography.Text code>{campId}</Typography.Text>
@@ -182,7 +183,7 @@ export function AuthorHome() {
             学员台
           </Button>
           <Dropdown
-            getPopupContainer={() => headerRef.current || document.body}
+            getPopupContainer={(trigger) => trigger.parentElement || document.body}
             menu={{
               items: [
                 { key: "profile", icon: <UserOutlined />, label: "个人中心", onClick: () => nav("/app/profile") },
@@ -201,7 +202,7 @@ export function AuthorHome() {
               </Space>
             </Button>
           </Dropdown>
-        </Space>
+        </div>
       </Header>
       <Layout>
         <Sider
@@ -232,7 +233,7 @@ export function AuthorHome() {
                 if (String(key).startsWith("/")) nav(String(key));
               }}
               className="author-side-menu"
-              getPopupContainer={() => siderRef.current || document.body}
+              getPopupContainer={(trigger) => trigger.parentElement || siderRef.current || document.body}
             />
           </div>
         </Sider>

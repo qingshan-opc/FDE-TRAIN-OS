@@ -1,40 +1,66 @@
 :root {
-  /* Teal light — anyCode Workbench density, positive training brand */
+  /* 青山在 Learning OS — 学习感 × 高级感
+     单一 teal 锁定；中性灰骨架；细字阶；细腻阴影与动效。 */
   --color-white: #ffffff;
-  --color-bg: #f7f8f9;
+  --color-bg: #f6f7f8;
+  --color-bg-tint: #eef3f2;
   --color-elevated: #ffffff;
-  --color-ink: #1f2937;
-  --color-ink-strong: #134e4a;
+  --color-ink: #1c2321;
+  --color-ink-strong: #0f2e2a;
   --color-muted: #6b7280;
+  --color-faint: #9aa3a0;
   --color-accent: #0d9488;
+  --color-accent-strong: #0b7c72;
   --color-accent-hover: #0f766e;
+  --color-accent-soft: rgba(13, 148, 136, 0.08);
   --color-accent-muted: rgba(13, 148, 136, 0.12);
-  --color-border: #e5e7eb;
-  --color-border-cold: #d1d5db;
+  --color-accent-ring: rgba(13, 148, 136, 0.32);
+  --color-border: #e7eae9;
+  --color-border-cold: #d6dbd9;
   --color-danger: #dc2626;
   --color-success: #16a34a;
   --color-warn: #ca8a04;
   --color-locked: #9ca3af;
   --color-nav: #ffffff;
-  --color-nav-text: #134e4a;
+  --color-nav-text: #0f2e2a;
   --color-nav-muted: #6b7280;
 
-  --radius: 8px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --color-ink-heading: #134e4a;
-  --border: 1px solid var(--color-border-cold);
+  /* 阴影：贴近背景色相，克制不糊 */
+  --shadow-xs: 0 1px 2px rgba(15, 46, 42, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 46, 42, 0.05), 0 1px 3px rgba(15, 46, 42, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(15, 46, 42, 0.08), 0 2px 6px -2px rgba(15, 46, 42, 0.05);
+  --shadow-lg: 0 12px 32px -8px rgba(15, 46, 42, 0.14), 0 4px 12px -4px rgba(15, 46, 42, 0.06);
+  --shadow-accent: 0 6px 20px -6px rgba(13, 148, 136, 0.35);
 
+  /* 圆角系统：按钮/芯片 pill，卡片 14，面板 18，大容器 22 */
+  --radius: 10px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+  --color-ink-heading: #0f2e2a;
+  --border: 1px solid var(--color-border);
+
+  /* 字体：中英文各有担当，等宽只用于数据/代码 */
   --font-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --font-en: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-display: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
 
+  /* 字阶：display → 数字 hero；h1 → 页面标题 */
+  --fs-11: 11px;
   --fs-12: 12px;
+  --fs-13: 13px;
   --fs-14: 14px;
+  --fs-15: 15px;
   --fs-16: 16px;
+  --fs-18: 18px;
   --fs-20: 20px;
+  --fs-24: 24px;
   --fs-28: 28px;
+  --fs-32: 32px;
+  --fs-40: 40px;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -43,12 +69,25 @@
   --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
 
-  --nav-h: 52px;
+  /* 动效：统一的「青山在」缓动与时值 */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur: 240ms;
+  --dur-slow: 420ms;
+  --dur-slower: 680ms;
+
+  --nav-h: 56px;
   --touch: 44px;
-  --rail-left: 260px;
-  --rail-right: 300px;
+  --rail-left: 264px;
+  --rail-right: 304px;
   --z-toast: 1000;
   --z-dialog: 1100;
   --z-nav: 100;
+  --z-dock: 90;
 }

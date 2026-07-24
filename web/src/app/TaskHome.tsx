@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import type { DaySummary } from "../lib/types";
 import { dayLabel } from "../lib/dayLabel";
 import {
@@ -49,7 +49,7 @@ export function TaskHome({
 
   return (
     <div className="task-home" aria-label="任务首页">
-      <header className="task-home-head">
+      <header className="task-home-head anim-rise" style={{ "--i": 0 } as CSSProperties}>
         <div>
           <h1>今日任务</h1>
           <p className="task-home-sub muted">打开即可看到待办，一键进入对应学习节点</p>
@@ -61,7 +61,7 @@ export function TaskHome({
         )}
       </header>
 
-      <div className="task-home-summary">
+      <div className="task-home-summary anim-rise" style={{ "--i": 1 } as CSSProperties}>
         <div className="task-home-summary-row">
           <span>
             整体进度 {summary.passed}/{summary.total}（{summary.pct}%）
@@ -80,7 +80,7 @@ export function TaskHome({
         </div>
       </div>
 
-      <div className="task-home-tabs" role="tablist">
+      <div className="task-home-tabs anim-rise" role="tablist" style={{ "--i": 2 } as CSSProperties}>
         {(
           [
             ["pending", `待办 (${pending.length})`],
@@ -106,8 +106,13 @@ export function TaskHome({
         </p>
       ) : (
         <ul className="task-home-list">
-          {visible.map((card) => (
-            <TaskHomeCard key={card.id} card={card} onOpen={() => onOpenTask(card.day, card.nodeId)} />
+          {visible.map((card, i) => (
+            <TaskHomeCard
+              key={card.id}
+              card={card}
+              index={i}
+              onOpen={() => onOpenTask(card.day, card.nodeId)}
+            />
           ))}
         </ul>
       )}
@@ -115,7 +120,7 @@ export function TaskHome({
   );
 }
 
-function TaskHomeCard({ card, onOpen }: { card: TaskCard; onOpen: () => void }) {
+function TaskHomeCard({ card, index, onOpen }: { card: TaskCard; index: number; onOpen: () => void }) {
   const statusText = card.done
     ? "已完成"
     : card.locked
@@ -125,7 +130,7 @@ function TaskHomeCard({ card, onOpen }: { card: TaskCard; onOpen: () => void }) 
         : "待完成";
 
   return (
-    <li>
+    <li className="anim-rise" style={{ "--i": 3 + Math.min(index, 6) } as CSSProperties}>
       <button
         type="button"
         className={`task-home-card ${card.urgent ? "is-urgent" : ""} ${card.done ? "is-done" : ""} ${card.locked ? "is-locked" : ""}`}

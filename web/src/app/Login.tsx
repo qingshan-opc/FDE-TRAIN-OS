@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Card, Form, Input, Space, Tabs, Typography, theme } from "antd";
+import { Alert, Button, Card, Form, Input, Space, Tabs, Typography } from "antd";
 import { ApiError, authApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 
@@ -9,7 +9,6 @@ type Mode = "password" | "invite";
 export function LoginPage() {
   const { login, user, loading, refreshMe } = useAuth();
   const nav = useNavigate();
-  const { token } = theme.useToken();
   const [mode, setMode] = useState<Mode>("password");
   const [passwordForm] = Form.useForm();
   const [inviteForm] = Form.useForm();
@@ -78,19 +77,10 @@ export function LoginPage() {
   };
 
   return (
-    <div
-      className="login-page"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24,
-        background: `linear-gradient(160deg, ${token.colorBgLayout} 0%, #e6fffa 45%, ${token.colorBgLayout} 100%)`,
-      }}
-    >
-      <Card style={{ width: "100%", maxWidth: 420, boxShadow: token.boxShadowSecondary }}>
-        <Typography.Text type="secondary" style={{ letterSpacing: "0.04em" }}>
+    <div className="login-page">
+      <div className="login-page__glow" aria-hidden="true" />
+      <Card className="login-card anim-pop" style={{ width: "100%", maxWidth: 420 }}>
+        <Typography.Text type="secondary" style={{ letterSpacing: "0.08em", textTransform: "uppercase", fontSize: 11, fontWeight: 600 }}>
           FDE Learning OS
         </Typography.Text>
         <Typography.Title level={3} style={{ marginTop: 4, marginBottom: 8 }}>

@@ -1,0 +1,35 @@
+{
+  "total": 90.212,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 11.68
+    },
+    {
+      "id": "02-wire-skills",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s04_course/tts/02-wire-skills.wav",
+      "start": 11.93,
+      "duration": 19.52
+    },
+    {
+      "id": "03-exec-log",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s04_course/tts/03-exec-log.wav",
+      "start": 31.7,
+      "duration": 18.08
+    },
+    {
+      "id": "04-reject-loop",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s04_course/tts/04-reject-loop.wav",
+      "start": 50.03,
+      "duration": 21.932
+    },
+    {
+      "id": "05-log-replay",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s04_course/tts/05-log-replay.wav",
+      "start": 72.212,
+      "duration": 18.0
+    }
+  ]
+}

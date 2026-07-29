@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-bad-input-list",
+    "file": "02-bad-input-list.txt"
+  },
+  {
+    "id": "03-injection-record",
+    "file": "03-injection-record.txt"
+  },
+  {
+    "id": "04-fix-directions",
+    "file": "04-fix-directions.txt"
+  },
+  {
+    "id": "05-regression",
+    "file": "05-regression.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

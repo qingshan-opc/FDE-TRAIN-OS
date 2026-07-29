@@ -1,0 +1,41 @@
+{
+  "total": 115.183,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 20.8
+    },
+    {
+      "id": "02-action-verbs",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/02-action-verbs.wav",
+      "start": 21.05,
+      "duration": 16.16
+    },
+    {
+      "id": "03-verdict-patterns",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/03-verdict-patterns.wav",
+      "start": 37.46,
+      "duration": 20.413
+    },
+    {
+      "id": "04-reverse-order",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/04-reverse-order.wav",
+      "start": 58.123,
+      "duration": 19.36
+    },
+    {
+      "id": "05-swap-test",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/05-swap-test.wav",
+      "start": 77.733,
+      "duration": 20.32
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s04_course/tts/06-close.wav",
+      "start": 98.303,
+      "duration": 16.88
+    }
+  ]
+}

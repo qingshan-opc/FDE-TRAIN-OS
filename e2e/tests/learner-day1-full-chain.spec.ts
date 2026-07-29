@@ -67,8 +67,8 @@ async function answerQuiz(page: Page, questions: QuizQuestion[]) {
  * either a textarea or a checklist). Optional practices may already show
  * 「已提交」 / have no required gate — skip those cleanly. */
 async function submitActivePractice(page: Page, note: string) {
-  // Practice lives under the 「练习」 tab in the learn reader.
-  const practiceTab = page.getByRole("tab", { name: "练习" });
+  // Practice lives under the 「知识确认」 step in the four-step learn reader.
+  const practiceTab = page.getByRole("tab", { name: "知识确认" });
   if (await practiceTab.isVisible().catch(() => false)) {
     await practiceTab.click();
   }
@@ -142,12 +142,28 @@ test("learner Day1 full chain: invite -> learn -> quiz -> lab -> project -> revi
   await page.locator("#invite").fill("FDE-DEMO");
   await page.locator("#display").fill(displayName);
   await page.locator("#invite-email").fill(email);
+  // Landing 页媒体请求的 abort 风暴可能让表单提交延迟数秒——点击后若未跳转，
+  // 轮询补点一次，直到邀请接口成功或超时。
+  const inviteOk = page.waitForResponse(
+    (r) => r.url().includes("/api/v1/auth/invite") && r.ok(),
+    { timeout: 60_000 },
+  );
   await page.getByRole("button", { name: "用邀请码进入" }).click();
+  for (let i = 0; i < 5 && !page.url().includes("/app/courses"); i++) {
+    await page.waitForTimeout(3_000);
+    if (page.url().includes("/app/courses")) break;
+    const btn = page.getByRole("button", { name: "用邀请码进入" });
+    if (await btn.isVisible().catch(() => false)) await btn.click({ force: true });
+  }
+  await inviteOk;
   await expect(page).toHaveURL(/\/app\/courses/, { timeout: 20_000 });
 
   // 3) CoursePicker shows the FDE course card; enter it.
   await page.getByRole("button", { name: /继续 ·|进入课程|开始学习/ }).first().click();
   await expect(page).toHaveURL(/\/app(\/|$)/, { timeout: 20_000 });
+  // 「继续 ·」会直达 Day 视图（竞态：卡片按钮则到任务首页）——统一回到任务首页再验大纲。
+  await page.goto("/app");
+  await expect(page.getByLabel("任务首页")).toBeVisible({ timeout: 20_000 });
 
   // 4) Tree: Day1 expandable/clickable, Day2 locked.
   await expect(page.getByLabel("课程大纲")).toBeVisible({ timeout: 20_000 });
@@ -235,7 +251,7 @@ test("learner Day1 full chain: invite -> learn -> quiz -> lab -> project -> revi
   await expect(page.locator(".lab-ide-title").getByText(/succeeded/i)).toBeVisible({ timeout: 15_000 });
   await page.getByRole("button", { name: "评测", exact: true }).first().click();
   await expect(page.locator(".lab-ide-eval strong")).toContainText(/评测 · 通过 · \d+%/, { timeout: 30_000 });
-  await expect(page.getByText(/警戒/).first()).toBeVisible();
+  await expect(page.getByText(/PRD\.md/).first()).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "day1-chain-03-lab-eval-pass.png"), fullPage: true });
 
   await page.getByRole("button", { name: "完成", exact: true }).first().click();
@@ -282,9 +298,12 @@ test("learner Day1 full chain: invite -> learn -> quiz -> lab -> project -> revi
     lab?: { primary_files?: string[]; inherited_files?: string[]; workspace_mode?: string };
   }).lab;
   expect(labMeta?.workspace_mode || "cumulative").toBeTruthy();
+  // v0.7 契约：Day1 产出迷你 PRD（md），Day2 在其上完成架构设计（cumulative 工作区）。
   expect(labMeta?.primary_files?.length ?? 0, "Day2 should declare primary_files").toBeGreaterThan(0);
-  expect(labMeta?.inherited_files || []).toEqual(expect.arrayContaining(["index.html"]));
-  expect(labMeta?.primary_files || []).not.toEqual(expect.arrayContaining(["index.html"]));
+  expect(labMeta?.primary_files || []).toEqual(expect.arrayContaining(["architecture.md"]));
+  expect(labMeta?.inherited_files || []).toEqual(
+    expect.arrayContaining(["PRD.md"]),
+  );
 
   const day2LabNode = pkg2.nodes.find((n) => n.kind === "lab");
   if (day2LabNode && day2LabNode.status !== "locked") {

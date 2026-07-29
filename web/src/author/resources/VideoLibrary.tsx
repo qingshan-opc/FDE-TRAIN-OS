@@ -5,7 +5,7 @@ import { authorApi, ApiError } from "../../lib/api";
 import { useAuth } from "../../lib/auth";
 import type { Paginated } from "../../lib/listQuery";
 import { useListQuery } from "../../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
 
 type MediaAsset = {
   id: string;
@@ -59,48 +59,49 @@ export function VideoLibrary() {
   }, [load]);
 
   return (
-    <div>
-      <PageHeader
-        title="视频库"
-        description="营期媒资统一管理，可被课纲课节复用"
-        extra={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            disabled={!campId}
-            onClick={() => {
-              setEditing(null);
-              form.resetFields();
-              form.setFieldsValue({ kind: "video" });
-              setFile(null);
-              setMode({ kind: "create" });
-            }}
-          >
-            上传视频
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={<PageHeader title="视频库" description="营期媒资统一管理，可被课纲课节复用" />}
+        toolbar={
+          <SearchToolbar
+            fields={[
+              { key: "q", type: "search", label: "搜索", placeholder: "搜索标题/标签" },
+              {
+                key: "kind",
+                type: "select",
+                label: "类型",
+                placeholder: "类型",
+                options: [
+                  { value: "video", label: "视频" },
+                  { value: "audio", label: "音频" },
+                  { value: "poster", label: "海报" },
+                  { value: "image", label: "图片" },
+                ],
+              },
+            ]}
+            values={{ q: q || undefined, kind: filters.kind }}
+            onChange={setFilter}
+            onReset={hasFilters ? reset : undefined}
+            extra={
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                disabled={!campId}
+                onClick={() => {
+                  setEditing(null);
+                  form.resetFields();
+                  form.setFieldsValue({ kind: "video" });
+                  setFile(null);
+                  setMode({ kind: "create" });
+                }}
+              >
+                上传视频
+              </Button>
+            }
+          />
         }
-      />
-      <SearchToolbar
-        fields={[
-          { key: "q", type: "search", label: "搜索", placeholder: "搜索标题/标签" },
-          {
-            key: "kind",
-            type: "select",
-            label: "类型",
-            placeholder: "类型",
-            options: [
-              { value: "video", label: "视频" },
-              { value: "audio", label: "音频" },
-              { value: "poster", label: "海报" },
-              { value: "image", label: "图片" },
-            ],
-          },
-        ]}
-        values={{ q: q || undefined, kind: filters.kind }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<MediaAsset>
+      >
+        <ServerTable<MediaAsset>
         rowKey="id"
         loading={loading}
         error={error}
@@ -149,7 +150,8 @@ export function VideoLibrary() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
 
       <EntityModal
         mode={mode}
@@ -210,6 +212,6 @@ export function VideoLibrary() {
           </Form.Item>
         )}
       </EntityModal>
-    </div>
+    </>
   );
 }

@@ -3,7 +3,7 @@ import { App, Button, Form, Typography } from "antd";
 import { authorApi, ApiError } from "../../lib/api";
 import type { Paginated } from "../../lib/listQuery";
 import { useListQuery } from "../../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, type EntityModalMode } from "../../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, type EntityModalMode } from "../../components/crud";
 
 type Lead = {
   id: string;
@@ -42,15 +42,19 @@ export function SiteLeads() {
   }, [load]);
 
   return (
-    <div>
-      <PageHeader title="联系线索" description="Landing 预约/联系表单提交" />
-      <SearchToolbar
-        fields={[{ key: "q", type: "search", label: "搜索", placeholder: "姓名 / 组织 / 邮箱" }]}
-        values={{ q: q || undefined }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<Lead>
+    <>
+      <AuthorListPageLayout
+        header={<PageHeader title="联系线索" description="Landing 预约/联系表单提交" />}
+        toolbar={
+          <SearchToolbar
+            fields={[{ key: "q", type: "search", label: "搜索", placeholder: "姓名 / 组织 / 邮箱" }]}
+            values={{ q: q || undefined }}
+            onChange={setFilter}
+            onReset={hasFilters ? reset : undefined}
+          />
+        }
+      >
+        <ServerTable<Lead>
         rowKey="id"
         loading={loading}
         error={error}
@@ -77,7 +81,8 @@ export function SiteLeads() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
       <EntityModal
         mode={mode}
         title={{ create: "线索", edit: "线索", view: "线索详情" }}
@@ -113,6 +118,6 @@ export function SiteLeads() {
           {current?.message || "—"}
         </Typography.Paragraph>
       </EntityModal>
-    </div>
+    </>
   );
 }

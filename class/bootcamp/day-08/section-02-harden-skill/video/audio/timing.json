@@ -1,0 +1,41 @@
+{
+  "total": 112.303,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 14.08
+    },
+    {
+      "id": "02-bad-input-list",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/02-bad-input-list.wav",
+      "start": 14.33,
+      "duration": 20.733
+    },
+    {
+      "id": "03-injection-record",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/03-injection-record.wav",
+      "start": 35.313,
+      "duration": 17.84
+    },
+    {
+      "id": "04-fix-directions",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/04-fix-directions.wav",
+      "start": 53.403,
+      "duration": 23.12
+    },
+    {
+      "id": "05-regression",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/05-regression.wav",
+      "start": 76.773,
+      "duration": 16.8
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s02_course/tts/06-close.wav",
+      "start": 93.823,
+      "duration": 18.48
+    }
+  ]
+}

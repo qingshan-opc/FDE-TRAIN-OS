@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Alert,
   App,
   Breadcrumb,
   Button,
@@ -40,6 +39,7 @@ import {
   CodeOutlined,
   EyeOutlined,
   OrderedListOutlined,
+  CloudSyncOutlined,
 } from "@ant-design/icons";
 import { authorApi, ApiError } from "../../lib/api";
 import {
@@ -61,9 +61,10 @@ import {
   LabPanel,
   ResourcesPanel,
 } from "./panels";
-import { CapsuleModal, DayModal, YamlImportModal, type DayModalValues } from "./modals";
+import { CapsuleModal, DayModal, YamlImportModal, BootcampSyncModal, type DayModalValues } from "./modals";
 import { LearnerPreview } from "./LearnerPreview";
 import { useAuth } from "../../lib/auth";
+import { useErrorModal } from "../../hooks/useErrorModal";
 
 const { Sider, Content } = Layout;
 
@@ -95,6 +96,7 @@ export function CurriculumWorkbench() {
   const [capsuleModalOpen, setCapsuleModalOpen] = useState(false);
   const [yamlModalOpen, setYamlModalOpen] = useState(false);
   const [yamlImporting, setYamlImporting] = useState(false);
+  const [bootcampSyncOpen, setBootcampSyncOpen] = useState(false);
 
   const readonly = version?.status === "published";
   const dirty = pkg ? JSON.stringify(pkg) !== baseline : false;
@@ -474,6 +476,8 @@ export function CurriculumWorkbench() {
     }
   };
 
+  useErrorModal(error, { title: "课纲加载失败", onRetry: () => void loadVersion() });
+
   if (loading) {
     return (
       <div style={{ padding: 48, textAlign: "center" }}>
@@ -483,7 +487,15 @@ export function CurriculumWorkbench() {
   }
 
   if (error) {
-    return <Alert type="error" showIcon message={error} action={<Button onClick={() => void loadVersion()}>重试</Button>} />;
+    return (
+      <div style={{ padding: 48 }}>
+        <Empty description="课纲加载失败">
+          <Button type="primary" onClick={() => void loadVersion()}>
+            重试
+          </Button>
+        </Empty>
+      </div>
+    );
   }
 
   return (
@@ -515,6 +527,11 @@ export function CurriculumWorkbench() {
           {!readonly && (
             <Button icon={<PlusOutlined />} onClick={() => void openCreateDay()}>
               新建课次
+            </Button>
+          )}
+          {!readonly && (
+            <Button icon={<CloudSyncOutlined />} onClick={() => setBootcampSyncOpen(true)} disabled={!versionId}>
+              从 bootcamp 同步
             </Button>
           )}
           {!readonly && (
@@ -655,6 +672,16 @@ export function CurriculumWorkbench() {
         submitting={yamlImporting}
         onCancel={() => setYamlModalOpen(false)}
         onConfirm={(content) => void importYamlDay(content)}
+      />
+
+      <BootcampSyncModal
+        open={bootcampSyncOpen}
+        versionId={versionId}
+        onCancel={() => setBootcampSyncOpen(false)}
+        onSynced={() => {
+          void loadVersion();
+          if (selectedDay != null) void loadDay(selectedDay);
+        }}
       />
 
       <Drawer

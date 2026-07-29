@@ -1,9 +1,11 @@
 import {
+  App,
   Button,
   Card,
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   Switch,
@@ -15,6 +17,7 @@ import { newCapsuleId } from "./dayPackage";
 import { CapsuleEditorTabs } from "./CapsuleEditorTabs";
 import { NODE_TYPE_OPTIONS } from "./nodeTypes";
 import { useAuth } from "../../lib/auth";
+import { authorApi, ApiError } from "../../lib/api";
 import { authorSelectPopup, useAuthorLayout } from "../../lib/authorLayoutContext";
 import { useState } from "react";
 import {
@@ -668,8 +671,45 @@ export function ResourcesPanel({
   onChange: SetPkg;
 }) {
   const { campId } = useAuth();
+  const { message } = App.useApp();
   const [resourceModal, setResourceModal] = useState<{ index: number | null } | null>(null);
+  const [packImportOpen, setPackImportOpen] = useState(false);
+  const [packs, setPacks] = useState<{ value: string; label: string }[]>([]);
+  const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const resources = pkg.resources || [];
+
+  const openPackImport = async () => {
+    setPackImportOpen(true);
+    try {
+      const res = await authorApi.listResourcePacks({ camp_id: campId || undefined, page: 1, page_size: 50 });
+      setPacks((res.items || []).map((p: { id: string; name: string }) => ({ value: p.id, label: p.name })));
+    } catch {
+      setPacks([]);
+    }
+  };
+
+  const importFromPack = async () => {
+    if (!selectedPack) return;
+    try {
+      const res = await authorApi.listPackResources(selectedPack, { page: 1, page_size: 100 });
+      const items = (res.items || []) as Array<Record<string, unknown>>;
+      const dayFiltered = items.filter((r) => !r.day_index || Number(r.day_index) === pkg.day);
+      const imported = dayFiltered.map((r, i) => ({
+        id: String(r.id || `pack-${i}`),
+        title: String(r.title || "未命名"),
+        kind: String(r.kind || "link"),
+        url: r.url ? String(r.url) : undefined,
+        object_key: r.object_key ? String(r.object_key) : undefined,
+      }));
+      const existingIds = new Set(resources.map((x) => x.id));
+      const merged = [...resources, ...imported.filter((x) => !existingIds.has(x.id))];
+      onChange((p) => ({ ...p, resources: merged }));
+      message.success(`已从素材包导入 ${imported.length} 项`);
+      setPackImportOpen(false);
+    } catch (err) {
+      message.error(err instanceof ApiError ? err.message : "导入失败");
+    }
+  };
 
   return (
     <Card
@@ -720,11 +760,32 @@ export function ResourcesPanel({
           </Card>
         ))}
         {!readonly && (
-          <Button icon={<PlusOutlined />} onClick={() => setResourceModal({ index: null })}>
-            添加资源
-          </Button>
+          <Space>
+            <Button icon={<PlusOutlined />} onClick={() => setResourceModal({ index: null })}>
+              添加资源
+            </Button>
+            <Button onClick={() => void openPackImport()}>从素材包导入</Button>
+          </Space>
         )}
       </Space>
+      <Modal
+        title="从素材包导入"
+        open={packImportOpen}
+        onCancel={() => setPackImportOpen(false)}
+        onOk={() => void importFromPack()}
+        okText="导入"
+      >
+        <Select
+          style={{ width: "100%" }}
+          placeholder="选择素材包"
+          options={packs}
+          value={selectedPack || undefined}
+          onChange={setSelectedPack}
+        />
+        <Typography.Text type="secondary" style={{ display: "block", marginTop: 8 }}>
+          将导入包内资源到本课整日资源池（优先匹配 Day {pkg.day} 或未指定课次的条目）。
+        </Typography.Text>
+      </Modal>
       <ResourceModal
         open={resourceModal != null}
         campId={campId || undefined}

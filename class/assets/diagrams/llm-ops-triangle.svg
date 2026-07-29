@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="LLM 接入三件套：密钥、超时、降级">
+<rect width="1040" height="440" fill="#f2f5f0"/>
+<!-- 中心：摘要接口 -->
+<rect x="400" y="170" width="240" height="100" fill="#231f20"/>
+<text x="520" y="214" text-anchor="middle" font-size="15" font-weight="800" fill="#f2f5f0">摘要接口</text>
+<text x="520" y="240" text-anchor="middle" font-size="10.5" fill="rgba(242,245,240,.6)" style="font-family:'SF Mono',Menlo,monospace">/api/summary</text>
+<!-- 密钥 -->
+<rect x="60" y="60" width="280" height="130" fill="#ffffff" stroke="#f24e54" stroke-width="2"/>
+<text x="200" y="92" text-anchor="middle" font-size="14" font-weight="800" fill="#c92f3d">密钥</text>
+<text x="200" y="112" text-anchor="middle" font-size="9.5" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">SECRET</text>
+<text x="200" y="140" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">只住服务端环境变量</text>
+<text x="200" y="162" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">绝不写进前端 / git</text>
+<!-- 超时 -->
+<rect x="60" y="250" width="280" height="130" fill="#ffffff" stroke="#f5a947" stroke-width="2"/>
+<text x="200" y="282" text-anchor="middle" font-size="14" font-weight="800" fill="#d18a1f">超时</text>
+<text x="200" y="302" text-anchor="middle" font-size="9.5" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">TIMEOUT</text>
+<text x="200" y="330" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">AI 慢 ≠ 页面跟着卡死</text>
+<text x="200" y="352" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">给 deadline，到点就切</text>
+<!-- 降级 -->
+<rect x="700" y="60" width="280" height="130" fill="#ffffff" stroke="#2f9e44" stroke-width="2"/>
+<text x="840" y="92" text-anchor="middle" font-size="14" font-weight="800" fill="#2f9e44">降级</text>
+<text x="840" y="112" text-anchor="middle" font-size="9.5" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">FALLBACK</text>
+<text x="840" y="140" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">AI 挂了，页面不能挂</text>
+<text x="840" y="162" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.6)">缓存摘要 / 骨架文案顶上</text>
+<!-- 连线 -->
+<g stroke="rgba(35,31,32,.4)" stroke-width="1.5">
+<line x1="340" y1="150" x2="420" y2="190"/><line x1="340" y1="290" x2="420" y2="250"/><line x1="700" y1="150" x2="620" y2="190"/>
+</g>
+<!-- 底注 -->
+<text x="520" y="330" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">接入架构三件套，少一件都不准上线</text>
+<text x="520" y="358" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">验收时要能演示：拔掉模型 key，页面其余部分照常工作，摘要区给降级文案</text>
+</svg>

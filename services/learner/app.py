@@ -33,7 +33,17 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from services.shared import FDE_ENV, db_cursor, init_schema, user_camps, write_audit  # noqa: E402
-from services.shared.config import CLAMAV_ENABLED, S3_BUCKET_ARTIFACTS  # noqa: E402
+from services.shared.config import (  # noqa: E402
+    CLAMAV_ENABLED,
+    COURSE_MEDIA_OPEN_PREFIX,
+    COURSE_MEDIA_SHARED_PREFIX,
+    COURSE_MEDIA_SITE_HERO_PREFIX,
+    COURSE_MEDIA_SITE_MENTOR_PREFIX,
+    DEFAULT_CAMP_ID,
+    LAB_ATTACHMENT_MAX_BYTES,
+    S3_BUCKET_ARTIFACTS,
+)
+from services.storage import course_media_key, legacy_camp_media_prefix  # noqa: E402
 from services.shared.middleware import (  # noqa: E402
     require_camp_access,
     require_user,
@@ -44,8 +54,6 @@ from services.shared.rate_limit import rate_limit  # noqa: E402
 
 log = logging.getLogger("fde.learner")
 
-LAB_ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024
-
 router = APIRouter(tags=["learner"])
 app = FastAPI(title="FDE Learner", version="0.1.0")
 init_schema()
@@ -55,7 +63,27 @@ DEFAULT_LANDING: dict[str, Any] = {
     "tagline": "为政府、高校与企业交付可验收的数字化人才训练",
     "hero_video": None,
     "brand": {"name": "青山在", "footer": "© 青山在 · FDE Learning OS"},
-    "hero": {"eyebrow": "FDE LEARNING OS", "empty_title": "课程宣传片筹备中"},
+    "hero": {
+        "eyebrow": "FDE LEARNING OS",
+        "title_lines": ["让每一次学习", "都留下可验证的证据"],
+        "title_em": "可验证",
+        "empty_title": "课程宣传片筹备中",
+        "cta_primary": "进入学习",
+        "cta_secondary": "了解企业培训",
+        "bg_image": "/landing/hero.png",
+        "proof": [
+            {"value": "21", "label": "天任务驱动训练"},
+            {"value": "100%", "label": "交付全程留痕"},
+            {"value": "3", "label": "类机构同行验证"},
+        ],
+    },
+    "seo": {
+        # 与 web/index.html、<title> 保持一致，前端不会再改成短标题以免页签闪烁
+        "title": "青山在 · FDE Learning OS",
+        "description": "为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。",
+        "keywords": "青山在,FDE,数字化人才,企业培训,训练营,Agent实训,结业证书,可验收交付",
+        "og_image": "/landing/hero.png",
+    },
     "cta": {"login": "/login", "app": "/app/courses"},
     "tabs": [
         {"id": "enterprise", "label": "企业培训"},
@@ -76,8 +104,8 @@ DEFAULT_LANDING: dict[str, Any] = {
             "minutes": 2,
             "level": "入门",
             "summary": "用两分钟看清 FDE 如何把老板语言翻译成可验收交付。",
-            "object_key": "documents/camp-v03/course-media/day01-c1-explainer.mp4",
-            "poster_key": "documents/camp-v03/course-media/day01-c1-poster.jpg",
+            "object_key": course_media_key("day01-c1-explainer.mp4"),
+            "poster_key": course_media_key("day01-c1-poster.jpg"),
             "duration_sec": 117,
             "published": True,
         },
@@ -87,8 +115,8 @@ DEFAULT_LANDING: dict[str, Any] = {
             "minutes": 2,
             "level": "入门",
             "summary": "角色 + 背景 + 任务 + 约束——指挥 AI 的最小公式。",
-            "object_key": "documents/camp-v03/course-media/day01-c3-explainer.mp4",
-            "poster_key": "documents/camp-v03/course-media/day01-c3-poster.jpg",
+            "object_key": course_media_key("day01-c3-explainer.mp4"),
+            "poster_key": course_media_key("day01-c3-poster.jpg"),
             "duration_sec": 87,
             "published": True,
         },
@@ -98,8 +126,8 @@ DEFAULT_LANDING: dict[str, Any] = {
             "minutes": 2,
             "level": "实操预告",
             "summary": "看清 Week1 最小可用产物长什么样，再决定是否报名完整营期。",
-            "object_key": "documents/camp-v03/course-media/day01-c6-explainer.mp4",
-            "poster_key": "documents/camp-v03/course-media/day01-c6-poster.jpg",
+            "object_key": course_media_key("day01-c6-explainer.mp4"),
+            "poster_key": course_media_key("day01-c6-poster.jpg"),
             "duration_sec": 91,
             "published": True,
         },
@@ -119,12 +147,61 @@ DEFAULT_LANDING: dict[str, Any] = {
 # Static M2 site sections without dedicated DB tables yet (tabs/enterprise/
 # about/contact) — served from DEFAULT_LANDING unless body_json overrides.
 # open_courses is DB-overridable via body_json and may include media keys.
-_STATIC_LANDING_KEYS = ("tabs", "enterprise", "open_courses", "about", "contact", "brand", "hero")
+_STATIC_LANDING_KEYS = ("tabs", "enterprise", "open_courses", "about", "contact", "brand", "hero", "seo")
 
 _PUBLIC_OPEN_PREFIXES = (
-    "documents/shared/open-courses/",
-    "documents/camp-v03/course-media/",
+    COURSE_MEDIA_OPEN_PREFIX,
+    COURSE_MEDIA_SHARED_PREFIX,
+    legacy_camp_media_prefix(DEFAULT_CAMP_ID),
 )
+_PUBLIC_SITE_HERO_PREFIX = COURSE_MEDIA_SITE_HERO_PREFIX
+_PUBLIC_SITE_MENTOR_PREFIX = COURSE_MEDIA_SITE_MENTOR_PREFIX
+
+
+def _merge_section(key: str, body: dict[str, Any]) -> Any:
+    """Merge body_json section with defaults; empty dict falls back / deep-merges."""
+    default = DEFAULT_LANDING.get(key)
+    raw = body.get(key)
+    if key == "open_courses":
+        return list_open_courses(include_unpublished=False)
+    if key == "enterprise":
+        ent = raw if isinstance(raw, dict) else {}
+        base = dict(DEFAULT_LANDING["enterprise"])
+        title = str(ent.get("title") or "").strip()
+        subtitle = str(ent.get("subtitle") or "").strip()
+        # 脏数据防护：曾出现 title="2" / facts=3
+        if len(title) < 2:
+            title = str(base.get("title") or "")
+        if len(subtitle) < 2:
+            subtitle = str(base.get("subtitle") or "")
+        facts = ent.get("facts")
+        if not isinstance(facts, list):
+            facts = base.get("facts") or []
+        mentors = ent.get("mentors") if isinstance(ent.get("mentors"), list) else []
+        return {**base, **ent, "title": title, "subtitle": subtitle, "facts": facts, "mentors": mentors}
+    if not isinstance(raw, dict) or not raw:
+        return default
+    if isinstance(default, dict):
+        return {**default, **raw}
+    return raw
+
+
+def _public_hero_video(media_row: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not media_row:
+        return None
+    out: dict[str, Any] = {"poster_url": None, "src_url": None, "captions_url": None}
+    poster = media_row.get("poster_url") or media_row.get("poster_key")
+    src = media_row.get("src_url") or media_row.get("object_key")
+    captions = media_row.get("captions_url") or media_row.get("captions_key")
+    if poster:
+        out["poster_url"] = "/api/v1/site/hero/stream?asset=poster"
+        out["poster_key"] = str(poster)
+    if src:
+        out["src_url"] = "/api/v1/site/hero/stream?asset=video"
+        out["object_key"] = str(src)
+    if captions:
+        out["captions_url"] = "/api/v1/site/hero/stream?asset=captions"
+    return out if (out["poster_url"] or out["src_url"]) else None
 
 
 def _normalize_open_course(raw: dict[str, Any]) -> dict[str, Any] | None:
@@ -328,21 +405,9 @@ def site_landing() -> dict[str, Any]:
 
             hero_video: dict[str, Any] | None = None
             try:
-                if _table_exists(cur, "site_media"):
-                    cur.execute(
-                        "SELECT * FROM site_media WHERE page_slug=? AND kind='hero_video' ORDER BY created_at DESC LIMIT 1",
-                        ("landing",),
-                    )
-                    media_row = cur.fetchone()
-                    if media_row:
-                        m = dict(media_row)
-                        src = _first(m, "src_url", "object_key")
-                        if src or m.get("poster_url"):
-                            hero_video = {
-                                "poster_url": m.get("poster_url"),
-                                "src_url": src,
-                                "captions_url": m.get("captions_url"),
-                            }
+                from services.author.site_content import _read_hero_media
+
+                hero_video = _public_hero_video(_read_hero_media())
             except Exception:
                 hero_video = None
 
@@ -354,29 +419,67 @@ def site_landing() -> dict[str, Any]:
             }
             for key in _STATIC_LANDING_KEYS:
                 if key == "open_courses":
-                    payload[key] = list_open_courses(include_unpublished=False)
+                    payload[key] = _merge_section(key, body)
                 elif key == "enterprise":
-                    enterprise = body.get("enterprise") or DEFAULT_LANDING["enterprise"]
-                    if isinstance(enterprise, dict):
-                        mentors = []
-                        for m in enterprise.get("mentors") or []:
-                            if not isinstance(m, dict):
-                                continue
-                            nm = dict(m)
-                            key_av = nm.get("avatar_key") or nm.get("avatar_url")
-                            if key_av and isinstance(key_av, str) and not str(key_av).startswith("/api/"):
-                                if not str(key_av).startswith("http"):
-                                    nm["avatar_url"] = f"/api/v1/media/stream?object_key={key_av}"
-                            mentors.append(nm)
-                        payload[key] = {**enterprise, "mentors": mentors}
-                    else:
-                        payload[key] = DEFAULT_LANDING["enterprise"]
+                    from services.author.site_content import _normalize_enterprise
+
+                    payload[key] = _normalize_enterprise(body.get("enterprise"))
                 else:
-                    payload[key] = body.get(key, DEFAULT_LANDING.get(key))
+                    payload[key] = _merge_section(key, body)
             return payload
     except Exception:
         return _fallback()
 
+
+@router.get("/api/v1/site/hero/stream")
+def stream_site_hero(
+    request: Request,
+    asset: str = Query("poster", pattern="^(video|poster|captions)$"),
+) -> Response:
+    """Public — no auth. Streams landing Hero 海报/视频/字幕（仅 shared/site/hero）。"""
+    from services.author.site_content import _read_hero_media
+    from services.media.app import stream_s3_object
+
+    media = _read_hero_media()
+    if not media:
+        raise HTTPException(404, "未配置 Hero 媒资")
+    if asset == "poster":
+        key = media.get("poster_key") or media.get("poster_url")
+    elif asset == "captions":
+        key = media.get("captions_key") or media.get("captions_url")
+    else:
+        key = media.get("object_key") or media.get("src_url")
+    if not key:
+        raise HTTPException(404, f"Hero 暂无 {asset}")
+    key = str(key).strip().lstrip("/")
+    if ".." in key or not key.startswith(_PUBLIC_SITE_HERO_PREFIX):
+        raise HTTPException(403, "Hero 媒资路径不允许")
+    return stream_s3_object(request, key, cache_control="public, max-age=300")
+
+
+@router.get("/api/v1/site/mentors/{mentor_id}/avatar")
+def stream_mentor_avatar(mentor_id: str, request: Request) -> Response:
+    """Public — no auth. Streams a landing mentor avatar under shared/site/mentors/."""
+    from services.author.site_content import _normalize_enterprise, _load_page_and_body
+    from services.media.app import stream_s3_object
+
+    mid = (mentor_id or "").strip()
+    if not mid:
+        raise HTTPException(404, "导师不存在")
+    try:
+        _, body = _load_page_and_body()
+        enterprise = _normalize_enterprise(body.get("enterprise"))
+    except Exception as exc:
+        raise HTTPException(404, "导师不存在") from exc
+    mentor = next((m for m in enterprise.get("mentors") or [] if str(m.get("id")) == mid), None)
+    if not mentor:
+        raise HTTPException(404, "导师不存在")
+    key = str(mentor.get("avatar_key") or "").strip().lstrip("/")
+    if not key:
+        raise HTTPException(404, "未配置头像")
+    if ".." in key or not key.startswith(_PUBLIC_SITE_MENTOR_PREFIX):
+        raise HTTPException(403, "头像路径不允许")
+    return stream_s3_object(request, key, cache_control="public, max-age=300")
 
 
 @router.get("/api/v1/site/open-courses/{course_id}/stream")
@@ -396,6 +499,24 @@ def stream_open_course(
     key = str(key).strip().lstrip("/")
     if ".." in key or not any(key.startswith(p) for p in _PUBLIC_OPEN_PREFIXES):
         raise HTTPException(403, "公开课媒资路径不允许")
+    # 仅视频播放计入运维「公开课点击」；海报预加载不计入
+    if asset == "video":
+        try:
+            actor = None
+            try:
+                actor = require_user(request).id
+            except Exception:
+                actor = None
+            write_audit(
+                "site.open_course_play",
+                actor_id=actor,
+                resource_type="open_course",
+                resource_id=course_id,
+                camp_id=None,
+                details={"asset": asset, "object_key": key},
+            )
+        except Exception as exc:
+            log.debug("open_course_play audit skipped: %s", exc)
     from services.media.app import stream_s3_object
 
     return stream_s3_object(request, key, cache_control="public, max-age=120")
@@ -777,7 +898,7 @@ def start_identity(body: IdentityStartBody, request: Request) -> dict[str, Any]:
     `provider_ref` + masked display fields — the raw `real_name`/`id_number`
     the learner may submit here are used solely to compute the masked
     fields in-process and are never written to the DB."""
-    from services.application.kyc import get_kyc_provider, mask_id_tail, mask_name
+    from services.application.kyc import get_kyc_provider, hash_id_number, mask_id_tail, mask_name
 
     user = require_user(request)
     real_name = (body.real_name or "").strip()
@@ -792,6 +913,8 @@ def start_identity(body: IdentityStartBody, request: Request) -> dict[str, Any]:
     status = str(result["status"])
     masked_name = mask_name(real_name)
     id_tail = mask_id_tail(id_number)
+    id_number_sha256 = hash_id_number(id_number)
+    holder_name = real_name
 
     # Dev/demo stub: auto-pass when name + ID submitted (prod still needs real KYC)
     if provider.name == "stub" and FDE_ENV != "prod" and masked_name and id_tail:
@@ -802,18 +925,19 @@ def start_identity(body: IdentityStartBody, request: Request) -> dict[str, Any]:
         (
             """
             INSERT INTO identity_verifications
-              (id, user_id, provider, verification_id, provider_ref, status, masked_name, id_tail, created_at, updated_at)
-            VALUES (?,?,?,?,?,?,?,?,NOW(),NOW())
+              (id, user_id, provider, verification_id, provider_ref, status, masked_name, id_tail,
+               holder_name, id_number_sha256, created_at, updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,NOW(),NOW())
             """,
-            (rid, user.id, provider.name, provider_ref, provider_ref, status, masked_name, id_tail),
+            (rid, user.id, provider.name, provider_ref, provider_ref, status, masked_name, id_tail, holder_name, id_number_sha256),
         ),
         (
             """
             INSERT INTO identity_verifications
-              (id, user_id, method, provider_ref, status, masked_name, id_tail, detail_json, created_at)
-            VALUES (?,?,?,?,?,?,?,?::jsonb,NOW())
+              (id, user_id, method, provider_ref, status, masked_name, id_tail, holder_name, id_number_sha256, detail_json, created_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?::jsonb,NOW())
             """,
-            (rid, user.id, provider.name, provider_ref, status, masked_name, id_tail, json.dumps({"verification_id": provider_ref})),
+            (rid, user.id, provider.name, provider_ref, status, masked_name, id_tail, holder_name, id_number_sha256, json.dumps({"verification_id": provider_ref})),
         ),
     ]
     with db_cursor() as cur:

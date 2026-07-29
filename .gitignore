@@ -16,3 +16,13 @@ e2e/artifacts/
 prototype-gpt.zip
 videos/
 
+# 本地运行时与批量日志
+logs/
+backups/
+
+# Bootcamp 口播视频：源文件入库，大媒体与临时渲染不入库（成片在 MinIO）
+class/**/video/renders/work-*/
+class/**/video/renders/*.mp4
+class/**/video/audio/*.wav
+class/**/video/assets/avatar-lipsync.mp4
+

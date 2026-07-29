@@ -1,0 +1,41 @@
+{
+  "total": 171.205,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 34.568
+    },
+    {
+      "id": "02-token",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/02-token.wav",
+      "start": 34.818,
+      "duration": 29.609
+    },
+    {
+      "id": "03-window",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/03-window.wav",
+      "start": 64.677,
+      "duration": 33.528
+    },
+    {
+      "id": "04-hallucination",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/04-hallucination.wav",
+      "start": 98.455,
+      "duration": 26.88
+    },
+    {
+      "id": "05-boundary",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/05-boundary.wav",
+      "start": 125.585,
+      "duration": 25.37
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/06-close.wav",
+      "start": 151.205,
+      "duration": 20.0
+    }
+  ]
+}

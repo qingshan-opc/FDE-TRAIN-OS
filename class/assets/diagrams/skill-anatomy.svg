@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Skill 解剖：输入、步骤、输出、证据">
+<defs>
+<marker id="sk-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
+</marker>
+</defs>
+<rect width="1040" height="470" fill="#f2f5f0"/>
+<!-- 描述横幅 -->
+<rect x="50" y="40" width="940" height="64" fill="#231f20"/>
+<text x="80" y="68" font-size="13" font-weight="800" fill="#f2f5f0">描述 · DESCRIPTION</text>
+<text x="80" y="90" font-size="11.5" fill="rgba(242,245,240,.7)">「给销售部生成周报初稿：读本周线索与商机表，产出三段式 markdown」——Agent 靠这段话决定选不选你</text>
+<!-- 三段 -->
+<g>
+<rect x="50" y="140" width="280" height="220" fill="#ffffff" stroke="#5f52a0" stroke-width="2"/>
+<text x="190" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">输入 · INPUT</text>
+<g font-size="11" fill="rgba(35,31,32,.65)">
+<text x="76" y="208">参数表：</text>
+<text x="76" y="232" style="font-family:'SF Mono',Menlo,monospace">month: 2026-07</text>
+<text x="76" y="254" style="font-family:'SF Mono',Menlo,monospace">region?: 华东</text>
+<text x="76" y="286">类型 + 必填/可选 + 示例</text>
+<text x="76" y="310">坏输入怎么拒（见边界声明）</text>
+</g>
+</g>
+<g>
+<rect x="380" y="140" width="280" height="220" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
+<text x="520" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">步骤 · STEPS</text>
+<g font-size="11" fill="rgba(35,31,32,.65)">
+<text x="406" y="208">1. 查库取本周数据</text>
+<text x="406" y="232">2. 算环比与异常</text>
+<text x="406" y="256">3. 调模型写初稿</text>
+<text x="406" y="280">4. 按模板整形</text>
+<text x="406" y="314" fill="rgba(35,31,32,.45)">每步可观测：日志留痕</text>
+</g>
+</g>
+<g>
+<rect x="710" y="140" width="280" height="220" fill="#ffffff" stroke="#2f9e44" stroke-width="2"/>
+<text x="850" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#2f9e44">输出 · OUTPUT</text>
+<g font-size="11" fill="rgba(35,31,32,.65)">
+<text x="736" y="208">产物：weekly-2026-07.md</text>
+<text x="736" y="240" font-weight="700" fill="#231f20">+ 证据 · EVIDENCE</text>
+<text x="736" y="264">数据快照 / 用时 / 模型版本</text>
+<text x="736" y="296" fill="rgba(35,31,32,.45)">没证据的输出 ≈ 没发生过</text>
+</g>
+</g>
+<!-- 箭头 -->
+<line x1="332" y1="250" x2="374" y2="250" stroke="#231f20" stroke-width="1.8" marker-end="url(#sk-arrow)"/>
+<line x1="662" y1="250" x2="704" y2="250" stroke="#231f20" stroke-width="1.8" marker-end="url(#sk-arrow)"/>
+<!-- 底注 -->
+<text x="520" y="412" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">Skill = 会写字的岗位说明书：写得越清楚，Agent 越选得对、跑得越稳</text>
+<text x="520" y="438" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">它就是 MCP 的朴素版 —— 先学会封装，标准以后随换随接</text>
+</svg>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-four-elements",
+    "file": "02-four-elements.txt"
+  },
+  {
+    "id": "03-agent-definition",
+    "file": "03-agent-definition.txt"
+  },
+  {
+    "id": "04-decision-loop",
+    "file": "04-decision-loop.txt"
+  },
+  {
+    "id": "05-workflow-vs-agent",
+    "file": "05-workflow-vs-agent.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

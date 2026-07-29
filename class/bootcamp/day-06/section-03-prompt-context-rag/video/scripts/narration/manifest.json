@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-prompt",
+    "file": "02-prompt.txt"
+  },
+  {
+    "id": "03-context",
+    "file": "03-context.txt"
+  },
+  {
+    "id": "04-rag",
+    "file": "04-rag.txt"
+  },
+  {
+    "id": "05-finetune",
+    "file": "05-finetune.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

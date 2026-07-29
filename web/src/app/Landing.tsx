@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { LandingTopbar } from "../components/LandingTopbar";
 import { LandingHeroFocus } from "../components/LandingHeroFocus";
@@ -6,7 +6,8 @@ import { scrollPageToTop } from "../lib/scrollPageToTop";
 import { LandingFooter } from "../components/LandingFooter";
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
-import type { LandingPayload } from "../lib/types";
+import { applyPageSeo, SITE_DEFAULT_TITLE } from "../lib/seo";
+import type { LandingHeroCopy, LandingPayload } from "../lib/types";
 import {
   FALLBACK_LANDING_TABS,
   LANDING_FALLBACK_OPEN_COURSES,
@@ -73,12 +74,33 @@ const FALLBACK_FACTS = [
   { n: "03", t: "可核验结业证书", d: "结业证书公开可查，组织能验证每一位学员的真实产出。" },
 ];
 
+const FALLBACK_HERO: LandingHeroCopy = {
+  eyebrow: "FDE LEARNING OS",
+  empty_title: "课程宣传片筹备中",
+  title_lines: ["让每一次学习", "都留下可验证的证据"],
+  title_em: "可验证",
+  cta_primary: "进入学习",
+  cta_secondary: "了解企业培训",
+  bg_image: LANDING_HERO,
+  proof: [
+    { value: "21", label: "天任务驱动训练" },
+    { value: "100%", label: "交付全程留痕" },
+    { value: "3", label: "类机构同行验证" },
+  ],
+};
+
 const FALLBACK: LandingPayload = {
   title: "青山在",
   tagline: SLOGAN,
   hero_video: null,
   brand: { name: "青山在", footer: "© 青山在 · FDE Learning OS" },
-  hero: { eyebrow: "FDE LEARNING OS", empty_title: "课程宣传片筹备中" },
+  hero: FALLBACK_HERO,
+  seo: {
+    title: SITE_DEFAULT_TITLE,
+    description: "为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。",
+    keywords: "青山在,FDE,数字化人才,企业培训,训练营,Agent实训,结业证书,可验收交付",
+    og_image: LANDING_HERO,
+  },
   cta: { login: "/login", app: "/app/courses" },
   tabs: FALLBACK_LANDING_TABS,
   enterprise: {
@@ -93,6 +115,31 @@ const FALLBACK: LandingPayload = {
     body: "青山在是新一代数字化人才训练品牌，由杭州灵梧智能科技有限公司运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
   },
 };
+
+function emphasizeLine(line: string, em?: string): ReactNode {
+  const needle = (em || "").trim();
+  if (!needle || !line.includes(needle)) return line;
+  const parts = line.split(needle);
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {part}
+      {i < parts.length - 1 ? <em>{needle}</em> : null}
+    </Fragment>
+  ));
+}
+
+function renderHeroTitle(hero: LandingHeroCopy, siteTitle: string): ReactNode {
+  const lines = (hero.title_lines || []).map((s) => String(s || "").trim()).filter(Boolean);
+  if (lines.length > 0) {
+    return lines.map((line, i) => (
+      <Fragment key={i}>
+        {i > 0 ? <br /> : null}
+        {emphasizeLine(line, hero.title_em)}
+      </Fragment>
+    ));
+  }
+  return siteTitle;
+}
 
 function StoryVideoStrip({ slides }: { slides: StorySlide[] }) {
   const [active, setActive] = useState(0);
@@ -334,7 +381,17 @@ export function Landing() {
     (async () => {
       try {
         const res = await siteApi.landing();
-        if (!cancelled) setData(res);
+        if (cancelled) return;
+        // 与本地 FALLBACK 深合并，避免接口缺字段时标题/Hero 跳动
+        setData({
+          ...FALLBACK,
+          ...res,
+          brand: { ...FALLBACK.brand, ...(res.brand || {}) },
+          hero: { ...FALLBACK_HERO, ...(res.hero || {}) },
+          seo: { ...FALLBACK.seo, ...(res.seo || {}), title: SITE_DEFAULT_TITLE },
+          cta: { ...FALLBACK.cta, ...(res.cta || {}) },
+          enterprise: res.enterprise || FALLBACK.enterprise,
+        });
       } catch {
         if (!cancelled) setData(FALLBACK);
       }
@@ -343,6 +400,11 @@ export function Landing() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    // 首页页签固定为品牌全称，与 index.html 一致，禁止中途改成「青山在」或「FDE Learning OS」
+    return applyPageSeo({ ...FALLBACK.seo, ...data.seo, title: SITE_DEFAULT_TITLE }, SITE_DEFAULT_TITLE);
+  }, [data.seo?.description, data.seo?.keywords, data.seo?.og_image]);
 
   useEffect(() => {
     const onScroll = () => setHeaderSolid(window.scrollY > 32);
@@ -380,14 +442,27 @@ export function Landing() {
     setActiveTab("enterprise");
   };
 
-  const appHref = user ? "/app/courses" : data.cta.app || "/app/courses";
+  const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
   const enterprise = data.enterprise || FALLBACK.enterprise!;
   const contactEmail = data.contact?.email || CONTACT_EMAIL;
-  const brandName = data.brand?.name || FALLBACK.brand?.name || "青山在";
-  const heroEyebrow = data.hero?.eyebrow || FALLBACK.hero?.eyebrow || "FDE LEARNING OS";
-  const slogan = SLOGAN;
+  const brandName = data.brand?.name || data.title || FALLBACK.brand?.name || "青山在";
+  const siteTitle = data.title || brandName;
+  const hero = { ...FALLBACK_HERO, ...(data.hero || {}) };
+  const heroEyebrow = hero.eyebrow || FALLBACK_HERO.eyebrow || "FDE LEARNING OS";
+  // 站点信息「标语」→ Hero 副标题；缺省回落默认口号
+  const slogan = (data.tagline || "").trim() || SLOGAN;
+  const footerText = data.brand?.footer || FALLBACK.brand?.footer;
   const storySlides = buildStorySlides();
   const storyImages = [...LANDING_STORY_POSTERS];
+  const heroFallback = hero.bg_image || LANDING_HERO;
+  // 有上传海报时优先用流地址；坏图/占位图由 LandingHeroFocus 回退到静态底图
+  const heroBg = data.hero_video?.poster_url || heroFallback;
+  const proof =
+    hero.proof && hero.proof.length > 0
+      ? hero.proof
+      : FALLBACK_HERO.proof || [];
+  const primaryCta = user ? "进入学习平台" : hero.cta_primary || "进入学习";
+  const secondaryCta = hero.cta_secondary || "了解企业培训";
 
   return (
     <div className="landing">
@@ -395,7 +470,7 @@ export function Landing() {
         activeTab={activeTab}
         headerSolid={headerSolid}
         brandName={brandName}
-        loginHref={data.cta.login || "/login"}
+        loginHref={data.cta?.login || "/login"}
         appHref={appHref}
         user={user}
         tabs={data.tabs}
@@ -403,39 +478,30 @@ export function Landing() {
       />
 
       <section className="landing-hero scene-product-hero">
-        <LandingHeroFocus src={LANDING_HERO} />
+        <LandingHeroFocus src={heroBg} fallbackSrc={heroFallback} />
         <div className="landing-hero__content">
           <p className="landing-hero__eyebrow mono">{heroEyebrow}</p>
-          <h1 className="landing-hero__title">
-            让每一次学习
-            <br />
-            都留下<em>可验证</em>的证据
-          </h1>
+          <h1 className="landing-hero__title">{renderHeroTitle(hero, siteTitle)}</h1>
           <p className="landing-hero__subtitle">{slogan}</p>
           <div className="landing-hero__actions">
             <Link to={appHref} className="landing-hero-btn landing-hero-btn--primary">
-              {user ? "进入学习平台" : "进入学习"}
+              {primaryCta}
             </Link>
             <button type="button" className="landing-hero-btn" onClick={() => scrollToSection("enterprise")}>
-              了解企业培训
+              {secondaryCta}
             </button>
           </div>
         </div>
         <div className="landing-hero__proof" aria-hidden="false">
-          <div className="landing-hero__proof-item">
-            <strong className="num">21</strong>
-            <span>天任务驱动训练</span>
-          </div>
-          <span className="landing-hero__proof-divider" aria-hidden="true" />
-          <div className="landing-hero__proof-item">
-            <strong className="num">100%</strong>
-            <span>交付全程留痕</span>
-          </div>
-          <span className="landing-hero__proof-divider" aria-hidden="true" />
-          <div className="landing-hero__proof-item">
-            <strong className="num">3</strong>
-            <span>类机构同行验证</span>
-          </div>
+          {proof.map((item, i) => (
+            <Fragment key={`${item.value}-${item.label}-${i}`}>
+              {i > 0 ? <span className="landing-hero__proof-divider" aria-hidden="true" /> : null}
+              <div className="landing-hero__proof-item">
+                <strong className="num">{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
+            </Fragment>
+          ))}
         </div>
       </section>
 
@@ -458,7 +524,12 @@ export function Landing() {
         </div>
       </section>
 
-      <LandingFooter brandName={brandName} appHref={appHref} contactEmail={contactEmail} />
+      <LandingFooter
+        brandName={brandName}
+        appHref={appHref}
+        contactEmail={contactEmail}
+        footerText={footerText}
+      />
     </div>
   );
 }

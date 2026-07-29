@@ -17,9 +17,10 @@ from typing import Any
 from uuid import uuid4
 
 from services.shared import db_cursor, now_iso
+from services.shared.config import CAMP_VERSION_LABEL
 from services.shared.rubric_registry import enrich_eval_result
 
-CAMP_VERSION_DEFAULT = "v0.3"
+CAMP_VERSION_DEFAULT = CAMP_VERSION_LABEL
 
 
 def _node_ids_for_day(day_data: dict[str, Any] | None, day: int) -> list[str]:

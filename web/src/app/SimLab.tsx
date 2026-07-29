@@ -36,6 +36,18 @@ export function SimLab({
       (day.lab?.ui as { layout?: string } | undefined)?.layout ||
       "",
   );
+  const taskBrief = String(day.lab?.task_brief || "");
+  const quickCommands = useMemo(() => {
+    const fromLab = (day.lab?.quick_commands || (seed.quick_commands as string[] | undefined)) as string[] | undefined;
+    return fromLab && fromLab.length
+      ? fromLab
+      : [
+          "echo 'proxy_pass http://127.0.0.1:3000;' > /etc/nginx/sites-enabled/docs",
+          "nginx -t",
+          "systemctl reload nginx",
+          "cat /etc/nginx/sites-enabled/docs",
+        ];
+  }, [day.lab, seed]);
 
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [view, setView] = useState<Record<string, unknown> | null>(null);
@@ -109,7 +121,11 @@ export function SimLab({
       if (type === "terminal.exec") {
         const stdout = String(res.stdout || "");
         const c = String(payload.cmd || "");
-        setTermLines((prev) => [...prev, `$ ${c}`, stdout || "(no output)"]);
+        const state = (res.state || {}) as { cwd?: string };
+        const cwdTilde = String(state.cwd || view?.cwd || "/home/trainee").replace("/home/trainee", "~");
+        const lines = [`trainee@fde-server:${cwdTilde}$ ${c}`];
+        if (stdout) lines.push(stdout); // 真实终端：无输出不打印占位
+        setTermLines((prev) => [...prev, ...lines]);
       }
       await refreshView(sessionId);
       if (type !== "manifest.set") toast.push("动作已应用", "success");
@@ -274,17 +290,17 @@ export function SimLab({
       {sessionId && isTerminal && !isK8s && (
         <div className="panel stack">
           <h3>终端</h3>
+          {taskBrief && (
+            <p className="muted" style={{ fontSize: 13, whiteSpace: "pre-line" }}>
+              {taskBrief}
+            </p>
+          )}
           <div className="sim-terminal" aria-live="polite">
-            {termLines.length ? termLines.join("\n") : "输入命令执行仿真 shell（如 nginx -t）"}
+            {termLines.length ? termLines.join("\n") : `输入命令执行仿真 shell（如 ${quickCommands[0] || "pwd"}）`}
           </div>
           <div className="row" style={{ flexWrap: "wrap" }}>
-            {[
-              "echo 'proxy_pass http://127.0.0.1:3000;' > /etc/nginx/sites-enabled/docs",
-              "nginx -t",
-              "systemctl reload nginx",
-              "cat /etc/nginx/sites-enabled/docs",
-            ].map((c) => (
-              <button key={c} type="button" disabled={busy} onClick={() => void runAction("terminal.exec", { cmd: c })}>
+            {quickCommands.map((c) => (
+              <button key={c} type="button" title="填入输入框（自己回车执行）" disabled={busy} onClick={() => setCmd(c)}>
                 {c.length > 36 ? `${c.slice(0, 36)}…` : c}
               </button>
             ))}

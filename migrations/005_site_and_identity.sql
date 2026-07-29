@@ -60,7 +60,20 @@ CREATE TABLE IF NOT EXISTS certificate_issuances (
 
 CREATE INDEX IF NOT EXISTS idx_identity_verifications_user ON identity_verifications(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_certificate_issuances_user ON certificate_issuances(user_id, issued_at DESC);
-CREATE INDEX IF NOT EXISTS idx_site_media_page ON site_media(page_slug, kind);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'site_media' AND column_name = 'page_slug'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_site_media_page ON site_media(page_slug, kind);
+  ELSIF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'site_media' AND column_name = 'page_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_site_media_page ON site_media(page_id, kind);
+  END IF;
+END $$;
 
 -- NOTE: the `landing` seed row is inserted lazily by
 -- `services/learner/app.py` (`_ensure_landing_row`) on first read, not here.

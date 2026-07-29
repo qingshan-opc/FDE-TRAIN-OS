@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 520" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="AI 应用的四层架构"><rect width="1040" height="520" fill="#231f20"/>
+        <!-- 左列视角问题 -->
+        <g style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">
+          <text x="40" y="86" font-size="13" font-weight="700" fill="rgba(242,245,240,.85)">你看到的</text>
+          <text x="40" y="106" font-size="10" letter-spacing="1.5" fill="#f24e54">L1</text>
+          <text x="40" y="192" font-size="13" font-weight="700" fill="rgba(242,245,240,.85)">怎么对话</text>
+          <text x="40" y="212" font-size="10" letter-spacing="1.5" fill="#5f52a0">L2</text>
+          <text x="40" y="298" font-size="13" font-weight="700" fill="rgba(242,245,240,.85)">数据住哪</text>
+          <text x="40" y="318" font-size="10" letter-spacing="1.5" fill="#1cd5b0">L3</text>
+          <text x="40" y="404" font-size="13" font-weight="700" fill="rgba(242,245,240,.85)">谁动脑子</text>
+          <text x="40" y="424" font-size="10" letter-spacing="1.5" fill="#e0479e">L4</text>
+        </g>
+
+        <!-- L1 前端 -->
+        <rect x="180" y="40" width="640" height="88" fill="none" stroke="#f24e54" stroke-width="2"/>
+        <text x="210" y="80" font-size="18" font-weight="800" fill="#f2f5f0">前端界面</text>
+        <text x="210" y="102" font-size="10.5" letter-spacing="1.5" fill="rgba(242,245,240,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">UI LAYER · DAY 2</text>
+        <text x="790" y="90" text-anchor="end" font-size="12.5" fill="rgba(242,245,240,.6)">驾驶舱页面：五区块骨架 · 三态 · Prompt 即源码</text>
+
+        <!-- L2 接口 -->
+        <rect x="180" y="146" width="640" height="88" fill="none" stroke="#5f52a0" stroke-width="2"/>
+        <text x="210" y="186" font-size="18" font-weight="800" fill="#f2f5f0">接口服务</text>
+        <text x="210" y="208" font-size="10.5" letter-spacing="1.5" fill="rgba(242,245,240,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">API LAYER · DAY 3</text>
+        <text x="790" y="196" text-anchor="end" font-size="12.5" fill="rgba(242,245,240,.6)">FastAPI · JSON 契约——前后端唯一的对话方式</text>
+
+        <!-- L3 数据库 -->
+        <rect x="180" y="252" width="640" height="88" fill="none" stroke="#1cd5b0" stroke-width="2"/>
+        <text x="210" y="292" font-size="18" font-weight="800" fill="#f2f5f0">数据库</text>
+        <text x="210" y="314" font-size="10.5" letter-spacing="1.5" fill="rgba(242,245,240,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">DATA LAYER · DAY 4</text>
+        <text x="790" y="302" text-anchor="end" font-size="12.5" fill="rgba(242,245,240,.6)">SQLite 起步，PostgreSQL 毕业——数据终于有家</text>
+
+        <!-- L4 模型 -->
+        <rect x="180" y="358" width="640" height="88" fill="none" stroke="#e0479e" stroke-width="2"/>
+        <text x="210" y="398" font-size="18" font-weight="800" fill="#f2f5f0">AI 模型</text>
+        <text x="210" y="420" font-size="10.5" letter-spacing="1.5" fill="rgba(242,245,240,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">MODEL LAYER · DAY 5</text>
+        <text x="790" y="408" text-anchor="end" font-size="12.5" fill="rgba(242,245,240,.6)">云 API 或本地推理——摘要与建议的大脑</text>
+
+        <!-- 层间双向箭头 -->
+        <g stroke="rgba(242,245,240,.5)" stroke-width="1.5">
+          <line x1="852" y1="128" x2="852" y2="146"/><path d="M852 150 L847 141 L857 141 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+          <line x1="876" y1="146" x2="876" y2="128"/><path d="M876 124 L871 133 L881 133 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+          <line x1="852" y1="234" x2="852" y2="252"/><path d="M852 256 L847 247 L857 247 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+          <line x1="876" y1="252" x2="876" y2="234"/><path d="M876 230 L871 239 L881 239 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+          <line x1="852" y1="340" x2="852" y2="358"/><path d="M852 362 L847 353 L857 353 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+          <line x1="876" y1="358" x2="876" y2="340"/><path d="M876 336 L871 345 L881 345 Z" fill="rgba(242,245,240,.5)" stroke="none"/>
+        </g>
+        <g font-size="10" fill="rgba(242,245,240,.5)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">
+          <text x="892" y="133">↓ 点击 · 输入</text>
+          <text x="892" y="147">↑ 页面 · 渲染</text>
+          <text x="892" y="239">↓ SQL 查询</text>
+          <text x="892" y="253">↑ 数据行</text>
+          <text x="892" y="345">↓ Prompt 调用</text>
+          <text x="892" y="359">↑ 摘要 · 建议</text>
+        </g>
+
+        <text x="180" y="492" font-size="11" fill="rgba(242,245,240,.5)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">接电顺序：Day 2 前端 → Day 3 接口 → Day 4 数据库 → Day 5 模型 → Day 6 部署上线</text>
+      </svg>

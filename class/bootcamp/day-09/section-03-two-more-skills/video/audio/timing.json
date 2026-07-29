@@ -1,0 +1,35 @@
+{
+  "total": 78.6,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s03_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 4.96
+    },
+    {
+      "id": "02-upstream-input",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s03_course/tts/02-upstream-input.wav",
+      "start": 5.21,
+      "duration": 18.32
+    },
+    {
+      "id": "03-send-guard",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s03_course/tts/03-send-guard.wav",
+      "start": 23.78,
+      "duration": 18.48
+    },
+    {
+      "id": "04-align-check",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s03_course/tts/04-align-check.wav",
+      "start": 42.51,
+      "duration": 18.4
+    },
+    {
+      "id": "05-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s03_course/tts/05-close.wav",
+      "start": 61.16,
+      "duration": 17.44
+    }
+  ]
+}

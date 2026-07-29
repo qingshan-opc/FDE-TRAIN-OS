@@ -15,6 +15,7 @@ import {
 import { DeleteOutlined, PlusOutlined, UploadOutlined, VideoCameraAddOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import type { AuthorCapsule, AuthorDayPackage, AuthorQuizQuestion, CapsuleEditorTab, DayResource } from "./dayPackage";
+import type { KnowledgeCard } from "../../lib/types";
 import { practiceToText } from "./dayPackage";
 import { authorApi, ApiError } from "../../lib/api";
 import { useAuth } from "../../lib/auth";
@@ -96,6 +97,106 @@ function CapsuleQuizTab({
           setQuizModal(null);
         }}
       />
+    </Space>
+  );
+}
+
+function emptyCard(): KnowledgeCard {
+  return { id: `card-${Date.now()}`, term: "", plain: "" };
+}
+
+function CapsuleKnowledgeCardsTab({
+  capsule,
+  readonly,
+  patch,
+}: {
+  capsule: AuthorCapsule;
+  readonly: boolean;
+  patch: PatchCapsule;
+}) {
+  const cards = capsule.knowledge_cards || [];
+  const setCards = (next: KnowledgeCard[]) => patch({ knowledge_cards: next });
+
+  return (
+    <Space direction="vertical" style={{ width: "100%" }}>
+      <Typography.Text type="secondary">
+        学员端「知识卡片」步展示；建议 3–6 张，每张含词条、人话解释，可选标签与补充细节。
+      </Typography.Text>
+      {cards.map((c, i) => (
+        <Card
+          key={c.id || i}
+          size="small"
+          type="inner"
+          title={c.term || `卡片 ${i + 1}`}
+          extra={
+            !readonly && (
+              <Button size="small" danger onClick={() => setCards(cards.filter((_, j) => j !== i))}>
+                删除
+              </Button>
+            )
+          }
+        >
+          <Form layout="vertical" disabled={readonly}>
+            <Form.Item label="ID">
+              <Input
+                value={c.id}
+                onChange={(e) => {
+                  const next = [...cards];
+                  next[i] = { ...next[i], id: e.target.value.trim() };
+                  setCards(next);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="词条">
+              <Input
+                value={c.term}
+                onChange={(e) => {
+                  const next = [...cards];
+                  next[i] = { ...next[i], term: e.target.value };
+                  setCards(next);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="人话解释">
+              <Input.TextArea
+                rows={2}
+                value={c.plain}
+                onChange={(e) => {
+                  const next = [...cards];
+                  next[i] = { ...next[i], plain: e.target.value };
+                  setCards(next);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="补充细节">
+              <Input.TextArea
+                rows={2}
+                value={c.detail || ""}
+                onChange={(e) => {
+                  const next = [...cards];
+                  next[i] = { ...next[i], detail: e.target.value };
+                  setCards(next);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="标签">
+              <Input
+                value={c.tag || ""}
+                onChange={(e) => {
+                  const next = [...cards];
+                  next[i] = { ...next[i], tag: e.target.value };
+                  setCards(next);
+                }}
+              />
+            </Form.Item>
+          </Form>
+        </Card>
+      ))}
+      {!readonly && (
+        <Button icon={<PlusOutlined />} onClick={() => setCards([...cards, emptyCard()])}>
+          添加知识卡片
+        </Button>
+      )}
     </Space>
   );
 }
@@ -222,6 +323,7 @@ export function CapsuleEditorTabs({
   const { getContentPopupContainer } = useAuthorLayout();
   const selectPopup = authorSelectPopup(getContentPopupContainer);
   const [uploading, setUploading] = useState(false);
+  const [bootcampMediaBusy, setBootcampMediaBusy] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [advancedText, setAdvancedText] = useState(
     () => (capsule.advanced ? JSON.stringify(capsule.advanced, null, 2) : ""),
@@ -263,6 +365,23 @@ export function CapsuleEditorTabs({
       setUploading(false);
     }
     return false;
+  };
+
+  const bindBootcampMedia = async () => {
+    setBootcampMediaBusy(true);
+    try {
+      const res = await authorApi.getBootcampCapsuleMedia(pkg.day, capsuleId);
+      if (!res.items?.length) {
+        message.warning(`Day ${pkg.day} · ${capsuleId} 在 bootcamp 暂无 media 配置`);
+        return;
+      }
+      patch({ media: res.items });
+      message.success(`已绑定 bootcamp 本节 ${res.items.length} 条媒体`);
+    } catch (err) {
+      message.error(err instanceof ApiError ? err.message : "读取 bootcamp 失败");
+    } finally {
+      setBootcampMediaBusy(false);
+    }
   };
 
   const saveAdvanced = () => {
@@ -356,6 +475,9 @@ export function CapsuleEditorTabs({
                               <Button icon={<VideoCameraAddOutlined />} onClick={() => setPickerOpen(true)}>
                                 从视频库选择
                               </Button>
+                              <Button loading={bootcampMediaBusy} onClick={() => void bindBootcampMedia()}>
+                                从 bootcamp 本节成片
+                              </Button>
                             </Space>
                           )}
                           {(capsule.media || []).map((m, mi) => (
@@ -418,6 +540,11 @@ export function CapsuleEditorTabs({
                 </Form.Item>
               </Form>
             ),
+          },
+          {
+            key: "knowledge_cards",
+            label: `知识卡片（${(capsule.knowledge_cards || []).length}）`,
+            children: <CapsuleKnowledgeCardsTab capsule={capsule} readonly={readonly} patch={patch} />,
           },
           {
             key: "local_prep",

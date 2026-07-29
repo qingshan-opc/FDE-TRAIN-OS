@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-three-requirements",
+    "file": "02-three-requirements.txt"
+  },
+  {
+    "id": "03-min-impl",
+    "file": "03-min-impl.txt"
+  },
+  {
+    "id": "04-priority",
+    "file": "04-priority.txt"
+  },
+  {
+    "id": "05-panorama-check",
+    "file": "05-panorama-check.txt"
+  }
+]

@@ -17,6 +17,7 @@ if str(_ROOT) not in sys.path:
 
 from services.author.pagination import offset_limit, page_meta, parse_page  # noqa: E402
 from services.shared import db_cursor, write_audit  # noqa: E402
+from services.shared.config import ENROLLMENT_ACTIVITY_LIMIT  # noqa: E402
 from services.shared.middleware import require_author, session_camp_id  # noqa: E402
 
 router = APIRouter(tags=["author-learners"])
@@ -430,7 +431,7 @@ def get_enrollment(enrollment_id: str, request: Request) -> dict[str, Any]:
             FROM mentor_reviews
             WHERE enrollment_id=? OR (learner_id=? AND camp_id=?)
             ORDER BY created_at DESC
-            LIMIT 20
+            LIMIT {ENROLLMENT_ACTIVITY_LIMIT}
             """,
             (enrollment_id, uid, camp),
         )
@@ -442,9 +443,27 @@ def get_enrollment(enrollment_id: str, request: Request) -> dict[str, Any]:
                     d[key] = d[key].isoformat()
             reviews.append(d)
 
+        capsule_progress: list[dict[str, Any]] = []
+        if camp:
+            cur.execute(
+                """
+                SELECT day, capsule_id, opened_at
+                FROM capsule_progress
+                WHERE learner_id=? AND camp_id=?
+                ORDER BY day ASC, capsule_id ASC
+                """,
+                (uid, camp),
+            )
+            for r in cur.fetchall():
+                d = _row(r)
+                if d.get("opened_at") is not None and hasattr(d["opened_at"], "isoformat"):
+                    d["opened_at"] = d["opened_at"].isoformat()
+                capsule_progress.append(d)
+
     return {
         **item,
         "node_progress": node_progress,
+        "capsule_progress": capsule_progress,
         "submission_count": submission_count,
         "attachment_count": attachment_count,
         "mentor_reviews": reviews,

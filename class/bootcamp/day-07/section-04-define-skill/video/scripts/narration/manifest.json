@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-action-verbs",
+    "file": "02-action-verbs.txt"
+  },
+  {
+    "id": "03-verdict-patterns",
+    "file": "03-verdict-patterns.txt"
+  },
+  {
+    "id": "04-reverse-order",
+    "file": "04-reverse-order.txt"
+  },
+  {
+    "id": "05-swap-test",
+    "file": "05-swap-test.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

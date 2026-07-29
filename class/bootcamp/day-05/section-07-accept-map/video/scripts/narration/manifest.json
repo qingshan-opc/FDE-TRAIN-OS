@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-gates",
+    "file": "01-gates.txt"
+  },
+  {
+    "id": "02-quiz",
+    "file": "02-quiz.txt"
+  },
+  {
+    "id": "03-map",
+    "file": "03-map.txt"
+  },
+  {
+    "id": "04-pass",
+    "file": "04-pass.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-input-steps",
+    "file": "02-input-steps.txt"
+  },
+  {
+    "id": "03-output-accept",
+    "file": "03-output-accept.txt"
+  },
+  {
+    "id": "04-weekly-example",
+    "file": "04-weekly-example.txt"
+  },
+  {
+    "id": "05-common-defects",
+    "file": "05-common-defects.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

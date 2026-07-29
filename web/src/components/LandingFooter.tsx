@@ -14,10 +14,13 @@ export function LandingFooter({
   brandName = "青山在",
   appHref = "/app/courses",
   contactEmail = LANDING_FOOTER_TRAINING_EMAIL,
+  footerText,
 }: {
   brandName?: string;
   appHref?: string;
   contactEmail?: string;
+  /** 站点信息里配置的页脚文案；缺省则用品牌名 + 年份 */
+  footerText?: string | null;
 }) {
   const year = new Date().getFullYear();
 
@@ -114,7 +117,9 @@ export function LandingFooter({
             <a href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("商务合作")}`}>商务合作</a>
           </p>
           <p className="landing-site-footer__copy">
-            © 2024-{year} {LANDING_FOOTER_COMPANY} 版权所有
+            {footerText?.trim()
+              ? footerText
+              : `© 2024-${year} ${LANDING_FOOTER_COMPANY} 版权所有`}
           </p>
           <p className="landing-site-footer__tagline">{LANDING_FOOTER_TAGLINE}</p>
         </div>

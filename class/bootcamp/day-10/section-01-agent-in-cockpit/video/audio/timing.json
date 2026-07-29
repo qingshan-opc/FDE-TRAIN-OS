@@ -1,0 +1,35 @@
+{
+  "total": 88.92,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s01_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 10.48
+    },
+    {
+      "id": "02-three-requirements",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s01_course/tts/02-three-requirements.wav",
+      "start": 10.73,
+      "duration": 21.36
+    },
+    {
+      "id": "03-min-impl",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s01_course/tts/03-min-impl.wav",
+      "start": 32.34,
+      "duration": 17.84
+    },
+    {
+      "id": "04-priority",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s01_course/tts/04-priority.wav",
+      "start": 50.43,
+      "duration": 21.44
+    },
+    {
+      "id": "05-panorama-check",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s01_course/tts/05-panorama-check.wav",
+      "start": 72.12,
+      "duration": 16.8
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "total": 167.019,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 28.08
+    },
+    {
+      "id": "02-eval",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/02-eval.wav",
+      "start": 28.33,
+      "duration": 28.489
+    },
+    {
+      "id": "03-guardrails",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/03-guardrails.wav",
+      "start": 57.069,
+      "duration": 31.2
+    },
+    {
+      "id": "04-vibe",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/04-vibe.wav",
+      "start": 88.519,
+      "duration": 32.16
+    },
+    {
+      "id": "05-triangle",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/05-triangle.wav",
+      "start": 120.929,
+      "duration": 26.4
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s04_course/tts/06-close.wav",
+      "start": 147.579,
+      "duration": 19.44
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-ten-evidence",
+    "file": "02-ten-evidence.txt"
+  },
+  {
+    "id": "03-strong-weak",
+    "file": "03-strong-weak.txt"
+  },
+  {
+    "id": "04-one-liner",
+    "file": "04-one-liner.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

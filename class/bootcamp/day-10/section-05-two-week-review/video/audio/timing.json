@@ -1,0 +1,35 @@
+{
+  "total": 86.532,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s05_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 7.28
+    },
+    {
+      "id": "02-map-self",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s05_course/tts/02-map-self.wav",
+      "start": 7.53,
+      "duration": 19.84
+    },
+    {
+      "id": "03-cognitive-fold",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s05_course/tts/03-cognitive-fold.wav",
+      "start": 27.62,
+      "duration": 19.2
+    },
+    {
+      "id": "04-ninety-day",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s05_course/tts/04-ninety-day.wav",
+      "start": 47.07,
+      "duration": 21.132
+    },
+    {
+      "id": "05-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s05_course/tts/05-close.wav",
+      "start": 68.452,
+      "duration": 18.08
+    }
+  ]
+}

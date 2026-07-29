@@ -1,4 +1,12 @@
-export type UserRole = "learner" | "author" | "admin";
+export type UserRole = "learner" | "author" | "admin" | "partner";
+
+export interface UserAttribution {
+  user_id: string;
+  org_id: string;
+  org_name?: string;
+  invite_code?: string;
+  bound_at?: string;
+}
 
 export interface User {
   id: string;
@@ -20,6 +28,7 @@ export interface AuthMe {
   camps: Camp[];
   csrf?: string | null;
   server_time?: number;
+  attribution?: UserAttribution | null;
 }
 
 export type NodeKind = "learn" | "quiz" | "lab" | "project" | "review" | "unlock";
@@ -57,6 +66,21 @@ export interface CapsuleLocalPrep {
   suggested_questions?: string[];
 }
 
+export interface CapsuleTool {
+  name: string;
+  note?: string;
+  url?: string;
+}
+
+/** Interactive concept card for the knowledge-cards learn step. */
+export interface KnowledgeCard {
+  id: string;
+  term: string;
+  plain: string;
+  detail?: string;
+  tag?: string;
+}
+
 export interface Capsule {
   id: string;
   title: string;
@@ -67,6 +91,10 @@ export interface Capsule {
   media?: CapsuleMedia[];
   resource_ids?: string[];
   resources?: DayResource[];
+  tools?: CapsuleTool[];
+  knowledge_cards?: KnowledgeCard[];
+  /** Section glossary shown left of resources under the video step. */
+  glossary_terms?: KnowledgeCard[];
   quiz?: { questions?: Array<{ q: string; options: string[]; answer?: number; explain?: string }>; pass_rate?: number };
   lab?: Record<string, unknown>;
   advanced?: Record<string, unknown>;
@@ -144,6 +172,10 @@ export interface DayPackage {
     rubric?: RubricCheck[];
     seed?: Record<string, unknown>;
     ui?: Record<string, unknown>;
+    /** Sim terminal labs: task instructions shown above the terminal and
+     * quick-command buttons (fallback is the nginx starter set). */
+    task_brief?: string;
+    quick_commands?: string[];
     coach?: {
       help_mode?: "explain" | "debug" | "process" | "interview" | "review";
       skill_id?: string;
@@ -287,6 +319,7 @@ export interface AuthorDocument {
   filename: string;
   content_type?: string;
   size_bytes?: number;
+  object_key?: string | null;
   status: string;
   camp_id?: string;
   created_at?: string;
@@ -381,9 +414,27 @@ export interface LandingBrand {
   footer?: string;
 }
 
+export interface LandingHeroProof {
+  value?: string;
+  label?: string;
+}
+
 export interface LandingHeroCopy {
   eyebrow?: string;
   empty_title?: string;
+  title_lines?: string[];
+  title_em?: string;
+  cta_primary?: string;
+  cta_secondary?: string;
+  bg_image?: string;
+  proof?: LandingHeroProof[];
+}
+
+export interface LandingSeo {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  og_image?: string;
 }
 
 export interface LandingOpenCourse {
@@ -419,6 +470,7 @@ export interface LandingPayload {
   cta: { login: string; app: string };
   brand?: LandingBrand;
   hero?: LandingHeroCopy;
+  seo?: LandingSeo;
   tabs?: LandingTab[];
   enterprise?: LandingEnterprise;
   open_courses?: LandingOpenCourse[];
@@ -481,9 +533,26 @@ export interface IdentityStartResult {
   id_tail?: string | null;
 }
 
+export interface ChainPublicInfo {
+  holder_name?: string | null;
+  course_title?: string | null;
+  issued_at?: string | null;
+  id_number_sha256?: string | null;
+  id_hash_algorithm?: string | null;
+  id_hash_normalization?: string | null;
+  id_hash_steps?: string[];
+  tx_hash?: string | null;
+  block_height?: number | null;
+  field_checks?: {
+    course_consistent?: boolean;
+    issued_at_consistent?: boolean;
+  };
+}
+
 export interface CertificateVerifyResult {
   valid: boolean;
   verified_identity?: boolean;
+  identity_verified?: boolean;
   id?: string;
   cert_id?: string;
   course_title?: string;
@@ -496,6 +565,13 @@ export interface CertificateVerifyResult {
   chain_network?: string | null;
   chain_content_hash?: string | null;
   chain_anchor_at?: string | null;
+  chain_block_height?: number | null;
+  chain_block_hash?: string | null;
+  chain_holder_name?: string | null;
+  chain_id_number_sha256?: string | null;
+  chain_public?: ChainPublicInfo | null;
+  chain_only?: boolean;
+  platform_record?: boolean;
   requires_identity_challenge?: boolean;
 }
 

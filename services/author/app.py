@@ -30,8 +30,20 @@ from services.shared import (  # noqa: E402
     now_iso,
     write_audit,
 )
+from services.shared.config import (  # noqa: E402
+    DEFAULT_UPLOAD_MAX_BYTES,
+    MEDIA_MAX_BYTES_BY_KIND,
+    S3_PRESIGN_GET_EXPIRES,
+)
 from services.shared.middleware import require_author, session_camp_id  # noqa: E402
-from services.storage import document_key, get_store  # noqa: E402
+from services.storage import (  # noqa: E402
+    course_media_key,
+    document_key,
+    get_store,
+    site_hero_key,
+    site_mentor_avatar_key,
+    open_course_key,
+)
 from services.application.curriculum_projection import (  # noqa: E402
     delete_projected_day,
     project_course_version,
@@ -39,13 +51,19 @@ from services.application.curriculum_projection import (  # noqa: E402
 )
 from services.author.pagination import offset_limit, page_meta, parse_page  # noqa: E402
 from services.author.enrollments import router as enrollments_router  # noqa: E402
+from services.author.partners import router as partners_router  # noqa: E402
 from services.author import media_library as media_lib  # noqa: E402
 from services.author import site_content as site_content  # noqa: E402
+from services.author.bootcamp_sync import (  # noqa: E402
+    list_available_days,
+    sync_bootcamp_days,
+)
 
 log = logging.getLogger("fde.author")
 
 router = APIRouter(tags=["author"])
 router.include_router(enrollments_router)
+router.include_router(partners_router)
 app = FastAPI(title="FDE Author", version="0.2.0")
 init_schema()
 ensure_dirs()
@@ -369,9 +387,9 @@ def document_download(document_id: str, request: Request) -> dict[str, Any]:
         doc = cur.fetchone()
         if not doc:
             raise HTTPException(404, "document not found")
-    url = get_store().presign_get(S3_BUCKET_DOCUMENTS, doc["object_key"], expires=300)
+    url = get_store().presign_get(S3_BUCKET_DOCUMENTS, doc["object_key"])
     write_audit("author.document_download", actor_id=request.state.user.id, resource_id=document_id, camp_id=doc["camp_id"])
-    return {"url": url, "expires_in": 300}
+    return {"url": url, "expires_in": S3_PRESIGN_GET_EXPIRES}
 
 
 @router.get("/api/v1/author/course-versions")
@@ -898,6 +916,126 @@ def update_course_version_day(version_id: str, day: int, body: DayPackageUpdate,
     return {"ok": True, "course_version_id": version_id, "day": day}
 
 
+class BootcampSyncBody(BaseModel):
+    days: list[int] | None = None
+    dry_run: bool = False
+    merge_mode: str = "full"  # full | media_fields
+
+
+@router.get("/api/v1/author/bootcamp/days")
+def list_bootcamp_days(request: Request) -> dict[str, Any]:
+    require_author(request)
+    return {"items": list_available_days()}
+
+
+@router.get("/api/v1/author/bootcamp/days/{day}/capsules/{capsule_id}/media")
+def get_bootcamp_capsule_media_route(day: int, capsule_id: str, request: Request) -> dict[str, Any]:
+    require_author(request)
+    from services.author.bootcamp_sync import get_bootcamp_capsule_media
+
+    try:
+        media = get_bootcamp_capsule_media(day, capsule_id)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    return {"day": day, "capsule_id": capsule_id, "items": media}
+
+
+@router.post("/api/v1/author/course-versions/{version_id}/sync-bootcamp")
+def sync_bootcamp_to_version(version_id: str, body: BootcampSyncBody, request: Request) -> dict[str, Any]:
+    """Import day packages from class/bootcamp into a draft course version."""
+    user = require_author(request)
+    merge_mode = body.merge_mode if body.merge_mode in ("full", "media_fields") else "full"
+    available = list_available_days()
+    if not available:
+        raise HTTPException(404, "class/bootcamp 下没有可同步的 day.yaml")
+
+    target_days = body.days if body.days else available
+    invalid = [d for d in target_days if d not in available]
+    if invalid:
+        raise HTTPException(400, f"bootcamp 不存在这些课次: {invalid}")
+
+    with db_cursor() as cur:
+        cur.execute("SELECT status FROM course_versions WHERE id=?", (version_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(404, "course version not found")
+        if row["status"] == "published" and not body.dry_run:
+            raise HTTPException(409, "已发布版本不可修改；请创建新草稿后再同步")
+
+        existing_by_day: dict[int, dict[str, Any] | None] = {}
+        for day in target_days:
+            cur.execute(
+                "SELECT package_json FROM day_packages WHERE course_version_id=? AND day=?",
+                (version_id, day),
+            )
+            r = cur.fetchone()
+            if r:
+                pkg = r["package_json"]
+                if isinstance(pkg, str):
+                    pkg = json.loads(pkg)
+                existing_by_day[day] = pkg if isinstance(pkg, dict) else None
+            else:
+                existing_by_day[day] = None
+
+    previews, errors = sync_bootcamp_days(existing_by_day, target_days, merge_mode)  # type: ignore[arg-type]
+
+    if body.dry_run:
+        return {
+            "dry_run": True,
+            "merge_mode": merge_mode,
+            "days": [
+                {
+                    "day": p["day"],
+                    "title": p["title"],
+                    "capsule_count": p["capsule_count"],
+                    "capsules": p["capsules"],
+                    "changes": p["changes"],
+                }
+                for p in previews
+            ],
+            "errors": errors,
+        }
+
+    updated: list[int] = []
+    with db_cursor() as cur:
+        cur.execute("SELECT status FROM course_versions WHERE id=?", (version_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(404, "course version not found")
+        if row["status"] == "published":
+            raise HTTPException(409, "已发布版本不可修改")
+
+        for preview in previews:
+            day = int(preview["day"])
+            pkg = preview["package_json"]
+            title = str(pkg.get("title") or f"Day {day}")
+            project = pkg.get("project")
+            _validate_day_package_payload(pkg)
+            cur.execute(
+                """
+                INSERT INTO day_packages (id, course_version_id, day, title, project, package_json)
+                VALUES (?,?,?,?,?,?::jsonb)
+                ON CONFLICT (course_version_id, day) DO UPDATE
+                  SET title=EXCLUDED.title, project=EXCLUDED.project, package_json=EXCLUDED.package_json
+                """,
+                (str(uuid4()), version_id, day, title, project, json.dumps(pkg, ensure_ascii=False)),
+            )
+            try:
+                project_day_package(version_id, day, pkg)
+            except Exception as exc:
+                log.warning("curriculum projection failed for bootcamp sync %s day %s: %s", version_id, day, exc)
+            updated.append(day)
+
+    write_audit(
+        "author.bootcamp_sync",
+        actor_id=user.id,
+        resource_type="course_version",
+        resource_id=version_id,
+        details={"days": updated, "merge_mode": merge_mode},
+    )
+    return {"dry_run": False, "merge_mode": merge_mode, "updated": updated, "errors": errors}
+
+
 class DayCreateBody(BaseModel):
     day: int | None = None
     title: str | None = None
@@ -1117,12 +1255,12 @@ async def upload_course_media(
         "image": ".png",
     }.get(kind_l, ".bin")
     data = await file.read()
-    max_bytes = 200 * 1024 * 1024 if kind_l == "video" else 32 * 1024 * 1024
+    max_bytes = MEDIA_MAX_BYTES_BY_KIND.get(kind_l, DEFAULT_UPLOAD_MAX_BYTES)
     if len(data) > max_bytes:
         raise HTTPException(413, f"{kind_l} too large")
     ctype = file.content_type or "application/octet-stream"
     safe_cap = "".join(ch for ch in (capsule_id or "c1") if ch.isalnum() or ch in "-_") or "c1"
-    key = f"documents/{camp}/course-media/day{int(day):02d}-{safe_cap}-{uuid4().hex[:10]}{ext}"
+    key = course_media_key(f"day{int(day):02d}-{safe_cap}-{uuid4().hex[:10]}{ext}", camp_id=camp)
     get_store().put_bytes(S3_BUCKET_DOCUMENTS, key, data, content_type=ctype)
     write_audit(
         "author.course_media_upload",
@@ -1581,6 +1719,8 @@ def list_pack_resources(
     pack_id: str,
     request: Request,
     q: str | None = None,
+    day_index: int | None = None,
+    node_id: str | None = None,
     page: int | None = None,
     page_size: int | None = None,
 ) -> dict[str, Any]:
@@ -1596,6 +1736,12 @@ def list_pack_resources(
         if q and q.strip():
             where.append("title ILIKE ?")
             args.append(f"%{q.strip()}%")
+        if day_index is not None:
+            where.append("day_index=?")
+            args.append(int(day_index))
+        if node_id and node_id.strip():
+            where.append("meta_json->>'node_id'=?")
+            args.append(node_id.strip())
         where_sql = " AND ".join(where)
         cur.execute(f"SELECT COUNT(*) AS c FROM learning_resources WHERE {where_sql}", args)
         total = int(cur.fetchone()["c"] or 0)
@@ -1701,6 +1847,7 @@ class LandingPatch(BaseModel):
     cta: dict[str, Any] | None = None
     brand: dict[str, Any] | None = None
     hero: dict[str, Any] | None = None
+    seo: dict[str, Any] | None = None
     tabs: list[dict[str, Any]] | None = None
     enterprise: dict[str, Any] | None = None
     about: dict[str, Any] | None = None
@@ -1735,20 +1882,20 @@ async def author_upload_hero(
 
     if video is not None and video.filename:
         data = await video.read()
-        if len(data) > 200 * 1024 * 1024:
+        if len(data) > MEDIA_MAX_BYTES_BY_KIND["video"]:
             raise HTTPException(413, "视频超过 200MB")
         if not data:
             raise HTTPException(400, "empty video")
         ext = Path(video.filename).suffix.lower() or ".mp4"
-        object_key = f"documents/shared/site/hero/video-{uuid4().hex[:12]}{ext}"
+        object_key = site_hero_key("video", uuid4().hex[:12], ext)
         store.put_bytes(S3_BUCKET_DOCUMENTS, object_key, data, content_type=video.content_type or "video/mp4")
 
     if poster is not None and poster.filename:
         data = await poster.read()
-        if len(data) > 8 * 1024 * 1024:
+        if len(data) > MEDIA_MAX_BYTES_BY_KIND["poster"]:
             raise HTTPException(413, "海报超过 8MB")
         ext = Path(poster.filename).suffix.lower() or ".jpg"
-        poster_key = f"documents/shared/site/hero/poster-{uuid4().hex[:12]}{ext}"
+        poster_key = site_hero_key("poster", uuid4().hex[:12], ext)
         store.put_bytes(S3_BUCKET_DOCUMENTS, poster_key, data, content_type=poster.content_type or "image/jpeg")
 
     if captions is not None and captions.filename:
@@ -1756,7 +1903,7 @@ async def author_upload_hero(
         if len(data) > 2 * 1024 * 1024:
             raise HTTPException(413, "字幕超过 2MB")
         ext = Path(captions.filename).suffix.lower() or ".vtt"
-        captions_key = f"documents/shared/site/hero/captions-{uuid4().hex[:12]}{ext}"
+        captions_key = site_hero_key("captions", uuid4().hex[:12], ext)
         store.put_bytes(S3_BUCKET_DOCUMENTS, captions_key, data, content_type=captions.content_type or "text/vtt")
 
     if not object_key and not poster_key and not captions_key:
@@ -1785,10 +1932,10 @@ async def author_mentor_avatar(
     if not avatar.filename:
         raise HTTPException(400, "avatar file required")
     data = await avatar.read()
-    if len(data) > 8 * 1024 * 1024:
+    if len(data) > MEDIA_MAX_BYTES_BY_KIND["poster"]:
         raise HTTPException(413, "头像超过 8MB")
     ext = Path(avatar.filename).suffix.lower() or ".jpg"
-    key = f"documents/shared/site/mentors/{mentor_id}/avatar-{uuid4().hex[:10]}{ext}"
+    key = site_mentor_avatar_key(mentor_id, uuid4().hex[:10], ext)
     get_store().put_bytes(S3_BUCKET_DOCUMENTS, key, data, content_type=avatar.content_type or "image/jpeg")
     landing = site_content.update_mentor_avatar_key(mentor_id, key)
     write_audit(
@@ -1931,17 +2078,17 @@ async def author_upsert_open_course(
     store = get_store()
     if video is not None and video.filename:
         data = await video.read()
-        if len(data) > 200 * 1024 * 1024:
+        if len(data) > MEDIA_MAX_BYTES_BY_KIND["video"]:
             raise HTTPException(400, "视频超过 200MB")
-        key = f"documents/shared/open-courses/{cid}/video{Path(video.filename).suffix or '.mp4'}"
+        key = open_course_key(cid, "video", Path(video.filename).suffix or ".mp4")
         ctype = video.content_type or "video/mp4"
         store.put_bytes(S3_BUCKET_DOCUMENTS, key, data, content_type=ctype)
         course["object_key"] = key
     if poster is not None and poster.filename:
         data = await poster.read()
-        if len(data) > 8 * 1024 * 1024:
+        if len(data) > MEDIA_MAX_BYTES_BY_KIND["poster"]:
             raise HTTPException(400, "海报超过 8MB")
-        key = f"documents/shared/open-courses/{cid}/poster{Path(poster.filename).suffix or '.jpg'}"
+        key = open_course_key(cid, "poster", Path(poster.filename).suffix or ".jpg")
         ctype = poster.content_type or "image/jpeg"
         store.put_bytes(S3_BUCKET_DOCUMENTS, key, data, content_type=ctype)
         course["poster_key"] = key
@@ -2078,10 +2225,33 @@ def author_delete_media_asset(asset_id: str, request: Request) -> dict[str, Any]
 
 # --- Overview ---------------------------------------------------------------
 
+# 课节打开 → 估算学习时长（分钟）。无精确心跳时的运维近似值。
+_MINUTES_PER_CAPSULE_OPEN = 8
+
+
+def _last_n_date_strings(n: int = 7) -> list[str]:
+    from datetime import date, timedelta
+
+    today = date.today()
+    return [(today - timedelta(days=n - 1 - i)).isoformat() for i in range(n)]
+
+
+def _series_fill(dates: list[str], rows: dict[str, dict[str, int]], keys: list[str]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for d in dates:
+        item: dict[str, Any] = {"date": d}
+        src = rows.get(d) or {}
+        for k in keys:
+            item[k] = int(src.get(k) or 0)
+        out.append(item)
+    return out
+
+
 @router.get("/api/v1/author/overview")
 def author_overview(request: Request, camp_id: str | None = None) -> dict[str, Any]:
     require_author(request)
     camp = session_camp_id(request, camp_id)
+    dates = _last_n_date_strings(7)
     stats: dict[str, Any] = {
         "camp_id": camp,
         "courses": 0,
@@ -2089,13 +2259,39 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
         "pending_submissions": 0,
         "documents": 0,
         "videos": 0,
+        "videos_library": 0,
+        "videos_open_courses": 0,
+        "videos_site": 0,
         "learners": 0,
         "contact_leads": 0,
         "open_courses": 0,
         "pending_reviews": 0,
         "submission_trend_7d": [],
+        "learn_active_users_7d": [],
+        "learn_duration_minutes_7d": [],
+        "open_course_clicks_7d": [],
+        "capsule_opens_7d": [],
         "recent_actions": [],
+        "metrics_note": {
+            "learn_duration": f"按课节打开次数×{_MINUTES_PER_CAPSULE_OPEN} 分钟估算",
+            "open_course_clicks": "公开课视频播放次数（含历史 media.presign 中匹配公开课 object_key）",
+            "videos": "视频库未删除条目 + 已配置视频的公开课 + 站点 Hero 视频",
+        },
     }
+    open_course_keys: set[str] = set()
+    try:
+        from services.learner.app import list_open_courses
+
+        ocs = list_open_courses(include_unpublished=True)
+        stats["open_courses"] = len(ocs)
+        for c in ocs:
+            key = str(c.get("object_key") or "").strip()
+            if key:
+                open_course_keys.add(key)
+                stats["videos_open_courses"] = int(stats["videos_open_courses"]) + 1
+    except Exception:
+        pass
+
     with db_cursor() as cur:
         cur.execute("SELECT COUNT(*) AS c FROM courses WHERE COALESCE(status,'active') <> 'archived'")
         stats["courses"] = int(cur.fetchone()["c"] or 0)
@@ -2117,14 +2313,30 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
             (camp,),
         )
         stats["documents"] = int(cur.fetchone()["c"] or 0)
+
+        # 视频：视频库（未删除）+ 公开课视频 + 站点 Hero
         cur.execute("SELECT to_regclass(?) AS reg", ("media_assets",))
         if cur.fetchone().get("reg"):
             cur.execute(
                 "SELECT COUNT(*) AS c FROM media_assets WHERE camp_id=? AND deleted_at IS NULL AND kind='video'",
                 (camp,),
             )
-            stats["videos"] = int(cur.fetchone()["c"] or 0)
-        # learners: prefer enrollment_records via offerings for this camp, else legacy enrollments
+            stats["videos_library"] = int(cur.fetchone()["c"] or 0)
+        cur.execute("SELECT to_regclass(?) AS reg", ("site_media",))
+        if cur.fetchone().get("reg"):
+            cur.execute(
+                """
+                SELECT COUNT(*) AS c FROM site_media
+                WHERE kind IN ('hero_video', 'video')
+                  AND (src_url IS NOT NULL OR poster_url IS NOT NULL)
+                """
+            )
+            stats["videos_site"] = int(cur.fetchone()["c"] or 0)
+        stats["videos"] = (
+            int(stats["videos_library"]) + int(stats["videos_open_courses"]) + int(stats["videos_site"])
+        )
+
+        # learners
         cur.execute("SELECT to_regclass(?) AS reg", ("enrollment_records",))
         if cur.fetchone().get("reg"):
             cur.execute(
@@ -2153,34 +2365,105 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
                 (camp,),
             )
             stats["pending_reviews"] = int(cur.fetchone()["c"] or 0)
+
+        # 提交趋势
         cur.execute(
             """
             SELECT date_trunc('day', created_at)::date AS d, COUNT(*) AS c
             FROM submissions
-            WHERE camp_id=? AND created_at >= NOW() - INTERVAL '7 days'
+            WHERE camp_id=? AND created_at >= (CURRENT_DATE - INTERVAL '6 days')
             GROUP BY 1 ORDER BY 1
             """,
             (camp,),
         )
-        stats["submission_trend_7d"] = [
-            {"date": str(r["d"]), "count": int(r["c"] or 0)} for r in cur.fetchall()
-        ]
+        sub_map = {str(r["d"]): {"count": int(r["c"] or 0)} for r in cur.fetchall()}
+        stats["submission_trend_7d"] = _series_fill(dates, sub_map, ["count"])
+
+        # 学习活跃 / 时长估算：capsule.open
         cur.execute(
             """
-            SELECT actor_id, action, resource_type, resource_id, camp_id, created_at
+            SELECT date_trunc('day', created_at)::date AS d,
+                   COUNT(*) AS opens,
+                   COUNT(DISTINCT actor_id) AS users
             FROM audit_logs
-            WHERE camp_id=? OR camp_id IS NULL
-            ORDER BY created_at DESC LIMIT 20
+            WHERE action='capsule.open'
+              AND created_at >= (CURRENT_DATE - INTERVAL '6 days')
+              AND (camp_id=? OR camp_id IS NULL)
+            GROUP BY 1 ORDER BY 1
             """,
             (camp,),
         )
-        stats["recent_actions"] = [dict(r) for r in cur.fetchall()]
-    try:
-        from services.learner.app import list_open_courses
+        learn_map: dict[str, dict[str, int]] = {}
+        for r in cur.fetchall():
+            d = str(r["d"])
+            opens = int(r["opens"] or 0)
+            learn_map[d] = {
+                "users": int(r["users"] or 0),
+                "opens": opens,
+                "minutes": opens * _MINUTES_PER_CAPSULE_OPEN,
+            }
+        stats["learn_active_users_7d"] = _series_fill(dates, learn_map, ["users"])
+        stats["learn_duration_minutes_7d"] = _series_fill(dates, learn_map, ["minutes"])
+        stats["capsule_opens_7d"] = _series_fill(dates, learn_map, ["opens"])
 
-        stats["open_courses"] = len(list_open_courses(include_unpublished=True))
-    except Exception:
-        pass
+        # 公开课点击人数：优先新埋点去重 actor；并合并历史 media.presign（按 actor 去重）
+        # 用集合按日合并，避免两次查询简单相加导致重复
+        click_actors: dict[str, set[str]] = {d: set() for d in dates}
+        cur.execute(
+            """
+            SELECT date_trunc('day', created_at)::date AS d, actor_id
+            FROM audit_logs
+            WHERE action='site.open_course_play'
+              AND created_at >= (CURRENT_DATE - INTERVAL '6 days')
+              AND actor_id IS NOT NULL
+            """
+        )
+        for r in cur.fetchall():
+            d = str(r["d"])
+            if d in click_actors and r.get("actor_id"):
+                click_actors[d].add(str(r["actor_id"]))
+        anon_clicks: dict[str, int] = {d: 0 for d in dates}
+        cur.execute(
+            """
+            SELECT date_trunc('day', created_at)::date AS d, COUNT(*) AS c
+            FROM audit_logs
+            WHERE action='site.open_course_play'
+              AND created_at >= (CURRENT_DATE - INTERVAL '6 days')
+              AND actor_id IS NULL
+            GROUP BY 1
+            """
+        )
+        for r in cur.fetchall():
+            d = str(r["d"])
+            if d in anon_clicks:
+                anon_clicks[d] = int(r["c"] or 0)
+        if open_course_keys:
+            keys = list(open_course_keys)
+            placeholders = ",".join("?" for _ in keys)
+            cur.execute(
+                f"""
+                SELECT date_trunc('day', created_at)::date AS d, actor_id
+                FROM audit_logs
+                WHERE action IN ('media.presign', 'media.stream')
+                  AND created_at >= (CURRENT_DATE - INTERVAL '6 days')
+                  AND resource_id IN ({placeholders})
+                  AND actor_id IS NOT NULL
+                """,
+                keys,
+            )
+            for r in cur.fetchall():
+                d = str(r["d"])
+                if d in click_actors and r.get("actor_id"):
+                    click_actors[d].add(str(r["actor_id"]))
+        click_map = {
+            d: {"count": len(click_actors[d]) + anon_clicks.get(d, 0)} for d in dates
+        }
+        stats["open_course_clicks_7d"] = _series_fill(dates, click_map, ["count"])
+        stats["metrics_note"]["open_course_clicks"] = "公开课视频播放去重人数（登录用户按账号；匿名按次）"
+
+        # 最近操作：暂不展示原始 audit（字段与前端 title/at 不匹配）；保持空列表
+        stats["recent_actions"] = []
+
     return stats
 
 

@@ -7,14 +7,15 @@ import unittest
 from pathlib import Path
 
 from services.author.app import _magic_ok
+from services.shared.config import DEFAULT_CAMP_ID
 from services.shared import resolve_safe, workspace_path
 from services.storage import artifact_key, document_key, snapshot_prefix
 
 
 class ObjectKeyTests(unittest.TestCase):
     def test_document_key_shape(self):
-        key = document_key("camp-v03", "doc-1", "abc123", "notes.docx")
-        self.assertEqual(key, "documents/camp-v03/doc-1/abc123/notes.docx")
+        key = document_key(DEFAULT_CAMP_ID, "doc-1", "abc123", "notes.docx")
+        self.assertEqual(key, f"documents/{DEFAULT_CAMP_ID}/doc-1/abc123/notes.docx")
 
     def test_document_key_strips_path(self):
         key = document_key("c", "d", "sha", "../../evil.pdf")

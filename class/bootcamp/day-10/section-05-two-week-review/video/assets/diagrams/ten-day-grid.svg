@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="十天演进图"><rect width="1040" height="450" fill="#f2f5f0"/>
+        <!-- 列头 -->
+        <g text-anchor="middle" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">
+          <text x="123" y="36" font-size="12.5" font-weight="700" fill="#231f20">D1</text>
+          <text x="123" y="56" font-size="9.5" fill="rgba(35,31,32,.45)">认知</text>
+          <text x="261" y="36" font-size="12.5" font-weight="700" fill="#231f20">D2</text>
+          <text x="261" y="56" font-size="9.5" fill="rgba(35,31,32,.45)">V0.1</text>
+          <text x="399" y="36" font-size="12.5" font-weight="700" fill="#231f20">D3</text>
+          <text x="399" y="56" font-size="9.5" fill="rgba(35,31,32,.45)">V0.2</text>
+          <text x="537" y="36" font-size="12.5" font-weight="700" fill="#231f20">D4</text>
+          <text x="537" y="56" font-size="9.5" fill="rgba(35,31,32,.45)">V0.3</text>
+          <text x="675" y="36" font-size="12.5" font-weight="700" fill="#231f20">D5</text>
+          <text x="675" y="56" font-size="9.5" fill="rgba(35,31,32,.45)">V0.4</text>
+          <text x="813" y="36" font-size="12.5" font-weight="700" fill="#231f20">D6</text>
+          <text x="813" y="56" font-size="9.5" fill="#1400ff" font-weight="700">V1.0</text>
+          <text x="951" y="36" font-size="12.5" font-weight="700" fill="#231f20">W2</text>
+          <text x="951" y="56" font-size="9.5" fill="#1400ff" font-weight="700">V2.0</text>
+        </g>
+        <!-- 行标签 -->
+        <g style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace" font-size="11.5">
+          <text x="8" y="113" fill="#f24e54" font-weight="700">前端</text>
+          <text x="8" y="179" fill="#5f52a0" font-weight="700">接口</text>
+          <text x="8" y="245" fill="#0a8f74" font-weight="700">数据库</text>
+          <text x="8" y="311" fill="#e0479e" font-weight="700">模型</text>
+          <text x="8" y="377" fill="#2f9e44" font-weight="700">Agent</text>
+        </g>
+        <!-- 前端行 y=80 -->
+        <g>
+          <rect x="64" y="80" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="123" y="113" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="202" y="80" width="118" height="56" fill="#f24e54" fill-opacity=".16"/><text x="261" y="113" text-anchor="middle" font-size="10.5" fill="#c92f3d" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">模拟数据</text>
+          <rect x="340" y="80" width="118" height="56" fill="#f24e54"/><text x="399" y="113" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">真数据</text>
+          <rect x="478" y="80" width="118" height="56" fill="#f24e54"/><text x="537" y="113" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">真数据</text>
+          <rect x="616" y="80" width="118" height="56" fill="#f24e54"/><text x="675" y="113" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">真数据</text>
+          <rect x="754" y="80" width="118" height="56" fill="#f24e54"/><text x="813" y="113" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已上线</text>
+          <rect x="892" y="80" width="118" height="56" fill="#f24e54"/><text x="951" y="113" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">V2.0</text>
+        </g>
+        <!-- 接口行 y=146 -->
+        <g>
+          <rect x="64" y="146" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="123" y="179" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="202" y="146" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="261" y="179" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="340" y="146" width="118" height="56" fill="#5f52a0" fill-opacity=".16"/><text x="399" y="179" text-anchor="middle" font-size="10.5" fill="#4a3f8a" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">模拟数据</text>
+          <rect x="478" y="146" width="118" height="56" fill="#5f52a0"/><text x="537" y="179" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">真数据</text>
+          <rect x="616" y="146" width="118" height="56" fill="#5f52a0"/><text x="675" y="179" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">真数据</text>
+          <rect x="754" y="146" width="118" height="56" fill="#5f52a0"/><text x="813" y="179" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已上线</text>
+          <rect x="892" y="146" width="118" height="56" fill="#5f52a0"/><text x="951" y="179" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">V2.0</text>
+        </g>
+        <!-- 数据库行 y=212 -->
+        <g>
+          <rect x="64" y="212" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="123" y="245" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="202" y="212" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="261" y="245" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="340" y="212" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="399" y="245" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="478" y="212" width="118" height="56" fill="#1cd5b0" fill-opacity=".16"/><text x="537" y="245" text-anchor="middle" font-size="10.5" fill="#0a8f74" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已入库</text>
+          <rect x="616" y="212" width="118" height="56" fill="#1cd5b0"/><text x="675" y="245" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已入库</text>
+          <rect x="754" y="212" width="118" height="56" fill="#1cd5b0"/><text x="813" y="245" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已上线</text>
+          <rect x="892" y="212" width="118" height="56" fill="#1cd5b0"/><text x="951" y="245" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">V2.0</text>
+        </g>
+        <!-- 模型行 y=278 -->
+        <g>
+          <rect x="64" y="278" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="123" y="311" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="202" y="278" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="261" y="311" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="340" y="278" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="399" y="311" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="478" y="278" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="537" y="311" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="616" y="278" width="118" height="56" fill="#e0479e" fill-opacity=".16"/><text x="675" y="311" text-anchor="middle" font-size="10.5" fill="#c22e82" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">接电中</text>
+          <rect x="754" y="278" width="118" height="56" fill="#e0479e"/><text x="813" y="311" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已上线</text>
+          <rect x="892" y="278" width="118" height="56" fill="#e0479e"/><text x="951" y="311" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">V2.0</text>
+        </g>
+        <!-- Agent 行 y=344 -->
+        <g>
+          <rect x="64" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="123" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="202" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="261" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="340" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="399" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="478" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="537" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="616" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="675" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="754" y="344" width="118" height="56" fill="rgba(35,31,32,.05)"/><text x="813" y="377" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.28)">—</text>
+          <rect x="892" y="344" width="118" height="56" fill="#2f9e44"/><text x="951" y="377" text-anchor="middle" font-size="10.5" fill="#fff" font-weight="700" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">已上岗</text>
+        </g>
+        <!-- 底部里程碑 -->
+        <g text-anchor="middle" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace" font-size="10.5">
+          <text x="123" y="428" fill="rgba(35,31,32,.5)">世界观日 · 无代码</text>
+          <text x="813" y="428" fill="#1400ff" font-weight="700">★ V1.0 上线</text>
+          <text x="951" y="428" fill="#1400ff" font-weight="700">★ V2.0 能干活</text>
+        </g>
+      </svg>

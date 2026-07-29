@@ -3,15 +3,16 @@
 export type { DayResource } from "../../lib/curriculum/capsuleResources";
 export { resolveCapsuleResources } from "../../lib/curriculum/capsuleResources";
 import type { DayResource } from "../../lib/curriculum/capsuleResources";
-import type { CapsuleLocalPrep } from "../../lib/types";
+import type { CapsuleLocalPrep, KnowledgeCard } from "../../lib/types";
 
 export type AuthorNodeType = "learn" | "quiz" | "lab" | "project" | "review" | "unlock";
 
-export type CapsuleEditorTab = "notes" | "practice" | "local_prep" | "resources" | "quiz" | "lab" | "advanced";
+export type CapsuleEditorTab = "notes" | "practice" | "knowledge_cards" | "local_prep" | "resources" | "quiz" | "lab" | "advanced";
 
 export const CAPSULE_EDITOR_TABS: { key: CapsuleEditorTab; label: string }[] = [
   { key: "notes", label: "讲义" },
   { key: "practice", label: "练习" },
+  { key: "knowledge_cards", label: "知识卡片" },
   { key: "resources", label: "资源" },
   { key: "quiz", label: "节测验" },
   { key: "lab", label: "节实训" },
@@ -71,6 +72,8 @@ export interface AuthorCapsule {
   quiz?: { questions?: AuthorQuizQuestion[]; pass_rate?: number };
   lab?: Partial<AuthorDayLab>;
   local_prep?: CapsuleLocalPrep;
+  knowledge_cards?: KnowledgeCard[];
+  glossary_terms?: KnowledgeCard[];
   advanced?: Record<string, unknown>;
 }
 

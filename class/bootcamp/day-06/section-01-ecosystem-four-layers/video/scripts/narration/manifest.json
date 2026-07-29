@@ -1,0 +1,9 @@
+[
+  { "id": "01-open", "file": "01-open.txt" },
+  { "id": "02-llm", "file": "02-llm.txt" },
+  { "id": "03-four-layer", "file": "03-four-layer.txt" },
+  { "id": "04-you-are-here", "file": "04-you-are-here.txt" },
+  { "id": "05-open-closed", "file": "05-open-closed.txt" },
+  { "id": "06-multimodal", "file": "06-multimodal.txt" },
+  { "id": "07-close", "file": "07-close.txt" }
+]

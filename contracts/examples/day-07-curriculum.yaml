@@ -1,107 +1,582 @@
-camp_version: v0.3
+camp_version: v0.7
 day: 7
-title: Agent 工程分层预热与选型沙盘
-project: 经营驾驶舱技术方案
-project_brief: 在约束内完成驾驶舱架构选型：包含 api/warehouse/auth，满足成本/延迟/驻留，决策笔记≥120字。
+title: 第一个 Skill：把你的工作方式教给 AI
+week: 2
+project: 第一个 Skill
+project_brief: Week 2 换档日：从「做系统」到「造能力」。把一项每周重复、规则清晰、可验收的工作封装成第一个 Skill 说明书（输入/步骤/输出/验收），现场运行一次并留下可检查证据。Skill 进 Git，GATE 7
+  三问过关。
 review_checklist:
-- 组件齐全
-- NFR 满足约束
-- 决策笔记充分
-- 能讲清取舍
+- Skill 三问：它做什么（输入→输出）？步骤谁定？好坏谁判？
+- 现场运行一次 Skill，产出物过验收标准
+- Skill 说明书含验收标准（可判对错），进 Git
+- 'commit：`feat: 第一个 Skill——<你的 Skill 名>`'
+resources:
+- id: dg-skill-anatomy
+  title: 讲解图 · Skill 解剖四部件
+  kind: diagram
+  summary: 输入 / 步骤 / 输出 / 验收——缺一个都转不动
+  url: /course-assets/assets/diagrams/skill-anatomy.svg
+- id: glossary
+  title: 新概念词典（速查版）
+  kind: site
+  summary: 18 词随身查：Skill / MCP / Agent 等
+  url: /course-assets/resources/h5/glossary.html
+- id: open-o2
+  title: 公开课 O2 · LLM 与编排深化
+  kind: doc
+  summary: Skill 生态、MCP、各平台格式（选读）
+  url: /docs/open-course/o2-llm.md
 learn:
   lingzhi_tags:
-  - camp:v0.3
+  - camp:v0.7
   - day:7
-  - topic:arch
-  estimated_minutes: 120
+  - project:role-week
+  estimated_minutes: 110
   require_capsules: true
   capsules:
   - id: c1
-    title: Agent = Model + Scaffolding + Harness
-    minutes: 20
-    content: 脚手架塑造行为；Harness 真正跑循环与工具。
-    practice: 用自己的话解释 Harness。
+    title: 概念：从系统到能力
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-07/section-01-system-to-skill/lesson.md
+    content: 同学们好，我是你们的老师404。第七天换档——第一周做系统，第二周造能力。关键句：**系统被使用，能力被执行**。Prompt 管这次对话，Skill 管长期复用（输入/步骤/输出/验收）。三重价值：可复用、可验收、可交接。反例：低频、不稳定、高风险别碰。详见
+      `PPT_AND_NARRATION.md`。
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - glossary
+    tools:
+    - name: Prompt vs Skill 对照表
+      note: 寿命 / 结构 / 验收 / 交接四列
+    quiz:
+    - - Week 2 换档后，主工作对象从什么变成什么？
+      - - 从 Prompt 变成代码
+        - 从「做系统」变成「造能力」
+        - 从后端变成前端
+      - 1
+      - 系统被使用，能力被执行——Skill 是能力的说明书。
+    - - Prompt 和 Skill 的核心区别是？
+      - - Prompt 更长
+        - Prompt 一次性；Skill 长期复用、有结构、有验收标准
+        - Skill 必须用代码写
+      - 1
+      - Skill 四部件齐全才可交接；Prompt 用完即弃。
+    - - 「系统 vs 能力」里，驾驶舱属于哪一类？
+      - - 能力
+        - 系统
+        - 两者都是
+      - 1
+      - 驾驶舱回答「发生了什么」；Skill 回答「接下来做什么」。
+    - - 下列哪项最不适合作为第一个 Skill？
+      - - 每周一次的周报生成
+        - 必须老板当场拍板的战略决策
+        - 从驾驶舱拉 KPI 数据
+      - 1
+      - 必须人拍板的不能封装成全自动 Skill——只能封装「准备材料」。
+    media:
+    - kind: video
+      title: 口播课件 · 系统 vs 能力
+      object_key: documents/shared/course-media/day07-c1-system-skill.mp4
+      poster_key: documents/shared/course-media/day07-c1-system-skill-poster.jpg
+      duration_sec: 216
+    knowledge_cards:
+    - id: system-vs-capability
+      term: 系统 vs 能力
+      plain: 驾驶舱是系统（等人来看）；Skill 是能力（被 AI 执行）——Week 2 换档对象变了。
+      tag: 核心
+    - id: prompt-vs-skill
+      term: Prompt vs Skill
+      plain: Prompt 是一次性对话；Skill 是可复用说明书，有结构、有验收、可交接。
+      tag: 对比
+    - id: skill-triple
+      term: Skill 三重价值
+      plain: 可复用、可验收、可交接——最后一个最被低估。
+      tag: 框架
+    - id: anti-patterns
+      term: 不值得封装
+      plain: 一年一次的、每次都不一样的、必须人拍板的——先别封装。
+      tag: 红线
+    glossary_terms:
+    - id: gt-skill
+      term: Skill
+      plain: 教 AI 做一件具体事的说明书：输入、步骤、输出、验收四部件。
+    - id: gt-sop
+      term: SOP
+      plain: 标准作业程序——Skill 是人类 SOP 第一次能被 AI 直接执行的形态。
+    - id: gt-capability
+      term: 能力
+      plain: 一件具体可执行的事（生成周报/整理线索），载体是 Skill + 执行者（AI）。
+    - id: gt-mcp-preview
+      term: MCP（预告）
+      plain: 给 AI 接工具的 USB-C 标准——你的 Skill 是它的朴素版（Day 8 深讲）。
   - id: c2
-    title: Tool Calling
-    minutes: 20
-    content: 模型决定调什么；执行在 harness。
-    practice: 举一个库存工具名。
+    title: 概念：Skill 解剖四部件
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-07/section-02-skill-anatomy/lesson.md
+    content: '同学们，这节咱们解剖一只 Skill。一份能被 AI 执行的说明书长什么样？四个部件：输入、步骤、输出、验收。缺一个都转不动——输入没写清楚，AI 不知道吃什么料；验收没写清楚，你不知道货好不好，对吧。
+
+      输入管做这件事吃什么料，要具体到来源和范围。比如周报 Skill：驾驶舱 /api/kpi 和 /api/exceptions，近七天，读者是总监——不能写相关数据，哪相关呢？步骤管怎么做，AI 能一步步执行：拉数据、找变化、找逾期、生成。不能写分析一下，怎么分析嘛，对吧。
+
+      输出管交出什么货：Markdown 四段、三百字以内、数字只用来源里真实存在的。验收管好坏怎么判：四段齐全、每个数字能溯源、建议主语是人且可执行——每条都能判 ✓ 还是 ✗。不能写写得好，谁判、怎么判呢，对吧。
+
+      看这份周报 Skill 完整示例。输入写着两个接口、近七天、读者总监；步骤四条，拉 KPI、找环比变化最大的两个指标、找逾期最久的三张工单、按格式生成；输出 Markdown 四段三百字；验收三条，结构、数字、意图各一。咱们对照这份模板，等会儿就要写自己的，嘛。
+
+      常见缺陷记四个词：相关数据分析一下写个周报写得好——看到这些词，说明书就还没写完。步骤要多细？细到换一个人或 AI 照着做，不会做出第二种理解。写不到这个程度，先拆步骤，对吧。
+
+      眼熟吗？输出加验收，就是你们第五天学的结构化输出加三条军规。第一周的每个概念，在第二周的说明书里都有自己的格子。下一节咱们用三筛法选第一个 Skill——高频、稳定、低险，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: 四部件缺陷速查
+      note: 相关数据 / 分析一下 / 写个周报 / 写得好
+    quiz:
+    - - Skill 四部件的正确组合是？
+      - - 名字 / 图标 / 颜色 / 版本
+        - 输入 / 步骤 / 输出 / 验收
+        - 前端 / 后端 / 数据库 / 模型
+      - 1
+      - 四部件一个不能少；验收必须可判对错。
+    - - 「分析一下本周数据」作为步骤，主要缺陷是？
+      - - 太短
+        - 不可执行——AI 不知道「怎么分析」
+        - 应该用英文
+      - 1
+      - 步骤要细到换一个人/AI 照着做不会做出第二种理解。
+    - - 输出 + 验收对应 Week 1 的哪两个概念？
+      - - 三态与降级
+        - 结构化输出 + Rubric 验收
+        - 契约与 DDL
+      - 1
+      - Week 1 的每个概念在 Skill 说明书里都有自己的格子。
+    - - 验收标准「写得好」为什么不合格？
+      - - 太主观，第三方无法客观判过/不过
+        - 字数太少
+        - 必须用 Markdown
+      - 0
+      - 验收的铁律是可衡量、可判对错——和 PRD 验收标准同一套逻辑。
+    media:
+    - kind: video
+      title: 口播课件 · 四部件
+      object_key: documents/shared/course-media/day07-c2-skill-anatomy.mp4
+      poster_key: documents/shared/course-media/day07-c2-skill-anatomy-poster.jpg
+      duration_sec: 122
+    knowledge_cards:
+    - id: four-parts
+      term: 四部件
+      plain: 输入、步骤、输出、验收——缺一个说明书就转不动。
+      tag: 核心
+    - id: input-spec
+      term: 输入要求
+      plain: 具体到来源与范围；「相关数据」是常见缺陷。
+      tag: 写作
+    - id: steps-spec
+      term: 步骤要求
+      plain: AI 能逐步执行；「分析一下」不是步骤。
+      tag: 写作
+    - id: output-spec
+      term: 输出要求
+      plain: 格式 + 长度 + 红线；对应 Day 5 结构化输出。
+      tag: 连接
+    - id: accept-spec
+      term: 验收要求
+      plain: 可判对错；「写得好」不是验收标准。
+      tag: 连接
+    glossary_terms:
+    - id: gt-input
+      term: 输入（Skill）
+      plain: 做这件事吃什么料：数据来源、时间范围、读者对象。
+    - id: gt-evidence
+      term: 证据
+      plain: 运行后留下的可检查产物：文件、日志、验收结果——不是口头「跑过了」。
   - id: c3
-    title: Skills 渐进披露
-    minutes: 20
-    content: 先给能力目录，用到再加载细节；对比 RAG。
-    practice: 写一句差异。
+    title: 方法：选哪项工作先封装
+    minutes: 15
+    form: 方法
+    content_ref: class/bootcamp/day-07/section-03-pick-first/lesson.md
+    content: '同学们，第一个 Skill 选品决定你今天的成就感。选错了，后面写得再漂亮也跑不通，今天就会卡在验收上。咱们先看三个真实失败案例，再学三筛法——高频、稳定、低险，对吧。
+
+      小张封装了一年一次的年报——写完再没用过，封装成本回不来。小李封装了处理客户投诉——每次情况都不同，AI 开盲盒。小王第一个就封装给客户发报价邮件——AI 写错一个数字，发出去了。三个坑：低频、不稳定、高风险，对吧。
+
+      三筛法按顺序过。第一筛高频：每周至少做一次吗？低频的封装成本回不来。第二筛稳定：步骤能写成无歧义说明书吗？看情况太多的，AI 执行就是开盲盒。第三筛低险：做错了代价小吗？第一个 Skill 是拿来练信任的，对吧。
+
+      重点说低险——这是硬筛。对外发送、改数据库、花钱的事，先别碰。第一个 Skill 练的是你和 AI 之间的信任，不是练胆子。第九天咱们学人工确认点，学完再碰高风险的事，嘛。
+
+      动手打分：每项一到五分，加一列数据可得——输入能直接从驾驶舱或现有文件拿到的，今天就能跑通。拿不定就选周报：高频、稳定、低险，数据就在你驾驶舱里。日报也行，结构一样，对吧。
+
+      收个尾：今天只做一个 Skill，做透。可以选两个候选打分，但定品只定一个。下一节开写——四部件齐全，验收可判。咱们把第一个 Skill 写进 skills/ 目录，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: 选品打分表
+      note: 高频 / 稳定 / 低险 / 数据可得 各 1–5 分
+    quiz:
+    - - 选第一个 Skill 的三筛顺序是？
+      - - 低险 → 高频 → 稳定
+        - 高频 → 稳定 → 低险
+        - 稳定 → 低险 → 高频
+      - 1
+      - 先筛频率，再筛能否写说明书，最后筛出错代价。
+    - - 为什么第一个 Skill 必须「低险」？
+      - - 低险的工作简单
+        - 第一个 Skill 是练信任——错了代价要小
+        - 导师要求
+      - 1
+      - 对外发送/改数据/花钱的等高险操作，Day 9 学完确认闸再说。
+    - - 推荐首发「周报生成」同时满足三筛，还因为？
+      - - 最难所以最有价值
+        - 高频、结构稳定、产出不对外发送、数据可从驾驶舱拉
+        - 老板最喜欢
+      - 1
+      - 四列打分表里「数据可得」是加分项——今天就能跑通。
+    - - 小张封装「年度总结」失败的根本原因是？
+      - - 写得太长
+        - 低频——封装成本回不来
+        - 没有用 Markdown
+      - 1
+      - 一年一次的工作，写完再没用过——第一筛就没过。
+    media:
+    - kind: video
+      title: 口播课件 · 选品三筛
+      object_key: documents/shared/course-media/day07-c3-pick-first.mp4
+      poster_key: documents/shared/course-media/day07-c3-pick-first-poster.jpg
+      duration_sec: 110
+    knowledge_cards:
+    - id: three-filters
+      term: 选品三筛
+      plain: 高频（每周≥1）→ 稳定（步骤可写死）→ 低险（出错代价小）。
+      tag: 方法
+    - id: low-risk-first
+      term: 低险优先
+      plain: 第一个 Skill 是练信任——对外发送/改数据/花钱的先别碰（Day 9 再学确认闸）。
+      tag: 原则
+    - id: data-available
+      term: 数据可得
+      plain: 输入能直接从驾驶舱或现有文件拿到，今天就能跑通——加分项。
+      tag: 技巧
+    glossary_terms:
+    - id: gt-high-freq
+      term: 高频
+      plain: 每周至少做一次——封装成本才回得来。
+    - id: gt-stable
+      term: 稳定步骤
+      plain: 「看情况」太多的工作，AI 执行就是开盲盒。
   - id: c4
-    title: 先看病再抓药
-    minutes: 20
-    content: 无系统→先造系统；有文档→RAG；多系统→工具编排。
-    practice: 匹配一个企业场景。
+    title: 实战：定义 Skill
+    minutes: 30
+    form: 实战
+    content_ref: class/bootcamp/day-07/section-04-define-skill/lesson.md
+    content: '同学们，这节开写。三十分钟后，skills/ 目录里要有你的第一份 Skill 说明书——四部件齐全，验收可判，同桌能读懂。写之前咱们先给两个库：动作动词库和判据句式库，对吧。
+
+      步骤段只许出现动作动词：拉取、筛选、对比、汇总、排序、找出、计算、生成、检查、列出。分析一下处理一下优化一下——这些不是动作，是愿望。我巡场见到就划掉，改写成 AI 能执行的具体动作，嘛。
+
+      验收段用判据句式：结构判X 段齐全、含字段 A/B/C；数字判每个数字能在来源中找到出处；意图判当某情况时，必须某表现——第五天用例格式直接搬。验收写几条？至少三条，结构、数字、意图各一，对吧。
+
+      写作顺序听好：倒着写。先写输出——交什么货；再写验收——怎么判；然后输入——吃什么料；最后步骤——从料到货就是连线题。正着写的人，都在步骤里迷路了。输出段贴一个好示例，是最划算的消歧方式，对吧。
+
+      写完做换人测试：同桌只看你的说明书，说出要做什么、怎么判好坏。他说错了，就是你写岔了——改说明书，不怪他。步骤里能写分支吗？能，但每个分支都要落到动作动词；分支超过三层，说明该拆成两个 Skill，嘛。
+
+      定稿进 Git，预演下一节运行。带走两个库：动作动词写步骤，判据句式写验收，换人测试消歧义。下一节 AI 拿着你的说明书上岗——派活、收货、按标准验收、留证据，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: Skill 模板四段式
+      note: 输入 / 步骤 / 输出 / 验收 + 工具描述
+    quiz:
+    - - Skill 说明书中「工具描述」为什么要写「何时不用」？
+      - - 凑字数
+        - 帮 Agent（和人）判断该不该选这件工具
+        - 法律要求
+      - 1
+      - Day 8 的「选错图谱」靠在描述里写清边界。
+    - - 步骤写到什么程度算合格？
+      - - 越厚越好
+        - 换一个人/AI 照着做，不会做出第二种理解
+        - 只要列三步就行
+      - 1
+      - 可执行性比篇幅重要——「分析一下」永远不合格。
+    - - 今日定稿文件应放在哪里？
+      - - prompts/ 目录
+        - skills/<name>.md 并 commit 进 Git
+        - 只存在聊天记录里
+      - 1
+      - 可复用、可交接——必须版本化进仓库。
+    media:
+    - kind: video
+      title: 口播课件 · skills/<name>.md
+      object_key: documents/shared/course-media/day07-c4-define-skill.mp4
+      poster_key: documents/shared/course-media/day07-c4-define-skill-poster.jpg
+      duration_sec: 115
+    knowledge_cards:
+    - id: skill-md
+      term: skills/<name>.md
+      plain: 今日交付物：四部件 + 工具描述（何时用/何时不用）写进 Git。
+      tag: 交付
+    - id: tool-desc
+      term: 工具描述
+      plain: 一句话干什么、何时用、何时不用——决定 Day 8 Agent 选不选得对。
+      tag: 关键
+    glossary_terms:
+    - id: gt-tool-table
+      term: 工具表
+      plain: Agent 能调用的 Skill 清单——描述写得越清，选型越准。
   - id: c5
-    title: 非功能约束
-    minutes: 20
-    content: 成本、延迟、数据驻留决定架构。
-    practice: 设一个预算上限。
+    title: 实战：运行与证据
+    minutes: 25
+    form: 实战
+    content_ref: class/bootcamp/day-07/section-05-run-evidence/lesson.md
+    content: '同学们，这节 AI 拿着你的说明书上岗。你的工作变成四步：派活、收货、按标准验收、留证据——不再是自己打字，而是按标准验货。运行就是说明书加输入，一句按这份 Skill 执行，对吧。
+
+      运行方式很简单：Agent Lab 或模型对话里，先粘贴 Skill 说明书全文，再粘贴输入数据——驾驶舱 curl 结果或数据文件，最后一句按这份 Skill 执行。收货后别看感觉，看你写的验收段：逐条判 ✓ 还是 ✗，对吧。
+
+      每次运行留证据三件套：runs/日期-skill名/ 目录下，input.md 是输入快照，output.md 是产出物原文，verdict.md 是验收结果——逐条判 ✓/✗，加总判和改进项。Skill 的信任是攒出来的，连续十次通过，你才敢把每次都看降级成抽看，嘛。
+
+      验收不过怎么办？定位是说明书歧义还是 AI 执行偏差。歧义就改说明书——多数情况是这个；偏差就换表达、加示例、拆步骤，然后重跑。记住：验收不过大概率是说明书的锅，不是 AI 的锅。就像换人测试里读者误解，是作者的锅，对吧。
+
+      AI 没按步骤做、直接跳到生成？在说明书开头加严格按步骤顺序执行，每步完成后简述结果。每次跑结果不一样？正常，模型有概率性；验收标准管的是底线——结构、数字、意图，波动在标准内即可。今天目标：连续两次验收全过，对吧。
+
+      证据归档，迭代日志写清楚改了什么、重跑了几次。下一节是第七天验收——Skill 三问口试，导师看证据链。带走一句：Skill 的信任是攒出来的，证据三件套就是你的本金，嘛。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: 运行记录模板
+      note: 时间 | 输入摘要 | 产出路径 | 验收结果
+    quiz:
+    - - Skill 跑完必须留下什么？
+      - - 好印象
+        - 可检查的证据：产物文件 + 运行记录
+        - 完整聊天记录导出
+      - 1
+      - 没有证据的运行等于没跑——和 Eval 思维一致。
+    - - 验收结果应如何记录？
+      - - 口头告诉导师
+        - 对照验收标准逐条判过/不过，写入 runs/
+        - 只记「成功了」
+      - 1
+      - 第三方应能独立复查：打开产物 + 日志即可验证。
+    - - prompts/summary.md 和今日 Skill 的关系是？
+      - - 完全无关
+        - Week 1 的 summary 提示词是「半个 Skill」——今天升级成完全体
+        - 必须删除旧文件
+      - 1
+      - 有契约、有红线，缺运行步骤与验收执行——今天补全。
+    media:
+    - kind: video
+      title: 口播课件 · 运行一次
+      object_key: documents/shared/course-media/day07-c5-run-evidence.mp4
+      poster_key: documents/shared/course-media/day07-c5-run-evidence-poster.jpg
+      duration_sec: 113
+    knowledge_cards:
+    - id: run-once
+      term: 运行一次
+      plain: 按说明书真实执行，不是「我觉得能跑」——证据必须第三方可查。
+      tag: 实战
+    - id: run-log
+      term: 运行记录
+      plain: 时间、输入摘要、产出路径、验收结果——写入 runs/ 目录。
+      tag: 证据
+    glossary_terms:
+    - id: gt-runs-dir
+      term: runs/
+      plain: 存放 Skill 运行记录与产物的目录——可复查、可回放。
   - id: c6
-    title: 沙盘目标
-    minutes: 20
-    content: 在画布上放 api/warehouse/auth，写决策笔记。
-    practice: 草稿三句决策。
+    title: 验收：Skill 三问 + GATE 7
+    minutes: 10
+    form: 验收
+    content_ref: class/bootcamp/day-07/section-06-accept/lesson.md
+    content: '同学们，第七天验收，第二周第一关。第一周最后一天，你的驾驶舱上线了；第七天，你的第一个同事上岗了——它不吃饭不摸鱼，拿着你写的说明书，每次交出同样标准的货。你从写 Prompt 的人变成了设计工作方式的人，对吧。
+
+      Skill 三问，脱口而出。第一问它做什么？输入到输出，一句话：吃某某，交某某。第二问步骤谁定的？你——AI 按说明书执行，不自由发挥。第三问好坏谁判的？你——按验收段逐条判，有证据句。三问答不上来，说明书还没写透，嘛。
+
+      证据链验收：skills/ 里的说明书、runs/ 里的三件套、连续两次验收全过，全部进 Git。导师会随机指一条验收判据，你要指出最近一次运行里对应的证据句。判据和证据对得上，才叫真验收，对吧。
+
+      GATE 7 清单：Skill 三问脱口而出；证据链完整；抽查判据能指证据；commit 信息写 feat: 第一个 Skill——你的 Skill 名称。一天就做了一个 Skill，少吗？第一个做透比什么都重要——三筛、四部件、验收、证据，这套动作明天开始加速复用，对吧。
+
+      收个尾：Skill 能分享给同事——说明书就是交接物，让对方跑一次并独立验收，就是分享仪式。第八天咱们掀开引擎盖：AI 怎么拿着说明书干活？Harness、工具、记忆、决策环——Agent 登场。今晚预习公开课 O2 的 Agent
+      篇，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    - glossary
+    tools:
+    - name: GATE 7 清单
+      note: 三问口答 + 现场运行 + 证据 + commit
+    quiz:
+    - - Skill 三问里「好坏谁判」对应说明书的哪个部件？
+      - - 输入
+        - 验收
+        - 步骤
+      - 1
+      - 验收标准必须可判对错——不能是「我觉得还行」。
+    - - GATE 7 的 commit 信息应包含什么？
+      - - fix: 随便改改
+        - feat: 第一个 Skill——<你的 Skill 名>
+        - docs: 更新 README
+      - 1
+      - 里程碑 commit 让 Git 历史能讲演进故事（Day 10 证据
+    - - 同学 Skill 能跑但没有 runs/ 记录，应如何判定？
+      - - 通过，跑过就行
+        - 打回——证据不可复查
+        - 通过，明天再补
+      - 1
+      - 可检查的证据是 GATE 7 硬标准，不是可选项。
+    media:
+    - kind: video
+      title: 口播课件 · Skill 三问
+      object_key: documents/shared/course-media/day07-c6-accept.mp4
+      poster_key: documents/shared/course-media/day07-c6-accept-poster.jpg
+      duration_sec: 98
+    knowledge_cards:
+    - id: gate7-three
+      term: Skill 三问
+      plain: 它做什么（输入→输出）？步骤谁定？好坏谁判？
+      tag: 验收
+    - id: gate7
+      term: GATE 7
+      plain: 现场运行 + 产出过验收 + 说明书含可判标准 + commit 进 Git。
+      tag: 闸门
+    glossary_terms:
+    - id: gt-gate7
+      term: GATE 7
+      plain: Day 7 日验收闸：Skill 可运行、证据可复查、三问能口答。
 quiz:
-  pass_rate: 0.5
+  pass_rate: 0.67
   questions:
-  - q: 真正执行工具的是？
+  - q: Week 2 的主线换档是？
     options:
-    - 裸模型权重
-    - Harness
-    - 浏览器主题
+    - 从写代码到写文档
+    - 从「做系统」到「造能力（Skill）」
+    - 从本地到云端
     answer: 1
-    explain: Harness 执行工具。
-  - q: 企业无系统时优先？
+    explain: 驾驶舱是系统；Skill 是能力——AI 拿着说明书就能干活。
+  - q: Skill 四部件是？
     options:
-    - 强行多智能体
-    - AI 编码造传统系统
-    - 只买向量库
+    - 前端/后端/数据库/模型
+    - 输入 / 步骤 / 输出 / 验收
+    - 需求/设计/开发/测试
     answer: 1
-    explain: 先数字化基建。
+    explain: 四部件一个不能少；验收必须可判对错。
+  - q: Prompt 和 Skill 的本质区别？
+    options:
+    - Prompt 更高级
+    - Prompt 一次性对话；Skill 可复用、有验收、可交接
+    - 没有区别
+    answer: 1
+    explain: Week 1 散落在对话里的 Prompt，今天固化为 Skill。
+  - q: 选第一个 Skill 的三筛法是？
+    options:
+    - 难/贵/新
+    - 高频 / 稳定 / 低险
+    - 快/省/好
+    answer: 1
+    explain: 第一个 Skill 练信任——低险是硬筛。
+  - q: 「工具描述」为什么要写「何时不用」？
+    options:
+    - 法律免责
+    - 帮 Agent 判断该不该选这件工具（Day 8 选错图谱）
+    - 凑文档厚度
+    answer: 1
+    explain: 描述决定 Agent 第 1 步理解任务时选不选得对。
+  - q: 步骤「分析一下数据」的主要问题是？
+    options:
+    - 太短
+    - 不可执行——没有具体操作序列
+    - 应该用 bullet
+    answer: 1
+    explain: 步骤要细到可照做，不能留「分析」这种黑洞词。
+  - q: Skill 运行后必须留下？
+    options:
+    - 口头汇报
+    - 可检查的证据（产物 + runs/ 记录）
+    - 截图发群
+    answer: 1
+    explain: 没有证据 = 没跑；和 Eval 思维一脉相承。
+  - q: 输出 + 验收对应 Week 1 的？
+    options:
+    - 三态与降级
+    - 结构化输出 + Rubric
+    - 契约与 DDL
+    answer: 1
+    explain: Week 1 概念在 Skill 说明书里各有一格。
+  - q: 第一个 Skill 不建议封装？
+    options:
+    - 每周周报
+    - 给客户发报价邮件（不可撤回、高险）
+    - 从 API 拉 KPI
+    answer: 1
+    explain: 对外发送/改数据/花钱——Day 9 确认闸后再碰。
+  - q: Skill 三问不包括？
+    options:
+    - 它做什么（输入→输出）
+    - 步骤谁定
+    - 用哪个 AI 模型
+    answer: 2
+    explain: 三问：做什么、步骤谁定、好坏谁判——模型是 Harness 的事。
+  - q: GATE 7 过闸必须包含？
+    options:
+    - 视频看完
+    - 现场运行 + 产出过验收 + 说明书进 Git
+    - 背下四部件定义
+    answer: 1
+    explain: 能跑、有证据、可交接——三问是口答检验理解。
+  - q: 「系统被使用，能力被执行」意思是？
+    options:
+    - 系统和能力一样
+    - 驾驶舱等人看；Skill 被 AI 拿去干活
+    - 能力比系统高级
+    answer: 1
+    explain: 你从操作者变成派活的人——Week 2 的核心位移。
 nodes:
 - type: learn
-  title: Agent 分层
+  title: 今日课节（6 节 · 110′）
 - type: quiz
-  title: 工程速测
+  title: Day7 概念验收
 - type: lab
-  title: 约束画布选型
+  title: 第一个 Skill：跑出可检查的证据
 - type: project
-  title: 企业任务：预算内方案
+  title: 企业任务：Skill 说明书 + 运行证据
 - type: review
-  title: 决策评审
-- type: unlock
-  title: 解锁 Day8
+  title: 交付自检与 GATE 7
 lab:
-  runner: sim
+  runner: agent
+  workspace_mode: cumulative
+  primary_files:
+  - skills/skill-01.md
+  - runs/
+  inherited_files:
+  - PRD.md
+  - architecture.md
+  - index.html
+  - API_Spec.md
+  - DB_Schema.md
   coach:
-    help_mode: explain
+    help_mode: debug
     skill_id: fde-coach
-    max_help_level: 2
-  sim_kind: arch_design
+    max_help_level: 3
   adapter_version: '1.0'
-  seed:
-    canvas_fixture: cockpit-v1
-    constraints:
-      max_monthly_cost_usd: 800
-      data_residency: cn
-      p95_latency_ms: 400
-  ui:
-    layout: constraint_canvas
+  agent:
+    prompt_template: '你是 Skill 架构师。背景：FDE 训练营 Day 7，学员选定了一项高频、规则清晰、可验收的部门工作。
+
+      任务：在工作区生成 skills/skill-01.md——第一个 Skill 说明书，含四部件（输入：字段与来源 / 步骤：可执行的操作序列 / 输出：产物格式与存放路径 / 验收：如何判对错）+ 工具描述（一句话干什么、何时用、何时不用）；然后用该
+      Skill 真实执行一次，产物与运行记录写入 runs/ 目录。
+
+      要求：步骤必须具体到可照做；输出路径写死；证据必须第三方可查（文件/日志，不是口头）。'
   rubric:
-  - check: constraints_satisfied
+  - check: file_exists
     args:
-      all: true
-  - check: decision_note_min_chars
+      path: skills/skill-01.md
+  - check: text_contains
     args:
-      min: 120
-  - check: required_components
+      path: skills/skill-01.md
+      needle: 输入
+  - check: text_contains
     args:
-      includes:
-      - api
-      - warehouse
-      - auth
+      path: skills/skill-01.md
+      needle: 输出
+  - check: text_contains
+    args:
+      path: skills/skill-01.md
+      needle: 何时用

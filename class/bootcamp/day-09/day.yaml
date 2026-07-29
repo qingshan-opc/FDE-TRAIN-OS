@@ -1,0 +1,370 @@
+day: 9
+project: 多 Skill 编排与人工确认
+project_brief: 工具表从 1 件变 3 件，串成带人工确认闸的 workflow 流水线。掌握编排观（业务流程即 Skill 串联）、确认闸三问与执行日志三要素，再封装两个 Skill，跑通「拦得住、回得来、查得了」的 GATE
+  9。
+resources:
+- id: dg-orchestration
+  title: 讲解图 · 编排确认闸与执行日志
+  kind: diagram
+  summary: 步骤定死 + 确认闸 + 每步留痕
+  url: /course-assets/assets/diagrams/orchestration-confirm.svg
+- id: dg-workflow-agent
+  title: 讲解图 · workflow vs agent
+  kind: diagram
+  summary: 编排是 workflow——步骤你定死，AI 当流水线工人
+  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
+- id: glossary
+  title: 新概念词典（速查版）
+  kind: site
+  summary: Workflow / HITL / Eval
+  url: /course-assets/resources/h5/glossary.html
+capsule_extra:
+  c1:
+    resource_ids:
+    - dg-workflow-agent
+    knowledge_cards:
+    - id: orchestration
+      term: 编排
+      plain: 把多步业务流程拆成 Skill 串联，数据在步骤间流动——你当流程设计师。
+      tag: 核心
+    - id: workflow-not-agent
+      term: 编排 = workflow
+      plain: 步骤定死，不依赖 Agent 现想——能 workflow 别 agent（Day 8 铁律）。
+      tag: 原则
+    - id: split-three-q
+      term: 拆分三问
+      plain: 执行还是判断？输入从哪来？错了能撤回吗？
+      tag: 方法
+    glossary_terms:
+    - id: gt-orchestration
+      term: 编排（Orchestration）
+      plain: 多 Skill 按固定顺序串联，数据逐步传递——业务流程的工程化表达。
+    - id: gt-hitl
+      term: Human-in-the-loop
+      plain: 人在环：关键步骤必须人工确认或放行。
+    quiz:
+    - - 编排（orchestration）的核心是？
+      - - 让 Agent 自由发挥
+        - 把业务流程拆成 Skill 串联，数据在步骤间流动
+        - 写更多 Prompt
+      - 1
+      - 你定步骤顺序，AI 当流水线工人——这是 workflow。
+    - - 拆分每一步首先要问？
+      - - 用什么模型
+        - 这步是「执行」还是「判断/放行」
+        - 谁写的代码
+      - 1
+      - 执行 → Skill；判断/放行 → 人（确认点）。
+    - - 「这步错了能撤回吗？」决定什么？
+      - - 用什么数据库
+        - 不可撤回的步骤前必须有人工确认闸
+        - 用不用 Docker
+      - 1
+      - 发出去了就收不回——确认闸挡在「不可撤回」之前。
+    - - A 的输出契约必须满足 B 的输入，体现什么思想？
+      - - 契约先行（又一次）
+        - 随机对接
+        - 越厚越好
+      - 0
+      - 数据流格式要对齐——接口契约思想在编排里第三次出现。
+    tools:
+    - name: 拆分三问卡
+      note: 执行/判断 · 输入来源 · 可撤回性
+    media:
+    - kind: video
+      title: 口播课件 · 编排
+      object_key: documents/shared/course-media/day09-c1-orchestration.mp4
+      poster_key: documents/shared/course-media/day09-c1-orchestration-poster.jpg
+      duration_sec: 92
+  c2:
+    resource_ids:
+    - dg-orchestration
+    knowledge_cards:
+    - id: confirm-three
+      term: 确认闸三问
+      plain: 看什么 / 谁来看 / 多久看一次——闸不是「点确定大赛」。
+      tag: 核心
+    - id: trust-tier
+      term: 信任分级
+      plain: 新上线每次看 → 连续通过降抽看 → 稳定期抽看+审计。
+      tag: 方法
+    - id: log-three
+      term: 日志三要素
+      plain: 时间 / 动作 / 结果——出事故能回答「什么时候、谁干的、干成了什么」。
+      tag: 证据
+    glossary_terms:
+    - id: gt-confirm-gate
+      term: 确认闸
+      plain: 不可撤回步骤前的强制暂停——人批准才继续。
+    - id: gt-exec-log
+      term: 执行日志
+      plain: 每步一条记录，可回放、可追责——runs/ 是案底。
+    quiz:
+    - - 确认闸三问是？
+      - - 谁开发/多少钱/快不快
+        - 看什么 / 谁来看 / 多久看一次
+        - 早上/中午/晚上
+      - 1
+      - 看什么 = 决策所需的最低信息，不是日志原文。
+    - - 确认界面必须提供？
+      - - 一句「发送吗？」
+        - 草稿 + 关键数字 + 风险标红
+        - 全部原始日志
+      - 1
+      - 信息不足逼人盲批——闸的第一种死法。
+    - - 执行日志三要素？
+      - - 时间 / 动作 / 结果
+        - 谁 / 什么 / 为什么
+        - 开始 / 结束 / 耗时
+      - 0
+      - 案底三问：什么时候、谁干的、干成了什么。
+    - - 信任分级的含义？
+      - - 永远每次都看
+        - 连续通过攒额度：从每次看降到抽看 + 定期审计
+        - 完全放手
+      - 1
+      - 一天弹 20 次确认，第 21 次一定盲批——分级治麻木。
+    tools:
+    - name: 确认闸设计卡
+      note: 三问 + 信任分级 + 反模式三条
+    media:
+    - kind: video
+      title: 口播课件 · 确认闸三问
+      object_key: documents/shared/course-media/day09-c2-multi-skill.mp4
+      poster_key: documents/shared/course-media/day09-c2-multi-skill-poster.jpg
+      duration_sec: 91
+  c3:
+    resource_ids:
+    - dg-orchestration
+    knowledge_cards:
+    - id: three-skills
+      term: 工具表 3 件
+      plain: 复用 Day 7 全流程提速——每件有说明书 + 边界 + 工具描述。
+      tag: 交付
+    - id: speed-up
+      term: 复用提速
+      plain: 第 2、3 个 Skill 走同一套四部件 + 边界模板，不再从零摸索。
+      tag: 技巧
+    glossary_terms:
+    - id: gt-tool-table-3
+      term: 三件工具表
+      plain: Agent/workflow 可调用的完整工具集——Day 9 从 1 扩到 3。
+    quiz:
+    - - 工具表 3 件每件必须包含？
+      - - 只有名字
+        - 说明书 + 边界声明 + 工具描述
+        - 只有代码
+      - 1
+      - 和 Day 7-8 标准一致——可依赖的三件套。
+    - - 再封装两个 Skill 为什么比第一个快？
+      - - AI 变强了
+        - 四部件 + 边界模板已练过，走同一套流程
+        - 不需要验收了
+      - 1
+      - 第一个练信任，第二三个练吞吐——模板复用。
+    tools:
+    - name: Skill 边界模板
+      note: 复用 Day 8 v1 结构
+    media:
+    - kind: video
+      title: 口播课件 · 工具表 3 件
+      object_key: documents/shared/course-media/day09-c3-human-confirm.mp4
+      poster_key: documents/shared/course-media/day09-c3-human-confirm-poster.jpg
+      duration_sec: 79
+  c4:
+    resource_ids:
+    - dg-orchestration
+    knowledge_cards:
+    - id: pipeline
+      term: 流水线
+      plain: A→B→确认闸→C：步骤定死、数据流清楚、闸在不可撤回步骤前。
+      tag: 实战
+    - id: reject-path
+      term: 驳回路径
+      plain: 闸口驳回必须能退回重做、版本+1、留痕——不是只有批准。
+      tag: 关键
+    glossary_terms:
+    - id: gt-orchestration-md
+      term: orchestration.md
+      plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
+    quiz:
+    - - 确认闸应放在哪类步骤之前？
+      - - 每一步
+        - 不可撤回的步骤（对外发送/改数据/花钱）
+        - 最快的步骤
+      - 1
+      - 可撤回的自动连跑——比例通常是 5 步 1 闸。
+    - - 流水线跑到确认闸应该？
+      - - 自动跳过
+        - 自动停下等人；批准后继续；驳回有记录
+        - 发邮件提醒
+      - 1
+      - 拦得住、回得来、查得了——GATE 9 三板斧。
+    - - 不批准时 C 步骤能否执行？
+      - - 可以，反正差不多
+        - 绝不——不批准绝不执行不可撤回步骤
+        - 看 Agent 心情
+      - 1
+      - 钥匙在你手里——这是信任的工程设计。
+    tools:
+    - name: 流水线施工清单
+      note: 串联图 / 数据流 / 闸位置 / 日志格式
+    media:
+    - kind: video
+      title: 口播课件 · 流水线
+      object_key: documents/shared/course-media/day09-c4-runbook.mp4
+      poster_key: documents/shared/course-media/day09-c4-runbook-poster.jpg
+      duration_sec: 90
+  c5:
+    resource_ids:
+    - dg-orchestration
+    knowledge_cards:
+    - id: gate9
+      term: GATE 9
+      plain: 3 件工具 + 编排文档 + 闸口实测 + 执行日志可回放。
+      tag: 验收
+    - id: gate9-test
+      term: 闸口实测
+      plain: 跑到闸自动停 → 批准继续 / 驳回留痕——两条路径都要跑通。
+      tag: 验收
+    glossary_terms:
+    - id: gt-gate9
+      term: GATE 9
+      plain: Week 2 编排里程碑：流水线跑通，闸口拦得住，日志查得了。
+    quiz:
+    - - GATE 9 必须实测几条路径？
+      - - 只测批准
+        - 批准继续 + 驳回留痕两条
+        - 不需要实测
+      - 1
+      - 驳回路径和批准路径同样重要——回得来才算工程化。
+    - - GATE 9 commit 信息？
+      - - feat: 三 Skill 编排——确认闸 + 执行日志
+        - fix: typo
+        - docs: readme
+      - 0
+      - 里程碑标记编排与安全设计落地。
+    - - 执行日志的可回放性指？
+      - - 能打印
+        - 不看代码也能还原当天流水线经过
+        - 只有导师能看
+      - 1
+      - 出事故时的唯一案底——Day 10 答辩兜底证据。
+    tools:
+    - name: GATE 9 清单
+      note: 3 件工具 / 编排文档 / 闸口实测 / 日志回放
+    media:
+    - kind: video
+      title: 口播课件 · GATE 9
+      object_key: documents/shared/course-media/day09-c5-gate9.mp4
+      poster_key: documents/shared/course-media/day09-c5-gate9-poster.jpg
+      duration_sec: 73
+quiz:
+- - 编排的核心思想？
+  - - Agent 自由决策
+    - 业务流程拆成 Skill 串联，步骤定死（workflow）
+    - 写一个超级 Prompt
+  - 1
+  - 你当流程设计师，AI 当流水线工人。
+- - 确认闸三问？
+  - - 谁/什么/为什么
+    - 看什么 / 谁来看 / 多久看一次
+    - 快/好/省
+  - 1
+  - 闸不是点确定大赛——信息足够才能决策。
+- - 确认界面最低信息？
+  - - 「发送吗？」
+    - 草稿 + 关键数字 + 风险标红
+    - 全部日志
+  - 1
+  - 信息不足 = 逼人盲批。
+- - 执行日志三要素？
+  - - 时间 / 动作 / 结果
+    - 输入 / 步骤 / 输出
+    - 谁 / 在哪 / 用什么
+  - 0
+  - 案底三问：什么时候、谁干的、干成了什么。
+- - 确认闸应放在？
+  - - 每一步前面
+    - 不可撤回步骤（发送/改数据/花钱）之前
+    - 最后一步后面
+  - 1
+  - 能撤回的自动连跑；不能撤回的必须有人工闸。
+- - 信任分级是？
+  - - 永远全看
+    - 连续通过降抽看 + 定期审计
+    - 完全自动化
+  - 1
+  - 治「点确定大赛」的麻木——信任是工程设计。
+- - 工具表从几件扩到几件？
+  - - 1 → 2
+    - 1 → 3
+    - 3 → 5
+  - 1
+  - 一件是助手，三件是团队——今天扩工具表。
+- - 编排文档 orchestration.md 必须包含？
+  - - 只有步骤名
+    - 串联图 + 数据流 + 确认闸位置 + 日志格式
+    - 团队照片
+  - 1
+  - 施工图纸——按图施工，闸口才能拦得住。
+- - 驳回路径必须？
+  - - 静默忽略
+    - 退回重做、版本+1、留痕
+    - 自动批准
+  - 1
+  - 回得来才算完整流水线——不是只有「通过」。
+- - 拆分步骤「错了能撤回吗」影响？
+  - - 用什么框架
+    - 决定确认闸是否必须
+    - 代码风格
+  - 1
+  - 不可撤回 → 前面必须有人工闸。
+- - 编排属于 workflow 还是 agent？
+  - - agent——让模型现想
+    - workflow——步骤你定死
+    - 两者一样
+  - 1
+  - Day 8 铁律：能 workflow 别 agent——编排就是 workflow。
+- - GATE 9 闸口实测要求？
+  - - 口头描述即可
+    - 跑到闸自动停，批准/驳回两条路径都跑通
+    - 只测 happy path
+  - 1
+  - 拦得住、回得来、查得了。
+- - 数据流对齐体现？
+  - - 随机拼接
+    - 契约先行——A 的输出满足 B 的输入
+    - 越厚越好
+  - 1
+  - 契约思想在编排里继续生效。
+- - 一天弹 20 次确认的问题？
+  - - 效率太高
+    - 第 21 次一定盲批——需要信任分级
+    - 没有 problem
+  - 1
+  - 确认闸设计要治麻木，不是治 lazy。
+lab:
+  primary_files:
+  - docs/orchestration.md
+  - runs/
+  prompt: '你是流程工程师。背景：FDE 训练营 Day 9，学员已有 3 件 Skill（skills/ 目录）。
+
+    任务：1. 生成 docs/orchestration.md——编排文档：步骤定死的串联图（A→B→C）、数据流（谁的输出是谁的输入）、确认闸位置（必须在不可撤回步骤之前）、闸设计卡（三问）、日志格式；2. 按文档把流水线真实跑一遍：A
+    跑 → B 产出确认界面（草稿+关键数字+风险标红）→ 停 → 人批准 → C 执行；再跑一次驳回路径（打回 B 重做、版本+1、留痕）；3. 每步执行后向 runs/ 追加日志行（时间|步骤|结果）。
+
+    要求：不批准绝不执行 C；驳回必须能退回重做且留记录；日志可独立回放当天经过。'
+  rubric:
+  - check: file_exists
+    args:
+      path: docs/orchestration.md
+  - check: text_contains
+    args:
+      path: docs/orchestration.md
+      needle: 确认闸
+  - check: text_contains
+    args:
+      path: docs/orchestration.md
+      needle: 日志
+nodes_lab: 流水线施工：拦得住、回得来、查得了
+nodes_project: 企业任务：三 Skill 编排 + 确认闸 + 执行日志

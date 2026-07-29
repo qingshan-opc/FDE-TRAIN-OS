@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-stage12",
+    "file": "02-stage12.txt"
+  },
+  {
+    "id": "03-stage34",
+    "file": "03-stage34.txt"
+  },
+  {
+    "id": "04-agent",
+    "file": "04-agent.txt"
+  },
+  {
+    "id": "05-cockpit",
+    "file": "05-cockpit.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

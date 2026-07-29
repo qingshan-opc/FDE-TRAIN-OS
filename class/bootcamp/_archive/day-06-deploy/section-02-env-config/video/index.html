@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Day06 S03 · 概念：环境与配置分离（15′ · 概念）</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:72px;line-height:1.12;margin-bottom:18px;max-width:16ch}
+.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em}
+.diagram-box{border:1px solid var(--ink);padding:14px;background:#fff;margin-top:16px;max-width:980px}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:10px}
+.diagram-box img{width:100%;max-height:320px;object-fit:contain;display:block}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="40.500" data-width="1920" data-height="1080">
+<div class="stage-bg"></div>
+
+      <section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="8.800">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+          <h1 class="display" data-anim="t">「想一个矛盾：代码要上 Git 公网仓库，密钥又不能见人…</h1>
+          <p class="lede" data-anim="s">「想一个矛盾：代码要上 Git 公网仓库，密钥又不能见人——但它们现在在同一个文件里。怎么办？</p>
+        </div>
+      </section>
+      <section id="slide-02-core" class="clip slide" data-track-index="1" data-start="9.050" data-duration="19.600">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">02</span>CORE</div>
+          <h1 class="display" data-anim="t">分家</h1>
+          <p class="lede" data-anim="s">分家。三件套记牢：`.env` 装本地真值，进 gitignore 永不提交；`.env.example` 装样板——键名加假值加注释，进 Git，别人 clone 下来照着配；线上真值放平台的环境变量面板，网页里配，不是文件。</p>
+          <div class="diagram-box" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 概念：环境与配置分离（15′ · 概念）</div>
+            <img src="assets/diagrams/env-config-split.svg" alt="" />
+          </div>
+        </div>
+      </section>
+      <section id="slide-03-detail" class="clip slide" data-track-index="1" data-start="28.900" data-duration="11.600">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">03</span>DETAIL</div>
+          <h1 class="display" data-anim="t">代码只干一件事：os.environ 读环境变量</h1>
+          <p class="lede" data-anim="s">代码只干一件事：os.environ 读环境变量。验收标准一句话：把你的仓库现在公开，项目还安全吗？安全，分家才算完成。」</p>
+        </div>
+      </section>
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="40.500" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> Day 06 · 03</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="40.500" data-track-index="5">
+<div class="speak-ring"></div>
+<div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="40.500" data-track-index="6"></video></div>
+<div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="40.500" data-track-index="10" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.36);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.5);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+      enter("#slide-01-open", 0.000);
+      exit("#slide-01-open", 8.350, 8.800);
+      enter("#slide-02-core", 9.050);
+      exit("#slide-02-core", 28.200, 28.650);
+      enter("#slide-03-detail", 28.900);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

@@ -77,12 +77,12 @@ export function LocalPrepPanel({
   const copyPrompt = async () => {
     const text = prep.codex_prompt?.trim();
     if (!text) {
-      toast.push("暂无 Codex 任务上下文", "error");
+      toast.push("暂无任务上下文", "error");
       return;
     }
     try {
       await navigator.clipboard.writeText(text);
-      toast.push("已复制，请粘贴到本机 Codex 并加载 fde-local-prep Skill", "success");
+      toast.push("已复制，请粘贴到本机 AI 工具（Codex / Cursor / openclaw / Kimi 等）", "success");
     } catch {
       toast.push("复制失败，请手动选择文本复制", "error");
     }
@@ -91,7 +91,7 @@ export function LocalPrepPanel({
   return (
     <div className="local-prep-panel">
       <p className="local-prep-lead muted">
-        平台提供企业背景与验收边界；请在本机 Codex 完成分析与表达，最终判断须由你确认。
+        平台提供企业背景与验收边界；请在本机 AI 工具（Codex / Cursor / openclaw / Kimi 等）完成分析与表达，最终判断须由你确认。
       </p>
       <div className="local-prep-grid">
         <section className="local-prep-card">
@@ -112,7 +112,7 @@ export function LocalPrepPanel({
           )}
         </section>
         <section className="local-prep-card local-prep-card--codex">
-          <h4>复制给 Codex 的任务上下文</h4>
+          <h4>复制给本机 AI 工具的任务上下文</h4>
           {prep.skill_id && <p className="local-prep-skill mono">Skill · {prep.skill_id}</p>}
           <pre className="local-prep-prompt">{prep.codex_prompt?.trim() || "（教研尚未配置 prompt）"}</pre>
           <div className="local-prep-actions">

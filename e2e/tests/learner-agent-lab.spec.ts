@@ -5,12 +5,17 @@ import { loginAsLearner } from "../fixtures/auth";
 
 const artifacts = path.join(__dirname, "..", "artifacts");
 
+// NOTE: this spec uses the shared demo learner because Day1's lab node is
+// gated behind learn+quiz completion. The demo workspace accumulates files
+// across runs, and every workspace mutation snapshots the whole tree to
+// MinIO synchronously — so CRUD toast waits below are generous (300s).
+// If the demo workspace is ever reset, these can go back to 120s.
 test.beforeAll(() => {
   fs.mkdirSync(artifacts, { recursive: true });
 });
 
 test("learner Agent Lab stub run on Day1", async ({ page }) => {
-  test.setTimeout(420_000);
+  test.setTimeout(900_000);
   await loginAsLearner(page);
 
   // Prefer deep-link into the Lab node — day row toggles expand/collapse and
@@ -40,7 +45,7 @@ test("learner Agent Lab stub run on Day1", async ({ page }) => {
     await genBtn.click();
   }
   await expect(page.getByRole("treeitem").filter({ hasText: /index\.html/ }).first()).toBeVisible({
-    timeout: 120_000,
+    timeout: 300_000,
   });
 
   // Nested/file tree (not a flat Markdown dump): index.html + README.md visible.
@@ -62,13 +67,14 @@ test("learner Agent Lab stub run on Day1", async ({ page }) => {
   await expect(page.locator("iframe.lab-preview-frame")).toBeVisible({ timeout: 20_000 });
 
   const previewFrame = page.frameLocator("iframe.lab-preview-frame");
-  await expect(previewFrame.getByRole("heading", { name: "库存列表" })).toBeVisible({ timeout: 15_000 });
-  await expect(previewFrame.getByText(/预警：|低库存|B-200/).first()).toBeVisible({ timeout: 20_000 });
-  await expect(previewFrame.locator("table tbody tr").first()).toBeVisible({ timeout: 10_000 });
+  // v0.7 Day1 lab：stub 产出 PRD.md + 产品愿景预览页（部门周报助手）
+  await expect(previewFrame.getByRole("heading", { name: "部门周报助手" })).toBeVisible({ timeout: 15_000 });
+  await expect(previewFrame.getByText(/每周节省 2 小时|自动汇总/).first()).toBeVisible({ timeout: 20_000 });
+  await expect(previewFrame.locator("ul li").first()).toBeVisible({ timeout: 10_000 });
 
   await page.locator(".lab-ide-actions").getByRole("button", { name: "评测", exact: true }).click();
   await expect(page.getByText(/评测/).first()).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByText(/警戒/).first()).toBeVisible();
+  await expect(page.getByText(/验收标准/).first()).toBeVisible();
 
   const crudName = `e2e-crud-${Date.now()}.txt`;
   await page.getByRole("button", { name: "+文件", exact: true }).click();
@@ -76,7 +82,7 @@ test("learner Agent Lab stub run on Day1", async ({ page }) => {
   await page.getByTestId("ide-crud-input").fill(crudName);
   await page.getByTestId("ide-crud-confirm").click();
   await expect(page.getByText(new RegExp(`已创建 ${crudName.replace(".", "\\.")}`))).toBeVisible({
-    timeout: 120_000,
+    timeout: 300_000,
   });
   await expect(page.getByRole("treeitem").filter({ hasText: crudName }).first()).toBeVisible({
     timeout: 30_000,
@@ -89,7 +95,7 @@ test("learner Agent Lab stub run on Day1", async ({ page }) => {
   await page.getByTestId("ide-crud-input").fill(renamed);
   await page.getByTestId("ide-crud-confirm").click();
   await expect(page.getByText(new RegExp(`已重命名为 ${renamed.replace(".", "\\.")}`))).toBeVisible({
-    timeout: 120_000,
+    timeout: 300_000,
   });
   await expect(page.getByRole("treeitem").filter({ hasText: renamed }).first()).toBeVisible({
     timeout: 30_000,
@@ -99,7 +105,7 @@ test("learner Agent Lab stub run on Day1", async ({ page }) => {
   await page.getByRole("menuitem", { name: "删除" }).click();
   await page.getByTestId("ide-crud-confirm").click();
   await expect(page.getByText(new RegExp(`已删除 ${renamed.replace(".", "\\.")}`))).toBeVisible({
-    timeout: 120_000,
+    timeout: 300_000,
   });
   await expect(page.getByRole("treeitem").filter({ hasText: renamed })).toHaveCount(0, {
     timeout: 30_000,

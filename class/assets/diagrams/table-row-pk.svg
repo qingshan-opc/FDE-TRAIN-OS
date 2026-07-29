@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="表、行与主键">
+<rect width="1040" height="440" fill="#f2f5f0"/>
+<!-- 表名 -->
+<text x="130" y="52" font-size="13" font-weight="800" fill="#231f20" style="font-family:'SF Mono',Menlo,monospace">表 · kpi_daily（同类记录的集合）</text>
+<!-- 表头 -->
+<rect x="130" y="70" width="120" height="40" fill="#231f20"/><rect x="250" y="70" width="220" height="40" fill="#231f20"/><rect x="470" y="70" width="220" height="40" fill="#231f20"/><rect x="690" y="70" width="220" height="40" fill="#231f20"/>
+<g font-size="12" font-weight="700" fill="#f2f5f0" style="font-family:'SF Mono',Menlo,monospace">
+<text x="145" y="95">id</text><text x="265" y="95">date</text><text x="485" y="95">region</text><text x="705" y="95">amount</text>
+</g>
+<!-- 数据行 -->
+<g font-size="12" fill="#231f20" style="font-family:'SF Mono',Menlo,monospace">
+<rect x="130" y="110" width="780" height="44" fill="#ffffff" stroke="rgba(35,31,32,.15)"/>
+<text x="145" y="137">001</text><text x="265" y="137">2026-07-21</text><text x="485" y="137">华东</text><text x="705" y="137">¥ 128,400</text>
+<rect x="130" y="154" width="780" height="44" fill="#ffffff" stroke="rgba(35,31,32,.15)"/>
+<text x="145" y="181">002</text><text x="265" y="181">2026-07-21</text><text x="485" y="181">华南</text><text x="705" y="181">¥ 96,200</text>
+<rect x="130" y="198" width="780" height="44" fill="#ffffff" stroke="rgba(35,31,32,.15)"/>
+<text x="145" y="225">003</text><text x="265" y="225">2026-07-22</text><text x="485" y="225">华东</text><text x="705" y="225">¥ 131,700</text>
+<rect x="130" y="242" width="780" height="44" fill="#ffffff" stroke="rgba(35,31,32,.15)"/>
+<text x="145" y="269">004</text><text x="265" y="269">2026-07-22</text><text x="485" y="269">华北</text><text x="705" y="269">¥ 88,900</text>
+</g>
+<!-- 主键高亮 -->
+<rect x="130" y="70" width="120" height="216" fill="none" stroke="#1400ff" stroke-width="2.5"/>
+<path d="M190 292 L190 318" stroke="#1400ff" stroke-width="2"/>
+<path d="M190 318 L184 308 L196 308 Z" fill="#1400ff"/>
+<text x="190" y="344" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1400ff">主键 · PRIMARY KEY</text>
+<text x="190" y="366" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.55)">每行的身份证号：不重复、不为空</text>
+<!-- 行标注 -->
+<path d="M922 132 L952 132" stroke="rgba(35,31,32,.4)" stroke-width="1.5"/>
+<text x="958" y="136" font-size="11" fill="rgba(35,31,32,.55)">行 = 一条记录</text>
+<path d="M922 220 L952 220" stroke="rgba(35,31,32,.4)" stroke-width="1.5"/>
+<text x="958" y="224" font-size="11" fill="rgba(35,31,32,.55)">列 = 一个字段</text>
+<!-- 底注 -->
+<text x="520" y="404" text-anchor="middle" font-size="12.5" font-weight="700" fill="#231f20">记住主键：Day 4 的 UPDATE / DELETE 都靠它「找准那一行」</text>
+<text x="520" y="426" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.5)">没有主键的表，就像没有工号的员工名单——改谁删谁都说不清</text>
+</svg>

@@ -1,0 +1,1 @@
+MCP，Model Context Protocol，模型上下文协议——给 AI 接工具和数据源的统一标准。以前接一个工具，得给每个 Agent 单独写适配；MCP 像 USB-C 插座，按标准写一个 Server，Cursor、Claude Desktop、各种 Agent 都能插。训练营里的 Skill 是朴素版 MCP：读 SKILL.md，描述工具，按约定执行，交付结果。第二周你们会亲手写，今天先知道「Skill 就是自己能用的 MCP 服务」，对吧。

@@ -28,18 +28,19 @@ test("lab rubric fail then pass unlocks project node", async ({ page }) => {
   await page.locator("#force-stub").check({ force: true });
   await expect(page.locator("#force-stub")).toBeChecked();
 
-  if ((await page.getByRole("treeitem").filter({ hasText: /index\.html/ }).count()) === 0) {
+  if ((await page.getByRole("treeitem").filter({ hasText: /PRD\.md/ }).count()) === 0) {
     await genBtn.click();
   }
-  const indexItem = page.getByRole("treeitem").filter({ hasText: /index\.html/ }).first();
-  await expect(indexItem).toBeVisible({ timeout: 120_000 });
+  // v0.7 Day1 rubric 锚定 PRD.md（用户故事/验收标准）。
+  const prdItem = page.getByRole("treeitem").filter({ hasText: /PRD\.md/ }).first();
+  await expect(prdItem).toBeVisible({ timeout: 120_000 });
 
   // Break rubric by deleting required artifact.
-  await indexItem.click({ button: "right" });
+  await prdItem.click({ button: "right" });
   await page.getByRole("menuitem", { name: "删除" }).click();
   await page.getByTestId("ide-crud-confirm").click();
-  await expect(page.getByText(/已删除 index\.html/)).toBeVisible({ timeout: 120_000 });
-  await expect(page.getByRole("treeitem").filter({ hasText: /index\.html/ })).toHaveCount(0, {
+  await expect(page.getByText(/已删除 PRD\.md/)).toBeVisible({ timeout: 300_000 });
+  await expect(page.getByRole("treeitem").filter({ hasText: /PRD\.md/ })).toHaveCount(0, {
     timeout: 30_000,
   });
 
@@ -53,8 +54,8 @@ test("lab rubric fail then pass unlocks project node", async ({ page }) => {
   }
 
   await genBtn.click();
-  await expect(page.getByRole("treeitem").filter({ hasText: /index\.html/ }).first()).toBeVisible({
-    timeout: 120_000,
+  await expect(page.getByRole("treeitem").filter({ hasText: /PRD\.md/ }).first()).toBeVisible({
+    timeout: 300_000,
   });
   await page.locator(".lab-ide-actions").getByRole("button", { name: "评测", exact: true }).click();
   await expect(page.getByText(/评测已通过：点「完成」|评测通过/).first()).toBeVisible({ timeout: 30_000 });

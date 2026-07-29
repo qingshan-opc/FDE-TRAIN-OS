@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { meApi, ApiError } from "../lib/api";
+import { meApi, authApi, ApiError } from "../lib/api";
+import type { UserAttribution } from "../lib/types";
 import { LearnerAccountLayout } from "../components/LearnerAccountLayout";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
@@ -31,6 +32,7 @@ export function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [displayName, setDisplayName] = useState("");
+  const [attribution, setAttribution] = useState<UserAttribution | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -39,6 +41,8 @@ export function Profile() {
       const profile = await meApi.profile();
       setData(profile);
       setDisplayName(profile.display_name || "");
+      const me = await authApi.me();
+      setAttribution(me.attribution || null);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "加载失败");
     } finally {
@@ -147,6 +151,23 @@ export function Profile() {
                   </div>
                 </div>
               </div>
+            </section>
+
+            <section className="panel profile-base-panel">
+              <h2 className="profile-section-title">渠道归属</h2>
+              {attribution ? (
+                <div className="profile-meta-row">
+                  <span className="muted">已绑定机构</span>
+                  <span>
+                    {attribution.org_name || attribution.org_id}
+                    {attribution.invite_code ? ` · ${attribution.invite_code}` : ""}
+                  </span>
+                </div>
+              ) : (
+                <p className="muted" style={{ margin: 0, lineHeight: 1.55 }}>
+                  未绑定机构渠道。机构归因仅支持通过机构提供的注册链接完成注册时自动绑定，注册后不支持自行填写邀请码。
+                </p>
+              )}
             </section>
 
             <section className="panel profile-status-panel">

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-demo-segment",
+    "file": "02-demo-segment.txt"
+  },
+  {
+    "id": "03-arch-story",
+    "file": "03-arch-story.txt"
+  },
+  {
+    "id": "04-outline-rehearse",
+    "file": "04-outline-rehearse.txt"
+  },
+  {
+    "id": "05-fallback",
+    "file": "05-fallback.txt"
+  }
+]

@@ -31,8 +31,9 @@ from services.repositories.progress_repository import ProgressRepository
 
 log = logging.getLogger("fde.seed_v2")
 
+from services.shared.config import DEFAULT_CAMP_ID
+
 COURSE_SLUG = "fde-two-week"
-DEFAULT_CAMP_ID = "camp-v03"
 
 
 def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:

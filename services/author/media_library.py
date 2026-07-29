@@ -12,6 +12,7 @@ from uuid import uuid4
 from fastapi import HTTPException, UploadFile
 
 from services.author.pagination import offset_limit, page_meta, parse_page
+from services.shared.config import DEFAULT_UPLOAD_MAX_BYTES, MEDIA_MAX_BYTES_BY_KIND
 from services.shared import S3_BUCKET_DOCUMENTS, db_cursor
 from services.storage import get_store
 
@@ -24,12 +25,10 @@ KIND_EXT = {
     "poster": ".jpg",
     "image": ".png",
 }
-KIND_MAX_BYTES = {
-    "video": 200 * 1024 * 1024,
-    "audio": 64 * 1024 * 1024,
-    "poster": 8 * 1024 * 1024,
-    "image": 8 * 1024 * 1024,
-}
+
+
+def _max_bytes_for_kind(kind: str) -> int:
+    return MEDIA_MAX_BYTES_BY_KIND.get(kind, DEFAULT_UPLOAD_MAX_BYTES)
 
 
 def _table_exists(cur, name: str) -> bool:
@@ -200,7 +199,7 @@ async def create_media_asset(
         raise HTTPException(400, f"kind must be one of {sorted(ALLOWED_KINDS)}")
     name = file.filename or f"media{KIND_EXT.get(kind_l, '.bin')}"
     data = await file.read()
-    max_b = KIND_MAX_BYTES.get(kind_l, 32 * 1024 * 1024)
+    max_b = _max_bytes_for_kind(kind_l)
     if len(data) > max_b:
         raise HTTPException(413, f"{kind_l} too large")
     if not data:

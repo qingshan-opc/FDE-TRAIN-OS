@@ -2,16 +2,40 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { capsuleApi, practiceApi, dayApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { useToast } from "../components/Toast";
-import type { Capsule, CapsulePracticeSpec, DayPackage, DayResource, NodeCompleteResult, NodeState } from "../lib/types";
+import type {
+  Capsule,
+  CapsulePracticeSpec,
+  CapsuleTool,
+  DayPackage,
+  DayResource,
+  NodeCompleteResult,
+  NodeState,
+} from "../lib/types";
 import { resolveCapsuleResources } from "../lib/curriculum/capsuleResources";
 import { ErrorState } from "../components/ErrorState";
 import { Empty } from "../components/Empty";
 import { CapsuleMediaStack } from "../components/CapsuleMedia";
-import { ToolsPanel } from "../components/ToolsPanel";
 import { LocalPrepPanel } from "../components/learn/LocalPrepPanel";
+import { CapsuleSimTerminal, type CapsuleSimConfig } from "../components/learn/CapsuleSimTerminal";
+import { GlossaryTermsPanel, KnowledgeCardsStep } from "../components/learn/KnowledgeCardsStep";
 import { blockPracticeClipboard } from "../lib/practiceClipboard";
 
-type LearnTab = "notes" | "resources" | "local_prep" | "practice";
+type LearnStep = "video" | "cards" | "quiz" | "lab" | "local_prep" | "submit";
+
+const STEP_LABELS: Record<LearnStep, string> = {
+  video: "视频讲解",
+  cards: "知识卡片",
+  quiz: "知识确认",
+  lab: "实验",
+  local_prep: "本地实操",
+  submit: "提交验收",
+};
+
+/** 步骤条文案按课节内容动态生成。 */
+function stepLabel(id: LearnStep, cap: Capsule | undefined): string {
+  if (id === "video") return (cap?.media || []).length ? "课件讲解员" : "课件讲解";
+  return STEP_LABELS[id];
+}
 
 function CapsuleProse({ content }: { content: string }) {
   return (
@@ -169,36 +193,131 @@ function PracticeBlock({
   );
 }
 
-function ResourcesTab({ day, resources }: { day: DayPackage; resources: DayResource[] }) {
-  if (!resources.length) {
-    return (
-      <div className="learn-tab-panel">
-        <ToolsPanel day={day} />
-        <p className="muted">本节暂无额外资源。</p>
-      </div>
-    );
-  }
+/** 知识确认：可点击判分的交互选择题（纯前端，不存成绩）。 */
+function StepQuiz({
+  questions,
+  answers,
+  onAnswer,
+}: {
+  questions: Array<{ q: string; options: string[]; answer?: number; explain?: string }>;
+  answers: Record<number, number>;
+  onAnswer: (qIdx: number, optIdx: number) => void;
+}) {
+  const correctCount = questions.filter((q, i) => q.answer != null && answers[i] === q.answer).length;
   return (
-    <div className="learn-tab-panel">
-      <ul className="learn-resource-list">
-        {resources.map((r) => (
-          <li key={r.id} className="learn-resource-item">
-            <div>
-              <strong>{r.title}</strong>
-              {r.summary && <p className="muted">{r.summary}</p>}
+    <div className="step-quiz">
+      <p className="step-quiz-score muted">
+        已答对 {correctCount} / {questions.length} 题 · 点选即判分，答错可重选
+      </p>
+      {questions.map((q, qi) => {
+        const selected = answers[qi];
+        const answered = selected !== undefined;
+        return (
+          <section className="step-quiz-q" key={qi}>
+            <p className="step-quiz-question">
+              <span className="step-quiz-no num">Q{qi + 1}</span>
+              {q.q}
+            </p>
+            <div className="step-quiz-options">
+              {q.options.map((opt, oi) => {
+                const isAnswer = q.answer === oi;
+                const cls = !answered ? "" : isAnswer ? "is-correct" : selected === oi ? "is-wrong" : "is-dim";
+                return (
+                  <button
+                    key={oi}
+                    type="button"
+                    className={`step-quiz-option ${cls}`}
+                    onClick={() => onAnswer(qi, oi)}
+                  >
+                    <span className="step-quiz-badge">{answered && isAnswer ? "✓" : answered && selected === oi ? "✕" : String.fromCharCode(65 + oi)}</span>
+                    {opt}
+                  </button>
+                );
+              })}
             </div>
-            {r.url ? (
-              <a href={r.url} target="_blank" rel="noreferrer">
-                打开
-              </a>
-            ) : (
-              <span className="muted">{r.kind || "资料"}</span>
-            )}
-          </li>
-        ))}
-      </ul>
-      <ToolsPanel day={day} />
+            {answered && q.explain ? (
+              <p className={`step-quiz-explain ${selected === q.answer ? "is-right" : "is-retry"}`}>
+                {selected === q.answer ? "✓ 答对了。" : "再想想——"}
+                {q.explain}
+              </p>
+            ) : null}
+          </section>
+        );
+      })}
     </div>
+  );
+}
+
+/**
+ * 课节底部「资源 / 工具与资料」双 tab。
+ */
+function LearnAssetsTabs({ resources, tools }: { resources: DayResource[]; tools: CapsuleTool[] }) {
+  const [tab, setTab] = useState<"resources" | "tools">("resources");
+  if (!resources.length && !tools.length) return null;
+  return (
+    <section className="learn-assets" aria-label="资源与工具">
+      <div className="learn-assets-tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "resources"}
+          className={`learn-assets-tab${tab === "resources" ? " is-on" : ""}`}
+          onClick={() => setTab("resources")}
+        >
+          资源{resources.length ? ` (${resources.length})` : ""}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "tools"}
+          className={`learn-assets-tab${tab === "tools" ? " is-on" : ""}`}
+          onClick={() => setTab("tools")}
+        >
+          工具与资料{tools.length ? ` (${tools.length})` : ""}
+        </button>
+      </div>
+      {tab === "resources" ? (
+        resources.length ? (
+          <ul className="learn-resource-list" role="tabpanel">
+            {resources.map((r) => (
+              <li key={r.id} className="learn-resource-item">
+                <div>
+                  <strong>{r.title}</strong>
+                  {r.summary && <p className="muted">{r.summary}</p>}
+                </div>
+                {r.url ? (
+                  <a href={r.url} target="_blank" rel="noreferrer">
+                    打开
+                  </a>
+                ) : (
+                  <span className="muted">{r.kind || "资料"}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="muted learn-assets-empty">本节暂无资源。</p>
+        )
+      ) : tools.length ? (
+        <ul className="learn-tool-list" role="tabpanel">
+          {tools.map((t, i) => (
+            <li key={`${t.name}-${i}`} className="learn-tool-item">
+              <div>
+                <strong>{t.name}</strong>
+                {t.note && <p className="muted">{t.note}</p>}
+              </div>
+              {t.url && (
+                <a href={t.url} target="_blank" rel="noreferrer">
+                  打开
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="muted learn-assets-empty">本节暂无固定工具与资料。</p>
+      )}
+    </section>
   );
 }
 
@@ -245,7 +364,8 @@ export function CapsuleReader({
   const [practice, setPractice] = useState<Record<string, PracticeState>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<LearnTab>("notes");
+  const [step, setStep] = useState<LearnStep>("video");
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, Record<number, number>>>({});
   const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const saveSeq = useRef<Record<string, number>>({});
   const practiceRef = useRef(practice);
@@ -271,7 +391,7 @@ export function CapsuleReader({
     if (onOpenCapsuleIdChange) onOpenCapsuleIdChange(c.id);
     else setInternalOpenId(c.id);
     setReadAndNotify((prev) => (prev.has(c.id) ? prev : new Set(prev).add(c.id)));
-    setTab("notes");
+    setStep("video");
     if (!user || !campId) return;
     void capsuleApi
       .markOpened({ camp_id: campId, day: day.day, capsule_id: c.id, learner_id: user.id })
@@ -303,7 +423,8 @@ export function CapsuleReader({
     setInternalOpenId(null);
     setReadAndNotify(new Set());
     setPractice({});
-    setTab("notes");
+    setQuizAnswers({});
+    setStep("video");
 
     (async () => {
       if (!user || !campId) {
@@ -477,6 +598,59 @@ export function CapsuleReader({
     (c) => practiceSpecs[c.id]?.required && practice[c.id]?.status !== "submitted",
   ).length;
 
+  // ---- 步流：课件讲解员 → 知识卡片 → 知识确认 → … → 提交验收（缺件自动隐藏） ----
+  const quizQuestions = active?.quiz?.questions || [];
+  const knowledgeCards = active?.knowledge_cards || [];
+  const glossaryTerms = active?.glossary_terms || [];
+  const quizAnswersForActive = (active && quizAnswers[active.id]) || {};
+  const quizAllAnswered = quizQuestions.length > 0 && quizQuestions.every((_, i) => quizAnswersForActive[i] !== undefined);
+  const practiceDone = !activeSpec?.required || activePractice.status === "submitted";
+  const quizStepDone = quizAllAnswered && practiceDone;
+
+  const steps = useMemo(() => {
+    if (!active) return [] as { id: LearnStep; minutes: number }[];
+    const list: { id: LearnStep; minutes: number }[] = [];
+    const dur = (active.media || []).find((m) => m.duration_sec)?.duration_sec;
+    list.push({ id: "video", minutes: dur ? Math.max(1, Math.ceil(dur / 60)) : active.minutes || 5 });
+    if (knowledgeCards.length > 0) list.push({ id: "cards", minutes: 3 });
+    if (quizQuestions.length > 0 || activeSpec) list.push({ id: "quiz", minutes: 3 });
+    // 课节内嵌实验（如 Day 5 第 3 节的终端实验台）：有 lab 配置才出现「实验」tab
+    if (active.lab && (active.lab as { sim_kind?: string }).sim_kind) {
+      list.push({ id: "lab", minutes: 10 });
+    }
+    if (active.local_prep?.codex_prompt || (active.local_prep?.checklist || []).length) {
+      list.push({ id: "local_prep", minutes: 8 });
+    }
+    list.push({ id: "submit", minutes: 2 });
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active?.id, active?.media, active?.knowledge_cards, active?.local_prep, active?.quiz, active?.lab, activeSpec]);
+
+  const stepIds = steps.map((s) => s.id);
+  const currentStepIdx = Math.max(0, stepIds.indexOf(step));
+  const effectiveStep: LearnStep = stepIds.includes(step) ? step : "video";
+  const nextStep = currentStepIdx < steps.length - 1 ? steps[currentStepIdx + 1] : null;
+
+  const isStepDone = (id: LearnStep, idx: number): boolean => {
+    if (id === "submit") return node.status === "passed";
+    if (id === "quiz") return quizStepDone;
+    if (id === "cards") return idx < currentStepIdx || knowledgeCards.length === 0;
+    return idx < currentStepIdx;
+  };
+
+  const goStep = (id: LearnStep) => setStep(id);
+  const goNextStep = () => {
+    if (nextStep) setStep(nextStep.id);
+  };
+
+  const onQuizAnswer = (qIdx: number, optIdx: number) => {
+    if (!active) return;
+    setQuizAnswers((prev) => ({
+      ...prev,
+      [active.id]: { ...(prev[active.id] || {}), [qIdx]: optIdx },
+    }));
+  };
+
   const goPrev = () => {
     if (activeIndex > 0) openCapsule(capsules[activeIndex - 1]);
   };
@@ -500,8 +674,6 @@ export function CapsuleReader({
       <main className="learn-content" aria-live="polite">
         {active ? (
           <article className="learn-article">
-            <CapsuleMediaStack items={active.media} campId={campId} />
-
             <header className="learn-article-head">
               <h3>{active.title}</h3>
               <div className="learn-article-meta">
@@ -515,45 +687,60 @@ export function CapsuleReader({
               </div>
             </header>
 
-            <div className="learn-tabs" role="tablist">
-              {(
-                [
-                  ["notes", "课节讲义"],
-                  ["resources", `资源 (${resources.length})`],
-                  ...(active.local_prep?.codex_prompt || (active.local_prep?.checklist || []).length
-                    ? ([["local_prep", "本地实操"]] as const)
-                    : []),
-                  ["practice", activeSpec ? "练习" : "练习"],
-                ] as const
-              ).map(([id, label]) => (
-                <button
-                  key={id}
-                  type="button"
-                  role="tab"
-                  className={`learn-tab ${tab === id ? "is-active" : ""}`}
-                  aria-selected={tab === id}
-                  onClick={() => setTab(id)}
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="learn-steps" role="tablist">
+              {steps.map((s, idx) => {
+                const done = isStepDone(s.id, idx);
+                const isActive = effectiveStep === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    className={`learn-step-card ${isActive ? "is-active" : ""} ${done ? "is-done" : ""}`}
+                    onClick={() => goStep(s.id)}
+                  >
+                    <span className="learn-step-kicker num">
+                      STEP 0{idx + 1} · {s.minutes}分钟
+                    </span>
+                    {done && (
+                      <span className="learn-step-check" aria-hidden>
+                        ✓
+                      </span>
+                    )}
+                    <span className="learn-step-title">{stepLabel(s.id, active)}</span>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="learn-tab-panel" role="tabpanel">
-              {tab === "notes" && <CapsuleProse content={active.content || "（本节暂无正文）"} />}
-              {tab === "resources" && <ResourcesTab day={day} resources={resources} />}
-              {tab === "local_prep" && active.local_prep && (
-                <LocalPrepPanel
-                  day={day}
-                  capsuleId={active.id}
-                  prep={active.local_prep}
-                  resources={day.resources || []}
-                  disabled={locked || busy}
-                />
+            <div
+              className={`learn-step-panel${effectiveStep === "video" || effectiveStep === "cards" ? " is-wide" : ""}`}
+              role="tabpanel"
+            >
+              {effectiveStep === "video" && (
+                <div className="learn-video-stage">
+                  <CapsuleMediaStack items={active.media} campId={campId} />
+                  {!active.media?.length && (
+                    <CapsuleProse content={active.content || "（本节暂无正文）"} />
+                  )}
+                  <div
+                    className={`learn-video-below${glossaryTerms.length ? " has-glossary" : ""}`}
+                  >
+                    {glossaryTerms.length > 0 && <GlossaryTermsPanel terms={glossaryTerms} />}
+                    <LearnAssetsTabs resources={resources} tools={active.tools || []} />
+                  </div>
+                </div>
               )}
-              {tab === "practice" &&
-                (activeSpec ? (
-                  <>
+
+              {effectiveStep === "cards" && <KnowledgeCardsStep cards={knowledgeCards} />}
+
+              {effectiveStep === "quiz" && (
+                <>
+                  {quizQuestions.length > 0 && (
+                    <StepQuiz questions={quizQuestions} answers={quizAnswersForActive} onAnswer={onQuizAnswer} />
+                  )}
+                  {activeSpec && (
                     <PracticeBlock
                       capsuleId={active.id}
                       spec={activeSpec}
@@ -565,29 +752,77 @@ export function CapsuleReader({
                       onSubmit={() => void submitPractice(active.id)}
                       onReopen={() => reopenPractice(active.id)}
                     />
-                    {(active.quiz?.questions || []).length > 0 && (
-                      <aside className="learn-practice" style={{ marginTop: 16 }}>
-                        <h4>节测验</h4>
-                        <ol>
-                          {(active.quiz?.questions || []).map((q, i) => (
-                            <li key={i}>{q.q}</li>
-                          ))}
-                        </ol>
-                      </aside>
-                    )}
-                  </>
-                ) : (active.quiz?.questions || []).length > 0 ? (
-                  <aside className="learn-practice">
-                    <h4>节测验</h4>
-                    <ol>
-                      {(active.quiz?.questions || []).map((q, i) => (
-                        <li key={i}>{q.q}</li>
-                      ))}
-                    </ol>
-                  </aside>
+                  )}
+                </>
+              )}
+
+              {effectiveStep === "lab" && active.lab && (
+                <CapsuleSimTerminal day={day.day} capsuleId={active.id} lab={active.lab as unknown as CapsuleSimConfig} />
+              )}
+
+              {effectiveStep === "local_prep" && active.local_prep && (
+                <LocalPrepPanel
+                  day={day}
+                  capsuleId={active.id}
+                  prep={active.local_prep}
+                  resources={day.resources || []}
+                  disabled={locked || busy}
+                />
+              )}
+
+              {effectiveStep === "submit" && (
+                <div className="learn-submit-panel">
+                  <h4>提交前自查</h4>
+                  <ul className="learn-submit-checks">
+                    <li className={quizStepDone || !stepIds.includes("quiz") ? "is-ok" : ""}>
+                      知识确认{stepIds.includes("quiz") ? (quizStepDone ? "：已完成" : "：未完成") : "（本节无）"}
+                    </li>
+                    <li className={!stepIds.includes("local_prep") || currentStepIdx > stepIds.indexOf("local_prep") || node.status === "passed" ? "is-ok" : ""}>
+                      本地实操{stepIds.includes("local_prep") ? "" : "（本节无）"}
+                    </li>
+                    <li className={pendingPracticeCount === 0 ? "is-ok" : ""}>
+                      必做练习{pendingPracticeCount === 0 ? "：全部已提交" : `：还差 ${pendingPracticeCount} 个`}
+                    </li>
+                  </ul>
+                  <p className="muted">
+                    {node.status === "passed"
+                      ? "本节点已完成，可继续后续内容。"
+                      : activeIndex < capsules.length - 1
+                        ? "提交后进入下一节。"
+                        : "这是今天最后一节，提交后记得去完成日级验收。"}
+                  </p>
+                </div>
+              )}
+
+              <div className="learn-step-footer">
+                <span className="muted learn-step-hint">
+                  {effectiveStep === "video" &&
+                    (knowledgeCards.length ? "看完课件后，去翻知识卡片" : "看完课件后进入下一步")}
+                  {effectiveStep === "cards" && "点卡片看解释，能复述就算会了"}
+                  {effectiveStep === "quiz" && (quizStepDone ? "已全部确认，可继续" : "全部作答并提交必做练习后可继续")}
+                  {effectiveStep === "local_prep" && "在本地完成后返回平台提交"}
+                  {effectiveStep === "submit" && "确认无误后提交本节学习"}
+                </span>
+                {effectiveStep === "submit" ? (
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    disabled={busy || locked || node.status === "passed"}
+                    onClick={() => void complete()}
+                  >
+                    {node.status === "passed" ? "已完成" : busy ? "提交中…" : "我已完成，去提交"}
+                  </button>
                 ) : (
-                  <p className="muted">本节暂无练习。</p>
-                ))}
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    disabled={!nextStep || (effectiveStep === "quiz" && !quizStepDone)}
+                    onClick={goNextStep}
+                  >
+                    {nextStep ? `下一步：${stepLabel(nextStep.id, active)}` : "下一步"}
+                  </button>
+                )}
+              </div>
             </div>
 
             <footer className="learn-pager">

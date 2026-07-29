@@ -1,0 +1,1 @@
+GATE 8 清单：现场演示 Agent 正确调用、产出过 Skill 验收段；Skill v1 边界声明加注入测试证据，至少三条全 ✓ 加回归过；口试四件套，第四条基于真实图谱；docs/agent-tool-map.md 进 Git；commit 写 feat: Skill v1 工程化 + Agent v0.1，对吧。

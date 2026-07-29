@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Harness 解剖：模型之外的骨架">
+<rect width="1040" height="480" fill="#f2f5f0"/>
+<!-- 中央模型 -->
+<rect x="420" y="180" width="200" height="110" fill="#231f20"/>
+<text x="520" y="226" text-anchor="middle" font-size="16" font-weight="800" fill="#f2f5f0">LLM</text>
+<text x="520" y="250" text-anchor="middle" font-size="10" fill="rgba(242,245,240,.6)" style="font-family:'SF Mono',Menlo,monospace">只会「预测下一个词」</text>
+<!-- 骨架六件 -->
+<g>
+<rect x="80" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="210" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">工具表 · TOOLS</text>
+<text x="210" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">能调什么 Skill，各怎么描述</text>
+</g>
+<g>
+<rect x="390" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="520" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">记忆 · MEMORY</text>
+<text x="520" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">前几轮发生了什么</text>
+</g>
+<g>
+<rect x="700" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="830" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">规划 · PLANNER</text>
+<text x="830" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">下一步做什么的决策</text>
+</g>
+<g>
+<rect x="80" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="210" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">循环 · LOOP</text>
+<text x="210" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">理解→规划→调工具→观察→继续</text>
+</g>
+<g>
+<rect x="390" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="520" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">重试 · RETRY</text>
+<text x="520" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">失败了怎么办：重来 / 降级 / 求助</text>
+</g>
+<g>
+<rect x="700" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
+<text x="830" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">日志 · LOG</text>
+<text x="830" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">每步留痕：追责与复盘的地基</text>
+</g>
+<!-- 连线 -->
+<g stroke="rgba(35,31,32,.35)" stroke-width="1.5">
+<line x1="340" y1="110" x2="430" y2="180"/><line x1="520" y1="136" x2="520" y2="176"/><line x1="700" y1="110" x2="610" y2="180"/>
+<line x1="340" y1="368" x2="430" y2="290"/><line x1="520" y1="330" x2="520" y2="294"/><line x1="700" y1="368" x2="610" y2="290"/>
+</g>
+<!-- 底注 -->
+<text x="520" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1400ff">同一个模型，换一副骨架，能力天差地别 —— Harness 才是智能体的身体</text>
+<text x="520" y="472" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">本课的 Agent 平台就是一副 harness；你在 Week2 给它添工具（Skill）</text>
+</svg>

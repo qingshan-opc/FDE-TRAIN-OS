@@ -27,7 +27,7 @@ from services.shared import (  # noqa: E402
     resolve_safe,
     setup_logging,
 )
-from services.shared.config import CLAMAV_ENABLED, S3_BUCKET_DOCUMENTS  # noqa: E402
+from services.shared.config import CLAMAV_ENABLED, MAX_JOB_ATTEMPTS, JOB_BACKOFF_BASE_SEC, S3_BUCKET_DOCUMENTS, S3_BUCKET_WORKSPACES  # noqa: E402
 from services.shared.db import db_cursor  # noqa: E402
 from services.storage import (  # noqa: E402
     get_store,
@@ -38,8 +38,6 @@ from services.storage import (  # noqa: E402
 
 log = logging.getLogger("fde.worker")
 PARSER_VERSION = "fde-parser-1.0"
-MAX_JOB_ATTEMPTS = 3
-JOB_BACKOFF_BASE_SEC = 30
 
 
 class JobCancelled(RuntimeError):
@@ -228,7 +226,7 @@ def handle_agent_job(job: dict[str, Any]) -> None:
                 (
                     "succeeded",
                     json.dumps(result, ensure_ascii=False),
-                    f"s3://fde-workspaces/{snap['object_prefix']}",
+                    f"s3://{S3_BUCKET_WORKSPACES}/{snap['object_prefix']}",
                     snap["id"],
                     now_iso(),
                     legacy_id,

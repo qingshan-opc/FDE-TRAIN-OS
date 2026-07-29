@@ -139,22 +139,65 @@ def get_landing_raw() -> dict[str, Any]:
     cta_raw = page.get("cta_json") or body.get("cta") or DEFAULT_LANDING["cta"]
     cta = cta_raw if isinstance(cta_raw, dict) else (json.loads(cta_raw) if cta_raw else DEFAULT_LANDING["cta"])
 
+    def _section(key: str) -> Any:
+        raw = body.get(key)
+        default = DEFAULT_LANDING.get(key)
+        if not isinstance(raw, dict) or not raw:
+            return default if default is not None else {}
+        if isinstance(default, dict):
+            return {**default, **raw}
+        return raw
+
+    brand_default = {"name": page.get("title") or DEFAULT_LANDING["title"], "footer": None}
+    brand_raw = body.get("brand") if isinstance(body.get("brand"), dict) else {}
     payload: dict[str, Any] = {
         "title": page.get("title") or DEFAULT_LANDING["title"],
         "tagline": _first(page, "tagline") or body.get("tagline") or DEFAULT_LANDING["tagline"],
         "cta": cta,
-        "brand": body.get("brand") or {"name": page.get("title") or DEFAULT_LANDING["title"], "footer": None},
-        "hero": body.get("hero") or {},
+        "brand": {**brand_default, **(DEFAULT_LANDING.get("brand") or {}), **brand_raw},
+        "hero": _section("hero"),
+        "seo": _section("seo"),
         "tabs": body.get("tabs") or DEFAULT_LANDING["tabs"],
-        "enterprise": body.get("enterprise") or DEFAULT_LANDING["enterprise"],
-        "about": body.get("about") or DEFAULT_LANDING["about"],
-        "contact": body.get("contact") or DEFAULT_LANDING["contact"],
+        "enterprise": _normalize_enterprise(body.get("enterprise")),
+        "about": _section("about"),
+        "contact": _section("contact"),
         "open_courses": list_open_courses(include_unpublished=True),
         "hero_video": _read_hero_media(),
         "status": page.get("status"),
         "updated_at": page.get("updated_at"),
     }
     return payload
+
+
+def mentor_public_avatar_url(mentor_id: str) -> str:
+    return f"/api/v1/site/mentors/{mentor_id}/avatar"
+
+
+def _normalize_enterprise(raw: Any) -> dict[str, Any]:
+    from services.learner.app import DEFAULT_LANDING
+
+    base = dict(DEFAULT_LANDING.get("enterprise") or {})
+    ent = raw if isinstance(raw, dict) else {}
+    title = str(ent.get("title") or "").strip()
+    subtitle = str(ent.get("subtitle") or "").strip()
+    if len(title) < 2:
+        title = str(base.get("title") or "")
+    if len(subtitle) < 2:
+        subtitle = str(base.get("subtitle") or "")
+    facts = ent.get("facts") if isinstance(ent.get("facts"), list) else (base.get("facts") or [])
+    mentors: list[dict[str, Any]] = []
+    for m in ent.get("mentors") or []:
+        if not isinstance(m, dict):
+            continue
+        mid = str(m.get("id") or "").strip()
+        nm = dict(m)
+        key_av = nm.get("avatar_key") or ""
+        if mid and key_av:
+            nm["avatar_url"] = mentor_public_avatar_url(mid)
+        elif key_av and isinstance(key_av, str) and not str(key_av).startswith(("/api/", "http")):
+            nm["avatar_url"] = f"/api/v1/media/stream?object_key={key_av}"
+        mentors.append(nm)
+    return {**base, **ent, "title": title, "subtitle": subtitle, "facts": facts, "mentors": mentors}
 
 
 def _validate_tabs(tabs: list[Any]) -> list[dict[str, Any]]:
@@ -372,7 +415,7 @@ def update_mentor_avatar_key(mentor_id: str, avatar_key: str) -> dict[str, Any]:
         if isinstance(m, dict) and str(m.get("id") or "") == mid:
             nm = dict(m)
             nm["avatar_key"] = avatar_key
-            nm["avatar_url"] = f"/api/v1/media/stream?object_key={avatar_key}"
+            nm["avatar_url"] = mentor_public_avatar_url(mid)
             new_mentors.append(nm)
             found = True
         else:

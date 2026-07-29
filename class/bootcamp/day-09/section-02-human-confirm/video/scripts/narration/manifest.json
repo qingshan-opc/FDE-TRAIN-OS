@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-gate-three",
+    "file": "02-gate-three.txt"
+  },
+  {
+    "id": "03-trust-tier",
+    "file": "03-trust-tier.txt"
+  },
+  {
+    "id": "04-exec-log",
+    "file": "04-exec-log.txt"
+  },
+  {
+    "id": "05-trust-engineering",
+    "file": "05-trust-engineering.txt"
+  }
+]

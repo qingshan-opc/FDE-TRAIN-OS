@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Alert, App, Button, Card, Form, Input, Select, Space, Typography } from "antd";
+import { App, Button, Card, Form, Input, Select, Space, Typography } from "antd";
 import { authorApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { DEMO_LEARNER } from "../lib/demoConfig";
 import { authorSelectPopup, useAuthorLayout } from "../lib/authorLayoutContext";
+import { useErrorModal } from "../hooks/useErrorModal";
 
 export function CampKeySettings() {
   const { campId, camps } = useAuth();
@@ -14,7 +16,7 @@ export function CampKeySettings() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const options = (camps.length ? camps : [{ id: campId || "camp-v03", name: campId || "camp-v03" }]).map((c) => ({
+  const options = (camps.length ? camps : campId ? [{ id: campId, name: campId }] : []).map((c) => ({
     value: c.id,
     label: `${c.name || c.id} (${c.id})`,
   }));
@@ -34,6 +36,8 @@ export function CampKeySettings() {
     }
   };
 
+  useErrorModal(error, { title: "保存失败" });
+
   return (
     <div>
       <Typography.Title level={3} style={{ marginTop: 0 }}>
@@ -47,7 +51,7 @@ export function CampKeySettings() {
         <Form
           form={form}
           layout="vertical"
-          initialValues={{ camp_id: campId || camps[0]?.id || "camp-v03", lingzhi_api_key: "" }}
+          initialValues={{ camp_id: campId || camps[0]?.id || DEMO_LEARNER.campId, lingzhi_api_key: "" }}
           onFinish={(v) => void save(v)}
         >
           <Form.Item name="camp_id" label="营期" rules={[{ required: true, message: "请选择营期" }]}>
@@ -61,7 +65,6 @@ export function CampKeySettings() {
               当前打码：<Typography.Text code>{masked}</Typography.Text>
             </Typography.Paragraph>
           )}
-          {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 16 }} />}
           <Space>
             <Button type="primary" htmlType="submit" loading={busy}>
               保存 Key

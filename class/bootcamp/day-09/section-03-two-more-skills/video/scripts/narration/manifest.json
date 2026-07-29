@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-upstream-input",
+    "file": "02-upstream-input.txt"
+  },
+  {
+    "id": "03-send-guard",
+    "file": "03-send-guard.txt"
+  },
+  {
+    "id": "04-align-check",
+    "file": "04-align-check.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

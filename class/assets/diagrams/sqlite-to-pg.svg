@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="换库时机：SQLite 到 PostgreSQL">
+<defs>
+<marker id="db-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#1400ff"/>
+</marker>
+</defs>
+<rect width="1040" height="420" fill="#f2f5f0"/>
+<!-- SQLite -->
+<rect x="50" y="60" width="300" height="240" fill="#ffffff" stroke="#1cd5b0" stroke-width="2.5"/>
+<text x="200" y="96" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">SQLite</text>
+<text x="200" y="118" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">一个文件就是库</text>
+<g font-size="11.5" fill="rgba(35,31,32,.65)">
+<text x="80" y="152">✓ 零配置，装完就能用</text>
+<text x="80" y="180">✓ 单文件，拷走就是备份</text>
+<text x="80" y="208">✓ 一个人用，飞快</text>
+<text x="80" y="244" fill="#c92f3d">✗ 多人同时写，会打架</text>
+<text x="80" y="272" fill="#c92f3d">✗ 跨机器访问，做不到</text>
+</g>
+<!-- 换库信号 -->
+<path d="M360 180 L460 180" stroke="#1400ff" stroke-width="2.5" marker-end="url(#db-arrow)"/>
+<text x="410" y="150" text-anchor="middle" font-size="12" font-weight="800" fill="#1400ff">换库信号</text>
+<g font-size="10.5" fill="rgba(35,31,32,.6)">
+<text x="410" y="212" text-anchor="middle">多人同时写</text>
+<text x="410" y="234" text-anchor="middle">要上线给全部门用</text>
+<text x="410" y="256" text-anchor="middle">数据量上 GB</text>
+</g>
+<!-- PostgreSQL -->
+<rect x="470" y="60" width="300" height="240" fill="#ffffff" stroke="#1cd5b0" stroke-width="2.5"/>
+<text x="620" y="96" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">PostgreSQL</text>
+<text x="620" y="118" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">一个服务进程</text>
+<g font-size="11.5" fill="rgba(35,31,32,.65)">
+<text x="500" y="152">✓ 多连接并发，生产级</text>
+<text x="500" y="180">✓ 权限、备份、监控全套</text>
+<text x="500" y="208">✓ 云上托管一键开</text>
+<text x="500" y="244" fill="#c92f3d">✗ 要装要配要维护</text>
+<text x="500" y="272" fill="#c92f3d">✗ 学习成本高一截</text>
+</g>
+<!-- 课程路径 -->
+<rect x="800" y="60" width="190" height="240" fill="#231f20"/>
+<text x="895" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#f2f5f0">课程路径</text>
+<g font-size="11" fill="rgba(242,245,240,.75)">
+<text x="820" y="132">Day 4</text>
+<text x="820" y="154" font-weight="700" fill="#f2f5f0">SQLite 起步</text>
+<text x="820" y="186">Day 6 前</text>
+<text x="820" y="208" font-weight="700" fill="#f2f5f0">按信号评估</text>
+<text x="820" y="240">毕业后</text>
+<text x="820" y="262" font-weight="700" fill="#f2f5f0">需要时再迁</text>
+</g>
+<!-- 底注 -->
+<text x="520" y="352" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">选型原则：先用最简单的能跑起来的，信号出现了再换</text>
+<text x="520" y="378" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">「早晚要换所以现在就用重的」= 过度设计；「死扛着不换」= 技术债</text>
+</svg>

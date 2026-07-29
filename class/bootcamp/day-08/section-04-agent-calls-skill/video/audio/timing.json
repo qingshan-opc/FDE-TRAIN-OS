@@ -1,0 +1,41 @@
+{
+  "total": 118.465,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 12.24
+    },
+    {
+      "id": "02-tool-description",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/02-tool-description.wav",
+      "start": 12.49,
+      "duration": 24.96
+    },
+    {
+      "id": "03-three-tasks",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/03-three-tasks.wav",
+      "start": 37.7,
+      "duration": 20.32
+    },
+    {
+      "id": "04-wrong-pick-map",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/04-wrong-pick-map.wav",
+      "start": 58.27,
+      "duration": 21.04
+    },
+    {
+      "id": "05-platform-tips",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/05-platform-tips.wav",
+      "start": 79.56,
+      "duration": 21.92
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s04_course/tts/06-close.wav",
+      "start": 101.73,
+      "duration": 16.735
+    }
+  ]
+}

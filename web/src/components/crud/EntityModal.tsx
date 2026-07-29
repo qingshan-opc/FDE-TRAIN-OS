@@ -19,6 +19,7 @@ export function EntityModal<TForm extends object>({
   onSubmit,
   children,
   width = 560,
+  initialValues,
 }: {
   mode: EntityModalMode;
   title: { create: string; edit: string; view: string };
@@ -29,17 +30,34 @@ export function EntityModal<TForm extends object>({
   onSubmit: (values: TForm) => Promise<void>;
   children: ReactNode;
   width?: number | string;
+  /** 打开编辑/查看时回填；与 Form key 配合，避免 destroyOnClose 丢值 */
+  initialValues?: Partial<TForm> | null;
 }) {
   const open = mode.kind !== "closed";
   const readonly = mode.kind === "view";
   const heading =
     mode.kind === "create" ? title.create : mode.kind === "edit" ? title.edit : mode.kind === "view" ? title.view : "";
+  const formKey =
+    mode.kind === "closed"
+      ? "closed"
+      : mode.kind === "create"
+        ? "create"
+        : `${mode.kind}-${mode.id}`;
 
   useEffect(() => {
+    if (!open) return;
     if (mode.kind === "create") {
       form.resetFields();
+      return;
     }
-  }, [mode, form]);
+    if (initialValues) {
+      const t = window.setTimeout(() => {
+        form.setFieldsValue(initialValues as TForm);
+      }, 0);
+      return () => window.clearTimeout(t);
+    }
+    return undefined;
+  }, [open, formKey, form, initialValues, mode.kind]);
 
   return (
     <Modal
@@ -56,15 +74,25 @@ export function EntityModal<TForm extends object>({
           onClose();
           return;
         }
-        void form.validateFields().then(async (values) => {
-          await onSubmit(values as TForm);
-        });
+        void form
+          .validateFields()
+          .then(async (values) => {
+            await onSubmit(values as TForm);
+          })
+          .catch(() => undefined);
       }}
       width={typeof width === "number" ? Math.min(width, typeof window !== "undefined" ? window.innerWidth - 32 : width) : width}
       styles={{ body: { maxHeight: "70vh", overflow: "auto" } }}
       style={{ top: 24, maxWidth: 720, paddingBottom: 0 }}
     >
-      <Form form={form} layout="vertical" disabled={readonly || loading} preserve={false}>
+      <Form
+        key={formKey}
+        form={form}
+        layout="vertical"
+        disabled={readonly || loading}
+        preserve={false}
+        initialValues={(initialValues || undefined) as TForm | undefined}
+      >
         {children}
       </Form>
     </Modal>

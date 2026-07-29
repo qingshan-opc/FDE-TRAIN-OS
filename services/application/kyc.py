@@ -122,6 +122,9 @@ def matches_name(submitted_name: str | None, stored_masked: str | None) -> bool:
     return mask_name(submitted_name.strip()) == stored_masked.strip()
 
 
+from services.chain.hash_utils import hash_id_number  # noqa: F401 — re-export for KYC callers
+
+
 def matches_id_tail(submitted_tail: str | None, stored_tail: str | None) -> bool:
     """Compare user-entered ID tail (6 digits) against stored id_tail."""
     if not submitted_tail or not stored_tail:

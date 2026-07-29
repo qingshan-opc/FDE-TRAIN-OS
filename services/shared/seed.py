@@ -13,9 +13,16 @@ from typing import Any
 from services.shared.config import (
     AUTHOR_EMAIL,
     AUTHOR_PASSWORD,
+    CURRICULUM_VERSION_TAG,
+    DEFAULT_CAMP_ID,
     DEMO_EMAIL,
     DEMO_PASSWORD,
+    LEARNER_EMAIL,
+    LEARNER_PASSWORD,
     LINGZHI_API_KEY,
+    PARTNER_DEMO_EMAIL,
+    PARTNER_DEMO_PASSWORD,
+    PASSWORD_PBKDF2_ITERATIONS,
     SEED_DEMO_USERS,
 )
 from services.shared.db import db_cursor
@@ -27,7 +34,7 @@ def now_iso() -> str:
 
 def hash_password(password: str) -> str:
     salt = secrets.token_hex(16)
-    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 120_000).hex()
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), PASSWORD_PBKDF2_ITERATIONS).hex()
     return f"pbkdf2${salt}${digest}"
 
 
@@ -38,21 +45,22 @@ def verify_password(password: str, encoded: str) -> bool:
         return False
     if algo not in ("pbkdf2", "pbkdf2_sha256"):
         return False
-    check = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 120_000).hex()
+    check = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), PASSWORD_PBKDF2_ITERATIONS).hex()
     return hmac.compare_digest(check, digest)
 
 
 def seed_defaults() -> None:
     with db_cursor() as cur:
-        cur.execute("SELECT id FROM camps WHERE id=?", ("camp-v03",))
+        cur.execute("SELECT id FROM camps WHERE id=?", (DEFAULT_CAMP_ID,))
         if not cur.fetchone():
             cur.execute(
                 "INSERT INTO camps (id, name, version, invite_code, lingzhi_api_key, created_at) VALUES (?,?,?,?,?,?)",
-                ("camp-v03", "FDE 0期 v0.3", "v0.3", "FDE-DEMO", LINGZHI_API_KEY or None, now_iso()),
+                (DEFAULT_CAMP_ID, "FDE 0期 v0.3", "v0.3", "FDE-DEMO", LINGZHI_API_KEY or None, now_iso()),
             )
         if not SEED_DEMO_USERS:
             return
         for email, password, role, name in (
+            (LEARNER_EMAIL, LEARNER_PASSWORD, "learner", "学习账号"),
             (DEMO_EMAIL, DEMO_PASSWORD, "learner", "Demo Learner"),
             (AUTHOR_EMAIL, AUTHOR_PASSWORD, "author", "Demo Author"),
         ):
@@ -66,16 +74,79 @@ def seed_defaults() -> None:
                 )
                 cur.execute(
                     "INSERT INTO enrollments (user_id, camp_id, status, created_at) VALUES (?,?,?,?) ON CONFLICT DO NOTHING",
-                    (uid, "camp-v03", "active", now_iso()),
+                    (uid, DEFAULT_CAMP_ID, "active", now_iso()),
                 )
             else:
                 uid = row["id"] if isinstance(row, dict) else row[0]
-                cur.execute("SELECT 1 FROM enrollments WHERE user_id=? AND camp_id=?", (uid, "camp-v03"))
+                cur.execute("SELECT 1 FROM enrollments WHERE user_id=? AND camp_id=?", (uid, DEFAULT_CAMP_ID))
                 if not cur.fetchone():
                     cur.execute(
                         "INSERT INTO enrollments (user_id, camp_id, status, created_at) VALUES (?,?,?,?) ON CONFLICT DO NOTHING",
-                        (uid, "camp-v03", "active", now_iso()),
+                        (uid, DEFAULT_CAMP_ID, "active", now_iso()),
                     )
+        _seed_partner_demo(cur)
+
+
+def _seed_partner_demo(cur) -> None:
+    """Demo org + partner account + invite code for channel testing."""
+    cur.execute("SELECT id FROM organizations WHERE id=?", ("org-demo",))
+    if not cur.fetchone():
+        cur.execute(
+            "INSERT INTO organizations (id, name, status, contact_name, created_at, updated_at) VALUES (?,?,?,?,?,?)",
+            ("org-demo", "演示合作机构", "active", "张老师", now_iso(), now_iso()),
+        )
+        cur.execute(
+            """
+            INSERT INTO commission_tiers (id, org_id, min_paid_users, rate_bps, created_at)
+            VALUES (?,?,?,?,?)
+            ON CONFLICT DO NOTHING
+            """,
+            ("ct-demo-0", "org-demo", 0, 1000, now_iso()),
+        )
+        cur.execute(
+            """
+            INSERT INTO commission_tiers (id, org_id, min_paid_users, rate_bps, created_at)
+            VALUES (?,?,?,?,?)
+            ON CONFLICT DO NOTHING
+            """,
+            ("ct-demo-10", "org-demo", 10, 2000, now_iso()),
+        )
+    cur.execute("SELECT id FROM invite_codes WHERE code=?", ("PARTNER-DEMO",))
+    if not cur.fetchone():
+        cur.execute(
+            """
+            INSERT INTO invite_codes (id, org_id, code, status, used_count, created_at)
+            VALUES (?,?,?,?,0,?)
+            """,
+            ("ic-partner-demo", "org-demo", "PARTNER-DEMO", "active", now_iso()),
+        )
+    cur.execute("SELECT id FROM users WHERE email=?", (PARTNER_DEMO_EMAIL,))
+    row = cur.fetchone()
+    if not row:
+        uid = str(uuid.uuid4())
+        cur.execute(
+            "INSERT INTO users (id, email, password_hash, display_name, role, created_at) VALUES (?,?,?,?,?,?)",
+            (uid, PARTNER_DEMO_EMAIL, hash_password(PARTNER_DEMO_PASSWORD), "演示机构管理员", "partner", now_iso()),
+        )
+    else:
+        uid = row["id"] if isinstance(row, dict) else row[0]
+    cur.execute("SELECT id FROM org_accounts WHERE email=?", (PARTNER_DEMO_EMAIL,))
+    if not cur.fetchone():
+        cur.execute(
+            """
+            INSERT INTO org_accounts (id, org_id, email, password_hash, display_name, status, created_at)
+            VALUES (?,?,?,?,?,?,?)
+            """,
+            (
+                f"oa-{uuid.uuid4().hex[:12]}",
+                "org-demo",
+                PARTNER_DEMO_EMAIL,
+                hash_password(PARTNER_DEMO_PASSWORD),
+                "演示机构管理员",
+                "active",
+                now_iso(),
+            ),
+        )
 
 
 def _day_yaml_path(day: int):
@@ -134,8 +205,10 @@ def _upsert_days(cv_id: str) -> int:
     return count
 
 
-def seed_course_version_from_yaml(camp_id: str = "camp-v03", version_tag: str = "721-v1") -> dict[str, Any]:
-    """Create or refresh a published course_version from curriculum YAML (Day1-13)."""
+def seed_course_version_from_yaml(
+    camp_id: str = DEFAULT_CAMP_ID, version_tag: str = CURRICULUM_VERSION_TAG
+) -> dict[str, Any]:
+    """Create or refresh a published course_version from curriculum YAML (Day1-10)."""
     with db_cursor() as cur:
         cur.execute(
             "SELECT id FROM course_versions WHERE camp_id=? AND version_tag=?",
@@ -153,7 +226,7 @@ def seed_course_version_from_yaml(camp_id: str = "camp-v03", version_tag: str = 
             INSERT INTO course_versions (id, camp_id, version_tag, status, title, source, published_at, created_at)
             VALUES (?,?,?,?,?,?,NOW(),?)
             """,
-            (cv_id, camp_id, version_tag, "published", "FDE 两周课 721", "curriculum-yaml", now_iso()),
+            (cv_id, camp_id, version_tag, "published", f"FDE 训练营 · AI 角色周 + 全栈理论（{CURRICULUM_VERSION_TAG}）", "curriculum-yaml", now_iso()),
         )
     days = _upsert_days(cv_id)
     return {"id": cv_id, "created": True, "days": days}

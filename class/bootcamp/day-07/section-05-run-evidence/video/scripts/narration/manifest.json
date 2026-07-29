@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-run-steps",
+    "file": "02-run-steps.txt"
+  },
+  {
+    "id": "03-evidence-trio",
+    "file": "03-evidence-trio.txt"
+  },
+  {
+    "id": "04-iteration-loop",
+    "file": "04-iteration-loop.txt"
+  },
+  {
+    "id": "05-common-issues",
+    "file": "05-common-issues.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

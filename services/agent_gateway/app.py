@@ -37,8 +37,8 @@ from services.shared import (  # noqa: E402
 from services.shared.anycode_client import anycode_healthy  # noqa: E402
 from services.shared.middleware import require_user, session_camp_id, session_learner_id  # noqa: E402
 from services.shared.rubric_registry import enrich_eval_result  # noqa: E402
-from services.storage import get_store, hydrate_workspace, snapshot_workspace, temp_workspace  # noqa: E402
-from services.shared.config import S3_BUCKET_WORKSPACES  # noqa: E402
+from services.storage import get_store, hydrate_workspace, snapshot_prefix, snapshot_workspace, temp_workspace  # noqa: E402
+from services.shared.config import S3_BUCKET_WORKSPACES, S3_PRESIGN_GET_EXPIRES  # noqa: E402
 
 router = APIRouter(tags=["agent"])
 app = FastAPI(title="FDE AgentGateway", version="0.4.0")
@@ -104,7 +104,230 @@ def _stub_write(ws: Path, prompt: str) -> dict[str, Any]:
         )
         return name
 
-    if "schema.sql" in low or "CREATE TABLE products" in prompt or ("products" in low and "ddl" in low) or "db-notes" in low:
+    if "theory-map" in low:
+        # v07 Day5 理论收束：个人全栈理论地图（rubric: 云原生/前端/后端）
+        (ws / "theory-map.md").write_text(
+            """# 个人全栈理论地图 · 部门周报助手
+
+## 世界观
+1. 六次浪潮每次重排「谁变贵」——实例：Day 1 我用 PM 提示词定方向而不是手写 PRD。
+2. 「写」变便宜，定方向与做验收变贵——实例：每天的 Rubric 过闸。
+3. FDE = 离业务最近的全栈交付工程师——实例：五天从需求走到接口设计。
+
+## 开发流程
+1. 六站：需求调研→原型确认→开发→测试验收→上线→迭代——实例：Day 1 PRD 就是调研产出。
+2. 敏捷 = 一周装修一间房——实例：每天一个小交付、每天一次验收。
+3. 访谈问「上一次」，不问「好不好」——类比：看食堂倒掉什么。
+
+## 服务器与云原生
+1. 服务器 = 一直开着、没屏幕、住机房的电脑——实例：周报助手合盖就没，必须上云。
+2. 演进五站：物理机→虚拟机→容器→K8s→Serverless——类比：从买车到打车。
+3. 云原生 = 生下来就住在云上的应用——小工具先一台云主机起步，不为三箱货建深水港。
+
+## 命令行
+1. 命令行 = 用文字和电脑对话——实例：仿真终端敲出 8 个命令。
+2. 排障四步：curl 敲门 → tail -f 看日志 → docker ps 看容器 → df/top 看资源。
+3. 八句起步：pwd / ls / mkdir / cd / curl / tail / chmod / docker ps——敲一遍顶看十遍。
+
+## 前端选型
+1. 前端 = 用户直接接触的界面层：Web / App / 小程序 / 桌面——实例：Day 3 的 index.html 是 Web 支。
+2. 两步选型法：先定平台，再选框架（四问：团队/生态/AI/项目大小）。
+3. 框架是项目长大了才需要的装备——小项目不用框架就是正确答案。
+
+## 后端选型
+1. 后端三件事：业务逻辑、数据、接口——实例：Day 4 的餐厅后厨类比。
+2. AI 项目首选 Python + FastAPI（自带 OpenAPI）——实例：API_Spec.md 与 FastAPI 天生一对。
+3. 场景决定数据库：原型 SQLite、主库 PostgreSQL、缓存 Redis、分析 ClickHouse。
+4. 契约是合同，语言只是施工队——实例：API_Spec.md 先于任何语言定稿。
+""",
+            encoding="utf-8",
+        )
+        files.append("theory-map.md")
+        primary = "theory-map.md"
+    elif "api_spec" in low:
+        # v07 Day4 后端设计：API 契约 + 数据库设计（rubric: GET / 主键）
+        (ws / "API_Spec.md").write_text(
+            """# API 定义 · 部门周报助手（OpenAPI 3.0 摘要）
+
+Base URL: `http://localhost:8000` · 认证: JWT Bearer
+
+## 接口列表
+
+### GET /reports?dept_id=&week=
+获取某部门某周周报。200: `{id, dept, week, summary, metrics[]}`；404: 周报不存在；500: 服务异常。
+
+### POST /reports
+触发周报生成。Body: `{dept_id, week}`；201: `{id, status}`；400: 参数缺失；401: 未认证。
+
+### GET /metrics?dept_id=&range=7d
+获取指标明细。200: `{metrics[]}`；400: range 非法。
+""",
+            encoding="utf-8",
+        )
+        (ws / "DB_Schema.md").write_text(
+            """# 数据库设计 · 部门周报助手
+
+## users 表
+| 列 | 类型 | 约束 |
+|----|------|------|
+| id | SERIAL | 主键 |
+| name | VARCHAR(64) | NOT NULL |
+| dept_id | INT | 外键 → depts.id |
+
+## reports 表
+| 列 | 类型 | 约束 |
+|----|------|------|
+| id | SERIAL | 主键 |
+| dept_id | INT | 外键 → depts.id |
+| week | VARCHAR(8) | NOT NULL |
+| summary | TEXT | |
+
+索引建议：`reports(dept_id, week)` 联合索引（按部门查周报最快）。
+""",
+            encoding="utf-8",
+        )
+        files.extend(["API_Spec.md", "DB_Schema.md"])
+        primary = "API_Spec.md"
+    elif "高保真" in prompt or "hero" in low:
+        # v07 Day3 前端原型：高保真单页（rubric: <html / hover）
+        (ws / "index.html").write_text(
+            """<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/><title>部门周报助手</title>
+<style>
+body{font-family:system-ui;margin:0;color:#1a2332}
+.hero{padding:4rem 2rem;background:linear-gradient(135deg,#0f2a43,#1b4a6b);color:#fff}
+.hero h1{font-size:2.5rem;margin:0 0 .5rem}
+.btn{display:inline-block;background:#2dd4bf;color:#06281f;padding:.8rem 1.6rem;border-radius:.6rem;border:0;font-size:1rem;cursor:pointer}
+.btn:hover{background:#5eead4}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.cards{display:flex;gap:1rem;padding:2rem}
+.card{flex:1;border:1px solid #e2e8f0;border-radius:.8rem;padding:1.2rem}
+.card:hover{border-color:#2dd4bf}
+</style></head>
+<body>
+<section class="hero"><h1>部门周报助手</h1><p>每周五下午 4 点，周报已经写好了。</p>
+<button class="btn" type="button">立即体验</button> <button class="btn" type="button" disabled>企业版（即将上线）</button></section>
+<section class="cards">
+<div class="card"><h3>自动汇总</h3><p>订单、工单、库存数据一屏看齐。</p></div>
+<div class="card"><h3>AI 摘要</h3><p>一句话说清本周最该盯的事。</p></div>
+<div class="card"><h3>一键导出</h3><p>Markdown / PDF 直接发给负责人。</p></div>
+</section>
+</body></html>""",
+            encoding="utf-8",
+        )
+        (ws / "README.md").write_text(
+            "# 部门周报助手 · 高保真原型\n\n- `index.html` — 单页原型：hero + 三功能区块，含 hover / disabled 状态。\n",
+            encoding="utf-8",
+        )
+        files.extend(["index.html", "README.md"])
+        primary = "index.html"
+    elif "architecture.md" in low:
+        # v07 Day2 架构设计：风格选择 + ADR（rubric: ADR / 理由）
+        (ws / "architecture.md").write_text(
+            """# 架构设计 · 部门周报助手
+
+## 架构风格选择
+选择：模块化单体。理由：3 人团队、内部工具、日活 < 500——微服务的分布式代价远超收益。
+否决方案：微服务（运维成本高，否决）、Serverless（定时汇总任务有冷启动，保留观察）。
+
+## 四层分层
+前端层（React 单页）→ 接口层（REST / FastAPI）→ 数据层（PostgreSQL）→ 模型层（周报摘要，经网关调用）。
+
+## ADR-001 采用模块化单体
+- 背景：小团队、需求变化快。
+- 决策：单体 + 模块边界（reports / metrics / summary）。
+- 理由：部署一个进程即可，拆服务信号 = 团队超过 8 人或单模块 QPS > 100。
+- 后果：迭代快；代价是模块边界要靠评审守住。
+
+## ADR-002 PostgreSQL 作为主库
+- 背景：结构化周报数据、需要复杂查询。
+- 决策：PostgreSQL。理由：团队熟悉、JSONB 可存半结构化指标。
+- 后果：写模型输出到 JSONB 无需改表。
+
+## ADR-003 模型调用走网关
+- 背景：摘要模型可能更换。
+- 决策：所有模型调用经内部网关。理由：换模型 = 换配置。
+- 后果：多一跳延迟（<50ms 可接受）。
+""",
+            encoding="utf-8",
+        )
+        files.append("architecture.md")
+        primary = "architecture.md"
+    elif "prd.md" in low:
+        # v07 Day1 迷你 PRD（rubric: 用户故事 / 验收标准）
+        (ws / "PRD.md").write_text(
+            """# PRD · 部门周报助手（迷你版）
+
+## 1. 产品概述
+部门周报助手：自动汇总部门一周数据并生成周报草稿，让负责人每周节省 2 小时。
+
+## 2. 目标用户与平台
+- 用户：部门负责人（周读）、团队成员（周填）。
+- 目标平台：Web（桌面端优先）。
+
+## 3. 用户故事
+1. 作为部门负责人，我想要自动汇总本周指标，以便不再手动收数。
+2. 作为部门负责人，我想要 AI 生成一句话摘要，以便 30 秒看懂重点。
+3. 作为团队成员，我想要异常项自动高亮，以便提前处理风险。
+
+## 4. 验收标准
+- 故事 1：打开页面 3 秒内展示本周全部核心指标卡。
+- 故事 2：摘要不超过 60 字且包含至少 1 个具体数字。
+- 故事 3：超阈值指标以警示色高亮，并可点击查看明细。
+""",
+            encoding="utf-8",
+        )
+        (ws / "README.md").write_text(
+            "# 部门周报助手 · 工作区\n\n- `PRD.md` — 迷你产品需求文档（Day 1 交付物）\n- `index.html` — 产品愿景预览页\n",
+            encoding="utf-8",
+        )
+        (ws / "index.html").write_text(
+            """<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/><title>部门周报助手</title>
+<style>body{font-family:system-ui;margin:2rem;line-height:1.6}.badge{background:#2dd4bf;padding:.2rem .6rem;border-radius:1rem}</style>
+</head><body><h1>部门周报助手</h1>
+<p><span class="badge">每周节省 2 小时</span></p>
+<ul><li>自动汇总本周指标</li><li>AI 一句话摘要</li><li>异常项自动高亮</li></ul>
+</body></html>""",
+            encoding="utf-8",
+        )
+        files.extend(["PRD.md", "README.md", "index.html"])
+        primary = "PRD.md"
+    elif "direction-card" in low or "方向卡" in prompt or "wireframe" in low:
+        # v06 Day1 实战：方向卡 + 驾驶舱线框（rubric: 两文件存在 + 关键字段）
+        (ws / "direction-card.md").write_text(
+            """# 方向卡 · 运营驾驶舱（示例稿）
+
+## 一句话价值主张
+让部门负责人每天早上 3 分钟看清「昨天发生了什么、今天该盯什么」。
+
+## 业务问题
+1. 业务问题一：昨天订单量与转化率环比如何？（数据来源：订单系统日报 → 决策用途：是否启动促销预案）
+2. 业务问题二：异常工单数量与分布？（数据来源：工单系统 → 决策用途：是否加派人手）
+3. 业务问题三：库存预警 SKU 数？（数据来源：WMS → 决策用途：是否触发补货）
+
+> 每个问题均可数据化、有明确数据来源与决策用途。
+""",
+            encoding="utf-8",
+        )
+        (ws / "wireframe.md").write_text(
+            """# 驾驶舱五区块线框（V0.1 草稿）
+
+1. 标题区：部门 + 日期 + 数据刷新时间。
+2. 指标卡区（回答问题 1）：订单量、转化率、环比箭头；三态：加载中骨架屏 / 成功数值 / 失败错误条。
+3. 趋势图区（回答问题 1）：近 14 天订单量折线；三态：加载中 / 成功折线 / 空数据占位。
+4. 明细表区（回答问题 2、3）：异常工单 + 预警 SKU 表；三态：加载中 / 成功表格 / 空态文案。
+5. AI 摘要占位区：一句话昨日总结；三态：生成中 / 成功文本 / 降级为规则模板。
+
+## Prompt 草稿（四要素）
+- 角色：资深前端工程师
+- 任务：按上述五区块生成单文件驾驶舱 index.html（模拟数据）
+- 约束：每区块含指标卡数值与三态占位；不请求外部接口
+- 格式：单 HTML 文件，内联样式与脚本
+""",
+            encoding="utf-8",
+        )
+        files.extend(["direction-card.md", "wireframe.md"])
+        primary = "direction-card.md"
+    elif "schema.sql" in low or "CREATE TABLE products" in prompt or ("products" in low and "ddl" in low) or "db-notes" in low:
         primary = "schema.sql"
         (ws / primary).write_text(
             """CREATE TABLE products (
@@ -821,10 +1044,11 @@ def preview_url(camp_id: str, learner_id: str, request: Request, path: str = "in
         head = cur.fetchone()
     if not head:
         raise HTTPException(404, "无快照")
-    key = f"workspaces/{camp_id}/{learner_id}/snapshots/{head['snapshot_id']}/files/{path.lstrip('/')}"
-    url = get_store().presign_get(S3_BUCKET_WORKSPACES, key, expires=300)
+    prefix = snapshot_prefix(camp_id, learner_id, head["snapshot_id"])
+    key = f"{prefix}/files/{path.lstrip('/')}"
+    url = get_store().presign_get(S3_BUCKET_WORKSPACES, key)
     write_audit("workspace.preview", actor_id=user.id, camp_id=camp_id, resource_type="workspace", resource_id=learner_id)
-    return {"url": url, "expires_in": 300, "path": path}
+    return {"url": url, "expires_in": S3_PRESIGN_GET_EXPIRES, "path": path}
 
 
 @router.get("/api/v1/agent/workspaces/{camp_id}/{learner_id}/preview-render")
@@ -888,7 +1112,8 @@ def read_snapshot_file(
     meta = _file_meta(rel, 0)
     if meta["kind"] == "binary":
         return {**meta, "content": "", "status": "binary", "snapshot_id": snapshot_id}
-    key = f"workspaces/{camp_id}/{learner_id}/snapshots/{snapshot_id}/files/{rel}"
+    prefix = snapshot_prefix(camp_id, learner_id, snapshot_id)
+    key = f"{prefix}/files/{rel}"
     try:
         data = get_store().get_bytes(S3_BUCKET_WORKSPACES, key)
     except Exception as exc:

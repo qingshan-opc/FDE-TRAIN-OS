@@ -1,0 +1,41 @@
+{
+  "total": 126.45,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 18.8
+    },
+    {
+      "id": "02-four-elements",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/02-four-elements.wav",
+      "start": 19.05,
+      "duration": 22.88
+    },
+    {
+      "id": "03-agent-definition",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/03-agent-definition.wav",
+      "start": 42.18,
+      "duration": 21.68
+    },
+    {
+      "id": "04-decision-loop",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/04-decision-loop.wav",
+      "start": 64.11,
+      "duration": 23.84
+    },
+    {
+      "id": "05-workflow-vs-agent",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/05-workflow-vs-agent.wav",
+      "start": 88.2,
+      "duration": 22.72
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s03_course/tts/06-close.wav",
+      "start": 111.17,
+      "duration": 15.28
+    }
+  ]
+}

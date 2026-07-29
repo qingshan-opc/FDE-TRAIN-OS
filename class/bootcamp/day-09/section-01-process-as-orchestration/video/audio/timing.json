@@ -1,0 +1,35 @@
+{
+  "total": 92.293,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s01_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 17.44
+    },
+    {
+      "id": "02-split-three",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s01_course/tts/02-split-three.wav",
+      "start": 17.69,
+      "duration": 18.88
+    },
+    {
+      "id": "03-dataflow",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s01_course/tts/03-dataflow.wav",
+      "start": 36.82,
+      "duration": 16.72
+    },
+    {
+      "id": "04-weekly-pipeline",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s01_course/tts/04-weekly-pipeline.wav",
+      "start": 53.79,
+      "duration": 18.8
+    },
+    {
+      "id": "05-workflow-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s01_course/tts/05-workflow-close.wav",
+      "start": 72.84,
+      "duration": 19.453
+    }
+  ]
+}

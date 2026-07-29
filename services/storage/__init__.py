@@ -23,8 +23,15 @@ from services.shared.config import (
     S3_BUCKET_WORKSPACES,
     S3_ENDPOINT,
     S3_FORCE_PATH_STYLE,
+    S3_PRESIGN_GET_EXPIRES,
+    S3_PRESIGN_PUT_EXPIRES,
     S3_REGION,
     S3_SECRET_KEY,
+    COURSE_MEDIA_OPEN_PREFIX,
+    COURSE_MEDIA_SHARED_PREFIX,
+    COURSE_MEDIA_SITE_HERO_PREFIX,
+    COURSE_MEDIA_SITE_MENTOR_PREFIX,
+    DEFAULT_CAMP_ID,
     TEMP_WORKSPACE_ROOT,
     ensure_dirs,
 )
@@ -103,15 +110,17 @@ class ObjectStore:
     def delete(self, bucket: str, key: str) -> None:
         self._client.delete_object(Bucket=bucket, Key=key)
 
-    def presign_put(self, bucket: str, key: str, expires: int = 900, content_type: str | None = None) -> str:
+    def presign_put(self, bucket: str, key: str, expires: int | None = None, content_type: str | None = None) -> str:
+        exp = S3_PRESIGN_PUT_EXPIRES if expires is None else expires
         params: dict[str, Any] = {"Bucket": bucket, "Key": key}
         if content_type:
             params["ContentType"] = content_type
-        return self._client.generate_presigned_url("put_object", Params=params, ExpiresIn=expires)
+        return self._client.generate_presigned_url("put_object", Params=params, ExpiresIn=exp)
 
-    def presign_get(self, bucket: str, key: str, expires: int = 300) -> str:
+    def presign_get(self, bucket: str, key: str, expires: int | None = None) -> str:
+        exp = S3_PRESIGN_GET_EXPIRES if expires is None else expires
         return self._client.generate_presigned_url(
-            "get_object", Params={"Bucket": bucket, "Key": key}, ExpiresIn=expires
+            "get_object", Params={"Bucket": bucket, "Key": key}, ExpiresIn=exp
         )
 
     def list_prefix(self, bucket: str, prefix: str) -> list[str]:
@@ -152,6 +161,33 @@ def snapshot_prefix(camp_id: str, learner_id: str, snapshot_id: str) -> str:
 def artifact_key(camp_id: str, learner_id: str, submission_id: str, filename: str) -> str:
     safe = Path(filename).name.replace("..", "_")
     return f"artifacts/{camp_id}/{learner_id}/{submission_id}/{safe}"
+
+
+def course_media_prefix(camp_id: str | None = None) -> str:
+    if camp_id:
+        return f"documents/{camp_id}/course-media/"
+    return COURSE_MEDIA_SHARED_PREFIX
+
+
+def course_media_key(filename: str, *, camp_id: str | None = None) -> str:
+    safe = Path(filename).name.replace("..", "_")
+    return f"{course_media_prefix(camp_id)}{safe}"
+
+
+def site_hero_key(kind: str, unique: str, ext: str) -> str:
+    return f"{COURSE_MEDIA_SITE_HERO_PREFIX}{kind}-{unique}{ext}"
+
+
+def site_mentor_avatar_key(mentor_id: str, unique: str, ext: str) -> str:
+    return f"{COURSE_MEDIA_SITE_MENTOR_PREFIX}{mentor_id}/avatar-{unique}{ext}"
+
+
+def open_course_key(course_id: str, kind: str, ext: str) -> str:
+    return f"{COURSE_MEDIA_OPEN_PREFIX}{course_id}/{kind}{ext}"
+
+
+def legacy_camp_media_prefix(camp_id: str = DEFAULT_CAMP_ID) -> str:
+    return f"documents/{camp_id}/course-media/"
 
 
 def temp_workspace(camp_id: str, learner_id: str, job_id: str) -> Path:

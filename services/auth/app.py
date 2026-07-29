@@ -38,16 +38,21 @@ from services.shared import (  # noqa: E402
     _pg_upsert_enrollment,
 )
 from services.shared.config import CORS_ORIGINS  # noqa: E402
+from services.shared.auth_constants import (  # noqa: E402
+    ACCESS_COOKIE,
+    CSRF_COOKIE,
+    INVITE_PENDING_COOKIE,
+    INVITE_PENDING_MAX_AGE,
+    REFRESH_COOKIE,
+    clear_auth_cookies,
+    set_auth_cookies,
+)
 from services.shared.rate_limit import rate_limit  # noqa: E402
 
 router = APIRouter(tags=["auth"])
 app = FastAPI(title="FDE Auth", version="0.2.0")
 init_schema()
 log = logging.getLogger("fde.auth")
-
-ACCESS_COOKIE = "fde_token"
-REFRESH_COOKIE = "fde_refresh"
-CSRF_COOKIE = "fde_csrf"
 
 
 class LoginBody(BaseModel):
@@ -60,6 +65,16 @@ class InviteLoginBody(BaseModel):
     invite_code: str
     display_name: str = "学员"
     email: str | None = None
+
+
+class RegisterBody(BaseModel):
+    email: str
+    password: str
+    display_name: str = "学员"
+
+
+class BindInviteBody(BaseModel):
+    invite_code: str
 
 
 class CampKeyBody(BaseModel):
@@ -83,28 +98,17 @@ def _ensure_enrollment_record_safe(user_id: str, camp_id: str) -> None:
 
 
 def _secure() -> bool:
-    return FDE_ENV == "prod"
+    from services.shared.auth_constants import auth_cookie_secure
+
+    return auth_cookie_secure()
 
 
 def _set_auth_cookies(resp: Response, access: str, refresh: str, csrf: str) -> None:
-    common = {"httponly": True, "samesite": "lax", "secure": _secure(), "path": "/"}
-    resp.set_cookie(ACCESS_COOKIE, access, max_age=900, **common)
-    resp.set_cookie(REFRESH_COOKIE, refresh, max_age=7 * 86400, **common)
-    # CSRF readable by JS for double-submit
-    resp.set_cookie(
-        CSRF_COOKIE,
-        csrf,
-        httponly=False,
-        samesite="lax",
-        secure=_secure(),
-        path="/",
-        max_age=7 * 86400,
-    )
+    set_auth_cookies(resp, access, refresh, csrf)
 
 
 def _clear_cookies(resp: Response) -> None:
-    for name in (ACCESS_COOKIE, REFRESH_COOKIE, CSRF_COOKIE):
-        resp.delete_cookie(name, path="/")
+    clear_auth_cookies(resp)
 
 
 def _issue(user: AuthUser, camp_id: str | None, response: Response, request: Request) -> dict[str, Any]:
@@ -148,6 +152,69 @@ def login(body: LoginBody, request: Request, response: Response) -> dict[str, An
     if camp_id and user.role == "learner":
         _ensure_enrollment_record_safe(user.id, camp_id)
     return _issue(user, camp_id, response, request)
+
+
+@router.get("/api/v1/auth/invite-link")
+def claim_invite_link(code: str, response: Response) -> dict[str, Any]:
+    """Validate org invite link and stash code in httpOnly cookie for registration."""
+    from services.partners.service import normalize_code, resolve_invite_code
+
+    raw = (code or "").strip()
+    if not raw:
+        raise HTTPException(400, "缺少邀请码")
+    ic = resolve_invite_code(raw)
+    if not ic:
+        raise HTTPException(404, "邀请链接无效或已失效")
+    normalized = normalize_code(raw)
+    response.set_cookie(
+        INVITE_PENDING_COOKIE,
+        normalized,
+        max_age=INVITE_PENDING_MAX_AGE,
+        httponly=True,
+        samesite="lax",
+        secure=_secure(),
+        path="/",
+    )
+    return {
+        "valid": True,
+        "code": normalized,
+        "org_name": ic.get("org_name") or ic.get("org_id"),
+    }
+
+
+@router.post("/api/v1/auth/register", dependencies=[Depends(rate_limit("login"))])
+def register(body: RegisterBody, request: Request, response: Response) -> dict[str, Any]:
+    from services.partners.service import bind_invite_code
+
+    email = body.email.strip().lower()
+    if len(body.password) < 6:
+        raise HTTPException(400, "密码至少 6 位")
+    with db_cursor() as cur:
+        cur.execute("SELECT id FROM users WHERE email=?", (email,))
+        if cur.fetchone():
+            raise HTTPException(409, "邮箱已注册")
+        uid = str(uuid4())
+        cur.execute(
+            "INSERT INTO users (id, email, password_hash, display_name, role, created_at) VALUES (?,?,?,?,?,?)",
+            (uid, email, _hash_password(body.password), body.display_name.strip() or "学员", "learner", now_iso()),
+        )
+    pending_invite = (request.cookies.get(INVITE_PENDING_COOKIE) or "").strip()
+    if pending_invite:
+        try:
+            bind_invite_code(uid, pending_invite)
+            response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
+    user = get_user_by_id(uid)
+    assert user
+    write_audit("auth.register", actor_id=user.id, ip=request.client.host if request.client else None)
+    return _issue(user, None, response, request)
+
+
+@router.post("/api/v1/me/bind-invite")
+def bind_invite(body: BindInviteBody, request: Request) -> dict[str, Any]:
+    """Self-service invite binding is disabled — attribution only via org registration link."""
+    raise HTTPException(403, "不支持自行绑定邀请码，请通过机构提供的注册链接完成注册")
 
 
 @router.post("/api/v1/auth/invite")
@@ -237,12 +304,16 @@ def me(request: Request) -> dict[str, Any]:
         camp_id = payload.get("camp_id")
     else:
         camp_id = getattr(request.state, "camp_id", None)
+    from services.partners.service import get_user_attribution
+
+    attribution = get_user_attribution(user.id)
     return {
         "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
         "camp_id": camp_id,
         "camps": user_camps(user.id),
         "csrf": request.cookies.get(CSRF_COOKIE),
         "server_time": int(time.time()),
+        "attribution": attribution,
     }
 
 

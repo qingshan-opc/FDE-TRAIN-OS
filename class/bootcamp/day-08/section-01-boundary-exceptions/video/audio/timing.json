@@ -1,0 +1,41 @@
+{
+  "total": 124.473,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 14.4
+    },
+    {
+      "id": "02-bad-input-scenes",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/02-bad-input-scenes.wav",
+      "start": 14.65,
+      "duration": 18.56
+    },
+    {
+      "id": "03-four-exception-types",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/03-four-exception-types.wav",
+      "start": 33.46,
+      "duration": 29.44
+    },
+    {
+      "id": "04-fail-by-design",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/04-fail-by-design.wav",
+      "start": 63.15,
+      "duration": 21.372
+    },
+    {
+      "id": "05-boundary-declaration",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/05-boundary-declaration.wav",
+      "start": 84.772,
+      "duration": 23.851
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s01_course/tts/06-close.wav",
+      "start": 108.873,
+      "duration": 15.6
+    }
+  ]
+}

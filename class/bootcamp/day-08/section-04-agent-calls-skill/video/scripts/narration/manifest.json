@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-tool-description",
+    "file": "02-tool-description.txt"
+  },
+  {
+    "id": "03-three-tasks",
+    "file": "03-three-tasks.txt"
+  },
+  {
+    "id": "04-wrong-pick-map",
+    "file": "04-wrong-pick-map.txt"
+  },
+  {
+    "id": "05-platform-tips",
+    "file": "05-platform-tips.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

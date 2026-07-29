@@ -29,19 +29,22 @@ import { BrandLogo } from "../components/BrandLogo";
 import { AuthorLayoutProvider } from "../lib/authorLayoutContext";
 import { useAuth } from "../lib/auth";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const leafIcon = (icon: ReactNode) => <span style={{ fontSize: 16 }}>{icon}</span>;
+const leafIcon = (icon: ReactNode) => <span style={{ fontSize: 15 }}>{icon}</span>;
 
-const MENU_ITEMS: MenuItem[] = [
-  { key: "/author", icon: <DashboardOutlined style={{ fontSize: 18 }} />, label: "概览" },
+type MenuGroup = { label: string; items: MenuItem[] };
+
+const MENU_GROUPS: MenuGroup[] = [
   {
-    key: "site",
-    icon: <GlobalOutlined style={{ fontSize: 18 }} />,
+    label: "工作台",
+    items: [{ key: "/author", icon: <DashboardOutlined />, label: "概览" }],
+  },
+  {
     label: "网站维护",
-    children: [
+    items: [
       { key: "/author/site/settings", icon: leafIcon(<ProfileOutlined />), label: "站点信息" },
       { key: "/author/site/home", icon: leafIcon(<HomeOutlined />), label: "首页内容" },
       { key: "/author/site/open-courses", icon: leafIcon(<PlaySquareOutlined />), label: "站点公开课" },
@@ -50,72 +53,54 @@ const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    key: "resources",
-    icon: <FolderOpenOutlined style={{ fontSize: 18 }} />,
     label: "资源",
-    children: [
+    items: [
       { key: "/author/resources/documents", icon: leafIcon(<FileTextOutlined />), label: "文档库" },
       { key: "/author/resources/videos", icon: leafIcon(<VideoCameraOutlined />), label: "视频库" },
       { key: "/author/resources/packs", icon: leafIcon(<AppstoreOutlined />), label: "素材包" },
     ],
   },
   {
-    key: "curriculum",
-    icon: <ReadOutlined style={{ fontSize: 18 }} />,
     label: "课程设计",
-    children: [
+    items: [
       { key: "/author/curriculum/courses", icon: leafIcon(<BookOutlined />), label: "课程与大纲" },
       { key: "/author/curriculum/versions", icon: leafIcon(<BranchesOutlined />), label: "课程版本" },
     ],
   },
   {
-    key: "learners",
-    icon: <TeamOutlined style={{ fontSize: 18 }} />,
     label: "学员中心",
-    children: [
+    items: [
       { key: "/author/learners", icon: leafIcon(<UserOutlined />), label: "学员与课程" },
       { key: "/author/learners/submissions", icon: leafIcon(<InboxOutlined />), label: "提交资料" },
+      { key: "/author/learners/reviews", icon: leafIcon(<TeamOutlined />), label: "导师复核" },
     ],
   },
   {
-    key: "settings",
-    icon: <SettingOutlined style={{ fontSize: 18 }} />,
     label: "系统设置",
-    children: [{ key: "/author/settings/camp-key", icon: leafIcon(<KeyOutlined />), label: "营期 Key" }],
+    items: [
+      { key: "/author/settings/camp-key", icon: leafIcon(<KeyOutlined />), label: "营期 Key" },
+      { key: "/author/settings/channels", icon: leafIcon(<TeamOutlined />), label: "渠道与分账" },
+    ],
   },
 ];
 
+const GROUP_ICONS: Record<string, ReactNode> = {
+  网站维护: <GlobalOutlined />,
+  资源: <FolderOpenOutlined />,
+  课程设计: <ReadOutlined />,
+  学员中心: <TeamOutlined />,
+  系统设置: <SettingOutlined />,
+};
+
 function findSelectedKey(pathname: string): string {
-  const leafKeys = [
-    "/author/site/settings",
-    "/author/site/home",
-    "/author/site/open-courses",
-    "/author/site/enterprise",
-    "/author/site/leads",
-    "/author/resources/documents",
-    "/author/resources/videos",
-    "/author/resources/packs",
-    "/author/curriculum/courses",
-    "/author/curriculum/versions",
-    "/author/learners/submissions",
-    "/author/learners",
-    "/author/settings/camp-key",
-    "/author",
-  ];
+  const leafKeys = MENU_GROUPS.flatMap((g) =>
+    (g.items || []).map((it) => String((it as { key?: string }).key || "")),
+  ).filter(Boolean);
   const hit = leafKeys
     .slice()
     .sort((a, b) => b.length - a.length)
     .find((k) => (k === "/author" ? pathname === "/author" : pathname.startsWith(k)));
   return hit || "/author";
-}
-
-function openKeysFor(pathname: string): string[] {
-  if (pathname.startsWith("/author/site")) return ["site"];
-  if (pathname.startsWith("/author/resources")) return ["resources"];
-  if (pathname.startsWith("/author/curriculum") || pathname.startsWith("/author/courses/")) return ["curriculum"];
-  if (pathname.startsWith("/author/learners")) return ["learners"];
-  if (pathname.startsWith("/author/settings")) return ["settings"];
-  return [];
 }
 
 export function AuthorHome() {
@@ -125,14 +110,12 @@ export function AuthorHome() {
   const { message } = AntApp.useApp();
   const { user, campId, camps, logout, switchCamp } = useAuth();
   const [switching, setSwitching] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const siderRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLElement>(null);
 
   const selected = findSelectedKey(loc.pathname);
-  const defaultOpen = useMemo(() => openKeysFor(loc.pathname), [loc.pathname]);
-  const [openKeys, setOpenKeys] = useState<string[]>(defaultOpen);
+  const allItems = useMemo(() => MENU_GROUPS.flatMap((g) => g.items), []);
 
   const onSwitchCamp = async (nextCampId: string) => {
     if (!nextCampId || nextCampId === campId) return;
@@ -157,99 +140,110 @@ export function AuthorHome() {
 
   return (
     <AuthorLayoutProvider headerRef={headerRef} siderRef={siderRef} contentRef={contentRef}>
-    <Layout className="author-shell" style={{ minHeight: "100vh", background: token.colorBgLayout }}>
-      <Header ref={headerRef} className="author-topbar">
-        <div className="author-topbar__left">
-          <BrandLogo to="/" name="青山在" />
-          <span className="author-topbar-badge">教研台</span>
-        </div>
-        <div className="author-topbar__right">
-          {campOptions.length > 1 ? (
-            <Select
-              aria-label="切换营期"
-              value={campId || undefined}
-              options={campOptions}
-              loading={switching}
-              onChange={(v) => void onSwitchCamp(v)}
-              style={{ minWidth: 140 }}
-              size="small"
-              popupMatchSelectWidth={false}
-              getPopupContainer={(trigger) => trigger.parentElement || document.body}
-            />
-          ) : (
-            campId && <Typography.Text code>{campId}</Typography.Text>
-          )}
-          <Button size="small" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
-            学员台
-          </Button>
-          <Dropdown
-            getPopupContainer={(trigger) => trigger.parentElement || document.body}
-            menu={{
-              items: [
-                { key: "profile", icon: <UserOutlined />, label: "个人中心", onClick: () => nav("/app/profile") },
-                { key: "certs", icon: <BookOutlined />, label: "结业证书", onClick: () => nav("/app/certificates") },
-                { type: "divider" },
-                { key: "logout", icon: <LogoutOutlined />, label: "退出登录", danger: true, onClick: () => void onLogout() },
-              ],
-            }}
-          >
-            <Button type="text" style={{ height: 40 }}>
-              <Space>
-                <Avatar size="small" style={{ backgroundColor: token.colorPrimary }}>
-                  {(user?.display_name || user?.email || "?")[0]?.toUpperCase()}
-                </Avatar>
-                <span>{user?.display_name || user?.email}</span>
-              </Space>
-            </Button>
-          </Dropdown>
-        </div>
-      </Header>
-      <Layout>
-        <Sider
-          ref={siderRef}
-          breakpoint="lg"
-          collapsedWidth={72}
-          width={236}
-          collapsible
-          collapsed={collapsed}
-          onCollapse={(nextCollapsed) => {
-            setCollapsed(nextCollapsed);
-            if (!nextCollapsed) {
-              setOpenKeys((prev) => (prev.length ? prev : defaultOpen));
-            }
-          }}
-          className="author-sider"
-          style={{ background: "transparent", borderRight: "none" }}
-        >
-          <div className="author-sider-inner">
+      <div className="author-shell">
+        <aside className="author-sider" ref={siderRef}>
+          <div className="author-sider-brand">
+            <BrandLogo to="/" name="青山在" showText={false} />
+            <div className="author-sider-brand-text">
+              <strong>青山在</strong>
+              <span>教研台</span>
+            </div>
+          </div>
+          <div className="author-sider-nav">
+            {MENU_GROUPS.map((group) => (
+              <div key={group.label} className="author-nav-group">
+                <div className="author-nav-section">
+                  {GROUP_ICONS[group.label] ? (
+                    <span className="author-nav-section-icon">{GROUP_ICONS[group.label]}</span>
+                  ) : null}
+                  {group.label}
+                </div>
+                <Menu
+                  mode="inline"
+                  selectedKeys={[selected]}
+                  items={group.items}
+                  className="author-side-menu"
+                  getPopupContainer={() => siderRef.current || document.body}
+                  onClick={({ key }) => {
+                    if (String(key).startsWith("/")) nav(String(key));
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="author-sider-footer">
             <Menu
               mode="inline"
-              selectedKeys={[selected]}
-              openKeys={collapsed ? [] : openKeys.length ? openKeys : defaultOpen}
-              onOpenChange={(keys) => setOpenKeys(keys as string[])}
-              items={MENU_ITEMS}
-              style={{ height: "100%", borderInlineEnd: 0, paddingTop: 8, background: "transparent" }}
-              onClick={({ key }) => {
-                if (String(key).startsWith("/")) nav(String(key));
-              }}
               className="author-side-menu"
-              getPopupContainer={(trigger) => trigger.parentElement || siderRef.current || document.body}
+              getPopupContainer={() => siderRef.current || document.body}
+              items={[
+                {
+                  key: "logout",
+                  icon: <LogoutOutlined />,
+                  label: "退出登录",
+                  onClick: () => void onLogout(),
+                },
+              ]}
             />
           </div>
-        </Sider>
-        <Content
-          ref={contentRef}
-          className="author-content"
-          style={{
-            padding: typeof window !== "undefined" && window.innerWidth < 768 ? 16 : 24,
-            maxWidth: 1280,
-            overflow: "auto",
-          }}
-        >
-          <Outlet />
-        </Content>
-      </Layout>
-    </Layout>
+        </aside>
+
+        <div className="author-main">
+          <Header ref={headerRef} className="author-topbar">
+            <div className="author-topbar__left">
+              <Typography.Text type="secondary" className="author-topbar-hint">
+                {allItems.find((it) => String((it as { key?: string }).key) === selected)
+                  ? String((allItems.find((it) => String((it as { key?: string }).key) === selected) as { label?: string })?.label || "")
+                  : "教研台"}
+              </Typography.Text>
+            </div>
+            <div className="author-topbar__right">
+              {campOptions.length > 1 ? (
+                <Select
+                  aria-label="切换营期"
+                  value={campId || undefined}
+                  options={campOptions}
+                  loading={switching}
+                  onChange={(v) => void onSwitchCamp(v)}
+                  style={{ minWidth: 140 }}
+                  size="middle"
+                  popupMatchSelectWidth={false}
+                  getPopupContainer={() => headerRef.current || document.body}
+                  className="author-camp-select"
+                />
+              ) : (
+                campId && <Typography.Text code>{campId}</Typography.Text>
+              )}
+              <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
+                学员台
+              </Button>
+              <Dropdown
+                getPopupContainer={() => headerRef.current || document.body}
+                menu={{
+                  items: [
+                    { key: "profile", icon: <UserOutlined />, label: "个人中心", onClick: () => nav("/app/profile") },
+                    { key: "certs", icon: <BookOutlined />, label: "结业证书", onClick: () => nav("/app/certificates") },
+                    { type: "divider" },
+                    { key: "logout", icon: <LogoutOutlined />, label: "退出登录", danger: true, onClick: () => void onLogout() },
+                  ],
+                }}
+              >
+                <Button type="text" className="author-user-btn">
+                  <Space>
+                    <Avatar size="small" style={{ backgroundColor: token.colorPrimary }}>
+                      {(user?.display_name || user?.email || "?")[0]?.toUpperCase()}
+                    </Avatar>
+                    <span>{user?.display_name || user?.email}</span>
+                  </Space>
+                </Button>
+              </Dropdown>
+            </div>
+          </Header>
+          <Content ref={contentRef} className="author-content">
+            <Outlet />
+          </Content>
+        </div>
+      </div>
     </AuthorLayoutProvider>
   );
 }

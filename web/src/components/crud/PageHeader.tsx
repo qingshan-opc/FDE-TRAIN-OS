@@ -16,23 +16,27 @@ export function PageHeader({
   extra?: ReactNode;
 }) {
   return (
-    <div style={{ marginBottom: 16 }}>
+    <div className="author-page-header">
       {breadcrumb && breadcrumb.length > 0 && (
         <Breadcrumb
-          style={{ marginBottom: 8 }}
+          style={{ marginBottom: 6 }}
           items={breadcrumb.map((c) => ({
             title: c.href ? <Link to={c.href}>{c.title}</Link> : c.title,
           }))}
         />
       )}
       <Space style={{ width: "100%", justifyContent: "space-between" }} align="start" wrap>
-        <div>
-          <Typography.Title level={3} style={{ margin: 0 }}>
+        <div className="author-page-header__text">
+          <Typography.Title level={4} style={{ margin: 0 }} className="author-page-header__title">
             {title}
           </Typography.Title>
-          {description && <Typography.Text type="secondary">{description}</Typography.Text>}
+          {description && (
+            <Typography.Text type="secondary" className="author-page-header__desc">
+              {description}
+            </Typography.Text>
+          )}
         </div>
-        {extra && <Space wrap>{extra}</Space>}
+        {extra && <Space wrap className="author-page-header__extra">{extra}</Space>}
       </Space>
     </div>
   );

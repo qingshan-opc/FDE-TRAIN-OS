@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FDE 训练营 · 部门 AI 驾驶舱 · 模块化课程</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">FDE<em>·</em>训练营 <em>/</em> 模块化课程</div>
+    <div class="nav-links">
+      <a href="#intro">导论</a><a href="#evolution">演进</a><a href="#ecosystem">生态</a><a href="#glossary">词典</a><a href="#modules">地图</a><a href="#schedule">课表</a><a href="#resources">资源</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-meta rv">
+      <span><b>FDE</b> Forward Deployed Engineer</span>
+      <span>6 个模块 · 10 天 · 每天 100–140 分钟</span>
+      <span>70% 主线 + 30% 部门方向</span>
+    </div>
+    <h1 class="display rv rv-d1">部门 AI 驾驶舱<br><span class="thin">FDE 训练营课程</span></h1>
+    <p class="hero-statement rv rv-d2">大模型已经泛化，<strong>人类还没有</strong>。</p>
+    <div class="hero-sub rv rv-d3">
+      <p>第一周，用 AI 完成一个全栈项目。第二周，把项目升级成会调用 Skills、能够执行任务的部门 Agent。</p>
+      <p>驾驶舱只是载体——真正交付的，是学员对这个行业的认知：时代、生态、架构、模型、智能体。</p>
+    </div>
+    <div class="ladder rv rv-d4">
+      <div class="rung calm"><small>Day 1</small><b>快通+首战</b></div>
+      <div class="rung"><small>Day 2</small><b>V0.1</b></div>
+      <div class="rung"><small>Day 3</small><b>V0.2</b></div>
+      <div class="rung"><small>Day 4</small><b>V0.3</b></div>
+      <div class="rung"><small>Day 5</small><b>V0.4</b></div>
+      <div class="rung"><small>Day 6</small><b>V1.0</b></div>
+      <div class="rung final"><small>Day 10</small><b>V2.0</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 00 导论 ================= -->
+<section class="intro" id="intro">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">00</span>导论 · INTRODUCTION</div>
+    <h2 class="sec-title rv">先认识时代，再认识角色</h2>
+    <p class="intro-quote rv">这门课的第一课不是「FDE 是谁」，<br>而是<strong>你生活在一个什么样的时代</strong>。</p>
+    <div class="intro-duo">
+      <div class="fde-def rv">
+        <h3>FDE · Forward Deployed Engineer</h3>
+        <p><b>前方部署工程师</b>：被派到业务一线、对结果负责的工程师。不等需求文档，自己走进部门、看懂问题、建成系统、交付价值。</p>
+        <p>在这门课里，FDE 不是头衔，是<b>毕业时的状态</b>——你不需要先成为谁，十天后答辩通过的那一刻，你就是。</p>
+        <div class="fde-roles">
+          <div><b>传统开发</b><span>按需求文档写代码，交付功能是终点。AI 时代，这一层最先被压缩。</span></div>
+          <div><b>AI 使用者</b><span>把 AI 当高级搜索引擎，问答提效，但不建成任何东西。</span></div>
+          <div class="is-fde"><b>FDE</b><span>理解业务问题，指挥 AI 建成系统，并对结果逐项验收——这是你十天后的样子。</span></div>
+        </div>
+      </div>
+      <div class="howto rv rv-d1">
+        <div class="row"><div class="no">RULE 01</div><h4>70% 主线 + 30% 方向</h4><p>主线所有人同款：一个部门驾驶舱。30% 换成你自己部门的真实数据与问题——方向卡 Day 1 定稿。</p></div>
+        <div class="row"><div class="no">RULE 02</div><h4>世界观先于动手</h4><p>先讲清「我在什么时代、AI 是什么、生态里有什么」，再碰代码。概念课当堂自测，词典随身查。</p></div>
+        <div class="row"><div class="no">RULE 03</div><h4>三道闸，不过不进阶</h4><p>每日验收 → V1.0 周验收 → V2.0 毕业答辩。验收标准全部公开，AI 导师按表执行。</p></div>
+        <div class="row"><div class="no">RULE 04</div><h4>视频位预留，口播稿先行</h4><p>概念节的视频资源位已留空，现阶段配口播稿 + 图文讲解图；看文档能答对题，就算学会。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 01 技术演进 ================= -->
+<section class="evolution" id="evolution">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">01</span>技术演进 · EVOLUTION</div>
+    <h2 class="sec-title rv">六次浪潮，每次重排「谁值钱」</h2>
+    <p class="sec-lede rv">为什么写代码突然不值钱了？为什么企业现在需要「懂业务 + 会指挥 AI」的人？答案不在任何一本教材里，在三十年的技术演进里。这条线是 Day 1 第 1 节的讲义，也是整门课的地基。</p>
+
+    <div class="diagram rv">
+      <div class="dg-cap">讲解图 01 · 技术演进时间线</div>
+      <img src="../assets/diagrams/evolution-timeline.svg" alt="技术演进时间线：六次浪潮" loading="lazy">
+    </div>
+
+    <div class="evo-note">
+      <div class="blk rv">
+        <h4>为什么「写代码」不值钱了</h4>
+        <p>AI 把「写」的成本打到接近零，但没有消灭工程——值钱的是判断「写什么」、验收「写得对不对」。这门课练的就是这两件事：方向感与验收力。</p>
+      </div>
+      <div class="blk rv rv-d1">
+        <h4>这门课站在第六次浪潮上</h4>
+        <p>我们不教打字，教指挥。十天里你写的每一行 Prompt、做的每一次验收、封装的每一个 Skill，都是 AI 原生时代的基本功——学会了，工具怎么换都不慌。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 LLM 生态 ================= -->
+<section id="ecosystem">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">02</span>LLM 生态 · ECOSYSTEM</div>
+    <h2 class="sec-title rv">一张地图，装下你听过的所有 AI 名词</h2>
+    <p class="sec-lede rv">GPT、Claude、DeepSeek、Ollama、MCP、Agent 框架……它们不是一堆乱词，而是四层生态。看懂这张图，出了教室看任何行业文章都拆得开。本课默认从 Kimi 云 API 进入，Day 5 学会「换模型只是换网关后面的牌子」。</p>
+
+    <div class="diagram rv">
+      <div class="dg-cap">讲解图 02 · LLM 生态分层图 —— 你在哪一层</div>
+      <img src="../assets/diagrams/llm-ecosystem.svg" alt="LLM 生态分层图" loading="lazy">
+    </div>
+    <p class="rhythm-note rv">读法：你的驾驶舱住在应用层；Day 5 从平台层「接电」；换模型，只是换网关后面那块牌子。四层之间全靠「契约」对话——这就是 Day 3 要讲的事。</p>
+  </div>
+</section>
+
+<!-- ================= 03 新概念词典 ================= -->
+<section class="gloss" id="glossary">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">03</span>新概念词典 · GLOSSARY</div>
+    <h2 class="sec-title rv">18 个词，看懂 2026 年的行业日常</h2>
+    <p class="sec-lede rv">Harness、RAG、Eval、Vibe Coding……这些已经是行业日常词汇。词典不是课文，是随身工具：十天里听到任何词发懵，回来查这一页。完整版（含自测 6 题）在公开课 O4——Day 1 快测的词典考点就出自这里。</p>
+
+    <div class="gloss-grid rv">
+      <div class="gloss-card"><div class="term">LLM · 大语言模型</div><div class="def">用海量文本训练的「预测下一个词」的机器；生成、理解、推理都从这个机制长出来。</div><div class="day">Day 1 · 5</div></div>
+      <div class="gloss-card"><div class="term">Token 与上下文窗口</div><div class="def">模型读写的基本单位（约 0.6–1 个汉字）；窗口是它「一次能看到的字数上限」。</div><div class="day">Day 5</div></div>
+      <div class="gloss-card"><div class="term">幻觉 · Hallucination</div><div class="def">它永远给「最像真的」而非「经过核实」的答案——幻觉是机制，不是 bug。</div><div class="day">Day 1 · 5</div></div>
+      <div class="gloss-card"><div class="term">开源权重 vs 闭源 API</div><div class="def">闭源只能调 API；开源权重可下载自部署——能力、成本、隐私的三角权衡。</div><div class="day">Day 1 · 5</div></div>
+      <div class="gloss-card"><div class="term">多模态 · Multimodal</div><div class="def">不只读写文字，还能看图、听音、出图的模型。本课只用文本能力。</div><div class="day">Day 1</div></div>
+      <div class="gloss-card"><div class="term">Prompt 工程</div><div class="def">给模型的任务说明书：角色 + 背景 + 任务 + 约束 + 输出格式，可迭代、可验收。</div><div class="day">Day 2 · 5</div></div>
+      <div class="gloss-card"><div class="term">Context Engineering</div><div class="def">决定「这次调用放什么进模型视野」的手艺——给少了它瞎编，给多了它迷失。</div><div class="day">Day 5 · Week2</div></div>
+      <div class="gloss-card"><div class="term">RAG · 检索增强生成</div><div class="def">先从资料库检索相关片段，再让模型基于片段回答——治幻觉的主流药方之一。</div><div class="day">Day 1</div></div>
+      <div class="gloss-card"><div class="term">Fine-tuning vs Prompting</div><div class="def">改模型权重（贵、慢、持久）vs 改给模型的话（快、便宜）——90% 的场景先用后者。</div><div class="day">Day 1</div></div>
+      <div class="gloss-card"><div class="term">Eval · 评测</div><div class="def">给 AI 产物出考卷：固定题库 + 明确判分，代替「我觉得还行」。</div><div class="day">Day 5 · Week2</div></div>
+      <div class="gloss-card"><div class="term">Guardrails · 护栏</div><div class="def">拦在模型输入输出上的规则——什么不许问、什么不许答、越界时怎么办。</div><div class="day">Day 8</div></div>
+      <div class="gloss-card"><div class="term">Vibe Coding · 氛围编程</div><div class="def">用自然语言描述意图、让 AI 写代码；爽点是真的，验收责任也是真的。我们练的是「带验收的 vibe coding」。</div><div class="day">全程</div></div>
+      <div class="gloss-card"><div class="term">Agent · 智能体</div><div class="def">能自己决定下一步做什么的 AI：理解任务 → 规划 → 调用工具 → 观察结果 → 继续，直到完成或求助。</div><div class="day">Day 8 – 10</div></div>
+      <div class="gloss-card"><div class="term">Harness · 智能体骨架</div><div class="def">让 Agent 跑起来的那套「模型之外的循环」——工具表、记忆、规划、重试、日志。同一个模型换一副骨架，能力天差地别。</div><div class="day">Day 8</div></div>
+      <div class="gloss-card"><div class="term">Workflow vs Agent</div><div class="def">Workflow 是人写死的流程图；Agent 是模型现场决策下一步——能写死就写死，写不死才上 Agent。</div><div class="day">Day 8 · 9</div></div>
+      <div class="gloss-card"><div class="term">Tool Calling · 工具调用</div><div class="def">模型输出「我要调用 X 工具、参数是 Y」的结构化请求，由 harness 执行后把结果喂回去。</div><div class="day">Day 8</div></div>
+      <div class="gloss-card"><div class="term">MCP · Model Context Protocol</div><div class="def">给 AI 接工具 / 数据源的「USB-C 接口标准」——按标准写一个服务，所有支持 MCP 的 Agent 都能用。我们的 Skill 是它的朴素版。</div><div class="day">Day 1 · Week2</div></div>
+      <div class="gloss-card"><div class="term">Copilot vs Agent</div><div class="def">Copilot 是你开它递扳手（补全、问答）；Agent 是你定目的地它开（接任务、跑流程）——信任要求和验收方式完全不同。</div><div class="day">Day 1 · 8</div></div>
+    </div>
+    <p class="gloss-foot rv">完整版含「在课程哪里遇到 + 延伸阅读 + 自测 6 题」 → <a href="../resources/glossary.md">resources/glossary.md</a></p>
+  </div>
+</section>
+
+<!-- ================= 04 模块地图 ================= -->
+<section id="modules">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">04</span>模块地图 · MODULES</div>
+    <h2 class="sec-title rv">六个模块，一条认知主线</h2>
+    <p class="sec-lede rv">模块是认知单元，天是交付单元。课程从「十天流水」重构为六个模块：先建立世界观，再碰代码；FDE 不是第一课，是你毕业时的状态。</p>
+
+    <div class="mods rv">
+      <div class="mod">
+        <div class="m-no">M0<small>课前自学</small></div>
+        <div><h4>导论：FDE 是什么</h4><p>你将建成什么、课程怎么用、为什么是现在——30 分钟自学，本页 00 区就是教材。它是课程的介绍，不是第一课。</p></div>
+        <div class="m-days"><b>~30′</b><br>课前</div>
+      </div>
+      <div class="mod">
+        <div class="m-no">M1<small>世界观日</small></div>
+        <div><h4>AI 世界观：快通 + 第一次动手</h4><p>演进线 + 生态图两张图快通 · LLM 最小认知 · 四层架构与两周路线——概念只讲 40′，当天就完成 Agent Lab 首战并交出方向卡与线框。完整理论（演进详史 / 生态分层 / 词典 18 词）移入公开课 O1–O4，课前与每晚自学；Day 1 快测 6 题就是免修考试。</p></div>
+        <div class="m-days"><b>Day 1</b><br>110′</div>
+      </div>
+      <div class="mod">
+        <div class="m-no">M2<small>融入 D1–D2</small></div>
+        <div><h4>全局架构：决策的语法</h4><p>四层地图（前端/接口/数据库/模型）· 信息架构 · 约束驱动选型。不单列天数——先在 Day 1 看懂地图，再在 Day 2 用它做第一次选型。</p></div>
+        <div class="m-days"><b>D1 后半 → D2</b><br>约 50′</div>
+      </div>
+      <div class="mod">
+        <div class="m-no">M3<small>全栈实战</small></div>
+        <div><h4>每天接电一层，V1.0 上线</h4><p>前端 → 接口 → 数据库 → LLM → 部署。同一艘驾驶舱逐层变真：模拟数据 → 真接口 → 真入库 → AI 接电 → 换设备可访问。</p></div>
+        <div class="m-days"><b>Day 2 – 6</b><br>605′</div>
+      </div>
+      <div class="mod">
+        <div class="m-no">M4<small>Agent 进阶</small></div>
+        <div><h4>从系统到能干活的能力</h4><p>Skill 封装 → 异常与边界工程化 → Harness/Agent 决策环 → 多 Skill 编排与人工确认。你的项目开始替你上班。</p></div>
+        <div class="m-days"><b>Day 7 – 9</b><br>345′</div>
+      </div>
+      <div class="mod">
+        <div class="m-no">M5<small>收官</small></div>
+        <div><h4>V2.0 · 答辩 · 成为 FDE</h4><p>Agent 接入驾驶舱 · 端到端十条能力证据 · 答辩与互评 · 行业地图自评 + 个人自学路线。答辩通过的那一刻，你就是 FDE。</p></div>
+        <div class="m-days"><b>Day 10</b><br>110′</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 领域知识地图 ================= -->
+<section class="domains" id="domains">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">05</span>领域知识地图 · DOMAINS</div>
+    <h2 class="sec-title rv">七个领域，一艘驾驶舱串起来</h2>
+    <p class="sec-lede rv">驾驶舱是载体，认知才是交付物。每个领域都不是孤立的一课——它们在同一艘船上逐层接电。先看清四层，再看每个领域在哪天登场。</p>
+
+    <div class="diagram rv">
+      <div class="dg-cap">讲解图 03 · AI 应用的四层架构 —— 同一艘驾驶舱的逐层接电</div>
+      <img src="../assets/diagrams/four-layer.svg" alt="AI 应用的四层架构" loading="lazy">
+    </div>
+
+    <div class="domain-list rv">
+      <div class="domain">
+        <span class="idx">01</span>
+        <div class="name"><span class="chip" style="background:var(--c-arch)"></span><div><b>全局架构</b><div class="en">Architecture</div></div></div>
+        <div class="desc">四层地图、信息架构、约束驱动选型——所有技术决策的语法，看懂再动手。</div>
+        <div class="days">D1 · D2 / D8 · D9</div>
+      </div>
+      <div class="domain">
+        <span class="idx">02</span>
+        <div class="name"><span class="chip" style="background:var(--c-fe)"></span><div><b>前端</b><div class="en">Frontend</div></div></div>
+        <div class="desc">五区块骨架、加载/空/错三态、Prompt 即源码——页面必须回答业务问题。</div>
+        <div class="days">D2</div>
+      </div>
+      <div class="domain">
+        <span class="idx">03</span>
+        <div class="name"><span class="chip" style="background:var(--c-be)"></span><div><b>后端</b><div class="en">Backend</div></div></div>
+        <div class="desc">接口契约先于实现，JSON 与状态码是看得懂的报错语言，FastAPI 解剖。</div>
+        <div class="days">D3</div>
+      </div>
+      <div class="domain">
+        <span class="idx">04</span>
+        <div class="name"><span class="chip" style="background:var(--c-db)"></span><div><b>数据库</b><div class="en">Database</div></div></div>
+        <div class="desc">表、行、主键；SQL 四板斧看懂即可；换库时机：SQLite → PostgreSQL。</div>
+        <div class="days">D4</div>
+      </div>
+      <div class="domain">
+        <span class="idx">05</span>
+        <div class="name"><span class="chip" style="background:var(--c-cloud)"></span><div><b>云原生</b><div class="en">Cloud Native</div></div></div>
+        <div class="desc">部署是什么、环境与配置、容器与镜像的最小概念——V1.0 换设备能开。</div>
+        <div class="days">D6</div>
+      </div>
+      <div class="domain">
+        <span class="idx">06</span>
+        <div class="name"><span class="chip" style="background:var(--c-llm)"></span><div><b>LLM</b><div class="en">Large Language Model</div></div></div>
+        <div class="desc">模型本体与幻觉、生态分层、Prompt 工程、接入架构（密钥/超时/降级）。</div>
+        <div class="days">D1 · D5 / D8</div>
+      </div>
+      <div class="domain">
+        <span class="idx">07</span>
+        <div class="name"><span class="chip" style="background:var(--c-agent)"></span><div><b>Agent</b><div class="en">Agent & Harness</div></div></div>
+        <div class="desc">Skill 封装、Harness 决策环、多 Skill 编排与人工确认——能力封装成同事。</div>
+        <div class="days">D7 – D9</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 十天课表 ================= -->
+<section id="schedule">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">06</span>十天课表 · SCHEDULE</div>
+    <h2 class="sec-title rv">十天，从世界观到能干活</h2>
+    <p class="sec-lede rv">点击每一天展开课节。每天 100–140 分钟：概念讲透就停，时间留给动手与验收。课节形式四色标签——<b>概念 / 方法 / 实战 / 验收</b>；每天最后一节永远是验收。</p>
+
+    <div class="diagram rv">
+      <div class="dg-cap">讲解图 · 十天演进 —— 同一艘驾驶舱，每天接电一层</div>
+      <img src="../assets/diagrams/ten-day-grid.svg" alt="十天演进图" loading="lazy">
+    </div>
+
+    <!-- ===== M1 ===== -->
+    <div class="week-head rv"><h3><span>M1</span>AI 世界观</h3><div class="wk-tag">Day 1 · <b>快通 + 首战 · 完整理论在公开课 O1–O4</b></div></div>
+
+    <details class="day rv" open>
+      <summary>
+        <div class="dnum"><small>M1 · 快通日</small>01<span class="ver">快通</span></div>
+        <div>
+          <h4>世界观快通 + 第一次动手</h4>
+          <p class="core">两张图看懂时代与生态，概念只占 40′——当天就碰工具：Agent Lab 五步闭环导师演一遍、学员跟一遍，下课前交出方向卡与 V0.1 线框。完整世界观在公开课 O1–O4，快测 6 题就是免修考试。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-llm)"></i>LLM</span>
+            <span class="tag"><i style="background:var(--c-arch)"></i>全局架构</span>
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent 概念</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>方向卡 + 线框草稿 + 快测过线</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">1.1</span><span class="lt">世界观快通：演进线 + 生态图<small>六次浪潮谁值钱 · 四层生态你在哪层 · 讲解图 01/02</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">1.2</span><span class="lt">LLM 最小认知：能力 / 边界 / 幻觉<small>会什么、不会什么；幻觉不是 bug 是机制——够用就停</small></span><span class="lf f-concept">概念</span><span class="lm">10′</span></div>
+        <div class="lesson"><span class="lno">1.3</span><span class="lt">AI 应用的四层架构 + 两周路线<small>前端 / 接口 / 数据库 / 模型 · 讲解图 03 + 十天演进图</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">1.4</span><span class="lt">实战：Agent Lab 环境导览<small>五步闭环（需求 → Prompt → 生成 → 验收 → 迭代）导师演一遍、学员跟一遍</small></span><span class="lf f-practice">实战</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">1.5</span><span class="lt">实战：方向卡 + V0.1 线框草稿<small>3 个可数据化问题定稿；五区块线框 + 四要素 Prompt 草稿，Day 2 直接开生成</small></span><span class="lf f-practice">实战</span><span class="lm">35′</span></div>
+        <div class="lesson"><span class="lno">1.6</span><span class="lt">验收：快测 6 题 + 方向卡过闸<small>考点全部来自公开课 O1–O4；≥4/6 过线，方向卡过导师闸</small></span><span class="lf f-accept">验收</span><span class="lm">10′</span></div>
+        <div class="ltotal">合计 <b>110 分钟</b> · 6 节 · 概念 40′，其余全部动手 · 产出：方向卡 + 线框草稿</div>
+      </div>
+    </details>
+
+    <!-- ===== M3 ===== -->
+    <div class="week-head rv"><h3><span>M3</span>全栈实战</h3><div class="wk-tag">Day 2 – 6 · <b>每天接电一层，V1.0 上线</b></div></div>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M3 · 前端</small>02<span class="ver">V0.1</span></div>
+        <div>
+          <h4>驾驶舱前端：先画出瞄准镜</h4>
+          <p class="core">第一天动手。不追框架、不追炫技——用原生单页把五区块骨架立起来，第一次独立走完「线框 → Prompt → 生成 → 验收」五步闭环。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-fe)"></i>前端</span>
+            <span class="tag"><i style="background:var(--c-arch)"></i>全局架构</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>页面能开 · 三态占位 · 首个 commit</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">2.1</span><span class="lt">信息架构：页面回答什么问题<small>五区块骨架；每个指标必须回答一个业务问题</small></span><span class="lf f-method">方法</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">2.2</span><span class="lt">前端技术选型：约束驱动<small>三步选型法；为什么 V0.1 用原生单页而不是 React</small></span><span class="lf f-method">方法</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">2.3</span><span class="lt">实战：线框与 Prompt 草稿<small>线框 = 瞄准镜；四要素 Prompt（角色 / 任务 / 约束 / 格式）</small></span><span class="lf f-practice">实战</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">2.4</span><span class="lt">实战：Agent Lab 生成 V0.1<small>五步闭环第一次独立走完；模拟数据填充</small></span><span class="lf f-practice">实战</span><span class="lm">35′</span></div>
+        <div class="lesson"><span class="lno">2.5</span><span class="lt">实战：迭代与三态占位<small>Prompt 即源码；加载 / 空 / 错三态先占位；迭代日志</small></span><span class="lf f-practice">实战</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">2.6</span><span class="lt">验收与 Git 起步<small>Rubric 全绿 + 第一个 commit</small></span><span class="lf f-accept">验收</span><span class="lm">10′</span></div>
+        <div class="ltotal">合计 <b>125 分钟</b> · 6 节 · V0.1 页面能开</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M3 · 后端</small>03<span class="ver">V0.2</span></div>
+        <div>
+          <h4>后端接口：让页面说真话</h4>
+          <p class="core">前端和后端唯一的对话方式是契约。今天定契约、生接口、把页面上的模拟数据换成真的——三态第一次面对真实世界。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-be)"></i>后端</span>
+            <span class="tag"><i style="background:var(--c-fe)"></i>前端</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>页面数据变真 · 契约达成</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">3.1</span><span class="lt">接口契约：前端和后端怎么谈恋爱<small>契约先于实现；改契约的代价</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">3.2</span><span class="lt">JSON 与状态码<small>看得懂的报错语言；200 / 400 / 404 / 500 各是谁的锅</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">3.3</span><span class="lt">API 设计与 FastAPI 解剖<small>路径、方法、参数、响应模型</small></span><span class="lf f-method">方法</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">3.4</span><span class="lt">实战：生成接口<small>按契约生成 FastAPI 服务并自测</small></span><span class="lf f-practice">实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">3.5</span><span class="lt">实战：页面接电 + 三态变真<small>loading / error / empty 第一次面对真实接口</small></span><span class="lf f-practice">实战</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">3.6</span><span class="lt">验收<small>页面数据变真 + 错误态可演示</small></span><span class="lf f-accept">验收</span><span class="lm">10′</span></div>
+        <div class="ltotal">合计 <b>115 分钟</b> · 6 节 · V0.2 接口通电</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M3 · 数据库</small>04<span class="ver">V0.3</span></div>
+        <div>
+          <h4>数据库：给数据一个家</h4>
+          <p class="core">重启就丢的数据不算数据。今天搞懂表、行、主键，SQL 看懂四板斧即可，然后让接口真正持久化——重启不丢，才算有家。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-db)"></i>数据库</span>
+            <span class="tag"><i style="background:var(--c-be)"></i>后端</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>数据入库 · 重启不丢</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">4.1</span><span class="lt">为什么需要数据库<small>内存、文件、数据库的分工</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">4.2</span><span class="lt">表、行、主键<small>用部门 KPI 表当例子</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">4.3</span><span class="lt">SQL 四板斧：看懂即可<small>SELECT / INSERT / UPDATE / DELETE——会读比会写重要</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">4.4</span><span class="lt">换库时机：SQLite → PostgreSQL<small>什么时候该换、怎么判断</small></span><span class="lf f-method">方法</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">4.5</span><span class="lt">实战：DDL 建表<small>让 AI 写，你来审：字段、类型、约束</small></span><span class="lf f-practice">实战</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">4.6</span><span class="lt">实战：接口持久化 + 数据入库<small>接口读写改走数据库；重启验证</small></span><span class="lf f-practice">实战</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">4.7</span><span class="lt">验收<small>重启不丢 + SQL 抽读一条</small></span><span class="lf f-accept">验收</span><span class="lm">10′</span></div>
+        <div class="ltotal">合计 <b>125 分钟</b> · 7 节 · V0.3 数据入库</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M3 · 理论</small>05<span class="ver">理论</span></div>
+        <div>
+          <h4>FDE 全栈理论：把前四天的体感升级成框架</h4>
+          <p class="core">前四天你手里已有 PRD、架构、原型、接口与数据库——今天不给新工具，把世界观、企业数字化五阶段、开发流程、服务器与云原生（含命令行八句实验台）、前后端技术地图收成一张自己的 theory-map.md。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-arch)"></i>全局架构</span>
+            <span class="tag"><i style="background:var(--c-cloud)"></i>云原生</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>theory-map.md · 快测过线</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">5.1</span><span class="lt">世界观白话版：技术浪潮和你有什么关系<small>六次浪潮 · 谁变贵/谁变便宜 · 讲解图 day5-waves</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">5.2</span><span class="lt">企业数字化五阶段详解<small>从手工到 Agent 原生——你在哪一站</small></span><span class="lf f-concept">概念</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">5.3</span><span class="lt">软件是怎么开发出来的：流程与需求调研<small>六站旅程 · 访谈四法 · 讲解图 day5-dev-process</small></span><span class="lf f-concept">概念</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">5.4</span><span class="lt">服务器与云原生 + 命令行八句<small>五站演进 · 终端实验台 · 讲解图 day5-cloud-native</small></span><span class="lf f-practice">概念+实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">5.5</span><span class="lt">前端技术图：四大平台与框架地图<small>Web/App/小程序/桌面 · 讲解图 day5-frontend-map</small></span><span class="lf f-concept">概念</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">5.6</span><span class="lt">后端技术图：数据库分类、权限与语言框架地图<small>契约先行 · 讲解图 day5-backend-map</small></span><span class="lf f-concept">概念</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">5.7</span><span class="lt">验收：快测 + 理论地图过闸<small>≥14/21 + theory-map.md 七大主题</small></span><span class="lf f-accept">验收</span><span class="lm">25′</span></div>
+        <div class="ltotal">合计 <b>175 分钟</b> · 7 节 · 全栈理论收束</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M3 · LLM</small>06<span class="ver">词典</span></div>
+        <div>
+          <h4>LLM 理论日：18 词过线</h4>
+          <p class="core">先有全栈地图，再补 LLM 词典。今天无新代码——跟着讲解图把 18 个行业日常词装进脑子：生态四层、Token/幻觉、Prompt/RAG、Eval/护栏、Agent/Harness/MCP，下课前 18 词抽测 ≥12/18 + llm-cognition-card.md。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-llm)"></i>LLM</span>
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent 概念</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>18 词抽测过线 · 认知卡</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">6.1</span><span class="lt">生态四层地图：你在哪一层<small>模型 / 平台 / 协议工具 / 应用 · 讲解图 llm-ecosystem</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">6.2</span><span class="lt">Token / 窗口 / 幻觉：能力与边界<small>会什么、不会什么；幻觉是机制不是 bug</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">6.3</span><span class="lt">Prompt / Context / RAG / Fine-tune vs Prompt<small>上下文工程 · 90% 场景先用 Prompting</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">6.4</span><span class="lt">Eval / Guardrails / Vibe Coding<small>Rubric 代替「我觉得还行」· 带验收的 vibe coding</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">6.5</span><span class="lt">Agent / Harness / Tool / MCP / Workflow vs Agent<small>讲解图 harness-anatomy · agent-loop · workflow-vs-agent</small></span><span class="lf f-concept">概念</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">6.6</span><span class="lt">验收：18 词抽测 + 认知卡过闸<small>抽测 ≥12/18 + llm-cognition-card.md 六大主题</small></span><span class="lf f-accept">验收</span><span class="lm">15′</span></div>
+        <div class="ltotal">合计 <b>120 分钟</b> · 6 节 · LLM 理论收束 · Week 1 词典过关</div>
+      </div>
+    </details>
+
+    <!-- ===== M4 ===== -->
+    <div class="week-head rv"><h3><span>M4</span>Agent 进阶</h3><div class="wk-tag">Day 7 – 9 · <b>从系统到能干活的能力</b></div></div>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M4 · Skill</small>07<span class="ver">SKILL</span></div>
+        <div>
+          <h4>第一个 Skill：把经验封装成能力</h4>
+          <p class="core">系统只能看，能力才能用。今天把你周报里最重复的那项工作封装成第一个 Skill：输入、步骤、输出、证据，一个都不能少。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent</span>
+            <span class="tag"><i style="background:var(--c-llm)"></i>LLM</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>第一个 Skill 跑出证据</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">7.1</span><span class="lt">从系统到能力<small>驾驶舱回答「发生了什么」，Skill 回答「接下来做什么」</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">7.2</span><span class="lt">Skill 解剖：输入 / 步骤 / 输出<small>描述写得好，Agent 才选得对——MCP 的朴素版</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">7.3</span><span class="lt">选哪项工作先封装<small>高频、规则清晰、可验收——三选标准</small></span><span class="lf f-method">方法</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">7.4</span><span class="lt">实战：定义 Skill<small>写出你的第一个 Skill 定义</small></span><span class="lf f-practice">实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">7.5</span><span class="lt">实战：运行与证据<small>跑一次，留下可检查的产物</small></span><span class="lf f-practice">实战</span><span class="lm">25′</span></div>
+        <div class="lesson"><span class="lno">7.6</span><span class="lt">验收<small>Skill 可运行 + 证据可复查</small></span><span class="lf f-accept">验收</span><span class="lm">10′</span></div>
+        <div class="ltotal">合计 <b>110 分钟</b> · 6 节 · 第一个 Skill 上岗</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M4 · Agent</small>08<span class="ver">AGENT</span></div>
+        <div>
+          <h4>Skill 工程化 + 遇见 Agent</h4>
+          <p class="core">能跑不等于可依赖。上午给 Skill 加边界与异常，下午揭开 Agent 的底牌——模型之外那副叫 Harness 的骨架，才是智能体真正的身体。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent</span>
+            <span class="tag"><i style="background:var(--c-llm)"></i>LLM</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>Agent 正确调用你的 Skill</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">8.1</span><span class="lt">边界与异常：Skill 从能跑到可依赖<small>边界声明就是护栏（Guardrails）；异常分类与处置</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">8.2</span><span class="lt">实战：Skill v1 + 异常注入测试<small>故意喂坏输入，必须按声明的方式失败</small></span><span class="lf f-practice">实战</span><span class="lm">40′</span></div>
+        <div class="lesson"><span class="lno">8.3</span><span class="lt">Agent 与 Harness：智能体怎么跑起来的<small>模型 + 工具表 + 记忆 + 循环 = 骨架；决策环 · 讲解图 04；workflow vs agent</small></span><span class="lf f-concept">概念</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">8.4</span><span class="lt">实战：让 Agent 调用你的 Skill<small>自然语言任务 → 正确调用；Skill 描述决定选不选得对</small></span><span class="lf f-practice">实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">8.5</span><span class="lt">验收<small>Agent v0.1 闭环 + 陈述「它什么时候会选错」</small></span><span class="lf f-accept">验收</span><span class="lm">15′</span></div>
+        <div class="ltotal">合计 <b>120 分钟</b> · 5 节 · Agent v0.1 闭环</div>
+      </div>
+    </details>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M4 · 编排</small>09<span class="ver">编排</span></div>
+        <div>
+          <h4>多 Skill 编排与人工确认</h4>
+          <p class="core">一个 Skill 是工具，多个 Skill 编成流程才是同事。今天给流程装上确认点与执行日志——信任不是感觉，是工程设计。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>多 Skill 编排 + 人工确认跑通</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">9.1</span><span class="lt">业务流程即编排<small>能写死用 workflow，写不死才上 agent</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">9.2</span><span class="lt">人工确认与执行记录：信任的工程设计<small>哪些节点必须人点头；日志是追责与复盘的地基</small></span><span class="lf f-concept">概念</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">9.3</span><span class="lt">实战：再封装两个 Skill<small>复用 D7 的三选标准，速度应该明显变快</small></span><span class="lf f-practice">实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">9.4</span><span class="lt">实战：编排 + 确认点 + 执行日志<small>三个 Skill 串成一条部门流程</small></span><span class="lf f-practice">实战</span><span class="lm">35′</span></div>
+        <div class="lesson"><span class="lno">9.5</span><span class="lt">验收<small>编排跑通 + 确认点生效 + 日志完整</small></span><span class="lf f-accept">验收</span><span class="lm">20′</span></div>
+        <div class="ltotal">合计 <b>115 分钟</b> · 5 节 · 部门流程半自动</div>
+      </div>
+    </details>
+
+    <!-- ===== M5 ===== -->
+    <div class="week-head rv"><h3><span>M5</span>收官</h3><div class="wk-tag">Day 10 · <b>V2.0 · 答辩 · 自学路线</b></div></div>
+
+    <details class="day rv">
+      <summary>
+        <div class="dnum"><small>M5 · 收官</small>10<span class="ver">V2.0</span></div>
+        <div>
+          <h4>V2.0 收官：从项目到能力</h4>
+          <p class="core">Agent 接入驾驶舱，十条能力证据端到端跑通，站上答辩台。最后画一张自己的行业地图：哪些懂了、哪些要继续自学——课程结束，成长开始。</p>
+          <div class="tags">
+            <span class="tag"><i style="background:var(--c-agent)"></i>Agent</span>
+            <span class="tag"><i style="background:var(--c-arch)"></i>全局架构</span>
+          </div>
+        </div>
+        <div class="outcome"><b>当日产出</b>V2.0 答辩通过 + 90 天自学路线</div>
+        <div class="chev">+</div>
+      </summary>
+      <div class="lessons">
+        <div class="lesson"><span class="lno">10.1</span><span class="lt">实战：Agent 接入驾驶舱<small>V2.0：在驾驶舱里直接给 Agent 派活</small></span><span class="lf f-practice">实战</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">10.2</span><span class="lt">端到端十条能力证据<small>从建表到派活，十条链路逐条留证</small></span><span class="lf f-practice">实战</span><span class="lm">20′</span></div>
+        <div class="lesson"><span class="lno">10.3</span><span class="lt">答辩准备<small>5 分钟讲清：建了什么、怎么验的、踩了什么坑</small></span><span class="lf f-method">方法</span><span class="lm">15′</span></div>
+        <div class="lesson"><span class="lno">10.4</span><span class="lt">答辩与互评<small>演示 V2.0 + 回答「Agent 什么时候会选错」</small></span><span class="lf f-accept">验收</span><span class="lm">30′</span></div>
+        <div class="lesson"><span class="lno">10.5</span><span class="lt">两周复盘：行业地图自评 + 自学路线<small>对照七领域地图自评；每人一张 90 天自学路线</small></span><span class="lf f-accept">验收</span><span class="lm">15′</span></div>
+        <div class="ltotal">合计 <b>110 分钟</b> · 5 节 · V2.0 答辩 · 毕业</div>
+      </div>
+    </details>
+
+    <div class="diagram rv" style="margin-top:80px">
+      <div class="dg-cap">讲解图 04 · Agent 决策环 —— Harness 是智能体的身体（Day 8 第 3 节）</div>
+      <img src="../assets/diagrams/agent-loop.svg" alt="Agent 决策环" loading="lazy">
+    </div>
+    <p class="rhythm-note rv">同一个模型，聊天窗里只会说话，装进 Harness 就会干活——这就是 Day 8 的体感。选择原则：<b>能写死用 Workflow，写不死才上 Agent</b>；Skill 描述写得越好，第 1 步「理解任务」就越不容易跑偏。</p>
+  </div>
+</section>
+
+<!-- ================= 07 节奏 + 70/30 ================= -->
+<section id="format">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">07</span>上课方式 · FORMAT</div>
+    <h2 class="sec-title rv">概念讲透就停，时间留给动手</h2>
+    <div class="duo" style="margin-top:50px">
+      <div class="rv">
+        <h4 style="font-family:var(--serif);font-size:22px;font-weight:900">一节课的典型配比</h4>
+        <div class="rhythm-bar">
+          <div style="flex:15"><b>15′</b><small>概念</small></div>
+          <div style="flex:20"><b>20′</b><small>方法</small></div>
+          <div style="flex:30"><b>30′</b><small>实战</small></div>
+          <div style="flex:10"><b>10′</b><small>验收</small></div>
+        </div>
+        <p class="rhythm-note">视频课位已预留，现阶段概念节配「口播稿 + 讲解图」——看文档能答对题，就算学会。每天最后一节永远是验收：不过，当天补，不拖进明天。</p>
+      </div>
+      <div class="split7030 rv rv-d1">
+        <div class="row">
+          <div class="pct">70%</div>
+          <div class="what"><b>主线 · 所有人同款</b><span>一艘部门驾驶舱，同一套验收标准。先学会走路，再跑自己的步频。</span></div>
+        </div>
+        <div class="row">
+          <div class="pct">30%</div>
+          <div class="what"><b>方向 · 自己部门的真实问题</b><span>Day 1 方向卡定稿，之后每天的主线任务都换成自己的数据与场景。</span>
+            <div class="dir-chips"><i>销售</i><i>运营</i><i>财务</i><i>供应链</i><i>HR</i><i>客服</i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 三道闸 ================= -->
+<section id="gates">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">08</span>验收机制 · GATES</div>
+    <h2 class="sec-title rv">三道闸，不过不进阶</h2>
+    <p class="sec-lede rv">AI 时代的验收责任在人。所有验收标准提前公开，AI 导师按表执行——没有「我觉得还行」，只有 Rubric 全绿。</p>
+    <div class="gates rv">
+      <div class="gate">
+        <div><div class="g-no">GATE 1</div><div class="who">每天最后 10–20′ · AI 导师执行</div></div>
+        <div><h4>日验收</h4><p>当日 Rubric 全绿才算完：产物能跑、证据留档、概念抽测过线。不过当天补，不拖进明天。</p></div>
+        <div><h4>快捷提问</h4><p>AI 导师内置当日快捷问题：「帮我验收 V0.x」「这个报错是谁的锅」「解释一下今天的 XX 概念」。</p></div>
+      </div>
+      <div class="gate">
+        <div><div class="g-no">GATE 2</div><div class="who">Day 6 · 导师 + 学员互评</div></div>
+        <div><h4>周验收 · V1.0</h4><p>换设备能开、十条链路全绿、能讲清每一层为什么这么选。讲不清选型的，回去补 M2。</p></div>
+        <div><h4>复盘</h4><p>Week1 复盘：哪些概念还懵——回查词典与讲解图，带着问题进 Week2。</p></div>
+      </div>
+      <div class="gate">
+        <div><div class="g-no">GATE 3</div><div class="who">Day 10 · 评委答辩</div></div>
+        <div><h4>毕业答辩 · V2.0</h4><p>8 分钟演示（作品 3′ + 架构 3′ + 迭代故事 2′）+ 十条能力证据 + 回答「你的 Agent 什么时候会选错」。答得出，才真的懂 Harness。</p></div>
+        <div><h4>毕业产出</h4><p>行业地图自评 + 90 天自学路线——课程结束，成长开始。我们是引路人，后面的路你自己走。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 资源附件 ================= -->
+<section id="resources">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="num">09</span>资源附件 · RESOURCES</div>
+    <h2 class="sec-title rv">五份附件，十天随身</h2>
+    <p class="sec-lede rv">不是课文，是工具：公开课负责完整，词典用来查，清单用来延伸，速查卡放在手边。全部在 <code style="font-family:var(--mono);font-size:13px">class/</code> 目录下，随课程包分发。</p>
+    <div class="res-grid rv">
+      <a class="res-card" href="../open-course/README.md">
+        <div class="rk">公开课 · OPEN COURSE</div>
+        <h4>世界观完整版 · O1–O5</h4>
+        <p>主课快通，公开课完整：O1 时代演进 / O2 LLM 与编排深化 / O3 生态与基建 / O4 新概念词典 / O5 毕业后的路线。Day 1 快测考点全在这里——课前与每晚自学。</p>
+        <span class="fn">open-course/README.md</span>
+      </a>
+      <a class="res-card" href="../resources/glossary.md">
+        <div class="rk">词典 · GLOSSARY</div>
+        <h4>新概念词典 · 18 词</h4>
+        <p>每词三行：一句话定义、在课程第几天遇到、延伸阅读。附自测 6 题——Day 1 抽测范围。</p>
+        <span class="fn">resources/glossary.md</span>
+      </a>
+      <a class="res-card" href="../resources/reading-list.md">
+        <div class="rk">延伸 · READING</div>
+        <h4>技术演进与生态阅读清单</h4>
+        <p>M1 世界观日的课后延伸：视频、文章、榜单各就各位，按「30 分钟 / 半天 / 一个周末」分级。</p>
+        <span class="fn">resources/reading-list.md</span>
+      </a>
+      <a class="res-card" href="../resources/cheatsheet-four-layer.md">
+        <div class="rk">速查卡 · CHEATSHEET</div>
+        <h4>四层架构速查卡</h4>
+        <p>M2–M3 手边卡：每层「是什么 / 为什么 / 怎么选 / 挂了什么症状」，选型吵架时翻这张。</p>
+        <span class="fn">resources/cheatsheet-four-layer.md</span>
+      </a>
+      <a class="res-card" href="../resources/cheatsheet-prompt.md">
+        <div class="rk">速查卡 · CHEATSHEET</div>
+        <h4>Prompt 工程速查卡</h4>
+        <p>D2 / D5 实战手边卡：四要素模板、迭代口诀、常见翻车现场与修正手法。</p>
+        <span class="fn">resources/cheatsheet-prompt.md</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-line rv">驾驶舱是载体，<br><em>认知才是交付物。</em><br>我们做引路人。</div>
+    <div class="foot-meta rv rv-d1">
+      <span>FDE 训练营 · 模块化课程 v0.6</span>
+      <span>6 模块 · 10 天 · 100–140′/天</span>
+      <span>世界观 → 全栈 → Agent</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

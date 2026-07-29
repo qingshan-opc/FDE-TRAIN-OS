@@ -3,7 +3,7 @@
 # Worker: docker run ... fde-api:0.1.0 python -m services.worker
 # Migrate: docker run ... fde-api:0.1.0 python -m services.migrations_runner
 
-FROM python:3.12-slim AS base
+FROM docker.m.daocloud.io/library/python:3.12-slim AS base
 
 WORKDIR /app
 
@@ -19,6 +19,7 @@ RUN pip install --no-cache-dir -r requirements-skeleton.txt
 COPY services ./services
 COPY contracts ./contracts
 COPY migrations ./migrations
+COPY class ./class
 COPY prototype ./prototype
 COPY scripts ./scripts
 COPY sim ./sim

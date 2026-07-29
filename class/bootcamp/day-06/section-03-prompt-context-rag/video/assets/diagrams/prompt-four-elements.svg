@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Prompt 四要素">
+<rect width="1040" height="470" fill="#f2f5f0"/>
+<!-- 四要素 2x2 -->
+<g>
+<rect x="60" y="40" width="440" height="140" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="84" y="74" font-size="15" font-weight="800" fill="#1400ff" style="font-family:'SF Mono',Menlo,monospace">01 角色</text>
+<text x="84" y="98" font-size="12" fill="rgba(35,31,32,.6)">它是谁：「资深前端 + 数据可视化工程师」</text>
+<text x="84" y="126" font-size="11" fill="rgba(35,31,32,.45)">缺了 → 输出风格漂移，每次长得都不一样</text>
+<text x="84" y="152" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">ROLE</text>
+</g>
+<g>
+<rect x="540" y="40" width="440" height="140" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="564" y="74" font-size="15" font-weight="800" fill="#1400ff" style="font-family:'SF Mono',Menlo,monospace">02 任务</text>
+<text x="564" y="98" font-size="12" fill="rgba(35,31,32,.6)">做什么：「生成单文件部门驾驶舱页面」</text>
+<text x="564" y="126" font-size="11" fill="rgba(35,31,32,.45)">缺了 → 它自由发挥，给你一篇说明文</text>
+<text x="564" y="152" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">TASK</text>
+</g>
+<g>
+<rect x="60" y="200" width="440" height="140" fill="#ffffff" stroke="#1400ff" stroke-width="2.5"/>
+<text x="84" y="234" font-size="15" font-weight="800" fill="#1400ff" style="font-family:'SF Mono',Menlo,monospace">03 约束</text>
+<text x="84" y="258" font-size="12" fill="rgba(35,31,32,.6)">必须/不许：「单 HTML · 无外部依赖 · 指标 ≤5」</text>
+<text x="84" y="286" font-size="11" fill="rgba(35,31,32,.45)">缺了 → 无法验收——约束就是 Rubric 的上游</text>
+<text x="84" y="312" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">CONSTRAINTS · 至少 3 条、条条可验收</text>
+</g>
+<g>
+<rect x="540" y="200" width="440" height="140" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="564" y="234" font-size="15" font-weight="800" fill="#1400ff" style="font-family:'SF Mono',Menlo,monospace">04 格式</text>
+<text x="564" y="258" font-size="12" fill="rgba(35,31,32,.6)">长什么样：「五区块 · 三态占位 · 语义化结构」</text>
+<text x="564" y="286" font-size="11" fill="rgba(35,31,32,.45)">缺了 → 对不上线框，拼装时全是缝</text>
+<text x="564" y="312" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">FORMAT</text>
+</g>
+<!-- 反例 → 正例 -->
+<text x="60" y="392" font-size="13" fill="rgba(35,31,32,.45)" text-decoration="line-through">「请设计得高端、大气、智能」</text>
+<path d="M420 385 L470 385" stroke="#231f20" stroke-width="1.8"/>
+<path d="M470 385 L462 380 L462 390 Z" fill="#231f20"/>
+<text x="490" y="392" font-size="13" font-weight="700" fill="#1400ff">可验收：「单文件 · 无依赖 · 五区块 · 三态占位」</text>
+<text x="520" y="436" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.5)">空泛形容词不产生任何像素 —— 每条约束都要能回答「怎么算做到」</text>
+</svg>

@@ -1,0 +1,41 @@
+{
+  "total": 216.385,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 36.24
+    },
+    {
+      "id": "02-system-vs-skill",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/02-system-vs-skill.wav",
+      "start": 36.49,
+      "duration": 34.968
+    },
+    {
+      "id": "03-prompt-vs-skill",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/03-prompt-vs-skill.wav",
+      "start": 71.708,
+      "duration": 39.847
+    },
+    {
+      "id": "04-triple-value",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/04-triple-value.wav",
+      "start": 111.805,
+      "duration": 37.04
+    },
+    {
+      "id": "05-anti-patterns",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/05-anti-patterns.wav",
+      "start": 149.095,
+      "duration": 36.56
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/06-close.wav",
+      "start": 185.905,
+      "duration": 30.48
+    }
+  ]
+}

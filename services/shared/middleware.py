@@ -11,7 +11,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
 from services.shared import ALLOW_DEV_HEADERS, AuthUser, FDE_ENV, decode_access_token, get_user_by_id, user_enrolled
-from services.shared.config import CORS_ORIGINS
+from services.shared.auth_constants import auth_cookie_secure
+from services.shared.config import DEFAULT_CAMP_ID, HSTS_MAX_AGE_SEC
+from services.shared.auth_constants import ACCESS_COOKIE, CSRF_COOKIE, CSRF_HEADER
 
 # Populated per-request by RequestContextMiddleware; read by the logging
 # record factory (services.shared.setup_logging) so every log line carries
@@ -38,7 +40,19 @@ _CSP_DEFAULT = (
     "style-src 'self' 'unsafe-inline'; "
     "frame-ancestors 'none'"
 )
+# Interactive courseware (self-contained H5 single pages with inline JS) —
+# allow inline scripts only under this path prefix.
+_CSP_COURSEWARE = (
+    "default-src 'self'; "
+    "img-src 'self' data: blob:; "
+    "media-src 'self' blob:; "
+    "connect-src 'self'; "
+    "script-src 'self' 'unsafe-inline'; "
+    "style-src 'self' 'unsafe-inline'; "
+    "frame-ancestors 'none'"
+)
 _DOCS_PREFIXES = ("/api/docs", "/api/redoc")
+_COURSEWARE_PREFIXES = ("/course-assets/resources/h5/",)
 
 PUBLIC_EXACT = {
     "/",
@@ -57,20 +71,21 @@ PUBLIC_PREFIXES = (
     "/api/docs",
     "/api/redoc",
     "/api/v1/auth/login",
+    "/api/v1/auth/register",
+    "/api/v1/auth/invite-link",
     "/api/v1/auth/invite",
     "/api/v1/auth/logout",
     "/api/v1/auth/refresh",
     "/app",
     "/author",
     "/login",
+    "/partner",
+    "/chain",
     "/assets",
     "/slice",
 )
 
 SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
-CSRF_HEADER = "X-CSRF-Token"
-CSRF_COOKIE = "fde_csrf"
-ACCESS_COOKIE = "fde_token"
 
 
 class RequestContextMiddleware(BaseHTTPMiddleware):
@@ -94,7 +109,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
                 email=f"{request.headers['X-Learner-Id']}@local",
                 role="learner",
             )
-            request.state.camp_id = request.headers.get("X-Camp-Id", "camp-v03")
+            request.state.camp_id = request.headers.get("X-Camp-Id", DEFAULT_CAMP_ID)
         elif token:
             try:
                 payload = decode_access_token(token)
@@ -113,9 +128,12 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             and request.url.path
             not in (
                 "/api/v1/auth/login",
+                "/api/v1/auth/register",
                 "/api/v1/auth/invite",
                 "/api/v1/auth/logout",
                 "/api/v1/auth/refresh",
+                "/api/v1/partner/auth/login",
+                "/api/v1/billing/wechat/notify",
             )
         ):
             cookie_csrf = request.cookies.get(CSRF_COOKIE)
@@ -136,9 +154,11 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         response.headers.setdefault("X-Frame-Options", "DENY")
         response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
         is_docs = request.url.path.startswith(_DOCS_PREFIXES)
-        response.headers.setdefault("Content-Security-Policy", _CSP_DOCS if is_docs else _CSP_DEFAULT)
-        if FDE_ENV == "prod":
-            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+        is_courseware = request.url.path.startswith(_COURSEWARE_PREFIXES)
+        csp = _CSP_DOCS if is_docs else (_CSP_COURSEWARE if is_courseware else _CSP_DEFAULT)
+        response.headers.setdefault("Content-Security-Policy", csp)
+        if FDE_ENV == "prod" and auth_cookie_secure():
+            response.headers.setdefault("Strict-Transport-Security", f"max-age={HSTS_MAX_AGE_SEC}; includeSubDomains")
         return response
 
 

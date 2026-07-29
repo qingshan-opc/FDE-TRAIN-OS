@@ -37,6 +37,9 @@ from services.author.app import router as author_router  # noqa: E402
 from services.media.app import router as media_router  # noqa: E402
 from services.learner.app import router as learner_router  # noqa: E402
 from services.sql_lab.app import router as sql_lab_router  # noqa: E402
+from services.billing.app import router as billing_router  # noqa: E402
+from services.partner.app import router as partner_router  # noqa: E402
+from services.chain.app import router as chain_router  # noqa: E402
 
 setup_logging()
 ensure_dirs()
@@ -60,6 +63,9 @@ _ROUTERS = [
     (media_router, "FDE Media"),
     (learner_router, "FDE Learner"),
     (sql_lab_router, "FDE SQL Lab"),
+    (billing_router, "FDE Billing"),
+    (partner_router, "FDE Partner"),
+    (chain_router, "FDE Chain"),
 ]
 _SERVICE_TITLES = [title for _, title in _ROUTERS]
 
@@ -72,7 +78,7 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS or ["http://127.0.0.1:8760"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "X-CSRF-Token", "X-Request-Id", "Last-Event-ID"],
@@ -237,6 +243,10 @@ if _web_dist.is_dir() and (_web_dist / "index.html").exists():
     async def spa_about():
         return FileResponse(_web_dist / "index.html")
 
+    @app.get("/docs/{full_path:path}")
+    async def spa_docs(full_path: str = ""):
+        return FileResponse(_web_dist / "index.html")
+
     @app.get("/login")
     async def spa_login():
         return FileResponse(_web_dist / "index.html")
@@ -247,6 +257,26 @@ if _web_dist.is_dir() and (_web_dist / "index.html").exists():
 
     @app.get("/verify/{cert_id}")
     async def spa_verify(cert_id: str):
+        return FileResponse(_web_dist / "index.html")
+
+    @app.get("/chain")
+    async def spa_chain():
+        return FileResponse(_web_dist / "index.html")
+
+    @app.get("/chain/algorithms")
+    async def spa_chain_algorithms():
+        return FileResponse(_web_dist / "index.html")
+
+    @app.get("/chain/block/{height}")
+    async def spa_chain_block(height: int):
+        return FileResponse(_web_dist / "index.html")
+
+    @app.get("/chain/tx/{tx_hash}")
+    async def spa_chain_tx(tx_hash: str):
+        return FileResponse(_web_dist / "index.html")
+
+    @app.get("/chain/cert/{cert_id}")
+    async def spa_chain_cert(cert_id: str):
         return FileResponse(_web_dist / "index.html")
 else:
     if _proto_app.is_dir():
@@ -261,3 +291,9 @@ if _slice.is_dir():
 # Public /artifacts only in non-prod for local debug
 if FDE_ENV != "prod" and ARTIFACT_ROOT.is_dir():
     app.mount("/artifacts", StaticFiles(directory=str(ARTIFACT_ROOT)), name="artifacts")
+
+# Course content assets (class/): diagrams, open-course docs, schedule site,
+# homework/template downloads. Mounted in all envs — it IS course content.
+_course_assets = _ROOT / "class"
+if _course_assets.is_dir():
+    app.mount("/course-assets", StaticFiles(directory=str(_course_assets), html=True), name="course_assets")

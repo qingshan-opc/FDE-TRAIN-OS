@@ -1,0 +1,47 @@
+{
+  "total": 206.629,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 24.56
+    },
+    {
+      "id": "02-agent",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/02-agent.wav",
+      "start": 24.81,
+      "duration": 31.84
+    },
+    {
+      "id": "03-harness-tool",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/03-harness-tool.wav",
+      "start": 56.9,
+      "duration": 30.249
+    },
+    {
+      "id": "04-mcp",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/04-mcp.wav",
+      "start": 87.399,
+      "duration": 34.24
+    },
+    {
+      "id": "05-workflow",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/05-workflow.wav",
+      "start": 121.889,
+      "duration": 33.36
+    },
+    {
+      "id": "06-copilot",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/06-copilot.wav",
+      "start": 155.499,
+      "duration": 27.92
+    },
+    {
+      "id": "07-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s05_course/tts/07-close.wav",
+      "start": 183.669,
+      "duration": 22.96
+    }
+  ]
+}

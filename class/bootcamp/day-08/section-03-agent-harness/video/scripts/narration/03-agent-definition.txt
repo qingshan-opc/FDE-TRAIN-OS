@@ -1,0 +1,1 @@
+Agent 是什么？骨架加上角色：你的说明书、人格、目标。你们写的 ai-tutor.yaml，其实就是一份 Agent 角色定义——你们早就在造 Agent 了，只是没人告诉名字。Skill 是给 Agent 预备的工具；Agent 拿着工具表上的 Skill 去干活，对吧。

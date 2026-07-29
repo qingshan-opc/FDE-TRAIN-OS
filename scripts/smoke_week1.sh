@@ -2,18 +2,21 @@
 # Week1 Day1–5 package + stub artifact smoke
 set -euo pipefail
 BASE="${FDE_INTERNAL_BASE:-http://127.0.0.1:8760}"
+CAMP_ID="${FDE_DEFAULT_CAMP_ID:-camp-v03}"
+DEMO_EMAIL="${FDE_DEMO_EMAIL:-demo@fde.local}"
+DEMO_PASSWORD="${FDE_DEMO_PASSWORD:-demo1234}"
 
 echo "== healthz =="
 curl -sf "$BASE/healthz" >/dev/null
 
 LOGIN=$(curl -sf -X POST "$BASE/api/v1/auth/login" -H 'Content-Type: application/json' \
-  -d '{"email":"demo@fde.local","password":"demo1234","camp_id":"camp-v03"}')
+  -d "{\"email\":\"$DEMO_EMAIL\",\"password\":\"$DEMO_PASSWORD\",\"camp_id\":\"$CAMP_ID\"}")
 TOKEN=$(echo "$LOGIN" | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
 LEARNER_ID=$(echo "$LOGIN" | python3 -c "import sys,json; print(json.load(sys.stdin)['user']['id'])")
 AUTH="Authorization: Bearer $TOKEN"
 
 echo "== camp days list =="
-curl -sf -H "$AUTH" "$BASE/api/v1/camps/camp-v03/days" \
+curl -sf -H "$AUTH" "$BASE/api/v1/camps/$CAMP_ID/days" \
   | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['count']>=8; days={x['day'] for x in d['days']}; assert {1,2,3,4,5,6,7,8}<=days; print('days', sorted(days))"
 
 run_day_stub() {
@@ -22,14 +25,14 @@ run_day_stub() {
   local path=$3
   local needle=$4
   echo "== Day${day} package+stub =="
-  curl -sf -H "$AUTH" "$BASE/api/v1/camps/camp-v03/days/${day}?learner_id=$LEARNER_ID" \
+  curl -sf -H "$AUTH" "$BASE/api/v1/camps/$CAMP_ID/days/${day}?learner_id=$LEARNER_ID" \
     | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['lab']['runner']=='agent'; print(d['title'], d.get('source'))"
   curl -sf -X POST -H "$AUTH" -H 'Content-Type: application/json' \
     "$BASE/api/v1/agent/workspaces/ensure" \
-    -d "{\"camp_id\":\"camp-v03\",\"learner_id\":\"$LEARNER_ID\"}" >/dev/null
+    -d "{\"camp_id\":\"$CAMP_ID\",\"learner_id\":\"$LEARNER_ID\"}" >/dev/null
   JOB=$(curl -sf -X POST -H "$AUTH" -H 'Content-Type: application/json' \
     "$BASE/api/v1/agent/jobs" \
-    -d "{\"camp_id\":\"camp-v03\",\"learner_id\":\"$LEARNER_ID\",\"prompt\":$(python3 -c "import json; print(json.dumps('''$prompt'''))"),\"force_stub\":true}")
+    -d "{\"camp_id\":\"$CAMP_ID\",\"learner_id\":\"$LEARNER_ID\",\"prompt\":$(python3 -c "import json; print(json.dumps('''$prompt'''))"),\"force_stub\":true}")
   JID=$(echo "$JOB" | python3 -c "import sys,json; print(json.load(sys.stdin)['job_id'])")
   for _ in $(seq 1 40); do
     ST=$(curl -sf -H "$AUTH" "$BASE/api/v1/agent/jobs/$JID" | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")

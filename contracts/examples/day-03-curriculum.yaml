@@ -1,105 +1,346 @@
-camp_version: v0.3
+camp_version: v0.7
 day: 3
-title: 后端逻辑、API 与技术选型
-project: 企业库存管理系统 · API
-project_brief: 交付入库 API 说明页，含路径、方法与示例 JSON。
+title: AI 时代的前端
+week: 1
+project: AI 时代的前端
+project_brief: 方向定了（Day 1 PRD）、骨架定了（Day 2 架构），今天做脸——用 UI/UX 与 Web 前端两份角色提示词，为「部门周报助手」生成高保真单页原型 index.html，并学会用设计规范四件套验收还原度：不手改产物，只改约束重生成。
 review_checklist:
-- 产物文件存在且可预览
-- 对照 rubric 自检通过
-- 能向导师说清本日价值
+- 日级快测 6 题 ≥ 4 题正确
+- '`index.html` 单文件双击可直接打开，含 hero 区 + 三个功能区块'
+- 全页真实中文文案，无任何占位符（无 lorem ipsum、无「示例文字」、无灰块图）
+- 关键按钮具备三态样式：默认 / 悬停 / 禁用，缺一即打回重做
+resources:
+- id: tk-web
+  title: 提示词下载 · Web Client Agent（前端）
+  kind: download
+  summary: 整份粘进 AI 工具即用的前端提示词
+  url: /course-assets/resources/prompt-toolkit/Web_Client_Agent_Prompt.md
+- id: tk-uiux
+  title: 提示词下载 · UI/UX Designer Agent（设计）
+  kind: download
+  summary: 高保真原型生成提示词，与前端提示词搭配使用
+  url: /course-assets/resources/prompt-toolkit/UIUX_Designer_Agent_Prompt.md
+- id: tk-spec
+  title: 模板下载 · 设计规范四件套模板
+  kind: download
+  summary: 填空即用的 Design Spec 模板：颜色/字号/间距/圆角 + 交互三态
+  url: /course-assets/resources/prompt-toolkit/Design_Spec_Template.md
 learn:
   lingzhi_tags:
-  - camp:v0.3
+  - camp:v0.7
   - day:3
-  - topic:api
-  estimated_minutes: 120
+  - project:role-week
+  estimated_minutes: 100
   require_capsules: true
   capsules:
   - id: c1
-    title: API 与 HTTP/JSON
-    minutes: 20
-    content: API 是前后端翻译官；REST：GET 查、POST 增。
-    practice: 写出入库接口的方法与路径。
+    title: AI 时代的前端：从切图到还原度验收
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-03/section-01-frontend-in-ai-era/lesson.md
+    content: '【开场抛问】同学们，先回答一个问题：如果 AI 一分钟能生成十个页面，前端工程师还值钱吗？——值钱，但值钱的部位换了。
+
+
+      【类比】以前的前端像「搬砖工人」——一块砖一块砖砌，HTML、CSS、JS 全是手写的。现在 AI 是施工队，一晚上能盖十栋楼。你的新身份是——「样板间验收师」：拿著清单进门，墙面平不平、插座通不通，逐项打勾。
+
+
+      【核心概念】这个清单有个专业名字，叫「还原度」——人话就是：做出来的页面，和设计蓝本有多像。像不像，不能靠感觉，要靠数字。
+
+
+      【重点加高】注意这个转变——「写页面」在贬值，「判断页面」在升值。你说不出什么叫好看，AI 就给不出好看。
+
+
+      【为什么轮到你】AI 生成不设上限，瓶颈就转移到了挑选和修正。你的审美和标准，就是产出的天花板。
+
+
+      【带走的话】记住一句话——今天起，你不生产页面，你「验收」页面。会看，比会做更值钱。'
+    practice: 完成标志：能用「还原度」一词解释前端验收师的工作；写下至少 1 条可量化的验收意见；知识确认两题均有书面答案。
+    tools:
+    - name: 还原度验收清单
+      note: 「差点意思」必须翻译成可量化差距
+    - name: 角色转变卡
+      note: 从切图到还原度验收官
+    quiz:
+    - - AI 时代前端角色的核心价值从什么转向了什么？
+      - - 从写 CSS 转向手写更多页面
+        - 从写页面转向定义还原度标准并验收
+        - 从做界面转向做后端接口
+      - 1
+      - AI 接管了生产，人的瓶颈在判断与验收。
+    - - 下面哪条是合格的验收意见？
+      - - 这个页面差点意思
+        - 整体风格再高级一点
+        - '主按钮应为规范主色 #2563EB，实际用了 #3B82F6'
+      - 2
+      - 可验收的意见必须可量化、可对照。
   - id: c2
-    title: 业务逻辑与 ORM
+    title: 设计规范：高保真原型的秘密
     minutes: 20
-    content: 流向：API→业务→ORM/驱动→库。ORM 少写 SQL。
-    practice: 解释驱动 vs ORM 各一句。
+    form: 概念
+    content_ref: class/bootcamp/day-03/section-02-design-spec/lesson.md
+    content: '【开场抛问】同学们，你让 AI 生成过页面吗？是不是总觉得——能看，但「差点意思」？这节就告诉你差的那点意思是什么。
+
+
+      【诊断】AI 不认识你的品牌。你不给约束，它就用「平均值审美」——万能蓝紫渐变、万能 16 像素。每项都不出错，拼起来没性格。
+
+
+      【解法】解法不是换模型，是给「设计规范」——人话就是：把好看翻译成数字。你给数字，AI 才有靶子。
+
+
+      【四件套】规范就四件：「颜色」——主色、辅助色、警示色，各给色值；「字号层级」——大标题到正文三到四级；「间距」——八的倍数往上叠；「圆角阴影」——全站统一一挡。
+
+
+      【类比】这就像请油漆工刷墙。你说「刷好看点」，他只能自由发挥；你给他「色卡和尺子」，他才能刷出你要的那面墙。
+
+
+      【两条军规】再记两条：一，「真实文案」，不许用占位符——假文字会骗过你的眼睛；二，「交互三态」——默认、悬停、禁用，少一个就是海报不是界面。
+
+
+      【带走的话】带走一句话——对 AI 说「好看点」是许愿，给它四件套才是下单。'
+    practice: 完成标志：`design-spec.md` 覆盖四件套 + 三态，每项都有具体数值；全文没有一个「好看」「大气」「高级感」这类不可验收的词；知识确认两题均有书面答案。
+    resource_ids:
+    - tk-spec
+    tools:
+    - name: 三态检查单
+      note: 默认 / 悬停 / 禁用，一个不能少
+    quiz:
+    - - 设计规范四件套是？
+      - - 颜色、字号层级、间距体系、圆角阴影
+        - Logo、插画、字体、动效
+        - 布局、栅格、图标、配图
+      - 0
+      - 四件套：颜色 / 字号层级 / 间距体系 / 圆角阴影。
+    - - 为什么原型里严禁使用占位符文案？
+      - - 占位符涉嫌版权问题
+        - 假文案会掩盖真实排版问题，中文长度与英文差异会让布局上线才翻车
+        - 占位符会降低页面加载速度
+      - 1
+      - 真实文案才能在原型阶段暴露真实版式问题。
   - id: c3
-    title: 语言选型
-    minutes: 20
-    content: Python 快落地/AI；Java 企业大系统；Go 高并发；Node 前后端统一。
-    practice: 为库存 MVP 选一门并说明。
+    title: 解剖前端提示词：UI 先行，API 在后
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-03/section-03-web-prompt-anatomy/lesson.md
+    content: '【开场抛问】同学们，今天有两份提示词——设计的、前端的。为什么是两个，不是一个？这一节我们把它解剖开。
+
+
+      【接力】看流水线：「UIUX」吃你的 PRD，产出高保真原型；「Web Client」吃原型，产出前端代码。前一份的输出，正好是后一份的输入——这就是 Day 1 说的团队协作，只是执行者换成了 AI。
+
+
+      【两阶段】重点来了。Web Client 的提示词把活拆成两阶段：「UI 先行，API 在后」——先把界面做对，再接数据。为什么？因为「改界面成本低，改逻辑成本高」。界面上改个颜色几分钟；界面和逻辑缠在一起，改个颜色牵动十处。
+
+
+      【类比】像装修：先刷墙试色，不满意就重刷；你不会等家具全搬进去再试色——那时候动一面墙，全屋都得挪。
+
+
+      【迭代指令】还有一门手艺：下修改指令。烂指令是「标题大一点」，AI 只能猜；好指令是「标题字号从 24 调到 32」——「具体、可量化」，一次到位。记住口诀：产出不对，「改约束重生成」，别手改。
+
+
+      【带走的话】带走一句话——先冻结脸，再接心脏；改提示词，不改产物。'
+    practice: 完成标志：两份提示词的关键段落均有标注截图或摘抄；三条改写指令每条都含至少一个具体数值；知识确认两题均有书面答案。
+    resource_ids:
+    - tk-web
+    - tk-uiux
+    tools:
+    - name: 修改指令句式卡
+      note: 不说「大一点」，说「标题 24 调到 32」
+    quiz:
+    - - Web Client 提示词为什么规定「UI 先行、API 在后」？
+      - - 后端接口通常还没开发完
+        - 改界面成本低、改逻辑成本高，先冻结易变的视觉再写逻辑返工最少
+        - 纯 UI 页面加载更快
+      - 1
+      - 两阶段划分的根本原因是修改成本不对称。
+    - - 给 AI 的修改指令，哪条最有效？
+      - - 标题再大一点，醒目些
+        - 标题字号从 24px 调到 32px
+        - 参考大厂的风格优化一下标题
+      - 1
+      - 具体、可量化的指令才能一次到位。
   - id: c4
-    title: AI 生成入库接口
-    minutes: 20
-    content: 基于选型生成 inbound API 契约/说明。
-    practice: 列出 JSON 字段 sku/qty/warehouse。
+    title: 实战：用提示词生成高保真 index.html
+    minutes: 35
+    form: 实战
+    content_ref: class/bootcamp/day-03/section-04-hands-on-prototype/lesson.md
+    content: '【开场】同学们，理论到此为止，这 35 分钟全给你动手。目标一个——让「部门周报助手」有脸。
+
+
+      【备料】你手里已有三样东西：PRD、设计规范四件套、两份提示词。今天的战术是「两轮工作法」——第一轮「生成再验收」，第二轮「改约束重生成」。
+
+
+      【第一轮】把 UIUX 提示词整份粘进 AI 工具，接上你的四件套和 PRD 摘要，补一句「只输出一个 index.html」。生成完别急着高兴——拿第 2 节的验收清单，逐条打勾。
+
+
+      【第二轮】发现的问题，全部翻译成量化指令：不说「标题大一点」，说「标题字号从 24 调到 32」。改的是约束，不是产物——手改的产物，下次生成就没了。
+
+
+      【提醒】你会很想直接打开 HTML 改两行代码。忍住。你今天是「验收师」，不是施工队。
+
+
+      【带走的话】带走一句话——第一轮看 AI 的水平，第二轮看你的水平。'
+    practice: 完成标志：`index.html` 单文件可打开，含 hero 区 + 三个功能区块；验收清单五条全过：真实中文文案、无占位符、四件套与规范一致、主按钮三态齐全；迭代日志至少一行。
+    resource_ids:
+    - tk-uiux
+    - tk-web
+    tools:
+    - name: 真实文案检查单
+      note: 无占位符 · 无 lorem ipsum
+    quiz:
+    - - 生成的原型和规范差距明显，正确动作是？
+      - - 打开 HTML 手动改代码
+        - 换一个更强的 AI 模型重试
+        - 把差距改写成量化约束补进提示词，重新生成
+      - 2
+      - 改约束重生成才永久生效，手改的产物下次生成即被覆盖。
+    - - 今天生成 index.html 时要求「单文件、样式内联」的主要原因是？
+      - - 单文件加载速度快
+        - 单文件双击即可打开演示，不依赖构建工具与后端，符合阶段一（UI 优先）的定位
+        - AI 一次只能输出一个文件
+      - 1
+      - 阶段一只要可演示的视觉蓝本，单文件是成本最低的可交付形态。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: "你是 FDE 训练营 Day 3 的前端原型引导员。学员正在本机用 AI 工具为「部门周报助手」生成高保真单页原型 index.html。\n请按以下顺序引导，一次只做一步，等学员完成再进下一步：\n\
+        1. 先让学员定「设计规范四件套」：主色/辅助色/警示色（十六进制）、三级字号（像素值）、间距基准数（8 的倍数）、卡片与按钮圆角值。没有四件套，不许进入生成。\n2. 让学员把 UIUX_Designer_Agent_Prompt\
+        \ 整份 + 四件套 + PRD 摘要 + 约束「只输出一个 index.html，样式内联，单文件可直接打开」粘进 AI 工具生成。\n3. 生成后引导两轮验收：\n   - 验收一「真实文案」：全页抽查三处文本，出现 lorem\
+        \ ipsum、「示例文字」、灰块图任一即不达标；\n   - 验收二「三态样式」：检查主按钮是否有 hover 悬停样式和 disabled 禁用样式，缺一即不达标。\n4. 任一不达标：让学员把问题翻译成量化指令（如「标题字号从\
+        \ 24px 调到 32px」），补进提示词后重新生成——严禁打开 HTML 手改。\n5. 两轮后达标，让学员写一行迭代日志：第一轮差在哪、改了什么约束、效果如何。\n"
+      checklist:
+      - 设计规范四件套已写成具体数值（无「好看」「大气」类词）
+      - index.html 单文件双击可打开，含 hero 区 + 三个功能区块
+      - 全页真实中文文案，无任何占位符
+      - 主按钮默认 / 悬停 / 禁用三态样式齐全
+      - 迭代日志至少一行
+      suggested_questions:
+      - 主色怎么选才不踩雷？给我一个效率工具的稳妥方案
+      - AI 没按我的字号规范生成，约束该怎么写才够「量化」？
+      - 禁用态按钮在静态页面上怎么展示才合理？
+      template_resource_id: tk-uiux
   - id: c5
-    title: 接口测试思维
-    minutes: 20
-    content: 用工具验证写入；看状态码与响应体。
-    practice: 404 与 400 各代表什么。
-  - id: c6
-    title: 复盘与避坑
-    minutes: 20
-    content: 常见报错：连库失败、字段不对、方法错。遇错即问 AI。
-    practice: 记一条避坑。
+    title: 验收：快测 + 原型过闸
+    minutes: 15
+    form: 验收
+    content_ref: class/bootcamp/day-03/section-05-accept/lesson.md
+    content: '【开场】同学们，最后一节，两道关：脑子一道，产物一道。
+
+
+      【快测】快测 6 题，覆盖今天五节，过线 4 题。答题别靠背——每道题都在考「你会怎么判断」，不是在考「你记不记得名词」。
+
+
+      【原型闸】原型过闸四条：单文件能打开；「真实文案」，随便抽一句都念得出口；「三态齐全」，默认、悬停、禁用，少一条打回；结构齐全，hero 加三个功能区块。
+
+
+      【打回怎么办】被打回不丢人。回到第 4 节的循环——改约束，重生成，复验。这个循环本身就是今天的手艺。
+
+
+      【衔接】看一眼明天：今天这张脸是静的，按钮点了没反应。Day 4 你来做后端——「给脸接上心脏」。今天脸做得越真，明天接得越顺。
+
+
+      【带走的话】带走一句话——验收不是找茬，是把「差点意思」翻译成「差在哪」。'
+    practice: 完成标志：快测 ≥4/6；错题均有「错在哪」批注；index.html 通过他人验收，四条标准全过；工作区三份交付物齐全：PRD.md（Day 1）、architecture.md（Day 2）、index.html（Day
+      3）。
+    tools:
+    - name: 原型过闸清单
+      note: 真实文案 · 三态样式 · 单文件可打开
+    - name: 快测范围卡
+      note: 考点全部来自今天前五节
+    quiz:
+    - - 同学的原型里有一行灰色「示例文字，上线前替换」，按 GATE 3 应如何判定？
+      - - 通过，占位文字不影响功能
+        - 打回，违反真实文案标准，需改约束重生成
+        - 通过，只要按钮三态齐全即可
+      - 1
+      - 真实文案是硬性过闸标准，出现占位符即打回。
+    - - GATE 3 的原型过闸标准不包含哪项？
+      - - 单文件可直接打开
+        - 主按钮默认/悬停/禁用三态齐全
+        - 页面已完成与后端 API 的数据联调
+      - 2
+      - 今天是阶段一（UI 优先），接数据是 Day 4 的事。
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 创建资源通常用？
+  - q: AI 一分钟能生成十个页面，此时前端最值钱的能力是？
     options:
-    - GET
-    - POST
-    - OPTIONS
+    - 更快地手写 CSS
+    - 定义什么叫好并验收出来
+    - 记住更多框架 API
     answer: 1
-    explain: POST 用于创建。
-  - q: JSON 常用于？
+    explain: 生产不设上限后，瓶颈转移到判断与验收。
+  - q: 验收师发现 AI 生成的页面「差点意思」，下一步最该做的是？
     options:
-    - 前后端交换
-    - 替换数据库
-    - 替代 HTTPS
-    answer: 0
-    explain: JSON 是数据交换格式。
-  - q: FDE 选型优先看？
-    options:
-    - 只追新语言
-    - 场景与交付
-    - 背完语法
+    - 凭感觉让 AI 重做一版
+    - 把「差点意思」翻译成可量化的差距（色值/字号/间距逐项对照规范）
+    - 直接手动微调 HTML
     answer: 1
-    explain: 按场景选型。
+    explain: 不可验收的感觉必须先翻译成可对照的指标。
+  - q: 「间距统一用 8px 的倍数：8/16/24/32」属于设计规范四件套中的哪一件，解决什么问题？
+    options:
+    - 颜色——解决配色混乱
+    - 间距体系——解决元素间距随手拍、全站不一致
+    - 圆角阴影——解决卡片风格不统一
+    answer: 1
+    explain: 间距体系用基准数倍数保证全站节奏一致。
+  - q: 「UI 先行、API 在后」的根本原因是？
+    options:
+    - 前端工程师比后端工程师多
+    - 改界面成本低、改逻辑成本高，先冻结视觉再写逻辑返工最少
+    - 浏览器只能先渲染 UI 再请求数据
+    answer: 1
+    explain: 修改成本的不对称决定了两阶段的顺序。
+  - q: 第 1 轮生成的原型主色不对，正确的修复路径是？
+    options:
+    - 打开 index.html 把色值逐个改对
+    - '在提示词中补充「主色必须为 #2563EB」后重新生成'
+    - 放弃规范，接受 AI 的配色
+    answer: 1
+    explain: 改约束重生成；手改产物下次生成即被覆盖。
+  - q: 关于 GATE 3 过闸标准，哪种说法正确？
+    options:
+    - 页面必须已实现完整数据交互
+    - 全页真实中文文案、无占位符，主按钮三态齐全，单文件可打开
+    - 必须通过 W3C 全部校验且无一条警告
+    answer: 1
+    explain: 过闸四条：单文件可打开 / 真实文案 / 三态齐全 / 结构齐全。
 nodes:
 - type: learn
-  title: API 基础
+  title: 今日课节（5 节 · 100′）
 - type: quiz
-  title: HTTP 速测
+  title: Day3 概念验收
 - type: lab
-  title: Agent 生成入库 API 页
+  title: 高保真原型 index.html（部门周报助手）
 - type: project
-  title: 企业任务：入库契约
+  title: 企业任务：AI 时代的前端
 - type: review
-  title: 契约自检
-- type: unlock
-  title: 解锁 Day4
+  title: 交付自检与 GATE 3
 lab:
   runner: agent
+  workspace_mode: cumulative
+  primary_files:
+  - index.html
+  inherited_files:
+  - PRD.md
+  - architecture.md
   coach:
-    help_mode: explain
+    help_mode: debug
     skill_id: fde-coach
-    max_help_level: 2
+    max_help_level: 3
+  adapter_version: '1.0'
   agent:
-    prompt_template: 创建 api.html：说明库存「入库」API。含标题「入库 API」、路径 /api/inventory/inbound、方法
-      POST、示例 JSON 字段 sku、qty、warehouse。不要 Docker。
+    prompt_template: "你是学员的前端原型助手。背景：FDE 训练营 Day 3，学员已有 PRD.md 与 architecture.md（部门周报助手），现在要做高保真单页原型 index.html。\n\n流程（严格按序）：\n\
+      1. 先读工作区的 PRD.md，提炼产品的价值主张与三个核心功能。\n2. 生成前先问学员 3 个澄清问题，拿到答案再动手：\n   - 主色偏好（若学员没主意，推荐一个效率工具的稳妥方案并给十六进制色值）；\n   - 三个功能区块分别放什么内容（对照\
+      \ PRD 与学员确认）；\n   - 风格参考（明亮 / 暗黑 / 其他参考产品）。\n3. 引导学员定设计规范四件套：颜色（主/辅/警示，十六进制）、三级字号（像素值）、间距基准数（8 的倍数）、圆角值。无四件套不生成。\n4.\
+      \ 生成 index.html：单文件、样式内联于 <style> 标签、双击可直接打开；结构为 hero 区（价值主张 + 主按钮）+ 三个功能区块 + 页脚；全页真实中文成品文案；主按钮必须含 hover 悬停与 disabled\
+      \ 禁用两种状态样式。\n5. 验收：发现占位符文案（lorem ipsum / 「示例文字」/ 灰块图）或缺失状态样式时，改提示词约束重新生成，严禁直接手改 index.html。\n"
   rubric:
   - check: file_exists
     args:
-      path: api.html
+      path: index.html
   - check: text_contains
     args:
-      path: api.html
-      needle: inbound
+      path: index.html
+      needle: <html
   - check: text_contains
     args:
-      path: api.html
-      needle: POST
+      path: index.html
+      needle: hover

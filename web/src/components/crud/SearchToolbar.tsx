@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Button, Flex, Input, Select } from "antd";
-import { SEARCH_DEBOUNCE_MS } from "../../lib/listQuery";
+import { useEffect, useState, type ReactNode } from "react";
+import { Button, Flex, Input, Select, Space } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { useAuthorLayout, authorSelectPopup } from "../../lib/authorLayoutContext";
 
 export type SearchField = {
@@ -14,17 +14,23 @@ export type SearchField = {
 };
 
 export function SearchToolbar({
-  fields,
-  values,
+  fields = [],
+  values = {},
   onChange,
   onReset,
-  debounceMs = SEARCH_DEBOUNCE_MS,
+  extra,
+  leading,
 }: {
-  fields: SearchField[];
-  values: Record<string, string | undefined>;
-  onChange: (key: string, value: string | undefined) => void;
+  fields?: SearchField[];
+  values?: Record<string, string | undefined>;
+  onChange?: (key: string, value: string | undefined) => void;
   onReset?: () => void;
+  /** @deprecated 保留兼容；现改为点击「搜索」或 Enter 触发 */
   debounceMs?: number;
+  /** 右侧操作按钮（新增 / 上传等），与搜索同一行 */
+  extra?: ReactNode;
+  /** 自定义左侧区域（如 Tabs），与 fields 二选一或并用 */
+  leading?: ReactNode;
 }) {
   const { getContentPopupContainer } = useAuthorLayout();
   const selectPopup = authorSelectPopup(getContentPopupContainer);
@@ -47,81 +53,93 @@ export function SearchToolbar({
     return () => mq.removeEventListener("change", onChangeMq);
   }, []);
 
-  useEffect(() => {
-    if (!searchField) return;
-    const handle = window.setTimeout(() => {
-      const next = localQ.trim();
-      const cur = (values[searchField.key] || "").trim();
-      if (next !== cur) onChange(searchField.key, next || undefined);
-    }, debounceMs);
-    return () => window.clearTimeout(handle);
-  }, [localQ, debounceMs, searchField, onChange, values]);
+  const applySearch = () => {
+    if (!searchField || !onChange) return;
+    const next = localQ.trim();
+    onChange(searchField.key, next || undefined);
+  };
 
   const hasFilters = Object.values(values).some((v) => !!v);
 
   return (
-    <Flex
-      className="author-search-toolbar"
-      wrap={isMobile ? "wrap" : "nowrap"}
-      gap={12}
-      style={{ marginBottom: 16, alignItems: "center" }}
-    >
-      {fields.map((f) => {
-        if (f.type === "search") {
+    <div className={`author-search-toolbar${extra ? " author-search-toolbar--with-extra" : ""}`}>
+      <Flex
+        className="author-search-toolbar__filters"
+        wrap={isMobile ? "wrap" : "nowrap"}
+        gap={10}
+        align="center"
+      >
+        {leading}
+        {fields.map((f) => {
+          if (f.type === "search") {
+            return (
+              <Input
+                key={f.key}
+                allowClear
+                placeholder={f.placeholder || f.label}
+                value={localQ}
+                onChange={(e) => setLocalQ(e.target.value)}
+                onPressEnter={applySearch}
+                className="author-search-toolbar__input"
+                style={{
+                  width: isMobile ? "100%" : f.width ?? 260,
+                  flex: isMobile ? "1 1 100%" : "none",
+                  maxWidth: isMobile ? undefined : 300,
+                }}
+              />
+            );
+          }
+          if (f.type === "select") {
+            return (
+              <Select
+                key={f.key}
+                allowClear={f.allowClear !== false}
+                placeholder={f.placeholder || f.label}
+                value={values[f.key] || undefined}
+                options={f.options}
+                onChange={(v) => onChange?.(f.key, v || undefined)}
+                className="author-search-toolbar__select"
+                style={{
+                  width: f.width ?? 148,
+                  flex: "none",
+                  minWidth: f.width ?? 120,
+                }}
+                getPopupContainer={selectPopup}
+              />
+            );
+          }
           return (
-            <Input.Search
+            <Input
               key={f.key}
               allowClear
               placeholder={f.placeholder || f.label}
-              value={localQ}
-              onChange={(e) => setLocalQ(e.target.value)}
-              onSearch={(v) => onChange(f.key, v.trim() || undefined)}
+              value={values[f.key] || ""}
+              onChange={(e) => onChange?.(f.key, e.target.value.trim() || undefined)}
+              className="author-search-toolbar__input"
               style={{
-                width: isMobile ? "100%" : f.width ?? 300,
-                flex: isMobile ? "1 1 100%" : "none",
-                maxWidth: isMobile ? undefined : 320,
-              }}
-            />
-          );
-        }
-        if (f.type === "select") {
-          return (
-            <Select
-              key={f.key}
-              allowClear={f.allowClear !== false}
-              placeholder={f.placeholder || f.label}
-              value={values[f.key] || undefined}
-              options={f.options}
-              onChange={(v) => onChange(f.key, v || undefined)}
-              style={{
-                width: f.width ?? 160,
+                width: f.width ?? 148,
                 flex: "none",
-                minWidth: f.width ?? 120,
+                minWidth: f.width ?? 110,
               }}
-              getPopupContainer={selectPopup}
             />
           );
-        }
-        return (
-          <Input
-            key={f.key}
-            allowClear
-            placeholder={f.placeholder || f.label}
-            value={values[f.key] || ""}
-            onChange={(e) => onChange(f.key, e.target.value.trim() || undefined)}
-            style={{
-              width: f.width ?? 160,
-              flex: "none",
-              minWidth: f.width ?? 120,
-            }}
-          />
-        );
-      })}
-      {hasFilters && onReset && (
-        <Button onClick={onReset} style={{ flex: "none" }}>
-          重置
-        </Button>
-      )}
-    </Flex>
+        })}
+        {searchField ? (
+          <Button type="primary" icon={<SearchOutlined />} onClick={applySearch} className="author-search-toolbar__search-btn">
+            搜索
+          </Button>
+        ) : null}
+        {onReset ? (
+          <Button onClick={onReset} disabled={!hasFilters} className="author-search-toolbar__reset-btn">
+            重置
+          </Button>
+        ) : null}
+      </Flex>
+      {extra ? (
+        <Space wrap className="author-search-toolbar__extra" size={8}>
+          {extra}
+        </Space>
+      ) : null}
+    </div>
   );
 }

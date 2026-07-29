@@ -1,0 +1,29 @@
+{
+  "total": 73.162,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 12.8
+    },
+    {
+      "id": "02-gate-demo",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/02-gate-demo.wav",
+      "start": 13.05,
+      "duration": 18.24
+    },
+    {
+      "id": "03-oral-three",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/03-oral-three.wav",
+      "start": 31.54,
+      "duration": 22.332
+    },
+    {
+      "id": "04-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/04-close.wav",
+      "start": 54.122,
+      "duration": 19.04
+    }
+  ]
+}

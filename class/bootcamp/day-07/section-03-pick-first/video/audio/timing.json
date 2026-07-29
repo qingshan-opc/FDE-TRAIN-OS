@@ -1,0 +1,41 @@
+{
+  "total": 110.05,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 19.76
+    },
+    {
+      "id": "02-failure-stories",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/02-failure-stories.wav",
+      "start": 20.01,
+      "duration": 17.76
+    },
+    {
+      "id": "03-three-filters",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/03-three-filters.wav",
+      "start": 38.02,
+      "duration": 21.2
+    },
+    {
+      "id": "04-low-risk-hard",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/04-low-risk-hard.wav",
+      "start": 59.47,
+      "duration": 17.52
+    },
+    {
+      "id": "05-scoring-table",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/05-scoring-table.wav",
+      "start": 77.24,
+      "duration": 17.76
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s03_course/tts/06-close.wav",
+      "start": 95.25,
+      "duration": 14.8
+    }
+  ]
+}

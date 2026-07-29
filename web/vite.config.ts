@@ -3,6 +3,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+const apiPort = process.env.FDE_API_PORT || "8760";
+const devPort = Number(process.env.FDE_DEV_PORT || "5173");
+const apiTarget = (process.env.FDE_INTERNAL_BASE || `http://127.0.0.1:${apiPort}`).replace(/\/$/, "");
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/",
@@ -23,18 +27,33 @@ export default defineConfig({
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },
   server: {
-    port: 5173,
+    host: "0.0.0.0",
+    port: devPort,
+    strictPort: true,
+    hmr: {
+      protocol: "ws",
+      clientPort: devPort,
+      overlay: true,
+    },
+    watch: {
+      usePolling: false,
+      ignored: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
+    },
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:8760",
+        target: apiTarget,
         changeOrigin: true,
       },
       "/healthz": {
-        target: "http://127.0.0.1:8760",
+        target: apiTarget,
         changeOrigin: true,
       },
       "/artifacts": {
-        target: "http://127.0.0.1:8760",
+        target: apiTarget,
+        changeOrigin: true,
+      },
+      "/course-assets": {
+        target: apiTarget,
         changeOrigin: true,
       },
     },

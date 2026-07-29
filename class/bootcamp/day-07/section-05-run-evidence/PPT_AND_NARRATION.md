@@ -1,0 +1,93 @@
+# 第七天 · 第 5 节 · 实战：运行与证据
+
+路径：`class/bootcamp/day-07/section-05-run-evidence/video/`  
+PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  
+分词稿：`video/scripts/narration/`
+
+> 口播以分词稿为准 · TTS 后需重跑 `patch_section_video_timing.py`
+
+---
+
+## 01 · open
+
+**PPT（屏幕）**
+- 眉题：01 OPEN
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> 同学们好，我是你们的老师404。这节 AI 拿着你的说明书上岗。你的工作变成四步：派活、收货、按标准验收、留证据——不再是自己打字，而是按标准验货。运行就是说明书加输入，一句按这份 Skill 执行，对吧。
+
+文稿：`video/scripts/narration/01-open.txt`
+
+---
+
+## 02 · run-steps
+
+**PPT（屏幕）**
+- 眉题：02 RUN STEPS
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> 运行方式很简单：Agent Lab 或模型对话里，先粘贴 Skill 说明书全文，再粘贴输入数据——驾驶舱 curl 结果或数据文件，最后一句按这份 Skill 执行。收货后别看感觉，看你写的验收段：逐条判 ✓ 还是 ✗，对吧。
+
+文稿：`video/scripts/narration/02-run-steps.txt`
+
+---
+
+## 03 · evidence-trio
+
+**PPT（屏幕）**
+- 眉题：03 EVIDENCE TRIO
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> 每次运行留证据三件套：runs/日期-skill名/ 目录下，input.md 是输入快照，output.md 是产出物原文，verdict.md 是验收结果——逐条判 ✓/✗，加总判和改进项。Skill 的信任是攒出来的，连续十次通过，你才敢把每次都看降级成抽看，嘛。
+
+文稿：`video/scripts/narration/03-evidence-trio.txt`
+
+---
+
+## 04 · iteration-loop
+
+**PPT（屏幕）**
+- 眉题：04 ITERATION LOOP
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> 验收不过怎么办？定位是说明书歧义还是 AI 执行偏差。歧义就改说明书——多数情况是这个；偏差就换表达、加示例、拆步骤，然后重跑。记住：验收不过大概率是说明书的锅，不是 AI 的锅。就像换人测试里读者误解，是作者的锅，对吧。
+
+文稿：`video/scripts/narration/04-iteration-loop.txt`
+
+---
+
+## 05 · common-issues
+
+**PPT（屏幕）**
+- 眉题：05 COMMON ISSUES
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> AI 没按步骤做、直接跳到生成？在说明书开头加严格按步骤顺序执行，每步完成后简述结果。每次跑结果不一样？正常，模型有概率性；验收标准管的是底线——结构、数字、意图，波动在标准内即可。今天目标：连续两次验收全过，对吧。
+
+文稿：`video/scripts/narration/05-common-issues.txt`
+
+---
+
+## 06 · close
+
+**PPT（屏幕）**
+- 眉题：06 CLOSE
+- 第七天 · 第 5 节 · 实战：运行与证据
+
+**口播**
+> 同学们，本节先到这里。证据归档，迭代日志写清楚改了什么、重跑了几次。下一节是第七天验收——Skill 三问口试，导师看证据链。带走一句：Skill 的信任是攒出来的，证据三件套就是你的本金。
+
+文稿：`video/scripts/narration/06-close.txt`
+
+---
+
+## 评审清单
+
+- [x] PPT 无口播正文，仅图 + 概念卡/表
+- [x] 口播与 `narration/*.txt` 一致
+- [ ] TTS 后 patch 时间轴并重渲

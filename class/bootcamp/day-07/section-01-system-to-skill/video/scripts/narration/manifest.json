@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-system-vs-skill",
+    "file": "02-system-vs-skill.txt"
+  },
+  {
+    "id": "03-prompt-vs-skill",
+    "file": "03-prompt-vs-skill.txt"
+  },
+  {
+    "id": "04-triple-value",
+    "file": "04-triple-value.txt"
+  },
+  {
+    "id": "05-anti-patterns",
+    "file": "05-anti-patterns.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

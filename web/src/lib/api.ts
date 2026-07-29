@@ -145,6 +145,21 @@ export const authApi = {
       "/api/v1/auth/invite",
       { method: "POST", body: { invite_code, display_name, email: email || undefined }, skipRefresh: true },
     ),
+  register: (email: string, password: string, display_name: string) =>
+    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
+      "/api/v1/auth/register",
+      {
+        method: "POST",
+        body: { email, password, display_name },
+        skipRefresh: true,
+      },
+    ),
+  /** Open org registration link — sets httpOnly cookie used on register. */
+  claimInviteLink: (code: string) =>
+    api<{ valid: boolean; code: string; org_name?: string }>(
+      `/api/v1/auth/invite-link?code=${encodeURIComponent(code)}`,
+      { skipRefresh: true },
+    ),
   switchCamp: (camp_id: string) =>
     api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
       "/api/v1/auth/switch-camp",
@@ -696,6 +711,28 @@ export const certApi = {
     }),
 };
 
+/** Certificate chain explorer (public) */
+export const chainApi = {
+  stats: () => api<Record<string, unknown>>("/api/v1/chain/stats", { skipRefresh: true }),
+  algorithms: () => api<Record<string, unknown>>("/api/v1/chain/algorithms", { skipRefresh: true }),
+  blocks: (limit = 20, offset = 0) =>
+    api<{ items: Record<string, unknown>[] }>(`/api/v1/chain/blocks?limit=${limit}&offset=${offset}`, {
+      skipRefresh: true,
+    }),
+  block: (height: number) =>
+    api<{ block: Record<string, unknown> }>(`/api/v1/chain/blocks/${height}`, { skipRefresh: true }),
+  tx: (hash: string) =>
+    api<{ transaction: Record<string, unknown> }>(`/api/v1/chain/tx/${encodeURIComponent(hash)}`, {
+      skipRefresh: true,
+    }),
+  cert: (certId: string) =>
+    api<{ cert_id: string; transactions: Record<string, unknown>[] }>(
+      `/api/v1/chain/cert/${encodeURIComponent(certId)}`,
+      { skipRefresh: true },
+    ),
+  verify: () => api<{ valid: boolean; errors: string[] }>("/api/v1/chain/verify", { skipRefresh: true }),
+};
+
 /** Kb memories */
 export const kbApi = {
   uploadMemory: (body: { content: string; title?: string; camp_id?: string; tags?: string[] }) =>
@@ -871,6 +908,31 @@ export const authorApi = {
       `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/days/${day}`,
       { method: "PUT", body },
     ),
+  listBootcampDays: () => api<{ items: number[] }>("/api/v1/author/bootcamp/days"),
+  syncBootcamp: (
+    versionId: string,
+    body: { days?: number[]; dry_run?: boolean; merge_mode?: "full" | "media_fields" },
+  ) =>
+    api<{
+      dry_run: boolean;
+      merge_mode?: string;
+      days?: Array<{
+        day: number;
+        title: string;
+        capsule_count: number;
+        capsules: Array<{ id: string; title?: string; media_count?: number; knowledge_cards_count?: number }>;
+        changes: string[];
+      }>;
+      updated?: number[];
+      errors?: Array<{ day: number; error: string }>;
+    }>(`/api/v1/author/course-versions/${encodeURIComponent(versionId)}/sync-bootcamp`, {
+      method: "POST",
+      body,
+    }),
+  getBootcampCapsuleMedia: (day: number, capsuleId: string) =>
+    api<{ day: number; capsule_id: string; items: import("./types").CapsuleMedia[] }>(
+      `/api/v1/author/bootcamp/days/${day}/capsules/${encodeURIComponent(capsuleId)}/media`,
+    ),
   publishCourseVersionById: (versionId: string, note?: string) =>
     api<{ ok: boolean; course_version_id: string; status: string }>(
       `/api/v1/author/course-versions/${encodeURIComponent(versionId)}/publish`,
@@ -942,8 +1004,20 @@ export const authorApi = {
       pending_submissions: number;
       documents: number;
       videos: number;
+      videos_library?: number;
+      videos_open_courses?: number;
+      videos_site?: number;
       learners: number;
+      open_courses?: number;
+      contact_leads?: number;
       recent_actions?: { title: string; at?: string; href?: string }[];
+      pending_reviews?: number;
+      learn_active_users_7d?: { date: string; users: number }[];
+      learn_duration_minutes_7d?: { date: string; minutes: number }[];
+      open_course_clicks_7d?: { date: string; count: number }[];
+      capsule_opens_7d?: { date: string; opens: number }[];
+      submission_trend_7d?: { date: string; count: number }[];
+      metrics_note?: Record<string, string>;
     }>(`/api/v1/author/overview${campId ? `?camp_id=${encodeURIComponent(campId)}` : ""}`),
   getSiteLanding: () => api<Record<string, unknown>>("/api/v1/author/site/landing"),
   patchSiteLanding: (body: Record<string, unknown>) =>
@@ -1012,6 +1086,34 @@ export const authorApi = {
     api<any>(`/api/v1/author/resource-packs/${encodeURIComponent(id)}`, { method: "PATCH", body }),
   deleteResourcePack: (id: string) =>
     api<any>(`/api/v1/author/resource-packs/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  getResourcePack: (id: string) => api<any>(`/api/v1/author/resource-packs/${encodeURIComponent(id)}`),
+  listPackResources: (packId: string, params?: Record<string, unknown>) => {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params || {})) {
+      if (v != null && v !== "") q.set(k, String(v));
+    }
+    const qs = q.toString();
+    return api<Paginated<Record<string, unknown>>>(
+      `/api/v1/author/resource-packs/${encodeURIComponent(packId)}/resources${qs ? `?${qs}` : ""}`,
+    );
+  },
+  linkPackResource: (
+    packId: string,
+    body: {
+      kind: string;
+      title: string;
+      object_key?: string;
+      url?: string;
+      day_index?: number;
+      course_version_id?: string;
+      node_id?: string;
+    },
+  ) =>
+    api(`/api/v1/author/resource-packs/${encodeURIComponent(packId)}/resources`, { method: "POST", body }),
+  deletePackResource: (packId: string, resourceId: string) =>
+    api(`/api/v1/author/resource-packs/${encodeURIComponent(packId)}/resources/${encodeURIComponent(resourceId)}`, {
+      method: "DELETE",
+    }),
   listEnrollments: (params?: Record<string, unknown>) => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(params || {})) {
@@ -1020,6 +1122,22 @@ export const authorApi = {
     const qs = q.toString();
     return api<any>(`/api/v1/author/enrollments${qs ? `?${qs}` : ""}`);
   },
+  getEnrollment: (id: string) =>
+    api<{
+      id: string;
+      user_id: string;
+      display_name?: string;
+      email?: string;
+      course_title?: string;
+      version_tag?: string;
+      status: string;
+      progress_pct?: number;
+      node_progress?: Array<{ day: number; node_id: string; status: string; updated_at?: string }>;
+      capsule_progress?: Array<{ day: number; capsule_id: string; opened_at?: string }>;
+      submission_count?: number;
+      attachment_count?: number;
+      mentor_reviews?: Array<{ id: string; day: number; node_id?: string; status: string }>;
+    }>(`/api/v1/author/enrollments/${encodeURIComponent(id)}`),
   listOfferings: (params?: Record<string, unknown>) => {
     const q = new URLSearchParams();
     for (const [k, v] of Object.entries(params || {})) {
@@ -1056,4 +1174,81 @@ export const authorApi = {
     api<any>(`/api/v1/author/submissions/${encodeURIComponent(id)}/attachments`),
   reviewSubmission: (id: string, body: Record<string, unknown>) =>
     api<any>(`/api/v1/author/submissions/${encodeURIComponent(id)}/review`, { method: "POST", body }),
+};
+
+/** Partner channels (author) */
+export const partnerAdminApi = {
+  listOrgs: () => api<{ items: Record<string, unknown>[] }>("/api/v1/author/partners/orgs"),
+  createOrg: (body: Record<string, unknown>) =>
+    api<{ org: Record<string, unknown> }>("/api/v1/author/partners/orgs", { method: "POST", body }),
+  updateOrg: (orgId: string, body: Record<string, unknown>) =>
+    api<{ org: Record<string, unknown> }>(`/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}`, {
+      method: "PUT",
+      body,
+    }),
+  listInviteCodes: (orgId: string) =>
+    api<{ items: Record<string, unknown>[] }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/invite-codes`,
+    ),
+  createInviteCode: (orgId: string, body: { code: string; offering_id?: string; max_uses?: number }) =>
+    api<{ invite_code: Record<string, unknown> }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/invite-codes`,
+      { method: "POST", body },
+    ),
+  getTiers: (orgId: string) =>
+    api<{ items: { min_paid_users: number; rate_bps: number }[] }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/tiers`,
+    ),
+  setTiers: (orgId: string, tiers: { min_paid_users: number; rate_bps: number }[]) =>
+    api<{ items: { min_paid_users: number; rate_bps: number }[] }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/tiers`,
+      { method: "PUT", body: { tiers } },
+    ),
+  listAttributions: (orgId: string) =>
+    api<{ items: Record<string, unknown>[] }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/attributions`,
+    ),
+  createAccount: (orgId: string, body: { email: string; password: string; display_name?: string }) =>
+    api<{ email: string; org_id: string }>(
+      `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/accounts`,
+      { method: "POST", body },
+    ),
+};
+
+/** Billing */
+export const billingApi = {
+  listOfferings: () => api<{ items: Record<string, unknown>[] }>("/api/v1/billing/offerings"),
+  checkout: (offering_id: string) =>
+    api<{
+      order_id: string;
+      out_trade_no: string;
+      amount_fen: number;
+      code_url?: string;
+      dev_mode?: boolean;
+      status: string;
+    }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id } }),
+  getOrder: (orderId: string) => api<{ order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}`),
+  syncOrder: (orderId: string) =>
+    api<{ status: string; order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}/sync`, {
+      method: "POST",
+    }),
+  devMarkPaid: (orderId: string) =>
+    api<{ order: Record<string, unknown> }>(`/api/v1/billing/dev/mark-paid/${encodeURIComponent(orderId)}`, {
+      method: "POST",
+    }),
+};
+
+/** Partner portal */
+export const partnerApi = {
+  login: (email: string, password: string) =>
+    api<{ token: string; csrf: string; user: import("./types").User; org_id: string }>(
+      "/api/v1/partner/auth/login",
+      { method: "POST", body: { email, password }, skipRefresh: true },
+    ),
+  dashboard: () =>
+    api<{ org: Record<string, unknown>; stats: Record<string, unknown>; user: { id: string; email: string } }>(
+      "/api/v1/partner/dashboard",
+    ),
+  attributions: () => api<{ items: Record<string, unknown>[] }>("/api/v1/partner/attributions"),
+  profitShares: () => api<{ items: Record<string, unknown>[] }>("/api/v1/partner/profit-shares"),
 };

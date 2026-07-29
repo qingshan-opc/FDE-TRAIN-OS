@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-split-three",
+    "file": "02-split-three.txt"
+  },
+  {
+    "id": "03-dataflow",
+    "file": "03-dataflow.txt"
+  },
+  {
+    "id": "04-weekly-pipeline",
+    "file": "04-weekly-pipeline.txt"
+  },
+  {
+    "id": "05-workflow-close",
+    "file": "05-workflow-close.txt"
+  }
+]

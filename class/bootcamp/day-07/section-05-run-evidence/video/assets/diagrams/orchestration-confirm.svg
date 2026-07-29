@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="多 Skill 编排：发送动作前必须过人工确认闸，每一步写入执行日志">
+  <rect width="1040" height="480" fill="#f2f5f0"/>
+  <defs>
+    <marker id="oc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
+    </marker>
+    <marker id="oc-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f24e54"/>
+    </marker>
+  </defs>
+
+  <text x="520" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#231f20">多 Skill 编排：确认点 + 日志 = 信任的工程设计</text>
+
+  <!-- pipeline: Skill A -->
+  <rect x="60" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="150" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill A</text>
+  <text x="150" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">拉取数据</text>
+  <text x="150" y="240" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">只读 · 幂等 · 可自动跑</text>
+
+  <!-- Skill B -->
+  <rect x="300" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="390" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill B</text>
+  <text x="390" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">生成周报</text>
+  <text x="390" y="240" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">产出文档 · 可自动跑</text>
+
+  <!-- confirm gate diamond -->
+  <polygon points="580,205 660,150 740,205 660,260" fill="#f24e54" opacity="0.14"/>
+  <polygon points="580,205 660,150 740,205 660,260" fill="none" stroke="#f24e54" stroke-width="2.5"/>
+  <text x="660" y="198" text-anchor="middle" font-size="15" font-weight="800" fill="#f24e54">人工确认</text>
+  <text x="660" y="222" text-anchor="middle" font-size="11" fill="#f24e54">看一眼再放行</text>
+
+  <!-- Skill C -->
+  <rect x="800" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="890" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill C</text>
+  <text x="890" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">发送出去</text>
+  <text x="890" y="240" text-anchor="middle" font-size="12" fill="#f24e54">对外动作 · 不可逆</text>
+
+  <!-- arrows -->
+  <line x1="240" y1="205" x2="296" y2="205" stroke="#231f20" stroke-width="2" marker-end="url(#oc-arrow)"/>
+  <line x1="480" y1="205" x2="576" y2="205" stroke="#231f20" stroke-width="2" marker-end="url(#oc-arrow)"/>
+  <line x1="744" y1="205" x2="796" y2="205" stroke="#f24e54" stroke-width="2.5" marker-end="url(#oc-arrow-red)"/>
+
+  <!-- execution log panel -->
+  <rect x="60" y="310" width="560" height="140" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="84" y="342" font-size="14" font-weight="800" fill="#231f20">执行日志（每步一条，可追溯）</text>
+  <text x="84" y="374" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">✓ A: 拉取 42 条记录 · 用时 3.2s</text>
+  <text x="84" y="402" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">✓ B: 生成 weekly-report-0524.md</text>
+  <text x="84" y="430" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">⏸ C: 等待人工确认（草稿已备好）</text>
+
+  <!-- rule card -->
+  <rect x="660" y="310" width="320" height="140" rx="12" fill="#fff" stroke="#f24e54" stroke-width="2"/>
+  <text x="684" y="342" font-size="14" font-weight="800" fill="#f24e54">编排铁律</text>
+  <text x="684" y="372" font-size="13" fill="#231f20">只读步骤自动连跑；</text>
+  <text x="684" y="398" font-size="13" fill="#231f20">任何「对外 / 写入 / 花钱」步骤前，</text>
+  <text x="684" y="424" font-size="13" font-weight="700" fill="#231f20">必须插人工确认点并留日志。</text>
+</svg>

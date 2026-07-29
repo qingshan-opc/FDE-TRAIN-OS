@@ -6,8 +6,10 @@ import { authorApi, ApiError } from "../../lib/api";
 import { useAuth } from "../../lib/auth";
 import type { Paginated } from "../../lib/listQuery";
 import { useListQuery } from "../../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
 import { authorSelectPopup, useAuthorLayout } from "../../lib/authorLayoutContext";
+import { StatusTag } from "../../components/StatusTag";
+import { statusLabel, statusOptions } from "../../lib/statusLabels";
 
 type EnrollmentRow = {
   id: string;
@@ -23,13 +25,6 @@ type EnrollmentRow = {
   cert_id?: string | null;
   cert_status?: string | null;
   on_chain?: boolean;
-};
-
-const IDENTITY_LABEL: Record<string, string> = {
-  unverified: "未认证",
-  pending: "审核中",
-  verified: "已认证",
-  rejected: "未通过",
 };
 
 export function LearnerCourses() {
@@ -131,43 +126,45 @@ export function LearnerCourses() {
   };
 
   return (
-    <div>
-      <PageHeader
-        title="学员与课程"
-        description="查看学员报名、实名与结业证书；完成学习后可一键颁证上链"
-        extra={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              form.resetFields();
-              setMode({ kind: "create" });
-            }}
-          >
-            分配课程
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={
+          <PageHeader
+            title="学员与课程"
+            description="查看学员报名、实名与结业证书；完成学习后可一键颁证上链"
+          />
         }
-      />
-      <SearchToolbar
-        fields={[
-          { key: "q", type: "search", label: "搜索", placeholder: "姓名 / 邮箱" },
-          {
-            key: "status",
-            type: "select",
-            label: "状态",
-            placeholder: "报名状态",
-            options: [
-              { value: "active", label: "active" },
-              { value: "dropped", label: "dropped" },
-              { value: "completed", label: "completed" },
-            ],
-          },
-        ]}
-        values={{ q: q || undefined, status: filters.status }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<EnrollmentRow>
+        toolbar={
+          <SearchToolbar
+            fields={[
+              { key: "q", type: "search", label: "搜索", placeholder: "姓名 / 邮箱" },
+              {
+                key: "status",
+                type: "select",
+                label: "状态",
+                placeholder: "报名状态",
+                options: statusOptions(["active", "dropped", "completed"], "enrollment"),
+              },
+            ]}
+            values={{ q: q || undefined, status: filters.status }}
+            onChange={setFilter}
+            extra={
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  form.resetFields();
+                  setMode({ kind: "create" });
+                }}
+              >
+                分配课程
+              </Button>
+            }
+            onReset={hasFilters ? reset : undefined}
+          />
+        }
+      >
+        <ServerTable<EnrollmentRow>
         rowKey="id"
         loading={loading}
         error={error}
@@ -182,14 +179,14 @@ export function LearnerCourses() {
             title: "实名",
             dataIndex: "identity_status",
             responsive: ["md"],
-            render: (s?: string) => (
-              <Tag color={s === "verified" ? "success" : s === "pending" ? "processing" : "default"}>
-                {IDENTITY_LABEL[s || "unverified"] || s}
-              </Tag>
-            ),
+            render: (s?: string) => <StatusTag status={s || "unverified"} />,
           },
           { title: "版本", dataIndex: "version_tag", responsive: ["lg"] },
-          { title: "状态", dataIndex: "status", render: (s: string) => <Tag>{s}</Tag> },
+          {
+            title: "状态",
+            dataIndex: "status",
+            render: (s: string) => <StatusTag status={s} domain="enrollment" />,
+          },
           {
             title: "进度",
             dataIndex: "progress_pct",
@@ -211,6 +208,9 @@ export function LearnerCourses() {
             title: "操作",
             render: (_, r) => (
               <>
+                <Button type="link">
+                  <Link to={`/author/learners/${r.id}`}>进度</Link>
+                </Button>
                 <Button
                   type="link"
                   icon={<SafetyCertificateOutlined />}
@@ -229,7 +229,10 @@ export function LearnerCourses() {
                   onClick={() =>
                     confirmDelete({
                       name: r.display_name || r.email || r.id,
-                      impact: r.status === "dropped" ? "将恢复为 active" : "将标记为 dropped（不删除历史进度）",
+                      impact:
+                        r.status === "dropped"
+                          ? `将恢复为「${statusLabel("active", "在读", "enrollment")}」`
+                          : `将标记为「${statusLabel("dropped", "已停用", "enrollment")}」（不删除历史进度）`,
                       onOk: async () => {
                         await authorApi.patchEnrollment(r.id, {
                           status: r.status === "dropped" ? "active" : "dropped",
@@ -246,7 +249,8 @@ export function LearnerCourses() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
       <EntityModal
         mode={mode}
         title={{ create: "分配课程", edit: "分配", view: "查看" }}
@@ -272,6 +276,6 @@ export function LearnerCourses() {
           <Select options={offerings} showSearch optionFilterProp="label" getPopupContainer={selectPopup} />
         </Form.Item>
       </EntityModal>
-    </div>
+    </>
   );
 }

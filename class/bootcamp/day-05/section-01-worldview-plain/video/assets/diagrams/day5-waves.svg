@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="技术浪潮白话版：六次浪潮，每次重排谁值钱">
+  <rect width="1200" height="400" fill="#f2f5f0"/>
+  <text x="48" y="52" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','STSong','Noto Serif SC',serif">六次浪潮 · 一张「谁变贵 / 谁变便宜」的价目表</text>
+  <text x="48" y="78" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,monospace">SIX WAVES · PRICE LIST OF SKILLS</text>
+  <line x1="48" y1="210" x2="1090" y2="210" stroke="#231f20" stroke-width="2"/>
+  <path d="M1108 210 L1090 203.5 L1090 216.5 Z" fill="#231f20"/>
+  <!-- wave template: x positions -->
+  <g>
+    <text x="100" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">电脑进办公室</text>
+    <text x="100" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">1990s · 算盘</text>
+    <circle cx="100" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
+    <text x="100" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会把账搬进电脑的人</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 算盘打得快的老手</text>
+  </g>
+  <g>
+    <text x="280" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">店面搬上网</text>
+    <text x="280" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2000s · 网页</text>
+    <circle cx="280" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
+    <text x="280" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会做网站的人</text>
+    <text x="280" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只守实体店的人</text>
+  </g>
+  <g>
+    <text x="460" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">云</text>
+    <text x="460" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2010s · 电网</text>
+    <circle cx="460" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
+    <text x="460" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 让服务不挂的人</text>
+    <text x="460" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只伺候一台电脑的人</text>
+  </g>
+  <g>
+    <text x="640" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">移动</text>
+    <text x="640" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2010s · 口袋电脑</text>
+    <circle cx="640" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
+    <text x="640" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会做 App 的人</text>
+    <text x="640" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只做电脑网页的人</text>
+  </g>
+  <g>
+    <text x="820" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">AI 帮你写</text>
+    <text x="820" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2021+ · 自己填的表格</text>
+    <circle cx="820" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
+    <text x="820" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 一天压成一小时的人</text>
+    <text x="820" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 纯手工敲代码的人</text>
+  </g>
+  <g>
+    <rect x="940" y="92" width="230" height="150" rx="10" fill="none" stroke="#1400ff" stroke-width="2.5"/>
+    <text x="1055" y="122" text-anchor="middle" font-size="17" font-weight="900" fill="#1400ff">AI 原生</text>
+    <text x="1055" y="144" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2024+ · 认字的实习生</text>
+    <circle cx="1000" cy="210" r="7" fill="#1400ff"/>
+    <text x="1055" y="180" text-anchor="middle" font-size="12.5" fill="#2f9e44" font-weight="700">↑ 会派活、会验收的人</text>
+    <text x="1055" y="200" text-anchor="middle" font-size="12.5" fill="#f24e54">↓ 只会自己闷头写的人</text>
+    <text x="1055" y="226" text-anchor="middle" font-size="13" font-weight="900" fill="#1400ff">你在这里 →</text>
+  </g>
+  <text x="48" y="330" font-size="15" font-weight="700" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">规律只有一条：机器把「动手做」压低一层，人就往「知道该做什么、做得对不对」上移一层。</text>
+  <text x="48" y="360" font-size="13" fill="rgba(35,31,32,.6)">浪潮从不淘汰人——它只淘汰「只会动手」的人。</text>
+</svg>

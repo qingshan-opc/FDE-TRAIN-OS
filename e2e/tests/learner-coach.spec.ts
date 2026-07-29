@@ -24,21 +24,21 @@ test("learner asks coach via global AI 任务导师 FAB", async ({ page }) => {
   await expect(page.getByRole("button", { name: "AI 任务导师" })).toBeVisible();
   await page.getByRole("button", { name: "AI 任务导师" }).click();
   await expect(page.getByRole("dialog", { name: "AI 任务导师" })).toBeVisible({ timeout: 10_000 });
-  await page.locator("#coach-q").fill("Day1 库存列表页怎么验收？");
-  await page.getByRole("button", { name: "提问" }).click();
-  await expect(page.getByText(/LEVEL/i).first()).toBeVisible({ timeout: 20_000 });
+  await page.locator("#coach-q").fill("第一天的库存列表页怎么验收？");
+  await page.getByRole("button", { name: "发送" }).click();
+  await expect(page.locator(".coach-msg-bot").first()).toBeVisible({ timeout: 20_000 });
   await page.screenshot({ path: path.join(artifacts, "learner-coach.png"), fullPage: true });
 });
 
-test("c6 local_prep suggested questions appear in coach drawer", async ({ page }) => {
+test("c4 local_prep suggested questions appear in coach drawer", async ({ page }) => {
   await loginAsLearner(page);
   await openDayFromSyllabus(page, "第一天");
-  await page.getByRole("button", { name: /6\. 今日交付规格：企业库存管理系统 Week1/ }).click();
-  await expect(page.getByRole("heading", { name: "今日交付规格：企业库存管理系统 Week1" })).toBeVisible();
+  await page.getByRole("button", { name: /4\. 实战：用 PM 提示词跑出你的第一份迷你 PRD/ }).click();
+  await expect(page.getByRole("heading", { name: "实战：用 PM 提示词跑出你的第一份迷你 PRD" })).toBeVisible();
 
   await page.getByRole("button", { name: "AI 任务导师" }).click();
   await expect(page.getByRole("dialog", { name: "AI 任务导师" })).toBeVisible();
   await expect(page.getByText("推荐问题")).toBeVisible();
-  await expect(page.getByRole("button", { name: "我不知道表格里还必须有哪些列" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "示例数据怎样才算「能验收」" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "AI 没有反问我就直接开写了，怎么办？" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "验收标准里的「可衡量」到底怎么判断？" })).toBeVisible();
 });

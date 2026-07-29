@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import path from "node:path";
 import fs from "node:fs";
+import { DEMO_LEARNER, loginAsAuthor } from "../fixtures/auth";
 
 const artifacts = path.join(__dirname, "..", "artifacts", "curriculum");
 const artifactsV2 = path.join(__dirname, "..", "artifacts", "author-console-v2");
@@ -10,37 +11,33 @@ test.beforeAll(() => {
   fs.mkdirSync(artifactsV2, { recursive: true });
 });
 
-test("author curriculum editor: open draft + day/capsule/media/yaml modals", async ({ page, request }) => {
+test("author curriculum editor: open draft + day/capsule/media/yaml modals", async ({ page, request, baseURL }) => {
   test.setTimeout(120_000);
   const tag = `draft-e2e-${Date.now()}`;
 
-  await page.goto("/login");
-  await page.locator("#email").fill("author@fde.local");
-  await page.locator("#password").fill("author1234");
-  await page.getByRole("button", { name: /登\s*录/ }).click();
-  await expect(page).toHaveURL(/\/author/, { timeout: 20_000 });
+  await loginAsAuthor(page);
 
   const cookies = await page.context().cookies();
   const csrf = cookies.find((c) => c.name === "fde_csrf")?.value || "";
   const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
   const headers = { Cookie: cookieHeader, "X-CSRF-Token": csrf };
 
-  const courses = await request.get("http://127.0.0.1:8760/api/v1/author/courses?page=1&page_size=5", { headers });
+  const courses = await request.get(`${baseURL}/api/v1/author/courses?page=1&page_size=5`, { headers });
   const courseId = (await courses.json()).items?.[0]?.id as string;
   expect(courseId).toBeTruthy();
 
   const form = new URLSearchParams();
   form.set("version_tag", tag);
   form.set("title", "E2E blank");
-  form.set("camp_id", "camp-v03");
-  const created = await request.post(`http://127.0.0.1:8760/api/v1/author/courses/${courseId}/versions`, {
+  form.set("camp_id", DEMO_LEARNER.campId);
+  const created = await request.post(`${baseURL}/api/v1/author/courses/${courseId}/versions`, {
     headers: { ...headers, "Content-Type": "application/x-www-form-urlencoded" },
     data: form.toString(),
   });
   expect(created.ok()).toBeTruthy();
   const versionId = (await created.json()).course_version_id as string;
 
-  const dayRes = await request.post(`http://127.0.0.1:8760/api/v1/author/course-versions/${versionId}/days`, {
+  const dayRes = await request.post(`${baseURL}/api/v1/author/course-versions/${versionId}/days`, {
     headers: { ...headers, "Content-Type": "application/json" },
     data: JSON.stringify({ title: "E2E Day", week: 1 }),
   });
@@ -88,13 +85,40 @@ test("author curriculum editor: open draft + day/capsule/media/yaml modals", asy
     await fromLib.click();
     await expect(page.locator(".ant-modal")).toBeVisible();
     await page.screenshot({ path: path.join(artifactsV2, "13-media-picker.png"), fullPage: true });
-    await page.keyboard.press("Escape");
+    await page.locator(".ant-modal").getByRole("button", { name: /取\s*消|关\s*闭/ }).first().click();
   } else {
     await page.getByRole("button", { name: /导入 YAML/ }).click();
     await expect(page.locator(".ant-modal")).toBeVisible();
     await page.screenshot({ path: path.join(artifactsV2, "13-media-picker.png"), fullPage: true });
-    await page.keyboard.press("Escape");
+    await page.locator(".ant-modal").getByRole("button", { name: /取\s*消|关\s*闭/ }).first().click();
   }
+  await expect(page.locator(".ant-modal")).toHaveCount(0, { timeout: 10_000 });
+
+  // 知识卡片 Tab + 学员预览四步流（已在课节编辑器内，无需再点树节点）
+  await page.getByRole("tab", { name: /知识卡片/ }).click();
+  const cardsPanel = page.locator(".ant-tabs-tabpane-active");
+  await cardsPanel.getByRole("button", { name: /添加知识卡片/ }).click();
+  await cardsPanel.locator(".ant-card").last().getByRole("textbox").nth(1).fill("E2E词条");
+  await cardsPanel.locator(".ant-card").last().locator("textarea").first().fill("E2E解释");
+  await page.getByRole("button", { name: /学员预览/ }).click();
+  const previewDrawer = page.locator(".ant-drawer");
+  await expect(previewDrawer).toContainText("学员预览");
+  await previewDrawer.getByRole("tab", { name: /知识卡片/ }).click();
+  await expect(previewDrawer.getByRole("listitem").filter({ hasText: "E2E词条" }).first()).toBeVisible({ timeout: 10_000 });
+  await page.screenshot({ path: path.join(artifactsV2, "15-knowledge-cards-preview.png"), fullPage: true });
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".ant-drawer")).toHaveCount(0, { timeout: 10_000 });
+
+  // 本地实操 Tab + 预览步流
+  await page.getByRole("tab", { name: /本地实操/ }).click();
+  const prepPanel = page.locator(".ant-tabs-tabpane-active");
+  await prepPanel.locator("textarea").first().fill("E2E 本地任务：请在本机完成验收。");
+  await page.getByRole("button", { name: /学员预览/ }).click();
+  await previewDrawer.getByRole("tab", { name: /本地实操/ }).click();
+  await expect(previewDrawer.locator(".local-prep-panel")).toBeVisible({ timeout: 10_000 });
+  await expect(previewDrawer.getByText("E2E 本地任务")).toBeVisible();
+  await page.screenshot({ path: path.join(artifactsV2, "16-local-prep-preview.png"), fullPage: true });
+  await page.keyboard.press("Escape");
 
   await page.screenshot({ path: path.join(artifacts, "02-after-modals.png"), fullPage: true });
 });

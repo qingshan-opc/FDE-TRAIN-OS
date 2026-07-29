@@ -6,7 +6,7 @@ import logging
 from contextlib import contextmanager
 from typing import Any, Generator, Iterator
 
-from services.shared.config import DATABASE_URL, ensure_dirs, require_database_url
+from services.shared.config import DATABASE_URL, DB_STATEMENT_TIMEOUT_MS, ensure_dirs, require_database_url
 
 log = logging.getLogger("fde.db")
 
@@ -25,7 +25,7 @@ def get_pool():
         conninfo=DATABASE_URL,
         min_size=1,
         max_size=20,
-        kwargs={"row_factory": dict_row, "options": "-c statement_timeout=30000"},
+        kwargs={"row_factory": dict_row, "options": f"-c statement_timeout={DB_STATEMENT_TIMEOUT_MS}"},
         open=True,
     )
     return _pool

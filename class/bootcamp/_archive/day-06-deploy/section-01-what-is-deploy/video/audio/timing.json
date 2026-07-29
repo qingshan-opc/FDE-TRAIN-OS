@@ -1,0 +1,23 @@
+{
+  "total": 48.437,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 9.68
+    },
+    {
+      "id": "02-core",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/02-core.wav",
+      "start": 9.93,
+      "duration": 14.257
+    },
+    {
+      "id": "03-detail",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s02_course/tts/03-detail.wav",
+      "start": 24.437,
+      "duration": 24.0
+    }
+  ]
+}

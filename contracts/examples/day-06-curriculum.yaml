@@ -1,98 +1,614 @@
-camp_version: v0.3
+camp_version: v0.7
 day: 6
-title: Week1 复盘与 Prompt 指挥入门
-project: 从躯体到灵魂 · 过渡
-project_brief: 交付 prompt-playbook.html，含公式与好坏对比示例。
+title: LLM 理论日：18 词过线
+week: 2
+project: LLM 理论日
+project_brief: 纯 LLM 理论日：把前五天「用过 AI」的体感升级为 18 词词典框架——生态四层、Token/窗口/幻觉、Prompt/Context/RAG、Eval/Guardrails/Vibe Coding、Agent/Harness/MCP/Workflow。产出个人
+  LLM 认知卡 llm-cognition-card.md，18 词抽测 ≥12/18 过闸。无新 Lab。
 review_checklist:
-- 产物文件存在且可预览
-- 对照 rubric 自检通过
-- 能向导师说清本日价值
+- 18 词抽测 ≥ **12/18**（AI 导师按节级题库随机抽问，解析必须看懂，不是蒙对）
+- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent，每主题
+  2–3 条要点，每条配前五天真实实例或自己的类比，无照抄）
+- 词典自测：能口头解释任意 3 个词给同桌听，同桌能复述核心一句
+resources:
+- id: dg-llm-ecosystem
+  title: 讲解图 · LLM 生态分层
+  kind: diagram
+  summary: 基建→模型→编排→应用，标出 FDE 工作层
+  url: /course-assets/assets/diagrams/llm-ecosystem.svg
+- id: dg-four-layer
+  title: 讲解图 · 四层架构地图
+  kind: diagram
+  summary: 与驾驶舱模块对齐的生态四层
+  url: /course-assets/assets/diagrams/four-layer.svg
+- id: dg-agent-loop
+  title: 讲解图 · Agent 循环
+  kind: diagram
+  summary: 理解→规划→Tool Call→观察→继续
+  url: /course-assets/assets/diagrams/agent-loop.svg
+- id: dg-llm-capability
+  title: 讲解图 · LLM 能力与边界
+  kind: diagram
+  summary: Token、窗口、幻觉、擅长与不擅长
+  url: /course-assets/assets/diagrams/llm-capability.svg
+- id: dg-context-assembly
+  title: 讲解图 · Context 组装与 RAG
+  kind: diagram
+  summary: Prompt 装填 + 检索增强管线
+  url: /course-assets/assets/diagrams/context-assembly.svg
+- id: dg-harness
+  title: 讲解图 · Harness 解剖
+  kind: diagram
+  summary: 工具表、记忆、规划、重试、日志
+  url: /course-assets/assets/diagrams/harness-anatomy.svg
+- id: dg-workflow-agent
+  title: 讲解图 · Workflow vs Agent
+  kind: diagram
+  summary: 写死流程 vs 现场决策
+  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
+- id: glossary
+  title: 新概念词典 · 18 词
+  kind: site
+  summary: 可检索卡片：定义 / 哪天遇到 / 延伸阅读
+  url: /course-assets/resources/h5/glossary.html
+- id: glossary-md
+  title: 词典完整版 · glossary.md
+  kind: doc
+  summary: 18 词 + 自测 6 题 + 课程落点
+  url: /course-assets/resources/glossary.md
 learn:
   lingzhi_tags:
-  - camp:v0.3
+  - camp:v0.7
   - day:6
-  - topic:prompt
+  - project:role-week
   estimated_minutes: 120
   require_capsules: true
   capsules:
   - id: c1
-    title: Week1 躯体复盘
+    title: 生态四层地图：你在哪一层
     minutes: 20
-    content: 已具备：库表、API、前端、部署认知。传统系统虽笨能用。
-    practice: 画出你的库存链路。
+    form: 概念
+    content_ref: class/bootcamp/day-06/section-01-ecosystem-four-layers/lesson.md
+    content: '同学们，第六天了。前五天呢，你们用过 ChatGPT，写过 Prompt，第五天还调过那个摘要接口——AI 用是用了，可你真要问"这玩意儿到底是怎么运作的"，估计大部分人说不太清。今天咱们不写代码了，就把这些天用过的东西，从根上捋一遍。第一节先把整张生态地图铺开，品牌名不用记，记一个问题就行：我以后干活，到底在生态的哪一层，对吧。
+
+
+      先说最底下这层，LLM，大语言模型。它到底在干嘛呢？就一件事：猜下一个词。你给它一段话，它就琢磨"接下来最可能接啥"，然后一个词一个词往外蹦。GPT-4 啊、Claude 啊、还有咱们用的 DeepSeek，名字不一样，底下都是这个活儿。还记得第五天那个比方吗——它就是个认字特别快的实习生，但你别拿它当字典查，它没核实过，嘛。
+
+
+      整个生态呢，分四层，从下往上：基建、模型、编排、应用。打个比方，就当一栋楼。基建是地基水电——GPU、算力、向量库，盖楼先得有这些；模型层是楼层本身，GPT、Claude、DeepSeek 这些牌子；编排层是装修，Prompt、RAG、Agent，把毛坯房装成能住人的样子；应用层就是你开的店，驾驶舱、客服、写作助手，对吧。
+
+
+      那问题来了，你在哪层？同学们记好，咱们主要在顶上两层干活——编排和应用。啥意思？就是定方向、验货、把模型接到自己的业务里去。换模型，那是换模型层的牌子，不归你管；地基更不用你操心。这个定位记牢，后面九天你动手的地方，全在这两层，嘛。
+
+
+      模型层有个事儿得说清楚，就是开源还是闭源。别被这俩词绕进去，真正的区别是——你是调别人 API 呢，还是把模型下载到自己机器上跑。GPT、Claude 这种闭源的，只能调 API，按用了多少 Token 付钱，省心。DeepSeek、Qwen
+      这种是开源的，权重能下载，你想省钱、怕数据外泄，就自己买机器部署。但注意啊，开源的也能调 API——咱们这门课，就是用 DeepSeek 的 API 接进来的，又便宜又不用自己运维，对吧。所以不是非此即彼，看你图啥：要能力、要省钱、还是要数据不出门，自己掂量。
+
+
+      还有个词儿，多模态。啥意思呢，就是这模型不光会认字，还能看图、听声音、甚至出图。但咱们这门课的驾驶舱，刻意只用文本——摘要、问答、调工具，就这些。为啥？你得让模型干它擅长的活儿，别拿一个文字模型硬去认图，那是为难它。知道它几斤几两、能干啥不能干啥，比啥都重要，嘛。
+
+
+      好，第一节收一下。四层地图，基建、模型、编排、应用，你在顶上两层。今天讲的 18 个词儿，全都是从这四层里长出来的。带走一句：这些词不是课文，背完就完——它是你的随身工具，以后哪天听见个词发懵，回来翻这一页就行。下一节咱们拆 Token、上下文窗口、还有幻觉，对吧。'
+    practice: 完成标志：[ ] 四层名称顺序正确，且各举一个具体产品/动作；[ ] 能 30 秒向同桌解释「FDE 主要在 L3/L4」；[ ] 说清 LLM ≠ 事实库，输出要验收。
+    resource_ids:
+    - dg-llm-ecosystem
+    - dg-four-layer
+    - glossary
+    quiz:
+    - - LLM 的核心机制是什么？
+      - - 检索互联网最新信息
+        - 预测下一个 Token
+        - 存储企业数据库
+      - 1
+      - 生成、理解、推理都从「接龙」机制长出——不是搜索引擎也不是数据库。
+    - - 闭源 API（如 OpenAI）和开源权重（如 Qwen）的主要权衡是？
+      - - 闭源一定更聪明
+        - 能力、成本、隐私的三角权衡
+        - 开源不能 Tool Call
+      - 1
+      - 闭源快省心；开源可自部署换隐私——没有唯一正确答案，看场景。
+    - - 本课驾驶舱为什么刻意只用文本能力？
+      - - 多模态违法
+        - 聚焦摘要/问答/Tool Call，别用文本模型硬做不擅长的事
+        - 多模态太贵不能用
+      - 1
+      - 知道多模态存在，但训练聚焦文本链路——边界意识是 FDE 基本功。
+    media:
+    - kind: video
+      title: 口播课件 · 生态四层地图
+      object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
+      poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
+      duration_sec: 195
+    knowledge_cards:
+    - id: llm-core
+      term: LLM · 大语言模型
+      plain: 用海量文本训练的「预测下一个词」机器；生成、理解、推理都从这机制长出。
+      tag: 核心
+    - id: four-layers
+      term: 生态四层
+      plain: 基建→模型→编排→应用；FDE 主要在编排层和应用层动手。
+      tag: 框架
+    - id: open-closed
+      term: 开源权重 vs 闭源 API
+      plain: 闭源调 endpoint 按 Token 付费；开源下载权重自部署——能力、成本、隐私三角权衡。
+      tag: 选型
+    - id: multimodal-bound
+      term: 多模态边界
+      plain: 不只文本还能看图听音；本课驾驶舱只用文本能力。
+      tag: 边界
+    glossary_terms:
+    - id: gt-llm
+      term: LLM
+      plain: 大语言模型：预测下一个 Token，不是核实过的事实库。
+    - id: gt-open-closed
+      term: 开源 vs 闭源
+      plain: API 省心按量付；开源权重自部署换隐私与成本。
+    - id: gt-multimodal
+      term: 多模态
+      plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
   - id: c2
-    title: 传统 vs AI 将注入什么
+    title: Token / 窗口 / 幻觉：能力与边界
     minutes: 20
-    content: 第二周给系统加 RAG/Agent，对比体感。
-    practice: 写一句你对「变聪明」的期待。
+    form: 概念
+    content_ref: class/bootcamp/day-06/section-02-token-window-hallucination/lesson.md
+    content: '同学们，第二节，聊三个绑在一起的词：Token、上下文窗口、幻觉。你们调 API 时会看到 max_tokens、usage——今天搞懂它，以后就不会奇怪为什么对话越长越贵、越慢。
+
+      Token 是模型读写的最小单位，不是一个字。英文 roughly 一个单词，中文 roughly 半个到一个字。GPT-4o 按输入输出 Token 计费——所以压缩 Prompt、清掉废话，是真省钱。Cursor 里贴整份 repo，就是在烧
+      Token，对吧。
+
+      上下文窗口是一次性能看到的 Token 上限。Claude 3.5 常见 200K，GPT-4o 128K——听起来很大，但一份 PRD 加架构加接口契约加聊天记录，很快就满。满了怎么办？截断旧的、摘要压缩、或者 RAG 只检索相关段——第三节细讲，对吧。
+
+      幻觉 Hallucination：模型永远给最像真的答案，不是核实过的答案。你问一个不存在的论文，它也会编 DOI——这是机制，不是偶发 bug。所以 FDE 的铁律：关键事实必须可溯源，RAG 或人工验收，不能盲信，对吧。
+
+      能力边界三句话：擅长模式匹配和语言生成；不擅长实时数据、精确计算、未训练过的私有事实；输出必须验收。驾驶舱摘要接口——模型写得好不好，你得对照 Rubric，对吧。
+
+      记住：Token 是钱也是注意力；窗口是硬顶；幻觉是常态所以要验收。下一节 Prompt 和 RAG——怎么把有限窗口用在刀刃上，对吧。'
+    practice: 完成标志：[ ] 能解释 input/output Token 与账单的关系；[ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策；[ ] 说清「验收」比「再 prompt 一次」优先。
+    resource_ids:
+    - dg-llm-capability
+    - glossary
+    quiz:
+    - - Token 和「一个汉字」的关系是？
+      - - 完全相等
+        - 中文约 0.6–1 字/Token，不是一字一 Token
+        - Token 只用于英文
+      - 1
+      - API 账单按 Token 计——压缩 Prompt 是真省钱。
+    - - 上下文窗口满了，常见策略不包括？
+      - - 截断最早消息
+        - 无限扩大窗口忽略成本
+        - RAG 只检索相关片段
+      - 1
+      - 窗口是硬顶+成本顶——不能假装无限。
+    - - 为什么说幻觉是「机制」不是 bug？
+      - - 模型坏了要返厂
+        - 训练目标是 plausible 接龙，不是 fact-check
+        - 只有旧模型才幻觉
+      - 1
+      - 对策是 RAG+Eval+Guardrails，不是「再 prompt 一次就会好」。
+    media:
+    - kind: video
+      title: 口播课件 · Token / 窗口 / 幻觉
+      object_key: documents/shared/course-media/day06-c2-token.mp4
+      poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
+      duration_sec: 171
+    knowledge_cards:
+    - id: token-meter
+      term: Token 计量
+      plain: 模型读写最小单位；中文约 0.6–1 字/Token；API 按 input+output 计费。
+      tag: 核心
+    - id: context-window
+      term: 上下文窗口
+      plain: 一次调用能看到的 Token 上限；满了可截断、摘要或 RAG。
+      tag: 核心
+    - id: hallucination
+      term: 幻觉 Hallucination
+      plain: 给「最像真的」而非「核实过的」答案——机制如此，不是偶发 bug。
+      tag: 核心
+    glossary_terms:
+    - id: gt-token
+      term: Token / 窗口
+      plain: Token 是计费单位；窗口是一次能看多少——对话越长越贵越慢。
+    - id: gt-hallucination
+      term: 幻觉
+      plain: 流畅 plausible 优先于 fact-check；关键事实必须可溯源+验收。
   - id: c3
-    title: Prompt 公式
+    title: Prompt / Context / RAG / Fine-tune vs Prompt
     minutes: 20
-    content: 角色+背景+任务+约束。烂指令 vs 好指令。
-    practice: 改写一句烂 Prompt。
+    form: 概念
+    content_ref: class/bootcamp/day-06/section-03-prompt-context-rag/lesson.md
+    content: '同学们，第三节四个词：Prompt、Context Engineering、RAG、Fine-tuning vs Prompting。第一天 你们解剖过 PM 提示词——今天升级到系统视角：不是写一段话，而是设计一次调用的视野。
+
+      Prompt 工程是给模型的任务说明书：角色、背景、任务、约束、输出格式。PM Agent 提示词就是标准件——可迭代、可验收。坏 Prompt 的特征：没说清输出格式，没说清不许做什么。好 Prompt：工程师看完不用回来问第二遍，对吧。
+
+      Context Engineering 是决定这次调用放什么进窗口。给少了——模型瞎编；给多了——它迷失在中间。驾驶舱摘要：该放 PRD 片段还是整份 DB Schema？放最新用户消息还是全历史？这是手艺，不是玄学，对吧。
+
+      RAG 检索增强生成：先从资料库捞相关片段——向量库、关键词、企业 Wiki——再让模型基于片段回答。治幻觉的主流药方之一。流程：切块、嵌入、检索、拼进 Prompt、生成。你们驾驶舱基于本周数据生成摘要就是简化版 RAG 思想，对吧。
+
+      Fine-tuning 改模型权重，贵、慢、持久；Prompting 改给模型的话，快、便宜。90% 场景先用后者。只有当你需要固定风格、固定格式、且 Prompt 怎么写都不稳，才考虑 Fine-tune。别一上来就我们要训一个模型——FDE
+      先验收 Prompt 方案，对吧。
+
+      收束：Prompt 是说明书，Context 是装填术，RAG 是外挂记忆，Fine-tune 是最后手段。下一节 Eval 和 Guardrails——怎么给 AI 出考卷、怎么拦越界，对吧。'
+    practice: 完成标志：[ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）；[ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别；[ ] Fine-tune 何时才考虑（一句）。
+    resource_ids:
+    - dg-context-assembly
+    - glossary
+    quiz:
+    - - Prompt 工程「四要素」不包括？
+      - - 角色定位
+        - GPU 型号
+        - 输出格式
+      - 1
+      - 四要素：角色、背景、任务、格式——再加约束。
+    - - Context Engineering 主要解决什么问题？
+      - - 让模型更快
+        - 决定这次调用放什么进窗口，避免给少瞎编/给多迷失
+        - 替代 Fine-tuning
+      - 1
+      - 窗口有限——装填是手艺，不是玄学。
+    - - RAG 的正确顺序是？
+      - - 生成→检索→嵌入
+        - 切块→嵌入→检索→拼 Prompt→生成
+        - 检索→Fine-tune→生成
+      - 1
+      - 先捞相关片段再让模型基于片段回答。
+    - - 90% 场景应该优先？
+      - - Fine-tuning
+        - Prompting（+RAG+Eval）
+        - 换更大的模型
+      - 1
+      - Fine-tune 贵慢——Prompt 方案没过闸不升级。
+    media:
+    - kind: video
+      title: 口播课件 · Prompt / Context / RAG
+      object_key: documents/shared/course-media/day06-c3-rag.mp4
+      poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
+      duration_sec: 181
+    knowledge_cards:
+    - id: prompt-eng
+      term: Prompt 工程
+      plain: 任务说明书：角色+背景+任务+约束+输出格式，可迭代可验收。
+      tag: 核心
+    - id: context-eng
+      term: Context Engineering
+      plain: 决定这次调用放什么进窗口——给少瞎编，给多迷失。
+      tag: 核心
+    - id: rag-pipeline
+      term: RAG 管线
+      plain: 切块→嵌入→检索→拼 Prompt→生成；治幻觉主流方案之一。
+      tag: 核心
+    - id: finetune-prompt
+      term: Fine-tune vs Prompt
+      plain: 改权重贵慢；改 Prompt 快便宜——90% 场景先用后者。
+      tag: 选型
+    glossary_terms:
+    - id: gt-prompt
+      term: Prompt 工程
+      plain: 四要素+约束+格式；工程师看完不用回来问第二遍。
+    - id: gt-context
+      term: Context Engineering
+      plain: 装填窗口的手艺——PRD 片段 vs 整库，取舍决定质量。
+    - id: gt-rag
+      term: RAG
+      plain: 先检索相关片段再生成；驾驶舱摘要是简化版 RAG 思想。
   - id: c4
-    title: 指挥 AI 写代码
+    title: Eval / Guardrails / Vibe Coding
     minutes: 20
-    content: 给场景、验收标准、禁止项。
-    practice: 写一条带约束的 Prompt。
+    form: 概念
+    content_ref: class/bootcamp/day-06/section-04-eval-guardrails-vibe/lesson.md
+    content: '同学们，第四节三个词，都是你们已经在做、但今天给名字：Eval、Guardrails、Vibe Coding。训练营全程练的是带验收的 vibe coding——自然语言描述意图让 AI 写代码，爽点是真的，背锅也是真的。
+
+      Eval 评测：给 AI 产物出考卷。固定题库、明确判分、可重复跑——代替我觉得还行。第一天 的 Rubric、快测的选择题，都是 Eval 的朴素版。上线前：准备 20 条边界 case，模型改版后重跑，分数掉了就别发版，对吧。
+
+      Guardrails 护栏：拦在输入输出上的规则。什么不许问——比如要别人员工工资；什么不许答——比如没检索到就瞎编政策；越界怎么办——拒答、转人工、降级模板。企业驾驶舱必须有：敏感词、空结果、超时，三条降级路径，对吧。
+
+      Vibe Coding 氛围编程：Cursor、Copilot、Claude Code——你描述意图，AI 写 diff。第三天 大头 HTML 是 AI 写的，对吧。但验收不能 vibe：接口返回 200 不够，要对契约；摘要对不上数据，要回滚
+      Prompt。会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
+
+      三角关系：Eval 告诉你好不好；Guardrails 告诉你敢不敢上线；Vibe Coding 是生产力杠杆。缺 Eval 是盲飞；缺 Guardrails 是裸奔；缺验收的 Vibe 是技术债工厂，对吧。
+
+      带走一句：我觉得还行不是验收标准，Eval 才是。下一节 Agent 全家桶——Harness、MCP、Workflow 和 Agent 怎么分，对吧。'
+    practice: 完成标志：[ ] 5 条 case 可被第三方客观判过/不过；[ ] 说清一条 Guardrails 降级策略（空结果）；[ ] 举自己 vibe 写代码的一次经历 + 怎么验收的。
+    resource_ids:
+    - dg-llm-ecosystem
+    - glossary
+    quiz:
+    - - Eval 和「我觉得还行」的本质区别？
+      - - Eval 更贵
+        - Eval 可重复、有固定判分，第三方能客观判过/不过
+        - 没有区别
+      - 1
+      - Rubric 和快测都是 Eval 的朴素版。
+    - - 检索为空时 Guardrails 应该？
+      - - 让模型编造合理答案
+        - 拒答/模板降级/转人工，禁止 hallucinate
+        - 自动 Fine-tune
+      - 1
+      - 空结果瞎编是线上事故高发区。
+    - - 「带验收的 Vibe Coding」指？
+      - - 不许用 AI 写代码
+        - 可以用 AI 写 diff，但合并前必须 Eval 和验收关键路径
+        - 只要 vibe 快就行
+      - 1
+      - 会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
+    media:
+    - kind: video
+      title: 口播课件 · Eval / Guardrails / Vibe Coding
+      object_key: documents/shared/course-media/day06-c4-eval.mp4
+      poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
+      duration_sec: 167
+    knowledge_cards:
+    - id: eval-core
+      term: Eval · 评测
+      plain: 固定题库+明确判分+可重复跑——代替「我觉得还行」。
+      tag: 核心
+    - id: guardrails
+      term: Guardrails · 护栏
+      plain: 输入过滤、输出约束、越界降级——空结果别瞎编。
+      tag: 核心
+    - id: vibe-coded
+      term: Vibe Coding
+      plain: 自然语言让 AI 写代码；爽点是真的，验收责任也是真的。
+      tag: 全程
+    glossary_terms:
+    - id: gt-eval
+      term: Eval
+      plain: 给 AI 出考卷；模型/Prompt 改版后重跑，分掉别发版。
+    - id: gt-guardrails
+      term: Guardrails
+      plain: 敏感词、空结果、超时——三条降级路径企业必备。
+    - id: gt-vibe
+      term: Vibe Coding
+      plain: diff 可以 vibe，合并进 main 必须 Eval+人工看关键路径。
   - id: c5
-    title: 算账与模型选型
-    minutes: 20
-    content: Token、场景：DeepSeek/Claude/GPT。帮老板省钱。
-    practice: 选一个省钱场景。
+    title: Agent / Harness / Tool / MCP / Workflow vs Agent
+    minutes: 25
+    form: 概念
+    content_ref: class/bootcamp/day-06/section-05-agent-harness-mcp/lesson.md
+    content: '同学们，第五节最长，六个词一次讲清：Agent、Harness、Tool Calling、MCP、Workflow vs Agent、Copilot vs Agent。第二周 你们要封装 Skill——今天先把骨架名词对齐，别到时候
+      Harness 和 MCP 混成一团。
+
+      Agent 智能体：能自己决定下一步的 AI。理解任务、规划、调工具、看结果、继续——直到完成或求助。Cursor Agent 模式、Claude Code、OpenAI Assistants 都是。你定目的地和验收，它选路线，对吧。
+
+      Harness 是模型外面的循环：工具表、记忆、规划、重试、日志。同一个 GPT-4，换一副 Harness，能力天差地别。Tool Calling 是模型输出结构化请求我要调 search，参数 q=周报——Harness 执行后把结果喂回去。你们
+      API 里的 function calling 就是这个，对吧。
+
+      MCP Model Context Protocol：给 AI 接工具和数据源的 USB-C 标准。按 MCP 写一个服务，Cursor、Claude Desktop、各种 Agent 都能插。训练营 Skill 是朴素版 MCP——读
+      SKILL.md，调工具，交付结果。第二周 会亲手写，对吧。
+
+      Workflow vs Agent：Workflow 是人画死的流程图——先 A 再 B 再 C；Agent 是模型现场决定下一步。能写死就写死，写不死才上 Agent。报销审批适合 Workflow；帮我把这堆乱文件整理成 PRD适合
+      Agent，对吧。
+
+      Copilot vs Agent：Copilot 是你开车它递扳手——补全、问答、局部改写；Agent 是你定目的地它开——接任务、跑多步、调工具。信任要求和验收完全不同。Copilot 错了改一行；Agent 错了可能改坏十个文件——所以日志、回滚、Eval
+      更关键，对吧。
+
+      六词口诀：Agent 决策，Harness 骨架，Tool 手，MCP 插座，Workflow 写死，Copilot 副驾。最后一节 18 词抽测——检验今天有没有真过线，对吧。'
+    practice: 完成标志：[ ] 能画 Agent 循环简图；[ ] 说清 Copilot vs Agent 信任差异；[ ] 指驾驶舱哪块未来适合 Skill/MCP 封装。
+    resource_ids:
+    - dg-agent-loop
+    - dg-harness
+    - dg-workflow-agent
+    - glossary
+    quiz:
+    - - Agent 循环的正确顺序？
+      - - Tool Call→理解→规划
+        - 理解→规划→Tool Call→观察→继续
+        - 生成→生成→生成
+      - 1
+      - Harness 负责执行 Tool 并喂回结果。
+    - - 同一 GPT-4，Cursor Agent 和简陋脚本能力差异主要来自？
+      - - 模型版本不同
+        - Harness（工具表、记忆、重试、日志）不同
+        - 网络速度
+      - 1
+      - 骨架不同，能力天差地别——Week 2 练的就是 Harness/Skill。
+    - - MCP 最贴切的比喻是？
+      - - 新的编程语言
+        - AI 接工具/数据源的 USB-C 标准
+        - 只能 OpenAI 用的私有协议
+      - 1
+      - 按标准写 Server，Cursor/Claude Desktop 都能用。
+    - - 「能写死就写死，写不死才 Agent」说明？
+      - - Agent 永远优于 Workflow
+        - Workflow 稳定可审计；Agent 灵活但需 Eval——按任务选
+        - 不应该用 Agent
+      - 1
+      - 报销审批写 Workflow；开放式整理任务才 Agent。
+    - - Copilot 和 Agent 的核心区别？
+      - - Copilot 更贵
+        - Copilot 是你开车它递扳手；Agent 是你定目的地它开
+        - 没有区别
+      - 1
+      - Agent 多步跨文件，错了破坏力大——日志和 Eval 更关键。
+    - - Tool Calling 时谁真正执行工具？
+      - - 模型自己连数据库
+        - Harness 收到结构化请求后执行，再把结果塞回上下文
+        - 用户手动执行
+      - 1
+      - 模型只「说我要调什么」；执行在 Harness。
+    media:
+    - kind: video
+      title: 口播课件 · Agent / Harness / MCP
+      object_key: documents/shared/course-media/day06-c5-agent.mp4
+      poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
+      duration_sec: 207
+    knowledge_cards:
+    - id: agent-loop
+      term: Agent · 智能体
+      plain: 理解→规划→Tool Call→观察→继续；你定目的地和验收。
+      tag: 核心
+    - id: harness
+      term: Harness · 骨架
+      plain: 模型外循环：工具表、记忆、重试、日志——同模型不同骨架能力天差地别。
+      tag: 核心
+    - id: tool-call
+      term: Tool Calling
+      plain: 模型输出结构化工具请求，Harness 执行后结果喂回上下文。
+      tag: 核心
+    - id: mcp
+      term: MCP
+      plain: AI 接工具/数据源的 USB-C 标准；Skill 是它的朴素版。
+      tag: 地基
+    - id: workflow-agent
+      term: Workflow vs Agent
+      plain: 写死流程 vs 现场决策——能写死就写死，写不死才 Agent。
+      tag: 原则
+    - id: copilot-agent
+      term: Copilot vs Agent
+      plain: 副驾递扳手 vs 自主开车——信任与验收要求完全不同。
+      tag: 对比
+    glossary_terms:
+    - id: gt-agent
+      term: Agent
+      plain: 多步自主决策+调工具；Week 2 封装 Skill 的前置概念。
+    - id: gt-harness
+      term: Harness
+      plain: Cursor vs 简陋脚本——同一 GPT-4 不同骨架。
+    - id: gt-mcp
+      term: MCP
+      plain: Model Context Protocol；写一个 Server 多客户端能插。
+    - id: gt-workflow
+      term: Workflow vs Agent
+      plain: 报销审批适合 Workflow；整理乱文件成 PRD 适合 Agent。
+    - id: gt-copilot
+      term: Copilot vs Agent
+      plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
   - id: c6
-    title: 本周路线图
-    minutes: 20
-    content: 客服 RAG、驾驶舱、自动化助理三案。
-    practice: 标出你最想练的一案。
+    title: 验收：18 词抽测 + 认知卡过闸
+    minutes: 15
+    form: 验收
+    content_ref: class/bootcamp/day-06/section-06-accept-18words/lesson.md
+    content: '同学们，LLM 理论日最后一节——验收。两关：18 词抽测，和 LLM 认知卡。快测防的是没学，认知卡防的是没连起来——和前天的理论地图同一个逻辑，对吧。
+
+      第一关，随机抽 18 词里的 12 题，对 12 题过线。范围就是今天六节：生态四层、Token 幻觉、Prompt RAG、Eval 护栏、Agent MCP。考理解不考背诵——哪个词你只能背定义，说明那一节回去看讲解图，对吧。
+
+      第二关，LLM 认知卡 llm-cognition-card.md。六大主题，每个两到三条要点，每条配你前五天的真实例子——PRD、架构、摘要接口、Cursor 写过的页面都行。不许抄课件，要能 thirty 秒讲给同桌听，对吧。
+
+      过闸标准：抽测十二分之上；认知卡六大主题齐全；能口头向同桌解释任意三个词，同桌能复述核心一句。过了，第二周 的 Agent 和 Skill 才有共同语言，对吧。
+
+      六天前 LLM 是黑话；今天你有 18 个词的地图。带走一句：词典不是课文，是随身工具——听到任何词发懵，回来查这一页。LLM 理论日，毕业，对吧。'
+    practice: 完成标志：[ ] 抽测 ≥12/18；[ ] 认知卡已提交且六大主题齐全；[ ] 同桌互测签字（或聊天记录截图）。
+    resource_ids:
+    - glossary
+    - glossary-md
+    - dg-four-layer
+    quiz:
+    - - 今日 GATE 过线标准是？
+      - - 部署上云
+        - 18 词抽测 ≥12/18 + LLM 认知卡提交
+        - 写完 3000 行代码
+      - 1
+      - 纯理论日——验收认知，不是代码量。
+    - - LLM 认知卡每条要点必须配？
+      - - 一段抄课件的定义
+        - 前五天真实交付物或自己的类比
+        - 任意网络文章链接
+      - 1
+      - 要「你的」实例，不是「高级的」实例。
+    - - 18 词里「Hallucination」的核心对策组合是？
+      - - 更大模型
+        - RAG + Eval + Guardrails（可溯源+验收+降级）
+        - 不用 AI
+      - 1
+      - 幻觉是机制——用工程手段管理，不是 magic prompt。
+    media:
+    - kind: video
+      title: 口播课件 · 18 词验收
+      object_key: documents/shared/course-media/day06-c6-accept.mp4
+      poster_key: documents/shared/course-media/day06-c6-accept-poster.jpg
+      duration_sec: 116
+    knowledge_cards:
+    - id: gate-llm
+      term: GATE · LLM 认知过线
+      plain: 18 词抽测 ≥12/18 + LLM 认知卡六大主题有实例。
+      tag: 验收
+    - id: cognition-card
+      term: LLM 认知卡
+      plain: 六大主题×要点×前五天真实例——不许抄课件。
+      tag: 交付
+    glossary_terms:
+    - id: gt-glossary-18
+      term: 18 词词典
+      plain: 行业日常词汇随身工具——听到发懵回来查这一页。
 quiz:
-  pass_rate: 0.5
+  pass_rate: 0.67
   questions:
-  - q: 好 Prompt 通常包含？
+  - q: LLM 生态四层从底到顶的正确顺序是？
     options:
-    - 只有「帮我写」
-    - 角色背景任务约束
-    - 随机表情
+    - 应用→编排→模型→基建
+    - 基建→模型→编排→应用
+    - 模型→应用→编排→基建
     answer: 1
-    explain: 结构化指令更稳。
-  - q: Week1 目标是？
+    explain: 驾驶舱在应用层；换模型是换编排/模型层的牌子。
+  - q: Token 与上下文窗口的关系？
     options:
-    - 先上多智能体
-    - 做出能用的传统躯体
-    - 只学微调
+    - Token 是计费单位，与窗口无关
+    - Token 是读写基本单位；窗口是一次能塞进去的上限
+    - 窗口越大幻觉越少
     answer: 1
-    explain: 先躯体后灵魂。
+    explain: 给少了瞎编，给多了迷失——Context Engineering 管装填。
+  - q: 幻觉（Hallucination）的本质是？
+    options:
+    - 模型 bug，升级就消失
+    - 机制：永远给「最像真的」而非「经过核实的」
+    - 只有小模型才会幻觉
+    answer: 1
+    explain: 用 RAG、Eval、Guardrails 管理，不是 magic prompt。
+  - q: RAG 主要解决什么问题？
+    options:
+    - 让模型更快
+    - 先从资料库检索片段，再基于片段回答——治幻觉药方之一
+    - 替代 Fine-tune
+    answer: 1
+    explain: 可溯源比「听起来对」重要。
+  - q: Fine-tune 与 Prompt 的分工？
+    options:
+    - 完全相同
+    - Prompt 改这次输入；Fine-tune 改模型权重——贵、慢，多数业务 Prompt+RAG 够用
+    - Fine-tune 只能用于聊天
+    answer: 1
+    explain: 先 Prompt/Context，真搞不定再考虑 Fine-tune。
+  - q: Eval 替代的是什么？
+    options:
+    - 单元测试
+    - 「我觉得还行」——用固定题库+判分标准验收 AI 产物
+    - 代码审查
+    answer: 1
+    explain: Rubric 思维在 LLM 日落地。
+  - q: Agent 和 Workflow 怎么选？
+    options:
+    - 永远用 Agent
+    - 能写死流程就 Workflow；写不死才 Agent
+    - 永远用 Workflow
+    answer: 1
+    explain: Agent 信任成本高——需要 Harness 和日志。
+  - q: MCP 是什么？
+    options:
+    - 一种新的编程语言
+    - 给 AI 接工具/数据源的 USB-C 标准——Skill 是它的朴素版
+    - 只有 OpenAI 支持
+    answer: 1
+    explain: 标准接口让工具可复用。
+  - q: Copilot vs Agent？
+    options:
+    - Copilot 能自动跑完业务流程
+    - Copilot 递扳手；Agent 你定目的地它开——验收方式完全不同
+    - 没有区别
+    answer: 1
+    explain: Week 2 主要在 Agent 侧加深。
+  - q: Harness 包含什么？
+    options:
+    - 只有大模型
+    - 工具表、记忆、规划、重试、日志——模型之外的循环骨架
+    - 前端框架
+    answer: 1
+    explain: 同一模型换 Harness，能力天差地别。
 nodes:
 - type: learn
-  title: 过渡心智
+  title: 今日课节（6 节 · 120′）
 - type: quiz
-  title: Prompt 速测
-- type: lab
-  title: Agent 生成指挥手册
+  title: Day6 概念验收
 - type: project
-  title: 企业任务：团队 Prompt 规范
+  title: 企业任务：提交 LLM 认知卡 llm-cognition-card.md + 18 词抽测过线
 - type: review
-  title: 手册自检
-- type: unlock
-  title: 解锁 Day7
-lab:
-  runner: agent
-  coach:
-    help_mode: explain
-    skill_id: fde-coach
-    max_help_level: 2
-  agent:
-    prompt_template: 创建 prompt-playbook.html：标题「Prompt 指挥手册」，含「角色+背景+任务+约束」公式，以及烂指令/好指令对比各一例。不要
-      Docker。
-  rubric:
-  - check: file_exists
-    args:
-      path: prompt-playbook.html
-  - check: text_contains
-    args:
-      path: prompt-playbook.html
-      needle: 约束
-  - check: text_contains
-    args:
-      path: prompt-playbook.html
-      needle: 角色
+  title: 交付自检与 GATE · LLM 认知过线

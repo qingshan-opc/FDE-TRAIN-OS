@@ -1,0 +1,30 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-agent",
+    "file": "02-agent.txt"
+  },
+  {
+    "id": "03-harness-tool",
+    "file": "03-harness-tool.txt"
+  },
+  {
+    "id": "04-mcp",
+    "file": "04-mcp.txt"
+  },
+  {
+    "id": "05-workflow",
+    "file": "05-workflow.txt"
+  },
+  {
+    "id": "06-copilot",
+    "file": "06-copilot.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
+  }
+]

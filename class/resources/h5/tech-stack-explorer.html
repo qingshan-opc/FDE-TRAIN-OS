@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交互讲义 · 技术选型全图（前端/后端/数据库） | FDE 训练营 Day 5</title>
+<style>
+:root{
+  --bg:#f2f5f0; --ink:#231f20; --ink-60:rgba(35,31,32,.6); --ink-40:rgba(35,31,32,.4);
+  --ink-08:rgba(35,31,32,.08); --accent:#1400ff; --c-fe:#f24e54; --c-be:#5f52a0;
+  --c-db:#1cd5b0; --c-cloud:#f5a947; --c-ok:#2f9e44;
+  --serif:"Songti SC","STSong","Noto Serif SC",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+header{padding:56px 0 32px;border-bottom:6px solid var(--ink)}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(30px,5vw,48px);line-height:1.2;margin:10px 0 14px}
+.lede{color:var(--ink-60);max-width:660px;font-size:15px}
+.tabs{display:flex;gap:0;margin:40px 0 0;border:1px solid var(--ink);width:max-content;max-width:100%;flex-wrap:wrap}
+.tabs button{font-family:var(--mono);font-size:13px;letter-spacing:.1em;padding:14px 28px;background:none;border:none;cursor:pointer;color:var(--ink-60);transition:all .25s}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.tabs button:not(.on):hover{color:var(--accent)}
+/* platform block */
+.plat{margin:34px 0 6px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.plat h2{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:900}
+.plat .en{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--pc,var(--accent));font-weight:700}
+.plat .where{font-size:13px;color:var(--ink-60)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin:18px 0 8px}
+.card{background:#fff;border:1.5px solid var(--ink-08);border-left:6px solid var(--pc,var(--accent));border-radius:10px;padding:18px 20px;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(35,31,32,.10)}
+.card h3{font-family:var(--serif);font-size:18px;font-weight:900;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.card h3 small{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--pc,var(--accent));font-weight:700}
+.card .lang{font-family:var(--mono);font-size:11px;color:var(--ink-40);margin-top:2px}
+.card .one{font-size:13px;color:var(--ink-60);margin-top:6px}
+.detail{max-height:0;overflow:hidden;transition:max-height .45s ease,margin .45s ease}
+.card.open .detail{max-height:720px;margin-top:12px}
+.detail dl{display:grid;grid-template-columns:60px 1fr;gap:5px 12px;font-size:13px}
+.detail dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--ink-40);padding-top:2px}
+.detail dd.pro{color:var(--c-ok)}
+.detail dd.con{color:var(--c-fe)}
+.detail dd.scene{color:var(--ink)}
+.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.card .hint{font-family:var(--mono);font-size:10px;color:var(--ink-40);letter-spacing:.1em}
+.card.open .hint{display:none}
+.card a.official{font-family:var(--mono);font-size:11px;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:1px}
+.card a.official:hover{background:var(--accent);color:#fff}
+/* compare table */
+.cmp{width:100%;border-collapse:collapse;margin:26px 0 10px;background:#fff;border:1px solid var(--ink-08);border-radius:10px;overflow:hidden;font-size:13px}
+.cmp th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-align:left;background:var(--ink);color:var(--bg);padding:10px 14px}
+.cmp td{padding:10px 14px;border-top:1px solid var(--ink-08);vertical-align:top}
+.cmp tr td:first-child{font-weight:700;white-space:nowrap}
+.cmp .best{color:var(--c-ok);font-weight:700}
+.cmp-note{font-size:12px;color:var(--ink-40);margin-bottom:26px}
+/* stepper */
+.steps{margin:34px 0 8px}
+.step{border:1px solid var(--ink-08);border-radius:10px;background:#fff;margin-bottom:10px;overflow:hidden}
+.step>button{width:100%;display:flex;align-items:center;gap:14px;padding:15px 20px;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--sans);font-size:15px;font-weight:700;color:var(--ink)}
+.step>button .n{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.1em}
+.step>button .arrow{margin-left:auto;transition:transform .3s;color:var(--ink-40)}
+.step.open>button .arrow{transform:rotate(90deg)}
+.step .body{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--ink-60);font-size:14px;padding:0 20px}
+.step.open .body{max-height:220px;padding:0 20px 18px 66px}
+.verdict{margin:30px 0 44px;border:2px solid var(--accent);border-radius:10px;padding:20px 26px;font-family:var(--serif);font-size:16.5px;font-weight:700}
+.verdict b{color:var(--accent)}
+/* quiz */
+.quiz{border-top:6px solid var(--ink);padding:34px 0 60px}
+.q{background:#fff;border:1px solid var(--ink-08);border-radius:10px;padding:18px 22px;margin-top:14px}
+.q p{font-weight:700;font-size:14.5px}
+.q button{margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:none;border:1px solid var(--ink);border-radius:6px;padding:6px 14px;cursor:pointer}
+.q button:hover{background:var(--ink);color:var(--bg)}
+.q .a{display:none;margin-top:10px;font-size:13.5px;color:var(--c-ok)}
+.q.show .a{display:block}
+footer{padding:24px 0 50px;color:var(--ink-40);font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="tag">FDE 训练营 · Day 5 交互讲义 · 全图版</div>
+    <h1>技术选型全图<br><span style="font-weight:400;color:var(--ink-60)">前端（Web/App/小程序/桌面） × 后端语言与框架 × 数据库——先定平台，再看对比，最后点链接</span></h1>
+    <p class="lede">点任何一张卡片看「优势 / 劣势 / 适用场景」；卡片右下角是官方链接；每组下面有对比表。记住两步：<b>先定平台，再选框架</b>。</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tabs" role="tablist">
+    <button class="on" id="tab-fe" onclick="show('fe')">前端 · 四大平台</button>
+    <button id="tab-be" onclick="show('be')">后端 · 语言与框架</button>
+    <button id="tab-db" onclick="show('db')">数据库 · 场景选型</button>
+  </div>
+
+  <section id="fe"></section>
+  <section id="be" hidden></section>
+  <section id="db" hidden></section>
+
+  <h2 style="font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:900;margin:40px 0 4px">两步选型法</h2>
+  <div class="steps" id="steps"></div>
+  <div class="verdict">第一步<b>定平台</b>（用户在哪用你：浏览器 / 应用商店 / 微信里 / 桌面图标）；第二步<b>选框架</b>，四问按顺序：团队会什么 → 生态大不大 → AI 写得好不好 → 项目有多大。</div>
+
+  <div class="quiz">
+    <div class="tag">自测 3 问</div>
+    <div class="q"><p>1 · 小团队要做 iOS+Android 两端、一套代码，选什么？</p><button onclick="this.parentNode.classList.toggle('show')">看答案</button><div class="a">Flutter 或 React Native（跨端）。原生 Swift+Kotlin 要养两套代码两拨人，是大厂重体验产品的玩法。</div></div>
+    <div class="q"><p>2 · 做国内「扫码即用」的点单应用，平台选什么？</p><button onclick="this.parentNode.classList.toggle('show')">看答案</button><div class="a">小程序——微信原生最稳；要同时出支付宝/抖音小程序就选 Taro 或 uni-app。</div></div>
+    <div class="q"><p>3 · 两周原型、千万级订单系统、向量相似推荐，数据库各选什么？</p><button onclick="this.parentNode.classList.toggle('show')">看答案</button><div class="a">SQLite → PostgreSQL/MySQL → PostgreSQL（pgvector 向量插件）。场景决定数据库，不是名气。</div></div>
+  </div>
+</main>
+
+<footer><div class="wrap">FDE 训练营 · Day 5 · 技术选型全图 —— 看完回到课程第 5、6 节做快测</div></footer>
+
+<script>
+// ---------------- 数据 ----------------
+const FE_PLATS = [
+ { name:"Web 网页", en:"BROWSER", where:"用户在浏览器地址栏输入网址——官网、后台系统、你的周报助手", c:"var(--c-fe)",
+   cards:[
+    {n:"React",lang:"JavaScript / TypeScript",one:"人最多、生态最大、AI 最会写",pro:"踩的每个坑都有答案；招人最容易；AI 生成质量最稳",con:"概念稍多，纯小白直接学有点陡",scene:"中长期维护的中大型 Web 项目",url:"https://react.dev"},
+    {n:"Vue",lang:"JavaScript / TypeScript",one:"最好学，中文文档最地道",pro:"学习曲线最平缓；国内公司用得最多；模板写法直观",con:"海外/外企生态弱于 React",scene:"团队基础偏弱的中小项目、国内就业市场",url:"https://cn.vuejs.org"},
+    {n:"Angular",lang:"TypeScript",one:"大企业全家桶，规矩最全",pro:"路由/表单/HTTP 全内置；十年后来接手也能按同一套规矩干活",con:"笨重——小团队用它像开大货车去菜市场",scene:"大银行、大国企的长期巨型项目",url:"https://angular.dev"},
+    {n:"Svelte",lang:"JavaScript",one:"新派，代码最少、运行更快",pro:"写法简洁、无虚拟 DOM 开销",con:"人少、答案少、AI 不太熟",scene:"个人项目尝鲜",url:"https://svelte.dev"},
+    {n:"Next.js / Nuxt",lang:"React / Vue 的元框架",one:"在 React/Vue 上再加一层：服务端渲染、路由、SEO 一站配齐",pro:"对外发布、要 SEO 的网站标配",con:"内部小工具用不上这层复杂度",scene:"对外的内容站、官网、电商",url:"https://nextjs.org"},
+    {n:"不用框架",lang:"纯 HTML/CSS/JS",one:"小页面完全够用",pro:"零学习成本、双击就能开、AI 写起来零障碍",con:"多页面、多人协作、复杂状态会失控",scene:"活动页、内部小工具、高保真原型（你们的 Day 3）",url:""},
+   ]},
+ { name:"App 开发", en:"MOBILE", where:"用户在应用商店下载安装——微信、滴滴、Keep", c:"var(--c-cloud)",
+   cards:[
+    {n:"Swift（iOS）",lang:"Swift · Apple 官方",one:"苹果官方语言，iOS 性能与体验的天花板",pro:"性能最好、系统能力最全、App Store 审核最顺",con:"只能管 iOS 一端，Android 要另养一拨人",scene:"大厂重体验产品、只做 iOS 的工具",url:"https://developer.apple.com/swift/"},
+    {n:"Kotlin（Android）",lang:"Kotlin · Google 官方",one:"安卓官方语言",pro:"性能最好、系统能力最全",con:"只能管 Android 一端",scene:"大厂重体验产品、安卓定制场景",url:"https://kotlinlang.org"},
+    {n:"Flutter",lang:"Dart · Google",one:"一套代码同时出 iOS 和 Android，两端长得一模一样",pro:"界面自绘、两端一致；热重载开发快；创业公司跨端首选",con:"Dart 语言新、人才少；包体积略大",scene:"小团队跨端 App、两端体验要一致的产品",url:"https://flutter.dev"},
+    {n:"React Native",lang:"JavaScript · Meta",one:"用 React 写 App——前端团队直接上手",pro:"会 React 就能写；生态借力 React；可混原生模块",con:"复杂动画/性能场景不如 Flutter 稳",scene:"团队已会 React、要快速出 App",url:"https://reactnative.dev"},
+   ]},
+ { name:"小程序", en:"MINI PROGRAM", where:"微信/支付宝里扫码即用，不用下载——点单、健康码、报名", c:"var(--c-ok)",
+   cards:[
+    {n:"微信原生",lang:"WXML / WXSS / JS",one:"官方语言，能力最全、最稳",pro:"文档全、能力第一时间支持、审核最顺",con:"只能跑微信一家",scene:"只做微信小程序",url:"https://developers.weixin.qq.com/miniprogram/dev/framework/"},
+    {n:"Taro",lang:"React 风格 · 京东出品",one:"一套代码出微信/支付宝/抖音小程序 + H5 + App",pro:"用 React 写法；多端同构能力强",con:"抽象层有坑，复杂能力仍需写平台差异代码",scene:"要覆盖多个小程序平台的团队（会 React）",url:"https://taro.zone"},
+    {n:"uni-app",lang:"Vue 风格 · DCloud",one:"一套代码出各家小程序 + H5 + App",pro:"用 Vue 写法；国内资料多；HBuilderX 一条龙",con:"复杂项目工程化体验一般",scene:"要覆盖多个小程序平台的团队（会 Vue）",url:"https://uniapp.dcloud.net.cn"},
+   ]},
+ { name:"桌面软件", en:"DESKTOP", where:"电脑桌面双击图标——VS Code、飞书、剪映", c:"var(--c-be)",
+   cards:[
+    {n:"Electron",lang:"JavaScript + Chromium",one:"用网页技术写桌面软件：VS Code、飞书、Discord 都是它包的",pro:"前端团队零门槛；一套 Web 代码三端桌面复用",con:"安装包大、吃内存（每个应用背一个浏览器）",scene:"内部工具桌面版、跨平台桌面应用",url:"https://www.electronjs.org"},
+    {n:"Tauri",lang:"Rust + 系统 WebView",one:"Electron 的轻量替代：体积小十倍",pro:"安装包几 MB、内存省；复用系统浏览器",con:"生态新；需要一点 Rust；Windows 老系统兼容性要测",scene:"对体积/性能敏感的桌面工具",url:"https://tauri.app"},
+   ]},
+];
+
+const BE_LANGS = [
+ { name:"Java · Spring Boot", en:"ENTERPRISE", c:"var(--c-be)", lang:"Java",
+   one:"大厂标配：银行、电信、核心系统十之七八",
+   pro:"规矩全、工具全、能扛大场面；岗位最多；AI 写规矩代码最稳",
+   con:"仪式性代码多（啰嗦）；小项目嫌重",
+   scene:"企业内部系统、要维护十年、要招长期的人",
+   url:"https://spring.io/projects/spring-boot",
+   frames:[["Spring Boot","标配起手式"],["Spring Cloud","微服务全家桶"],["MyBatis","国内最常用 ORM"]]},
+ { name:"Python · FastAPI 家族", en:"AI FIRST", c:"var(--c-ok)", lang:"Python",
+   one:"AI 的母语：模型生态、数据处理全在这",
+   pro:"FastAPI 写 API 最顺手、自动生成 OpenAPI；Django 全家桶自带后台；Flask 小而简",
+   con:"性能不是强项（AI 场景无所谓——瓶颈在模型）",
+   scene:"AI 项目首选；数据处理；快速验证",
+   url:"https://fastapi.tiangolo.com",
+   frames:[["FastAPI","AI 项目首选，自带 OpenAPI"],["Django","全家桶，自带后台"],["Flask","小而简，几百行起服务"]]},
+ { name:"Node.js · Express / NestJS", en:"ONE LANGUAGE", c:"var(--c-cloud)", lang:"JavaScript / TypeScript",
+   one:"前后端同一种语言，一个人包圆",
+   pro:"小团队全栈最爱；npm 生态大；Express 极简、NestJS 规矩像 Java",
+   con:"CPU 密集任务不是强项；回调/类型历史包袱",
+   scene:"小团队全栈、前后端同一拨人、BFF 层",
+   url:"https://nodejs.org",
+   frames:[["Express","极简灵活"],["NestJS","大项目的规矩框架"]]},
+ { name:"Go · Gin", en:"FAST & LEAN", c:"var(--accent)", lang:"Go",
+   one:"Google 为服务器造的语言：快、省内存、一个文件部署",
+   pro:"高并发基础设施最强（网关/队列/下载）；编译单文件，部署极简",
+   con:"写业务逻辑不如 Python/Java 顺手；人才少一些",
+   scene:"高并发基础设施、云原生组件、运维团队主导",
+   url:"https://go.dev",
+   frames:[["Gin","最常用 Web 框架"],["Echo","同类轻量替代"]]},
+ { name:"C# · .NET", en:"MICROSOFT", c:"var(--c-db)", lang:"C#",
+   one:"微软全家桶：Windows 生态企业的主力",
+   pro:"工具链顶级（Visual Studio）；性能已进第一梯队；国企/制造业存量大",
+   con:"国内互联网声量小；跨平台生态年轻",
+   scene:"微软体系企业、制造业、Windows 桌面+服务一体",
+   url:"https://dotnet.microsoft.com",
+   frames:[["ASP.NET Core","现代 Web 框架"]]},
+];
+
+const DBS = [
+ {n:"PostgreSQL",one:"功能最全的主流关系型，2026 新项目默认答案",pro:"复杂查询强、JSONB 半结构化、pgvector 向量插件（AI 友好）",con:"运维比 MySQL 稍重",scene:"默认首选；AI 应用（向量检索）；复杂报表",url:"https://www.postgresql.org",c:"var(--c-db)"},
+ {n:"MySQL",one:"用得最广的老牌关系型",pro:"资料最多、主机厂全支持、互联网半壁江山",con:"高级特性（窗口函数/向量）弱于 PG",scene:"接老系统、团队全是 MySQL 老手",url:"https://www.mysql.com",c:"var(--c-db)"},
+ {n:"SQLite",one:"一个文件就是一个数据库，零运维",pro:"零部署、原型神器、移动端嵌入式标配",con:"多人在线写入会锁——不能当生产服务库",scene:"原型期、小工具、App 本地存储",url:"https://www.sqlite.org",c:"var(--c-db)"},
+ {n:"MongoDB",one:"文档型数据库：数据长得像 JSON",pro:"结构灵活、改字段不改表；内容型数据顺手",con:"多表关联（JOIN）是弱项；事务场景慎重",scene:"内容/日志/配置类、结构多变的业务",url:"https://www.mongodb.com",c:"var(--c-db)"},
+ {n:"Redis",one:"内存里的数据库：缓存之王",pro:"微秒级读写；会话、排行榜、限流标配",con:"数据在内存，贵且会丢——别当主库",scene:"缓存、会话、排行榜、分布式锁",url:"https://redis.io",c:"var(--c-db)"},
+ {n:"Elasticsearch",one:"全文搜索引擎",pro:"「搜得到」这件事的最强答案：分词、相关度排序",con:"集群重、运维贵；不是主库",scene:"站内搜索、日志检索（ELK）",url:"https://www.elastic.co",c:"var(--c-db)"},
+ {n:"ClickHouse",one:"分析型（OLAP）数据库：报表的跑车",pro:"亿级数据秒级聚合，BI 分析标配",con:"不适合高频单行写入/更新",scene:"经营分析、驾驶舱、日志统计",url:"https://clickhouse.com",c:"var(--c-db)"},
+];
+
+const STEPS = [
+  {q:"第一步 · 定平台：用户在哪用你？",a:"浏览器 → Web；应用商店 → App（跨端 Flutter/RN，重体验原生）；微信里扫码即用 → 小程序（原生/Taro/uni-app）；桌面图标 → Electron/Tauri。"},
+  {q:"第二步 · 选框架，四问按顺序",a:"① 团队会什么（学习成本是真实成本）→ ② 生态大不大（有答案、招得到人）→ ③ AI 写得好不好（语料多=生成稳）→ ④ 项目有多大（小工具别上大件）。"},
+  {q:"数据库怎么配？",a:"主库：默认 PostgreSQL（接老系统 MySQL）；原型期 SQLite；缓存加 Redis；搜索加 Elasticsearch；分析报表加 ClickHouse；结构多变的文档数据看 MongoDB。"},
+];
+
+const CMP_FE = {
+  head:["路线","学习成本","生态/答案","AI 生成","适合规模"],
+  note:"★ 越多越好；「适合规模」指这条路线最舒服的项目体量。",
+  rows:[
+    ["React","中","★★★★★","★★★★★","中大型 Web"],
+    ["Vue","低","★★★★","★★★★","中小型 Web"],
+    ["Angular","高","★★★","★★★","巨型 Web"],
+    ["Flutter","中","★★★★","★★★★","跨端 App"],
+    ["React Native","低（会 React）","★★★★","★★★★","跨端 App"],
+    ["Swift/Kotlin 原生","高","★★★★","★★★","重体验 App"],
+    ["微信原生小程序","低","★★★★","★★★★","微信小程序"],
+    ["Taro / uni-app","低","★★★","★★★","多端小程序"],
+    ["Electron","低（会 Web）","★★★★","★★★★","桌面应用"],
+    ["不用框架","零","★★★★★","★★★★★","单页/小工具"],
+  ],
+};
+const CMP_DB = {
+  head:["场景","选这个","为什么"],
+  note:"主库之外，缓存/搜索/分析是「加配」——不是替代主库。",
+  rows:[
+    ["两周原型 / 小工具","SQLite","一个文件零运维，先跑起来"],
+    ["新项目默认主库","PostgreSQL","功能最全 + 向量插件，AI 友好"],
+    ["接老系统 / 团队惯性","MySQL","资料最多、迁移成本最低"],
+    ["缓存 / 会话 / 排行榜","Redis","微秒级内存读写"],
+    ["站内搜索 / 日志检索","Elasticsearch","分词 + 相关度排序最强"],
+    ["经营分析 / 驾驶舱报表","ClickHouse","亿级数据秒级聚合"],
+    ["结构多变的文档数据","MongoDB","改字段不改表"],
+  ],
+};
+
+// ---------------- 渲染 ----------------
+function card(x, pc){
+  return `<div class="card" style="--pc:${x.c||pc}" onclick="this.classList.toggle('open')">
+    <h3>${x.n}<small>${x.en||""}</small></h3>
+    ${x.lang?`<div class="lang">${x.lang}</div>`:""}
+    <div class="one">${x.one}</div>
+    <div class="detail"><dl>
+      <dt>优势</dt><dd class="pro">${x.pro}</dd>
+      <dt>劣势</dt><dd class="con">${x.con}</dd>
+      <dt>适用场景</dt><dd class="scene">${x.scene}</dd>
+    </dl></div>
+    <div class="foot"><span class="hint">点击展开 ▾</span>${x.url?`<a class="official" href="${x.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">官方 ↗</a>`:"<span></span>"}</div>
+  </div>`;
+}
+function cmp(t){
+  return `<table class="cmp"><tr>${t.head.map(h=>`<th>${h}</th>`).join("")}</tr>${t.rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${i>0&&String(c).includes("★★★★★")?"best":""}">${c}</td>`).join("")}</tr>`).join("")}</table><p class="cmp-note">${t.note}</p>`;
+}
+
+document.getElementById("fe").innerHTML = FE_PLATS.map(p=>`
+  <div class="plat" style="--pc:${p.c}"><h2>${p.name}</h2><span class="en">${p.en}</span><span class="where">${p.where}</span></div>
+  <div class="grid">${p.cards.map(x=>card(x,p.c)).join("")}</div>`).join("")
+  + `<h2 style="font-family:var(--serif);font-size:22px;font-weight:900;margin:34px 0 4px">前端路线速查对比表</h2>` + cmp(CMP_FE);
+
+document.getElementById("be").innerHTML = `
+  <div class="plat"><h2>五条主流路线</h2><span class="en">LANGUAGE × FRAMEWORK</span><span class="where">卡片展开看优势/劣势/场景，旗下常用框架一并列出</span></div>
+  <div class="grid">${BE_LANGS.map(x=>{
+    const f = x.frames.map(([n,d])=>`<div style="font-size:12.5px;padding:4px 0;border-top:1px dashed var(--ink-08)"><b>${n}</b> <span style="color:var(--ink-60)">${d}</span></div>`).join("");
+    return card({...x, scene:x.scene+"<div style='margin-top:8px'>"+f+"</div>"}, x.c);
+  }).join("")}</div>
+  <div class="verdict" style="margin-top:26px">三句话决策：<b>AI 项目首选 Python（FastAPI）</b>；企业内部系统首选 Java；小工具快速验证选 FastAPI 或 Node——契约先行，语言只是施工队。</div>`;
+
+document.getElementById("db").innerHTML = `
+  <div class="plat"><h2>七个常用数据库</h2><span class="en">SCENARIO FIRST</span><span class="where">没有「最好的数据库」，只有「这个场景该用它」</span></div>
+  <div class="grid">${DBS.map(x=>card(x,x.c)).join("")}</div>
+  <h2 style="font-family:var(--serif);font-size:22px;font-weight:900;margin:34px 0 4px">场景速配表</h2>` + cmp(CMP_DB);
+
+document.getElementById("steps").innerHTML = STEPS.map((s,i)=>`
+  <div class="step${i===0?' open':''}"><button onclick="this.parentNode.classList.toggle('open')">
+    <span class="n">STEP ${i+1}</span>${s.q}<span class="arrow">▸</span></button>
+  <div class="body">${s.a}</div></div>`).join("");
+
+function show(w){
+  for (const k of ["fe","be","db"]){
+    document.getElementById(k).hidden = k!==w;
+    document.getElementById("tab-"+k).classList.toggle("on", k===w);
+  }
+}
+</script>
+</body>
+</html>

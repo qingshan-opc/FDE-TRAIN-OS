@@ -1,0 +1,35 @@
+{
+  "total": 79.573,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 2.4
+    },
+    {
+      "id": "02-ten-evidence",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s02_course/tts/02-ten-evidence.wav",
+      "start": 2.65,
+      "duration": 18.32
+    },
+    {
+      "id": "03-strong-weak",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s02_course/tts/03-strong-weak.wav",
+      "start": 21.22,
+      "duration": 20.653
+    },
+    {
+      "id": "04-one-liner",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s02_course/tts/04-one-liner.wav",
+      "start": 42.123,
+      "duration": 18.32
+    },
+    {
+      "id": "05-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s02_course/tts/05-close.wav",
+      "start": 60.693,
+      "duration": 18.88
+    }
+  ]
+}

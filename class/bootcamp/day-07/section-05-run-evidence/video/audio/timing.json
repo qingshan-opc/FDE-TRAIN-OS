@@ -1,0 +1,41 @@
+{
+  "total": 113.453,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 13.36
+    },
+    {
+      "id": "02-run-steps",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/02-run-steps.wav",
+      "start": 13.61,
+      "duration": 19.373
+    },
+    {
+      "id": "03-evidence-trio",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/03-evidence-trio.wav",
+      "start": 33.233,
+      "duration": 23.92
+    },
+    {
+      "id": "04-iteration-loop",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/04-iteration-loop.wav",
+      "start": 57.403,
+      "duration": 20.64
+    },
+    {
+      "id": "05-common-issues",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/05-common-issues.wav",
+      "start": 78.293,
+      "duration": 20.333
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s05_course/tts/06-close.wav",
+      "start": 98.876,
+      "duration": 14.577
+    }
+  ]
+}

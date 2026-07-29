@@ -1,40 +1,77 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Alert, Button, Card, Form, Input, Space, Tabs, Typography } from "antd";
 import { ApiError, authApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { DEMO_AUTHOR, DEMO_LEARNER } from "../lib/demoConfig";
 
-type Mode = "password" | "invite";
+type Mode = "login" | "register";
 
 export function LoginPage() {
   const { login, user, loading, refreshMe } = useAuth();
   const nav = useNavigate();
-  const [mode, setMode] = useState<Mode>("password");
-  const [passwordForm] = Form.useForm();
-  const [inviteForm] = Form.useForm();
+  const [searchParams] = useSearchParams();
+  const inviteFromUrl = (searchParams.get("invite") || "").trim();
+  const [mode, setMode] = useState<Mode>(inviteFromUrl ? "register" : "login");
+  const [loginForm] = Form.useForm();
+  const [registerForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [inviteLink, setInviteLink] = useState<{ code: string; org_name?: string } | null>(null);
+  const [inviteLinkError, setInviteLinkError] = useState<string | null>(null);
+  const [claimingInvite, setClaimingInvite] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
+      if (user.role === "partner") {
+        nav("/partner", { replace: true });
+        return;
+      }
       nav(user.role === "author" || user.role === "admin" ? "/author" : "/app/courses", { replace: true });
     }
   }, [loading, user, nav]);
 
   useEffect(() => {
-    passwordForm.setFieldsValue({
-      email: "demo@fde.local",
-      password: "demo1234",
-      camp: "camp-v03",
+    loginForm.setFieldsValue({
+      email: DEMO_LEARNER.email,
+      password: DEMO_LEARNER.password,
+      camp: DEMO_LEARNER.campId,
     });
-    inviteForm.setFieldsValue({
-      invite: "FDE-DEMO",
-      display: "学员",
-      "invite-email": "",
+    registerForm.setFieldsValue({
+      display: "新学员",
     });
-  }, [passwordForm, inviteForm]);
+  }, [loginForm, registerForm]);
 
-  const onPassword = async (values: { email: string; password: string; camp?: string }) => {
+  useEffect(() => {
+    if (!inviteFromUrl) {
+      setInviteLink(null);
+      setInviteLinkError(null);
+      return;
+    }
+    let cancelled = false;
+    setClaimingInvite(true);
+    setInviteLinkError(null);
+    void authApi
+      .claimInviteLink(inviteFromUrl)
+      .then((res) => {
+        if (cancelled) return;
+        setInviteLink({ code: res.code, org_name: res.org_name });
+        setMode("register");
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setInviteLink(null);
+        setInviteLinkError(err instanceof ApiError ? err.message : "邀请链接无效");
+      })
+      .finally(() => {
+        if (!cancelled) setClaimingInvite(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [inviteFromUrl]);
+
+  const onLogin = async (values: { email: string; password: string; camp?: string }) => {
     setSubmitting(true);
     setError(null);
     try {
@@ -48,31 +85,27 @@ export function LoginPage() {
     }
   };
 
-  const onInvite = async (values: { invite: string; display: string; "invite-email"?: string }) => {
+  const onRegister = async (values: { email: string; password: string; display: string }) => {
     setSubmitting(true);
     setError(null);
     try {
-      await authApi.invite(
-        values.invite.trim(),
-        (values.display || "").trim() || "学员",
-        (values["invite-email"] || "").trim() || undefined,
-      );
+      await authApi.register(values.email.trim(), values.password, (values.display || "").trim() || "学员");
       await refreshMe();
-      nav("/app/courses", { replace: true });
+      nav("/app/shop", { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "邀请码无效");
+      setError(err instanceof ApiError ? err.message : "注册失败");
     } finally {
       setSubmitting(false);
     }
   };
 
   const fill = (kind: "learner" | "author") => {
-    setMode("password");
+    setMode("login");
     setError(null);
     if (kind === "learner") {
-      passwordForm.setFieldsValue({ email: "demo@fde.local", password: "demo1234", camp: "camp-v03" });
+      loginForm.setFieldsValue({ email: DEMO_LEARNER.email, password: DEMO_LEARNER.password, camp: DEMO_LEARNER.campId });
     } else {
-      passwordForm.setFieldsValue({ email: "author@fde.local", password: "author1234", camp: "camp-v03" });
+      loginForm.setFieldsValue({ email: DEMO_AUTHOR.email, password: DEMO_AUTHOR.password, camp: DEMO_AUTHOR.campId });
     }
   };
 
@@ -84,11 +117,26 @@ export function LoginPage() {
           FDE Learning OS
         </Typography.Text>
         <Typography.Title level={3} style={{ marginTop: 4, marginBottom: 8 }}>
-          登录
+          {mode === "login" ? "登录" : "注册"}
         </Typography.Title>
         <Typography.Paragraph type="secondary" style={{ marginBottom: 16 }}>
-          两周课学员 / 教研工作台 · Cookie 会话
+          {inviteLink
+            ? "机构邀请注册 · 完成注册后自动归属渠道"
+            : "自由注册 · 机构渠道请使用邀请链接 · 微信购课"}
         </Typography.Paragraph>
+
+        {inviteLinkError && (
+          <Alert type="error" showIcon message={inviteLinkError} style={{ marginBottom: 16 }} />
+        )}
+        {inviteLink && (
+          <Alert
+            type="info"
+            showIcon
+            message={`机构邀请：${inviteLink.org_name || inviteLink.code}`}
+            description={`邀请码 ${inviteLink.code} 将在注册成功后自动绑定，不支持注册后再自行填写。`}
+            style={{ marginBottom: 16 }}
+          />
+        )}
 
         <Tabs
           activeKey={mode}
@@ -97,13 +145,13 @@ export function LoginPage() {
             setError(null);
           }}
           items={[
-            { key: "password", label: "账号密码" },
-            { key: "invite", label: "邀请码" },
+            { key: "login", label: "登录" },
+            { key: "register", label: "注册" },
           ]}
         />
 
-        {mode === "password" ? (
-          <Form form={passwordForm} layout="vertical" onFinish={(v) => void onPassword(v)}>
+        {mode === "login" ? (
+          <Form form={loginForm} layout="vertical" onFinish={(v) => void onLogin(v)}>
             <Form.Item
               name="email"
               label="邮箱"
@@ -123,19 +171,25 @@ export function LoginPage() {
             </Button>
           </Form>
         ) : (
-          <Form form={inviteForm} layout="vertical" onFinish={(v) => void onInvite(v)}>
-            <Form.Item name="invite" label="邀请码" rules={[{ required: true, message: "请输入邀请码" }]}>
-              <Input id="invite" className="mono" />
+          <Form form={registerForm} layout="vertical" onFinish={(v) => void onRegister(v)}>
+            <Form.Item name="email" label="邮箱" rules={[{ required: true, type: "email" }]}>
+              <Input type="email" autoComplete="username" />
             </Form.Item>
-            <Form.Item name="display" label="显示名" rules={[{ required: true, message: "请输入显示名" }]}>
-              <Input id="display" />
+            <Form.Item name="password" label="密码" rules={[{ required: true, min: 6, message: "至少 6 位" }]}>
+              <Input.Password autoComplete="new-password" />
             </Form.Item>
-            <Form.Item name="invite-email" label="邮箱（可选）" rules={[{ type: "email", message: "邮箱格式不正确" }]}>
-              <Input id="invite-email" type="email" placeholder="不填则自动生成" />
+            <Form.Item name="display" label="显示名" rules={[{ required: true }]}>
+              <Input />
             </Form.Item>
             {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 16 }} />}
-            <Button type="primary" htmlType="submit" block loading={submitting}>
-              用邀请码进入
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              loading={submitting || claimingInvite}
+              disabled={Boolean(inviteFromUrl && !inviteLink && !inviteLinkError)}
+            >
+              {inviteLink ? "通过机构链接注册" : "注册"}
             </Button>
           </Form>
         )}
@@ -143,9 +197,12 @@ export function LoginPage() {
         <Space style={{ marginTop: 16 }} wrap>
           <Button onClick={() => fill("learner")}>学员演示账号</Button>
           <Button onClick={() => fill("author")}>教研演示账号</Button>
+          <Button type="link" onClick={() => nav("/partner/login")}>
+            机构后台
+          </Button>
         </Space>
         <Typography.Paragraph type="secondary" style={{ marginTop: 12, marginBottom: 0, fontSize: 12 }}>
-          demo@fde.local / demo1234 · 邀请码 FDE-DEMO（以 seed 为准）
+          {DEMO_LEARNER.email} / {DEMO_LEARNER.password} · 机构链接示例 /login?invite=PARTNER-DEMO
         </Typography.Paragraph>
       </Card>
     </div>

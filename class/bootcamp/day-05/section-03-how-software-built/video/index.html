@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Day05 S02 · 软件是怎么开发出来的</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Noto Sans SC";
+        src: url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");
+        font-weight: 400; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Sans SC";
+        src: url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");
+        font-weight: 700; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Serif SC";
+        src: url("assets/fonts/NotoSerifSC-Regular.woff2") format("woff2");
+        font-weight: 400; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Serif SC";
+        src: url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");
+        font-weight: 700; font-style: normal; font-display: block;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+        font-weight: 700; font-style: normal; font-display: block;
+      }
+      :root {
+        --bg: #f2f5f0;
+        --ink: #231f20;
+        --ink-60: rgba(35, 31, 32, 0.72);
+        --ink-40: rgba(35, 31, 32, 0.55);
+        --ink-08: rgba(35, 31, 32, 0.08);
+        --ink-05: rgba(35, 31, 32, 0.05);
+        --accent: #1400ff;
+        --c-ok: #2f9e44;
+        --serif: "Noto Serif SC", serif;
+        --sans: "Noto Sans SC", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0; width: 1920px; height: 1080px; overflow: hidden;
+        background: #000; font-family: var(--sans); color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+      }
+      .stage-bg {
+        position: absolute; inset: 0; background: var(--bg); z-index: 0;
+      }
+      .slide {
+        position: absolute; inset: 0; z-index: 2;
+        padding: 72px 420px 72px 96px;
+      }
+      .slide.invert { color: var(--bg); }
+      .slide.invert .stage-fill { background: var(--ink); }
+      .stage-fill {
+        position: absolute; inset: 0; background: var(--bg); z-index: 0;
+      }
+      .slide-body { position: relative; z-index: 2; height: 100%; }
+
+      .sec-label {
+        font-family: var(--mono); font-size: 15px; letter-spacing: 0.18em;
+        text-transform: uppercase; color: var(--ink-60);
+        display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+      }
+      .sec-label::after {
+        content: ""; flex: 1; height: 6px; background: var(--ink); margin-left: 4px;
+        max-width: 520px;
+      }
+      .sec-label .num { color: var(--accent); font-weight: 700; }
+      .slide.invert .sec-label { color: rgba(242, 245, 240, 0.55); }
+      .slide.invert .sec-label::after { background: var(--bg); }
+
+      .display {
+        font-family: var(--serif); font-weight: 700; font-size: 72px;
+        line-height: 1.12; letter-spacing: 0.01em; margin-bottom: 18px;
+        max-width: 14ch;
+      }
+      .display .thin { font-weight: 400; color: var(--ink-60); }
+      .slide.invert .display .thin { color: rgba(242, 245, 240, 0.55); }
+      .statement {
+        font-family: var(--serif); font-size: 30px; line-height: 1.55;
+        max-width: 22em; margin-bottom: 28px;
+      }
+      .statement strong {
+        color: var(--accent); font-weight: 700;
+        border-bottom: 6px solid var(--accent);
+      }
+      .lede {
+        font-size: 22px; line-height: 1.55; color: var(--ink-60);
+        max-width: 34em; margin-bottom: 32px;
+      }
+      .slide.invert .lede { color: rgba(242, 245, 240, 0.55); }
+
+      .meta-row {
+        font-family: var(--mono); font-size: 14px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--ink-60);
+        display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 28px;
+      }
+      .meta-row b { color: var(--accent); font-weight: 700; }
+
+      .ladder {
+        display: flex; align-items: stretch; border: 1px solid var(--ink);
+        width: max-content; max-width: 100%;
+      }
+      .ladder .rung {
+        font-family: var(--mono); padding: 14px 14px; border-right: 1px solid var(--ink);
+        min-width: 96px; white-space: nowrap;
+      }
+      .ladder .rung:last-child { border-right: none; }
+      .ladder .rung small {
+        display: block; font-size: 11px; letter-spacing: 0.1em;
+        color: var(--ink-40); text-transform: uppercase; margin-bottom: 4px;
+      }
+      .ladder .rung b { font-size: 16px; font-weight: 700; }
+      .ladder .rung.on { background: var(--ink); color: var(--bg); }
+      .ladder .rung.on small { color: rgba(242, 245, 240, 0.5); }
+      .ladder .rung.hot { background: var(--accent); color: #fff; border-right-color: var(--accent); }
+      .ladder .rung.hot small { color: rgba(255, 255, 255, 0.65); }
+      .slide.invert .ladder { border-color: rgba(242, 245, 240, 0.35); }
+      .slide.invert .ladder .rung { border-right-color: rgba(242, 245, 240, 0.35); }
+
+      .duo {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px;
+      }
+      .trio {
+        display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 8px;
+      }
+      .card {
+        border: 1px solid var(--ink); padding: 22px 22px 24px; background: rgba(255,255,255,0.35);
+      }
+      .card .lab {
+        font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--accent); margin-bottom: 10px; font-weight: 700;
+      }
+      .card h4 { font-family: var(--serif); font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+      .card p { font-size: 17px; line-height: 1.5; color: var(--ink-60); }
+      .card.dim { background: var(--ink-05); }
+      .card.warn { border-color: var(--accent); background: rgba(20, 0, 255, 0.04); }
+      .slide.invert .card {
+        border-color: rgba(242, 245, 240, 0.25);
+        background: rgba(242, 245, 240, 0.04);
+      }
+      .slide.invert .card p { color: rgba(242, 245, 240, 0.6); }
+
+      .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 22px; }
+      .tag {
+        font-family: var(--mono); font-size: 14px; letter-spacing: 0.06em;
+        padding: 7px 14px; border: 1px solid var(--ink-40); color: var(--ink-60);
+        background: transparent;
+      }
+      .tag.hot { border-color: var(--accent); color: var(--accent); }
+      .tag.solid { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+      .blk {
+        border-top: 6px solid var(--ink); padding-top: 16px; margin-top: 8px;
+      }
+      .blk.accent { border-top-color: var(--accent); }
+      .blk h4 {
+        font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 8px;
+      }
+      .blk p { font-size: 18px; line-height: 1.55; color: var(--ink-60); }
+
+      .diagram-box {
+        border: 1px solid var(--ink); padding: 18px 20px 14px; background: #fff;
+        margin-top: 18px;
+      }
+      .diagram-box .dg-cap {
+        font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--ink-60); margin-bottom: 12px;
+        display: flex; align-items: center; gap: 12px;
+      }
+      .diagram-box .dg-cap::before {
+        content: ""; width: 26px; height: 6px; background: var(--accent);
+      }
+      .diagram-box img { width: 100%; height: auto; display: block; max-height: 320px; object-fit: contain; }
+
+      .flow {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 18px;
+      }
+      .flow .step {
+        font-family: var(--mono); font-size: 15px; padding: 12px 16px;
+        border: 1px solid var(--ink); background: #fff;
+      }
+      .flow .step.hot { background: var(--accent); color: #fff; border-color: var(--accent); }
+      .flow .arrow {
+        font-family: var(--mono); font-size: 20px; color: var(--accent); font-weight: 700;
+      }
+
+      .quote-big {
+        font-family: var(--serif); font-size: 42px; line-height: 1.45;
+        max-width: 16em; margin: 18px 0 28px;
+      }
+      .quote-big strong {
+        border-bottom: 6px solid var(--accent); font-weight: 700;
+      }
+
+      .takeaway-list {
+        list-style: none; display: flex; flex-direction: column; gap: 14px;
+        margin-top: 8px; max-width: 36em;
+      }
+      .takeaway-list li {
+        font-size: 20px; line-height: 1.5; color: var(--ink-60);
+        padding-left: 22px; border-left: 6px solid var(--accent);
+      }
+      .takeaway-list li b { color: var(--ink); font-weight: 700; }
+
+      .vs-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 12px;
+      }
+      .vs-card {
+        border: 1px solid var(--ink); padding: 26px 24px; background: #fff;
+        min-height: 280px;
+      }
+      .vs-card.hot { background: var(--accent); color: #fff; border-color: var(--accent); }
+      .vs-card .lab {
+        font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em;
+        text-transform: uppercase; margin-bottom: 12px; color: var(--accent); font-weight: 700;
+      }
+      .vs-card.hot .lab { color: rgba(255,255,255,0.7); }
+      .vs-card h3 {
+        font-family: var(--serif); font-size: 36px; font-weight: 700; margin-bottom: 14px;
+      }
+      .vs-card p { font-size: 18px; line-height: 1.55; color: var(--ink-60); }
+      .vs-card.hot p { color: rgba(255,255,255,0.85); }
+      .vs-card ul {
+        margin-top: 16px; padding-left: 1.1em; font-size: 17px; line-height: 1.55;
+        color: var(--ink-60);
+      }
+      .vs-card.hot ul { color: rgba(255,255,255,0.85); }
+
+      .bound-row {
+        display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px;
+        align-items: stretch; margin-top: 16px;
+      }
+      .bound-mid {
+        font-family: var(--mono); font-size: 28px; font-weight: 700;
+        color: var(--accent); display: flex; align-items: center; justify-content: center;
+        writing-mode: vertical-rl; letter-spacing: 0.2em;
+      }
+
+      .brand-bar {
+        position: absolute; left: 96px; bottom: 36px; z-index: 20;
+        font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--ink-40);
+      }
+      .brand-bar em { font-style: normal; color: var(--accent); }
+
+      #avatar-pip {
+        position: absolute; right: 40px; bottom: 36px; z-index: 30;
+        width: 248px; height: 380px;
+        display: flex; flex-direction: column;
+      }
+      .avatar-frame {
+        flex: 1; width: 100%; min-height: 0; overflow: hidden;
+        border: 2px solid var(--ink); border-bottom: none;
+        box-shadow: 8px 8px 0 var(--accent);
+        background: #0b1220; position: relative;
+      }
+      .avatar-frame video {
+        width: 100%; height: 100%; object-fit: cover;
+        object-position: 50% 22%; display: block;
+      }
+      .avatar-caption {
+        flex: none; height: 30px; line-height: 30px; padding: 0 10px;
+        font-family: var(--mono); font-size: 11px;
+        letter-spacing: 0.12em; text-transform: uppercase; text-align: center;
+        background: var(--ink); color: #f2f5f0;
+        border: 2px solid var(--ink); border-top: none;
+      }
+      .speak-ring {
+        position: absolute; inset: -8px;
+        border: 2px solid var(--accent); opacity: 0.35; pointer-events: none;
+      }
+
+      .foot-ladder {
+        position: absolute; left: 96px; bottom: 88px; z-index: 5;
+      }
+      .station-no {
+        font-family: var(--mono); font-weight: 700; font-size: 88px;
+        line-height: 0.9; color: var(--accent); letter-spacing: -0.04em;
+        margin-bottom: 8px;
+      }
+      .station-no small {
+        display: block; font-size: 14px; font-weight: 700; letter-spacing: 0.16em;
+        color: var(--ink-40); margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- placeholder durations ~270s; patch after TTS -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="246.008" data-width="1920" data-height="1080">
+      <div class="stage-bg" aria-hidden="true"></div>
+
+      <!-- 01 OPEN -->
+      <section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="21.932">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="meta-row" data-anim="meta">
+            <span><b>FDE</b> Day 05 · Section 02</span>
+            <span>流程 · 概念课</span>
+            <span>约 4′30″</span>
+          </div>
+          <div class="sec-label" data-anim="k"><span class="num">01</span>SDLC · 软件是怎么开发出来的</div>
+          <h1 class="display" data-anim="t">AI 离不开软件<span class="thin">，软件离不开流程</span></h1>
+          <p class="statement" data-anim="s">不是灵感一闪，是<strong>六站固定动作</strong>。</p>
+          <p class="lede" data-anim="lede">调研 → 原型 → 开发 → 验收 → 上线 → 运维迭代。你手机里每个 App，从一句「我想要」到每天打开用，中间都走过这几站。</p>
+          <div class="ladder" data-anim="ladder">
+            <div class="rung hot"><small>01</small><b>调研</b></div>
+            <div class="rung"><small>02</small><b>原型</b></div>
+            <div class="rung"><small>03</small><b>开发</b></div>
+            <div class="rung"><small>04</small><b>验收</b></div>
+            <div class="rung"><small>05</small><b>上线</b></div>
+            <div class="rung"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 RESEARCH -->
+      <section id="slide-02-research" class="clip slide" data-track-index="1" data-start="22.182" data-duration="46.646">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">02</span>STATION 01 · 需求调研</div>
+          <div class="station-no" data-anim="num">01<small>RESEARCH</small></div>
+          <h1 class="display" data-anim="t" style="font-size:56px;max-width:16ch;">反复沟通，搞清「谁的什么问题」</h1>
+          <p class="lede" data-anim="s">本质：解决用户的问题。用户抛问题，咱们给方案——不对就改。</p>
+          <div class="duo" data-anim="duo">
+            <div class="card">
+              <div class="lab">观察 · 食堂</div>
+              <h4>别只靠嘴</h4>
+              <p>想知道什么菜难吃——看倒掉什么。剩得多的，就是难吃的。行为比嘴诚实。</p>
+            </div>
+            <div class="card dim">
+              <div class="lab">问题形态 · Excel</div>
+              <h4>一年 120 张表</h4>
+              <p>本地管表很痛苦。抽成数据、做成系统——跨库查、多人协作，给用户省时间。</p>
+            </div>
+          </div>
+          <div class="tag-row" data-anim="tags">
+            <span class="tag solid">访谈</span>
+            <span class="tag hot">观察</span>
+            <span class="tag">问卷</span>
+            <span class="tag">竞品体验</span>
+          </div>
+        </div>
+        <div class="foot-ladder" data-anim="ladder">
+          <div class="ladder">
+            <div class="rung hot"><small>01</small><b>调研</b></div>
+            <div class="rung"><small>02</small><b>原型</b></div>
+            <div class="rung"><small>03</small><b>开发</b></div>
+            <div class="rung"><small>04</small><b>验收</b></div>
+            <div class="rung"><small>05</small><b>上线</b></div>
+            <div class="rung"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 PROTOTYPE -->
+      <section id="slide-03-prototype" class="clip slide" data-track-index="1" data-start="69.078" data-duration="32.480">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">03</span>STATION 02 · 原型确认</div>
+          <div class="station-no" data-anim="num">02<small>PROTOTYPE</small></div>
+          <h1 class="display" data-anim="t" style="font-size:56px;max-width:14ch;">先出样板间，再动工</h1>
+          <p class="lede" data-anim="s">系统长什么样？用户每天打开后台要做哪几步？跟客户持续确认，满意了才开发。</p>
+          <div class="trio" data-anim="trio">
+            <div class="card">
+              <div class="lab">对齐 01</div>
+              <h4>不用各建文件</h4>
+              <p>本地各管各的，协作和查找都难。</p>
+            </div>
+            <div class="card">
+              <div class="lab">对齐 02</div>
+              <h4>多人协作</h4>
+              <p>同一份数据，有权限的人都能用。</p>
+            </div>
+            <div class="card warn">
+              <div class="lab">成本</div>
+              <h4>改图便宜</h4>
+              <p>改一张图十分钟；改写好的程序可能十天。</p>
+            </div>
+          </div>
+        </div>
+        <div class="foot-ladder" data-anim="ladder">
+          <div class="ladder">
+            <div class="rung on"><small>01</small><b>调研</b></div>
+            <div class="rung hot"><small>02</small><b>原型</b></div>
+            <div class="rung"><small>03</small><b>开发</b></div>
+            <div class="rung"><small>04</small><b>验收</b></div>
+            <div class="rung"><small>05</small><b>上线</b></div>
+            <div class="rung"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 DEV + ACCEPT -->
+      <section id="slide-04-dev-accept" class="clip slide" data-track-index="1" data-start="101.808" data-duration="24.720">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">04</span>STATION 03–04 · 开发与测试验收</div>
+          <h1 class="display" data-anim="t" style="font-size:56px;max-width:16ch;">你描述，AI 写，你验收</h1>
+          <p class="lede" data-anim="s">开发和验收日常缠在一起：开发完 → 验收 → 反馈 → 再验收。照单子验货，不是「我觉得行」。</p>
+          <div class="flow" data-anim="flow">
+            <div class="step">描述需求</div><div class="arrow">→</div>
+            <div class="step hot">AI 写</div><div class="arrow">→</div>
+            <div class="step">你验收</div><div class="arrow">→</div>
+            <div class="step">反馈再验</div>
+          </div>
+          <div class="blk accent" data-anim="blk" style="margin-top:28px;max-width:36em;">
+            <h4>Rubric 过闸 = 最小验收</h4>
+            <p>你们每天照着清单过闸，就是这一站的缩影——标准在纸上，不在感觉里。</p>
+          </div>
+        </div>
+        <div class="foot-ladder" data-anim="ladder">
+          <div class="ladder">
+            <div class="rung on"><small>01</small><b>调研</b></div>
+            <div class="rung on"><small>02</small><b>原型</b></div>
+            <div class="rung hot"><small>03</small><b>开发</b></div>
+            <div class="rung hot"><small>04</small><b>验收</b></div>
+            <div class="rung"><small>05</small><b>上线</b></div>
+            <div class="rung"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 LAUNCH + UAT -->
+      <section id="slide-05-launch-uat" class="clip slide" data-track-index="1" data-start="126.778" data-duration="27.200">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">05</span>STATION 05 · 上线与 UAT</div>
+          <h1 class="display" data-anim="t" style="font-size:56px;max-width:14ch;">让客户真的用上</h1>
+          <p class="lede" data-anim="s">上线本质是服务部署：App、小程序或 Web。大企业中间往往还隔一站 UAT。</p>
+          <div class="duo" data-anim="duo">
+            <div class="card">
+              <div class="lab">Launch</div>
+              <h4>正式发布</h4>
+              <p>把软件以可访问的形式放出去——客户才能用。Day 6 部署上云，就是这一站。</p>
+            </div>
+            <div class="card warn">
+              <div class="lab">UAT</div>
+              <h4>用户验收测试</h4>
+              <p>模拟生产环境，接入部分真实数据，业务方用一段时间再调——怕一上去就翻车。</p>
+            </div>
+          </div>
+          <div class="tag-row" data-anim="tags">
+            <span class="tag solid">部署</span>
+            <span class="tag hot">UAT</span>
+            <span class="tag">App / 小程序 / Web</span>
+          </div>
+        </div>
+        <div class="foot-ladder" data-anim="ladder">
+          <div class="ladder">
+            <div class="rung on"><small>01</small><b>调研</b></div>
+            <div class="rung on"><small>02</small><b>原型</b></div>
+            <div class="rung on"><small>03</small><b>开发</b></div>
+            <div class="rung on"><small>04</small><b>验收</b></div>
+            <div class="rung hot"><small>05</small><b>上线</b></div>
+            <div class="rung"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 OPS BOUNDARY -->
+      <section id="slide-06-ops-boundary" class="clip slide" data-track-index="1" data-start="154.228" data-duration="30.320">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">06</span>STATION 06 · 迭代运维</div>
+          <h1 class="display" data-anim="t" style="font-size:52px;max-width:16ch;">运维 ≠ 新功能开发</h1>
+          <p class="lede" data-anim="s">上线不是终点。客户会签运维合同——修缺陷、做约定内优化。边界划清，合作才不打架。</p>
+          <div class="bound-row" data-anim="bound">
+            <div class="card">
+              <div class="lab">运维合同内</div>
+              <h4>修 · 优化</h4>
+              <p>收集使用中的问题：修缺陷、性能与体验优化——严格按约定范围。</p>
+            </div>
+            <div class="bound-mid">≠</div>
+            <div class="card warn">
+              <div class="lab">合同外</div>
+              <h4>新想法 · 新项目</h4>
+              <p>客户又想做一个大功能——另开调研和报价，别跟运维混为一谈。</p>
+            </div>
+          </div>
+        </div>
+        <div class="foot-ladder" data-anim="ladder">
+          <div class="ladder">
+            <div class="rung on"><small>01</small><b>调研</b></div>
+            <div class="rung on"><small>02</small><b>原型</b></div>
+            <div class="rung on"><small>03</small><b>开发</b></div>
+            <div class="rung on"><small>04</small><b>验收</b></div>
+            <div class="rung on"><small>05</small><b>上线</b></div>
+            <div class="rung hot"><small>06</small><b>运维</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 WATERFALL VS AGILE -->
+      <section id="slide-07-waterfall-agile" class="clip slide" data-track-index="1" data-start="184.798" data-duration="37.040">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">07</span>PACE · 瀑布 vs 敏捷</div>
+          <h1 class="display" data-anim="t" style="font-size:52px;max-width:16ch;">全楼装修 vs 一周一间</h1>
+          <p class="lede" data-anim="s">六站可以两种走法——节奏不同，目标都是交付能用的软件。</p>
+          <div class="vs-grid" data-anim="vs">
+            <div class="vs-card">
+              <div class="lab">Waterfall</div>
+              <h3>瀑布</h3>
+              <p>先把六站规划死，再按顺序走一遍——像画好整栋楼图纸再一口气装完。</p>
+              <ul>
+                <li>适合需求铁定不变（如航天）</li>
+                <li>坏处：半年后才住进去</li>
+              </ul>
+            </div>
+            <div class="vs-card hot">
+              <div class="lab">Agile · 你们在用</div>
+              <h3>敏捷</h3>
+              <p>大事切小块，每块快速走完六站、交付一个能用的东西——一周装修一间房。</p>
+              <ul>
+                <li>前四天：每天小交付</li>
+                <li>每天一次验收过闸</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 CLOSE -->
+      <section id="slide-08-close" class="clip slide" data-track-index="1" data-start="222.088" data-duration="23.920">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">08</span>TAKEAWAY · 带走三句话</div>
+          <p class="quote-big" data-anim="t">流程不是背出来的名词，你们已经<strong>用身体走过</strong>。</p>
+          <ul class="takeaway-list" data-anim="list">
+            <li><b>先搞清问题、对齐样子</b>，再让 AI 写、你来验</li>
+            <li><b>上线之后</b>，修问题和做新功能是两笔账</li>
+            <li><b>六站可瀑布可敏捷</b>——你们已经在用敏捷了</li>
+          </ul>
+          <div class="diagram-box" data-anim="diagram" style="margin-top:24px;max-width:920px;">
+            <div class="dg-cap">讲解图 · 软件开发六站</div>
+            <img src="assets/diagrams/day5-dev-process.svg" alt="" />
+          </div>
+        </div>
+      </section>
+
+      <div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="246.008" data-track-index="2">
+        FDE<em>·</em>训练营 <em>/</em> Day 05 · 02
+      </div>
+
+      <div id="avatar-pip" class="clip" data-start="0" data-duration="246.008" data-track-index="5">
+        <div class="speak-ring"></div>
+        <div class="avatar-frame">
+          <video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4"
+            muted playsinline preload="auto"
+            data-start="0" data-duration="246.008" data-track-index="6"></video>
+        </div>
+        <div class="avatar-caption">Lecturer · 口播</div>
+      </div>
+      <audio id="narration" class="clip" src="audio/narration-full.wav"
+        data-start="0" data-duration="246.008" data-track-index="10" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      function enter(id, t0, extras) {
+        tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+        tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+        tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+        tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.36);
+        if (extras) extras(t0);
+      }
+      function exit(id, tEnd, tHard) {
+        tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+        tl.to(`${id} .foot-ladder`, { opacity: 0, duration: 0.3, ease: "power2.in" }, tEnd);
+        tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+      }
+
+      // 01-open 0–22
+      enter("#slide-01-open", 0.000, (t0) => {
+        tl.from("#slide-01-open [data-anim='meta']", { y: 14, opacity: 0, duration: 0.4 }, t0 + 0.05);
+        tl.from("#slide-01-open [data-anim='lede']", { y: 16, opacity: 0, duration: 0.4 }, t0 + 0.48);
+        tl.from("#slide-01-open [data-anim='ladder'] .rung", { y: 16, opacity: 0, stagger: 0.05, duration: 0.35 }, t0 + 0.62);
+      });
+      exit("#slide-01-open", 21.482, 21.932);
+
+      // 02-research 22–77
+      enter("#slide-02-research", 22.182, (t0) => {
+        tl.from("#slide-02-research [data-anim='num']", { x: -24, opacity: 0, duration: 0.5, ease: "power3.out" }, t0 + 0.15);
+        tl.from("#slide-02-research [data-anim='duo'] .card", { y: 18, opacity: 0, stagger: 0.1, duration: 0.4 }, t0 + 0.55);
+        tl.from("#slide-02-research [data-anim='tags'] .tag", { y: 10, opacity: 0, stagger: 0.05, duration: 0.3 }, t0 + 0.9);
+        tl.from("#slide-02-research [data-anim='ladder']", { y: 12, opacity: 0, duration: 0.4 }, t0 + 0.55);
+      });
+      exit("#slide-02-research", 68.378, 68.828);
+
+      // 03-prototype 77–112
+      enter("#slide-03-prototype", 69.078, (t0) => {
+        tl.from("#slide-03-prototype [data-anim='num']", { x: -24, opacity: 0, duration: 0.5, ease: "power3.out" }, t0 + 0.15);
+        tl.from("#slide-03-prototype [data-anim='trio'] .card", { y: 18, opacity: 0, stagger: 0.08, duration: 0.4 }, t0 + 0.55);
+        tl.from("#slide-03-prototype [data-anim='ladder']", { y: 12, opacity: 0, duration: 0.4 }, t0 + 0.5);
+      });
+      exit("#slide-03-prototype", 101.108, 101.558);
+
+      // 04-dev-accept 112–137
+      enter("#slide-04-dev-accept", 101.808, (t0) => {
+        tl.from("#slide-04-dev-accept [data-anim='flow'] .step", { y: 12, opacity: 0, stagger: 0.06, duration: 0.3 }, t0 + 0.5);
+        tl.from("#slide-04-dev-accept [data-anim='blk']", { y: 16, opacity: 0, duration: 0.4 }, t0 + 0.85);
+        tl.from("#slide-04-dev-accept [data-anim='ladder']", { y: 12, opacity: 0, duration: 0.4 }, t0 + 0.5);
+      });
+      exit("#slide-04-dev-accept", 126.078, 126.528);
+
+      // 05-launch-uat 137–169
+      enter("#slide-05-launch-uat", 126.778, (t0) => {
+        tl.from("#slide-05-launch-uat [data-anim='duo'] .card", { y: 18, opacity: 0, stagger: 0.1, duration: 0.4 }, t0 + 0.5);
+        tl.from("#slide-05-launch-uat [data-anim='tags'] .tag", { y: 10, opacity: 0, stagger: 0.05, duration: 0.3 }, t0 + 0.85);
+        tl.from("#slide-05-launch-uat [data-anim='ladder']", { y: 12, opacity: 0, duration: 0.4 }, t0 + 0.5);
+      });
+      exit("#slide-05-launch-uat", 153.528, 153.978);
+
+      // 06-ops-boundary 169–199
+      enter("#slide-06-ops-boundary", 154.228, (t0) => {
+        tl.from("#slide-06-ops-boundary [data-anim='bound'] .card", { y: 18, opacity: 0, stagger: 0.12, duration: 0.45 }, t0 + 0.5);
+        tl.from("#slide-06-ops-boundary [data-anim='bound'] .bound-mid", { opacity: 0, scale: 0.8, duration: 0.35 }, t0 + 0.7);
+        tl.from("#slide-06-ops-boundary [data-anim='ladder']", { y: 12, opacity: 0, duration: 0.4 }, t0 + 0.5);
+      });
+      exit("#slide-06-ops-boundary", 184.098, 184.548);
+
+      // 07-waterfall-agile 199–239
+      enter("#slide-07-waterfall-agile", 184.798, (t0) => {
+        tl.from("#slide-07-waterfall-agile [data-anim='vs'] .vs-card", { y: 22, opacity: 0, stagger: 0.12, duration: 0.5 }, t0 + 0.5);
+      });
+      exit("#slide-07-waterfall-agile", 221.388, 221.838);
+
+      // 08-close 239–270
+      enter("#slide-08-close", 222.088, (t0) => {
+        tl.from("#slide-08-close [data-anim='list'] li", { y: 14, opacity: 0, stagger: 0.1, duration: 0.35 }, t0 + 0.55);
+        tl.from("#slide-08-close [data-anim='diagram']", { y: 16, opacity: 0, duration: 0.45 }, t0 + 0.95);
+      });
+
+      tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

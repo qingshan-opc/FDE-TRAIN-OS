@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scrollPageToTop } from "../lib/scrollPageToTop";
 
-/** Reset scroll position whenever the SPA route pathname changes. */
+/** Reset scroll before paint — avoids long→short 页切换后仍能滑出页底空白。 */
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     scrollPageToTop();
   }, [pathname]);
 

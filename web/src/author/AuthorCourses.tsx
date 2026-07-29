@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { App, Button, Form, Input, Space, Tag } from "antd";
+import { App, Button, Form, Input, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { authorApi, ApiError } from "../lib/api";
 import type { AuthorCourse } from "../lib/types";
 import type { Paginated } from "../lib/listQuery";
 import { useListQuery } from "../lib/useListQuery";
+import { StatusTag } from "../components/StatusTag";
+import { statusOptions } from "../lib/statusLabels";
 import {
+  AuthorListPageLayout,
   PageHeader,
   SearchToolbar,
   ServerTable,
@@ -91,43 +94,45 @@ export function AuthorCourses() {
   };
 
   return (
-    <div>
-      <PageHeader
-        title="课程与大纲"
-        description="维护课程目录；点「设计大纲」进入课纲工作台，版本管理请到「课程版本」"
-        extra={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setEditing(null);
-              form.resetFields();
-              setMode({ kind: "create" });
-            }}
-          >
-            新增课程
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={
+          <PageHeader
+            title="课程与大纲"
+            description="维护课程目录；点「设计大纲」进入课纲工作台，版本管理请到「课程版本」"
+          />
         }
-      />
-      <SearchToolbar
-        fields={[
-          { key: "q", type: "search", label: "搜索", placeholder: "搜索课程标题/slug" },
-          {
-            key: "status",
-            type: "select",
-            label: "状态",
-            options: [
-              { value: "active", label: "活跃" },
-              { value: "draft", label: "草稿" },
-              { value: "archived", label: "已归档" },
-            ],
-          },
-        ]}
-        values={{ q: q || undefined, status: filters.status }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<AuthorCourse>
+        toolbar={
+          <SearchToolbar
+            fields={[
+              { key: "q", type: "search", label: "搜索", placeholder: "搜索课程标题/slug" },
+              {
+                key: "status",
+                type: "select",
+                label: "状态",
+                options: statusOptions(["active", "draft", "archived"], "course"),
+              },
+            ]}
+            values={{ q: q || undefined, status: filters.status }}
+            onChange={setFilter}
+            extra={
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  setEditing(null);
+                  form.resetFields();
+                  setMode({ kind: "create" });
+                }}
+              >
+                新增课程
+              </Button>
+            }
+            onReset={hasFilters ? reset : undefined}
+          />
+        }
+      >
+        <ServerTable<AuthorCourse>
         data={data}
         loading={loading}
         error={error}
@@ -142,7 +147,7 @@ export function AuthorCourses() {
             dataIndex: "status",
             key: "status",
             width: 100,
-            render: (s: string) => <Tag>{s}</Tag>,
+            render: (s: string) => <StatusTag status={s} domain="course" />,
           },
           {
             title: "版本数",
@@ -200,7 +205,8 @@ export function AuthorCourses() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
 
       <EntityModal
         mode={mode}
@@ -258,6 +264,6 @@ export function AuthorCourses() {
           <Input.TextArea rows={3} />
         </Form.Item>
       </EntityModal>
-    </div>
+    </>
   );
 }

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 460" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="FastAPI 解剖：一次请求的生命周期">
+<defs>
+<marker id="fa-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
+</marker>
+</defs>
+<rect width="1040" height="460" fill="#f2f5f0"/>
+<!-- 请求进入 -->
+<rect x="60" y="190" width="180" height="80" fill="#ffffff" stroke="#f24e54" stroke-width="2"/>
+<text x="150" y="224" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">浏览器请求</text>
+<text x="150" y="246" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" style="font-family:'SF Mono',Menlo,monospace">GET /api/kpi?month=07</text>
+<!-- 生命周期五步 -->
+<g>
+<rect x="310" y="50" width="330" height="64" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="326" y="76" font-size="12.5" font-weight="800" fill="#231f20">① 路由匹配</text>
+<text x="326" y="98" font-size="11" fill="rgba(35,31,32,.55)" style="font-family:'SF Mono',Menlo,monospace">路径 + 方法 → 找到对应函数</text>
+</g>
+<g>
+<rect x="310" y="130" width="330" height="64" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="326" y="156" font-size="12.5" font-weight="800" fill="#231f20">② 参数校验</text>
+<text x="326" y="178" font-size="11" fill="rgba(35,31,32,.55)" style="font-family:'SF Mono',Menlo,monospace">类型不对 → 自动 422，不进逻辑</text>
+</g>
+<g>
+<rect x="310" y="210" width="330" height="64" fill="#ffffff" stroke="#5f52a0" stroke-width="2.5"/>
+<text x="326" y="236" font-size="12.5" font-weight="800" fill="#5f52a0">③ 业务逻辑</text>
+<text x="326" y="258" font-size="11" fill="rgba(35,31,32,.55)" style="font-family:'SF Mono',Menlo,monospace">查库 / 计算 / 调模型（你的代码在这）</text>
+</g>
+<g>
+<rect x="310" y="290" width="330" height="64" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="326" y="316" font-size="12.5" font-weight="800" fill="#231f20">④ 响应模型</text>
+<text x="326" y="338" font-size="11" fill="rgba(35,31,32,.55)" style="font-family:'SF Mono',Menlo,monospace">按契约整形：多字段砍掉、缺字段补上</text>
+</g>
+<g>
+<rect x="310" y="370" width="330" height="64" fill="#ffffff" stroke="#231f20" stroke-width="1.5"/>
+<text x="326" y="396" font-size="12.5" font-weight="800" fill="#231f20">⑤ JSON 返回</text>
+<text x="326" y="418" font-size="11" fill="rgba(35,31,32,.55)" style="font-family:'SF Mono',Menlo,monospace">状态码 + 契约里那张 JSON</text>
+</g>
+<!-- 箭头：请求入 ③，③ 内部上下流转 -->
+<line x1="242" y1="242" x2="304" y2="242" stroke="#231f20" stroke-width="1.8" marker-end="url(#fa-arrow)"/>
+<g stroke="rgba(35,31,32,.4)" stroke-width="1.5">
+<line x1="475" y1="114" x2="475" y2="126"/><line x1="475" y1="194" x2="475" y2="206"/>
+<line x1="475" y1="274" x2="475" y2="286"/><line x1="475" y1="354" x2="475" y2="366"/>
+</g>
+<!-- 返回 -->
+<path d="M640 402 L700 402 L700 230 L246 230" fill="none" stroke="#5f52a0" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-arrow)"/>
+<text x="700" y="330" font-size="10.5" fill="#5f52a0" style="font-family:'SF Mono',Menlo,monospace">JSON 回去</text>
+<!-- 右侧注 -->
+<rect x="740" y="50" width="250" height="384" fill="none" stroke="rgba(35,31,32,.2)"/>
+<text x="756" y="80" font-size="12" font-weight="800" fill="#231f20">解剖要点</text>
+<g font-size="11" fill="rgba(35,31,32,.6)">
+<text x="756" y="112">· ①②④⑤ 是框架白送的</text>
+<text x="756" y="140">· 你只需要写 ③ 和契约</text>
+<text x="756" y="168">· 参数错 = 422（框架报的）</text>
+<text x="756" y="196">· 逻辑炸 = 500（你的锅）</text>
+<text x="756" y="224">· 契约不符 = 前端对不上</text>
+<text x="756" y="268" font-weight="700" fill="#231f20">Day 3 生成接口后：</text>
+<text x="756" y="296">对着这五步逐站检查，</text>
+<text x="756" y="320">报错立刻定位到「站」。</text>
+</g>
+</svg>

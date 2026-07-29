@@ -1,12 +1,13 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import type { UseCoachResult } from "../../hooks/useCoach";
 import { useCoach } from "../../hooks/useCoach";
 import { CoachAskPanel } from "./CoachAskPanel";
-import { MemoriesUploader } from "./MemoriesUploader";
 import type { DayPackage, NodeState } from "../../lib/types";
 
 /**
- * Slide-over AI-coach drawer — opened from the global floating FAB.
+ * Centered AI-coach modal (Codex/Claude-style) — portal to document.body
+ * so left/right rails cannot offset or clip the dialog.
  */
 export function CoachDrawer({
   day,
@@ -36,14 +37,19 @@ export function CoachDrawer({
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div className="coach-drawer-overlay" role="presentation" onClick={onClose}>
-      <aside
+      <div
         className="coach-drawer"
         role="dialog"
         aria-label={title}
@@ -56,7 +62,7 @@ export function CoachDrawer({
             ✕
           </button>
         </header>
-        <div className="coach-drawer-body stack">
+        <div className="coach-drawer-body coach-drawer-body--chat">
           <CoachAskPanel
             day={day}
             node={node}
@@ -65,9 +71,9 @@ export function CoachDrawer({
             suggestedQuestions={suggestedQuestions}
             onPickSuggestion={onPickSuggestion}
           />
-          <MemoriesUploader dayLabel={day ? String(day.day) : undefined} />
         </div>
-      </aside>
-    </div>
+      </div>
+    </div>,
+    document.body,
   );
 }

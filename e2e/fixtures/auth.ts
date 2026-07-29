@@ -1,14 +1,17 @@
 import { expect, type APIRequestContext, type Page } from "@playwright/test";
 
+const campId = process.env.FDE_DEFAULT_CAMP_ID ?? "camp-v03";
+
 export const DEMO_LEARNER = {
-  email: "demo@fde.local",
-  password: "demo1234",
-  campId: "camp-v03",
+  email: process.env.FDE_DEMO_EMAIL ?? "demo@fde.local",
+  password: process.env.FDE_DEMO_PASSWORD ?? "demo1234",
+  campId,
 } as const;
 
 export const DEMO_AUTHOR = {
-  email: "author@fde.local",
-  password: "author1234",
+  email: process.env.FDE_AUTHOR_EMAIL ?? "author@fde.local",
+  password: process.env.FDE_AUTHOR_PASSWORD ?? "author1234",
+  campId,
 } as const;
 
 export async function getCsrfToken(page: Page): Promise<string> {

@@ -1,0 +1,41 @@
+{
+  "total": 125.342,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 18.88
+    },
+    {
+      "id": "02-input-steps",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/02-input-steps.wav",
+      "start": 19.13,
+      "duration": 22.572
+    },
+    {
+      "id": "03-output-accept",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/03-output-accept.wav",
+      "start": 41.952,
+      "duration": 21.44
+    },
+    {
+      "id": "04-weekly-example",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/04-weekly-example.wav",
+      "start": 63.642,
+      "duration": 25.44
+    },
+    {
+      "id": "05-common-defects",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/05-common-defects.wav",
+      "start": 89.332,
+      "duration": 16.08
+    },
+    {
+      "id": "06-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/06-close.wav",
+      "start": 105.662,
+      "duration": 19.68
+    }
+  ]
+}

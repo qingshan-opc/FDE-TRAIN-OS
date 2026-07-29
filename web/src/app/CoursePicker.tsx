@@ -214,9 +214,9 @@ export function CoursePicker() {
         ) : items.length === 0 ? (
           <Empty
             title="暂无已报名课程"
-            description="使用邀请码加入营期，或联系顾问了解企业培训与公开课"
-            actionLabel="返回首页咨询"
-            onAction={() => nav("/")}
+            description="注册后可选购课程；通过机构邀请链接注册的学员支付将计入机构渠道"
+            actionLabel="去选购课程"
+            onAction={() => nav("/app/shop")}
           />
         ) : (
           <div className="course-dashboard-grid">

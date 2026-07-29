@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-failure-stories",
+    "file": "02-failure-stories.txt"
+  },
+  {
+    "id": "03-three-filters",
+    "file": "03-three-filters.txt"
+  },
+  {
+    "id": "04-low-risk-hard",
+    "file": "04-low-risk-hard.txt"
+  },
+  {
+    "id": "05-scoring-table",
+    "file": "05-scoring-table.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

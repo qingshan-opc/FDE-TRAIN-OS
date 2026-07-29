@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-wire-skills",
+    "file": "02-wire-skills.txt"
+  },
+  {
+    "id": "03-exec-log",
+    "file": "03-exec-log.txt"
+  },
+  {
+    "id": "04-reject-loop",
+    "file": "04-reject-loop.txt"
+  },
+  {
+    "id": "05-log-replay",
+    "file": "05-log-replay.txt"
+  }
+]

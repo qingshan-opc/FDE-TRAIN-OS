@@ -18,6 +18,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from services.shared import S3_BUCKET_DOCUMENTS, user_enrolled, write_audit  # noqa: E402
+from services.shared.config import S3_PRESIGN_GET_EXPIRES  # noqa: E402
 from services.shared.middleware import require_user, session_camp_id  # noqa: E402
 from services.storage import get_store  # noqa: E402
 
@@ -69,7 +70,7 @@ def presign_media(
     request: Request,
     object_key: str = Query(..., min_length=3),
     camp_id: str | None = None,
-    expires: int = Query(300, ge=60, le=900),
+    expires: int = Query(default=S3_PRESIGN_GET_EXPIRES, ge=60, le=900),
 ) -> dict[str, Any]:
     """Return a same-origin stream URL.
 

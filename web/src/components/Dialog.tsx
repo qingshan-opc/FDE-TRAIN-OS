@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 export function Dialog({
   open,
@@ -25,35 +26,29 @@ export function Dialog({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <dialog
       ref={ref}
+      className="fde-dialog"
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={(e) => {
         if (e.target === ref.current) onClose();
       }}
-      style={{
-        border: "1px solid #d1d5db",
-        borderRadius: 4,
-        padding: 0,
-        maxWidth: 520,
-        width: "calc(100% - 32px)",
-        background: "#fff",
-      }}
     >
-      <div style={{ padding: 20 }}>
-        <div className="row" style={{ justifyContent: "space-between", marginBottom: 12 }}>
-          <h2 id={titleId} style={{ fontSize: 20 }}>
+      <div className="fde-dialog__body">
+        <div className="fde-dialog__head">
+          <h2 id={titleId} className="fde-dialog__title">
             {title}
           </h2>
-          <button type="button" className="btn-ghost" onClick={onClose} aria-label="关闭">
+          <button type="button" className="btn-ghost fde-dialog__close" onClick={onClose} aria-label="关闭">
             ✕
           </button>
         </div>
-        <div>{children}</div>
-        {footer && <div className="row" style={{ marginTop: 16, justifyContent: "flex-end" }}>{footer}</div>}
+        <div className="fde-dialog__content">{children}</div>
+        {footer && <div className="fde-dialog__footer">{footer}</div>}
       </div>
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }

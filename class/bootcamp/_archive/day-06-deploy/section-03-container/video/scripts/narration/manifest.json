@@ -1,0 +1,14 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-core",
+    "file": "02-core.txt"
+  },
+  {
+    "id": "03-detail",
+    "file": "03-detail.txt"
+  }
+]

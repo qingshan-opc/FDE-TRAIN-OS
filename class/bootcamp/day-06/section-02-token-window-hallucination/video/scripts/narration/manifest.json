@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-token",
+    "file": "02-token.txt"
+  },
+  {
+    "id": "03-window",
+    "file": "03-window.txt"
+  },
+  {
+    "id": "04-hallucination",
+    "file": "04-hallucination.txt"
+  },
+  {
+    "id": "05-boundary",
+    "file": "05-boundary.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

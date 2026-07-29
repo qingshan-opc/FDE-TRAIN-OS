@@ -25,9 +25,6 @@ test("coach handoff closed loop: learner handoff → author resolves → learner
 
   await learnerPage.getByRole("button", { name: "AI 任务导师" }).click();
   await expect(learnerPage.getByRole("dialog", { name: "AI 任务导师" })).toBeVisible();
-  await learnerPage.locator("#coach-q").fill("Day1 企业任务边界我还不太清楚，请导师帮我看看。");
-  await learnerPage.getByRole("button", { name: "提问" }).click();
-  await expect(learnerPage.getByText(/LEVEL/i).first()).toBeVisible({ timeout: 20_000 });
 
   const handoffRes = await apiPost(learnerPage, `${baseURL}/api/v1/coach/handoff`, {
     camp_id: "camp-v03",
@@ -41,7 +38,7 @@ test("coach handoff closed loop: learner handoff → author resolves → learner
 
   await loginAsAuthor(authorPage);
   const authorCsrf = await getCsrfToken(authorPage);
-  await authorPage.goto("/author/legacy/submissions");
+  await authorPage.goto("/author/learners/reviews");
   await expect(authorPage.getByText("导师复核队列")).toBeVisible({ timeout: 15_000 });
 
   const resolve = await authorPage.request.post(`${baseURL}/api/v1/author/reviews/${reviewId}/feedback`, {

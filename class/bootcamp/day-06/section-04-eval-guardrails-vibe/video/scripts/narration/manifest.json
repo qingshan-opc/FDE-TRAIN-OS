@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-eval",
+    "file": "02-eval.txt"
+  },
+  {
+    "id": "03-guardrails",
+    "file": "03-guardrails.txt"
+  },
+  {
+    "id": "04-vibe",
+    "file": "04-vibe.txt"
+  },
+  {
+    "id": "05-triangle",
+    "file": "05-triangle.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { App, Button, Form, Input, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { authorApi, ApiError } from "../../lib/api";
 import { useAuth } from "../../lib/auth";
 import type { Paginated } from "../../lib/listQuery";
 import { useListQuery } from "../../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
 
 type Pack = {
   id: string;
@@ -47,31 +48,32 @@ export function MaterialPacks() {
   }, [load]);
 
   return (
-    <div>
-      <PageHeader
-        title="素材包"
-        description="按课程版本组织文档/视频素材"
-        extra={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setEditing(null);
-              form.resetFields();
-              setMode({ kind: "create" });
-            }}
-          >
-            新建素材包
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={<PageHeader title="素材包" description="按课程版本组织文档/视频素材" />}
+        toolbar={
+          <SearchToolbar
+            fields={[{ key: "q", type: "search", label: "搜索", placeholder: "搜索包名" }]}
+            values={{ q: q || undefined }}
+            onChange={setFilter}
+            onReset={hasFilters ? reset : undefined}
+            extra={
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  setEditing(null);
+                  form.resetFields();
+                  setMode({ kind: "create" });
+                }}
+              >
+                新建素材包
+              </Button>
+            }
+          />
         }
-      />
-      <SearchToolbar
-        fields={[{ key: "q", type: "search", label: "搜索", placeholder: "搜索包名" }]}
-        values={{ q: q || undefined }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<Pack>
+      >
+        <ServerTable<Pack>
         rowKey="id"
         loading={loading}
         error={error}
@@ -91,6 +93,9 @@ export function MaterialPacks() {
             title: "操作",
             render: (_, r) => (
               <>
+                <Link to={`/author/resources/packs/${r.id}`}>
+                  <Button type="link">成员</Button>
+                </Link>
                 <Button
                   type="link"
                   onClick={() => {
@@ -121,7 +126,8 @@ export function MaterialPacks() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
       <EntityModal
         mode={mode}
         title={{ create: "新建素材包", edit: "编辑素材包", view: "查看" }}
@@ -161,6 +167,6 @@ export function MaterialPacks() {
           <Input placeholder="course_version uuid" />
         </Form.Item>
       </EntityModal>
-    </div>
+    </>
   );
 }

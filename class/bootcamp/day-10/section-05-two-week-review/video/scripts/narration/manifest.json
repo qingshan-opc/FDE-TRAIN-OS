@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-map-self",
+    "file": "02-map-self.txt"
+  },
+  {
+    "id": "03-cognitive-fold",
+    "file": "03-cognitive-fold.txt"
+  },
+  {
+    "id": "04-ninety-day",
+    "file": "04-ninety-day.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

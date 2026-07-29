@@ -71,6 +71,9 @@ test("author antd IA + redirects", async ({ page }) => {
   await page.goto("/author/submissions");
   await expect(page).toHaveURL(/\/author\/learners\/submissions/);
 
+  await page.goto("/author/legacy/submissions");
+  await expect(page).toHaveURL(/\/author\/learners\/reviews/);
+
   await page.goto("/author/open-courses");
   await expect(page).toHaveURL(/\/author\/site\/open-courses/);
 
@@ -83,9 +86,9 @@ test("author pagination search URL", async ({ page }) => {
   await authorLogin(page);
   await goLeaf(page, "资源", "文档库");
   await expect(page).toHaveURL(/\/author\/resources\/documents/);
-  const search = page.getByPlaceholder(/搜索/);
+  const search = page.getByPlaceholder(/搜索文件名/);
   await search.fill("day");
-  await search.press("Enter");
+  await page.waitForTimeout(400);
   await expect(page).toHaveURL(/q=day/, { timeout: 10_000 });
   await page.reload();
   await expect(page).toHaveURL(/q=day/);
@@ -98,11 +101,11 @@ test("author site settings roundtrip", async ({ page }) => {
   await goLeaf(page, "网站维护", "站点信息");
   await expect(page).toHaveURL(/\/author\/site\/settings/);
   await page.screenshot({ path: path.join(artifacts, "03-site-settings.png"), fullPage: true });
-  const editBtn = page.getByRole("button", { name: /编辑/ }).first();
+  const editBtn = page.getByRole("button", { name: /^编辑$/ }).first();
   if (await editBtn.isVisible().catch(() => false)) {
     await editBtn.click();
-    await expect(page.getByRole("dialog", { name: /编辑站点信息/ })).toBeVisible({ timeout: 15_000 });
-    await page.getByRole("button", { name: /取\s*消|Cancel/i }).click();
+    await expect(page.locator(".ant-modal")).toContainText("编辑站点信息", { timeout: 15_000 });
+    await page.locator(".ant-modal").getByRole("button", { name: /取\s*消|Cancel/i }).click();
   }
 
   await goLeaf(page, "网站维护", "首页内容");

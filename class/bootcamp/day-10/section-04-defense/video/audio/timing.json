@@ -1,0 +1,29 @@
+{
+  "total": 64.842,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 3.2
+    },
+    {
+      "id": "02-four-dimensions",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s04_course/tts/02-four-dimensions.wav",
+      "start": 3.45,
+      "duration": 21.532
+    },
+    {
+      "id": "03-accident-calm",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s04_course/tts/03-accident-calm.wav",
+      "start": 25.232,
+      "duration": 20.8
+    },
+    {
+      "id": "04-fde-graduate",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day10_s04_course/tts/04-fde-graduate.wav",
+      "start": 46.282,
+      "duration": 18.56
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>第七天 · 第 5 节 · 运行与证据</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.45);--ink-08:rgba(35,31,32,.1);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.slide.invert{color:var(--bg)}
+.slide.invert .stage-fill{background:var(--ink)}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);margin-left:4px;max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.slide.invert .sec-label{color:rgba(242,245,240,.55)}
+.slide.invert .sec-label::after{background:var(--bg)}
+.meta-row{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);display:flex;gap:28px;flex-wrap:wrap;margin-bottom:28px}
+.meta-row b{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:78px;line-height:1.12;letter-spacing:.01em;margin-bottom:18px;max-width:14ch}
+.display .thin{font-weight:400;color:var(--ink-60)}
+.slide.invert .display .thin{color:rgba(242,245,240,.55)}
+.statement{font-family:var(--serif);font-size:32px;line-height:1.55;max-width:22em;margin-bottom:28px}
+.statement strong{color:var(--accent);font-weight:700;border-bottom:6px solid var(--accent)}
+.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em;margin-bottom:32px}
+.slide.invert .lede{color:rgba(242,245,240,.55)}
+.ladder{display:flex;align-items:stretch;border:1px solid var(--ink);width:max-content;max-width:100%}
+.ladder .rung{font-family:var(--mono);padding:14px 16px;border-right:1px solid var(--ink);min-width:110px;white-space:nowrap}
+.ladder .rung:last-child{border-right:none}
+.ladder .rung small{display:block;font-size:11px;letter-spacing:.1em;color:var(--ink-40);text-transform:uppercase;margin-bottom:4px}
+.ladder .rung b{font-size:18px;font-weight:700}
+.ladder .rung.hot{background:var(--accent);color:#fff;border-right-color:var(--accent)}
+.ladder .rung.hot small{color:rgba(255,255,255,.65)}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;margin-top:8px;height:calc(100% - 210px)}
+.split.tight{height:calc(100% - 170px)}
+.photo-panel{position:relative;border:1px solid var(--ink);overflow:hidden;background:#ddd;min-height:420px}
+.photo-panel img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(.92)}
+.photo-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,245,240,.85);background:linear-gradient(transparent,rgba(35,31,32,.85))}
+.photo-frame-bar{position:absolute;top:0;left:0;width:26px;height:6px;background:var(--accent);z-index:2}
+.note-stack{display:flex;flex-direction:column;gap:18px}
+.blk{border-top:6px solid var(--ink);padding-top:16px}
+.blk.accent{border-top-color:var(--accent)}
+.blk h4{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:8px}
+.blk p{font-size:18px;line-height:1.55;color:var(--ink-60)}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.tag{font-family:var(--mono);font-size:14px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--ink-40);color:var(--ink-60);background:transparent}
+.tag.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:4px}
+.card{border:1px solid var(--ink);padding:22px 22px 24px;background:rgba(255,255,255,.35)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
+.card h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:8px}
+.card p{font-size:17px;line-height:1.5;color:var(--ink-60)}
+.card.dim{background:var(--ink-05);opacity:.85}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.78)}
+.mile-rail{display:flex;gap:0;border:1px solid var(--ink);margin-top:6px}
+.mile{flex:1;padding:18px 16px;border-right:1px solid var(--ink-08);font-family:var(--mono)}
+.mile:last-child{border-right:none}
+.mile small{display:block;font-size:12px;letter-spacing:.1em;color:var(--ink-40);margin-bottom:8px;text-transform:uppercase}
+.mile b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px;font-weight:700}
+.mile span{font-family:var(--sans);font-size:14px;color:var(--ink-60);line-height:1.4}
+.mile.hot{background:var(--accent);color:#fff}
+.mile.hot small{color:rgba(255,255,255,.65)}
+.mile.hot b,.mile.hot span{color:#fff}
+.chat-mock{border:1px solid var(--ink);background:#fff;padding:18px 20px;margin-top:6px;font-family:var(--mono);font-size:15px;line-height:1.85}
+.chat-mock .row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.chat-mock .u{color:var(--ink-40)}
+.chat-mock .a{color:var(--accent);font-weight:700}
+.chat-mock .arrow{color:var(--ink-40);font-weight:700}
+.chat-mock .ok{color:#2f9e44;font-weight:700}
+.chat-mock .no{color:#f24e54;font-weight:700}
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.flow .step{font-family:var(--mono);font-size:15px;padding:12px 16px;border:1px solid var(--ink);background:#fff}
+.flow .step.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.flow .arrow{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
+.hub-grid{display:grid;grid-template-columns:260px 1fr 1fr;gap:18px;margin-top:24px}
+.hub-grid.six{grid-template-columns:240px 1fr 1fr 1fr}
+.hub-core{grid-row:span 2;border:1px solid rgba(242,245,240,.35);background:var(--accent);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:28px 24px}
+.hub-core .lab{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:12px}
+.hub-core h3{font-family:var(--serif);font-size:36px;font-weight:700;line-height:1.2}
+.hub-cell{border:1px solid rgba(242,245,240,.25);padding:22px 22px;background:rgba(242,245,240,.04)}
+.hub-cell .lab{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7d8cff;margin-bottom:8px;font-weight:700}
+.hub-cell h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
+.hub-cell p{font-size:16px;color:rgba(242,245,240,.6);line-height:1.45}
+.side-photo{position:absolute;top:0;right:0;width:38%;height:100%;z-index:1;overflow:hidden;border-left:6px solid var(--ink)}
+.side-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15) contrast(1.05)}
+.side-photo .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,245,240,.35),transparent 40%)}
+.slide.has-side{padding-right:46%}
+.quote-big{font-family:var(--serif);font-size:60px;line-height:1.35;max-width:16em;margin:18px 0 28px}
+.quote-big strong{border-bottom:6px solid var(--accent);font-weight:700}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-40)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;width:100%;min-height:0;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220;position:relative}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{flex:none;height:30px;line-height:30px;padding:0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+#preview-pager{position:fixed;right:12px;top:12px;z-index:9999;font:13px/1.4 var(--mono);color:#fff;background:rgba(20,0,255,.85);padding:8px 14px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint,html.browser-preview #preview-pager{display:block}
+</style>
+</head>
+<body>
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页 · 点击画面下一页</div>
+<div id="preview-pager">1 / 6</div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="113.453" data-width="1920" data-height="1080">
+<div class="stage-bg"></div>
+<!-- 01 OPEN · side-photo + ladder -->
+<section id="slide-01-open" class="clip slide has-side" data-track-index="1" data-start="0.000" data-duration="13.360">
+  <div class="stage-fill"></div>
+  <div class="side-photo" data-anim="photo"><img src="assets/photos/01-open.jpg" alt="" /><div class="veil"></div></div>
+  <div class="slide-body">
+    <div class="meta-row" data-anim="meta"><span><b>FDE</b> 第七天 · Section 05</span><span>Skill 实战日 · 实战课</span><span>第五节</span></div>
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN · AI 拿着说明书上岗</div>
+    <h1 class="display" data-anim="t">你的工作变成<span class="thin">派活·收货·验收·留证</span></h1>
+    <p class="statement" data-anim="s">不再是亲手做，<strong>是派活的人</strong></p>
+    <p class="lede" data-anim="lede">这节 AI 拿着你的说明书上岗。你的工作变成四步：派活、收货、按标准验收、留证据——不再是亲手做，是派活的人。</p>
+    <div class="ladder" data-anim="ladder"><div class="rung hot"><small>01</small><b>派活</b></div><div class="rung"><small>02</small><b>收货</b></div><div class="rung"><small>03</small><b>验收</b></div><div class="rung"><small>04</small><b>留证</b></div></div>
+    <div class="tag-row" data-anim="tags"><span class="tag solid">AI 执行</span><span class="tag ">你验收</span><span class="tag hl">留证据</span></div>
+  </div>
+</section><!-- 02 · photo + content -->
+<section id="slide-02-run-steps" class="clip slide" data-track-index="1" data-start="13.610" data-duration="19.373">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>CORE · 怎么运行</div>
+    <h1 class="display" data-anim="t">粘贴说明书<span class="thin">再粘贴输入数据</span></h1>
+    <p class="lede" data-anim="s">运行方式很简单：Agent Lab 或模型对话里，先粘贴 Skill 说明书全文，再粘贴输入数据——AI 按步骤执行，产出结果。你收货，按验收标准判过/不过。</p>
+    <div class="split tight" data-anim="split">
+      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/02-run.jpg" alt="" /><div class="photo-cap">运行方式 · Unsplash</div></div>
+      <div class="note-stack"><div class="chat-mock" data-anim="mock"><div class="row"><span class="u">Step 1</span> 粘贴 Skill 说明书全文</div><div class="row"><span class="u">Step 2</span> 粘贴输入数据（/api/kpi 近7天）</div><div class="row"><span class="arrow">→</span> <span class="a">AI 按步骤执行</span></div><div class="row"><span class="u">Step 3</span> 收货 → 按验收标准判过/不过 <span class="ok">✓</span></div></div><div class="tag-row" data-anim="tags"><span class="tag solid">粘贴说明书</span><span class="tag ">粘贴数据</span><span class="tag ">AI执行</span><span class="tag hl">你验收</span></div></div>
+    </div>
+  </div>
+</section><!-- 03 · photo + content -->
+<section id="slide-03-evidence-trio" class="clip slide" data-track-index="1" data-start="33.233" data-duration="23.920">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>DETAIL · 每次运行留证据三件套</div>
+    <h1 class="display" data-anim="t">runs/ 目录下<span class="thin">input + output + 验收记录</span></h1>
+    <p class="lede" data-anim="s">每次运行留证据三件套：runs/日期-skill名/ 目录下，input.md 是输入快照，output.md 是产出，result.md 是验收结果。没有证据的运行等于没跑。</p>
+    <div class="split tight" data-anim="split">
+      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/03-evidence.jpg" alt="" /><div class="photo-cap">证据三件套 · Unsplash</div></div>
+      <div class="note-stack"><div class="mile-rail" data-anim="miles"><div class="mile hot"><small>01</small><b>input.md</b><span>输入快照——跑了什么数据</span></div><div class="mile hot"><small>02</small><b>output.md</b><span>产出——AI 交了什么货</span></div><div class="mile hot"><small>03</small><b>result.md</b><span>验收结果——过/不过+原因</span></div></div><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">有证据</div><h4>可复查可回放</h4><p>第三方打开 runs/ 即可验证——和 Eval 思维一致。</p></div><div class="card dim"><div class="lab">没证据</div><h4>等于没跑</h4><p>口头「跑过了」不算数——GATE 7 打回。</p></div></div></div>
+    </div>
+  </div>
+</section><!-- 04 · photo + content -->
+<section id="slide-04-iteration-loop" class="clip slide" data-track-index="1" data-start="57.403" data-duration="20.640">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>METHOD · 验收不过怎么办</div>
+    <h1 class="display" data-anim="t">定位是歧义<span class="thin">还是执行偏差</span></h1>
+    <p class="lede" data-anim="s">验收不过，先定位是说明书歧义还是 AI 执行偏差。歧义就改说明书——多数情况是这个；偏差就换表达方式重跑。改完重跑，连续两次过才算稳。</p>
+    <div class="split tight" data-anim="split">
+      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/04-debug.jpg" alt="" /><div class="photo-cap">验收不过 · Unsplash</div></div>
+      <div class="note-stack"><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">多数情况</div><h4>说明书歧义</h4><p>步骤写得不够细——改说明书，不是怪 AI。</p></div><div class="card dim"><div class="lab">少数情况</div><h4>AI 执行偏差</h4><p>换表达方式重跑——加「严格按步骤顺序执行」。</p></div></div><div class="chat-mock" data-anim="mock"><div class="row"><span class="u">验收不过</span> → 定位：歧义 or 偏差？</div><div class="row"><span class="arrow">→</span> <span class="a">歧义</span> 改说明书 <span class="ok">多数</span></div><div class="row"><span class="arrow">→</span> <span class="a">偏差</span> 换表达重跑 <span class="u">少数</span></div><div class="row"><span class="u">连续两次过</span> <span class="arrow">→</span> <span class="ok">才算稳</span></div></div></div>
+    </div>
+  </div>
+</section><!-- 05 · photo + content -->
+<section id="slide-05-common-issues" class="clip slide" data-track-index="1" data-start="78.293" data-duration="20.333">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>EXTRA · AI 不按步骤做怎么办</div>
+    <h1 class="display" data-anim="t">加一句指令<span class="thin">严格按步骤顺序执行</span></h1>
+    <p class="lede" data-anim="s">AI 没按步骤做、直接跳到生成？在说明书开头加「严格按步骤顺序执行，每步完成后简述结果」。每次跑结果不一样？把模糊步骤拆细，拆到无歧义。</p>
+    <div class="split tight" data-anim="split">
+      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/05-fix.jpg" alt="" /><div class="photo-cap">AI 偏差修正 · Unsplash</div></div>
+      <div class="note-stack"><div class="chat-mock" data-anim="mock"><div class="row"><span class="u">问题</span> AI 跳过步骤直接生成</div><div class="row"><span class="arrow">→</span> <span class="a">加</span> 「严格按步骤顺序执行，每步简述结果」</div><div class="row"><span class="u">问题</span> 每次跑结果不一样</div><div class="row"><span class="arrow">→</span> <span class="a">拆细</span> 模糊步骤拆到无歧义 <span class="ok">✓</span></div></div><div class="tag-row" data-anim="tags"><span class="tag solid">严格按步骤</span><span class="tag ">每步简述</span><span class="tag hl">拆细</span></div></div>
+    </div>
+  </div>
+</section><!-- 06 CLOSE · invert + quote-big + hub-grid -->
+<section id="slide-06-close" class="clip slide invert" data-track-index="1" data-start="98.876" data-duration="14.577">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY · 带走一句</div>
+    <h1 class="display" style="max-width:none;font-size:72px" data-anim="t">没有证据<span class="thin">等于没跑</span></h1>
+    <p class="quote-big" data-anim="s"><strong>runs/ 是你的证据链</strong></p>
+    <div class="hub-grid" data-anim="hub">
+      <div class="hub-core"><div class="lab">FOUR STEPS</div><h3>派活<br/>收货<br/>验收<br/>留证</h3></div>
+      <div class="hub-cell"><div class="lab">01 · 派活</div><h4>粘贴说明书+数据</h4><p>AI 按步骤执行——你不再亲手做。</p></div><div class="hub-cell"><div class="lab">02 · 收货</div><h4>收 AI 的产出</h4><p>按验收标准判过/不过。</p></div><div class="hub-cell"><div class="lab">03 · 验收</div><h4>判据句式逐条判</h4><p>结构+数字+意图——可判对错。</p></div><div class="hub-cell"><div class="lab">04 · 留证</div><h4>runs/ 三件套</h4><p>input+output+result——可复查。</p></div>
+    </div>
+    <p class="lede" style="margin-top:22px;margin-bottom:0" data-anim="lede">下一节 → GATE 7 验收：Skill 三问口试，导师看证据链。</p>
+  </div>
+</section>
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="113.453" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第七天 · 第 5 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="113.453" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="113.453" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="113.453" data-track-index="10" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [{"id": "#slide-01-open", "start": 0.000, "dur": 13.360}, {"id": "#slide-02-run-steps", "start": 13.610, "dur": 19.373}, {"id": "#slide-03-evidence-trio", "start": 33.233, "dur": 23.920}, {"id": "#slide-04-iteration-loop", "start": 57.403, "dur": 20.640}, {"id": "#slide-05-common-issues", "start": 78.293, "dur": 20.333}, {"id": "#slide-06-close", "start": 98.876, "dur": 14.577}];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='lede']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.4);
+  tl.from(`${id} [data-anim='meta']`, { y: 14, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.08);
+  tl.from(`${id} [data-anim='photo']`, { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, t0 + 0.1);
+  tl.from(`${id} [data-anim='split']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.35);
+  tl.from(`${id} [data-anim='ladder']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.45);
+  tl.from(`${id} [data-anim='mock']`, { y: 14, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.55);
+  tl.from(`${id} [data-anim='duo'] .card`, { y: 16, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.65);
+  tl.from(`${id} [data-anim='miles'] .mile`, { y: 14, opacity: 0, stagger: 0.08, duration: 0.35, ease: "power2.out" }, t0 + 0.55);
+  tl.from(`${id} [data-anim='flow'] .step`, { y: 12, opacity: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, t0 + 0.8);
+  tl.from(`${id} [data-anim='hub'] .hub-core`, { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.5);
+  tl.from(`${id} [data-anim='hub'] .hub-cell`, { y: 18, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.7);
+  tl.from(`${id} [data-anim='tags'] .tag`, { y: 10, opacity: 0, stagger: 0.05, duration: 0.3, ease: "power2.out" }, t0 + 0.95);
+}
+function exit(id, tEnd) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd - 0.45);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
+}
+slides.forEach((s) => { enter(s.id, s.start); exit(s.id, s.start + s.dur); });
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() { const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); document.body.style.transform = "scale(" + s + ")"; document.body.style.transformOrigin = "top left"; }
+  function reveal(el) { gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, x: 0, clearProps: "transform" }); }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+    const pager = document.getElementById("preview-pager");
+    if (pager) pager.textContent = (i + 1) + " / " + slidesEls.length;
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  document.getElementById("root").addEventListener("click", (e) => { if (e.target.closest("#avatar-pip")) return; idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); });
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+</body>
+</html>

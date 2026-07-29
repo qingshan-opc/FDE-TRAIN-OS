@@ -12,3 +12,4 @@ export type { LabRubricModalValues } from "./LabRubricModal";
 export { ResourceModal } from "./ResourceModal";
 export type { ResourceModalValues } from "./ResourceModal";
 export { YamlImportModal } from "./YamlImportModal";
+export { BootcampSyncModal } from "./BootcampSyncModal";

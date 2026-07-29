@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Button, Form, Input, InputNumber, Switch, Tag, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { authorApi, ApiError } from "../../lib/api";
 import type { Paginated } from "../../lib/listQuery";
 import { useListQuery } from "../../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../../components/crud";
 
 type OpenCourse = {
   id: string;
@@ -20,7 +20,7 @@ type OpenCourse = {
 export function SiteOpenCourses() {
   const { message } = App.useApp();
   const confirmDelete = useDeleteConfirm();
-  const { page, page_size, q, filters, hasFilters, setPage, setFilter, reset } = useListQuery();
+  const { page, page_size, q, filters, setPage, setFilter, reset } = useListQuery();
   const [data, setData] = useState<Paginated<OpenCourse> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,8 +56,6 @@ export function SiteOpenCourses() {
 
   const openCreate = () => {
     setEditing(null);
-    form.resetFields();
-    form.setFieldsValue({ published: true, minutes: 10 });
     setVideoFile(null);
     setPosterFile(null);
     setMode({ kind: "create" });
@@ -65,42 +63,61 @@ export function SiteOpenCourses() {
 
   const openEdit = (row: OpenCourse) => {
     setEditing(row);
-    form.setFieldsValue(row);
     setVideoFile(null);
     setPosterFile(null);
     setMode({ kind: "edit", id: row.id });
   };
 
+  const formInitialValues = useMemo(() => {
+    if (mode.kind === "edit" && editing) {
+      return {
+        title: editing.title,
+        level: editing.level,
+        minutes: editing.minutes,
+        summary: editing.summary,
+        published: Boolean(editing.published),
+      };
+    }
+    if (mode.kind === "create") {
+      return { published: true, minutes: 10 };
+    }
+    return null;
+  }, [mode.kind, editing]);
+
   return (
-    <div>
-      <PageHeader
-        title="站点公开课"
-        description="Landing 公开课列表，支持搜索分页与弹窗编辑"
-        extra={
-          <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
-            新增公开课
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={
+          <PageHeader title="站点公开课" description="Landing 公开课列表，支持搜索分页与弹窗编辑" />
         }
-      />
-      <SearchToolbar
-        fields={[
-          { key: "q", type: "search", label: "搜索", placeholder: "搜索标题" },
-          {
-            key: "published",
-            type: "select",
-            label: "发布",
-            placeholder: "发布状态",
-            options: [
-              { value: "true", label: "已发布" },
-              { value: "false", label: "未发布" },
-            ],
-          },
-        ]}
-        values={{ q: q || undefined, published: filters.published }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-      <ServerTable<OpenCourse>
+        toolbar={
+          <SearchToolbar
+            fields={[
+              { key: "q", type: "search", label: "搜索", placeholder: "搜索标题", width: 220 },
+              {
+                key: "published",
+                type: "select",
+                label: "发布",
+                placeholder: "发布状态",
+                width: 132,
+                options: [
+                  { value: "true", label: "已发布" },
+                  { value: "false", label: "未发布" },
+                ],
+              },
+            ]}
+            values={{ q: q || undefined, published: filters.published }}
+            onChange={setFilter}
+            onReset={reset}
+            extra={
+              <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+                新增公开课
+              </Button>
+            }
+          />
+        }
+      >
+        <ServerTable<OpenCourse>
         rowKey="id"
         loading={loading}
         error={error}
@@ -147,14 +164,19 @@ export function SiteOpenCourses() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
 
       <EntityModal
         mode={mode}
         title={{ create: "新增公开课", edit: "编辑公开课", view: "查看" }}
         form={form}
         submitting={submitting}
-        onClose={() => setMode({ kind: "closed" })}
+        initialValues={formInitialValues}
+        onClose={() => {
+          setMode({ kind: "closed" });
+          setEditing(null);
+        }}
         onSubmit={async (values) => {
           setSubmitting(true);
           try {
@@ -214,6 +236,6 @@ export function SiteOpenCourses() {
           </Upload>
         </Form.Item>
       </EntityModal>
-    </div>
+    </>
   );
 }

@@ -47,12 +47,20 @@ JWT_SECRET = os.getenv("JWT_SECRET", "dev-fde-jwt-secret-change-me")
 JWT_TTL_SEC = int(os.getenv("JWT_TTL_SEC", "900"))
 REFRESH_TTL_SEC = int(os.getenv("REFRESH_TTL_SEC", str(7 * 86400)))
 WORKSPACE_MAX_BYTES = int(os.getenv("FDE_WORKSPACE_MAX_BYTES", str(50 * 1024 * 1024)))
-FDE_INTERNAL_BASE = os.getenv("FDE_INTERNAL_BASE", "http://127.0.0.1:8760").rstrip("/")
+FDE_API_PORT = int(os.getenv("FDE_API_PORT", "8760"))
+FDE_DEV_PORT = int(os.getenv("FDE_DEV_PORT", "5173"))
+FDE_INTERNAL_BASE = os.getenv("FDE_INTERNAL_BASE", f"http://127.0.0.1:{FDE_API_PORT}").rstrip("/")
 DEMO_EMAIL = os.getenv("FDE_DEMO_EMAIL", "demo@fde.local")
 DEMO_PASSWORD = os.getenv("FDE_DEMO_PASSWORD", "demo1234")
+LEARNER_EMAIL = os.getenv("FDE_LEARNER_EMAIL", "learner@fde.local")
+LEARNER_PASSWORD = os.getenv("FDE_LEARNER_PASSWORD", "learner1234")
 AUTHOR_EMAIL = os.getenv("FDE_AUTHOR_EMAIL", "author@fde.local")
 AUTHOR_PASSWORD = os.getenv("FDE_AUTHOR_PASSWORD", "author1234")
-CORS_ORIGINS = [o.strip() for o in os.getenv("FDE_CORS_ORIGINS", "http://127.0.0.1:8760,http://localhost:8760").split(",") if o.strip()]
+_DEFAULT_CORS = (
+    f"http://127.0.0.1:{FDE_API_PORT},http://localhost:{FDE_API_PORT},"
+    f"http://127.0.0.1:{FDE_DEV_PORT},http://localhost:{FDE_DEV_PORT}"
+)
+CORS_ORIGINS = [o.strip() for o in os.getenv("FDE_CORS_ORIGINS", _DEFAULT_CORS).split(",") if o.strip()]
 ALLOW_DEV_HEADERS = os.getenv("FDE_ALLOW_DEV_HEADERS", "0") == "1"
 SEED_DEMO_USERS = os.getenv("FDE_SEED_DEMO_USERS", "1" if FDE_ENV != "prod" else "0") == "1"
 
@@ -81,6 +89,55 @@ RATE_LIMIT_LOGIN = os.getenv("RATE_LIMIT_LOGIN", "20/min")
 RATE_LIMIT_UPLOAD = os.getenv("RATE_LIMIT_UPLOAD", "30/min")
 RATE_LIMIT_COACH_ASK = os.getenv("RATE_LIMIT_COACH_ASK", "30/min")
 RATE_LIMIT_SQL_EXEC = os.getenv("RATE_LIMIT_SQL_EXEC", "60/min")
+
+# WeChat Pay v3 (billing)
+WECHAT_PAY_MCH_ID = os.getenv("WECHAT_PAY_MCH_ID", "")
+WECHAT_PAY_APP_ID = os.getenv("WECHAT_PAY_APP_ID", "")
+WECHAT_PAY_SERIAL_NO = os.getenv("WECHAT_PAY_SERIAL_NO", "")
+WECHAT_PAY_API_V3_KEY = os.getenv("WECHAT_PAY_API_V3_KEY", "")
+WECHAT_PAY_PRIVATE_KEY_PATH = os.getenv("WECHAT_PAY_PRIVATE_KEY_PATH", "")
+WECHAT_PAY_PLATFORM_CERT_PATH = os.getenv("WECHAT_PAY_PLATFORM_CERT_PATH", "")
+FDE_PUBLIC_BASE_URL = os.getenv("FDE_PUBLIC_BASE_URL", FDE_INTERNAL_BASE).rstrip("/")
+WECHAT_PAY_SKIP_VERIFY = os.getenv("WECHAT_PAY_SKIP_VERIFY", "0") == "1"
+PARTNER_DEMO_EMAIL = os.getenv("FDE_PARTNER_DEMO_EMAIL", "partner@fde.local")
+PARTNER_DEMO_PASSWORD = os.getenv("FDE_PARTNER_DEMO_PASSWORD", "partner1234")
+
+# Camp / curriculum identifiers (single source of truth)
+DEFAULT_CAMP_ID = os.getenv("FDE_DEFAULT_CAMP_ID", "camp-v03")
+CURRICULUM_VERSION_TAG = os.getenv("FDE_CURRICULUM_VERSION_TAG", "v0.7")
+SEED_VERSION_TAGS = [t.strip() for t in os.getenv("FDE_SEED_VERSION_TAGS", "v0.7,fde-v07").split(",") if t.strip()]
+CAMP_VERSION_LABEL = os.getenv("FDE_CAMP_VERSION_LABEL", "v0.3")
+
+# Object storage key prefixes
+COURSE_MEDIA_SHARED_PREFIX = "documents/shared/course-media/"
+COURSE_MEDIA_OPEN_PREFIX = "documents/shared/open-courses/"
+COURSE_MEDIA_SITE_HERO_PREFIX = "documents/shared/site/hero/"
+COURSE_MEDIA_SITE_MENTOR_PREFIX = "documents/shared/site/mentors/"
+
+# Presign / upload limits
+S3_PRESIGN_GET_EXPIRES = int(os.getenv("S3_PRESIGN_GET_EXPIRES", "300"))
+S3_PRESIGN_PUT_EXPIRES = int(os.getenv("S3_PRESIGN_PUT_EXPIRES", "900"))
+MEDIA_MAX_BYTES_BY_KIND: dict[str, int] = {
+    "video": int(os.getenv("FDE_MEDIA_MAX_VIDEO_BYTES", str(200 * 1024 * 1024))),
+    "audio": int(os.getenv("FDE_MEDIA_MAX_AUDIO_BYTES", str(64 * 1024 * 1024))),
+    "poster": int(os.getenv("FDE_MEDIA_MAX_POSTER_BYTES", str(8 * 1024 * 1024))),
+    "image": int(os.getenv("FDE_MEDIA_MAX_IMAGE_BYTES", str(8 * 1024 * 1024))),
+}
+DEFAULT_UPLOAD_MAX_BYTES = int(os.getenv("FDE_DEFAULT_UPLOAD_MAX_BYTES", str(32 * 1024 * 1024)))
+LAB_ATTACHMENT_MAX_BYTES = int(os.getenv("FDE_LAB_ATTACHMENT_MAX_BYTES", str(20 * 1024 * 1024)))
+
+# Worker / DB / security tuning
+HSTS_MAX_AGE_SEC = int(os.getenv("FDE_HSTS_MAX_AGE_SEC", str(365 * 86400)))
+DB_STATEMENT_TIMEOUT_MS = int(os.getenv("DB_STATEMENT_TIMEOUT_MS", "30000"))
+MAX_JOB_ATTEMPTS = int(os.getenv("FDE_JOB_MAX_ATTEMPTS", "3"))
+JOB_BACKOFF_BASE_SEC = int(os.getenv("FDE_JOB_BACKOFF_BASE_SEC", "30"))
+PASSWORD_PBKDF2_ITERATIONS = int(os.getenv("FDE_PASSWORD_PBKDF2_ITERATIONS", "120000"))
+ENROLLMENT_ACTIVITY_LIMIT = int(os.getenv("FDE_ENROLLMENT_ACTIVITY_LIMIT", "20"))
+API_PAGE_SIZE_MAX = int(os.getenv("FDE_API_PAGE_SIZE_MAX", "100"))
+
+# Bootcamp video pipeline (scripts)
+FDE_DHX_ROOT = Path(os.getenv("FDE_DHX_ROOT", str(ROOT.parent / "digital-human-platform")))
+FDE_HYPERFRAMES_VERSION = os.getenv("FDE_HYPERFRAMES_VERSION", "0.7.72")
 
 
 def require_database_url(url: str | None = None) -> str:

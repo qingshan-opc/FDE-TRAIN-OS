@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { App, Button, Form, Input, InputNumber, Modal, Space, Tag, Upload, Typography } from "antd";
+import { App, Button, Form, Input, InputNumber, Modal, Space, Upload, Typography } from "antd";
 import { UploadOutlined, DownloadOutlined, LinkOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import { authorApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import type { AuthorDocument } from "../lib/types";
 import type { Paginated } from "../lib/listQuery";
 import { useListQuery } from "../lib/useListQuery";
-import { PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../components/crud";
+import { AuthorListPageLayout, PageHeader, SearchToolbar, ServerTable, EntityModal, useDeleteConfirm, type EntityModalMode } from "../components/crud";
+import { StatusTag } from "../components/StatusTag";
+import { statusOptions } from "../lib/statusLabels";
 
 function boundLabel(d: AuthorDocument): string {
   const days = (d.bindings || [])
@@ -94,49 +96,43 @@ export function DocumentLibrary() {
   };
 
   return (
-    <div>
-      <PageHeader
-        title="文档库"
-        description="上传 DOCX/PDF，绑定到课程日，支持搜索与分页"
-        extra={
-          <Button type="primary" icon={<UploadOutlined />} onClick={() => setUploadOpen(true)} disabled={!campId}>
-            上传文档
-          </Button>
+    <>
+      <AuthorListPageLayout
+        header={<PageHeader title="文档库" description="上传 DOCX/PDF，绑定到课程日，支持搜索与分页" />}
+        toolbar={
+          <SearchToolbar
+            fields={[
+              { key: "q", type: "search", label: "搜索", placeholder: "搜索文件名" },
+              {
+                key: "status",
+                type: "select",
+                label: "状态",
+                placeholder: "入库状态",
+                options: statusOptions(["queued", "scanning", "ready", "failed"], "document"),
+              },
+              {
+                key: "bound",
+                type: "select",
+                label: "绑定",
+                placeholder: "绑定状态",
+                options: [
+                  { value: "1", label: "已绑定" },
+                  { value: "0", label: "未绑定" },
+                ],
+              },
+            ]}
+            values={{ q: q || undefined, status: filters.status, bound: filters.bound }}
+            onChange={setFilter}
+            onReset={hasFilters ? reset : undefined}
+            extra={
+              <Button type="primary" icon={<UploadOutlined />} onClick={() => setUploadOpen(true)} disabled={!campId}>
+                上传文档
+              </Button>
+            }
+          />
         }
-      />
-
-      <SearchToolbar
-        fields={[
-          { key: "q", type: "search", label: "搜索", placeholder: "搜索文件名" },
-          {
-            key: "status",
-            type: "select",
-            label: "状态",
-            placeholder: "入库状态",
-            options: [
-              { value: "queued", label: "queued" },
-              { value: "scanning", label: "scanning" },
-              { value: "ready", label: "ready" },
-              { value: "failed", label: "failed" },
-            ],
-          },
-          {
-            key: "bound",
-            type: "select",
-            label: "绑定",
-            placeholder: "绑定状态",
-            options: [
-              { value: "1", label: "已绑定" },
-              { value: "0", label: "未绑定" },
-            ],
-          },
-        ]}
-        values={{ q: q || undefined, status: filters.status, bound: filters.bound }}
-        onChange={setFilter}
-        onReset={hasFilters ? reset : undefined}
-      />
-
-      <ServerTable<AuthorDocument>
+      >
+        <ServerTable<AuthorDocument>
         rowKey="id"
         loading={loading}
         error={error}
@@ -149,7 +145,7 @@ export function DocumentLibrary() {
           {
             title: "状态",
             dataIndex: "status",
-            render: (s: string) => <Tag>{s}</Tag>,
+            render: (s: string) => <StatusTag status={s} domain="document" />,
           },
           {
             title: "大小",
@@ -215,7 +211,8 @@ export function DocumentLibrary() {
             ),
           },
         ]}
-      />
+        />
+      </AuthorListPageLayout>
 
       <Modal
         title="上传文档"
@@ -272,6 +269,6 @@ export function DocumentLibrary() {
           <Input placeholder="例如 c1" allowClear />
         </Form.Item>
       </EntityModal>
-    </div>
+    </>
   );
 }

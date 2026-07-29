@@ -80,7 +80,7 @@ cd e2e && npm run test:chromium
 |------|------|------|
 | E1 | FAB 提问 | — |
 | E2 | 申请导师复核 | — |
-| E3 | — | `/author/legacy/submissions` 队列 pending |
+| E3 | — | `/author/learners/reviews` 队列 pending |
 | E4 | — | 提交反馈 resolved |
 | E5 | 教练抽屉见导师反馈 | — |
 

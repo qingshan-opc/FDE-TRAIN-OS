@@ -1,0 +1,1 @@
+三个词怎么串？Eval 告诉你好不好；Guardrails 告诉你敢不敢上线；Vibe Coding 是生产力杠杆。缺 Eval 是盲飞——不知道改坏了没有；缺 Guardrails 是裸奔——啥都敢答；缺验收的 Vibe 是技术债工厂——写得快，还得还。生产力靠 vibe，可靠性靠 Eval 加 Guardrails，两个角缺一不可，对吧。

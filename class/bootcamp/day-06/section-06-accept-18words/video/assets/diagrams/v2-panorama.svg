@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="V2 成品全景：驾驶舱 + 挂 Skill 的 Agent + 十条能力证据，人在上面派活确认验收">
+  <rect width="1040" height="560" fill="#f2f5f0"/>
+  <defs>
+    <marker id="v2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
+    </marker>
+  </defs>
+
+  <text x="520" y="50" text-anchor="middle" font-size="26" font-weight="800" fill="#231f20">你的 V2 成品全景：一个能派活的驾驶舱</text>
+
+  <!-- left: dashboard thumbnail -->
+  <rect x="50" y="110" width="320" height="300" rx="14" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="210" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#231f20">驾驶舱前端（六个区块）</text>
+  <g font-size="12" fill="#231f20">
+    <rect x="74" y="160" width="130" height="60" rx="8" fill="#1400ff" opacity="0.10"/>
+    <rect x="74" y="160" width="130" height="60" rx="8" fill="none" stroke="#1400ff" stroke-width="1.5"/>
+    <text x="139" y="195" text-anchor="middle" fill="#1400ff" font-weight="700">核心指标</text>
+    <rect x="216" y="160" width="130" height="60" rx="8" fill="#f24e54" opacity="0.10"/>
+    <rect x="216" y="160" width="130" height="60" rx="8" fill="none" stroke="#f24e54" stroke-width="1.5"/>
+    <text x="281" y="195" text-anchor="middle" fill="#f24e54" font-weight="700">趋势图</text>
+    <rect x="74" y="232" width="130" height="60" rx="8" fill="#1cd5b0" opacity="0.12"/>
+    <rect x="74" y="232" width="130" height="60" rx="8" fill="none" stroke="#1cd5b0" stroke-width="1.5"/>
+    <text x="139" y="267" text-anchor="middle" font-weight="700">数据表</text>
+    <rect x="216" y="232" width="130" height="60" rx="8" fill="#f5a947" opacity="0.14"/>
+    <rect x="216" y="232" width="130" height="60" rx="8" fill="none" stroke="#f5a947" stroke-width="1.5"/>
+    <text x="281" y="267" text-anchor="middle" font-weight="700">筛选器</text>
+    <rect x="74" y="304" width="130" height="60" rx="8" fill="#5f52a0" opacity="0.10"/>
+    <rect x="74" y="304" width="130" height="60" rx="8" fill="none" stroke="#5f52a0" stroke-width="1.5"/>
+    <text x="139" y="339" text-anchor="middle" fill="#5f52a0" font-weight="700">详情面板</text>
+    <rect x="216" y="304" width="130" height="60" rx="8" fill="#e0479e" opacity="0.10"/>
+    <rect x="216" y="304" width="130" height="60" rx="8" fill="none" stroke="#e0479e" stroke-width="1.5"/>
+    <text x="281" y="339" text-anchor="middle" fill="#e0479e" font-weight="700">AI 助手位</text>
+  </g>
+  <text x="210" y="392" text-anchor="middle" font-size="11" fill="#231f20" opacity="0.6">React + FastAPI + SQLite · 云上部署</text>
+
+  <!-- middle: agent with skill chips -->
+  <rect x="420" y="110" width="220" height="300" rx="14" fill="#fff" stroke="#2f9e44" stroke-width="2.5"/>
+  <text x="530" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#2f9e44">Agent（你的数字同事）</text>
+  <!-- mini decision loop -->
+  <circle cx="530" cy="196" r="34" fill="#2f9e44" opacity="0.10"/>
+  <circle cx="530" cy="196" r="34" fill="none" stroke="#2f9e44" stroke-width="2"/>
+  <text x="530" y="192" text-anchor="middle" font-size="11" font-weight="700" fill="#2f9e44">决策环</text>
+  <text x="530" y="210" text-anchor="middle" font-size="10" fill="#231f20" opacity="0.7">感知→想→做</text>
+  <!-- skill chips -->
+  <g font-size="12" font-weight="700" fill="#231f20">
+    <rect x="440" y="248" width="180" height="38" rx="19" fill="#1400ff" opacity="0.10"/>
+    <rect x="440" y="248" width="180" height="38" rx="19" fill="none" stroke="#1400ff" stroke-width="1.5"/>
+    <text x="530" y="272" text-anchor="middle">Skill · 拉数据</text>
+    <rect x="440" y="296" width="180" height="38" rx="19" fill="#e0479e" opacity="0.10"/>
+    <rect x="440" y="296" width="180" height="38" rx="19" fill="none" stroke="#e0479e" stroke-width="1.5"/>
+    <text x="530" y="320" text-anchor="middle">Skill · 生成周报</text>
+    <rect x="440" y="344" width="180" height="38" rx="19" fill="#f24e54" opacity="0.10"/>
+    <rect x="440" y="344" width="180" height="38" rx="19" fill="none" stroke="#f24e54" stroke-width="1.5"/>
+    <text x="530" y="368" text-anchor="middle">Skill · 发送（带确认）</text>
+  </g>
+  <text x="530" y="398" text-anchor="middle" font-size="11" fill="#231f20" opacity="0.6">Harness 供上下文 · 异常有分类</text>
+
+  <!-- arrows between -->
+  <line x1="370" y1="260" x2="416" y2="260" stroke="#231f20" stroke-width="2" marker-end="url(#v2-arrow)"/>
+  <line x1="640" y1="260" x2="686" y2="260" stroke="#231f20" stroke-width="2" marker-end="url(#v2-arrow)"/>
+
+  <!-- right: evidence checklist -->
+  <rect x="690" y="110" width="300" height="300" rx="14" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="840" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#231f20">十条能力证据（验收单）</text>
+  <g font-size="12.5" fill="#231f20">
+    <text x="712" y="170">✓ 讲清四层架构与取舍</text>
+    <text x="712" y="198">✓ 前端三态 + 迭代日志</text>
+    <text x="712" y="226">✓ 接口契约 + 状态码语义</text>
+    <text x="712" y="254">✓ 表设计 + SQL 四招</text>
+    <text x="712" y="282">✓ Prompt 四要素 + 成本观</text>
+    <text x="712" y="310">✓ 环境变量与配置分离</text>
+    <text x="712" y="338">✓ 一个带验收的 Skill</text>
+    <text x="712" y="366">✓ 编排含确认点与日志</text>
+    <text x="712" y="394">✓ 线上可访问的 V2</text>
+  </g>
+
+  <!-- bottom: human band -->
+  <rect x="50" y="440" width="940" height="80" rx="14" fill="#231f20"/>
+  <text x="520" y="474" text-anchor="middle" font-size="16" font-weight="800" fill="#f2f5f0">你（人）：派活 → 确认关键动作 → 按验收单收货</text>
+  <text x="520" y="500" text-anchor="middle" font-size="12" fill="#f2f5f0" opacity="0.75">FDE = 架构你定、脏活 AI 干、质量你验收</text>
+
+  <!-- dashed links from human band -->
+  <line x1="210" y1="440" x2="210" y2="414" stroke="#231f20" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#v2-arrow)"/>
+  <line x1="530" y1="440" x2="530" y2="414" stroke="#231f20" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#v2-arrow)"/>
+  <line x1="840" y1="440" x2="840" y2="414" stroke="#231f20" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#v2-arrow)"/>
+</svg>

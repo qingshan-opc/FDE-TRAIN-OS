@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交互仿真 · 服务器命令行 | FDE 训练营 Day 5</title>
+<style>
+:root{
+  --bg:#f2f5f0; --ink:#231f20; --ink-60:rgba(35,31,32,.6); --ink-40:rgba(35,31,32,.4);
+  --ink-08:rgba(35,31,32,.08); --accent:#1400ff; --c-ok:#2f9e44; --c-fe:#f24e54; --c-cloud:#f5a947;
+  --serif:"Songti SC","STSong","Noto Serif SC",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--c-cloud);font-weight:700}
+header{padding:56px 0 30px;border-bottom:6px solid var(--ink)}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4.6vw,44px);line-height:1.2;margin:10px 0 12px}
+.lede{color:var(--ink-60);max-width:680px;font-size:15px}
+.lede b{color:var(--c-fe)}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:22px;margin:30px 0 50px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+/* terminal */
+.term{background:#14181d;border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(20,24,29,.25)}
+.term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#1d232b;border-bottom:1px solid rgba(255,255,255,.06)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.term-bar i:nth-child(1){background:#f24e54}.term-bar i:nth-child(2){background:#f5a947}.term-bar i:nth-child(3){background:#2f9e44}
+.term-bar span{margin-left:auto;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.1em}
+.term-body{height:430px;overflow-y:auto;padding:18px 18px 8px;font-family:var(--mono);font-size:13.5px;line-height:1.75;color:#d7e0e8}
+.term-body .cmd{color:#fff;font-weight:700}
+.term-body .prompt{color:#2f9e44;font-weight:700}
+.term-body .out{color:rgba(215,224,232,.85);white-space:pre-wrap}
+.term-body .sys{color:#f5a947}
+.term-body .err{color:#f24e54}
+.term-body .ok{color:#2f9e44}
+.term-input{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid rgba(255,255,255,.06);background:#14181d}
+.term-input .prompt{font-family:var(--mono);font-size:13.5px;color:#2f9e44;font-weight:700;white-space:nowrap}
+.term-input input{flex:1;background:none;border:none;outline:none;color:#fff;font-family:var(--mono);font-size:13.5px;caret-color:#2f9e44}
+/* tasks + manual column */
+.side{display:flex;flex-direction:column;gap:18px}
+.panel{background:#fff;border:1px solid var(--ink-08);border-radius:12px;padding:18px 20px}
+.panel h3{font-family:var(--serif);font-size:17px;font-weight:900;margin-bottom:10px}
+.panel h3 .tag{margin-left:8px}
+.tasks{list-style:none}
+.tasks li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-08);font-size:13px}
+.tasks li:last-child{border-bottom:none}
+.tasks li .box{flex:none;width:17px;height:17px;margin-top:3px;border:2px solid var(--ink-40);border-radius:4px;display:grid;place-items:center;font-size:11px;color:#fff;transition:all .25s}
+.tasks li.done .box{background:var(--c-ok);border-color:var(--c-ok)}
+.tasks li.done .t{color:var(--ink-40);text-decoration:line-through}
+.tasks code{font-family:var(--mono);font-size:12px;background:var(--ink-05,rgba(35,31,32,.05));padding:1px 6px;border-radius:5px}
+.progress{font-family:var(--mono);font-size:12px;color:var(--c-ok);margin-top:10px;letter-spacing:.06em}
+/* manual */
+.manual details{border-top:1px solid var(--ink-08);padding:9px 0}
+.manual details:first-of-type{border-top:none}
+.manual summary{cursor:pointer;font-size:13.5px;font-weight:700;list-style:none;display:flex;gap:8px;align-items:center}
+.manual summary::before{content:"▸";color:var(--c-cloud);transition:transform .2s}
+.manual details[open] summary::before{transform:rotate(90deg)}
+.manual summary code{font-family:var(--mono);font-size:12.5px;color:var(--accent)}
+.manual .mb{font-size:12.5px;color:var(--ink-60);padding:6px 0 4px 18px}
+.manual .mb code{font-family:var(--mono);font-size:12px;background:rgba(35,31,32,.05);padding:1px 5px;border-radius:4px}
+.hint{font-size:12px;color:var(--ink-40);margin-top:10px}
+.win{margin-top:14px;background:var(--ink);color:var(--bg);border-radius:10px;padding:16px 20px;display:none}
+.win.show{display:block;animation:pop .5s ease}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1}}
+.win b{color:#1cd5b0}
+footer{padding:26px 0 50px;color:var(--ink-40);font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="tag">FDE 训练营 · Day 5 交互仿真</div>
+    <h1>服务器命令行仿真<br><span style="font-weight:400;color:var(--ink-60)">黑窗口不可怕——它只是把鼠标点击换成了英语单词</span></h1>
+    <p class="lede">这是一个仿真终端：<b>不用真服务器，敲错也不会坏任何事</b>。按右侧任务卡完成 8 个任务——规矩只有一条：不许复制粘贴，每个字母自己敲。卡住就展开下面的命令手册。</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="layout">
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>learner@fde-server（仿真）</span></div>
+      <div class="term-body" id="body"></div>
+      <div class="term-input">
+        <span class="prompt" id="prompt">learner@fde-server:~$</span>
+        <input id="input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="在这里敲命令，回车执行（help 查看可用命令）">
+      </div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <h3>任务卡<span class="tag">8 TASKS</span></h3>
+        <ul class="tasks" id="tasks"></ul>
+        <div class="progress" id="progress"></div>
+        <div class="win" id="win">🎉 <b>全部完成！</b>你已经能用八句话指挥一台服务器了——回去把第 4 节练习的「完成标志」打上勾。</div>
+      </div>
+      <div class="panel manual">
+        <h3>命令手册<span class="tag">CHEATSHEET</span></h3>
+        <div id="manual"></div>
+        <p class="hint">手册是查的，不是背的。真服务器上命令一模一样。</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">FDE 训练营 · Day 5 · 服务器命令行仿真 —— 完成后回到课程第 4 节打卡</div></footer>
+
+<script>
+// ---------------- fake filesystem & state ----------------
+const FS = {
+  "/home/learner": ["deploy.sh", "notes.txt", "app/"],
+  "/home/learner/app": ["server.py", "logs/"],
+  "/home/learner/app/logs": ["server.log"],
+};
+let cwd = "/home/learner";
+let tailing = false;
+
+const TASKS = [
+  { re: /^pwd$/, hint: "pwd", label: "看自己在哪", cmd: "pwd" },
+  { re: /^ls( -[la]{1,2})?$/, hint: "ls -l", label: "看这里有什么", cmd: "ls -l" },
+  { re: /^mkdir( -p)? app\/logs$/, hint: "mkdir -p app/logs", label: "给日志安家", cmd: "mkdir -p app/logs" },
+  { re: /^cd app$/, hint: "cd app", label: "走进应用目录", cmd: "cd app" },
+  { re: /^curl (http:\/\/)?localhost:8000\/healthz$/, hint: "curl localhost:8000/healthz", label: "敲服务的门", cmd: "curl localhost:8000/healthz" },
+  { re: /^tail -f logs\/server\.log$/, hint: "tail -f logs/server.log", label: "盯实时日志（Ctrl+C 退出）", cmd: "tail -f logs/server.log" },
+  { re: /^chmod \+x deploy\.sh$/, hint: "chmod +x deploy.sh", label: "给脚本执行权", cmd: "chmod +x deploy.sh" },
+  { re: /^docker ps$/, hint: "docker ps", label: "看在跑的容器", cmd: "docker ps" },
+];
+const done = new Array(TASKS.length).fill(false);
+let nextIdx = 0;
+
+const MANUAL = [
+  ["pwd", "print working directory——「我在哪」。刚连上服务器先敲它。"],
+  ["ls / ls -l", "list——「这里有什么」。加 <code>-l</code> 看详细信息（权限、大小、时间）。"],
+  ["cd 目录名", "change directory——走进某个文件夹。<code>cd ..</code> 退回上一层。"],
+  ["mkdir -p 路径", "建文件夹；<code>-p</code> 表示父目录不存在就一起建。"],
+  ["curl 地址", "敲一下服务的门。返回 <code>200</code> = 服务活着；超时/拒绝 = 没起或挂了。"],
+  ["tail -f 文件", "盯着文件最后几行实时看（日志第一动作）。退出：<code>Ctrl+C</code>。"],
+  ["chmod +x 文件", "change mode——给文件「能执行」的权限。报 permission denied 时用它。"],
+  ["docker ps", "看哪些容器（集装箱）正在跑；加 <code>-a</code> 看全部（含已停止）。"],
+  ["clear", "清屏。窗口太乱时敲它。"],
+  ["help", "查看本仿真支持的全部命令。"],
+];
+
+// ---------------- terminal i/o ----------------
+const body = document.getElementById("body");
+const input = document.getElementById("input");
+const promptEl = document.getElementById("prompt");
+const tasksEl = document.getElementById("tasks");
+const progressEl = document.getElementById("progress");
+const winEl = document.getElementById("win");
+
+function scrollBottom(){ body.scrollTop = body.scrollHeight; }
+function line(html, cls){ const d = document.createElement("div"); d.className = cls || "out"; d.innerHTML = html; body.appendChild(d); scrollBottom(); }
+function printCmd(c){ line(`<span class="prompt">${promptText()}</span> <span class="cmd">${escapeHtml(c)}</span>`, "out"); }
+function promptText(){ return "learner@fde-server:" + cwd.replace("/home/learner", "~") + "$"; }
+function escapeHtml(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function renderTasks(){
+  tasksEl.innerHTML = TASKS.map((t,i)=>`<li class="${done[i]?'done':''}"><span class="box">${done[i]?'✓':''}</span><span class="t">${i+1}. <code>${t.cmd}</code> —— ${t.label}</span></li>`).join("");
+  const n = done.filter(Boolean).length;
+  progressEl.textContent = `进度 ${n} / ${TASKS.length}`;
+  winEl.classList.toggle("show", n === TASKS.length);
+}
+function renderManual(){
+  document.getElementById("manual").innerHTML = MANUAL.map(([c,d])=>`<details><summary><code>${c}</code></summary><div class="mb">${d}</div></details>`).join("");
+}
+
+// ---------------- command engine ----------------
+function exec(raw){
+  const c = raw.trim();
+  if (!c) return;
+  printCmd(c);
+  if (tailing){
+    if (c.toLowerCase() === "ctrl+c" || c === "^C"){ stopTail(); }
+    else line(`（正在 tail -f 中——按 <span class="sys">Ctrl+C</span> 退出，或直接输入 ctrl+c）`, "sys");
+    return;
+  }
+  const handled = runTask(c) || runBuiltin(c);
+  if (!handled){
+    line(`bash: ${escapeHtml(c.split(/\s+/)[0])}: command not found —— 这条命令仿真还没收录，试下 help`, "err");
+  }
+  renderTasks();
+}
+
+function runBuiltin(c){
+  if (c === "help"){
+    line(`可用命令：pwd · ls · cd · mkdir · curl · tail · chmod · docker · cat · echo · clear · whoami · ctrl+c`, "sys");
+    return true;
+  }
+  if (c === "clear"){ body.innerHTML = ""; return true; }
+  if (c === "whoami"){ line("learner"); return true; }
+  if (c === "pwd"){ line(cwd); return true; }
+  if (/^ls( -[la]{1,2})?$/.test(c)){
+    const items = FS[cwd] || [];
+    if (c.includes("-l")){
+      items.forEach(f => {
+        const dir = f.endsWith("/");
+        line(`${dir?"drwxr-xr-x":"-rw-r--r--"}  1 learner staff  ${dir?"128":(f==="deploy.sh"?"2.1K":"846")}  7月26日  ${f}`, "out");
+      });
+    } else line(items.join("   "));
+    return true;
+  }
+  if (/^cat /.test(c)){
+    const f = c.slice(4).trim();
+    if (f === "notes.txt"){ line("明天记得：先 curl 看服务活着没，再看日志。", "out"); }
+    else if (f === "logs/server.log" || f === "app/logs/server.log"){ line(LOG_LINES.join("\n")); }
+    else line(`cat: ${escapeHtml(f)}: No such file or directory`, "err");
+    return true;
+  }
+  if (/^echo /.test(c)){ line("（已写入——仿真里 echo 的内容不保存）", "sys"); return true; }
+  return false;
+}
+
+function runTask(c){
+  const i = TASKS.findIndex((t, idx) => !done[idx] && t.re.test(c));
+  if (i === -1){
+    // known command but not the pending task? allow repeats of completed tasks
+    const j = TASKS.findIndex(t => t.re.test(c));
+    if (j !== -1){ completeTask(j, true); return true; }
+    return false;
+  }
+  if (i !== nextIdx){
+    line(`（任务卡建议按顺序来——先完成第 ${nextIdx+1} 个：<span class="sys">${TASKS[nextIdx].hint}</span>）`, "sys");
+    return true;
+  }
+  completeTask(i, false);
+  return true;
+}
+
+const LOG_LINES = [
+  "2026-07-26 09:00:01 INFO  server started on :8000",
+  "2026-07-26 09:00:02 INFO  connected to database",
+  "2026-07-26 09:01:13 INFO  GET /healthz 200 2ms",
+  "2026-07-26 09:02:47 WARN  slow query 312ms",
+];
+
+function completeTask(i, repeat){
+  done[i] = true;
+  while (nextIdx < TASKS.length && done[nextIdx]) nextIdx++;
+  switch (i){
+    case 0: line("/home/learner"); break;
+    case 1: {
+      const items = FS[cwd] || [];
+      items.forEach(f => line(`${f.endsWith("/")?"drwxr-xr-x":"-rw-r--r--"}  1 learner staff  ${f.endsWith("/")?"128":"2.1K"}  7月26日  ${f}`));
+      break;
+    }
+    case 2:
+      if (!FS["/home/learner"].includes("app/")) FS["/home/learner"].push("app/");
+      line("（已创建 app/logs——以后应用的日志就住这里）", "ok");
+      break;
+    case 3: cwd = "/home/learner/app"; promptEl.textContent = promptText(); line(`（已进入 app 目录，提示符变成了 <span class="sys">${promptText()}</span>）`, "ok"); break;
+    case 4:
+      line(`{"status":"ok","uptime":"3d 4h"}`, "ok");
+      line("（返回 200——服务活着。「敲服务的门，看它应不应」就是这个动作）", "sys");
+      break;
+    case 5: startTail(); break;
+    case 6: line("（deploy.sh 现在可以执行了——权限问题就用 chmod +x）", "ok"); break;
+    case 7:
+      line("CONTAINER ID   IMAGE          STATUS         NAMES");
+      line("a1b2c3d4e5f6   weekbot:0.4    Up 3 days      weekbot-app");
+      line("f6e5d4c3b2a1   postgres:16    Up 3 days      weekbot-db");
+      line("（两个「集装箱」在跑：应用 + 数据库——第 3 节的内容亲眼看到了）", "sys");
+      break;
+  }
+}
+
+let tailTimer = null, tailN = 0;
+function startTail(){
+  tailing = true; tailN = 0;
+  line(LOG_LINES[0]); line(LOG_LINES[1]);
+  tailTimer = setInterval(()=>{
+    line(LOG_LINES[tailN % LOG_LINES.length] + (tailN>=LOG_LINES.length ? "" : ""));
+    tailN++;
+    if (tailN === LOG_LINES.length) line("……日志在滚动——按 <span class='sys'>Ctrl+C</span>（或输入 ctrl+c）退出", "sys");
+  }, 700);
+  line("（正在实时跟踪 server.log……）", "sys");
+}
+function stopTail(){
+  clearInterval(tailTimer); tailing = false;
+  line("^C", "sys");
+  line("（已退出 tail -f——它不是卡死，是在「跟着看」）", "ok");
+}
+
+input.addEventListener("keydown", (e)=>{
+  if (e.key === "Enter"){ const v = input.value; input.value = ""; exec(v); }
+  if (e.key === "c" && e.ctrlKey && tailing){ e.preventDefault(); printCmd("^C"); stopTail(); renderTasks(); }
+});
+document.querySelector(".term").addEventListener("click", ()=> input.focus());
+
+line("欢迎使用 FDE 服务器命令行仿真（与真实 Linux 命令一致，但怎么敲都不会坏）", "sys");
+line("先敲第一个命令：pwd ——看看你在哪。右侧有任务卡和命令手册。", "sys");
+renderTasks(); renderManual(); input.focus();
+</script>
+</body>
+</html>

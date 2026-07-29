@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>编排 + 确认点 + 执行日志</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:64px;line-height:1.12;margin-bottom:14px;max-width:14ch}
+.subtitle{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:30em;margin-bottom:12px}
+.card-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.card{border:1px solid var(--ink);padding:16px 20px;background:#fff;min-width:180px;flex:1}
+.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-60);margin-bottom:8px}
+.card strong{font-size:18px;display:block;margin-bottom:6px}
+.card span{font-size:15px;color:var(--ink-60);line-height:1.45}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);max-width:920px;margin-top:8px}
+.compare-col{padding:20px 24px;background:#fff}
+.compare-col:first-child{border-right:1px solid var(--ink)}
+.compare-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;margin-bottom:12px;color:var(--accent)}
+.compare-col ul{list-style:none;font-size:16px;line-height:1.65;color:var(--ink-60)}
+.compare-col li::before{content:"· ";color:var(--accent);font-weight:700}
+.flow{display:flex;align-items:stretch;gap:0;margin-top:12px;max-width:960px;border:1px solid var(--ink)}
+.flow-step{flex:1;padding:18px 16px;background:#fff;border-right:1px solid var(--ink);font-size:15px;line-height:1.5}
+.flow-step:last-child{border-right:none}
+.flow-step .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.checklist{border:1px solid var(--ink);background:#fff;margin-top:12px;max-width:920px}
+.checklist li{list-style:none;padding:14px 20px;border-bottom:1px solid rgba(35,31,32,.12);font-size:17px;display:flex;gap:12px;align-items:flex-start}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"□";font-family:var(--mono);color:var(--accent);font-weight:700;flex:none}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;margin-top:8px;flex:1;display:flex;flex-direction:column;min-height:0}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;flex:none}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:520px}
+.diagram-full .diagram-box{border:none;padding:0;background:transparent;margin:0}
+.diagram-full img{max-height:720px}
+.tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.tag{font-family:var(--mono);font-size:13px;padding:10px 16px;border:1px solid var(--ink);background:#fff}
+.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+
+</style>
+</head>
+<body>
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="116.78" data-width="1920" data-height="1080">
+<div class="stage-bg"></div>
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="25.56">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+    <h1 class="display" data-anim="t">施工三步：串联、装闸、记日志</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
+      <div class="card"><div class="k">02</div><strong>图纸在 orchestratio…</strong><span>n.md，三件工具已经齐。</span></div>
+      <div class="card"><div class="k">03</div><strong>现在三步：串联、装闸、记日志。</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-02-wire-skills" class="clip slide" data-track-index="1" data-start="25.81" data-duration="24.89">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>WIRE SKILLS</div>
+    <h1 class="display" data-anim="t">A 的输出喂给 B，B 的产…</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">01</div><strong>第一步串联：给 Agent 一条…</strong><span> workflow 指令，A 的输出喂给 B，B</span></div>
+      <div class="card"><div class="k">02</div><strong>第二步装闸：不可撤回的步骤前，A…</strong><span>gent 必须停，把草稿、关键数字、风险标红摆在</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-03-exec-log" class="clip slide" data-track-index="1" data-start="50.94" data-duration="21.11">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>EXEC LOG</div>
+    <h1 class="display" data-anim="t">每步一行：时间 | 步骤 |…</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">01</div><strong>第三步记日志：每执行一步，往 r…</strong><span>uns/ 追加一行，时间、步骤、结果。</span></div>
+      <div class="card"><div class="k">02</div><strong>指令里写清楚每步执行后追加到 r…</strong><span>uns/YYYYMMDD.md，Agent 来记</span></div>
+      <div class="card"><div class="k">03</div><strong>能回放，才算有案底，对吧。</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-04-reject-loop" class="clip slide" data-track-index="1" data-start="72.31" data-duration="23.11">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>REJECT LOOP</div>
+    <h1 class="display" data-anim="t">驳回有回路，不是断头路</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">01</div><strong>跑通之后别急着走，两条路径都要实测。</strong><span></span></div>
+      <div class="card"><div class="k">02</div><strong>批准走一遍，驳回也走一遍——比如…</strong><span>驳回：第二段数字不对，流水线得打回 B 重做，日</span></div>
+      <div class="card"><div class="k">03</div><strong>闸拦住一次不算本事，驳回了能退回…</strong><span>重做还留下记录，咱们这条线才算有回路，对吧。</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-05-log-replay" class="clip slide" data-track-index="1" data-start="95.67" data-duration="21.11">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>LOG REPLAY</div>
+    <h1 class="display" data-anim="t">只看日志复述今天发生了什么</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">01</div><strong>本节先到这里。</strong><span></span></div>
+      <div class="card"><div class="k">02</div><strong>最后两分钟，关掉屏幕别的窗口，只…</strong><span>看 runs/ 日志，复述今天发生了什么。</span></div>
+      <div class="card"><div class="k">03</div><strong>到闸停不停、批了动不动、驳回了回…</strong><span>不回得来——三个验收点全绿，第五节闸口实测才有底</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="116.78" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第九天 · 第 4 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="116.78" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="116.78" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="116.78" data-track-index="10" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.0, dur: 25.56 },
+  { id: "#slide-02-wire-skills", start: 25.81, dur: 24.89 },
+  { id: "#slide-03-exec-log", start: 50.94, dur: 21.11 },
+  { id: "#slide-04-reject-loop", start: 72.31, dur: 23.11 },
+  { id: "#slide-05-log-replay", start: 95.67, dur: 21.11 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.42);
+}
+function exit(id, tEnd) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd - 0.45);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
+}
+  enter("#slide-01-open", 0.0);
+  enter("#slide-02-wire-skills", 25.81);
+  enter("#slide-03-exec-log", 50.94);
+  enter("#slide-04-reject-loop", 72.31);
+  enter("#slide-05-log-replay", 95.67);
+  exit("#slide-01-open", 25.56);
+  exit("#slide-02-wire-skills", 50.7);
+  exit("#slide-03-exec-log", 72.05);
+  exit("#slide-04-reject-loop", 95.42);
+  exit("#slide-05-log-replay", 116.78);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+
+</script>
+</body>
+</html>

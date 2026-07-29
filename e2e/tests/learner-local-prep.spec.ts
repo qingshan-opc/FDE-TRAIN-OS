@@ -15,8 +15,8 @@ test("learner local prep tab copy prompt", async ({ page, context }) => {
     .click();
   await expect(page).toHaveURL(/\/app\/day\/1\?node=/);
 
-  await page.getByRole("button", { name: /6\. 今日交付规格：企业库存管理系统 Week1/ }).click();
-  await expect(page.getByRole("heading", { name: "今日交付规格：企业库存管理系统 Week1" })).toBeVisible();
+  await page.getByRole("button", { name: /4\. 实战：用 PM 提示词跑出你的第一份迷你 PRD/ }).click();
+  await expect(page.getByRole("heading", { name: "实战：用 PM 提示词跑出你的第一份迷你 PRD", exact: true })).toBeVisible();
 
   await page.getByRole("tab", { name: "本地实操" }).click();
   await expect(page.locator(".local-prep-panel")).toBeVisible();

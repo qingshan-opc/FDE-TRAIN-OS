@@ -1,0 +1,35 @@
+{
+  "total": 91.281,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 18.254
+    },
+    {
+      "id": "02-gate-three",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s02_course/tts/02-gate-three.wav",
+      "start": 18.504,
+      "duration": 18.254
+    },
+    {
+      "id": "03-trust-tier",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s02_course/tts/03-trust-tier.wav",
+      "start": 37.008,
+      "duration": 20.173
+    },
+    {
+      "id": "04-exec-log",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s02_course/tts/04-exec-log.wav",
+      "start": 57.431,
+      "duration": 16.8
+    },
+    {
+      "id": "05-trust-engineering",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s02_course/tts/05-trust-engineering.wav",
+      "start": 74.481,
+      "duration": 16.8
+    }
+  ]
+}

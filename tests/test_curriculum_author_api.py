@@ -8,7 +8,7 @@ import time
 import httpx
 import pytest
 
-BASE = "http://127.0.0.1:8760"
+from tests.constants import API_BASE as BASE
 
 
 @pytest.fixture(scope="module")

@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type TouchEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+  type SyntheticEvent,
+  type TouchEvent,
+} from "react";
 
 type Particle = {
   x: number;
@@ -13,12 +22,36 @@ function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function LandingHeroFocus({ src }: { src: string }) {
+export function LandingHeroFocus({ src, fallbackSrc }: { src: string; fallbackSrc?: string }) {
   const mediaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerRef = useRef({ x: 50, y: 58, active: false });
   const [active, setActive] = useState(false);
   const [pos, setPos] = useState({ x: 50, y: 58 });
+  const [imgSrc, setImgSrc] = useState(src);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
+  const useFallback = useCallback(() => {
+    if (fallbackSrc && imgSrc !== fallbackSrc) setImgSrc(fallbackSrc);
+  }, [fallbackSrc, imgSrc]);
+
+  const onImgError = useCallback(() => {
+    useFallback();
+  }, [useFallback]);
+
+  /** 上传失败常留下 1×1 占位图，会“加载成功”但首屏看起来像没图 */
+  const onImgLoad = useCallback(
+    (e: SyntheticEvent<HTMLImageElement>) => {
+      const img = e.currentTarget;
+      if (img.naturalWidth > 0 && img.naturalHeight > 0 && (img.naturalWidth < 8 || img.naturalHeight < 8)) {
+        useFallback();
+      }
+    },
+    [useFallback],
+  );
 
   const updatePointer = useCallback((clientX: number, clientY: number) => {
     const el = mediaRef.current;
@@ -152,8 +185,20 @@ export function LandingHeroFocus({ src }: { src: string }) {
       onTouchEnd={onLeave}
       aria-hidden="true"
     >
-      <img className="landing-hero__bg landing-hero__bg--blur" src={src} alt="" />
-      <img className="landing-hero__bg landing-hero__bg--sharp" src={src} alt="" />
+      <img
+        className="landing-hero__bg landing-hero__bg--blur"
+        src={imgSrc}
+        alt=""
+        onError={onImgError}
+        onLoad={onImgLoad}
+      />
+      <img
+        className="landing-hero__bg landing-hero__bg--sharp"
+        src={imgSrc}
+        alt=""
+        onError={onImgError}
+        onLoad={onImgLoad}
+      />
       <canvas ref={canvasRef} className="landing-hero__particles" />
       <div className="landing-hero__glow" />
       <div className="landing-hero__overlay" />

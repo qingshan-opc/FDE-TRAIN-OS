@@ -1,7 +1,15 @@
 day: 6
 project: LLM 理论日
-project_brief: 纯 LLM 理论日：把前五天「用过 AI」的体感升级为 18 词词典框架——生态四层、Token/窗口/幻觉、Prompt/Context/RAG、Eval/Guardrails/Vibe Coding、Agent/Harness/MCP/Workflow。产出个人
-  LLM 认知卡 llm-cognition-card.md，18 词抽测 ≥12/18 过闸。无新 Lab。
+project_brief: |-
+  今天不交长文报告。请提交一份 LLM 认知卡 llm-cognition-card.md（Markdown 即可）。
+
+  怎么做：
+  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
+  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；
+  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
+
+  过闸标准：六大主题齐全、每条有你的实例。18 词抽测在「概念验收」节点单独过。
 resources:
 - id: dg-llm-ecosystem
   title: 讲解图 · LLM 生态分层
@@ -48,6 +56,11 @@ resources:
   kind: doc
   summary: 18 词 + 自测 6 题 + 课程落点
   url: /course-assets/resources/glossary.md
+- id: tk-cognition-card
+  title: LLM 认知卡 · 搭档提示词
+  kind: download
+  summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
+  url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md
 capsule_extra:
   c1:
     resource_ids:
@@ -359,54 +372,7 @@ capsule_extra:
         - 用户手动执行
       - 1
       - 模型只「说我要调什么」；执行在 Harness。
-  c6:
-    resource_ids:
-    - glossary
-    - glossary-md
-    - dg-four-layer
-    media:
-    - kind: video
-      title: 口播课件 · 18 词验收
-      object_key: documents/shared/course-media/day06-c6-accept.mp4
-      poster_key: documents/shared/course-media/day06-c6-accept-poster.jpg
-      duration_sec: 116
-    knowledge_cards:
-    - id: gate-llm
-      term: GATE · LLM 认知过线
-      plain: 18 词抽测 ≥12/18 + LLM 认知卡六大主题有实例。
-      tag: 验收
-    - id: cognition-card
-      term: LLM 认知卡
-      plain: 六大主题×要点×前五天真实例——不许抄课件。
-      tag: 交付
-    glossary_terms:
-    - id: gt-glossary-18
-      term: 18 词词典
-      plain: 行业日常词汇随身工具——听到发懵回来查这一页。
-    quiz:
-    - - 今日 GATE 过线标准是？
-      - - 部署上云
-        - 18 词抽测 ≥12/18 + LLM 认知卡提交
-        - 写完 3000 行代码
-      - 1
-      - 纯理论日——验收认知，不是代码量。
-    - - LLM 认知卡每条要点必须配？
-      - - 一段抄课件的定义
-        - 前五天真实交付物或自己的类比
-        - 任意网络文章链接
-      - 1
-      - 要「你的」实例，不是「高级的」实例。
-    - - 18 词里「Hallucination」的核心对策组合是？
-      - - 更大模型
-        - RAG + Eval + Guardrails（可溯源+验收+降级）
-        - 不用 AI
-      - 1
-      - 幻觉是机制——用工程手段管理，不是 magic prompt。
-tools:
-- name: 18 词速查卡
-  note: class/schedule/index.html 词典节 + glossary.html
-- name: LLM 认知卡模板
-  note: 六大主题×2–3 要点×实例，提交 llm-cognition-card.md
+# 第 6 节「验收课」已撤：抽测走概念验收节点，收束靠企业任务认知卡。
 quiz:
 - - LLM 生态四层从底到顶的正确顺序是？
   - - 应用→编排→模型→基建
@@ -468,5 +434,5 @@ quiz:
     - 前端框架
   - 1
   - 同一模型换 Harness，能力天差地别。
-nodes_lab: 无 Lab（纯理论日；部署/V1.0 材料见旧 section 目录自学）
-nodes_project: 企业任务：提交 LLM 认知卡 llm-cognition-card.md + 18 词抽测过线
+# 纯理论日：无独立 Lab 节点（部署/V1.0 材料见 _archive/day-06-deploy/）
+nodes_project: 企业任务：提交 LLM 认知卡 llm-cognition-card.md

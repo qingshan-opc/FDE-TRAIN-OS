@@ -3,13 +3,25 @@ day: 6
 title: LLM 理论日：18 词过线
 week: 2
 project: LLM 理论日
-project_brief: 纯 LLM 理论日：把前五天「用过 AI」的体感升级为 18 词词典框架——生态四层、Token/窗口/幻觉、Prompt/Context/RAG、Eval/Guardrails/Vibe Coding、Agent/Harness/MCP/Workflow。产出个人
-  LLM 认知卡 llm-cognition-card.md，18 词抽测 ≥12/18 过闸。无新 Lab。
+project_brief: '今天不交长文报告。请提交一份 LLM 认知卡 llm-cognition-card.md（Markdown 即可）。
+
+
+  怎么做：
+
+  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+
+  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
+
+  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；
+
+  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
+
+
+  过闸标准：六大主题齐全、每条有你的实例。18 词抽测在「概念验收」节点单独过。'
 review_checklist:
-- 18 词抽测 ≥ **12/18**（AI 导师按节级题库随机抽问，解析必须看懂，不是蒙对）
-- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent，每主题
-  2–3 条要点，每条配前五天真实实例或自己的类比，无照抄）
-- 词典自测：能口头解释任意 3 个词给同桌听，同桌能复述核心一句
+- 18 词抽测 ≥ **12/18**（「Day6 概念验收」节点，解析必须看懂）
+- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；每主题
+  2–3 条要点，每条配前五天真实实例或自己的类比；可用「认知卡 · 搭档提示词」先梳骨架）
 resources:
 - id: dg-llm-ecosystem
   title: 讲解图 · LLM 生态分层
@@ -56,12 +68,17 @@ resources:
   kind: doc
   summary: 18 词 + 自测 6 题 + 课程落点
   url: /course-assets/resources/glossary.md
+- id: tk-cognition-card
+  title: LLM 认知卡 · 搭档提示词
+  kind: download
+  summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
+  url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:6
   - project:role-week
-  estimated_minutes: 120
+  estimated_minutes: 105
   require_capsules: true
   capsules:
   - id: c1
@@ -473,63 +490,6 @@ learn:
     - id: gt-copilot
       term: Copilot vs Agent
       plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
-  - id: c6
-    title: 验收：18 词抽测 + 认知卡过闸
-    minutes: 15
-    form: 验收
-    content_ref: class/bootcamp/day-06/section-06-accept-18words/lesson.md
-    content: '同学们，LLM 理论日最后一节——验收。两关：18 词抽测，和 LLM 认知卡。快测防的是没学，认知卡防的是没连起来——和前天的理论地图同一个逻辑，对吧。
-
-      第一关，随机抽 18 词里的 12 题，对 12 题过线。范围就是今天六节：生态四层、Token 幻觉、Prompt RAG、Eval 护栏、Agent MCP。考理解不考背诵——哪个词你只能背定义，说明那一节回去看讲解图，对吧。
-
-      第二关，LLM 认知卡 llm-cognition-card.md。六大主题，每个两到三条要点，每条配你前五天的真实例子——PRD、架构、摘要接口、Cursor 写过的页面都行。不许抄课件，要能 thirty 秒讲给同桌听，对吧。
-
-      过闸标准：抽测十二分之上；认知卡六大主题齐全；能口头向同桌解释任意三个词，同桌能复述核心一句。过了，第二周 的 Agent 和 Skill 才有共同语言，对吧。
-
-      六天前 LLM 是黑话；今天你有 18 个词的地图。带走一句：词典不是课文，是随身工具——听到任何词发懵，回来查这一页。LLM 理论日，毕业，对吧。'
-    practice: 完成标志：[ ] 抽测 ≥12/18；[ ] 认知卡已提交且六大主题齐全；[ ] 同桌互测签字（或聊天记录截图）。
-    resource_ids:
-    - glossary
-    - glossary-md
-    - dg-four-layer
-    quiz:
-    - - 今日 GATE 过线标准是？
-      - - 部署上云
-        - 18 词抽测 ≥12/18 + LLM 认知卡提交
-        - 写完 3000 行代码
-      - 1
-      - 纯理论日——验收认知，不是代码量。
-    - - LLM 认知卡每条要点必须配？
-      - - 一段抄课件的定义
-        - 前五天真实交付物或自己的类比
-        - 任意网络文章链接
-      - 1
-      - 要「你的」实例，不是「高级的」实例。
-    - - 18 词里「Hallucination」的核心对策组合是？
-      - - 更大模型
-        - RAG + Eval + Guardrails（可溯源+验收+降级）
-        - 不用 AI
-      - 1
-      - 幻觉是机制——用工程手段管理，不是 magic prompt。
-    media:
-    - kind: video
-      title: 口播课件 · 18 词验收
-      object_key: documents/shared/course-media/day06-c6-accept.mp4
-      poster_key: documents/shared/course-media/day06-c6-accept-poster.jpg
-      duration_sec: 116
-    knowledge_cards:
-    - id: gate-llm
-      term: GATE · LLM 认知过线
-      plain: 18 词抽测 ≥12/18 + LLM 认知卡六大主题有实例。
-      tag: 验收
-    - id: cognition-card
-      term: LLM 认知卡
-      plain: 六大主题×要点×前五天真实例——不许抄课件。
-      tag: 交付
-    glossary_terms:
-    - id: gt-glossary-18
-      term: 18 词词典
-      plain: 行业日常词汇随身工具——听到发懵回来查这一页。
 quiz:
   pass_rate: 0.67
   questions:
@@ -605,10 +565,10 @@ quiz:
     explain: 同一模型换 Harness，能力天差地别。
 nodes:
 - type: learn
-  title: 今日课节（6 节 · 120′）
+  title: 今日课节（5 节 · 105′）
 - type: quiz
   title: Day6 概念验收
 - type: project
-  title: 企业任务：提交 LLM 认知卡 llm-cognition-card.md + 18 词抽测过线
+  title: 企业任务：提交 LLM 认知卡 llm-cognition-card.md
 - type: review
   title: 交付自检与 GATE · LLM 认知过线

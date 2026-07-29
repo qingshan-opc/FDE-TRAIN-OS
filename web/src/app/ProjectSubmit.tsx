@@ -148,14 +148,17 @@ export function ProjectSubmit({
   const reviewFailed = submission?.status === "failed";
   const reviewPassed = submission?.status === "passed";
   const labNode = useMemo(() => day.nodes?.find((n) => n.kind === "lab"), [day.nodes]);
-  /** 无独立 Lab 节点的日子（如 Day5）：靠课节实验/附件交付，不堵在 Lab 证据上。 */
+  /** 无独立 Lab 节点的日子：靠附件交付，不堵在 Lab 证据上。 */
   const requiresLabEvidence = Boolean(labNode);
-  const needsSketchUpload = !requiresLabEvidence;
+  const requiresAttachment = !requiresLabEvidence;
+  const isHandDrawnArch = /手绘|架构图/.test(
+    String(node.title || "") + String(day.project_brief || node.refs?.brief || ""),
+  );
   const canSubmit =
     !locked &&
     !busy &&
     (!requiresLabEvidence || !!labEvidence) &&
-    (!needsSketchUpload || attachments.length > 0) &&
+    (!requiresAttachment || attachments.length > 0) &&
     reflection.trim().length >= 40 &&
     (!passed || reviewFailed);
   const promptResources = useMemo(
@@ -174,12 +177,15 @@ export function ProjectSubmit({
       toast.push("请先完成 Lab 并产出作品证据，再提交企业任务", "error");
       return;
     }
-    if (needsSketchUpload && attachments.length === 0) {
-      toast.push("请先上传手绘架构图照片", "error");
+    if (requiresAttachment && attachments.length === 0) {
+      toast.push(isHandDrawnArch ? "请先上传手绘架构图照片" : "请先上传交付附件（如认知卡 md）", "error");
       return;
     }
     if (reflection.trim().length < 40) {
-      toast.push("请写清复盘说明（至少 40 字，对着图讲四层）", "error");
+      toast.push(
+        isHandDrawnArch ? "请写清复盘说明（至少 40 字，对着图讲四层）" : "请写清复盘说明（至少 40 字）",
+        "error",
+      );
       return;
     }
     setBusy(true);
@@ -195,7 +201,7 @@ export function ProjectSubmit({
           reflection: reflection.trim(),
           attachment_ids: attachments.map((a) => a.id),
           lab_evidence_kind: labEvidence?.kind,
-          deliverable: needsSketchUpload ? "hand_drawn_arch_sketch" : undefined,
+          deliverable: isHandDrawnArch ? "hand_drawn_arch_sketch" : requiresAttachment ? "project_attachment" : undefined,
         },
       });
       const subRes = await submissionsApi.get({ camp_id: campId, day: day.day, node_id: node.id });
@@ -317,12 +323,18 @@ export function ProjectSubmit({
 
       <div className="panel stack">
         <div className="field">
-          <label htmlFor="project-reflection">复盘说明（对着图讲清四层）</label>
+          <label htmlFor="project-reflection">
+            {isHandDrawnArch ? "复盘说明（对着图讲清四层）" : "复盘说明"}
+          </label>
           <textarea
             id="project-reflection"
             className="practice-no-clipboard"
             rows={5}
-            placeholder="用 8–12 句话讲：这是什么项目、四层各有什么、关键箭头为什么这样连、下一步你会改哪一层…"
+            placeholder={
+              isHandDrawnArch
+                ? "用 8–12 句话讲：这是什么项目、四层各有什么、关键箭头为什么这样连、下一步你会改哪一层…"
+                : "简述你交了什么、哪几条现在能 30 秒讲清、下一步会补哪块…"
+            }
             value={reflection}
             disabled={locked || busy}
             onChange={(e) => setReflection(e.target.value)}
@@ -331,7 +343,13 @@ export function ProjectSubmit({
         </div>
 
         <div className="field">
-          <label>{requiresLabEvidence ? "附件（可选）" : "手绘架构图照片（必传）"}</label>
+          <label>
+            {requiresLabEvidence
+              ? "附件（可选）"
+              : isHandDrawnArch
+                ? "手绘架构图照片（必传）"
+                : "交付附件（必传）"}
+          </label>
           {attachments.length > 0 && (
             <ul style={{ margin: "0 0 8px", paddingLeft: 18 }}>
               {attachments.map((a) => (

@@ -33,8 +33,13 @@
 | `Day 5` | `第五天` |
 | `Day 1–4` | `前四天` |
 | `Week 1` / `Week 2` | `第一周` / `第二周` |
+| `学生自检三问——答得出才算听懂` | `我问三句，你们心里答得上，这节才算听明白` |
+| `整仓` | `整个代码仓库` |
+| PPT 贴口播全文 / `oral_cards` 回退 | 显式 `ppt:` 卡（讲解图 + 概念要点） |
 
 **不改**：目录 slug `day-05`、脚本 `--day 5`、MinIO key `day05-c1-…`
+
+**框架级课节**（五阶段 / 四层梯子）：见 [framework-stage-teach.md](framework-stage-teach.md)；金标准 `day05_s02.yaml`。
 
 ## 段长
 

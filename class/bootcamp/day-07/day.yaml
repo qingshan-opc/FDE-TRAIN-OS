@@ -85,7 +85,7 @@ capsule_extra:
       title: 口播课件 · 系统 vs 能力
       object_key: documents/shared/course-media/day07-c1-system-skill.mp4
       poster_key: documents/shared/course-media/day07-c1-system-skill-poster.jpg
-      duration_sec: 216
+      duration_sec: 289
   c2:
     resource_ids:
     - dg-skill-anatomy
@@ -296,51 +296,6 @@ capsule_extra:
       object_key: documents/shared/course-media/day07-c5-run-evidence.mp4
       poster_key: documents/shared/course-media/day07-c5-run-evidence-poster.jpg
       duration_sec: 113
-  c6:
-    resource_ids:
-    - dg-skill-anatomy
-    - glossary
-    knowledge_cards:
-    - id: gate7-three
-      term: Skill 三问
-      plain: 它做什么（输入→输出）？步骤谁定？好坏谁判？
-      tag: 验收
-    - id: gate7
-      term: GATE 7
-      plain: 现场运行 + 产出过验收 + 说明书含可判标准 + commit 进 Git。
-      tag: 闸门
-    glossary_terms:
-    - id: gt-gate7
-      term: GATE 7
-      plain: Day 7 日验收闸：Skill 可运行、证据可复查、三问能口答。
-    quiz:
-    - - Skill 三问里「好坏谁判」对应说明书的哪个部件？
-      - - 输入
-        - 验收
-        - 步骤
-      - 1
-      - 验收标准必须可判对错——不能是「我觉得还行」。
-    - - GATE 7 的 commit 信息应包含什么？
-      - - fix: 随便改改
-        - feat: 第一个 Skill——<你的 Skill 名>
-        - docs: 更新 README
-      - 1
-      - 里程碑 commit 让 Git 历史能讲演进故事（Day 10 证据
-    - - 同学 Skill 能跑但没有 runs/ 记录，应如何判定？
-      - - 通过，跑过就行
-        - 打回——证据不可复查
-        - 通过，明天再补
-      - 1
-      - 可检查的证据是 GATE 7 硬标准，不是可选项。
-    tools:
-    - name: GATE 7 清单
-      note: 三问口答 + 现场运行 + 证据 + commit
-    media:
-    - kind: video
-      title: 口播课件 · Skill 三问
-      object_key: documents/shared/course-media/day07-c6-accept.mp4
-      poster_key: documents/shared/course-media/day07-c6-accept-poster.jpg
-      duration_sec: 98
 quiz:
 - - Week 2 的主线换档是？
   - - 从写代码到写文档

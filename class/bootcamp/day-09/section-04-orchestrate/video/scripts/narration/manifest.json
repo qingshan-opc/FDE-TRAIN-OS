@@ -8,15 +8,27 @@
     "file": "02-wire-skills.txt"
   },
   {
-    "id": "03-exec-log",
-    "file": "03-exec-log.txt"
+    "id": "03-install-gate",
+    "file": "03-install-gate.txt"
   },
   {
-    "id": "04-reject-loop",
-    "file": "04-reject-loop.txt"
+    "id": "04-exec-log",
+    "file": "04-exec-log.txt"
   },
   {
-    "id": "05-log-replay",
-    "file": "05-log-replay.txt"
+    "id": "05-approve-path",
+    "file": "05-approve-path.txt"
+  },
+  {
+    "id": "06-reject-loop",
+    "file": "06-reject-loop.txt"
+  },
+  {
+    "id": "07-log-replay",
+    "file": "07-log-replay.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

@@ -4,19 +4,27 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-upstream-input",
-    "file": "02-upstream-input.txt"
+    "id": "02-speed-reuse",
+    "file": "02-speed-reuse.txt"
   },
   {
-    "id": "03-send-guard",
-    "file": "03-send-guard.txt"
+    "id": "03-upstream-input",
+    "file": "03-upstream-input.txt"
   },
   {
-    "id": "04-align-check",
-    "file": "04-align-check.txt"
+    "id": "04-send-guard",
+    "file": "04-send-guard.txt"
   },
   {
-    "id": "05-close",
-    "file": "05-close.txt"
+    "id": "05-align-check",
+    "file": "05-align-check.txt"
+  },
+  {
+    "id": "06-draw-vs-build",
+    "file": "06-draw-vs-build.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

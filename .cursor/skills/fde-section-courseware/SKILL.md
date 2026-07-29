@@ -21,7 +21,9 @@ description: >-
 - 修改 `lesson.md` 后需同步口播与 PPT
 - 口播过稿通过后跑 TTS→成片→MinIO
 
-**自主原则**：少问多做；缺 GPU/密钥再问；**用户未确认口播前禁止 TTS/渲染**。
+**自主原则**：少问多做；缺 GPU/密钥再问；**用户未确认口播前禁止 TTS/渲染**。用户明确说「合成 / 重渲 / 跑流水线」视为过稿授权。跳过已撤 `accept` 验收节；Day10 答辩节保留。
+
+**实操必带提示词**：凡 `practice.md` 含动手任务，必须有二级标题 `## 一键粘贴提示词` + ` ```text ` 代码块（给 Cursor / Agent / 任意 AI 搭档整段复制）。概念口答节也要给「教练提示词」。尖括号 `〈〉` 标可替换项。
 
 ---
 
@@ -36,7 +38,9 @@ description: >-
 | day.yaml 字段 | `class/bootcamp/day-05/day.yaml` → `capsule_extra.cN` |
 | 节序映射 | `scripts/bootcamp_sections.py`（勿手改 SECTION_DIRS） |
 
-子规范：[visual-format.md](visual-format.md) · [diagram-density.md](diagram-density.md) · [pipeline-commands.md](pipeline-commands.md) · [oral-colloquial.md](oral-colloquial.md)
+子规范：[visual-format.md](visual-format.md) · [diagram-density.md](diagram-density.md) · [pipeline-commands.md](pipeline-commands.md) · [oral-colloquial.md](oral-colloquial.md) · [framework-stage-teach.md](framework-stage-teach.md)
+
+**框架细讲金标准**：`scripts/section_narrations/day05_s02.yaml`（企业数字化五阶段 · 一段一级）
 
 ---
 

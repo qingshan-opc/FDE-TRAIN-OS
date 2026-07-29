@@ -168,7 +168,7 @@ learn:
       tag: 方法
     - id: evidence-map
       term: 证据地图
-      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM(D5) → Skill(D7-9) → Git(全程)。
+      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM+SSE(D6) → Skill(D7-9) → Git(全程)。
       tag: 结构
     glossary_terms:
     - id: gt-evidence-thinking
@@ -233,9 +233,9 @@ learn:
       term: defense-outline.md
       plain: 答辩提纲一页纸：演示路径 / 架构三点 / 迭代五要素 / 诚实声明。
   - id: c4
-    title: 答辩与互评
+    title: 答辩与互评（现场）
     minutes: 30
-    form: 验收
+    form: 答辩
     content_ref: class/bootcamp/day-10/section-04-defense/lesson.md
     content: '同学们，上台了。每人八分钟，作品三加架构三加故事二，响铃就停。规则简单：讲得清、拦得住、查得了、迭代真——四个维度，就是你的毕业成绩单。第一个上的别紧张，评委还没建立比较基准呢，对吧。
 

@@ -64,14 +64,9 @@
 
 **FDE 默认**：Prompt + RAG + Eval 三板斧，Fine-tune 写进「以后再说」。
 
-## 🎬 口播稿（约 6 段 · 待审）
+## 🎬 口播稿（6 段 · 课堂口语风格 · 待过审）
 
-> 同学们，第三节四个词：Prompt、Context Engineering、RAG、Fine-tuning vs Prompting。第一天 你们解剖过 PM 提示词——今天升级到系统视角：不是写一段话，而是设计一次调用的视野。
-> Prompt 工程是给模型的任务说明书：角色、背景、任务、约束、输出格式。PM Agent 提示词就是标准件——可迭代、可验收。坏 Prompt 的特征：没说清输出格式，没说清不许做什么。好 Prompt：工程师看完不用回来问第二遍，对吧。
-> Context Engineering 是决定这次调用放什么进窗口。给少了——模型瞎编；给多了——它迷失在中间。驾驶舱摘要：该放 PRD 片段还是整份 DB Schema？放最新用户消息还是全历史？这是手艺，不是玄学，对吧。
-> RAG 检索增强生成：先从资料库捞相关片段——向量库、关键词、企业 Wiki——再让模型基于片段回答。治幻觉的主流药方之一。流程：切块、嵌入、检索、拼进 Prompt、生成。你们驾驶舱基于本周数据生成摘要就是简化版 RAG 思想，对吧。
-> Fine-tuning 改模型权重，贵、慢、持久；Prompting 改给模型的话，快、便宜。90% 场景先用后者。只有当你需要固定风格、固定格式、且 Prompt 怎么写都不稳，才考虑 Fine-tune。别一上来就我们要训一个模型——FDE 先验收 Prompt 方案，对吧。
-> 收束：Prompt 是说明书，Context 是装填术，RAG 是外挂记忆，Fine-tune 是最后手段。下一节 Eval 和 Guardrails——怎么给 AI 出考卷、怎么拦越界，对吧。
+> 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
 
 
 ## 常见懵点

@@ -5,17 +5,17 @@
           <text x="40" y="110" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">APPLICATION</text>
           <text x="40" y="132" font-size="11.5" fill="rgba(35,31,32,.55)">直接为人服务的产品</text>
 
-          <text x="40" y="210" font-size="17" font-weight="800" fill="#231f20">协议与工具层</text>
-          <text x="40" y="234" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">PROTOCOL·TOOLS</text>
-          <text x="40" y="256" font-size="11.5" fill="rgba(35,31,32,.55)">模型与世界的接口</text>
+          <text x="40" y="210" font-size="17" font-weight="800" fill="#231f20">编排层</text>
+          <text x="40" y="234" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">ORCHESTRATION</text>
+          <text x="40" y="256" font-size="11.5" fill="rgba(35,31,32,.55)">控制模型怎么干活</text>
 
-          <text x="40" y="334" font-size="17" font-weight="800" fill="#231f20">平台层</text>
-          <text x="40" y="358" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">PLATFORM</text>
-          <text x="40" y="380" font-size="11.5" fill="rgba(35,31,32,.55)">模型怎么被跑起来</text>
+          <text x="40" y="334" font-size="17" font-weight="800" fill="#231f20">模型层</text>
+          <text x="40" y="358" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">MODEL</text>
+          <text x="40" y="380" font-size="11.5" fill="rgba(35,31,32,.55)">能力的源头</text>
 
-          <text x="40" y="458" font-size="17" font-weight="800" fill="#231f20">模型层</text>
-          <text x="40" y="482" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">MODEL</text>
-          <text x="40" y="504" font-size="11.5" fill="rgba(35,31,32,.55)">能力的源头</text>
+          <text x="40" y="458" font-size="17" font-weight="800" fill="#231f20">基建层</text>
+          <text x="40" y="482" font-size="10.5" letter-spacing="1.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">INFRA</text>
+          <text x="40" y="504" font-size="11.5" fill="rgba(35,31,32,.55)">算力 · 网关 · 托管</text>
         </g>
 
         <!-- 应用层 L4 -->
@@ -32,7 +32,7 @@
           <text x="666" y="97" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">部门驾驶舱 ← 你在这里</text>
         </g>
 
-        <!-- 协议与工具层 L3 -->
+        <!-- 编排层 L3 -->
         <rect x="200" y="164" width="620" height="104" fill="none" stroke="#231f20" stroke-width="1.5"/>
         <text x="806" y="184" text-anchor="end" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">L3</text>
         <g>
@@ -46,28 +46,28 @@
           <text x="664" y="221" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">Harness</text>
         </g>
 
-        <!-- 平台层 L2 -->
+        <!-- 模型层 L2 -->
         <rect x="200" y="288" width="620" height="104" fill="none" stroke="#231f20" stroke-width="1.5"/>
         <text x="806" y="308" text-anchor="end" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">L2</text>
         <g>
-          <rect x="346" y="322" width="122" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="407" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">API 网关 · 云托管</text>
-          <rect x="482" y="322" width="124" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="544" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">本地推理 · Ollama</text>
-          <rect x="620" y="322" width="54" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="647" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">vLLM</text>
+          <rect x="223" y="322" width="192" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="319" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">闭源 · GPT·Claude·Gemini</text>
+          <rect x="429" y="322" width="206" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="532" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">开源 · Qwen·DeepSeek·Llama</text>
+          <rect x="649" y="322" width="148" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="723" y="345" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">国内 · Kimi·智谱·豆包</text>
         </g>
 
-        <!-- 模型层 L1 -->
+        <!-- 基建层 L1 -->
         <rect x="200" y="412" width="620" height="104" fill="none" stroke="#231f20" stroke-width="1.5"/>
         <text x="806" y="432" text-anchor="end" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">L1</text>
         <g>
-          <rect x="223" y="446" width="192" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="319" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">闭源 · GPT·Claude·Gemini</text>
-          <rect x="429" y="446" width="206" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="532" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">开源 · Qwen·DeepSeek·Llama</text>
-          <rect x="649" y="446" width="148" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
-          <text x="723" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">国内 · Kimi·智谱·豆包</text>
+          <rect x="346" y="446" width="122" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="407" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">API 网关 · 云托管</text>
+          <rect x="482" y="446" width="124" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="544" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">本地推理 · Ollama</text>
+          <rect x="620" y="446" width="54" height="36" fill="#f2f5f0" stroke="#231f20" stroke-width="1.2"/>
+          <text x="647" y="469" text-anchor="middle" font-size="11.5" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">vLLM</text>
         </g>
 
         <!-- 右侧纵轴注解 -->

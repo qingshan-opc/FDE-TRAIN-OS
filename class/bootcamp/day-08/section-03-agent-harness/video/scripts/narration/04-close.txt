@@ -1,1 +1,0 @@
-步骤你定死，是 workflow；路径它现想，是 agent。记住这句：**能 workflow 的别 agent**——企业场景里，可预测是第一美德。明天我们学 workflow，今天先让 agent 跑起来给你看。」

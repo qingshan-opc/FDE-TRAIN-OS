@@ -3,23 +3,24 @@ day: 6
 title: LLM 理论日：18 词过线
 week: 2
 project: LLM 理论日
-project_brief: '今天不交长文报告。请提交一份 LLM 认知卡 llm-cognition-card.md（Markdown 即可）。
+project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
 
 
-  怎么做：
+  认知卡怎么做：
 
   1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
 
   2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
 
-  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；
+  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
 
   4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
 
 
-  过闸标准：六大主题齐全、每条有你的实例。18 词抽测在「概念验收」节点单独过。'
+  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
 review_checklist:
-- 18 词抽测 ≥ **12/18**（「Day6 概念验收」节点，解析必须看懂）
+- 第 1 节：能口述「一次性响应 vs SSE」；**DeepSeek + SSE** 最小接电跑通（或书面 blocker + 降级，经助教确认）
+- 日级快测过线（解析必须看懂）；目标对齐「18 词认知」——题库与词典对照复习
 - 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；每主题
   2–3 条要点，每条配前五天真实实例或自己的类比；可用「认知卡 · 搭档提示词」先梳骨架）
 resources:
@@ -78,35 +79,18 @@ learn:
   - camp:v0.7
   - day:6
   - project:role-week
-  estimated_minutes: 105
+  estimated_minutes: 115
   require_capsules: true
   capsules:
   - id: c1
-    title: 生态四层地图：你在哪一层
-    minutes: 20
-    form: 概念
+    title: 生态四层地图 + API/SSE 接入
+    minutes: 30
+    form: 概念+实战
     content_ref: class/bootcamp/day-06/section-01-ecosystem-four-layers/lesson.md
-    content: '同学们，第六天了。前五天呢，你们用过 ChatGPT，写过 Prompt，第五天还调过那个摘要接口——AI 用是用了，可你真要问"这玩意儿到底是怎么运作的"，估计大部分人说不太清。今天咱们不写代码了，就把这些天用过的东西，从根上捋一遍。第一节先把整张生态地图铺开，品牌名不用记，记一个问题就行：我以后干活，到底在生态的哪一层，对吧。
+    content: '过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。
 
-
-      先说最底下这层，LLM，大语言模型。它到底在干嘛呢？就一件事：猜下一个词。你给它一段话，它就琢磨"接下来最可能接啥"，然后一个词一个词往外蹦。GPT-4 啊、Claude 啊、还有咱们用的 DeepSeek，名字不一样，底下都是这个活儿。还记得第五天那个比方吗——它就是个认字特别快的实习生，但你别拿它当字典查，它没核实过，嘛。
-
-
-      整个生态呢，分四层，从下往上：基建、模型、编排、应用。打个比方，就当一栋楼。基建是地基水电——GPU、算力、向量库，盖楼先得有这些；模型层是楼层本身，GPT、Claude、DeepSeek 这些牌子；编排层是装修，Prompt、RAG、Agent，把毛坯房装成能住人的样子；应用层就是你开的店，驾驶舱、客服、写作助手，对吧。
-
-
-      那问题来了，你在哪层？同学们记好，咱们主要在顶上两层干活——编排和应用。啥意思？就是定方向、验货、把模型接到自己的业务里去。换模型，那是换模型层的牌子，不归你管；地基更不用你操心。这个定位记牢，后面九天你动手的地方，全在这两层，嘛。
-
-
-      模型层有个事儿得说清楚，就是开源还是闭源。别被这俩词绕进去，真正的区别是——你是调别人 API 呢，还是把模型下载到自己机器上跑。GPT、Claude 这种闭源的，只能调 API，按用了多少 Token 付钱，省心。DeepSeek、Qwen
-      这种是开源的，权重能下载，你想省钱、怕数据外泄，就自己买机器部署。但注意啊，开源的也能调 API——咱们这门课，就是用 DeepSeek 的 API 接进来的，又便宜又不用自己运维，对吧。所以不是非此即彼，看你图啥：要能力、要省钱、还是要数据不出门，自己掂量。
-
-
-      还有个词儿，多模态。啥意思呢，就是这模型不光会认字，还能看图、听声音、甚至出图。但咱们这门课的驾驶舱，刻意只用文本——摘要、问答、调工具，就这些。为啥？你得让模型干它擅长的活儿，别拿一个文字模型硬去认图，那是为难它。知道它几斤几两、能干啥不能干啥，比啥都重要，嘛。
-
-
-      好，第一节收一下。四层地图，基建、模型、编排、应用，你在顶上两层。今天讲的 18 个词儿，全都是从这四层里长出来的。带走一句：这些词不是课文，背完就完——它是你的随身工具，以后哪天听见个词发懵，回来翻这一页就行。下一节咱们拆 Token、上下文窗口、还有幻觉，对吧。'
-    practice: 完成标志：[ ] 四层名称顺序正确，且各举一个具体产品/动作；[ ] 能 30 秒向同桌解释「FDE 主要在 L3/L4」；[ ] 说清 LLM ≠ 事实库，输出要验收。
+      真相源：`scripts/section_narrations/day06_s01.yaml`。'
+    practice: 完成标志：[ ] 四层名称顺序正确，且各举一个具体产品/动作；[ ] 能向同桌说清：API 是调用方式，SSE 是流式通道，助手位建议 SSE；[ ] SSE 最小接电跑通（或书面记录 blocker + 降级方案，经助教确认）。
     resource_ids:
     - dg-llm-ecosystem
     - dg-four-layer
@@ -130,12 +114,24 @@ learn:
         - 多模态太贵不能用
       - 1
       - 知道多模态存在，但训练聚焦文本链路——边界意识是 FDE 基本功。
+    - - API 和 SSE 的正确关系是？
+      - - SSE 是另一家模型供应商
+        - API 是调用入口；SSE 常是流式返回通道（stream）
+        - 有了 SSE 就不必调 API
+      - 1
+      - 别对立：先打到模型 endpoint，再用 SSE 一段段收。
+    - - 驾驶舱助手位本课建议怎么接？
+      - - 只等整包 JSON，别流式
+        - DeepSeek 等云 API + SSE 流式；Key 不进前端
+        - 必须自建 GPU 集群
+      - 1
+      - 体感与可中断靠 SSE；密钥与降级是工程底线。
     media:
     - kind: video
       title: 口播课件 · 生态四层地图
       object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
       poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
-      duration_sec: 195
+      duration_sec: 496
     knowledge_cards:
     - id: llm-core
       term: LLM · 大语言模型
@@ -151,15 +147,26 @@ learn:
       tag: 选型
     - id: multimodal-bound
       term: 多模态边界
-      plain: 不只文本还能看图听音；本课驾驶舱只用文本能力。
+      plain: 不只文本还能看图听音；本课驾驶舱先盯文本 + SSE。
       tag: 边界
+    - id: sse-stream
+      term: SSE · Server-Sent Events
+      plain: 服务端按事件/Token 一段段推给浏览器；Chat 流式常用。助手位建议 SSE，不是另一种供应商。
+      tag: 接入
+    - id: api-vs-sse
+      term: 一次性响应 vs SSE
+      plain: 一次性等整包 JSON；SSE 边收边显示。API 是调用入口，SSE 是流式通道。
+      tag: 接入
     glossary_terms:
     - id: gt-llm
       term: LLM
       plain: 大语言模型：预测下一个 Token，不是核实过的事实库。
     - id: gt-open-closed
       term: 开源 vs 闭源
-      plain: API 省心按量付；开源权重自部署换隐私与成本。
+      plain: 云 API 省心按量付；权重自部署换隐私与成本。
+    - id: gt-sse
+      term: SSE
+      plain: Server-Sent Events；流式返回通道，挂在 stream 接口上。
     - id: gt-multimodal
       term: 多模态
       plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
@@ -168,18 +175,7 @@ learn:
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-02-token-window-hallucination/lesson.md
-    content: '同学们，第二节，聊三个绑在一起的词：Token、上下文窗口、幻觉。你们调 API 时会看到 max_tokens、usage——今天搞懂它，以后就不会奇怪为什么对话越长越贵、越慢。
-
-      Token 是模型读写的最小单位，不是一个字。英文 roughly 一个单词，中文 roughly 半个到一个字。GPT-4o 按输入输出 Token 计费——所以压缩 Prompt、清掉废话，是真省钱。Cursor 里贴整份 repo，就是在烧
-      Token，对吧。
-
-      上下文窗口是一次性能看到的 Token 上限。Claude 3.5 常见 200K，GPT-4o 128K——听起来很大，但一份 PRD 加架构加接口契约加聊天记录，很快就满。满了怎么办？截断旧的、摘要压缩、或者 RAG 只检索相关段——第三节细讲，对吧。
-
-      幻觉 Hallucination：模型永远给最像真的答案，不是核实过的答案。你问一个不存在的论文，它也会编 DOI——这是机制，不是偶发 bug。所以 FDE 的铁律：关键事实必须可溯源，RAG 或人工验收，不能盲信，对吧。
-
-      能力边界三句话：擅长模式匹配和语言生成；不擅长实时数据、精确计算、未训练过的私有事实；输出必须验收。驾驶舱摘要接口——模型写得好不好，你得对照 Rubric，对吧。
-
-      记住：Token 是钱也是注意力；窗口是硬顶；幻觉是常态所以要验收。下一节 Prompt 和 RAG——怎么把有限窗口用在刀刃上，对吧。'
+    content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
     practice: 完成标志：[ ] 能解释 input/output Token 与账单的关系；[ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策；[ ] 说清「验收」比「再 prompt 一次」优先。
     resource_ids:
     - dg-llm-capability
@@ -208,7 +204,7 @@ learn:
       title: 口播课件 · Token / 窗口 / 幻觉
       object_key: documents/shared/course-media/day06-c2-token.mp4
       poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
-      duration_sec: 171
+      duration_sec: 373
     knowledge_cards:
     - id: token-meter
       term: Token 计量
@@ -234,18 +230,7 @@ learn:
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-03-prompt-context-rag/lesson.md
-    content: '同学们，第三节四个词：Prompt、Context Engineering、RAG、Fine-tuning vs Prompting。第一天 你们解剖过 PM 提示词——今天升级到系统视角：不是写一段话，而是设计一次调用的视野。
-
-      Prompt 工程是给模型的任务说明书：角色、背景、任务、约束、输出格式。PM Agent 提示词就是标准件——可迭代、可验收。坏 Prompt 的特征：没说清输出格式，没说清不许做什么。好 Prompt：工程师看完不用回来问第二遍，对吧。
-
-      Context Engineering 是决定这次调用放什么进窗口。给少了——模型瞎编；给多了——它迷失在中间。驾驶舱摘要：该放 PRD 片段还是整份 DB Schema？放最新用户消息还是全历史？这是手艺，不是玄学，对吧。
-
-      RAG 检索增强生成：先从资料库捞相关片段——向量库、关键词、企业 Wiki——再让模型基于片段回答。治幻觉的主流药方之一。流程：切块、嵌入、检索、拼进 Prompt、生成。你们驾驶舱基于本周数据生成摘要就是简化版 RAG 思想，对吧。
-
-      Fine-tuning 改模型权重，贵、慢、持久；Prompting 改给模型的话，快、便宜。90% 场景先用后者。只有当你需要固定风格、固定格式、且 Prompt 怎么写都不稳，才考虑 Fine-tune。别一上来就我们要训一个模型——FDE
-      先验收 Prompt 方案，对吧。
-
-      收束：Prompt 是说明书，Context 是装填术，RAG 是外挂记忆，Fine-tune 是最后手段。下一节 Eval 和 Guardrails——怎么给 AI 出考卷、怎么拦越界，对吧。'
+    content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
     practice: 完成标志：[ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）；[ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别；[ ] Fine-tune 何时才考虑（一句）。
     resource_ids:
     - dg-context-assembly
@@ -280,7 +265,7 @@ learn:
       title: 口播课件 · Prompt / Context / RAG
       object_key: documents/shared/course-media/day06-c3-rag.mp4
       poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
-      duration_sec: 181
+      duration_sec: 327
     knowledge_cards:
     - id: prompt-eng
       term: Prompt 工程
@@ -313,18 +298,7 @@ learn:
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-04-eval-guardrails-vibe/lesson.md
-    content: '同学们，第四节三个词，都是你们已经在做、但今天给名字：Eval、Guardrails、Vibe Coding。训练营全程练的是带验收的 vibe coding——自然语言描述意图让 AI 写代码，爽点是真的，背锅也是真的。
-
-      Eval 评测：给 AI 产物出考卷。固定题库、明确判分、可重复跑——代替我觉得还行。第一天 的 Rubric、快测的选择题，都是 Eval 的朴素版。上线前：准备 20 条边界 case，模型改版后重跑，分数掉了就别发版，对吧。
-
-      Guardrails 护栏：拦在输入输出上的规则。什么不许问——比如要别人员工工资；什么不许答——比如没检索到就瞎编政策；越界怎么办——拒答、转人工、降级模板。企业驾驶舱必须有：敏感词、空结果、超时，三条降级路径，对吧。
-
-      Vibe Coding 氛围编程：Cursor、Copilot、Claude Code——你描述意图，AI 写 diff。第三天 大头 HTML 是 AI 写的，对吧。但验收不能 vibe：接口返回 200 不够，要对契约；摘要对不上数据，要回滚
-      Prompt。会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
-
-      三角关系：Eval 告诉你好不好；Guardrails 告诉你敢不敢上线；Vibe Coding 是生产力杠杆。缺 Eval 是盲飞；缺 Guardrails 是裸奔；缺验收的 Vibe 是技术债工厂，对吧。
-
-      带走一句：我觉得还行不是验收标准，Eval 才是。下一节 Agent 全家桶——Harness、MCP、Workflow 和 Agent 怎么分，对吧。'
+    content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
     practice: 完成标志：[ ] 5 条 case 可被第三方客观判过/不过；[ ] 说清一条 Guardrails 降级策略（空结果）；[ ] 举自己 vibe 写代码的一次经历 + 怎么验收的。
     resource_ids:
     - dg-llm-ecosystem
@@ -353,7 +327,7 @@ learn:
       title: 口播课件 · Eval / Guardrails / Vibe Coding
       object_key: documents/shared/course-media/day06-c4-eval.mp4
       poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
-      duration_sec: 167
+      duration_sec: 272
     knowledge_cards:
     - id: eval-core
       term: Eval · 评测
@@ -382,24 +356,7 @@ learn:
     minutes: 25
     form: 概念
     content_ref: class/bootcamp/day-06/section-05-agent-harness-mcp/lesson.md
-    content: '同学们，第五节最长，六个词一次讲清：Agent、Harness、Tool Calling、MCP、Workflow vs Agent、Copilot vs Agent。第二周 你们要封装 Skill——今天先把骨架名词对齐，别到时候
-      Harness 和 MCP 混成一团。
-
-      Agent 智能体：能自己决定下一步的 AI。理解任务、规划、调工具、看结果、继续——直到完成或求助。Cursor Agent 模式、Claude Code、OpenAI Assistants 都是。你定目的地和验收，它选路线，对吧。
-
-      Harness 是模型外面的循环：工具表、记忆、规划、重试、日志。同一个 GPT-4，换一副 Harness，能力天差地别。Tool Calling 是模型输出结构化请求我要调 search，参数 q=周报——Harness 执行后把结果喂回去。你们
-      API 里的 function calling 就是这个，对吧。
-
-      MCP Model Context Protocol：给 AI 接工具和数据源的 USB-C 标准。按 MCP 写一个服务，Cursor、Claude Desktop、各种 Agent 都能插。训练营 Skill 是朴素版 MCP——读
-      SKILL.md，调工具，交付结果。第二周 会亲手写，对吧。
-
-      Workflow vs Agent：Workflow 是人画死的流程图——先 A 再 B 再 C；Agent 是模型现场决定下一步。能写死就写死，写不死才上 Agent。报销审批适合 Workflow；帮我把这堆乱文件整理成 PRD适合
-      Agent，对吧。
-
-      Copilot vs Agent：Copilot 是你开车它递扳手——补全、问答、局部改写；Agent 是你定目的地它开——接任务、跑多步、调工具。信任要求和验收完全不同。Copilot 错了改一行；Agent 错了可能改坏十个文件——所以日志、回滚、Eval
-      更关键，对吧。
-
-      六词口诀：Agent 决策，Harness 骨架，Tool 手，MCP 插座，Workflow 写死，Copilot 副驾。最后一节 18 词抽测——检验今天有没有真过线，对吧。'
+    content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
     practice: 完成标志：[ ] 能画 Agent 循环简图；[ ] 说清 Copilot vs Agent 信任差异；[ ] 指驾驶舱哪块未来适合 Skill/MCP 封装。
     resource_ids:
     - dg-agent-loop
@@ -500,6 +457,13 @@ quiz:
     - 模型→应用→编排→基建
     answer: 1
     explain: 驾驶舱在应用层；换模型是换编排/模型层的牌子。
+  - q: 一次性 JSON 响应和 SSE 流式，主要差别是？
+    options:
+    - 计费单位不同
+    - 前者等整包再渲染；后者边收边显示（助手位建议 SSE）
+    - SSE 只能用于图像模型
+    answer: 1
+    explain: Day6 S01：API 负责打到哪，SSE 负责怎么流回来。
   - q: Token 与上下文窗口的关系？
     options:
     - Token 是计费单位，与窗口无关
@@ -565,7 +529,7 @@ quiz:
     explain: 同一模型换 Harness，能力天差地别。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 105′）
+  title: 今日课节（5 节 · 115′）
 - type: quiz
   title: Day6 概念验收
 - type: project

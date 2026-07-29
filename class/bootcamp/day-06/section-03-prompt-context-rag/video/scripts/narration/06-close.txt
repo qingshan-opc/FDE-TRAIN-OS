@@ -1,1 +1,0 @@
-好，第三节收一下。带走四句：Prompt 是说明书，Context 是装填术，RAG 是外挂记忆，Fine-tune 是最后手段。下一节咱们讲 Eval、Guardrails 和 Vibe Coding——怎么给 AI 出考卷、怎么拦越界，还有 Cursor 写代码爽归爽、验收责任在谁。同学们有问题，先翻讲解图，再回来听，对吧。

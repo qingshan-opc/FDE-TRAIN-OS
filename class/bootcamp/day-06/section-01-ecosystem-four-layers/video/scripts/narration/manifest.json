@@ -1,9 +1,46 @@
 [
-  { "id": "01-open", "file": "01-open.txt" },
-  { "id": "02-llm", "file": "02-llm.txt" },
-  { "id": "03-four-layer", "file": "03-four-layer.txt" },
-  { "id": "04-you-are-here", "file": "04-you-are-here.txt" },
-  { "id": "05-open-closed", "file": "05-open-closed.txt" },
-  { "id": "06-multimodal", "file": "06-multimodal.txt" },
-  { "id": "07-close", "file": "07-close.txt" }
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-history",
+    "file": "02-history.txt"
+  },
+  {
+    "id": "03-small-model",
+    "file": "03-small-model.txt"
+  },
+  {
+    "id": "04-generalization",
+    "file": "04-generalization.txt"
+  },
+  {
+    "id": "05-idiom-chain",
+    "file": "05-idiom-chain.txt"
+  },
+  {
+    "id": "06-four-layer",
+    "file": "06-four-layer.txt"
+  },
+  {
+    "id": "07-orchestration",
+    "file": "07-orchestration.txt"
+  },
+  {
+    "id": "08-access",
+    "file": "08-access.txt"
+  },
+  {
+    "id": "09-sse",
+    "file": "09-sse.txt"
+  },
+  {
+    "id": "10-multimodal",
+    "file": "10-multimodal.txt"
+  },
+  {
+    "id": "11-close",
+    "file": "11-close.txt"
+  }
 ]

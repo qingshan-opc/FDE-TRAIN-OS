@@ -26,7 +26,7 @@
 |------|------|
 | `README.md` | 当日合约：章节地图 / 验收 / GATE |
 | `day.yaml` | 胶囊 quiz、media、lab、resources（合约源） |
-| `section-NN-*/` | 每节五件套：`lesson.md` · `practice.md` · `resources.md` · `homework.md` · `ai-tutor.yaml` |
+| `section-NN-*/` | 每节五件套：`lesson.md` · `practice.md`（**必含「一键粘贴提示词」**）· `resources.md` · `homework.md` · `ai-tutor.yaml` |
 | `section-*/video/` | 口播 HyperFrames 工程（可选；成片在 MinIO） |
 
 历史材料（如旧 Day6 部署课）见 [`_archive/`](_archive/README.md)，不参与节序映射。

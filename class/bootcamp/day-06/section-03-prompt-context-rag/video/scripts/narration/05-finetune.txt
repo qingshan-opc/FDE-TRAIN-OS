@@ -1,1 +1,0 @@
-最后说选型：Fine-tuning 跟 Prompting。Fine-tuning 改的是模型权重，贵、慢、持久；Prompting 改的是你给模型的话，快、便宜、随时能调。咱们 FDE 的默认姿势：九成场景先用 Prompt 加 RAG 加 Eval 三板斧，Fine-tune 写进「以后再说」。只有当你需要固定风格、固定格式，Prompt 怎么写都不稳，才考虑微调。别一上来就说「我们要训一个模型」——先把 Prompt 方案验收过了再说，呢。

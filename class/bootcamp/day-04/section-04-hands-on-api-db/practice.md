@@ -19,6 +19,17 @@
 - 接口没有错误响应 → 「补上每个接口的 400/404 场景」；
 - 接口和表对不上 → 「逐个接口标注它读写哪张表的哪几列，对不上的修正设计」。
 
+## 一键粘贴提示词
+
+> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+
+```text
+把 Backend_Engineer_Agent_Prompt.md 整份当系统角色。
+输入：PRD.md +（若有）architecture.md。
+强制产出：API_Spec.md（OpenAPI 向）+ DB_Schema.md（含索引建议）。
+先澄清再生成；生成后自检字段是否前后对齐，不对齐就改契约不要改口头约定。
+```
+
 ## 完成标志
 
 - `API_Spec.md` 落盘，含 3–5 个接口且四要素齐全；

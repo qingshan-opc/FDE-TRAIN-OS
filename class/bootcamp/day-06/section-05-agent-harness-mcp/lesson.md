@@ -75,15 +75,9 @@
 
 信任与验收要求：Agent >> Copilot。
 
-## 🎬 口播稿（约 7 段 · 待审）
+## 🎬 口播稿（7 段 · 课堂口语风格 · 待过审）
 
-> 同学们，第五节最长，六个词一次讲清：Agent、Harness、Tool Calling、MCP、Workflow vs Agent、Copilot vs Agent。第二周 你们要封装 Skill——今天先把骨架名词对齐，别到时候 Harness 和 MCP 混成一团。
-> Agent 智能体：能自己决定下一步的 AI。理解任务、规划、调工具、看结果、继续——直到完成或求助。Cursor Agent 模式、Claude Code、OpenAI Assistants 都是。你定目的地和验收，它选路线，对吧。
-> Harness 是模型外面的循环：工具表、记忆、规划、重试、日志。同一个 GPT-4，换一副 Harness，能力天差地别。Tool Calling 是模型输出结构化请求我要调 search，参数 q=周报——Harness 执行后把结果喂回去。你们 API 里的 function calling 就是这个，对吧。
-> MCP Model Context Protocol：给 AI 接工具和数据源的 USB-C 标准。按 MCP 写一个服务，Cursor、Claude Desktop、各种 Agent 都能插。训练营 Skill 是朴素版 MCP——读 SKILL.md，调工具，交付结果。第二周 会亲手写，对吧。
-> Workflow vs Agent：Workflow 是人画死的流程图——先 A 再 B 再 C；Agent 是模型现场决定下一步。能写死就写死，写不死才上 Agent。报销审批适合 Workflow；帮我把这堆乱文件整理成 PRD适合 Agent，对吧。
-> Copilot vs Agent：Copilot 是你开车它递扳手——补全、问答、局部改写；Agent 是你定目的地它开——接任务、跑多步、调工具。信任要求和验收完全不同。Copilot 错了改一行；Agent 错了可能改坏十个文件——所以日志、回滚、Eval 更关键，对吧。
-> 六词口诀：Agent 决策，Harness 骨架，Tool 手，MCP 插座，Workflow 写死，Copilot 副驾。最后一节 18 词抽测——检验今天有没有真过线，对吧。
+> 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
 
 
 ## 常见懵点

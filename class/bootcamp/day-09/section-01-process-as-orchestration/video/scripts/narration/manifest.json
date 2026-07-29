@@ -4,19 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-split-three",
-    "file": "02-split-three.txt"
+    "id": "02-hitl-anchor",
+    "file": "02-hitl-anchor.txt"
   },
   {
-    "id": "03-dataflow",
-    "file": "03-dataflow.txt"
+    "id": "03-split-three",
+    "file": "03-split-three.txt"
   },
   {
-    "id": "04-weekly-pipeline",
-    "file": "04-weekly-pipeline.txt"
+    "id": "04-dataflow-contract",
+    "file": "04-dataflow-contract.txt"
   },
   {
-    "id": "05-workflow-close",
-    "file": "05-workflow-close.txt"
+    "id": "05-weekly-pipeline",
+    "file": "05-weekly-pipeline.txt"
+  },
+  {
+    "id": "06-manual-step",
+    "file": "06-manual-step.txt"
+  },
+  {
+    "id": "07-workflow-designer",
+    "file": "07-workflow-designer.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

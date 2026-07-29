@@ -42,5 +42,5 @@
 </g>
 <!-- 底注 -->
 <text x="520" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1400ff">同一个模型，换一副骨架，能力天差地别 —— Harness 才是智能体的身体</text>
-<text x="520" y="472" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">本课的 Agent 平台就是一副 harness；你在 Week2 给它添工具（Skill）</text>
+<text x="520" y="472" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">本课的 Agent 平台就是一副 harness；你在 第二周 给它添工具（Skill）</text>
 </svg>

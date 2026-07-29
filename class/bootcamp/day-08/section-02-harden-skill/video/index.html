@@ -67,115 +67,121 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="139.91" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="354.83" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="21.11">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="51.11">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">注入测试：故意喂坏输入</h1>
-    <p class="subtitle" data-anim="s">看它怎么死，死法要对</p>
+    <h1 class="display" data-anim="t">上刑场</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>注入测试是软件工程的老手艺：故意喂坏的，看它怎么死。</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>你的 Skill 昨天在乖数据上…</strong><span>过关，今天要在坏数据上证明——死法符合声明，才算</span></div>
-      </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · skill-anatomy</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · skill-anatomy" /></div>
-  </div>
-</section>
-
-<section id="slide-02-bad-input-list" class="clip slide" data-track-index="1" data-start="21.36" data-duration="23.78">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>BAD INPUT LIST</div>
-    <h1 class="display" data-anim="t">坏输入清单（四类各备一条）</h1>
-    <p class="subtitle" data-anim="s">空数据 / 缺字段 / 接口超时 / 过分要求</p>
-    <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>清单按四类各备至少一条：输入错—…</strong><span>—空数据、缺关键字段、字段名变了、日期范围超限；</span></div>
-      <div class="card"><div class="k">02</div><strong>咱们逐条喂，记录实际死法，嘛。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>注入测试</strong><span>故意喂坏输入</span></div>
+      <div class="card"><div class="k">要点</div><strong>死法符合声明</strong><span>才算可依赖</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-03-injection-record" class="clip slide" data-track-index="1" data-start="45.39" data-duration="22.89">
+<section id="slide-02-bad-input-list" class="clip slide" data-track-index="1" data-start="51.36" data-duration="50.0">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>BAD INPUT LIST</div>
+    <h1 class="display" data-anim="t">四类清单</h1>
+    <p class="subtitle" data-anim="s">每类至少备一条</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">输入错</div><strong>环境错</strong><span>能力限</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
+  </div>
+</section>
+
+<section id="slide-03-injection-record" class="clip slide" data-track-index="1" data-start="101.61" data-duration="52.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">03</span>INJECTION RECORD</div>
     <h1 class="display" data-anim="t">注入记录表</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">要点</div><strong>期望死法 vs 实际死法</strong><span>✓/✗</span></div>
+      <div class="card"><div class="k">坏输入</div><strong>期望死法</strong><span>实际死法</span></div>
+      <div class="card"><div class="k">要点</div><strong>判定：✓ 按声明</strong><span>✗ 失控</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · skill-anatomy</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · skill-anatomy" /></div>
   </div>
 </section>
 
-<section id="slide-04-fix-directions" class="clip slide" data-track-index="1" data-start="68.53" data-duration="24.44">
+<section id="slide-04-fix-directions" class="clip slide" data-track-index="1" data-start="154.08" data-duration="50.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">04</span>FIX DIRECTIONS</div>
-    <h1 class="display" data-anim="t">修的两个方向（别搞反）</h1>
-    <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>修的时候方向别搞反。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>死法对但声明没写——补声明，条款缺失补条款。</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>死法不对——改说明书，边界段措辞…</strong><span>、示例、红线前置，不是骂 AI。</span></div>
-      </div>
+    <h1 class="display" data-anim="t">修的两个方向</h1>
     <div class="flow" data-anim="diagram">
-      <div class="flow-step"><div class="k">01</div>死法对但声明没写</div>
+      <div class="flow-step"><div class="k">01</div>死法对 · 声明没写</div>
       <div class="flow-step"><div class="k">02</div>补声明</div>
+      <div class="flow-step"><div class="k">01</div>死法不对</div>
+      <div class="flow-step"><div class="k">02</div>改说明书</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-05-regression" class="clip slide" data-track-index="1" data-start="93.22" data-duration="22.22">
+<section id="slide-05-empty-data-trap" class="clip slide" data-track-index="1" data-start="204.56" data-duration="52.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>REGRESSION</div>
-    <h1 class="display" data-anim="t">乖数据回归</h1>
-    <p class="subtitle" data-anim="s">边界加完，好输入也得照常过</p>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>EMPTY DATA TRAP</div>
+    <h1 class="display" data-anim="t">空数据编周报</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>最后一步别省：乖数据回归。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>边界加完，好输入也得照常过——别…</strong><span>把 Skill 修成什么都拒的废人。</span></div>
-      <div class="card"><div class="k">03</div><strong>今天标准：注入测试至少三条、覆盖…</strong><span>至少两类，全部 ✓，再加乖数据回归仍过，才算 S</span></div>
+      <div class="card"><div class="k">要点</div><strong>太聪明</strong><span>反而失控</span></div>
+      <div class="card"><div class="k">要点</div><strong>红线前置</strong><span>再测</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · skill-anatomy</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · skill-anatomy" /></div>
   </div>
 </section>
 
-<section id="slide-06-close" class="clip slide" data-track-index="1" data-start="115.69" data-duration="24.22">
+<section id="slide-06-regression" class="clip slide" data-track-index="1" data-start="257.03" data-duration="51.33">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>CLOSE</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">证据归档 + commit 准备</h1>
-    <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">本节先到这里。</span>
-      <span class="tag">证据归档，commit 准备。</span>
-      <span class="tag">带走一句：注入测试比十次正确运行…</span>
+    <div class="sec-label" data-anim="k"><span class="num">06</span>REGRESSION</div>
+    <h1 class="display" data-anim="t">乖数据回归</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>边界加完</strong><span>好输入仍要过</span></div>
+      <div class="card"><div class="k">≥3 条注入</div><strong>覆盖 ≥2 类</strong><span>全 ✓</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · skill-anatomy</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · skill-anatomy" /></div>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="139.91" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第八天 · 第 2 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="139.91" data-track-index="5">
+<section id="slide-07-close" class="clip slide" data-track-index="1" data-start="308.61" data-duration="46.22">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">带走一句</h1>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">注入测试</span>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：Agent 与 Harness</p>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="354.83" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第八天 · 第 2 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="354.83" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="139.91" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="354.83" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="139.91" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="354.83" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.0, dur: 21.11 },
-  { id: "#slide-02-bad-input-list", start: 21.36, dur: 23.78 },
-  { id: "#slide-03-injection-record", start: 45.39, dur: 22.89 },
-  { id: "#slide-04-fix-directions", start: 68.53, dur: 24.44 },
-  { id: "#slide-05-regression", start: 93.22, dur: 22.22 },
-  { id: "#slide-06-close", start: 115.69, dur: 24.22 }
+  { id: "#slide-01-open", start: 0.0, dur: 51.11 },
+  { id: "#slide-02-bad-input-list", start: 51.36, dur: 50.0 },
+  { id: "#slide-03-injection-record", start: 101.61, dur: 52.22 },
+  { id: "#slide-04-fix-directions", start: 154.08, dur: 50.22 },
+  { id: "#slide-05-empty-data-trap", start: 204.56, dur: 52.22 },
+  { id: "#slide-06-regression", start: 257.03, dur: 51.33 },
+  { id: "#slide-07-close", start: 308.61, dur: 46.22 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -189,17 +195,19 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.0);
-  enter("#slide-02-bad-input-list", 21.36);
-  enter("#slide-03-injection-record", 45.39);
-  enter("#slide-04-fix-directions", 68.53);
-  enter("#slide-05-regression", 93.22);
-  enter("#slide-06-close", 115.69);
-  exit("#slide-01-open", 21.11);
-  exit("#slide-02-bad-input-list", 45.14);
-  exit("#slide-03-injection-record", 68.28);
-  exit("#slide-04-fix-directions", 92.97);
-  exit("#slide-05-regression", 115.44);
-  exit("#slide-06-close", 139.91);
+  enter("#slide-02-bad-input-list", 51.36);
+  enter("#slide-03-injection-record", 101.61);
+  enter("#slide-04-fix-directions", 154.08);
+  enter("#slide-05-empty-data-trap", 204.56);
+  enter("#slide-06-regression", 257.03);
+  enter("#slide-07-close", 308.61);
+  exit("#slide-01-open", 51.11);
+  exit("#slide-02-bad-input-list", 101.36);
+  exit("#slide-03-injection-record", 153.83);
+  exit("#slide-04-fix-directions", 204.3);
+  exit("#slide-05-empty-data-trap", 256.78);
+  exit("#slide-06-regression", 308.36);
+  exit("#slide-07-close", 354.83);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

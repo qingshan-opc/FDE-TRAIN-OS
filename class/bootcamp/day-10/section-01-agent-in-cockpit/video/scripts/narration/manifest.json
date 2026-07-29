@@ -4,19 +4,35 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-three-requirements",
-    "file": "02-three-requirements.txt"
+    "id": "02-cockpit-not-chat",
+    "file": "02-cockpit-not-chat.txt"
   },
   {
-    "id": "03-min-impl",
-    "file": "03-min-impl.txt"
+    "id": "03-three-requirements",
+    "file": "03-three-requirements.txt"
   },
   {
-    "id": "04-priority",
-    "file": "04-priority.txt"
+    "id": "04-awaken",
+    "file": "04-awaken.txt"
   },
   {
-    "id": "05-panorama-check",
-    "file": "05-panorama-check.txt"
+    "id": "05-status",
+    "file": "05-status.txt"
+  },
+  {
+    "id": "06-gate-in-page",
+    "file": "06-gate-in-page.txt"
+  },
+  {
+    "id": "07-one-at-a-time",
+    "file": "07-one-at-a-time.txt"
+  },
+  {
+    "id": "08-priority-fallback",
+    "file": "08-priority-fallback.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
   }
 ]

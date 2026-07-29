@@ -1,1 +1,1 @@
-Agent 是什么？骨架加上角色：你的说明书、人格、目标。你们写的 ai-tutor.yaml，其实就是一份 Agent 角色定义——你们早就在造 Agent 了，只是没人告诉名字。Skill 是给 Agent 预备的工具；Agent 拿着工具表上的 Skill 去干活，对吧。
+Agent 是什么？一句话：Harness 是骨架，角色是你写的说明书、人格、目标。你们写的 ai-tutor.yaml，其实就是一份 Agent 角色定义——你们早就在造 Agent 了，只是没人告诉名字。Skill 是给 Agent 预备的工具；Agent 拿着工具表上的 Skill 去干活。有同学可能会说：Agent 和聊天机器人啥区别？聊天机器人只有模型；Agent 有工具表和循环——能动手、能分多步。听见了吗？今天 Advanced 形态会自己写 Skill，那是后话；今天它调用你写的。来，骨架认完了，下一页看它在骨架上怎么转圈，对吧。

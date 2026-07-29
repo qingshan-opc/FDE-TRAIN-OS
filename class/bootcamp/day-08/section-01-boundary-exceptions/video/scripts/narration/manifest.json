@@ -8,19 +8,23 @@
     "file": "02-bad-input-scenes.txt"
   },
   {
-    "id": "03-four-exception-types",
-    "file": "03-four-exception-types.txt"
+    "id": "03-input-env",
+    "file": "03-input-env.txt"
   },
   {
-    "id": "04-fail-by-design",
-    "file": "04-fail-by-design.txt"
+    "id": "04-ability-ambiguity",
+    "file": "04-ability-ambiguity.txt"
   },
   {
-    "id": "05-boundary-declaration",
-    "file": "05-boundary-declaration.txt"
+    "id": "05-fail-by-design",
+    "file": "05-fail-by-design.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-boundary-declaration",
+    "file": "06-boundary-declaration.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

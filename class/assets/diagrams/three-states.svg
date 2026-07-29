@@ -29,6 +29,6 @@
 <text x="860" y="224" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">重试</text>
 <text x="860" y="262" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.45)">错误码记进日志，不给用户看</text>
 <!-- 底注 -->
-<text x="520" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#231f20">三态是页面的基本礼貌：V0.1 先占位，Day 3 接真接口后变真</text>
+<text x="520" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#231f20">三态是页面的基本礼貌：V0.1 先占位，第三天 接真接口后变真</text>
 <text x="520" y="376" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">铁律：出错文案说人话——「500 Internal Server Error」永远不该出现在用户眼前</text>
 </svg>

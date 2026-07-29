@@ -23,6 +23,17 @@
 
 本机加练（可选）：使用本节 local_prep 的 codex_prompt 在本机 AI 工具里再跑一遍，对比两次产出的差异，体会「约束给得越具体，产出越准」。
 
+## 一键粘贴提示词
+
+> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+
+```text
+把 class/resources/prompt-toolkit/Architect_Agent_Prompt.md 整份当作系统角色。
+关键输入：工作区 PRD.md（我会粘贴或说明路径）。
+产出：architecture.md（含决策记录/四层草图文字版/风险与降级）。
+先问我 3 个澄清（团队、用户量、运维），再生成；缺约束就追问，不要瞎编。
+```
+
 ## 完成标志
 
 - `architecture.md` 存在于工作区，包含架构风格、分层图、3 条 ADR；

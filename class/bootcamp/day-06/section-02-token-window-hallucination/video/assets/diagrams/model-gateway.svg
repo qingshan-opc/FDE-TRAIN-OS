@@ -5,7 +5,7 @@
 </marker>
 </defs>
 <rect width="1040" height="500" fill="#f2f5f0"/>
-<text x="990" y="36" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">Day 5 你亲手接这一层</text>
+<text x="990" y="36" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">第五天你亲手接这一层</text>
 <!-- 驾驶舱 -->
 <rect x="60" y="195" width="200" height="110" fill="#ffffff" stroke="#f24e54" stroke-width="2.5"/>
 <text x="160" y="240" text-anchor="middle" font-size="15" font-weight="800" fill="#231f20">你的驾驶舱</text>

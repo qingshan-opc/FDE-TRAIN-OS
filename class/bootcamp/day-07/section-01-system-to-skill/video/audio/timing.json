@@ -1,41 +1,47 @@
 {
-  "total": 216.385,
+  "total": 289.04,
   "segments": [
     {
       "id": "01-open",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/01-open.wav",
       "start": 0.0,
-      "duration": 36.24
+      "duration": 44.24
     },
     {
       "id": "02-system-vs-skill",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/02-system-vs-skill.wav",
-      "start": 36.49,
-      "duration": 34.968
+      "start": 44.49,
+      "duration": 43.766
     },
     {
       "id": "03-prompt-vs-skill",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/03-prompt-vs-skill.wav",
-      "start": 71.708,
-      "duration": 39.847
+      "start": 88.506,
+      "duration": 42.967
     },
     {
       "id": "04-triple-value",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/04-triple-value.wav",
-      "start": 111.805,
-      "duration": 37.04
+      "start": 131.723,
+      "duration": 40.8
     },
     {
-      "id": "05-anti-patterns",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/05-anti-patterns.wav",
-      "start": 149.095,
-      "duration": 36.56
+      "id": "05-not-code",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/05-not-code.wav",
+      "start": 172.773,
+      "duration": 37.36
     },
     {
-      "id": "06-close",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/06-close.wav",
-      "start": 185.905,
-      "duration": 30.48
+      "id": "06-anti-patterns",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/06-anti-patterns.wav",
+      "start": 210.383,
+      "duration": 40.96
+    },
+    {
+      "id": "07-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s01_course/tts/07-close.wav",
+      "start": 251.593,
+      "duration": 37.447
     }
   ]
 }

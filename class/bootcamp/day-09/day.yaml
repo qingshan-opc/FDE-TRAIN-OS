@@ -162,6 +162,18 @@ capsule_extra:
         - 不需要验收了
       - 1
       - 第一个练信任，第二三个练吞吐——模板复用。
+    - - 三个 Skill 怎么拆职责最稳？
+      - - 三个 Skill 做同一件事，互为备份
+        - 各管一段可验收步骤，输入输出契约能接上、描述不重叠
+        - 全塞进一个超级 Skill
+      - 1
+      - 编排靠串联，不靠重复——重叠描述会害 Agent 选型。
+    - - 第 2、3 个 Skill 可以省略边界声明吗？
+      - - 可以，反正模板熟了
+        - 不行——每件工具都要说明书 + 边界 + 描述，标准不降级
+        - 只写代码就够
+      - 1
+      - 工具表扩容不能降工程标准——可依赖是逐件验收的。
     tools:
     - name: Skill 边界模板
       note: 复用 Day 8 v1 结构
@@ -206,6 +218,18 @@ capsule_extra:
         - 看 Agent 心情
       - 1
       - 钥匙在你手里——这是信任的工程设计。
+    - - orchestration.md 最少要写清什么？
+      - - 只用画一张好看的图
+        - 串联步骤 + 数据流 + 确认闸位置 + 日志格式
+        - 模型厂商与价格表
+      - 1
+      - 编排文档是施工图——Day 10 证据与答辩都会翻它。
+    - - 驳回路径「必须能退回重做」对应哪条验收？
+      - - 只要批准路径通就行
+        - 闸口驳回有记录、能退回、版本可追踪——不是只有绿灯
+        - 驳回后自动强制执行
+      - 1
+      - 拦得住还要回得来——单侧幸福路径不算过闸。
     tools:
     - name: 流水线施工清单
       note: 串联图 / 数据流 / 闸位置 / 日志格式
@@ -215,50 +239,7 @@ capsule_extra:
       object_key: documents/shared/course-media/day09-c4-runbook.mp4
       poster_key: documents/shared/course-media/day09-c4-runbook-poster.jpg
       duration_sec: 90
-  c5:
-    resource_ids:
-    - dg-orchestration
-    knowledge_cards:
-    - id: gate9
-      term: GATE 9
-      plain: 3 件工具 + 编排文档 + 闸口实测 + 执行日志可回放。
-      tag: 验收
-    - id: gate9-test
-      term: 闸口实测
-      plain: 跑到闸自动停 → 批准继续 / 驳回留痕——两条路径都要跑通。
-      tag: 验收
-    glossary_terms:
-    - id: gt-gate9
-      term: GATE 9
-      plain: Week 2 编排里程碑：流水线跑通，闸口拦得住，日志查得了。
-    quiz:
-    - - GATE 9 必须实测几条路径？
-      - - 只测批准
-        - 批准继续 + 驳回留痕两条
-        - 不需要实测
-      - 1
-      - 驳回路径和批准路径同样重要——回得来才算工程化。
-    - - GATE 9 commit 信息？
-      - - feat: 三 Skill 编排——确认闸 + 执行日志
-        - fix: typo
-        - docs: readme
-      - 0
-      - 里程碑标记编排与安全设计落地。
-    - - 执行日志的可回放性指？
-      - - 能打印
-        - 不看代码也能还原当天流水线经过
-        - 只有导师能看
-      - 1
-      - 出事故时的唯一案底——Day 10 答辩兜底证据。
-    tools:
-    - name: GATE 9 清单
-      note: 3 件工具 / 编排文档 / 闸口实测 / 日志回放
-    media:
-    - kind: video
-      title: 口播课件 · GATE 9
-      object_key: documents/shared/course-media/day09-c5-gate9.mp4
-      poster_key: documents/shared/course-media/day09-c5-gate9-poster.jpg
-      duration_sec: 73
+# c5 验收课已撤出大纲（素材可留在旧 section 目录，不进课表）。
 quiz:
 - - 编排的核心思想？
   - - Agent 自由决策
@@ -344,6 +325,18 @@ quiz:
     - 没有 problem
   - 1
   - 确认闸设计要治麻木，不是治 lazy。
+- - 可撤回步骤前面要不要一律加确认闸？
+  - - 要，每步都闸最安全
+    - 不必——闸留给不可撤回步骤，过多确认会诱发盲批
+    - 永远不要闸
+  - 1
+  - 闸的密度是设计题：太稀失控，太密麻木。
+- - GATE 9「查得了」最低靠什么证明？
+  - - 口头复述流程
+    - 每步执行日志（时间/动作/结果）可独立回放
+    - 只要 orchestration.md 写了就行
+  - 1
+  - 文档是施工图，日志是案底——两者都要。
 lab:
   primary_files:
   - docs/orchestration.md

@@ -1,15 +1,20 @@
 day: 6
 project: LLM 理论日
-project_brief: |-
-  今天不交长文报告。请提交一份 LLM 认知卡 llm-cognition-card.md（Markdown 即可）。
+project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
 
-  怎么做：
+
+  认知卡怎么做：
+
   1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+
   2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
-  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；
+
+  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
+
   4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
 
-  过闸标准：六大主题齐全、每条有你的实例。18 词抽测在「概念验收」节点单独过。
+
+  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
 resources:
 - id: dg-llm-ecosystem
   title: 讲解图 · LLM 生态分层
@@ -72,7 +77,7 @@ capsule_extra:
       title: 口播课件 · 生态四层地图
       object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
       poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
-      duration_sec: 195
+      duration_sec: 496
     knowledge_cards:
     - id: llm-core
       term: LLM · 大语言模型
@@ -88,15 +93,26 @@ capsule_extra:
       tag: 选型
     - id: multimodal-bound
       term: 多模态边界
-      plain: 不只文本还能看图听音；本课驾驶舱只用文本能力。
+      plain: 不只文本还能看图听音；本课驾驶舱先盯文本 + SSE。
       tag: 边界
+    - id: sse-stream
+      term: SSE · Server-Sent Events
+      plain: 服务端按事件/Token 一段段推给浏览器；Chat 流式常用。助手位建议 SSE，不是另一种供应商。
+      tag: 接入
+    - id: api-vs-sse
+      term: 一次性响应 vs SSE
+      plain: 一次性等整包 JSON；SSE 边收边显示。API 是调用入口，SSE 是流式通道。
+      tag: 接入
     glossary_terms:
     - id: gt-llm
       term: LLM
       plain: 大语言模型：预测下一个 Token，不是核实过的事实库。
     - id: gt-open-closed
       term: 开源 vs 闭源
-      plain: API 省心按量付；开源权重自部署换隐私与成本。
+      plain: 云 API 省心按量付；权重自部署换隐私与成本。
+    - id: gt-sse
+      term: SSE
+      plain: Server-Sent Events；流式返回通道，挂在 stream 接口上。
     - id: gt-multimodal
       term: 多模态
       plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
@@ -119,6 +135,18 @@ capsule_extra:
         - 多模态太贵不能用
       - 1
       - 知道多模态存在，但训练聚焦文本链路——边界意识是 FDE 基本功。
+    - - API 和 SSE 的正确关系是？
+      - - SSE 是另一家模型供应商
+        - API 是调用入口；SSE 常是流式返回通道（stream）
+        - 有了 SSE 就不必调 API
+      - 1
+      - 别对立：先打到模型 endpoint，再用 SSE 一段段收。
+    - - 驾驶舱助手位本课建议怎么接？
+      - - 只等整包 JSON，别流式
+        - DeepSeek 等云 API + SSE 流式；Key 不进前端
+        - 必须自建 GPU 集群
+      - 1
+      - 体感与可中断靠 SSE；密钥与降级是工程底线。
   c2:
     resource_ids:
     - dg-llm-capability
@@ -128,7 +156,7 @@ capsule_extra:
       title: 口播课件 · Token / 窗口 / 幻觉
       object_key: documents/shared/course-media/day06-c2-token.mp4
       poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
-      duration_sec: 171
+      duration_sec: 373
     knowledge_cards:
     - id: token-meter
       term: Token 计量
@@ -177,7 +205,7 @@ capsule_extra:
       title: 口播课件 · Prompt / Context / RAG
       object_key: documents/shared/course-media/day06-c3-rag.mp4
       poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
-      duration_sec: 181
+      duration_sec: 327
     knowledge_cards:
     - id: prompt-eng
       term: Prompt 工程
@@ -239,7 +267,7 @@ capsule_extra:
       title: 口播课件 · Eval / Guardrails / Vibe Coding
       object_key: documents/shared/course-media/day06-c4-eval.mp4
       poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
-      duration_sec: 167
+      duration_sec: 272
     knowledge_cards:
     - id: eval-core
       term: Eval · 评测
@@ -293,7 +321,7 @@ capsule_extra:
       title: 口播课件 · Agent / Harness / MCP
       object_key: documents/shared/course-media/day06-c5-agent.mp4
       poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
-      duration_sec: 207
+      duration_sec: 322
     knowledge_cards:
     - id: agent-loop
       term: Agent · 智能体
@@ -372,7 +400,6 @@ capsule_extra:
         - 用户手动执行
       - 1
       - 模型只「说我要调什么」；执行在 Harness。
-# 第 6 节「验收课」已撤：抽测走概念验收节点，收束靠企业任务认知卡。
 quiz:
 - - LLM 生态四层从底到顶的正确顺序是？
   - - 应用→编排→模型→基建
@@ -380,6 +407,12 @@ quiz:
     - 模型→应用→编排→基建
   - 1
   - 驾驶舱在应用层；换模型是换编排/模型层的牌子。
+- - 一次性 JSON 响应和 SSE 流式，主要差别是？
+  - - 计费单位不同
+    - 前者等整包再渲染；后者边收边显示（助手位建议 SSE）
+    - SSE 只能用于图像模型
+  - 1
+  - Day6 S01：API 负责打到哪，SSE 负责怎么流回来。
 - - Token 与上下文窗口的关系？
   - - Token 是计费单位，与窗口无关
     - Token 是读写基本单位；窗口是一次能塞进去的上限
@@ -434,5 +467,4 @@ quiz:
     - 前端框架
   - 1
   - 同一模型换 Harness，能力天差地别。
-# 纯理论日：无独立 Lab 节点（部署/V1.0 材料见 _archive/day-06-deploy/）
 nodes_project: 企业任务：提交 LLM 认知卡 llm-cognition-card.md

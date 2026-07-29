@@ -2,16 +2,16 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1920, height=1080" />
-<title>第六天 · 第 1 节 · 生态四层地图</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>生态四层地图：你在哪一层</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
+
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.45);--ink-08:rgba(35,31,32,.1);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 html{margin:0;background:#111}
 html.browser-preview{overflow:hidden;height:100%}
@@ -19,517 +19,270 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 #root{position:relative;width:1920px;height:1080px;overflow:hidden}
 .stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
 .slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
-.slide.invert{color:var(--bg)}
-.slide.invert .stage-fill{background:var(--ink)}
 .stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
-.slide-body{position:relative;z-index:2;height:100%}
-
-.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);margin-left:4px;max-width:520px}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
 .sec-label .num{color:var(--accent);font-weight:700}
-.slide.invert .sec-label{color:rgba(242,245,240,.55)}
-.slide.invert .sec-label::after{background:var(--bg)}
-
-.meta-row{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);display:flex;gap:28px;flex-wrap:wrap;margin-bottom:28px}
-.meta-row b{color:var(--accent);font-weight:700}
-
-.display{font-family:var(--serif);font-weight:700;font-size:78px;line-height:1.12;letter-spacing:.01em;margin-bottom:18px;max-width:14ch}
-.display .thin{font-weight:400;color:var(--ink-60)}
-.slide.invert .display .thin{color:rgba(242,245,240,.55)}
-.statement{font-family:var(--serif);font-size:32px;line-height:1.55;max-width:22em;margin-bottom:28px}
-.statement strong{color:var(--accent);font-weight:700;border-bottom:6px solid var(--accent)}
-.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em;margin-bottom:32px}
-.slide.invert .lede{color:rgba(242,245,240,.55)}
-
-.ladder{display:flex;align-items:stretch;border:1px solid var(--ink);width:max-content;max-width:100%}
-.ladder .rung{font-family:var(--mono);padding:14px 16px;border-right:1px solid var(--ink);min-width:110px;white-space:nowrap}
-.ladder .rung:last-child{border-right:none}
-.ladder .rung small{display:block;font-size:11px;letter-spacing:.1em;color:var(--ink-40);text-transform:uppercase;margin-bottom:4px}
-.ladder .rung b{font-size:18px;font-weight:700}
-.ladder .rung.on{background:var(--ink);color:var(--bg)}
-.ladder .rung.on small{color:rgba(242,245,240,.5)}
-.ladder .rung.hot{background:var(--accent);color:#fff;border-right-color:var(--accent)}
-.ladder .rung.hot small{color:rgba(255,255,255,.65)}
-.slide.invert .ladder{border-color:rgba(242,245,240,.35)}
-.slide.invert .ladder .rung{border-right-color:rgba(242,245,240,.35)}
-
-/* split / photo / notes / tags */
-.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;margin-top:8px;height:calc(100% - 210px)}
-.split.tight{height:calc(100% - 170px)}
-.split.three{grid-template-columns:1fr 1fr 1fr;gap:24px}
-.photo-panel{position:relative;border:1px solid var(--ink);overflow:hidden;background:#ddd;min-height:420px}
-.photo-panel img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(.92)}
-.photo-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,245,240,.85);background:linear-gradient(transparent,rgba(35,31,32,.85))}
-.photo-frame-bar{position:absolute;top:0;left:0;width:26px;height:6px;background:var(--accent);z-index:2}
-
-.note-stack{display:flex;flex-direction:column;gap:18px}
-.blk{border-top:6px solid var(--ink);padding-top:16px}
-.blk.accent{border-top-color:var(--accent)}
-.blk h4{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:8px}
-.blk p{font-size:18px;line-height:1.55;color:var(--ink-60)}
-.slide.invert .blk{border-top-color:var(--bg)}
-.slide.invert .blk p{color:rgba(242,245,240,.6)}
-
-.tag-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
-.tag{font-family:var(--mono);font-size:14px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--ink-40);color:var(--ink-60);background:transparent}
-.tag.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
-.slide.invert .tag{border-color:rgba(242,245,240,.4);color:rgba(242,245,240,.7)}
-
-/* duo / card 对比卡片 */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:4px}
-.card{border:1px solid var(--ink);padding:22px 22px 24px;background:rgba(255,255,255,.35)}
-.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
-.card h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:8px}
-.card p{font-size:17px;line-height:1.5;color:var(--ink-60)}
-.card.dim{background:var(--ink-05);opacity:.85}
-.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.card.hot .lab{color:rgba(255,255,255,.7)}
-.card.hot p{color:rgba(255,255,255,.78)}
-.slide.invert .card{border-color:rgba(242,245,240,.25);background:rgba(242,245,240,.04)}
-.slide.invert .card p{color:rgba(242,245,240,.6)}
-
-/* mile-rail 横向里程碑 */
-.mile-rail{display:flex;gap:0;border:1px solid var(--ink);margin-top:6px}
-.mile{flex:1;padding:18px 16px;border-right:1px solid var(--ink-08);font-family:var(--mono)}
-.mile:last-child{border-right:none}
-.mile small{display:block;font-size:12px;letter-spacing:.1em;color:var(--ink-40);margin-bottom:8px;text-transform:uppercase}
-.mile b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px;font-weight:700}
-.mile span{font-family:var(--sans);font-size:14px;color:var(--ink-60);line-height:1.4}
-.mile.hot{background:var(--accent);color:#fff}
-.mile.hot small{color:rgba(255,255,255,.65)}
-.mile.hot b,.mile.hot span{color:#fff}
-.mile.dim{background:var(--ink-05);opacity:.7}
-
-/* chat-mock 聊天模拟 */
-.chat-mock{border:1px solid var(--ink);background:#fff;padding:18px 20px;margin-top:6px;font-family:var(--mono);font-size:15px;line-height:1.85}
-.chat-mock .row{display:flex;gap:10px;align-items:baseline}
-.chat-mock .u{color:var(--ink-40)}
-.chat-mock .a{color:var(--accent);font-weight:700}
-.chat-mock .arrow{color:var(--ink-40);font-weight:700}
-.chat-mock .cursor{display:inline-block;width:8px;height:18px;background:var(--accent);vertical-align:-3px;margin-left:4px;animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:0}}
-
-/* gen-compare 代次对比条 */
-.gen-compare{display:flex;border:1px solid var(--ink);margin-top:14px}
-.gen-compare .gc{flex:1;padding:14px 12px;border-right:1px solid var(--ink-08);font-family:var(--mono);text-align:center}
-.gen-compare .gc:last-child{border-right:none}
-.gen-compare .gc small{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-40);margin-bottom:6px}
-.gen-compare .gc b{font-size:16px;font-weight:700}
-.gen-compare .gc.on{background:var(--accent);color:#fff}
-.gen-compare .gc.on small{color:rgba(255,255,255,.65)}
-
-/* flow 流程 */
-.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-.flow .step{font-family:var(--mono);font-size:15px;padding:12px 16px;border:1px solid var(--ink);background:#fff}
-.flow .step.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.flow .arrow{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
-
-/* layer-cards 四层横排卡片 */
-.layer-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
-.lc{border:1px solid var(--ink);padding:18px 18px 20px;background:rgba(255,255,255,.45);position:relative;overflow:hidden}
-.lc .lc-num{font-family:var(--mono);font-size:14px;letter-spacing:.16em;color:var(--accent);font-weight:700;margin-bottom:8px}
-.lc h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px}
-.lc .lc-en{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-40);text-transform:uppercase;margin-bottom:12px}
-.lc p{font-size:15px;line-height:1.5;color:var(--ink-60);margin-bottom:10px}
-.lc .lc-ex{font-family:var(--mono);font-size:12px;color:var(--ink);letter-spacing:.04em;line-height:1.5}
-.lc.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.lc.hot .lc-num{color:rgba(255,255,255,.85)}
-.lc.hot .lc-en,.lc.hot p{color:rgba(255,255,255,.78)}
-.lc.hot .lc-ex{color:#fff}
-
-/* hub-grid 中心辐射 */
-.hub-grid{display:grid;grid-template-columns:260px 1fr 1fr;gap:18px;margin-top:24px}
-.hub-core{grid-row:span 2;border:1px solid rgba(242,245,240,.35);background:var(--accent);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:28px 24px}
-.hub-core .lab{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:12px}
-.hub-core h3{font-family:var(--serif);font-size:36px;font-weight:700;line-height:1.2}
-.hub-cell{border:1px solid rgba(242,245,240,.25);padding:22px 22px;background:rgba(242,245,240,.04)}
-.hub-cell .lab{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7d8cff;margin-bottom:8px;font-weight:700}
-.hub-cell h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
-.hub-cell p{font-size:16px;color:rgba(242,245,240,.6);line-height:1.45}
-
-/* side-photo 右侧通栏图 */
-.side-photo{position:absolute;top:0;right:0;width:38%;height:100%;z-index:1;overflow:hidden;border-left:6px solid var(--ink)}
-.side-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15) contrast(1.05)}
-.side-photo .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,245,240,.35),transparent 40%)}
-.slide.has-side{padding-right:46%}
-
-.quote-big{font-family:var(--serif);font-size:60px;line-height:1.35;max-width:16em;margin:18px 0 28px}
-.quote-big strong{border-bottom:6px solid var(--accent);font-weight:700}
-
-/* diagram-box 讲解图 */
+.display{font-family:var(--serif);font-weight:700;font-size:64px;line-height:1.12;margin-bottom:14px;max-width:14ch}
+.subtitle{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:30em;margin-bottom:12px}
+.card-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.card{border:1px solid var(--ink);padding:16px 20px;background:#fff;min-width:180px;flex:1}
+.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-60);margin-bottom:8px}
+.card strong{font-size:18px;display:block;margin-bottom:6px}
+.card span{font-size:15px;color:var(--ink-60);line-height:1.45}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);max-width:920px;margin-top:8px}
+.compare-col{padding:20px 24px;background:#fff}
+.compare-col:first-child{border-right:1px solid var(--ink)}
+.compare-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;margin-bottom:12px;color:var(--accent)}
+.compare-col ul{list-style:none;font-size:16px;line-height:1.65;color:var(--ink-60)}
+.compare-col li::before{content:"· ";color:var(--accent);font-weight:700}
+.flow{display:flex;align-items:stretch;gap:0;margin-top:12px;max-width:960px;border:1px solid var(--ink)}
+.flow-step{flex:1;padding:18px 16px;background:#fff;border-right:1px solid var(--ink);font-size:15px;line-height:1.5}
+.flow-step:last-child{border-right:none}
+.flow-step .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.checklist{border:1px solid var(--ink);background:#fff;margin-top:12px;max-width:920px}
+.checklist li{list-style:none;padding:14px 20px;border-bottom:1px solid rgba(35,31,32,.12);font-size:17px;display:flex;gap:12px;align-items:flex-start}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"□";font-family:var(--mono);color:var(--accent);font-weight:700;flex:none}
 .diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;margin-top:8px;flex:1;display:flex;flex-direction:column;min-height:0}
-.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;flex:none;display:flex;align-items:center;gap:12px}
-.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
-.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;flex:none}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:520px}
 .diagram-full .diagram-box{border:none;padding:0;background:transparent;margin:0}
-.diagram-full img{max-height:560px}
-
-/* building-metaphor 楼比喻 */
-.build-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
-.bm{border:1px solid var(--ink);padding:14px 16px;background:#fff;display:flex;flex-direction:column;gap:6px}
-.bm .bm-no{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-40);text-transform:uppercase}
-.bm h5{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink)}
-.bm .bm-met{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.04em}
-.bm p{font-size:14px;line-height:1.5;color:var(--ink-60)}
-.bm.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.bm.hot .bm-no,.bm.hot p{color:rgba(255,255,255,.78)}
-.bm.hot .bm-met{color:rgba(255,255,255,.95)}
-.bm.hot h5{color:#fff}
-
-/* brand-bar / avatar-pip */
-.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-40)}
+.diagram-full img{max-height:720px}
+.tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.tag{font-family:var(--mono);font-size:13px;padding:10px 16px;border:1px solid var(--ink);background:#fff}
+.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
-.avatar-frame{flex:1;width:100%;min-height:0;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220;position:relative}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-.avatar-caption{flex:none;height:30px;line-height:30px;padding:0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
 #preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
-#preview-pager{position:fixed;right:12px;top:12px;z-index:9999;font:13px/1.4 var(--mono);color:#fff;background:rgba(20,0,255,.85);padding:8px 14px;border-radius:4px;display:none;pointer-events:none}
-html.browser-preview #preview-hint,html.browser-preview #preview-pager{display:block}
+html.browser-preview #preview-hint{display:block}
+
 </style>
 </head>
 <body>
-<div id="preview-hint">浏览器预览 · ← → 或空格翻页 · 点击画面下一页</div>
-<div id="preview-pager">1 / 7</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="195.059" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="713.17" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<!-- 01 OPEN · 左文右图 + ladder + 4 tag -->
-<section id="slide-01-open" class="clip slide has-side" data-track-index="1" data-start="0.000" data-duration="26.490">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="71.56">
   <div class="stage-fill"></div>
-  <div class="side-photo" data-anim="photo">
-    <img src="assets/photos/01-ecosystem.jpg" alt="" />
-    <div class="veil"></div>
-  </div>
   <div class="slide-body">
-    <div class="meta-row" data-anim="meta">
-      <span><b>FDE</b> Day 06 · Section 01</span>
-      <span>LLM 理论日 · 概念课</span>
-      <span>第一节</span>
-    </div>
-    <div class="sec-label" data-anim="k"><span class="num">01</span>MAP · 生态四层地图</div>
-    <h1 class="display" data-anim="t">你在生态<span class="thin">哪一层</span></h1>
-    <p class="statement" data-anim="s">前五天用了 AI，<strong>今天捋清怎么回事</strong></p>
-    <p class="lede" data-anim="lede">把用过 AI 的体感，升级成一张能讲清边界的地图——品牌名不用记，记一个问题就行：我以后干活，到底在生态的哪一层。</p>
-    <div class="ladder" data-anim="ladder">
-      <div class="rung"><small>L1</small><b>基建</b></div>
-      <div class="rung"><small>L2</small><b>模型</b></div>
-      <div class="rung hot"><small>L3</small><b>编排</b></div>
-      <div class="rung hot"><small>L4 · 你在这里</small><b>应用</b></div>
-    </div>
-    <div class="tag-row" data-anim="tags">
-      <span class="tag solid">基建</span>
-      <span class="tag">模型</span>
-      <span class="tag">编排</span>
-      <span class="tag hl">应用 ← 你</span>
-    </div>
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+    <h1 class="display" data-anim="t">第二周开场</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>上周用工具</strong><span>本周拆模型</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · llm-ecosystem</div><img src="assets/diagrams/llm-ecosystem.svg" alt="讲解图 · llm-ecosystem" /></div>
   </div>
 </section>
 
-<!-- 02 LLM · photo + chat-mock 接龙 + duo 机制/边界 -->
-<section id="slide-02-llm" class="clip slide" data-track-index="1" data-start="26.740" data-duration="29.440">
+<section id="slide-02-history" class="clip slide" data-track-index="1" data-start="71.81" data-duration="74.0">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>LLM · 大语言模型</div>
-    <h1 class="display" data-anim="t">猜下一个词</h1>
-    <p class="lede" data-anim="s">你给它一段话，它琢磨"接下来最可能接啥"，然后一个词一个词往外蹦。GPT-4、Claude、还有咱们用的 DeepSeek，名字不一样，底下都是这个活儿。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel">
-        <div class="photo-frame-bar"></div>
-        <img src="assets/photos/02-neural-net.jpg" alt="" />
-        <div class="photo-cap">神经网络 · 接龙式生成 · Unsplash</div>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>HISTORY</div>
+    <h1 class="display" data-anim="t">大模型从哪来</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>课上讲来历</strong><span>预训练/LoRA 可课后问 AI</span></div>
       </div>
-      <div class="note-stack">
-        <div class="chat-mock" data-anim="mock">
-          <div class="row"><span class="u">You ·</span> 晚上吃啥</div>
-          <div class="row"><span class="arrow">→</span> <span class="a">AI ·</span> 火锅</div>
-          <div class="row"><span class="arrow">→</span> <span class="a">AI ·</span> 麻辣</div>
-          <div class="row"><span class="arrow">→</span> <span class="a">AI ·</span> 锅底<span class="cursor"></span></div>
-        </div>
-        <div class="duo" data-anim="duo">
-          <div class="card hot">
-            <div class="lab">机制</div>
-            <h4>预测下一个词</h4>
-            <p>一段话进，逐词往外蹦——生成、理解、推理，都从接龙长出来。</p>
-          </div>
-          <div class="card dim">
-            <div class="lab">边界</div>
-            <h4>不是字典</h4>
-            <p>认字很快的实习生，但它没核实过——别拿它当事实库查。</p>
-          </div>
-        </div>
-        <div class="tag-row" data-anim="tags">
-          <span class="tag solid">GPT-4</span>
-          <span class="tag">Claude</span>
-          <span class="tag">DeepSeek</span>
-          <span class="tag">Qwen</span>
-        </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>文献语料</div>
+      <div class="flow-step"><div class="k">02</div>神经网络</div>
+      <div class="flow-step"><div class="k">03</div>Transformer</div>
+      <div class="flow-step"><div class="k">04</div>ChatGPT</div>
       </div>
-    </div>
   </div>
 </section>
 
-<!-- 03 FOUR LAYERS · SVG + 四层卡片 + 楼比喻 -->
-<section id="slide-03-four-layer" class="clip slide diagram-full" data-track-index="1" data-start="56.430" data-duration="27.690">
+<section id="slide-03-small-model" class="clip slide" data-track-index="1" data-start="146.06" data-duration="64.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>FOUR LAYERS · 四层地图</div>
-    <h1 class="display" style="font-size:60px;margin-bottom:8px" data-anim="t">基建 → 模型 → 编排 → 应用</h1>
-    <p class="lede" style="margin-bottom:14px" data-anim="s">一栋楼：地基水电 · 楼层本身 · 装修 · 你开的店——四层从下往上叠。</p>
-    <div class="diagram-box" data-anim="diagram">
-      <div class="dg-cap">讲解图 · LLM 生态四层（L4 应用 ↓ L1 基建）</div>
-      <img src="assets/diagrams/llm-ecosystem.svg" alt="LLM 生态四层地图" />
-    </div>
-    <div class="build-row" data-anim="build">
-      <div class="bm">
-        <div class="bm-no">L1 · 基建层</div>
-        <h5>地基水电</h5>
-        <div class="bm-met">GPU · 算力 · 向量库</div>
-        <p>盖楼先得有这些，谁都绕不开。</p>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>SMALL MODEL</div>
+    <h1 class="display" data-anim="t">以前的「模型」</h1>
+    <p class="subtitle" data-anim="s">红外测温 + 摄像头人脸 = 传感器 + 专用小模型</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">语音</div><strong>OCR</strong><span>图像识别</span></div>
       </div>
-      <div class="bm">
-        <div class="bm-no">L2 · 模型层</div>
-        <h5>楼层本身</h5>
-        <div class="bm-met">GPT · Claude · DeepSeek</div>
-        <p>牌子不同，底下都是接龙。</p>
-      </div>
-      <div class="bm hot">
-        <div class="bm-no">L3 · 编排层</div>
-        <h5>装修</h5>
-        <div class="bm-met">Prompt · RAG · Agent</div>
-        <p>把毛坯装成能住人的样子。</p>
-      </div>
-      <div class="bm hot">
-        <div class="bm-no">L4 · 应用层</div>
-        <h5>你开的店</h5>
-        <div class="bm-met">驾驶舱 · 客服 · 写作</div>
-        <p>直接面对人的产品。</p>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- 04 YOU ARE HERE · photo + duo L1L2不归你管 vs L3L4你干活 + flow -->
-<section id="slide-04-you-are-here" class="clip slide" data-track-index="1" data-start="84.370" data-duration="22.492">
+<section id="slide-04-generalization" class="clip slide" data-track-index="1" data-start="210.75" data-duration="66.67">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>YOU ARE HERE · 你在哪层</div>
-    <h1 class="display" data-anim="t">你在顶上两层</h1>
-    <p class="statement" data-anim="s">换模型是换牌子，<strong>不归你管</strong></p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel">
-        <div class="photo-frame-bar"></div>
-        <img src="assets/photos/04-cockpit.jpg" alt="" />
-        <div class="photo-cap">你的驾驶舱 · 应用层 · Unsplash</div>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>GENERALIZATION</div>
+    <h1 class="display" data-anim="t">泛化</h1>
+    <p class="subtitle" data-anim="s">泛化＝没见过的题也能接一下</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>早期：小语料</strong><span>有点本事但不泛化</span></div>
+      <div class="card"><div class="k">临界：海量文本</div><strong>千亿参数</strong><span>很多显卡</span></div>
       </div>
-      <div class="note-stack">
-        <div class="duo" data-anim="duo">
-          <div class="card hot">
-            <div class="lab">你干活 · L3 + L4</div>
-            <h4>编排 + 应用</h4>
-            <p>定方向、验货、把模型接到自己的业务里去——后面九天动手的地方，全在这两层。</p>
-          </div>
-          <div class="card dim">
-            <div class="lab">不归你管 · L1 + L2</div>
-            <h4>基建 + 模型</h4>
-            <p>GPU、算力、向量库是地基；GPT、Claude、DeepSeek 是牌子。知道名字和权衡就行。</p>
-          </div>
-        </div>
-        <div class="flow" data-anim="flow">
-          <div class="step hot">定方向</div>
-          <div class="arrow">→</div>
-          <div class="step">验货</div>
-          <div class="arrow">→</div>
-          <div class="step">接 MCP</div>
-          <div class="arrow">→</div>
-          <div class="step">驾驶舱</div>
-        </div>
-        <div class="tag-row" data-anim="tags">
-          <span class="tag solid">顶上两层</span>
-          <span class="tag">编排</span>
-          <span class="tag">应用</span>
-          <span class="tag hl">你在这里</span>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- 05 OPEN vs CLOSED · photo + duo 调API vs 自部署 + gen-compare -->
-<section id="slide-05-open-closed" class="clip slide" data-track-index="1" data-start="107.112" data-duration="37.447">
+<section id="slide-05-idiom-chain" class="clip slide" data-track-index="1" data-start="277.67" data-duration="68.67">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>ACCESS · 开源 vs 闭源</div>
-    <h1 class="display" data-anim="t">调 API，还是自己部署</h1>
-    <p class="lede" data-anim="s">别被"开源/闭源"绕进去——真正的区别是：调别人 API，还是把模型下载到自己机器上跑。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel">
-        <div class="photo-frame-bar"></div>
-        <img src="assets/photos/05-datacenter.jpg" alt="" />
-        <div class="photo-cap">自部署：自己买机器 · 自己运维 · Unsplash</div>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>IDIOM CHAIN</div>
+    <h1 class="display" data-anim="t">核心机制</h1>
+    <p class="subtitle" data-anim="s">认字快的实习生，不是事实库</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>流畅 ≠ 核实过</strong><span>幻觉同源</span></div>
       </div>
-      <div class="note-stack">
-        <div class="duo" data-anim="duo">
-          <div class="card hot">
-            <div class="lab">本课走这条</div>
-            <h4>调 API</h4>
-            <p>GPT、Claude、DeepSeek-API——按 Token 付钱，省心。开源也能调 API，咱们就是 DeepSeek API 接进来的。</p>
-          </div>
-          <div class="card dim">
-            <div class="lab">另一条路</div>
-            <h4>自部署权重</h4>
-            <p>Qwen、DeepSeek 权重能下载——省钱、数据不出门，但机器和运维自己扛。</p>
-          </div>
-        </div>
-        <div class="gen-compare" data-anim="cmp">
-          <div class="gc on"><small>要能力</small><b>调 API</b></div>
-          <div class="gc"><small>要省钱</small><b>自部署</b></div>
-          <div class="gc"><small>要数据不出门</small><b>自部署</b></div>
-          <div class="gc on"><small>本课</small><b>DeepSeek API</b></div>
-        </div>
-        <div class="tag-row" data-anim="tags">
-          <span class="tag">GPT / Claude</span>
-          <span class="tag">DeepSeek / Qwen</span>
-          <span class="tag hl">自己掂量</span>
-        </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>你说一段</div>
+      <div class="flow-step"><div class="k">02</div>向量里检索</div>
+      <div class="flow-step"><div class="k">03</div>接下一个最像的</div>
       </div>
-    </div>
   </div>
 </section>
 
-<!-- 06 MULTIMODAL · photo + mile-rail 四模态 + duo 本课边界 -->
-<section id="slide-06-multimodal" class="clip slide" data-track-index="1" data-start="144.809" data-duration="26.160">
+<section id="slide-06-four-layer" class="clip slide" data-track-index="1" data-start="346.58" data-duration="61.33">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>MULTIMODAL · 多模态</div>
-    <h1 class="display" data-anim="t">咱们只用文本</h1>
-    <p class="lede" data-anim="s">多模态就是模型还能看图、听声音、出图——但本课驾驶舱刻意只用文本，别拿文字模型硬去认图。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel">
-        <div class="photo-frame-bar"></div>
-        <img src="assets/photos/06-multimodal.jpg" alt="" />
-        <div class="photo-cap">音频 · 多模态之一 · Unsplash</div>
+    <div class="sec-label" data-anim="k"><span class="num">06</span>FOUR LAYER</div>
+    <h1 class="display" data-anim="t">生态四层</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>上层贴业务</strong><span>下层是底座</span></div>
       </div>
-      <div class="note-stack">
-        <div class="mile-rail" data-anim="miles">
-          <div class="mile hot"><small>本课</small><b>文本</b><span>摘要 · 问答 · 调工具</span></div>
-          <div class="mile dim"><small>看图</small><b>图像</b><span>GPT-4o · 看截图</span></div>
-          <div class="mile dim"><small>听音</small><b>音频</b><span>Whisper · 语音转文字</span></div>
-          <div class="mile dim"><small>出图</small><b>生成</b><span>Midjourney · Suno</span></div>
-        </div>
-        <div class="duo" data-anim="duo">
-          <div class="card hot">
-            <div class="lab">本课边界</div>
-            <h4>只用文本</h4>
-            <p>驾驶舱只做：摘要、问答、调工具——让模型干它擅长的活儿。</p>
-          </div>
-          <div class="card dim">
-            <div class="lab">多模态</div>
-            <h4>知道有就行</h4>
-            <p>看图、听音、出图——别硬做它不擅长的事，那是为难它。</p>
-          </div>
-        </div>
-        <div class="tag-row" data-anim="tags">
-          <span class="tag solid">摘要</span>
-          <span class="tag">问答</span>
-          <span class="tag">调工具</span>
-        </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>应用</div>
+      <div class="flow-step"><div class="k">02</div>编排</div>
+      <div class="flow-step"><div class="k">03</div>模型</div>
+      <div class="flow-step"><div class="k">04</div>基建</div>
       </div>
-    </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · llm-ecosystem</div><img src="assets/diagrams/llm-ecosystem.svg" alt="讲解图 · llm-ecosystem" /></div>
   </div>
 </section>
 
-<!-- 07 CLOSE · invert + quote-big + hub-grid 四层归属 + 下节预告 -->
-<section id="slide-07-close" class="clip slide invert" data-track-index="1" data-start="171.219" data-duration="23.840">
+<section id="slide-07-orchestration" class="clip slide" data-track-index="1" data-start="408.17" data-duration="67.33">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">07</span>TAKEAWAY · 带走一句</div>
-    <h1 class="display" style="max-width:none;font-size:72px" data-anim="t">地图指路<span class="thin">，词典随身带</span></h1>
-    <p class="quote-big" data-anim="s">听到任何词发懵，<strong>回来翻这一页</strong></p>
-    <div class="hub-grid" data-anim="hub">
-      <div class="hub-core">
-        <div class="lab">FOUR LAYERS</div>
-        <h3>四层归属<br/>随身工具</h3>
+    <div class="sec-label" data-anim="k"><span class="num">07</span>ORCHESTRATION</div>
+    <h1 class="display" data-anim="t">应用 + 编排</h1>
+    <p class="subtitle" data-anim="s">应用：用户看得见的产品</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>编排：控制模型怎么干活的软件适配</strong><span></span></div>
+      <div class="card"><div class="k">提示词</div><strong>RAG</strong><span>MCP</span></div>
       </div>
-      <div class="hub-cell">
-        <div class="lab">L1 · 基建层</div>
-        <h4>部署</h4>
-        <p>GPU、向量库、托管平台——基础设施。</p>
-      </div>
-      <div class="hub-cell">
-        <div class="lab">L2 · 模型层</div>
-        <h4>选模型</h4>
-        <p>GPT、Claude、DeepSeek——牌子与权衡。</p>
-      </div>
-      <div class="hub-cell">
-        <div class="lab">L3 · 编排层</div>
-        <h4>改 Prompt</h4>
-        <p>Prompt、RAG、Agent——后面九天主战场。</p>
-      </div>
-      <div class="hub-cell">
-        <div class="lab">L4 · 应用层</div>
-        <h4>驾驶舱</h4>
-        <p>产品、验收、用户体验——你在这里。</p>
-      </div>
-    </div>
-    <p class="lede" style="margin-top:22px;margin-bottom:0" data-anim="lede">下一节 → Token · 上下文窗口 · 幻觉：18 个词从这四层长出来。</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="195.059" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 1 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="195.059" data-track-index="5">
+<section id="slide-08-access" class="clip slide" data-track-index="1" data-start="475.75" data-duration="59.56">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>ACCESS</div>
+    <h1 class="display" data-anim="t">怎么接到模型</h1>
+    <p class="subtitle" data-anim="s">建议：DeepSeek 等开源模型的云 API</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>主路：云端 HTTP API</strong><span>按量付费</span></div>
+      <div class="card"><div class="k">要点</div><strong>自部署：显卡与运维</strong><span>往往更贵更难</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-09-sse" class="clip slide" data-track-index="1" data-start="535.56" data-duration="84.22">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>SSE</div>
+    <h1 class="display" data-anim="t">一次性响应 vs 流式</h1>
+    <p class="subtitle" data-anim="s">一次性：等整包 JSON 再渲染</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>SSE：text/event-stream</strong><span>边收边显示</span></div>
+      <div class="card"><div class="k">要点</div><strong>助手位建议 SSE</strong><span>Key 不进前端</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-10-multimodal" class="clip slide" data-track-index="1" data-start="620.03" data-duration="40.22">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">10</span>MULTIMODAL</div>
+    <h1 class="display" data-anim="t">多模态</h1>
+    <p class="subtitle" data-anim="s">本课：先盯文本 + SSE</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>文本模型：文本进</strong><span>文本出</span></div>
+      <div class="card"><div class="k">多模态：图</div><strong>声</strong><span>画图</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-11-close" class="clip slide" data-track-index="1" data-start="660.5" data-duration="52.67">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">11</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">心里过三问</h1>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">我在哪一层</span>
+      </div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：练习接电 · 下一节 Token</p>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="713.17" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="713.17" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="195.059" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="713.17" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="195.059" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="713.17" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
-const GAP = 0.25;
 const slides = [
-  { id: "#slide-01-open", start: 0.000, dur: 26.490 },
-  { id: "#slide-02-llm", start: 26.740, dur: 29.440 },
-  { id: "#slide-03-four-layer", start: 56.430, dur: 27.690 },
-  { id: "#slide-04-you-are-here", start: 84.370, dur: 22.492 },
-  { id: "#slide-05-open-closed", start: 107.112, dur: 37.447 },
-  { id: "#slide-06-multimodal", start: 144.809, dur: 26.160 },
-  { id: "#slide-07-close", start: 171.219, dur: 23.840 },
+  { id: "#slide-01-open", start: 0.0, dur: 71.56 },
+  { id: "#slide-02-history", start: 71.81, dur: 74.0 },
+  { id: "#slide-03-small-model", start: 146.06, dur: 64.44 },
+  { id: "#slide-04-generalization", start: 210.75, dur: 66.67 },
+  { id: "#slide-05-idiom-chain", start: 277.67, dur: 68.67 },
+  { id: "#slide-06-four-layer", start: 346.58, dur: 61.33 },
+  { id: "#slide-07-orchestration", start: 408.17, dur: 67.33 },
+  { id: "#slide-08-access", start: 475.75, dur: 59.56 },
+  { id: "#slide-09-sse", start: 535.56, dur: 84.22 },
+  { id: "#slide-10-multimodal", start: 620.03, dur: 40.22 },
+  { id: "#slide-11-close", start: 660.5, dur: 52.67 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
   tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
   tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
   tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
-  tl.from(`${id} [data-anim='lede']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.4);
-  tl.from(`${id} [data-anim='meta']`, { y: 14, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.08);
-  tl.from(`${id} [data-anim='photo']`, { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, t0 + 0.1);
-  tl.from(`${id} [data-anim='split']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.35);
-  tl.from(`${id} [data-anim='ladder']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.45);
-  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.42);
-  tl.from(`${id} [data-anim='mock']`, { y: 14, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='duo'] .card`, { y: 16, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.65);
-  tl.from(`${id} [data-anim='miles'] .mile`, { y: 14, opacity: 0, stagger: 0.08, duration: 0.35, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='build'] .bm`, { y: 16, opacity: 0, stagger: 0.07, duration: 0.4, ease: "power2.out" }, t0 + 0.6);
-  tl.from(`${id} [data-anim='flow'] .step`, { y: 12, opacity: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, t0 + 0.85);
-  tl.from(`${id} [data-anim='cmp'] .gc`, { y: 10, opacity: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, t0 + 0.9);
-  tl.from(`${id} [data-anim='hub'] .hub-core`, { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.5);
-  tl.from(`${id} [data-anim='hub'] .hub-cell`, { y: 18, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.7);
-  tl.from(`${id} [data-anim='tags'] .tag`, { y: 10, opacity: 0, stagger: 0.05, duration: 0.3, ease: "power2.out" }, t0 + 0.95);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.42);
 }
 function exit(id, tEnd) {
   tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd - 0.45);
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
-slides.forEach((s) => {
-  enter(s.id, s.start);
-  exit(s.id, s.start + s.dur);
-});
+  enter("#slide-01-open", 0.0);
+  enter("#slide-02-history", 71.81);
+  enter("#slide-03-small-model", 146.06);
+  enter("#slide-04-generalization", 210.75);
+  enter("#slide-05-idiom-chain", 277.67);
+  enter("#slide-06-four-layer", 346.58);
+  enter("#slide-07-orchestration", 408.17);
+  enter("#slide-08-access", 475.75);
+  enter("#slide-09-sse", 535.56);
+  enter("#slide-10-multimodal", 620.03);
+  enter("#slide-11-close", 660.5);
+  exit("#slide-01-open", 71.56);
+  exit("#slide-02-history", 145.81);
+  exit("#slide-03-small-model", 210.5);
+  exit("#slide-04-generalization", 277.42);
+  exit("#slide-05-idiom-chain", 346.34);
+  exit("#slide-06-four-layer", 407.91);
+  exit("#slide-07-orchestration", 475.5);
+  exit("#slide-08-access", 535.31);
+  exit("#slide-09-sse", 619.78);
+  exit("#slide-10-multimodal", 660.25);
+  exit("#slide-11-close", 713.17);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
+
 (function bootBrowserPreview() {
   const params = new URLSearchParams(location.search);
   const renderMode = params.get("render") === "1";
@@ -544,27 +297,21 @@ window.__timelines["main"] = tl;
     document.body.style.transformOrigin = "top left";
   }
   function reveal(el) {
-    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, x: 0, clearProps: "transform" });
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
   }
   function show(i) {
     slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
     reveal(slidesEls[i]);
-    const pager = document.getElementById("preview-pager");
-    if (pager) pager.textContent = (i + 1) + " / " + slidesEls.length;
   }
   gsap.set("#avatar-pip", { opacity: 1, y: 0 });
   fit(); show(0);
   window.addEventListener("resize", fit);
-  document.getElementById("root").addEventListener("click", (e) => {
-    if (e.target.closest("#avatar-pip")) return;
-    idx = Math.min(idx + 1, slidesEls.length - 1);
-    show(idx);
-  });
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
     if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
   });
 })();
+
 </script>
 </body>
 </html>

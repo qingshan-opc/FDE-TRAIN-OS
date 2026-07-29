@@ -31,7 +31,7 @@ learn:
   - camp:v0.7
   - day:7
   - project:role-week
-  estimated_minutes: 110
+  estimated_minutes: 100
   require_capsules: true
   capsules:
   - id: c1
@@ -382,66 +382,6 @@ learn:
     - id: gt-runs-dir
       term: runs/
       plain: 存放 Skill 运行记录与产物的目录——可复查、可回放。
-  - id: c6
-    title: 验收：Skill 三问 + GATE 7
-    minutes: 10
-    form: 验收
-    content_ref: class/bootcamp/day-07/section-06-accept/lesson.md
-    content: '同学们，第七天验收，第二周第一关。第一周最后一天，你的驾驶舱上线了；第七天，你的第一个同事上岗了——它不吃饭不摸鱼，拿着你写的说明书，每次交出同样标准的货。你从写 Prompt 的人变成了设计工作方式的人，对吧。
-
-      Skill 三问，脱口而出。第一问它做什么？输入到输出，一句话：吃某某，交某某。第二问步骤谁定的？你——AI 按说明书执行，不自由发挥。第三问好坏谁判的？你——按验收段逐条判，有证据句。三问答不上来，说明书还没写透，嘛。
-
-      证据链验收：skills/ 里的说明书、runs/ 里的三件套、连续两次验收全过，全部进 Git。导师会随机指一条验收判据，你要指出最近一次运行里对应的证据句。判据和证据对得上，才叫真验收，对吧。
-
-      GATE 7 清单：Skill 三问脱口而出；证据链完整；抽查判据能指证据；commit 信息写 feat: 第一个 Skill——你的 Skill 名称。一天就做了一个 Skill，少吗？第一个做透比什么都重要——三筛、四部件、验收、证据，这套动作明天开始加速复用，对吧。
-
-      收个尾：Skill 能分享给同事——说明书就是交接物，让对方跑一次并独立验收，就是分享仪式。第八天咱们掀开引擎盖：AI 怎么拿着说明书干活？Harness、工具、记忆、决策环——Agent 登场。今晚预习公开课 O2 的 Agent
-      篇，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
-    resource_ids:
-    - dg-skill-anatomy
-    - glossary
-    tools:
-    - name: GATE 7 清单
-      note: 三问口答 + 现场运行 + 证据 + commit
-    quiz:
-    - - Skill 三问里「好坏谁判」对应说明书的哪个部件？
-      - - 输入
-        - 验收
-        - 步骤
-      - 1
-      - 验收标准必须可判对错——不能是「我觉得还行」。
-    - - GATE 7 的 commit 信息应包含什么？
-      - - fix: 随便改改
-        - feat: 第一个 Skill——<你的 Skill 名>
-        - docs: 更新 README
-      - 1
-      - 里程碑 commit 让 Git 历史能讲演进故事（Day 10 证据
-    - - 同学 Skill 能跑但没有 runs/ 记录，应如何判定？
-      - - 通过，跑过就行
-        - 打回——证据不可复查
-        - 通过，明天再补
-      - 1
-      - 可检查的证据是 GATE 7 硬标准，不是可选项。
-    media:
-    - kind: video
-      title: 口播课件 · Skill 三问
-      object_key: documents/shared/course-media/day07-c6-accept.mp4
-      poster_key: documents/shared/course-media/day07-c6-accept-poster.jpg
-      duration_sec: 98
-    knowledge_cards:
-    - id: gate7-three
-      term: Skill 三问
-      plain: 它做什么（输入→输出）？步骤谁定？好坏谁判？
-      tag: 验收
-    - id: gate7
-      term: GATE 7
-      plain: 现场运行 + 产出过验收 + 说明书含可判标准 + commit 进 Git。
-      tag: 闸门
-    glossary_terms:
-    - id: gt-gate7
-      term: GATE 7
-      plain: Day 7 日验收闸：Skill 可运行、证据可复查、三问能口答。
 quiz:
   pass_rate: 0.67
   questions:
@@ -531,7 +471,7 @@ quiz:
     explain: 你从操作者变成派活的人——Week 2 的核心位移。
 nodes:
 - type: learn
-  title: 今日课节（6 节 · 110′）
+  title: 今日课节（5 节 · 100′）
 - type: quiz
   title: Day7 概念验收
 - type: lab

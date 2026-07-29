@@ -8,19 +8,27 @@
     "file": "02-failure-stories.txt"
   },
   {
-    "id": "03-three-filters",
-    "file": "03-three-filters.txt"
+    "id": "03-filter-high-freq",
+    "file": "03-filter-high-freq.txt"
   },
   {
-    "id": "04-low-risk-hard",
-    "file": "04-low-risk-hard.txt"
+    "id": "04-filter-stable",
+    "file": "04-filter-stable.txt"
   },
   {
-    "id": "05-scoring-table",
-    "file": "05-scoring-table.txt"
+    "id": "05-filter-low-risk",
+    "file": "05-filter-low-risk.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-scoring-table",
+    "file": "06-scoring-table.txt"
+  },
+  {
+    "id": "07-recommend-weekly",
+    "file": "07-recommend-weekly.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

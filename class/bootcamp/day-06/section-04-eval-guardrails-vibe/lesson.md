@@ -54,14 +54,9 @@
 可靠性 ◄──────── Eval + Guardrails
 ```
 
-## 🎬 口播稿（约 6 段 · 待审）
+## 🎬 口播稿（6 段 · 课堂口语风格 · 待过审）
 
-> 同学们，第四节三个词，都是你们已经在做、但今天给名字：Eval、Guardrails、Vibe Coding。训练营全程练的是带验收的 vibe coding——自然语言描述意图让 AI 写代码，爽点是真的，背锅也是真的。
-> Eval 评测：给 AI 产物出考卷。固定题库、明确判分、可重复跑——代替我觉得还行。第一天 的 Rubric、快测的选择题，都是 Eval 的朴素版。上线前：准备 20 条边界 case，模型改版后重跑，分数掉了就别发版，对吧。
-> Guardrails 护栏：拦在输入输出上的规则。什么不许问——比如要别人员工工资；什么不许答——比如没检索到就瞎编政策；越界怎么办——拒答、转人工、降级模板。企业驾驶舱必须有：敏感词、空结果、超时，三条降级路径，对吧。
-> Vibe Coding 氛围编程：Cursor、Copilot、Claude Code——你描述意图，AI 写 diff。第三天 大头 HTML 是 AI 写的，对吧。但验收不能 vibe：接口返回 200 不够，要对契约；摘要对不上数据，要回滚 Prompt。会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
-> 三角关系：Eval 告诉你好不好；Guardrails 告诉你敢不敢上线；Vibe Coding 是生产力杠杆。缺 Eval 是盲飞；缺 Guardrails 是裸奔；缺验收的 Vibe 是技术债工厂，对吧。
-> 带走一句：我觉得还行不是验收标准，Eval 才是。下一节 Agent 全家桶——Harness、MCP、Workflow 和 Agent 怎么分，对吧。
+> 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
 
 
 ## 常见懵点

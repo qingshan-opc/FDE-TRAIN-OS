@@ -10,6 +10,15 @@
 
 **「Token 估算」**：把你 Day 4 的 `API_Spec.md` 前 500 字贴进 tokenizer（或 Cursor 看 usage），粗算多少 Token。再假设窗口 32K，还能塞几份同样长的文档？
 
+## 一键粘贴提示词
+
+> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+
+```text
+你是 LLM 能力边界教练。用我的驾驶舱摘要场景，解释 Token 计费、上下文窗口满了的三条出路、幻觉为什么是机制不是偶发 bug。
+每点配一个「我项目里的坏例子」。最后出 3 道口答题考我。
+```
+
 ## 完成标志
 
 - [ ] 能解释 input/output Token 与账单的关系；

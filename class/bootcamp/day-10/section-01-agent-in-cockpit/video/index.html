@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Agent 接入驾驶舱</title>
+<title>实战：Agent 接入驾驶舱</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
 
@@ -67,95 +67,147 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="116.78" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="529.34" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="21.78">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="57.11">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">驾驶舱 AI 助手位最后一块拼图</h1>
+    <h1 class="display" data-anim="t">助手位最后一块拼图</h1>
+    <p class="subtitle" data-anim="s">右边 AI 助手位空了九天</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>驾驶舱右边那个 AI 助手位空了…</strong><span>九天了，今天让它活起来——这是 V2.0 最后一</span></div>
-      <div class="card"><div class="k">03</div><strong>助手位不是装饰用的聊天框，是驾驶…</strong><span>位：状态看得见、刹车踩得到，才叫接入，对吧。</span></div>
+      <div class="card"><div class="k">要点</div><strong>V2.0 就差这一角</strong><span></span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
   </div>
 </section>
 
-<section id="slide-02-three-requirements" class="clip slide" data-track-index="1" data-start="22.03" data-duration="24.67">
+<section id="slide-02-cockpit-not-chat" class="clip slide" data-track-index="1" data-start="57.36" data-duration="61.11">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>THREE REQUIREMENTS</div>
-    <h1 class="display" data-anim="t">接入三要件：唤起、状态、闸在页内</h1>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>COCKPIT NOT CHAT</div>
+    <h1 class="display" data-anim="t">驾驶位不是摆设</h1>
+    <p class="subtitle" data-anim="s">助手位 = 人-Agent 对话口</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>第一唤起：助手位能发消息给 Ag…</strong><span>ent，Agent 能回话。</span></div>
-      <div class="card"><div class="k">02</div><strong>第二状态：流水线跑到哪一步，助手…</strong><span>位实时可见，最小实现读 runs/ 最新日志行就</span></div>
-      <div class="card"><div class="k">03</div><strong>第三闸在页内：确认界面出现在驾驶…</strong><span>舱里，批准和驳回按钮直接点，对吧。</span></div>
+      <div class="card"><div class="k">要点</div><strong>只挂聊天框 = 摆设</strong><span></span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
   </div>
 </section>
 
-<section id="slide-03-min-impl" class="clip slide" data-track-index="1" data-start="46.94" data-duration="19.56">
+<section id="slide-03-three-requirements" class="clip slide" data-track-index="1" data-start="118.72" data-duration="56.0">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>MIN IMPL</div>
-    <h1 class="display" data-anim="t">最小实现：对话区 + 日志 …</h1>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>THREE REQUIREMENTS</div>
+    <h1 class="display" data-anim="t">接入三要件</h1>
+    <p class="subtitle" data-anim="s">① 唤起 ② 状态 ③ 闸在页内</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>最小实现别贪大：对话区接 Age…</strong><span>nt，状态读 runs/ 日志最新行，闸就是草稿</span></div>
-      <div class="card"><div class="k">02</div><strong>一件通了再做下一件——别三个半成…</strong><span>品堆在一起，咱们宁可做一个能点批准的真闸，对吧。</span></div>
+      <div class="card"><div class="k">要点</div><strong>三件齐了才叫接入</strong><span></span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
   </div>
 </section>
 
-<section id="slide-04-priority" class="clip slide" data-track-index="1" data-start="66.75" data-duration="26.67">
+<section id="slide-04-awaken" class="clip slide" data-track-index="1" data-start="174.97" data-duration="62.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>PRIORITY</div>
-    <h1 class="display" data-anim="t">优先级：闸 > 状态 > 唤起</h1>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>AWAKEN</div>
+    <h1 class="display" data-anim="t">第一要件：唤起</h1>
+    <p class="subtitle" data-anim="s">页面内嵌对话区</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>时间不够怎么办？</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>优先级记死：闸大于状态大于唤起。</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>对话区接不通真实 Agent 环境？</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>接通 Agent 运行环境</strong><span></span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
   </div>
 </section>
 
-<section id="slide-05-panorama-check" class="clip slide" data-track-index="1" data-start="93.67" data-duration="23.11">
+<section id="slide-05-status" class="clip slide" data-track-index="1" data-start="237.67" data-duration="57.56">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>PANORAMA CHECK</div>
-    <h1 class="display" data-anim="t">六个区块 + Agent +…</h1>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>STATUS</div>
+    <h1 class="display" data-anim="t">第二要件：状态</h1>
+    <p class="subtitle" data-anim="s">读 runs/ 最新日志行</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>本节先到这里。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>做完对照 V2.0 全景图打勾：…</strong><span>六个区块、Agent、三件 Skill——全亮，</span></div>
-      <div class="card"><div class="k">03</div><strong>样式复用驾驶舱既有卡片，助手位别长得像外来的。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>当前步骤 + 状态可见</strong><span></span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="116.78" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第十天 · 第 1 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="116.78" data-track-index="5">
+<section id="slide-06-gate-in-page" class="clip slide" data-track-index="1" data-start="295.47" data-duration="60.89">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>GATE IN PAGE</div>
+    <h1 class="display" data-anim="t">第三要件：闸在页内</h1>
+    <p class="subtitle" data-anim="s">草稿渲染进助手位</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>批准 / 驳回写回结果</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
+  </div>
+</section>
+
+<section id="slide-07-one-at-a-time" class="clip slide" data-track-index="1" data-start="356.61" data-duration="57.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>ONE AT A TIME</div>
+    <h1 class="display" data-anim="t">一件通了再做下一件</h1>
+    <p class="subtitle" data-anim="s">对话区 + 日志行 + 两按钮</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>别三个半成品堆一起</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
+  </div>
+</section>
+
+<section id="slide-08-priority-fallback" class="clip slide" data-track-index="1" data-start="414.19" data-duration="57.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>PRIORITY FALLBACK</div>
+    <h1 class="display" data-anim="t">闸 > 状态 > 唤起</h1>
+    <p class="subtitle" data-anim="s">降级：步骤 + 确认按钮 + Lab 回填</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>打通人-Agent-驾驶舱回路</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
+  </div>
+</section>
+
+<section id="slide-09-close" class="clip slide" data-track-index="1" data-start="471.78" data-duration="57.56">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">全景自查</h1>
+    <p class="subtitle" data-anim="s">六区块 + Agent + 三 Skill 全亮</p>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">助手位是驾驶位，不是摆设</span>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · v2-panorama</div><img src="assets/diagrams/v2-panorama.svg" alt="讲解图 · v2-panorama" /></div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="529.34" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第十天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="529.34" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="116.78" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="529.34" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="116.78" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="529.34" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.0, dur: 21.78 },
-  { id: "#slide-02-three-requirements", start: 22.03, dur: 24.67 },
-  { id: "#slide-03-min-impl", start: 46.94, dur: 19.56 },
-  { id: "#slide-04-priority", start: 66.75, dur: 26.67 },
-  { id: "#slide-05-panorama-check", start: 93.67, dur: 23.11 }
+  { id: "#slide-01-open", start: 0.0, dur: 57.11 },
+  { id: "#slide-02-cockpit-not-chat", start: 57.36, dur: 61.11 },
+  { id: "#slide-03-three-requirements", start: 118.72, dur: 56.0 },
+  { id: "#slide-04-awaken", start: 174.97, dur: 62.44 },
+  { id: "#slide-05-status", start: 237.67, dur: 57.56 },
+  { id: "#slide-06-gate-in-page", start: 295.47, dur: 60.89 },
+  { id: "#slide-07-one-at-a-time", start: 356.61, dur: 57.33 },
+  { id: "#slide-08-priority-fallback", start: 414.19, dur: 57.33 },
+  { id: "#slide-09-close", start: 471.78, dur: 57.56 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -169,15 +221,23 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.0);
-  enter("#slide-02-three-requirements", 22.03);
-  enter("#slide-03-min-impl", 46.94);
-  enter("#slide-04-priority", 66.75);
-  enter("#slide-05-panorama-check", 93.67);
-  exit("#slide-01-open", 21.78);
-  exit("#slide-02-three-requirements", 46.7);
-  exit("#slide-03-min-impl", 66.5);
-  exit("#slide-04-priority", 93.42);
-  exit("#slide-05-panorama-check", 116.78);
+  enter("#slide-02-cockpit-not-chat", 57.36);
+  enter("#slide-03-three-requirements", 118.72);
+  enter("#slide-04-awaken", 174.97);
+  enter("#slide-05-status", 237.67);
+  enter("#slide-06-gate-in-page", 295.47);
+  enter("#slide-07-one-at-a-time", 356.61);
+  enter("#slide-08-priority-fallback", 414.19);
+  enter("#slide-09-close", 471.78);
+  exit("#slide-01-open", 57.11);
+  exit("#slide-02-cockpit-not-chat", 118.47);
+  exit("#slide-03-three-requirements", 174.72);
+  exit("#slide-04-awaken", 237.41);
+  exit("#slide-05-status", 295.23);
+  exit("#slide-06-gate-in-page", 356.36);
+  exit("#slide-07-one-at-a-time", 413.94);
+  exit("#slide-08-priority-fallback", 471.52);
+  exit("#slide-09-close", 529.34);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

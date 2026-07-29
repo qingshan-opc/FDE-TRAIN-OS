@@ -16,11 +16,19 @@
     "file": "04-reverse-order.txt"
   },
   {
-    "id": "05-swap-test",
-    "file": "05-swap-test.txt"
+    "id": "05-few-shot-output",
+    "file": "05-few-shot-output.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-swap-test",
+    "file": "06-swap-test.txt"
+  },
+  {
+    "id": "07-branches-split",
+    "file": "07-branches-split.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

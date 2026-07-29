@@ -2,16 +2,16 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1920, height=1080" />
-<title>第七天 · 第 3 节 · 选品三筛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方法：选哪项工作先封装</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
+
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.45);--ink-08:rgba(35,31,32,.1);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 html{margin:0;background:#111}
 html.browser-preview{overflow:hidden;height:100%}
@@ -19,219 +19,215 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 #root{position:relative;width:1920px;height:1080px;overflow:hidden}
 .stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
 .slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
-.slide.invert{color:var(--bg)}
-.slide.invert .stage-fill{background:var(--ink)}
 .stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
-.slide-body{position:relative;z-index:2;height:100%}
-.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);margin-left:4px;max-width:520px}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
 .sec-label .num{color:var(--accent);font-weight:700}
-.slide.invert .sec-label{color:rgba(242,245,240,.55)}
-.slide.invert .sec-label::after{background:var(--bg)}
-.meta-row{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);display:flex;gap:28px;flex-wrap:wrap;margin-bottom:28px}
-.meta-row b{color:var(--accent);font-weight:700}
-.display{font-family:var(--serif);font-weight:700;font-size:78px;line-height:1.12;letter-spacing:.01em;margin-bottom:18px;max-width:14ch}
-.display .thin{font-weight:400;color:var(--ink-60)}
-.slide.invert .display .thin{color:rgba(242,245,240,.55)}
-.statement{font-family:var(--serif);font-size:32px;line-height:1.55;max-width:22em;margin-bottom:28px}
-.statement strong{color:var(--accent);font-weight:700;border-bottom:6px solid var(--accent)}
-.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em;margin-bottom:32px}
-.slide.invert .lede{color:rgba(242,245,240,.55)}
-.ladder{display:flex;align-items:stretch;border:1px solid var(--ink);width:max-content;max-width:100%}
-.ladder .rung{font-family:var(--mono);padding:14px 16px;border-right:1px solid var(--ink);min-width:110px;white-space:nowrap}
-.ladder .rung:last-child{border-right:none}
-.ladder .rung small{display:block;font-size:11px;letter-spacing:.1em;color:var(--ink-40);text-transform:uppercase;margin-bottom:4px}
-.ladder .rung b{font-size:18px;font-weight:700}
-.ladder .rung.hot{background:var(--accent);color:#fff;border-right-color:var(--accent)}
-.ladder .rung.hot small{color:rgba(255,255,255,.65)}
-.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;margin-top:8px;height:calc(100% - 210px)}
-.split.tight{height:calc(100% - 170px)}
-.photo-panel{position:relative;border:1px solid var(--ink);overflow:hidden;background:#ddd;min-height:420px}
-.photo-panel img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(.92)}
-.photo-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,245,240,.85);background:linear-gradient(transparent,rgba(35,31,32,.85))}
-.photo-frame-bar{position:absolute;top:0;left:0;width:26px;height:6px;background:var(--accent);z-index:2}
-.note-stack{display:flex;flex-direction:column;gap:18px}
-.blk{border-top:6px solid var(--ink);padding-top:16px}
-.blk.accent{border-top-color:var(--accent)}
-.blk h4{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:8px}
-.blk p{font-size:18px;line-height:1.55;color:var(--ink-60)}
-.tag-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
-.tag{font-family:var(--mono);font-size:14px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--ink-40);color:var(--ink-60);background:transparent}
-.tag.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.display{font-family:var(--serif);font-weight:700;font-size:64px;line-height:1.12;margin-bottom:14px;max-width:14ch}
+.subtitle{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:30em;margin-bottom:12px}
+.card-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.card{border:1px solid var(--ink);padding:16px 20px;background:#fff;min-width:180px;flex:1}
+.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-60);margin-bottom:8px}
+.card strong{font-size:18px;display:block;margin-bottom:6px}
+.card span{font-size:15px;color:var(--ink-60);line-height:1.45}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);max-width:920px;margin-top:8px}
+.compare-col{padding:20px 24px;background:#fff}
+.compare-col:first-child{border-right:1px solid var(--ink)}
+.compare-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;margin-bottom:12px;color:var(--accent)}
+.compare-col ul{list-style:none;font-size:16px;line-height:1.65;color:var(--ink-60)}
+.compare-col li::before{content:"· ";color:var(--accent);font-weight:700}
+.flow{display:flex;align-items:stretch;gap:0;margin-top:12px;max-width:960px;border:1px solid var(--ink)}
+.flow-step{flex:1;padding:18px 16px;background:#fff;border-right:1px solid var(--ink);font-size:15px;line-height:1.5}
+.flow-step:last-child{border-right:none}
+.flow-step .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.checklist{border:1px solid var(--ink);background:#fff;margin-top:12px;max-width:920px}
+.checklist li{list-style:none;padding:14px 20px;border-bottom:1px solid rgba(35,31,32,.12);font-size:17px;display:flex;gap:12px;align-items:flex-start}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"□";font-family:var(--mono);color:var(--accent);font-weight:700;flex:none}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;margin-top:8px;flex:1;display:flex;flex-direction:column;min-height:0}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;flex:none}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:520px}
+.diagram-full .diagram-box{border:none;padding:0;background:transparent;margin:0}
+.diagram-full img{max-height:720px}
+.tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.tag{font-family:var(--mono);font-size:13px;padding:10px 16px;border:1px solid var(--ink);background:#fff}
 .tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:4px}
-.card{border:1px solid var(--ink);padding:22px 22px 24px;background:rgba(255,255,255,.35)}
-.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
-.card h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:8px}
-.card p{font-size:17px;line-height:1.5;color:var(--ink-60)}
-.card.dim{background:var(--ink-05);opacity:.85}
-.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.card.hot .lab{color:rgba(255,255,255,.7)}
-.card.hot p{color:rgba(255,255,255,.78)}
-.mile-rail{display:flex;gap:0;border:1px solid var(--ink);margin-top:6px}
-.mile{flex:1;padding:18px 16px;border-right:1px solid var(--ink-08);font-family:var(--mono)}
-.mile:last-child{border-right:none}
-.mile small{display:block;font-size:12px;letter-spacing:.1em;color:var(--ink-40);margin-bottom:8px;text-transform:uppercase}
-.mile b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px;font-weight:700}
-.mile span{font-family:var(--sans);font-size:14px;color:var(--ink-60);line-height:1.4}
-.mile.hot{background:var(--accent);color:#fff}
-.mile.hot small{color:rgba(255,255,255,.65)}
-.mile.hot b,.mile.hot span{color:#fff}
-.chat-mock{border:1px solid var(--ink);background:#fff;padding:18px 20px;margin-top:6px;font-family:var(--mono);font-size:15px;line-height:1.85}
-.chat-mock .row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
-.chat-mock .u{color:var(--ink-40)}
-.chat-mock .a{color:var(--accent);font-weight:700}
-.chat-mock .arrow{color:var(--ink-40);font-weight:700}
-.chat-mock .ok{color:#2f9e44;font-weight:700}
-.chat-mock .no{color:#f24e54;font-weight:700}
-.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-.flow .step{font-family:var(--mono);font-size:15px;padding:12px 16px;border:1px solid var(--ink);background:#fff}
-.flow .step.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.flow .arrow{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
-.hub-grid{display:grid;grid-template-columns:260px 1fr 1fr;gap:18px;margin-top:24px}
-.hub-grid.six{grid-template-columns:240px 1fr 1fr 1fr}
-.hub-core{grid-row:span 2;border:1px solid rgba(242,245,240,.35);background:var(--accent);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:28px 24px}
-.hub-core .lab{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:12px}
-.hub-core h3{font-family:var(--serif);font-size:36px;font-weight:700;line-height:1.2}
-.hub-cell{border:1px solid rgba(242,245,240,.25);padding:22px 22px;background:rgba(242,245,240,.04)}
-.hub-cell .lab{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7d8cff;margin-bottom:8px;font-weight:700}
-.hub-cell h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
-.hub-cell p{font-size:16px;color:rgba(242,245,240,.6);line-height:1.45}
-.side-photo{position:absolute;top:0;right:0;width:38%;height:100%;z-index:1;overflow:hidden;border-left:6px solid var(--ink)}
-.side-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15) contrast(1.05)}
-.side-photo .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,245,240,.35),transparent 40%)}
-.slide.has-side{padding-right:46%}
-.quote-big{font-family:var(--serif);font-size:60px;line-height:1.35;max-width:16em;margin:18px 0 28px}
-.quote-big strong{border-bottom:6px solid var(--accent);font-weight:700}
-.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-40)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
-.avatar-frame{flex:1;width:100%;min-height:0;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220;position:relative}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-.avatar-caption{flex:none;height:30px;line-height:30px;padding:0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
 #preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
-#preview-pager{position:fixed;right:12px;top:12px;z-index:9999;font:13px/1.4 var(--mono);color:#fff;background:rgba(20,0,255,.85);padding:8px 14px;border-radius:4px;display:none;pointer-events:none}
-html.browser-preview #preview-hint,html.browser-preview #preview-pager{display:block}
+html.browser-preview #preview-hint{display:block}
+
 </style>
 </head>
 <body>
-<div id="preview-hint">浏览器预览 · ← → 或空格翻页 · 点击画面下一页</div>
-<div id="preview-pager">1 / 6</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="110.050" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="362.19" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
-<!-- 01 OPEN · side-photo + ladder -->
-<section id="slide-01-open" class="clip slide has-side" data-track-index="1" data-start="0.000" data-duration="19.760">
-  <div class="stage-fill"></div>
-  <div class="side-photo" data-anim="photo"><img src="assets/photos/01-open.jpg" alt="" /><div class="veil"></div></div>
-  <div class="slide-body">
-    <div class="meta-row" data-anim="meta"><span><b>FDE</b> 第七天 · Section 03</span><span>Skill 实战日 · 方法课</span><span>第三节</span></div>
-    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN · 第一个 Skill 选品</div>
-    <h1 class="display" data-anim="t">选错了<span class="thin">后面再漂亮也跑不通</span></h1>
-    <p class="statement" data-anim="s">三筛法：<strong>高频 → 稳定 → 低险</strong></p>
-    <p class="lede" data-anim="lede">第一个 Skill 选品决定你今天的成就感。选错了，后面写得再漂亮也跑不通，今天就会卡在验收。三筛法按顺序过，第一筛高频，第二筛稳定，第三筛低险。</p>
-    <div class="ladder" data-anim="ladder"><div class="rung hot"><small>01</small><b>高频</b></div><div class="rung"><small>02</small><b>稳定</b></div><div class="rung"><small>03</small><b>低险</b></div><div class="rung"><small>04</small><b>打分</b></div></div>
-    <div class="tag-row" data-anim="tags"><span class="tag solid">三筛法</span><span class="tag ">按顺序过</span><span class="tag hl">低险硬筛</span></div>
-  </div>
-</section><!-- 02 · photo + content -->
-<section id="slide-02-failure-stories" class="clip slide" data-track-index="1" data-start="20.010" data-duration="17.760">
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="43.78">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>CORE · 两个选品失败的故事</div>
-    <h1 class="display" data-anim="t">小张和小李<span class="thin">都栽在哪</span></h1>
-    <p class="lede" data-anim="s">小张封装了一年一次的年报——写完再没用过，封装成本回不来。小李封装了处理客户投诉——每次情况都不同，没有稳定步骤可写。两个都栽在三筛上。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/02-fail.jpg" alt="" /><div class="photo-cap">选品失败 · Unsplash</div></div>
-      <div class="note-stack"><div class="duo" data-anim="duo"><div class="card dim"><div class="lab">小张的坑</div><h4>年报 · 一年一次</h4><p>低频——封装成本回不来。第一筛（高频）就没过。</p></div><div class="card dim"><div class="lab">小李的坑</div><h4>投诉 · 每次不同</h4><p>不稳定——没有可写死的步骤。第二筛（稳定）就没过。</p></div></div><div class="tag-row" data-anim="tags"><span class="tag no">低频别碰</span><span class="tag no">不稳定别碰</span><span class="tag hl">三筛先过</span></div></div>
-    </div>
-  </div>
-</section><!-- 03 · photo + content -->
-<section id="slide-03-three-filters" class="clip slide" data-track-index="1" data-start="38.020" data-duration="21.200">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>DETAIL · 三筛法按顺序过</div>
-    <h1 class="display" data-anim="t">高频 → 稳定<span class="thin"> → 低险</span></h1>
-    <p class="lede" data-anim="s">第一筛高频：每周至少做一次吗？低频的封装成本回不来。第二筛稳定：步骤能写成无歧义说明书吗？第三筛低险：出错代价小吗？对外发送、改数据、花钱的先别碰。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/03-three-filters.jpg" alt="" /><div class="photo-cap">三筛法 · Unsplash</div></div>
-      <div class="note-stack"><div class="mile-rail" data-anim="miles"><div class="mile hot"><small>筛 01</small><b>高频</b><span>每周≥1次，封装成本才回得来</span></div><div class="mile hot"><small>筛 02</small><b>稳定</b><span>步骤可写死，不是开盲盒</span></div><div class="mile hot"><small>筛 03</small><b>低险</b><span>出错代价小，练信任优先</span></div></div><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">过三筛</div><h4>周报生成</h4><p>高频、结构稳定、不对外发送、数据可从驾驶舱拉。</p></div><div class="card dim"><div class="lab">不过三筛</div><h4>年度总结</h4><p>低频——一年一次，写完再没用过。</p></div></div></div>
-    </div>
-  </div>
-</section><!-- 04 · photo + content -->
-<section id="slide-04-low-risk-hard" class="clip slide" data-track-index="1" data-start="59.470" data-duration="17.520">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>METHOD · 低险是硬筛</div>
-    <h1 class="display" data-anim="t">第一个 Skill<span class="thin">练的是信任</span></h1>
-    <p class="lede" data-anim="s">对外发送、改数据库、花钱的事，先别碰。第一个 Skill 练的是你和 AI 的信任——错了代价要小。高险操作等 Day 9 学完确认闸再说。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/04-low-risk.jpg" alt="" /><div class="photo-cap">低险优先 · Unsplash</div></div>
-      <div class="note-stack"><div class="blk accent" data-anim="blk"><h4>低险优先</h4><p>第一个 Skill 是练信任——错了代价要小。对外发送/改数据/花钱的，Day 9 确认闸后再碰。</p></div><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">低险 ✓</div><h4>周报生成</h4><p>产出不对外发送，数据从驾驶舱拉——错了最多重跑。</p></div><div class="card dim"><div class="lab">高险 ✗</div><h4>发报价邮件</h4><p>对外发送、不可撤回——第一个 Skill 别碰。</p></div></div><div class="tag-row" data-anim="tags"><span class="tag no">对外发送</span><span class="tag no">改数据</span><span class="tag no">花钱</span><span class="tag hl">低险优先</span></div></div>
-    </div>
-  </div>
-</section><!-- 05 · photo + content -->
-<section id="slide-05-scoring-table" class="clip slide" data-track-index="1" data-start="77.240" data-duration="17.760">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>EXTRA · 动手打分</div>
-    <h1 class="display" data-anim="t">每项 1-5 分<span class="thin">加一列数据可得</span></h1>
-    <p class="lede" data-anim="s">高频、稳定、低险各打 1-5 分，加一列数据可得——输入能直接从驾驶舱或现有文件拿到的，今天就能跑通。拿不定就选两个候选打分，但定品只定一个。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/05-score.jpg" alt="" /><div class="photo-cap">打分表 · Unsplash</div></div>
-      <div class="note-stack"><div class="chat-mock" data-anim="mock"><div class="row"><span class="u">周报</span> 高频5 稳定4 低险5 数据5 <span class="arrow">→</span> <span class="ok">19分 ✓</span></div><div class="row"><span class="u">线索整理</span> 高频4 稳定3 低险4 数据4 <span class="arrow">→</span> <span class="ok">15分 ✓</span></div><div class="row"><span class="u">年报</span> 高频1 稳定3 低险4 数据3 <span class="arrow">→</span> <span class="no">11分 ✗</span></div><div class="row"><span class="u">发报价</span> 高频3 稳定2 低险1 数据3 <span class="arrow">→</span> <span class="no">9分 ✗</span></div></div><div class="tag-row" data-anim="tags"><span class="tag ">高频1-5</span><span class="tag ">稳定1-5</span><span class="tag ">低险1-5</span><span class="tag hl">数据可得</span></div></div>
-    </div>
-  </div>
-</section><!-- 06 CLOSE · invert + quote-big + hub-grid -->
-<section id="slide-06-close" class="clip slide invert" data-track-index="1" data-start="95.250" data-duration="14.800">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY · 带走一句</div>
-    <h1 class="display" style="max-width:none;font-size:72px" data-anim="t">今天只做<span class="thin">一个 Skill，做透</span></h1>
-    <p class="quote-big" data-anim="s"><strong>定品只定一个</strong></p>
-    <div class="hub-grid" data-anim="hub">
-      <div class="hub-core"><div class="lab">THREE FILTERS</div><h3>高频<br/>稳定<br/>低险</h3></div>
-      <div class="hub-cell"><div class="lab">01 · 高频</div><h4>每周≥1次</h4><p>封装成本才回得来——第一筛。</p></div><div class="hub-cell"><div class="lab">02 · 稳定</div><h4>步骤可写死</h4><p>不是开盲盒——第二筛。</p></div><div class="hub-cell"><div class="lab">03 · 低险</div><h4>出错代价小</h4><p>练信任优先——硬筛。</p></div><div class="hub-cell"><div class="lab">04 · 数据</div><h4>今天能跑通</h4><p>从驾驶舱或文件直接拿——加分项。</p></div>
-    </div>
-    <p class="lede" style="margin-top:22px;margin-bottom:0" data-anim="lede">下一节 → 开写：skills/<name>.md，四部件齐全，倒着写，换人测试消歧义。</p>
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+    <h1 class="display" data-anim="t">选品决定成就感</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>第一个 Skill</strong><span>选错全盘输</span></div>
+      <div class="card"><div class="k">要点</div><strong>先看失败案例</strong><span>再三筛法</span></div>
+      </div>
   </div>
 </section>
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="110.050" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第七天 · 第 3 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="110.050" data-track-index="5">
+
+<section id="slide-02-failure-stories" class="clip slide" data-track-index="1" data-start="44.03" data-duration="47.78">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>FAILURE STORIES</div>
+    <h1 class="display" data-anim="t">三个踩坑故事</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">小张</div><strong>年报</strong><span>低频吃灰</span></div>
+      <div class="card"><div class="k">小李</div><strong>投诉</strong><span>不稳定盲盒</span></div>
+      <div class="card"><div class="k">小王</div><strong>报价邮件</strong><span>高风险</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-03-filter-high-freq" class="clip slide" data-track-index="1" data-start="92.06" data-duration="44.44">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>FILTER HIGH FREQ</div>
+    <h1 class="display" data-anim="t">第一筛高频</h1>
+    <p class="subtitle" data-anim="s">每周至少做一次？</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>低频</strong><span>封装成本回不来</span></div>
+      <div class="card"><div class="k">要点</div><strong>概念卡</strong><span>时间黑洞优先</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-04-filter-stable" class="clip slide" data-track-index="1" data-start="136.75" data-duration="47.56">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>FILTER STABLE</div>
+    <h1 class="display" data-anim="t">第二筛稳定</h1>
+    <p class="subtitle" data-anim="s">步骤能写成无歧义说明书？</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>看情况太多 = 开盲盒</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>换人测试预演</strong><span></span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-05-filter-low-risk" class="clip slide" data-track-index="1" data-start="184.56" data-duration="46.0">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>FILTER LOW RISK</div>
+    <h1 class="display" data-anim="t">第三筛低险</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>硬筛</strong><span>第一个练信任</span></div>
+      <div class="card"><div class="k">对外发送</div><strong>改库</strong><span>花钱</span></div>
+      <div class="card"><div class="k">要点</div><strong>第九天</strong><span>人工确认点</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-06-scoring-table" class="clip slide" data-track-index="1" data-start="230.81" data-duration="43.78">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>SCORING TABLE</div>
+    <h1 class="display" data-anim="t">打分表</h1>
+    <p class="subtitle" data-anim="s">驾驶舱 / 现有文件能直接喂</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">高频</div><strong>稳定</strong><span>低险</span></div>
+      <div class="card"><div class="k">要点</div><strong>加分</strong><span>数据可得</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-07-recommend-weekly" class="clip slide" data-track-index="1" data-start="274.83" data-duration="46.89">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>RECOMMEND WEEKLY</div>
+    <h1 class="display" data-anim="t">拿不定就选周报</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>高频</strong><span>每周</span></div>
+      <div class="card"><div class="k">要点</div><strong>稳定</strong><span>四段结构</span></div>
+      <div class="card"><div class="k">低险</div><strong>只给你看</strong><span>数据现成</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="321.97" data-duration="40.22">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">定品一句</h1>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>高频</div>
+      <div class="flow-step"><div class="k">02</div>稳定</div>
+      <div class="flow-step"><div class="k">03</div>低险</div>
+      </div>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">今天只做一个</span>
+      </div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告 · 开写四部件</p>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="362.19" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第七天 · 第 3 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="362.19" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="110.050" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="362.19" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="110.050" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="362.19" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
-const slides = [{"id": "#slide-01-open", "start": 0.000, "dur": 19.760}, {"id": "#slide-02-failure-stories", "start": 20.010, "dur": 17.760}, {"id": "#slide-03-three-filters", "start": 38.020, "dur": 21.200}, {"id": "#slide-04-low-risk-hard", "start": 59.470, "dur": 17.520}, {"id": "#slide-05-scoring-table", "start": 77.240, "dur": 17.760}, {"id": "#slide-06-close", "start": 95.250, "dur": 14.800}];
+const slides = [
+  { id: "#slide-01-open", start: 0.0, dur: 43.78 },
+  { id: "#slide-02-failure-stories", start: 44.03, dur: 47.78 },
+  { id: "#slide-03-filter-high-freq", start: 92.06, dur: 44.44 },
+  { id: "#slide-04-filter-stable", start: 136.75, dur: 47.56 },
+  { id: "#slide-05-filter-low-risk", start: 184.56, dur: 46.0 },
+  { id: "#slide-06-scoring-table", start: 230.81, dur: 43.78 },
+  { id: "#slide-07-recommend-weekly", start: 274.83, dur: 46.89 },
+  { id: "#slide-08-close", start: 321.97, dur: 40.22 }
+];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
   tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
   tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
   tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
-  tl.from(`${id} [data-anim='lede']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.4);
-  tl.from(`${id} [data-anim='meta']`, { y: 14, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.08);
-  tl.from(`${id} [data-anim='photo']`, { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, t0 + 0.1);
-  tl.from(`${id} [data-anim='split']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.35);
-  tl.from(`${id} [data-anim='ladder']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.45);
-  tl.from(`${id} [data-anim='mock']`, { y: 14, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='duo'] .card`, { y: 16, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.65);
-  tl.from(`${id} [data-anim='miles'] .mile`, { y: 14, opacity: 0, stagger: 0.08, duration: 0.35, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='flow'] .step`, { y: 12, opacity: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, t0 + 0.8);
-  tl.from(`${id} [data-anim='hub'] .hub-core`, { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.5);
-  tl.from(`${id} [data-anim='hub'] .hub-cell`, { y: 18, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.7);
-  tl.from(`${id} [data-anim='tags'] .tag`, { y: 10, opacity: 0, stagger: 0.05, duration: 0.3, ease: "power2.out" }, t0 + 0.95);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.42);
 }
 function exit(id, tEnd) {
   tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd - 0.45);
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
-slides.forEach((s) => { enter(s.id, s.start); exit(s.id, s.start + s.dur); });
+  enter("#slide-01-open", 0.0);
+  enter("#slide-02-failure-stories", 44.03);
+  enter("#slide-03-filter-high-freq", 92.06);
+  enter("#slide-04-filter-stable", 136.75);
+  enter("#slide-05-filter-low-risk", 184.56);
+  enter("#slide-06-scoring-table", 230.81);
+  enter("#slide-07-recommend-weekly", 274.83);
+  enter("#slide-08-close", 321.97);
+  exit("#slide-01-open", 43.78);
+  exit("#slide-02-failure-stories", 91.81);
+  exit("#slide-03-filter-high-freq", 136.5);
+  exit("#slide-04-filter-stable", 184.31);
+  exit("#slide-05-filter-low-risk", 230.56);
+  exit("#slide-06-scoring-table", 274.59);
+  exit("#slide-07-recommend-weekly", 321.72);
+  exit("#slide-08-close", 362.19);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
+
 (function bootBrowserPreview() {
   const params = new URLSearchParams(location.search);
   const renderMode = params.get("render") === "1";
@@ -240,23 +236,27 @@ window.__timelines["main"] = tl;
   document.documentElement.classList.add("browser-preview");
   const slidesEls = [...document.querySelectorAll(".slide")];
   let idx = 0;
-  function fit() { const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); document.body.style.transform = "scale(" + s + ")"; document.body.style.transformOrigin = "top left"; }
-  function reveal(el) { gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, x: 0, clearProps: "transform" }); }
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
   function show(i) {
     slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
     reveal(slidesEls[i]);
-    const pager = document.getElementById("preview-pager");
-    if (pager) pager.textContent = (i + 1) + " / " + slidesEls.length;
   }
   gsap.set("#avatar-pip", { opacity: 1, y: 0 });
   fit(); show(0);
   window.addEventListener("resize", fit);
-  document.getElementById("root").addEventListener("click", (e) => { if (e.target.closest("#avatar-pip")) return; idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); });
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
     if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
   });
 })();
+
 </script>
 </body>
 </html>

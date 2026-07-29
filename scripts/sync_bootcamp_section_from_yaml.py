@@ -74,6 +74,7 @@ def parse_ppt(ppt: list[str], oral: str, sid: str) -> dict:
             continue
         if line.startswith("讲解图："):
             svg = line.split("：", 1)[1].strip()
+            svg = re.sub(r"[（(].*$", "", svg).strip()
             diagram = ("讲解图 · " + svg.replace(".svg", ""), svg)
             continue
         if line.startswith("下一节") or line.startswith("预告"):
@@ -106,8 +107,8 @@ def parse_ppt(ppt: list[str], oral: str, sid: str) -> dict:
     slug = sid.split("-", 1)[-1] if "-" in sid else sid
     if not headline:
         headline = slug.replace("-", " ")
-    if not cards and oral:
-        cards = oral_cards(oral)
+    # Do not fall back to oral_cards — PPT must never show narration sentences.
+    # Authors must put explicit concept cards in yaml ppt[]; empty is OK (diagram/tags only).
     if slug.endswith("close") or slug in ("close", "graduate", "takeaway"):
         if cards and not tags:
             tags = [(c[1], i == 0) for i, c in enumerate(cards[:4])]
@@ -143,7 +144,9 @@ def sync_narration(section_dir: Path, data: dict) -> list[dict]:
         manifest.append({"id": sid, "file": fname})
         for line in seg.get("ppt", []):
             if str(line).startswith("讲解图："):
-                copy_diagram(str(line).split("：", 1)[1].strip(), section_dir)
+                svg = str(line).split("：", 1)[1].strip()
+                svg = re.sub(r"[（(].*$", "", svg).strip()
+                copy_diagram(svg, section_dir)
     (narr / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
@@ -233,12 +236,14 @@ def main() -> None:
     ap.add_argument("--regen-html", action="store_true")
     ap.add_argument("--align-day06", action="store_true")
     args = ap.parse_args()
-    if args.align_day06 or (args.from_day <= 6 <= args.to_day):
+    # Never call align.main() here: its hardcoded SECTIONS can overwrite fine-grained
+    # day06_s0N.yaml. Use --align-day06 only as an explicit opt-in (legacy).
+    if args.align_day06:
         align.main()
     for day in range(args.from_day, args.to_day + 1):
         for sec in section_dirs(day):
-            if day == 6 and sec == "01":
-                continue
+            if day == 6 and sec == "06":
+                continue  # accept section withdrawn from curriculum
             sync_section(day, sec, regen_html=args.regen_html or day >= 8)
 
 

@@ -4,19 +4,35 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-map-self",
-    "file": "02-map-self.txt"
+    "id": "02-cognitive-fold",
+    "file": "02-cognitive-fold.txt"
   },
   {
-    "id": "03-cognitive-fold",
-    "file": "03-cognitive-fold.txt"
+    "id": "03-industry-map",
+    "file": "03-industry-map.txt"
   },
   {
-    "id": "04-ninety-day",
-    "file": "04-ninety-day.txt"
+    "id": "04-orchestration-star",
+    "file": "04-orchestration-star.txt"
   },
   {
-    "id": "05-close",
-    "file": "05-close.txt"
+    "id": "05-ten-days-enough",
+    "file": "05-ten-days-enough.txt"
+  },
+  {
+    "id": "06-roadmap",
+    "file": "06-roadmap.txt"
+  },
+  {
+    "id": "07-ninety-day",
+    "file": "07-ninety-day.txt"
+  },
+  {
+    "id": "08-choose-station",
+    "file": "08-choose-station.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
   }
 ]

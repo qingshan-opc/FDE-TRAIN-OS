@@ -80,7 +80,7 @@ capsule_extra:
         - 体面失败：AI 挂了/数据不够，系统不能假装成功
         - 永远不用 AI
       - 1
-      - 前端三态（D2-3）、LLM 降级（D5）、Skill 边界（D8）——同一思想的第三次生长。
+      - 前端三态（D2-3）、LLM/SSE 降级（D6）、Skill 边界（D8）——同一思想的第三次生长。
     tools:
     - name: 异常四分类处置卡
       note: 输入错 / 环境错 / 能力限 / 目标歧
@@ -129,6 +129,18 @@ capsule_extra:
         - 聊天记录全文
       - 1
       - 注入 + Agent 选型实验都要留痕——Day 10 证据素材。
+    - - Skill v1 相对「能跑」版，工程化多交什么？
+      - - 更漂亮的 Prompt
+        - 边界声明（不接什么 + 失败怎么表现）+ 注入用例过闸
+        - 换更大的模型
+      - 1
+      - GATE 8：可依赖 = 声明在先、坏输入按声明失败。
+    - - 注入用例「空数据 / 错格式 / 越界请求」分别主要测哪类异常？
+      - - 全是模型错
+        - 输入错 / 输入错 / 权限或范围错（按你边界声明归类）
+        - 全是环境错
+      - 1
+      - 四分类要对上用例——测的是设计，不是碰运气。
     tools:
     - name: 注入用例模板
       note: 坏输入 | 预期行为 | 实际行为 | 过/不过
@@ -237,6 +249,18 @@ capsule_extra:
         - 测试模型速度
       - 1
       - 「什么时候会选错」是 GATE 8 口答必考点——Day 10 答辩也会问。
+    - - 工具描述里写清「何时不用」主要防止什么？
+      - - 模型算力不够
+        - Agent 在模糊任务上误选你的 Skill
+        - 日志文件过大
+      - 1
+      - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
+    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
+      - - 没区别，都是聊天
+        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
+        - Agent 更便宜所以优先
+      - 1
+      - 信任对象变了：从「建议」变成「代执行」，必须可回放。
     tools:
     - name: 选错图谱
       note: 描述重叠 / 缺边界 / 任务歧义
@@ -246,52 +270,7 @@ capsule_extra:
       object_key: documents/shared/course-media/day08-c4-agent-loop.mp4
       poster_key: documents/shared/course-media/day08-c4-agent-loop-poster.jpg
       duration_sec: 118
-  c5:
-    resource_ids:
-    - dg-exception
-    - dg-agent-loop
-    - dg-workflow-agent
-    knowledge_cards:
-    - id: gate8
-      term: GATE 8
-      plain: Skill v1 + 注入全过 + Agent 闭环 + 口答 Harness/决策环/workflow vs agent/选错。
-      tag: 验收
-    - id: agent-v01
-      term: Agent v0.1
-      plain: 能正确调用你的 Skill 并完成闭环——引擎盖掀开后的第一个可演示版本。
-      tag: 交付
-    glossary_terms:
-    - id: gt-gate8
-      term: GATE 8
-      plain: 工程化 Skill + Agent 闭环 + 口答四题——Week 2 第一个里程碑。
-    quiz:
-    - - GATE 8 口答必须包括？
-      - - 前端三态
-        - Harness 四要素、决策环、workflow vs agent、什么时候会选错
-        - SQL 四板斧
-      - 1
-      - 概念 + 实战双验收——能讲清楚才算真懂。
-    - - GATE 8 commit 信息示例？
-      - - fix: typo
-        - feat: Skill v1 工程化 + Agent v0.1
-        - chore: 部署
-      - 1
-      - 里程碑 commit 标记 Skill 工程化与 Agent 初遇。
-    - - Skill v1 相比 v0 必须新增？
-      - - 更长的步骤
-        - 边界声明 + 通过异常注入测试
-        - 新的前端页面
-      - 1
-      - 从能跑到可依赖——边界是分水岭。
-    tools:
-    - name: GATE 8 口答清单
-      note: 四要素 / 决策环 / workflow vs agent / 选错
-    media:
-    - kind: video
-      title: 口播课件 · GATE 8
-      object_key: documents/shared/course-media/day08-c5-gate8.mp4
-      poster_key: documents/shared/course-media/day08-c5-gate8-poster.jpg
-      duration_sec: 99
+# c5 验收课已撤出大纲（素材可留在旧 section 目录，不进课表）。
 quiz:
 - - 「能跑」和「可依赖」之间隔着什么？
   - - 更强的模型
@@ -377,6 +356,18 @@ quiz:
     - 记忆模块
   - 1
   - 你早就在造 Agent——今天只是掀引擎盖。
+- - GATE 8 对 Skill v1 的硬门槛是？
+  - - 只要 Prompt 更长
+    - 有边界声明，且 ≥3 种坏输入均按声明失败
+    - 必须上多 Agent 框架
+  - 1
+  - 工程化验收看声明与注入，不看「感觉稳」。
+- - Harness「记忆」要素主要解决什么？
+  - - 换更大显卡
+    - 跨步保留上下文，避免每轮从零猜任务状态
+    - 替代工具表
+  - 1
+  - 四要素缺一不可——没记忆的循环只会原地打转。
 lab:
   primary_files:
   - skills/skill-01.md

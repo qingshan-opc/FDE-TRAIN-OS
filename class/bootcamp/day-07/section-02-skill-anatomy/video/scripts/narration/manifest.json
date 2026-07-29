@@ -4,23 +4,35 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-input-steps",
-    "file": "02-input-steps.txt"
+    "id": "02-four-parts-map",
+    "file": "02-four-parts-map.txt"
   },
   {
-    "id": "03-output-accept",
-    "file": "03-output-accept.txt"
+    "id": "03-input",
+    "file": "03-input.txt"
   },
   {
-    "id": "04-weekly-example",
-    "file": "04-weekly-example.txt"
+    "id": "04-steps",
+    "file": "04-steps.txt"
   },
   {
-    "id": "05-common-defects",
-    "file": "05-common-defects.txt"
+    "id": "05-output",
+    "file": "05-output.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-accept",
+    "file": "06-accept.txt"
+  },
+  {
+    "id": "07-weekly-example",
+    "file": "07-weekly-example.txt"
+  },
+  {
+    "id": "08-defects-day5",
+    "file": "08-defects-day5.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
   }
 ]

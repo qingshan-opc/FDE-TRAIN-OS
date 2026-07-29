@@ -32,7 +32,7 @@ learn:
   - camp:v0.7
   - day:9
   - project:role-week
-  estimated_minutes: 115
+  estimated_minutes: 95
   require_capsules: true
   capsules:
   - id: c1
@@ -210,6 +210,18 @@ learn:
         - 不需要验收了
       - 1
       - 第一个练信任，第二三个练吞吐——模板复用。
+    - - 三个 Skill 怎么拆职责最稳？
+      - - 三个 Skill 做同一件事，互为备份
+        - 各管一段可验收步骤，输入输出契约能接上、描述不重叠
+        - 全塞进一个超级 Skill
+      - 1
+      - 编排靠串联，不靠重复——重叠描述会害 Agent 选型。
+    - - 第 2、3 个 Skill 可以省略边界声明吗？
+      - - 可以，反正模板熟了
+        - 不行——每件工具都要说明书 + 边界 + 描述，标准不降级
+        - 只写代码就够
+      - 1
+      - 工具表扩容不能降工程标准——可依赖是逐件验收的。
     media:
     - kind: video
       title: 口播课件 · 工具表 3 件
@@ -268,6 +280,18 @@ learn:
         - 看 Agent 心情
       - 1
       - 钥匙在你手里——这是信任的工程设计。
+    - - orchestration.md 最少要写清什么？
+      - - 只用画一张好看的图
+        - 串联步骤 + 数据流 + 确认闸位置 + 日志格式
+        - 模型厂商与价格表
+      - 1
+      - 编排文档是施工图——Day 10 证据与答辩都会翻它。
+    - - 驳回路径「必须能退回重做」对应哪条验收？
+      - - 只要批准路径通就行
+        - 闸口驳回有记录、能退回、版本可追踪——不是只有绿灯
+        - 驳回后自动强制执行
+      - 1
+      - 拦得住还要回得来——单侧幸福路径不算过闸。
     media:
     - kind: video
       title: 口播课件 · 流水线
@@ -287,62 +311,6 @@ learn:
     - id: gt-orchestration-md
       term: orchestration.md
       plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
-  - id: c5
-    title: 验收：闸口实测 + GATE 9
-    minutes: 20
-    form: 验收
-    content_ref: class/bootcamp/day-09/section-05-accept/lesson.md
-    content: '同学们，GATE 9 今天考的就一件事：你的流水线拦不拦得住。我站闸口边看三样——到闸停不停、批了动不动、驳回了回不回得来。工具表三件、编排文档、执行日志，证据齐了咱们再口试，对吧。
-
-      现场跑一遍流水线，确认界面信息够不够你做决策——不是发送吗？四个字，是草稿加关键数字加风险标红。挂了好，用排障速查现场修一次，修的过程本身就是加分；假装没挂，那才是真挂，咱们都懂。
-
-      口试三题都在课上讲过。你的闸——看什么、谁来看、多久看一次？确认闸形同虚设的三种死法是什么，你怎么避开？从每次都看到抽看，中间条件是什么——连续通过攒额度，抽看配定期审计。答不出信任分级路径，等于第二节白听，对吧。
-
-      全绿才过：三件 Skill 齐、编排清楚、闸口实测、日志可回放，commit 信息也写规范。过了这关，你手里就是一条完整的、带刹车的 AI 流水线。明天收官，把它接上驾驶舱，然后你来讲给我听，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
-    resource_ids:
-    - dg-orchestration
-    tools:
-    - name: GATE 9 清单
-      note: 3 件工具 / 编排文档 / 闸口实测 / 日志回放
-    quiz:
-    - - GATE 9 必须实测几条路径？
-      - - 只测批准
-        - 批准继续 + 驳回留痕两条
-        - 不需要实测
-      - 1
-      - 驳回路径和批准路径同样重要——回得来才算工程化。
-    - - GATE 9 commit 信息？
-      - - feat: 三 Skill 编排——确认闸 + 执行日志
-        - fix: typo
-        - docs: readme
-      - 0
-      - 里程碑标记编排与安全设计落地。
-    - - 执行日志的可回放性指？
-      - - 能打印
-        - 不看代码也能还原当天流水线经过
-        - 只有导师能看
-      - 1
-      - 出事故时的唯一案底——Day 10 答辩兜底证据。
-    media:
-    - kind: video
-      title: 口播课件 · GATE 9
-      object_key: documents/shared/course-media/day09-c5-gate9.mp4
-      poster_key: documents/shared/course-media/day09-c5-gate9-poster.jpg
-      duration_sec: 73
-    knowledge_cards:
-    - id: gate9
-      term: GATE 9
-      plain: 3 件工具 + 编排文档 + 闸口实测 + 执行日志可回放。
-      tag: 验收
-    - id: gate9-test
-      term: 闸口实测
-      plain: 跑到闸自动停 → 批准继续 / 驳回留痕——两条路径都要跑通。
-      tag: 验收
-    glossary_terms:
-    - id: gt-gate9
-      term: GATE 9
-      plain: Week 2 编排里程碑：流水线跑通，闸口拦得住，日志查得了。
 quiz:
   pass_rate: 0.67
   questions:
@@ -444,9 +412,23 @@ quiz:
     - 没有 problem
     answer: 1
     explain: 确认闸设计要治麻木，不是治 lazy。
+  - q: 可撤回步骤前面要不要一律加确认闸？
+    options:
+    - 要，每步都闸最安全
+    - 不必——闸留给不可撤回步骤，过多确认会诱发盲批
+    - 永远不要闸
+    answer: 1
+    explain: 闸的密度是设计题：太稀失控，太密麻木。
+  - q: GATE 9「查得了」最低靠什么证明？
+    options:
+    - 口头复述流程
+    - 每步执行日志（时间/动作/结果）可独立回放
+    - 只要 orchestration.md 写了就行
+    answer: 1
+    explain: 文档是施工图，日志是案底——两者都要。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 115′）
+  title: 今日课节（4 节 · 95′）
 - type: quiz
   title: Day9 概念验收
 - type: lab

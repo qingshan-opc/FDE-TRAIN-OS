@@ -4,23 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-prompt",
-    "file": "02-prompt.txt"
+    "id": "02-prompt-bad",
+    "file": "02-prompt-bad.txt"
   },
   {
-    "id": "03-context",
-    "file": "03-context.txt"
+    "id": "03-prompt-good",
+    "file": "03-prompt-good.txt"
   },
   {
-    "id": "04-rag",
-    "file": "04-rag.txt"
+    "id": "04-context",
+    "file": "04-context.txt"
   },
   {
-    "id": "05-finetune",
-    "file": "05-finetune.txt"
+    "id": "05-rag-story",
+    "file": "05-rag-story.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-rag-steps",
+    "file": "06-rag-steps.txt"
+  },
+  {
+    "id": "07-finetune",
+    "file": "07-finetune.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

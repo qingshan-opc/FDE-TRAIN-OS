@@ -4,23 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-run-steps",
-    "file": "02-run-steps.txt"
+    "id": "02-run-formula",
+    "file": "02-run-formula.txt"
   },
   {
-    "id": "03-evidence-trio",
-    "file": "03-evidence-trio.txt"
+    "id": "03-run-steps",
+    "file": "03-run-steps.txt"
   },
   {
-    "id": "04-iteration-loop",
-    "file": "04-iteration-loop.txt"
+    "id": "04-evidence-trio",
+    "file": "04-evidence-trio.txt"
   },
   {
-    "id": "05-common-issues",
-    "file": "05-common-issues.txt"
+    "id": "05-iteration-loop",
+    "file": "05-iteration-loop.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-trust-building",
+    "file": "06-trust-building.txt"
+  },
+  {
+    "id": "07-common-issues",
+    "file": "07-common-issues.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

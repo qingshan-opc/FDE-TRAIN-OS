@@ -42,7 +42,7 @@ learn:
   - camp:v0.7
   - day:8
   - project:role-week
-  estimated_minutes: 120
+  estimated_minutes: 105
   require_capsules: true
   capsules:
   - id: c1
@@ -91,7 +91,7 @@ learn:
         - 体面失败：AI 挂了/数据不够，系统不能假装成功
         - 永远不用 AI
       - 1
-      - 前端三态（D2-3）、LLM 降级（D5）、Skill 边界（D8）——同一思想的第三次生长。
+      - 前端三态（D2-3）、LLM/SSE 降级（D6）、Skill 边界（D8）——同一思想的第三次生长。
     media:
     - kind: video
       title: 口播课件 · 边界声明
@@ -163,6 +163,18 @@ learn:
         - 聊天记录全文
       - 1
       - 注入 + Agent 选型实验都要留痕——Day 10 证据素材。
+    - - Skill v1 相对「能跑」版，工程化多交什么？
+      - - 更漂亮的 Prompt
+        - 边界声明（不接什么 + 失败怎么表现）+ 注入用例过闸
+        - 换更大的模型
+      - 1
+      - GATE 8：可依赖 = 声明在先、坏输入按声明失败。
+    - - 注入用例「空数据 / 错格式 / 越界请求」分别主要测哪类异常？
+      - - 全是模型错
+        - 输入错 / 输入错 / 权限或范围错（按你边界声明归类）
+        - 全是环境错
+      - 1
+      - 四分类要对上用例——测的是设计，不是碰运气。
     media:
     - kind: video
       title: 口播课件 · Skill v1
@@ -310,6 +322,18 @@ learn:
         - 测试模型速度
       - 1
       - 「什么时候会选错」是 GATE 8 口答必考点——Day 10 答辩也会问。
+    - - 工具描述里写清「何时不用」主要防止什么？
+      - - 模型算力不够
+        - Agent 在模糊任务上误选你的 Skill
+        - 日志文件过大
+      - 1
+      - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
+    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
+      - - 没区别，都是聊天
+        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
+        - Agent 更便宜所以优先
+      - 1
+      - 信任对象变了：从「建议」变成「代执行」，必须可回放。
     media:
     - kind: video
       title: 口播课件 · Agent 调用 Skill
@@ -329,68 +353,6 @@ learn:
     - id: gt-copilot-agent
       term: Copilot vs Agent
       plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
-  - id: c5
-    title: 验收：Agent v0.1 闭环 + GATE 8
-    minutes: 15
-    form: 验收
-    content_ref: class/bootcamp/day-08/section-05-accept/lesson.md
-    content: '同学们，第八天验收。今天你从写说明书的人升级为带 AI 团队的人——哪怕团队目前只有一件工具。上午把 Skill 从能跑炼成可依赖；下午把它挂上 Agent 工具表，并且知道它什么时候会被选错，对吧。
-
-      现场演示：导师随机下任务，含一个易选错的，观察 Agent 选择与产出。演示时 Agent 现场选错了怎么办？不慌，这正是图谱的素材——现场归因、现场说修法。导师评的是你的诊断力，不是 Agent 的运气，嘛。
-
-      口试四件套，脱口而出。第一 Harness 四要素：模型、工具表、记忆、循环，各说一个你的对应产物。第二决策环：理解、规划、调工具、观察、继续。第三 workflow vs agent：步骤定死 vs 路径现想，能 workflow
-      别 agent。第四选错图谱：我的 Agent 在什么措辞下会误选，因为什么，我用什么修了描述，对吧。
-
-      GATE 8 清单：现场演示 Agent 正确调用、产出过 Skill 验收段；Skill v1 边界声明加注入测试证据，至少三条全 ✓ 加回归过；口试四件套，第四条基于真实图谱；docs/agent-tool-map.md 进 Git；commit
-      写 feat: Skill v1 工程化 + Agent v0.1，对吧。
-
-      收个尾：明天工具表要从一件变三件，还要串成一条流水线——多 Skill 编排。以及全课最重要的设计之一：人工确认点——让 AI 放手干，但钥匙在你手里。今晚备好两个 Skill 候选，咱们第九天见，嘛。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
-    resource_ids:
-    - dg-exception
-    - dg-agent-loop
-    - dg-workflow-agent
-    tools:
-    - name: GATE 8 口答清单
-      note: 四要素 / 决策环 / workflow vs agent / 选错
-    quiz:
-    - - GATE 8 口答必须包括？
-      - - 前端三态
-        - Harness 四要素、决策环、workflow vs agent、什么时候会选错
-        - SQL 四板斧
-      - 1
-      - 概念 + 实战双验收——能讲清楚才算真懂。
-    - - GATE 8 commit 信息示例？
-      - - fix: typo
-        - feat: Skill v1 工程化 + Agent v0.1
-        - chore: 部署
-      - 1
-      - 里程碑 commit 标记 Skill 工程化与 Agent 初遇。
-    - - Skill v1 相比 v0 必须新增？
-      - - 更长的步骤
-        - 边界声明 + 通过异常注入测试
-        - 新的前端页面
-      - 1
-      - 从能跑到可依赖——边界是分水岭。
-    media:
-    - kind: video
-      title: 口播课件 · GATE 8
-      object_key: documents/shared/course-media/day08-c5-gate8.mp4
-      poster_key: documents/shared/course-media/day08-c5-gate8-poster.jpg
-      duration_sec: 99
-    knowledge_cards:
-    - id: gate8
-      term: GATE 8
-      plain: Skill v1 + 注入全过 + Agent 闭环 + 口答 Harness/决策环/workflow vs agent/选错。
-      tag: 验收
-    - id: agent-v01
-      term: Agent v0.1
-      plain: 能正确调用你的 Skill 并完成闭环——引擎盖掀开后的第一个可演示版本。
-      tag: 交付
-    glossary_terms:
-    - id: gt-gate8
-      term: GATE 8
-      plain: 工程化 Skill + Agent 闭环 + 口答四题——Week 2 第一个里程碑。
 quiz:
   pass_rate: 0.67
   questions:
@@ -492,9 +454,23 @@ quiz:
     - 记忆模块
     answer: 1
     explain: 你早就在造 Agent——今天只是掀引擎盖。
+  - q: GATE 8 对 Skill v1 的硬门槛是？
+    options:
+    - 只要 Prompt 更长
+    - 有边界声明，且 ≥3 种坏输入均按声明失败
+    - 必须上多 Agent 框架
+    answer: 1
+    explain: 工程化验收看声明与注入，不看「感觉稳」。
+  - q: Harness「记忆」要素主要解决什么？
+    options:
+    - 换更大显卡
+    - 跨步保留上下文，避免每轮从零猜任务状态
+    - 替代工具表
+    answer: 1
+    explain: 四要素缺一不可——没记忆的循环只会原地打转。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 120′）
+  title: 今日课节（4 节 · 105′）
 - type: quiz
   title: Day8 概念验收
 - type: lab

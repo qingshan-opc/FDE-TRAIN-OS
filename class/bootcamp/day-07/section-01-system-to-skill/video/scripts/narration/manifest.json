@@ -16,11 +16,15 @@
     "file": "04-triple-value.txt"
   },
   {
-    "id": "05-anti-patterns",
-    "file": "05-anti-patterns.txt"
+    "id": "05-not-code",
+    "file": "05-not-code.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-anti-patterns",
+    "file": "06-anti-patterns.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

@@ -22,6 +22,18 @@
 
 > 本机加练：本节已配 local_prep（一键复制的引导提示词），在你的本机 AI 工具里按引导完成上述两轮。
 
+## 一键粘贴提示词
+
+> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+
+```text
+按顺序工作（不要跳步）：
+1) 角色= UIUX_Designer_Agent_Prompt.md，输入我的 PRD 摘要，产出/修订 design-spec.md；
+2) 角色= Web_Client_Agent_Prompt.md，粘贴 design-spec + PRD 核心功能，约束「只输出一个 index.html，样式内联，单文件可打开」；
+3) 对照规范列出缺口 → 把缺口写成量化约束 → 再生成一版。
+最终交付 index.html + 简短迭代说明（改了哪几条约束）。
+```
+
 ## 完成标志
 
 - `index.html` 单文件可打开，含 hero 区 + 三个功能区块；

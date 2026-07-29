@@ -4,19 +4,35 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-demo-segment",
-    "file": "02-demo-segment.txt"
+    "id": "02-demo-dont-tell",
+    "file": "02-demo-dont-tell.txt"
   },
   {
-    "id": "03-arch-story",
-    "file": "03-arch-story.txt"
+    "id": "03-demo-path",
+    "file": "03-demo-path.txt"
   },
   {
-    "id": "04-outline-rehearse",
-    "file": "04-outline-rehearse.txt"
+    "id": "04-arch-segment",
+    "file": "04-arch-segment.txt"
   },
   {
-    "id": "05-fallback",
-    "file": "05-fallback.txt"
+    "id": "05-bug-story",
+    "file": "05-bug-story.txt"
+  },
+  {
+    "id": "06-outline",
+    "file": "06-outline.txt"
+  },
+  {
+    "id": "07-rehearse",
+    "file": "07-rehearse.txt"
+  },
+  {
+    "id": "08-fallback",
+    "file": "08-fallback.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
   }
 ]

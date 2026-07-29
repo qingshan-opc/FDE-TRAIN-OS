@@ -96,7 +96,7 @@ capsule_extra:
       tag: 方法
     - id: evidence-map
       term: 证据地图
-      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM(D5) → Skill(D7-9) → Git(全程)。
+      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM+SSE(D6) → Skill(D7-9) → Git(全程)。
       tag: 结构
     glossary_terms:
     - id: gt-evidence-thinking

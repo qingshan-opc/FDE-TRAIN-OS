@@ -1,1 +1,1 @@
-同学们，第五节词最多，六个一次讲清：Agent、Harness、Tool Calling、MCP、Workflow 跟 Agent 怎么分，还有 Copilot 跟 Agent 差在哪。第二周你们要封装 Skill——今天先把骨架名词对齐，别到时候 Harness 和 MCP 混成一团，听完了能跟同桌各讲一个词，就算过关，嘛。
+同学们好，我是你们的老师404。第五节词最多：Agent、Harness、Tool Calling、MCP、Workflow 跟 Agent、Copilot 跟 Agent。先问一句：你能不能用一句话说清——Harness 和 MCP 不是一回事？说不清很正常，今天就是来对齐的。有同学可能会怕背不完。不用背定义全文——听完要能跟同桌各讲一个词，并各举一条前五天的例子。第二周要封装 Skill，今天先把骨架名词立住。来，看屏幕，从 Agent 开始，嘛。

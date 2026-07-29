@@ -4,19 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-ten-evidence",
-    "file": "02-ten-evidence.txt"
+    "id": "02-evidence-mindset",
+    "file": "02-evidence-mindset.txt"
   },
   {
-    "id": "03-strong-weak",
-    "file": "03-strong-weak.txt"
+    "id": "03-ten-map",
+    "file": "03-ten-map.txt"
   },
   {
-    "id": "04-one-liner",
-    "file": "04-one-liner.txt"
+    "id": "04-self-check",
+    "file": "04-self-check.txt"
   },
   {
-    "id": "05-close",
-    "file": "05-close.txt"
+    "id": "05-strong-three",
+    "file": "05-strong-three.txt"
+  },
+  {
+    "id": "06-weak-two",
+    "file": "06-weak-two.txt"
+  },
+  {
+    "id": "07-one-liner",
+    "file": "07-one-liner.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

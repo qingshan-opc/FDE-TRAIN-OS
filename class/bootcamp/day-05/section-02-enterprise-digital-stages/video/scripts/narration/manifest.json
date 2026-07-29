@@ -4,23 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-stage12",
-    "file": "02-stage12.txt"
+    "id": "02-info",
+    "file": "02-info.txt"
   },
   {
-    "id": "03-stage34",
-    "file": "03-stage34.txt"
+    "id": "03-digital",
+    "file": "03-digital.txt"
   },
   {
-    "id": "04-agent",
-    "file": "04-agent.txt"
+    "id": "04-network",
+    "file": "04-network.txt"
   },
   {
-    "id": "05-cockpit",
-    "file": "05-cockpit.txt"
+    "id": "05-intel",
+    "file": "05-intel.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-agent",
+    "file": "06-agent.txt"
+  },
+  {
+    "id": "07-cockpit",
+    "file": "07-cockpit.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

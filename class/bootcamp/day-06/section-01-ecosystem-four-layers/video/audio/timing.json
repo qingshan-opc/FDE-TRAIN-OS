@@ -1,47 +1,65 @@
 {
-  "total": 195.059,
+  "total": 496.055,
   "segments": [
     {
       "id": "01-open",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/01-open.wav",
       "start": 0.0,
-      "duration": 26.49
+      "duration": 55.605
     },
     {
-      "id": "02-llm",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/02-llm.wav",
-      "start": 26.74,
-      "duration": 29.44
+      "id": "02-history",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/02-history.wav",
+      "start": 55.855,
+      "duration": 51.126
     },
     {
-      "id": "03-four-layer",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/03-four-layer.wav",
-      "start": 56.43,
-      "duration": 27.69
+      "id": "03-small-model",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/03-small-model.wav",
+      "start": 107.231,
+      "duration": 49.366
     },
     {
-      "id": "04-you-are-here",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/04-you-are-here.wav",
-      "start": 84.37,
-      "duration": 22.492
+      "id": "04-generalization",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/04-generalization.wav",
+      "start": 156.847,
+      "duration": 54.965
     },
     {
-      "id": "05-open-closed",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/05-open-closed.wav",
-      "start": 107.112,
-      "duration": 37.447
+      "id": "05-idiom-chain",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/05-idiom-chain.wav",
+      "start": 212.062,
+      "duration": 54.725
     },
     {
-      "id": "06-multimodal",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/06-multimodal.wav",
-      "start": 144.809,
-      "duration": 26.16
+      "id": "06-four-layer",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/06-four-layer.wav",
+      "start": 267.037,
+      "duration": 44.246
     },
     {
-      "id": "07-close",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/07-close.wav",
-      "start": 171.219,
-      "duration": 23.84
+      "id": "07-orchestration",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/07-orchestration.wav",
+      "start": 311.533,
+      "duration": 51.366
+    },
+    {
+      "id": "08-access",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/08-access.wav",
+      "start": 363.149,
+      "duration": 49.206
+    },
+    {
+      "id": "09-multimodal",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/09-multimodal.wav",
+      "start": 412.605,
+      "duration": 40.96
+    },
+    {
+      "id": "10-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day06_s01_course/tts/10-close.wav",
+      "start": 453.815,
+      "duration": 42.24
     }
   ]
 }

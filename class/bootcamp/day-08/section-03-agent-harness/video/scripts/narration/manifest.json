@@ -16,11 +16,15 @@
     "file": "04-decision-loop.txt"
   },
   {
-    "id": "05-workflow-vs-agent",
-    "file": "05-workflow-vs-agent.txt"
+    "id": "05-loop-guardrails",
+    "file": "05-loop-guardrails.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-workflow-vs-agent",
+    "file": "06-workflow-vs-agent.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

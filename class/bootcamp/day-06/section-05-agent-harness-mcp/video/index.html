@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第六天 · 第 5 节 · Agent / Harness / MCP</title>
+<title>Agent / Harness / Tool / MCP / Workflow vs Agent</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
 
@@ -67,122 +67,136 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="206.629" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="321.530" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="24.560">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="33.840">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">Agent<br/>全家桶</h1>
-    <p class="subtitle" data-anim="s">六个词一次讲清 · 第二周 Skill 封装前对齐</p>
-    <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">Agent</span>
-      <span class="tag">Harness</span>
-      <span class="tag">Tool Calling</span>
-      <span class="tag">MCP</span>
-      <span class="tag">Workflow</span>
-      <span class="tag">Copilot</span>
+    <h1 class="display" data-anim="t">六个词一次对齐</h1>
+    <p class="subtitle" data-anim="s">听懂标志：能讲给同桌听并举例</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">Agent</div><strong>Harness</strong><span>Tool</span></div>
       </div>
   </div>
 </section>
 
-<section id="slide-02-agent" class="clip slide" data-track-index="1" data-start="24.810" data-duration="31.840">
+<section id="slide-02-agent" class="clip slide" data-track-index="1" data-start="34.090" data-duration="42.160">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">02</span>AGENT</div>
-    <h1 class="display" data-anim="t">Agent 智能体</h1>
-    <p class="subtitle" data-anim="s">能自己决定下一步的 AI</p>
+    <h1 class="display" data-anim="t">能决定下一步</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">你定</div><strong>目的地 + 验收</strong><span></span></div>
-      <div class="card"><div class="k">它选</div><strong>路线 + 工具</strong><span>Cursor Agent · Claude Code</span></div>
+      <div class="card"><div class="k">要点</div><strong>你定目的地与验收</strong><span>它选路线</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Agent 决策环</div><img src="assets/diagrams/agent-loop.svg" alt="讲解图 · Agent 决策环" /></div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>理解</div>
+      <div class="flow-step"><div class="k">02</div>规划</div>
+      <div class="flow-step"><div class="k">03</div>调工具</div>
+      <div class="flow-step"><div class="k">04</div>观察</div>
+      <div class="flow-step"><div class="k">05</div>继续</div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · agent-loop</div><img src="assets/diagrams/agent-loop.svg" alt="讲解图 · agent-loop" /></div>
   </div>
 </section>
 
-<section id="slide-03-harness-tool" class="clip slide" data-track-index="1" data-start="56.900" data-duration="30.249">
+<section id="slide-03-harness" class="clip slide" data-track-index="1" data-start="76.500" data-duration="41.127">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">03</span>HARNESS</div>
-    <h1 class="display" data-anim="t">Harness<br/>+ Tool</h1>
+    <h1 class="display" data-anim="t">外面那层壳</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">Harness</div><strong>模型外循环</strong><span>工具表 · 记忆 · 重试</span></div>
-      <div class="card"><div class="k">Tool Call</div><strong>结构化请求</strong><span>执行后结果喂回模型</span></div>
+      <div class="card"><div class="k">工具表</div><strong>记忆</strong><span>规划</span></div>
+      <div class="card"><div class="k">同一模型</div><strong>不同 Harness</strong><span>能力天差地别</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Harness 解剖</div><img src="assets/diagrams/harness-anatomy.svg" alt="讲解图 · Harness 解剖" /></div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · harness-anatomy</div><img src="assets/diagrams/harness-anatomy.svg" alt="讲解图 · harness-anatomy" /></div>
   </div>
 </section>
 
-<section id="slide-04-mcp" class="clip slide" data-track-index="1" data-start="87.399" data-duration="34.240">
+<section id="slide-04-tool" class="clip slide" data-track-index="1" data-start="117.877" data-duration="34.720">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>MCP</div>
-    <h1 class="display" data-anim="t">MCP</h1>
-    <p class="subtitle" data-anim="s">Model Context Protocol · 接工具的 USB-C</p>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>TOOL</div>
+    <h1 class="display" data-anim="t">伸出来的手</h1>
+    <p class="subtitle" data-anim="s">第五天 function calling = 雏形</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">标准</div><strong>写一次多处插</strong><span>Cursor · Claude Desktop</span></div>
-      <div class="card"><div class="k">训练营</div><strong>读 SKILL.md</strong><span>调工具 · 交付结果</span></div>
+      <div class="card"><div class="k">三卡：结构化请求</div><strong>Harness 执行</strong><span>结果喂回</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Skill ≈ 朴素 MCP</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · Skill ≈ 朴素 MCP" /></div>
   </div>
 </section>
 
-<section id="slide-05-workflow" class="clip slide" data-track-index="1" data-start="121.889" data-duration="33.360">
+<section id="slide-05-mcp" class="clip slide" data-track-index="1" data-start="152.847" data-duration="44.806">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>WORKFLOW</div>
-    <h1 class="display" data-anim="t">Workflow<br/>vs Agent</h1>
-    <div class="compare" data-anim="diagram"><div class="compare-col"><h3>Workflow</h3><ul><li>人画死流程</li><li>先 A 再 B 再 C</li><li>报销审批</li></ul></div><div class="compare-col"><h3>Agent</h3><ul><li>模型决定下一步</li><li>多步 · 调工具</li><li>乱文件 → PRD</li></ul></div></div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · 写死 vs 自主</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · 写死 vs 自主" /></div>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>MCP</div>
+    <h1 class="display" data-anim="t">统一插座</h1>
+    <p class="subtitle" data-anim="s">Skill ≈ 朴素版 MCP 服务</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>以前：一工具一适配</strong><span>现在：USB-C 标准</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · skill-anatomy</div><img src="assets/diagrams/skill-anatomy.svg" alt="讲解图 · skill-anatomy" /></div>
   </div>
 </section>
 
-<section id="slide-06-copilot" class="clip slide" data-track-index="1" data-start="155.499" data-duration="27.920">
+<section id="slide-06-workflow" class="clip slide" data-track-index="1" data-start="197.903" data-duration="43.360">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>COPILOT</div>
-    <h1 class="display" data-anim="t">Copilot<br/>vs Agent</h1>
-    <div class="compare" data-anim="diagram"><div class="compare-col"><h3>Copilot 副驾</h3><ul><li>补全 · 问答</li><li>局部改写</li><li>错了改一行</li></ul></div><div class="compare-col"><h3>Agent 主驾</h3><ul><li>接任务 · 多步</li><li>调工具 · 日志</li><li>错了可能十文件</li></ul></div></div>
+    <div class="sec-label" data-anim="k"><span class="num">06</span>WORKFLOW</div>
+    <h1 class="display" data-anim="t">写死 vs 现场决策</h1>
+    <p class="subtitle" data-anim="s">原则：能写死就写死</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>双列：Workflow 稳定可审计</strong><span>Agent 灵活需 Eval</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
   </div>
 </section>
 
-<section id="slide-07-close" class="clip slide" data-track-index="1" data-start="183.669" data-duration="22.960">
+<section id="slide-07-copilot" class="clip slide" data-track-index="1" data-start="241.513" data-duration="41.687">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">07</span>TAKEAWAY</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">六词口诀</h1>
+    <div class="sec-label" data-anim="k"><span class="num">07</span>COPILOT</div>
+    <h1 class="display" data-anim="t">副驾 vs 司机</h1>
+    <p class="subtitle" data-anim="s">信任与验收要求完全不同</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>副驾：补全·局部改</strong><span>错一行</span></div>
+      <div class="card"><div class="k">要点</div><strong>司机：多步·调工具</strong><span>可能错十文件</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="283.450" data-duration="38.080">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">六词口诀 + 自检</h1>
+    <p class="subtitle" data-anim="s">下一站：概念抽测 + 认知卡</p>
     <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">Agent → 决策</span>
-      <span class="tag">Harness → 骨架</span>
-      <span class="tag">Tool → 手</span>
-      <span class="tag">MCP → 插座</span>
-      <span class="tag">Workflow → 写死</span>
-      <span class="tag">Copilot → 副驾</span>
+      <span class="tag hl">Harness骨架</span>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">下一节：18 词抽测 · 认知卡过闸</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="206.629" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 5 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="206.629" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="321.530" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 5 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="321.530" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="206.629" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="321.530" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="206.629" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="321.530" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.000, dur: 24.560 },
-  { id: "#slide-02-agent", start: 24.810, dur: 31.840 },
-  { id: "#slide-03-harness-tool", start: 56.900, dur: 30.249 },
-  { id: "#slide-04-mcp", start: 87.399, dur: 34.240 },
-  { id: "#slide-05-workflow", start: 121.889, dur: 33.360 },
-  { id: "#slide-06-copilot", start: 155.499, dur: 27.920 },
-  { id: "#slide-07-close", start: 183.669, dur: 22.960 }
+  { id: "#slide-01-open", start: 0.000, dur: 33.840 },
+  { id: "#slide-02-agent", start: 34.090, dur: 42.160 },
+  { id: "#slide-03-harness", start: 76.500, dur: 41.127 },
+  { id: "#slide-04-tool", start: 117.877, dur: 34.720 },
+  { id: "#slide-05-mcp", start: 152.847, dur: 44.806 },
+  { id: "#slide-06-workflow", start: 197.903, dur: 43.360 },
+  { id: "#slide-07-copilot", start: 241.513, dur: 41.687 },
+  { id: "#slide-08-close", start: 283.450, dur: 38.080 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -196,19 +210,21 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.000);
-  enter("#slide-02-agent", 24.810);
-  enter("#slide-03-harness-tool", 56.900);
-  enter("#slide-04-mcp", 87.399);
-  enter("#slide-05-workflow", 121.889);
-  enter("#slide-06-copilot", 155.499);
-  enter("#slide-07-close", 183.669);
-  exit("#slide-01-open", 36.44);
-  exit("#slide-02-agent", 82.91);
-  exit("#slide-03-harness-tool", 129.39);
-  exit("#slide-04-mcp", 181.2);
-  exit("#slide-05-workflow", 227.0);
-  exit("#slide-06-copilot", 268.81);
-  exit("#slide-07-close", 298.84);
+  enter("#slide-02-agent", 34.090);
+  enter("#slide-03-harness", 76.500);
+  enter("#slide-04-tool", 117.877);
+  enter("#slide-05-mcp", 152.847);
+  enter("#slide-06-workflow", 197.903);
+  enter("#slide-07-copilot", 241.513);
+  enter("#slide-08-close", 283.450);
+  exit("#slide-01-open", 50.89);
+  exit("#slide-02-agent", 114.03);
+  exit("#slide-03-harness", 171.61);
+  exit("#slide-04-tool", 222.97);
+  exit("#slide-05-mcp", 293.89);
+  exit("#slide-06-workflow", 356.58);
+  exit("#slide-07-copilot", 411.94);
+  exit("#slide-08-close", 461.08);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

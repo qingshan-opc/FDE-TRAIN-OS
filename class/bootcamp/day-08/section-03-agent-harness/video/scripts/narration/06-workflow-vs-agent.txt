@@ -1,0 +1,1 @@
+最后一个分水岭：workflow 还是 agent？步骤你定死，是 workflow——第九天学编排就是这个。路径它现想，是 agent。能 workflow 的别 agent——企业场景里，可预测是第一美德。报销审批适合 workflow；「帮我把这堆乱文件整理成 PRD」适合 agent。有同学可能会问：那周报生成用哪个？拉数、调 Skill、给你看——步骤稳定就 workflow；「帮我看看这周有什么值得注意的」才更像 agent。听见了吗？不是 agent 高级、workflow 低级，是风险不同。来，对照屏幕两张图，别用 agent 解决该写死流程的事，对吧。

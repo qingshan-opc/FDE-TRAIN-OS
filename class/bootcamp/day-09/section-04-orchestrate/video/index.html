@@ -67,95 +67,142 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="116.78" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="481.53" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="25.56">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="62.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">施工三步：串联、装闸、记日志</h1>
+    <h1 class="display" data-anim="t">施工三步</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>图纸在 orchestratio…</strong><span>n.md，三件工具已经齐。</span></div>
-      <div class="card"><div class="k">03</div><strong>现在三步：串联、装闸、记日志。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>orchestration.md</strong><span>三件工具齐</span></div>
+      <div class="card"><div class="k">串联</div><strong>装闸</strong><span>记日志</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-02-wire-skills" class="clip slide" data-track-index="1" data-start="25.81" data-duration="24.89">
+<section id="slide-02-wire-skills" class="clip slide" data-track-index="1" data-start="62.47" data-duration="59.11">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">02</span>WIRE SKILLS</div>
-    <h1 class="display" data-anim="t">A 的输出喂给 B，B 的产…</h1>
+    <h1 class="display" data-anim="t">第一步串联</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>第一步串联：给 Agent 一条…</strong><span> workflow 指令，A 的输出喂给 B，B</span></div>
-      <div class="card"><div class="k">02</div><strong>第二步装闸：不可撤回的步骤前，A…</strong><span>gent 必须停，把草稿、关键数字、风险标红摆在</span></div>
+      <div class="card"><div class="k">要点</div><strong>workflow 指令</strong><span>顺序写死</span></div>
+      </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>A 产出</div>
+      <div class="flow-step"><div class="k">02</div>喂给 B</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-03-exec-log" class="clip slide" data-track-index="1" data-start="50.94" data-duration="21.11">
+<section id="slide-03-install-gate" class="clip slide" data-track-index="1" data-start="121.83" data-duration="62.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>EXEC LOG</div>
-    <h1 class="display" data-anim="t">每步一行：时间 | 步骤 |…</h1>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>INSTALL GATE</div>
+    <h1 class="display" data-anim="t">第二步装闸</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>第三步记日志：每执行一步，往 r…</strong><span>uns/ 追加一行，时间、步骤、结果。</span></div>
-      <div class="card"><div class="k">02</div><strong>指令里写清楚每步执行后追加到 r…</strong><span>uns/YYYYMMDD.md，Agent 来记</span></div>
-      <div class="card"><div class="k">03</div><strong>能回放，才算有案底，对吧。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>不可撤回前</strong><span>Agent 必须停</span></div>
+      <div class="card"><div class="k">要点</div><strong>发 or 驳</strong><span>一个字</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-04-reject-loop" class="clip slide" data-track-index="1" data-start="72.31" data-duration="23.11">
+<section id="slide-04-exec-log" class="clip slide" data-track-index="1" data-start="184.53" data-duration="59.56">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>REJECT LOOP</div>
-    <h1 class="display" data-anim="t">驳回有回路，不是断头路</h1>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>EXEC LOG</div>
+    <h1 class="display" data-anim="t">第三步记日志</h1>
+    <p class="subtitle" data-anim="s">runs/YYYYMMDD.md</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>跑通之后别急着走，两条路径都要实测。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>批准走一遍，驳回也走一遍——比如…</strong><span>驳回：第二段数字不对，流水线得打回 B 重做，日</span></div>
-      <div class="card"><div class="k">03</div><strong>闸拦住一次不算本事，驳回了能退回…</strong><span>重做还留下记录，咱们这条线才算有回路，对吧。</span></div>
+      <div class="card"><div class="k">时间</div><strong>步骤</strong><span>结果</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-05-log-replay" class="clip slide" data-track-index="1" data-start="95.67" data-duration="21.11">
+<section id="slide-05-approve-path" class="clip slide" data-track-index="1" data-start="244.33" data-duration="58.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>LOG REPLAY</div>
-    <h1 class="display" data-anim="t">只看日志复述今天发生了什么</h1>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>APPROVE PATH</div>
+    <h1 class="display" data-anim="t">批准路径实测</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>本节先到这里。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>最后两分钟，关掉屏幕别的窗口，只…</strong><span>看 runs/ 日志，复述今天发生了什么。</span></div>
-      <div class="card"><div class="k">03</div><strong>到闸停不停、批了动不动、驳回了回…</strong><span>不回得来——三个验收点全绿，第五节闸口实测才有底</span></div>
+      <div class="card"><div class="k">要点</div><strong>到闸自动停</strong><span>验收点一</span></div>
+      </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>A</div>
+      <div class="flow-step"><div class="k">02</div>B</div>
+      <div class="flow-step"><div class="k">03</div>停</div>
+      <div class="flow-step"><div class="k">04</div>发</div>
+      <div class="flow-step"><div class="k">05</div>C</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="116.78" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第九天 · 第 4 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="116.78" data-track-index="5">
+<section id="slide-06-reject-loop" class="clip slide" data-track-index="1" data-start="303.03" data-duration="60.0">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>REJECT LOOP</div>
+    <h1 class="display" data-anim="t">驳回要有回路</h1>
+    <p class="subtitle" data-anim="s">闸不是断头路</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>打回 B 重做</strong><span>日志记驳回</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-07-log-replay" class="clip slide" data-track-index="1" data-start="363.28" data-duration="57.11">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>LOG REPLAY</div>
+    <h1 class="display" data-anim="t">只看日志复述</h1>
+    <p class="subtitle" data-anim="s">三个验收点全绿</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">停不停</div><strong>动不动</strong><span>回不回</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="420.64" data-duration="60.89">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检三问</h1>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">双路径</span>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：闸口实测验收</p>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="481.53" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第九天 · 第 4 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="481.53" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="116.78" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="481.53" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="116.78" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="481.53" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.0, dur: 25.56 },
-  { id: "#slide-02-wire-skills", start: 25.81, dur: 24.89 },
-  { id: "#slide-03-exec-log", start: 50.94, dur: 21.11 },
-  { id: "#slide-04-reject-loop", start: 72.31, dur: 23.11 },
-  { id: "#slide-05-log-replay", start: 95.67, dur: 21.11 }
+  { id: "#slide-01-open", start: 0.0, dur: 62.22 },
+  { id: "#slide-02-wire-skills", start: 62.47, dur: 59.11 },
+  { id: "#slide-03-install-gate", start: 121.83, dur: 62.44 },
+  { id: "#slide-04-exec-log", start: 184.53, dur: 59.56 },
+  { id: "#slide-05-approve-path", start: 244.33, dur: 58.44 },
+  { id: "#slide-06-reject-loop", start: 303.03, dur: 60.0 },
+  { id: "#slide-07-log-replay", start: 363.28, dur: 57.11 },
+  { id: "#slide-08-close", start: 420.64, dur: 60.89 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -169,15 +216,21 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.0);
-  enter("#slide-02-wire-skills", 25.81);
-  enter("#slide-03-exec-log", 50.94);
-  enter("#slide-04-reject-loop", 72.31);
-  enter("#slide-05-log-replay", 95.67);
-  exit("#slide-01-open", 25.56);
-  exit("#slide-02-wire-skills", 50.7);
-  exit("#slide-03-exec-log", 72.05);
-  exit("#slide-04-reject-loop", 95.42);
-  exit("#slide-05-log-replay", 116.78);
+  enter("#slide-02-wire-skills", 62.47);
+  enter("#slide-03-install-gate", 121.83);
+  enter("#slide-04-exec-log", 184.53);
+  enter("#slide-05-approve-path", 244.33);
+  enter("#slide-06-reject-loop", 303.03);
+  enter("#slide-07-log-replay", 363.28);
+  enter("#slide-08-close", 420.64);
+  exit("#slide-01-open", 62.22);
+  exit("#slide-02-wire-skills", 121.58);
+  exit("#slide-03-install-gate", 184.27);
+  exit("#slide-04-exec-log", 244.09);
+  exit("#slide-05-approve-path", 302.77);
+  exit("#slide-06-reject-loop", 363.03);
+  exit("#slide-07-log-replay", 420.39);
+  exit("#slide-08-close", 481.53);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

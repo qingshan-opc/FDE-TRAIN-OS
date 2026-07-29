@@ -2,16 +2,16 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1920, height=1080" />
-<title>第七天 · 第 4 节 · 定义 Skill</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>实战：定义 Skill</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
+
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.45);--ink-08:rgba(35,31,32,.1);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 html{margin:0;background:#111}
 html.browser-preview{overflow:hidden;height:100%}
@@ -19,219 +19,212 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 #root{position:relative;width:1920px;height:1080px;overflow:hidden}
 .stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
 .slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
-.slide.invert{color:var(--bg)}
-.slide.invert .stage-fill{background:var(--ink)}
 .stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
-.slide-body{position:relative;z-index:2;height:100%}
-.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);margin-left:4px;max-width:520px}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
 .sec-label .num{color:var(--accent);font-weight:700}
-.slide.invert .sec-label{color:rgba(242,245,240,.55)}
-.slide.invert .sec-label::after{background:var(--bg)}
-.meta-row{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);display:flex;gap:28px;flex-wrap:wrap;margin-bottom:28px}
-.meta-row b{color:var(--accent);font-weight:700}
-.display{font-family:var(--serif);font-weight:700;font-size:78px;line-height:1.12;letter-spacing:.01em;margin-bottom:18px;max-width:14ch}
-.display .thin{font-weight:400;color:var(--ink-60)}
-.slide.invert .display .thin{color:rgba(242,245,240,.55)}
-.statement{font-family:var(--serif);font-size:32px;line-height:1.55;max-width:22em;margin-bottom:28px}
-.statement strong{color:var(--accent);font-weight:700;border-bottom:6px solid var(--accent)}
-.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em;margin-bottom:32px}
-.slide.invert .lede{color:rgba(242,245,240,.55)}
-.ladder{display:flex;align-items:stretch;border:1px solid var(--ink);width:max-content;max-width:100%}
-.ladder .rung{font-family:var(--mono);padding:14px 16px;border-right:1px solid var(--ink);min-width:110px;white-space:nowrap}
-.ladder .rung:last-child{border-right:none}
-.ladder .rung small{display:block;font-size:11px;letter-spacing:.1em;color:var(--ink-40);text-transform:uppercase;margin-bottom:4px}
-.ladder .rung b{font-size:18px;font-weight:700}
-.ladder .rung.hot{background:var(--accent);color:#fff;border-right-color:var(--accent)}
-.ladder .rung.hot small{color:rgba(255,255,255,.65)}
-.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;margin-top:8px;height:calc(100% - 210px)}
-.split.tight{height:calc(100% - 170px)}
-.photo-panel{position:relative;border:1px solid var(--ink);overflow:hidden;background:#ddd;min-height:420px}
-.photo-panel img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(.92)}
-.photo-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,245,240,.85);background:linear-gradient(transparent,rgba(35,31,32,.85))}
-.photo-frame-bar{position:absolute;top:0;left:0;width:26px;height:6px;background:var(--accent);z-index:2}
-.note-stack{display:flex;flex-direction:column;gap:18px}
-.blk{border-top:6px solid var(--ink);padding-top:16px}
-.blk.accent{border-top-color:var(--accent)}
-.blk h4{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:8px}
-.blk p{font-size:18px;line-height:1.55;color:var(--ink-60)}
-.tag-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
-.tag{font-family:var(--mono);font-size:14px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--ink-40);color:var(--ink-60);background:transparent}
-.tag.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.display{font-family:var(--serif);font-weight:700;font-size:64px;line-height:1.12;margin-bottom:14px;max-width:14ch}
+.subtitle{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:30em;margin-bottom:12px}
+.card-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.card{border:1px solid var(--ink);padding:16px 20px;background:#fff;min-width:180px;flex:1}
+.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-60);margin-bottom:8px}
+.card strong{font-size:18px;display:block;margin-bottom:6px}
+.card span{font-size:15px;color:var(--ink-60);line-height:1.45}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);max-width:920px;margin-top:8px}
+.compare-col{padding:20px 24px;background:#fff}
+.compare-col:first-child{border-right:1px solid var(--ink)}
+.compare-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;margin-bottom:12px;color:var(--accent)}
+.compare-col ul{list-style:none;font-size:16px;line-height:1.65;color:var(--ink-60)}
+.compare-col li::before{content:"· ";color:var(--accent);font-weight:700}
+.flow{display:flex;align-items:stretch;gap:0;margin-top:12px;max-width:960px;border:1px solid var(--ink)}
+.flow-step{flex:1;padding:18px 16px;background:#fff;border-right:1px solid var(--ink);font-size:15px;line-height:1.5}
+.flow-step:last-child{border-right:none}
+.flow-step .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.checklist{border:1px solid var(--ink);background:#fff;margin-top:12px;max-width:920px}
+.checklist li{list-style:none;padding:14px 20px;border-bottom:1px solid rgba(35,31,32,.12);font-size:17px;display:flex;gap:12px;align-items:flex-start}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"□";font-family:var(--mono);color:var(--accent);font-weight:700;flex:none}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;margin-top:8px;flex:1;display:flex;flex-direction:column;min-height:0}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;flex:none}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:520px}
+.diagram-full .diagram-box{border:none;padding:0;background:transparent;margin:0}
+.diagram-full img{max-height:720px}
+.tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.tag{font-family:var(--mono);font-size:13px;padding:10px 16px;border:1px solid var(--ink);background:#fff}
 .tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:4px}
-.card{border:1px solid var(--ink);padding:22px 22px 24px;background:rgba(255,255,255,.35)}
-.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
-.card h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:8px}
-.card p{font-size:17px;line-height:1.5;color:var(--ink-60)}
-.card.dim{background:var(--ink-05);opacity:.85}
-.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.card.hot .lab{color:rgba(255,255,255,.7)}
-.card.hot p{color:rgba(255,255,255,.78)}
-.mile-rail{display:flex;gap:0;border:1px solid var(--ink);margin-top:6px}
-.mile{flex:1;padding:18px 16px;border-right:1px solid var(--ink-08);font-family:var(--mono)}
-.mile:last-child{border-right:none}
-.mile small{display:block;font-size:12px;letter-spacing:.1em;color:var(--ink-40);margin-bottom:8px;text-transform:uppercase}
-.mile b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px;font-weight:700}
-.mile span{font-family:var(--sans);font-size:14px;color:var(--ink-60);line-height:1.4}
-.mile.hot{background:var(--accent);color:#fff}
-.mile.hot small{color:rgba(255,255,255,.65)}
-.mile.hot b,.mile.hot span{color:#fff}
-.chat-mock{border:1px solid var(--ink);background:#fff;padding:18px 20px;margin-top:6px;font-family:var(--mono);font-size:15px;line-height:1.85}
-.chat-mock .row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
-.chat-mock .u{color:var(--ink-40)}
-.chat-mock .a{color:var(--accent);font-weight:700}
-.chat-mock .arrow{color:var(--ink-40);font-weight:700}
-.chat-mock .ok{color:#2f9e44;font-weight:700}
-.chat-mock .no{color:#f24e54;font-weight:700}
-.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-.flow .step{font-family:var(--mono);font-size:15px;padding:12px 16px;border:1px solid var(--ink);background:#fff}
-.flow .step.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
-.flow .arrow{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700}
-.hub-grid{display:grid;grid-template-columns:260px 1fr 1fr;gap:18px;margin-top:24px}
-.hub-grid.six{grid-template-columns:240px 1fr 1fr 1fr}
-.hub-core{grid-row:span 2;border:1px solid rgba(242,245,240,.35);background:var(--accent);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:28px 24px}
-.hub-core .lab{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:12px}
-.hub-core h3{font-family:var(--serif);font-size:36px;font-weight:700;line-height:1.2}
-.hub-cell{border:1px solid rgba(242,245,240,.25);padding:22px 22px;background:rgba(242,245,240,.04)}
-.hub-cell .lab{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7d8cff;margin-bottom:8px;font-weight:700}
-.hub-cell h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
-.hub-cell p{font-size:16px;color:rgba(242,245,240,.6);line-height:1.45}
-.side-photo{position:absolute;top:0;right:0;width:38%;height:100%;z-index:1;overflow:hidden;border-left:6px solid var(--ink)}
-.side-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15) contrast(1.05)}
-.side-photo .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,245,240,.35),transparent 40%)}
-.slide.has-side{padding-right:46%}
-.quote-big{font-family:var(--serif);font-size:60px;line-height:1.35;max-width:16em;margin:18px 0 28px}
-.quote-big strong{border-bottom:6px solid var(--accent);font-weight:700}
-.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-40)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
-.avatar-frame{flex:1;width:100%;min-height:0;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220;position:relative}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-.avatar-caption{flex:none;height:30px;line-height:30px;padding:0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
 #preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
-#preview-pager{position:fixed;right:12px;top:12px;z-index:9999;font:13px/1.4 var(--mono);color:#fff;background:rgba(20,0,255,.85);padding:8px 14px;border-radius:4px;display:none;pointer-events:none}
-html.browser-preview #preview-hint,html.browser-preview #preview-pager{display:block}
+html.browser-preview #preview-hint{display:block}
+
 </style>
 </head>
 <body>
-<div id="preview-hint">浏览器预览 · ← → 或空格翻页 · 点击画面下一页</div>
-<div id="preview-pager">1 / 6</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="115.183" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="361.3" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
-<!-- 01 OPEN · side-photo + ladder -->
-<section id="slide-01-open" class="clip slide has-side" data-track-index="1" data-start="0.000" data-duration="20.800">
-  <div class="stage-fill"></div>
-  <div class="side-photo" data-anim="photo"><img src="assets/photos/01-open.jpg" alt="" /><div class="veil"></div></div>
-  <div class="slide-body">
-    <div class="meta-row" data-anim="meta"><span><b>FDE</b> 第七天 · Section 04</span><span>Skill 实战日 · 实战课</span><span>第四节</span></div>
-    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN · 开写 Skill</div>
-    <h1 class="display" data-anim="t">三十分钟后<span class="thin">skills/ 里要有你的说明书</span></h1>
-    <p class="statement" data-anim="s">四部件齐全，<strong>commit 进 Git</strong></p>
-    <p class="lede" data-anim="lede">这节开写。三十分钟后，skills/ 目录里要有你的第一份 Skill 说明书——四部件齐全，commit 进 Git。带走两个库：动作动词写步骤，判据句式写验收。</p>
-    <div class="ladder" data-anim="ladder"><div class="rung hot"><small>01</small><b>动作动词</b></div><div class="rung"><small>02</small><b>判据句式</b></div><div class="rung"><small>03</small><b>倒着写</b></div><div class="rung"><small>04</small><b>换人测试</b></div></div>
-    <div class="tag-row" data-anim="tags"><span class="tag solid">skills/<name>.md</span><span class="tag ">commit</span><span class="tag hl">倒着写</span></div>
-  </div>
-</section><!-- 02 · photo + content -->
-<section id="slide-02-action-verbs" class="clip slide" data-track-index="1" data-start="21.050" data-duration="16.160">
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="42.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>CORE · 步骤只许动作动词</div>
-    <h1 class="display" data-anim="t">拉取 筛选 对比<span class="thin">汇总 排序 找出</span></h1>
-    <p class="lede" data-anim="s">步骤段只许出现动作动词：拉取、筛选、对比、汇总、排序、找出、计算、生成、检查、列出。「分析一下」「处理一下」不是步骤，是黑洞词。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/02-verbs.jpg" alt="" /><div class="photo-cap">动作动词 · Unsplash</div></div>
-      <div class="note-stack"><div class="chat-mock" data-anim="mock"><div class="row"><span class="u">✓ 动作动词</span> 拉取 /api/kpi 近7天数据</div><div class="row"><span class="u">✓ 动作动词</span> 筛选环比变化 >10% 的指标</div><div class="row"><span class="u">✓ 动作动词</span> 汇总成 Markdown 四段</div><div class="row"><span class="no">✗ 黑洞词</span> 分析一下数据 <span class="arrow">→</span> <span class="no">AI 不知道怎么分析</span></div></div><div class="tag-row" data-anim="tags"><span class="tag solid">拉取</span><span class="tag ">筛选</span><span class="tag ">对比</span><span class="tag ">汇总</span><span class="tag ">排序</span><span class="tag hl">找出</span></div></div>
-    </div>
-  </div>
-</section><!-- 03 · photo + content -->
-<section id="slide-03-verdict-patterns" class="clip slide" data-track-index="1" data-start="37.460" data-duration="20.413">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>DETAIL · 验收用判据句式</div>
-    <h1 class="display" data-anim="t">结构判 + 数字判<span class="thin"> + 意图判</span></h1>
-    <p class="lede" data-anim="s">验收段用判据句式：结构判 X 段齐全、含字段 A/B/C；数字判每个数字能在来源中找到出处；意图判当某值超阈值时标注异常并转人工。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/03-criteria.jpg" alt="" /><div class="photo-cap">判据句式 · Unsplash</div></div>
-      <div class="note-stack"><div class="mile-rail" data-anim="miles"><div class="mile hot"><small>结构</small><b>结构判</b><span>X 段齐全 + 含字段 A/B/C</span></div><div class="mile hot"><small>数字</small><b>数字判</b><span>每个数字能在来源找到出处</span></div><div class="mile hot"><small>意图</small><b>意图判</b><span>超阈值标注异常 + 转人工</span></div></div><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">合格验收</div><h4>四段齐全+数字有出处</h4><p>第三方能独立判过/不过——可衡量。</p></div><div class="card dim"><div class="lab">不合格验收</div><h4>写得好</h4><p>主观——第三方无法客观判对错。</p></div></div></div>
-    </div>
-  </div>
-</section><!-- 04 · photo + content -->
-<section id="slide-04-reverse-order" class="clip slide" data-track-index="1" data-start="58.123" data-duration="19.360">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>METHOD · 写作顺序倒着写</div>
-    <h1 class="display" data-anim="t">输出 → 验收<span class="thin"> → 输入 → 步骤</span></h1>
-    <p class="lede" data-anim="s">先写输出——交什么货；再写验收——怎么判；然后输入——吃什么料；最后步骤——从输入到输出怎么走。倒着写，因为输出和验收决定一切。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/04-reverse.jpg" alt="" /><div class="photo-cap">倒着写 · Unsplash</div></div>
-      <div class="note-stack"><div class="blk accent" data-anim="blk"><h4>倒着写的逻辑</h4><p>输出和验收是目标，输入和步骤是路径。先定目标再定路径——和 PRD 先定验收标准同一套逻辑。</p></div><div class="flow" data-anim="flow"><div class="step hot">输出</div><div class="arrow">→</div><div class="step hot">验收</div><div class="arrow">→</div><div class="step">输入</div><div class="arrow">→</div><div class="step">步骤</div></div><div class="tag-row" data-anim="tags"><span class="tag solid">先定目标</span><span class="tag hl">再定路径</span></div></div>
-    </div>
-  </div>
-</section><!-- 05 · photo + content -->
-<section id="slide-05-swap-test" class="clip slide" data-track-index="1" data-start="77.733" data-duration="20.320">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>EXTRA · 换人测试消歧义</div>
-    <h1 class="display" data-anim="t">同桌只看说明书<span class="thin">说出要做什么怎么判</span></h1>
-    <p class="lede" data-anim="s">写完做换人测试：同桌只看你的说明书，说出要做什么、怎么判好坏。他说错了，就是你写岔了——改说明书，不是教他。换人测试是最高效的消歧义。</p>
-    <div class="split tight" data-anim="split">
-      <div class="photo-panel"><div class="photo-frame-bar"></div><img src="assets/photos/05-test.jpg" alt="" /><div class="photo-cap">换人测试 · Unsplash</div></div>
-      <div class="note-stack"><div class="duo" data-anim="duo"><div class="card hot"><div class="lab">换人测试</div><h4>同桌照着说</h4><p>只看说明书，说出要做什么、怎么判。说对了=合格。</p></div><div class="card dim"><div class="lab">说错了</div><h4>改说明书</h4><p>不是教他——是说明书有歧义。改完再测。</p></div></div><div class="tag-row" data-anim="tags"><span class="tag solid">换人测试</span><span class="tag hl">消歧义</span></div></div>
-    </div>
-  </div>
-</section><!-- 06 CLOSE · invert + quote-big + hub-grid -->
-<section id="slide-06-close" class="clip slide invert" data-track-index="1" data-start="98.303" data-duration="16.880">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY · 带走两个库</div>
-    <h1 class="display" style="max-width:none;font-size:72px" data-anim="t">动作动词写步骤<span class="thin">判据句式写验收</span></h1>
-    <p class="quote-big" data-anim="s"><strong>换人测试消歧义</strong></p>
-    <div class="hub-grid" data-anim="hub">
-      <div class="hub-core"><div class="lab">TWO TOOLKITS</div><h3>动词<br/>+判据</h3></div>
-      <div class="hub-cell"><div class="lab">01 · 步骤</div><h4>动作动词</h4><p>拉取/筛选/对比/汇总——不许黑洞词。</p></div><div class="hub-cell"><div class="lab">02 · 验收</div><h4>判据句式</h4><p>结构判+数字判+意图判——可衡量。</p></div><div class="hub-cell"><div class="lab">03 · 顺序</div><h4>倒着写</h4><p>输出→验收→输入→步骤——先定目标。</p></div><div class="hub-cell"><div class="lab">04 · 测试</div><h4>换人测试</h4><p>同桌照着说——说错了改说明书。</p></div>
-    </div>
-    <p class="lede" style="margin-top:22px;margin-bottom:0" data-anim="lede">下一节 → 运行一次：AI 拿着说明书上岗，你派活、收货、验收、留证据。</p>
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+    <h1 class="display" data-anim="t">三十分钟开写</h1>
+    <p class="subtitle" data-anim="s">同桌能读懂</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>skills/</strong><span>第一份说明书</span></div>
+      <div class="card"><div class="k">要点</div><strong>四部件齐全</strong><span>验收可判</span></div>
+      </div>
   </div>
 </section>
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="115.183" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第七天 · 第 4 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="115.183" data-track-index="5">
+
+<section id="slide-02-action-verbs" class="clip slide" data-track-index="1" data-start="42.47" data-duration="49.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>ACTION VERBS</div>
+    <h1 class="display" data-anim="t">动作动词库</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">拉取</div><strong>筛选</strong><span>对比</span></div>
+      <div class="card"><div class="k">排序</div><strong>找出</strong><span>计算</span></div>
+      <div class="card"><div class="k">要点</div><strong>禁用</strong><span>分析/处理/优化</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-03-verdict-patterns" class="clip slide" data-track-index="1" data-start="92.06" data-duration="45.78">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>VERDICT PATTERNS</div>
+    <h1 class="display" data-anim="t">判据句式库</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">结构</div><strong>X 段齐全</strong><span>含字段 A/B/C</span></div>
+      <div class="card"><div class="k">要点</div><strong>数字</strong><span>能在来源中找到出处</span></div>
+      <div class="card"><div class="k">意图</div><strong>当…时</strong><span>必须…</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-04-reverse-order" class="clip slide" data-track-index="1" data-start="138.08" data-duration="43.78">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>REVERSE ORDER</div>
+    <h1 class="display" data-anim="t">倒着写</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>① 输出</strong><span>交什么货</span></div>
+      <div class="card"><div class="k">要点</div><strong>② 验收</strong><span>怎么判</span></div>
+      <div class="card"><div class="k">③ 输入</div><strong>④ 步骤</strong><span>连线题</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-05-few-shot-output" class="clip slide" data-track-index="1" data-start="182.11" data-duration="45.11">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>FEW SHOT OUTPUT</div>
+    <h1 class="display" data-anim="t">输出贴示例</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>好示例</strong><span>最划算消歧</span></div>
+      <div class="card"><div class="k">格式</div><strong>语气</strong><span>长度一次看齐</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · prompt-four-elements</div><img src="assets/diagrams/prompt-four-elements.svg" alt="讲解图 · prompt-four-elements" /></div>
+  </div>
+</section>
+
+<section id="slide-06-swap-test" class="clip slide" data-track-index="1" data-start="227.47" data-duration="50.67">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>SWAP TEST</div>
+    <h1 class="display" data-anim="t">换人测试</h1>
+    <p class="subtitle" data-anim="s">同桌只看说明书</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>说出做什么</strong><span>怎么判好坏</span></div>
+      <div class="card"><div class="k">要点</div><strong>说错</strong><span>改说明书不怪他</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-07-branches-split" class="clip slide" data-track-index="1" data-start="278.39" data-duration="45.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>BRANCHES SPLIT</div>
+    <h1 class="display" data-anim="t">分支与拆分</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>如果…就…</strong><span>每支落到动词</span></div>
+      <div class="card"><div class="k">要点</div><strong>分支 &gt; 三层</strong><span>拆两个 Skill</span></div>
+      <div class="card"><div class="k">要点</div><strong>复杂</strong><span>子 Skill 可后置</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="323.97" data-duration="37.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">两个库带走</h1>
+    <div class="tag-row" data-anim="diagram">
+      <span class="tag hl">动作动词</span>
+      <span class="tag">判据句式</span>
+      </div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告 · AI 上岗运行</p>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="361.3" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第七天 · 第 4 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="361.3" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="115.183" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="361.3" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="115.183" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="361.3" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
-const slides = [{"id": "#slide-01-open", "start": 0.000, "dur": 20.800}, {"id": "#slide-02-action-verbs", "start": 21.050, "dur": 16.160}, {"id": "#slide-03-verdict-patterns", "start": 37.460, "dur": 20.413}, {"id": "#slide-04-reverse-order", "start": 58.123, "dur": 19.360}, {"id": "#slide-05-swap-test", "start": 77.733, "dur": 20.320}, {"id": "#slide-06-close", "start": 98.303, "dur": 16.880}];
+const slides = [
+  { id: "#slide-01-open", start: 0.0, dur: 42.22 },
+  { id: "#slide-02-action-verbs", start: 42.47, dur: 49.33 },
+  { id: "#slide-03-verdict-patterns", start: 92.06, dur: 45.78 },
+  { id: "#slide-04-reverse-order", start: 138.08, dur: 43.78 },
+  { id: "#slide-05-few-shot-output", start: 182.11, dur: 45.11 },
+  { id: "#slide-06-swap-test", start: 227.47, dur: 50.67 },
+  { id: "#slide-07-branches-split", start: 278.39, dur: 45.33 },
+  { id: "#slide-08-close", start: 323.97, dur: 37.33 }
+];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
   tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
   tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
   tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
-  tl.from(`${id} [data-anim='lede']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.4);
-  tl.from(`${id} [data-anim='meta']`, { y: 14, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.08);
-  tl.from(`${id} [data-anim='photo']`, { x: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, t0 + 0.1);
-  tl.from(`${id} [data-anim='split']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.35);
-  tl.from(`${id} [data-anim='ladder']`, { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.45);
-  tl.from(`${id} [data-anim='mock']`, { y: 14, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='duo'] .card`, { y: 16, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.65);
-  tl.from(`${id} [data-anim='miles'] .mile`, { y: 14, opacity: 0, stagger: 0.08, duration: 0.35, ease: "power2.out" }, t0 + 0.55);
-  tl.from(`${id} [data-anim='flow'] .step`, { y: 12, opacity: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, t0 + 0.8);
-  tl.from(`${id} [data-anim='hub'] .hub-core`, { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, t0 + 0.5);
-  tl.from(`${id} [data-anim='hub'] .hub-cell`, { y: 18, opacity: 0, stagger: 0.08, duration: 0.4, ease: "power2.out" }, t0 + 0.7);
-  tl.from(`${id} [data-anim='tags'] .tag`, { y: 10, opacity: 0, stagger: 0.05, duration: 0.3, ease: "power2.out" }, t0 + 0.95);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.42);
 }
 function exit(id, tEnd) {
   tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd - 0.45);
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
-slides.forEach((s) => { enter(s.id, s.start); exit(s.id, s.start + s.dur); });
+  enter("#slide-01-open", 0.0);
+  enter("#slide-02-action-verbs", 42.47);
+  enter("#slide-03-verdict-patterns", 92.06);
+  enter("#slide-04-reverse-order", 138.08);
+  enter("#slide-05-few-shot-output", 182.11);
+  enter("#slide-06-swap-test", 227.47);
+  enter("#slide-07-branches-split", 278.39);
+  enter("#slide-08-close", 323.97);
+  exit("#slide-01-open", 42.22);
+  exit("#slide-02-action-verbs", 91.8);
+  exit("#slide-03-verdict-patterns", 137.84);
+  exit("#slide-04-reverse-order", 181.86);
+  exit("#slide-05-few-shot-output", 227.22);
+  exit("#slide-06-swap-test", 278.14);
+  exit("#slide-07-branches-split", 323.72);
+  exit("#slide-08-close", 361.3);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
+
 (function bootBrowserPreview() {
   const params = new URLSearchParams(location.search);
   const renderMode = params.get("render") === "1";
@@ -240,23 +233,27 @@ window.__timelines["main"] = tl;
   document.documentElement.classList.add("browser-preview");
   const slidesEls = [...document.querySelectorAll(".slide")];
   let idx = 0;
-  function fit() { const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); document.body.style.transform = "scale(" + s + ")"; document.body.style.transformOrigin = "top left"; }
-  function reveal(el) { gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, x: 0, clearProps: "transform" }); }
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
   function show(i) {
     slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
     reveal(slidesEls[i]);
-    const pager = document.getElementById("preview-pager");
-    if (pager) pager.textContent = (i + 1) + " / " + slidesEls.length;
   }
   gsap.set("#avatar-pip", { opacity: 1, y: 0 });
   fit(); show(0);
   window.addEventListener("resize", fit);
-  document.getElementById("root").addEventListener("click", (e) => { if (e.target.closest("#avatar-pip")) return; idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); });
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
     if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
   });
 })();
+
 </script>
 </body>
 </html>

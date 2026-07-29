@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第六天 · 第 4 节 · Eval / Guardrails / Vibe</title>
+<title>Eval / Guardrails / Vibe Coding</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
 
@@ -67,115 +67,114 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="167.019" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="271.914" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="28.080">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="36.000">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">Eval<br/>Guardrails<br/>Vibe</h1>
-    <p class="subtitle" data-anim="s">给已在做的做法命名 · 带验收的 vibe coding</p>
+    <h1 class="display" data-anim="t">给已经在做的事起名</h1>
+    <p class="subtitle" data-anim="s">带验收的 vibe coding</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">Eval</div><strong>出考卷</strong><span>代替「我觉得还行」</span></div>
-      <div class="card"><div class="k">Guardrails</div><strong>护栏</strong><span>输入输出规则</span></div>
-      <div class="card"><div class="k">Vibe</div><strong>氛围编程</strong><span>AI 写 diff · 你来验收</span></div>
+      <div class="card"><div class="k">Eval</div><strong>Guardrails</strong><span>Vibe Coding</span></div>
       </div>
   </div>
 </section>
 
-<section id="slide-02-eval" class="clip slide" data-track-index="1" data-start="28.330" data-duration="28.489">
+<section id="slide-02-eval-why" class="clip slide" data-track-index="1" data-start="36.250" data-duration="43.040">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>EVAL</div>
-    <h1 class="display" data-anim="t">Eval 评测</h1>
-    <p class="subtitle" data-anim="s">给 AI 产物出考卷</p>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>EVAL WHY</div>
+    <h1 class="display" data-anim="t">为啥要出考卷</h1>
+    <p class="subtitle" data-anim="s">代替最危险的一句：我觉得还行</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">方法</div><strong>固定题库</strong><span>明确判分 · 可重复</span></div>
-      <div class="card"><div class="k">朴素版</div><strong>Rubric</strong><span>快测选择题</span></div>
-      <div class="card"><div class="k">上线前</div><strong>20 条边界 case</strong><span>分数掉了别发版</span></div>
+      <div class="card"><div class="k">要点</div><strong>没有考卷 = 无法证明变好了</strong><span></span></div>
       </div>
   </div>
 </section>
 
-<section id="slide-03-guardrails" class="clip slide" data-track-index="1" data-start="57.069" data-duration="31.200">
+<section id="slide-03-eval-how" class="clip slide" data-track-index="1" data-start="79.540" data-duration="41.760">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>GUARDRAILS</div>
-    <h1 class="display" data-anim="t">Guardrails</h1>
-    <p class="subtitle" data-anim="s">拦在输入输出上的规则</p>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>EVAL HOW</div>
+    <h1 class="display" data-anim="t">怎么出考卷</h1>
+    <p class="subtitle" data-anim="s">分数掉了就别发版</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">不许问</div><strong>敏感信息</strong><span>如他人工资</span></div>
-      <div class="card"><div class="k">不许答</div><strong>没检索到</strong><span>禁止瞎编政策</span></div>
-      <div class="card"><div class="k">越界</div><strong>拒答 · 转人工</strong><span>降级模板</span></div>
+      <div class="card"><div class="k">固定输入</div><strong>明确判分</strong><span>可重复跑</span></div>
+      <div class="card"><div class="k">要点</div><strong>准备边界 case</strong><span>改版整套重跑</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · 异常与降级路径</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · 异常与降级路径" /></div>
   </div>
 </section>
 
-<section id="slide-04-vibe" class="clip slide" data-track-index="1" data-start="88.519" data-duration="32.160">
+<section id="slide-04-guardrails" class="clip slide" data-track-index="1" data-start="121.550" data-duration="38.800">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>VIBE</div>
-    <h1 class="display" data-anim="t">Vibe Coding</h1>
-    <p class="subtitle" data-anim="s">描述意图 · AI 写代码</p>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>GUARDRAILS</div>
+    <h1 class="display" data-anim="t">护栏</h1>
+    <p class="subtitle" data-anim="s">敏感词 / 空结果 / 超时</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">工具</div><strong>Cursor · Copilot</strong><span>Claude Code</span></div>
-      <div class="card"><div class="k">爽点</div><strong>生产力杠杆</strong><span>真的快</span></div>
-      <div class="card"><div class="k">验收</div><strong>不能 vibe</strong><span>200≠对契约 · 摘要对数据</span></div>
+      <div class="card"><div class="k">输入过滤</div><strong>输出约束</strong><span>越界降级</span></div>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">会 vibe + 验收 → 变贵</p>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-05-triangle" class="clip slide" data-track-index="1" data-start="120.929" data-duration="26.400">
+<section id="slide-05-vibe" class="clip slide" data-track-index="1" data-start="160.600" data-duration="48.166">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>TRIANGLE</div>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>VIBE</div>
+    <h1 class="display" data-anim="t">氛围编程</h1>
+    <p class="subtitle" data-anim="s">Cursor / Copilot / Claude Code</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>diff 可以 vibe</strong><span>合并必须验收</span></div>
+      <div class="card"><div class="k">要点</div><strong>只会 vibe = 技术债工厂</strong><span></span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-06-triangle" class="clip slide" data-track-index="1" data-start="209.016" data-duration="35.448">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>TRIANGLE</div>
     <h1 class="display" data-anim="t">三角关系</h1>
+    <p class="subtitle" data-anim="s">最小集：几条 case + 空结果拒答 + 关键路径人审</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">缺 Eval</div><strong>盲飞</strong><span></span></div>
-      <div class="card"><div class="k">缺 Guardrails</div><strong>裸奔</strong><span></span></div>
-      <div class="card"><div class="k">缺验收 Vibe</div><strong>技术债工厂</strong><span></span></div>
+      <div class="card"><div class="k">Eval=好不好</div><strong>Guardrails=敢不敢</strong><span>Vibe=杠杆</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Eval · Guardrails · Ops</div><img src="assets/diagrams/llm-ops-triangle.svg" alt="讲解图 · Eval · Guardrails · Ops" /></div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · llm-ops-triangle</div><img src="assets/diagrams/llm-ops-triangle.svg" alt="讲解图 · llm-ops-triangle" /></div>
   </div>
 </section>
 
-<section id="slide-06-close" class="clip slide" data-track-index="1" data-start="147.579" data-duration="19.440">
+<section id="slide-07-close" class="clip slide" data-track-index="1" data-start="244.714" data-duration="27.200">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">带走一句</h1>
-    <p class="subtitle" data-anim="s">「我觉得还行」不是验收标准，Eval 才是</p>
-    <div class="tag-row" data-anim="diagram">
-      <span class="tag">Agent</span>
-      <span class="tag">Harness</span>
-      <span class="tag">MCP</span>
-      <span class="tag">Workflow</span>
-      </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">下一节：Agent 全家桶</p>
+    <div class="sec-label" data-anim="k"><span class="num">07</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检</h1>
+    <p class="subtitle" data-anim="s">「我觉得还行」≠ 验收标准</p>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：Agent · Harness · MCP</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="167.019" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 4 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="167.019" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="271.914" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 4 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="271.914" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="167.019" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="271.914" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="167.019" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="271.914" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.000, dur: 28.080 },
-  { id: "#slide-02-eval", start: 28.330, dur: 28.489 },
-  { id: "#slide-03-guardrails", start: 57.069, dur: 31.200 },
-  { id: "#slide-04-vibe", start: 88.519, dur: 32.160 },
-  { id: "#slide-05-triangle", start: 120.929, dur: 26.400 },
-  { id: "#slide-06-close", start: 147.579, dur: 19.440 }
+  { id: "#slide-01-open", start: 0.000, dur: 36.000 },
+  { id: "#slide-02-eval-why", start: 36.250, dur: 43.040 },
+  { id: "#slide-03-eval-how", start: 79.540, dur: 41.760 },
+  { id: "#slide-04-guardrails", start: 121.550, dur: 38.800 },
+  { id: "#slide-05-vibe", start: 160.600, dur: 48.166 },
+  { id: "#slide-06-triangle", start: 209.016, dur: 35.448 },
+  { id: "#slide-07-close", start: 244.714, dur: 27.200 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -189,17 +188,19 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.000);
-  enter("#slide-02-eval", 28.330);
-  enter("#slide-03-guardrails", 57.069);
-  enter("#slide-04-vibe", 88.519);
-  enter("#slide-05-triangle", 120.929);
-  enter("#slide-06-close", 147.579);
-  exit("#slide-01-open", 36.89);
-  exit("#slide-02-eval", 76.47);
-  exit("#slide-03-guardrails", 113.83);
-  exit("#slide-04-vibe", 160.08);
-  exit("#slide-05-triangle", 198.55);
-  exit("#slide-06-close", 227.25);
+  enter("#slide-02-eval-why", 36.250);
+  enter("#slide-03-eval-how", 79.540);
+  enter("#slide-04-guardrails", 121.550);
+  enter("#slide-05-vibe", 160.600);
+  enter("#slide-06-triangle", 209.016);
+  enter("#slide-07-close", 244.714);
+  exit("#slide-01-open", 51.56);
+  exit("#slide-02-eval-why", 104.25);
+  exit("#slide-03-eval-how", 152.72);
+  exit("#slide-04-guardrails", 206.08);
+  exit("#slide-05-vibe", 275.22);
+  exit("#slide-06-triangle", 325.03);
+  exit("#slide-07-close", 363.28);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

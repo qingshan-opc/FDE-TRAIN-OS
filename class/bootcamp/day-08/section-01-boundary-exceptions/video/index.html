@@ -67,105 +67,119 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="149.92" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="380.61" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="24.0">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="54.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
     <h1 class="display" data-anim="t">能跑 ≠ 可依赖</h1>
-    <p class="subtitle" data-anim="s">乖数据上二连过，只是第一步</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>昨天你的 Skill 在乖数据上二连过，恭喜，它能跑了。</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>但能跑和可依赖之间，隔着一份边界声明和一张异常分类表。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>乖数据过关</strong><span>只是第一步</span></div>
+      <div class="card"><div class="k">要点</div><strong>边界声明</strong><span>异常分类表</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-02-bad-input-scenes" class="clip slide" data-track-index="1" data-start="24.25" data-duration="22.0">
+<section id="slide-02-bad-input-scenes" class="clip slide" data-track-index="1" data-start="54.69" data-duration="52.89">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">02</span>BAD INPUT SCENES</div>
-    <h1 class="display" data-anim="t">三个真实坏输入场景</h1>
+    <h1 class="display" data-anim="t">三个坏输入</h1>
+    <p class="subtitle" data-anim="s">答不出 = 只算能跑</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">空数据</div><strong>缺字段</strong><span>需求模糊</span></div>
+      <div class="card"><div class="k">KPI 空数组</div><strong>缺逾期天数</strong><span>两周指哪两周</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-03-four-exception-types" class="clip slide" data-track-index="1" data-start="46.5" data-duration="31.78">
+<section id="slide-03-input-env" class="clip slide" data-track-index="1" data-start="107.83" data-duration="53.33">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>FOUR EXCEPTION TYPES</div>
-    <h1 class="display" data-anim="t">异常四分类</h1>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>INPUT ENV</div>
+    <h1 class="display" data-anim="t">ENV · 两类异常</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">输入错</div><strong>环境错</strong><span>能力限</span></div>
+      <div class="card"><div class="k">输入错：空</div><strong>缺字段</strong><span>格式不对</span></div>
+      <div class="card"><div class="k">要点</div><strong>环境错：超时</strong><span>文件打不开</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-04-fail-by-design" class="clip slide" data-track-index="1" data-start="78.53" data-duration="24.67">
+<section id="slide-04-ability-ambiguity" class="clip slide" data-track-index="1" data-start="161.42" data-duration="54.44">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>FAIL BY DESIGN</div>
-    <h1 class="display" data-anim="t">按声明的方式失败</h1>
+    <div class="sec-label" data-anim="k"><span class="num">04</span>ABILITY AMBIGUITY</div>
+    <h1 class="display" data-anim="t">AMBIGUITY · 两类异常</h1>
+    <p class="subtitle" data-anim="s">能力限：超说明书范围</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>目标歧：两种以上合理解法</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
+  </div>
+</section>
+
+<section id="slide-05-fail-by-design" class="clip slide" data-track-index="1" data-start="216.11" data-duration="56.89">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>FAIL BY DESIGN</div>
+    <h1 class="display" data-anim="t">按声明失败</h1>
     <div class="card-row" data-anim="diagram">
       <div class="card"><div class="k">停下来</div><strong>说清楚</strong><span>等人来</span></div>
+      <div class="card"><div class="k">要点</div><strong>失败不可怕</strong><span>失控才可怕</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-05-boundary-declaration" class="clip slide" data-track-index="1" data-start="103.44" data-duration="26.67">
+<section id="slide-06-boundary-declaration" class="clip slide" data-track-index="1" data-start="273.25" data-duration="54.89">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>BOUNDARY DECLARATION</div>
+    <div class="sec-label" data-anim="k"><span class="num">06</span>BOUNDARY DECLARATION</div>
     <h1 class="display" data-anim="t">边界声明写法</h1>
     <div class="card-row" data-anim="diagram">
       <div class="card"><div class="k">不接受</div><strong>输入不足时</strong><span>超范围</span></div>
+      <div class="card"><div class="k">要点</div><strong>会拒绝</strong><span>才可依赖</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
   </div>
 </section>
 
-<section id="slide-06-close" class="clip slide" data-track-index="1" data-start="130.36" data-duration="19.56">
+<section id="slide-07-close" class="clip slide" data-track-index="1" data-start="328.39" data-duration="52.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>CLOSE</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">close</h1>
+    <div class="sec-label" data-anim="k"><span class="num">07</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检三问</h1>
     <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">本节先到这里。</span>
-      <span class="tag">边界声明是 Skill 从能跑到可依赖的门票。</span>
-      <span class="tag">下一节上刑场——故意喂坏输入，看…</span>
+      <span class="tag hl">共同原则</span>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · exception-taxonomy</div><img src="assets/diagrams/exception-taxonomy.svg" alt="讲解图 · exception-taxonomy" /></div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">下一节：异常注入测试</p>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：异常注入测试</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="149.92" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第八天 · 第 1 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="149.92" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="380.61" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第八天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="380.61" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="149.92" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="380.61" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="149.92" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="380.61" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.0, dur: 24.0 },
-  { id: "#slide-02-bad-input-scenes", start: 24.25, dur: 22.0 },
-  { id: "#slide-03-four-exception-types", start: 46.5, dur: 31.78 },
-  { id: "#slide-04-fail-by-design", start: 78.53, dur: 24.67 },
-  { id: "#slide-05-boundary-declaration", start: 103.44, dur: 26.67 },
-  { id: "#slide-06-close", start: 130.36, dur: 19.56 }
+  { id: "#slide-01-open", start: 0.0, dur: 54.44 },
+  { id: "#slide-02-bad-input-scenes", start: 54.69, dur: 52.89 },
+  { id: "#slide-03-input-env", start: 107.83, dur: 53.33 },
+  { id: "#slide-04-ability-ambiguity", start: 161.42, dur: 54.44 },
+  { id: "#slide-05-fail-by-design", start: 216.11, dur: 56.89 },
+  { id: "#slide-06-boundary-declaration", start: 273.25, dur: 54.89 },
+  { id: "#slide-07-close", start: 328.39, dur: 52.22 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -179,17 +193,19 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.0);
-  enter("#slide-02-bad-input-scenes", 24.25);
-  enter("#slide-03-four-exception-types", 46.5);
-  enter("#slide-04-fail-by-design", 78.53);
-  enter("#slide-05-boundary-declaration", 103.44);
-  enter("#slide-06-close", 130.36);
-  exit("#slide-01-open", 24.0);
-  exit("#slide-02-bad-input-scenes", 46.25);
-  exit("#slide-03-four-exception-types", 78.28);
-  exit("#slide-04-fail-by-design", 103.2);
-  exit("#slide-05-boundary-declaration", 130.11);
-  exit("#slide-06-close", 149.92);
+  enter("#slide-02-bad-input-scenes", 54.69);
+  enter("#slide-03-input-env", 107.83);
+  enter("#slide-04-ability-ambiguity", 161.42);
+  enter("#slide-05-fail-by-design", 216.11);
+  enter("#slide-06-boundary-declaration", 273.25);
+  enter("#slide-07-close", 328.39);
+  exit("#slide-01-open", 54.44);
+  exit("#slide-02-bad-input-scenes", 107.58);
+  exit("#slide-03-input-env", 161.16);
+  exit("#slide-04-ability-ambiguity", 215.86);
+  exit("#slide-05-fail-by-design", 273.0);
+  exit("#slide-06-boundary-declaration", 328.14);
+  exit("#slide-07-close", 380.61);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

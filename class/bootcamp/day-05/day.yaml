@@ -1,15 +1,20 @@
 day: 5
 project: FDE 全栈理论
-project_brief: |-
-  今天不写长文地图。请基于「你自己的项目」（默认：部门周报助手；也可换成你的点子）手绘一张技术架构图，拍照上传。
+project_brief: '今天不写长文地图。请基于「你自己的项目」（默认：部门周报助手；也可换成你的点子）手绘一张技术架构图，拍照上传。
+
 
   怎么做：
+
   1）打开资源「手绘架构图 · 搭档提示词」，整份粘进 AI，先回答它的 4 个约束问题，拿到「该画什么」的四层清单；
+
   2）自己动手画（纸笔 / 白板 / 手写板均可）——禁止截网上现成架构图充数；
+
   3）图上至少能看出：前端入口、后端/服务、数据存储、一次外部依赖（有则标，无则写「暂无」）；
+
   4）上传清晰照片，并在复盘里用 8–12 句话讲清「为什么这样分层」。
 
-  过闸标准：是你自己的项目、四层齐、能对着图讲清楚。
+
+  过闸标准：是你自己的项目、四层齐、能对着图讲清楚。'
 resources:
 - id: h5-tech
   title: 交互讲义 · 前后端技术选型地图
@@ -620,7 +625,7 @@ capsule_extra:
       title: 口播课件 · 企业数字化五阶段
       object_key: documents/shared/course-media/day05-c2-digital-stages.mp4
       poster_key: documents/shared/course-media/day05-c2-digital-stages-poster.jpg
-      duration_sec: 122
+      duration_sec: 283
     knowledge_cards:
     - id: five-stages
       term: 企业数字化五阶段
@@ -824,6 +829,4 @@ quiz:
     - 语言选好就不能改
   - 0
   - 第 6 节：API_Spec.md 与实现语言解耦——契约先行。
-# Day5 动手终端只挂在第 4 节课节实验（capsule_extra.c4.lab），不再单独挂 Lab 节点，避免大纲重复。
-# 第 7 节「验收课」已撤：概念靠快测节点，收束靠企业任务手绘架构图。
 nodes_project: 企业任务：手绘一张自己项目的技术架构图

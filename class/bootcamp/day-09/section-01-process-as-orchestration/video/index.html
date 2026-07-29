@@ -67,96 +67,140 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="121.45" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="486.19" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="24.22">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.0" data-duration="56.0">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">一件工具是助手，一条流水线才…</h1>
-    <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>同学们好，我是你们的老师404。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>先快答一句：Human-in-t…</strong><span>he-loop 就是关键步骤要人点头，AI 不能</span></div>
-      <div class="card"><div class="k">03</div><strong>今天咱们把业务流程翻译成流水线，这叫编排。</strong><span></span></div>
+    <h1 class="display" data-anim="t">流水线不是单件工具</h1>
+    <p class="subtitle" data-anim="s">Human-in-the-loop 快答</p>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>业务流程</div>
+      <div class="flow-step"><div class="k">02</div>Skill 串联</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
   </div>
 </section>
 
-<section id="slide-02-split-three" class="clip slide" data-track-index="1" data-start="24.47" data-duration="24.0">
+<section id="slide-02-hitl-anchor" class="clip slide" data-track-index="1" data-start="56.25" data-duration="60.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>SPLIT THREE</div>
-    <h1 class="display" data-anim="t">对每一步问三个问题</h1>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>HITL ANCHOR</div>
+    <h1 class="display" data-anim="t">人该在哪一步</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>拆分手法呢，对每一步问三个问题。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>第一，这步是执行还是判断？</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>执行给 Skill，判断和放行人留着。</strong><span></span></div>
+      <div class="card"><div class="k">要点</div><strong>执行给 Skill</strong><span>判断给人</span></div>
+      </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>不可撤回</div>
+      <div class="flow-step"><div class="k">02</div>前面装闸</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-03-dataflow" class="clip slide" data-track-index="1" data-start="48.72" data-duration="18.22">
+<section id="slide-03-split-three" class="clip slide" data-track-index="1" data-start="116.72" data-duration="56.67">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>DATAFLOW</div>
-    <h1 class="display" data-anim="t">A 的产出 = B 的输入</h1>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>SPLIT THREE</div>
+    <h1 class="display" data-anim="t">拆一步问三问</h1>
+    <p class="subtitle" data-anim="s">执行还是判断？</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>咱们再强调一遍数据流。</strong><span></span></div>
-      <div class="card"><div class="k">02</div><strong>上一步吐什么格式，下一步就吃什么…</strong><span>格式，中间对不齐，流水线一定卡。</span></div>
-      <div class="card"><div class="k">03</div><strong>又是契约思想，第六次了嘛——编排…</strong><span>不是堆 Skill，是让产出和输入咬合，对吧。</span></div>
+      <div class="card"><div class="k">要点</div><strong>输入从哪来？错了能撤吗？</strong><span></span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+  </div>
+</section>
+
+<section id="slide-04-dataflow-contract" class="clip slide" data-track-index="1" data-start="173.64" data-duration="62.44">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>DATAFLOW CONTRACT</div>
+    <h1 class="display" data-anim="t">产出咬合输入</h1>
+    <p class="subtitle" data-anim="s">A 的产出 = B 的输入</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>格式对不齐</strong><span>流水线必卡</span></div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
   </div>
 </section>
 
-<section id="slide-04-weekly-pipeline" class="clip slide" data-track-index="1" data-start="67.19" data-duration="23.11">
+<section id="slide-05-weekly-pipeline" class="clip slide" data-track-index="1" data-start="236.33" data-duration="63.33">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>WEEKLY PIPELINE</div>
-    <h1 class="display" data-anim="t">运营周报流水线示例</h1>
-    <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">01</div><strong>看这条周报流水线：Skill A…</strong><span> 拉 KPI 和异常，Skill B 生成草稿，</span></div>
-      <div class="card"><div class="k">02</div><strong>发送之前呢，一个确认闸——你看一眼草稿，批准才发。</strong><span></span></div>
-      <div class="card"><div class="k">03</div><strong>消息发出去了就收不回，这个例子咱们后面还会用到。</strong><span></span></div>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>WEEKLY PIPELINE</div>
+    <h1 class="display" data-anim="t">运营周报流水线</h1>
+    <p class="subtitle" data-anim="s">发送不可撤回</p>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>A 拉数</div>
+      <div class="flow-step"><div class="k">02</div>B 草稿</div>
+      <div class="flow-step"><div class="k">03</div>确认闸</div>
+      <div class="flow-step"><div class="k">04</div>C 发送</div>
       </div>
     <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
   </div>
 </section>
 
-<section id="slide-05-workflow-close" class="clip slide" data-track-index="1" data-start="90.56" data-duration="30.89">
+<section id="slide-06-manual-step" class="clip slide" data-track-index="1" data-start="299.92" data-duration="64.22">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>WORKFLOW CLOSE</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">你当流程设计师，AI 当流水…</h1>
+    <div class="sec-label" data-anim="k"><span class="num">06</span>MANUAL STEP</div>
+    <h1 class="display" data-anim="t">人工也是一步</h1>
+    <p class="subtitle" data-anim="s">确认本身占一格</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">谁干</div><strong>看什么</strong><span>批还是驳</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
+  </div>
+</section>
+
+<section id="slide-07-workflow-designer" class="clip slide" data-track-index="1" data-start="364.39" data-duration="59.33">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>WORKFLOW DESIGNER</div>
+    <h1 class="display" data-anim="t">你设计 · AI 执行</h1>
+    <p class="subtitle" data-anim="s">能 workflow 别 agent</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>步骤定死</strong><span>不靠 Agent 现想</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="423.97" data-duration="62.22">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检三问</h1>
     <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">本节先到这里。</span>
-      <span class="tag">注意这是 workflow，步骤…</span>
-      <span class="tag">还记得第八天的铁律吗，能 wor…</span>
+      <span class="tag hl">数据流</span>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · workflow-vs-agent</div><img src="assets/diagrams/workflow-vs-agent.svg" alt="讲解图 · workflow-vs-agent" /></div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · orchestration-confirm</div><img src="assets/diagrams/orchestration-confirm.svg" alt="讲解图 · orchestration-confirm" /></div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：确认闸怎么设计才不虚</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="121.45" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第九天 · 第 1 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="121.45" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="486.19" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第九天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="486.19" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="121.45" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="486.19" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="121.45" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="486.19" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.0, dur: 24.22 },
-  { id: "#slide-02-split-three", start: 24.47, dur: 24.0 },
-  { id: "#slide-03-dataflow", start: 48.72, dur: 18.22 },
-  { id: "#slide-04-weekly-pipeline", start: 67.19, dur: 23.11 },
-  { id: "#slide-05-workflow-close", start: 90.56, dur: 30.89 }
+  { id: "#slide-01-open", start: 0.0, dur: 56.0 },
+  { id: "#slide-02-hitl-anchor", start: 56.25, dur: 60.22 },
+  { id: "#slide-03-split-three", start: 116.72, dur: 56.67 },
+  { id: "#slide-04-dataflow-contract", start: 173.64, dur: 62.44 },
+  { id: "#slide-05-weekly-pipeline", start: 236.33, dur: 63.33 },
+  { id: "#slide-06-manual-step", start: 299.92, dur: 64.22 },
+  { id: "#slide-07-workflow-designer", start: 364.39, dur: 59.33 },
+  { id: "#slide-08-close", start: 423.97, dur: 62.22 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -170,15 +214,21 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.0);
-  enter("#slide-02-split-three", 24.47);
-  enter("#slide-03-dataflow", 48.72);
-  enter("#slide-04-weekly-pipeline", 67.19);
-  enter("#slide-05-workflow-close", 90.56);
-  exit("#slide-01-open", 24.22);
-  exit("#slide-02-split-three", 48.47);
-  exit("#slide-03-dataflow", 66.94);
-  exit("#slide-04-weekly-pipeline", 90.3);
-  exit("#slide-05-workflow-close", 121.45);
+  enter("#slide-02-hitl-anchor", 56.25);
+  enter("#slide-03-split-three", 116.72);
+  enter("#slide-04-dataflow-contract", 173.64);
+  enter("#slide-05-weekly-pipeline", 236.33);
+  enter("#slide-06-manual-step", 299.92);
+  enter("#slide-07-workflow-designer", 364.39);
+  enter("#slide-08-close", 423.97);
+  exit("#slide-01-open", 56.0);
+  exit("#slide-02-hitl-anchor", 116.47);
+  exit("#slide-03-split-three", 173.39);
+  exit("#slide-04-dataflow-contract", 236.08);
+  exit("#slide-05-weekly-pipeline", 299.66);
+  exit("#slide-06-manual-step", 364.14);
+  exit("#slide-07-workflow-designer", 423.72);
+  exit("#slide-08-close", 486.19);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

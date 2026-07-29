@@ -8,23 +8,27 @@
     "file": "02-agent.txt"
   },
   {
-    "id": "03-harness-tool",
-    "file": "03-harness-tool.txt"
+    "id": "03-harness",
+    "file": "03-harness.txt"
   },
   {
-    "id": "04-mcp",
-    "file": "04-mcp.txt"
+    "id": "04-tool",
+    "file": "04-tool.txt"
   },
   {
-    "id": "05-workflow",
-    "file": "05-workflow.txt"
+    "id": "05-mcp",
+    "file": "05-mcp.txt"
   },
   {
-    "id": "06-copilot",
-    "file": "06-copilot.txt"
+    "id": "06-workflow",
+    "file": "06-workflow.txt"
   },
   {
-    "id": "07-close",
-    "file": "07-close.txt"
+    "id": "07-copilot",
+    "file": "07-copilot.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

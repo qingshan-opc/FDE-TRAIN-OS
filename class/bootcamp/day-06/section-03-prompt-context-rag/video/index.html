@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第六天 · 第 3 节 · Prompt / Context / RAG</title>
+<title>Prompt / Context / RAG / Fine-tune vs Prompt</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
 
@@ -67,110 +67,140 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="180.550" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="326.905" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="25.760">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="36.168">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">Prompt<br/>Context<br/>RAG</h1>
-    <p class="subtitle" data-anim="s">从写一段话 → 设计一次调用的视野</p>
-    <div class="tag-row" data-anim="diagram">
-      <span class="tag">Prompt</span>
-      <span class="tag">Context Engineering</span>
-      <span class="tag">RAG</span>
-      <span class="tag">Fine-tuning</span>
-      </div>
-  </div>
-</section>
-
-<section id="slide-02-prompt" class="clip slide" data-track-index="1" data-start="26.010" data-duration="32.720">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>PROMPT</div>
-    <h1 class="display" data-anim="t">Prompt 工程</h1>
-    <p class="subtitle" data-anim="s">给模型的任务说明书</p>
+    <h1 class="display" data-anim="t">设计一次调用的视野</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">坏</div><strong>格式不清</strong><span>约束缺失</span></div>
-      <div class="card"><div class="k">好</div><strong>工程师不用问第二遍</strong><span>可迭代 · 可验收</span></div>
+      <div class="card"><div class="k">Prompt</div><strong>Context</strong><span>RAG</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Prompt 四要素</div><img src="assets/diagrams/prompt-four-elements.svg" alt="讲解图 · Prompt 四要素" /></div>
-  </div>
-</section>
-
-<section id="slide-03-context" class="clip slide" data-track-index="1" data-start="58.980" data-duration="34.880">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>CONTEXT</div>
-    <h1 class="display" data-anim="t">Context 装填</h1>
-    <p class="subtitle" data-anim="s">这次调用放什么进窗口？</p>
-    <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">给少了</div><strong>模型瞎编</strong><span>信息不足</span></div>
-      <div class="card"><div class="k">给多了</div><strong>迷失中间</strong><span>窗口浪费</span></div>
-      </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Context 组装</div><img src="assets/diagrams/context-assembly.svg" alt="讲解图 · Context 组装" /></div>
-  </div>
-</section>
-
-<section id="slide-04-rag" class="clip slide" data-track-index="1" data-start="94.110" data-duration="33.208">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>RAG</div>
-    <h1 class="display" data-anim="t">RAG</h1>
-    <p class="subtitle" data-anim="s">检索增强生成 · 治幻觉主流药方</p>
     <div class="flow" data-anim="diagram">
-      <div class="flow-step"><div class="k">① 切块</div>资料库文档</div>
-      <div class="flow-step"><div class="k">② 嵌入</div>向量 / 关键词</div>
-      <div class="flow-step"><div class="k">③ 检索</div>捞相关片段</div>
-      <div class="flow-step"><div class="k">④ 生成</div>基于片段回答</div>
+      <div class="flow-step"><div class="k">01</div>从随手敲两句</div>
+      <div class="flow-step"><div class="k">02</div>设计模型看见什么</div>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">驾驶舱本周摘要 = 简化版 RAG</p>
   </div>
 </section>
 
-<section id="slide-05-finetune" class="clip slide" data-track-index="1" data-start="127.568" data-duration="30.160">
+<section id="slide-02-prompt-bad" class="clip slide" data-track-index="1" data-start="36.418" data-duration="46.086">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>FINETUNE</div>
-    <h1 class="display" data-anim="t">Fine-tune<br/>vs Prompt</h1>
-    <div class="compare" data-anim="diagram"><div class="compare-col"><h3>Fine-tuning</h3><ul><li>改模型权重</li><li>贵 · 慢 · 持久</li><li>固定风格/格式</li></ul></div><div class="compare-col"><h3>Prompting</h3><ul><li>改给模型的话</li><li>快 · 便宜</li><li>90% 场景够用</li></ul></div></div>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>PROMPT BAD</div>
+    <h1 class="display" data-anim="t">坏 Prompt 长啥样</h1>
+    <p class="subtitle" data-anim="s">例子：「帮我写个摘要」</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">缺：角色</div><strong>材料</strong><span>边界</span></div>
+      </div>
   </div>
 </section>
 
-<section id="slide-06-close" class="clip slide" data-track-index="1" data-start="157.978" data-duration="22.572">
+<section id="slide-03-prompt-good" class="clip slide" data-track-index="1" data-start="82.754" data-duration="37.680">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">收束</h1>
+    <div class="sec-label" data-anim="k"><span class="num">03</span>PROMPT GOOD</div>
+    <h1 class="display" data-anim="t">五要素</h1>
+    <p class="subtitle" data-anim="s">像写接口契约</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">角色</div><strong>背景</strong><span>任务</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · prompt-four-elements</div><img src="assets/diagrams/prompt-four-elements.svg" alt="讲解图 · prompt-four-elements" /></div>
+  </div>
+</section>
+
+<section id="slide-04-context" class="clip slide" data-track-index="1" data-start="120.684" data-duration="53.040">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>CONTEXT</div>
+    <h1 class="display" data-anim="t">往窗口装什么</h1>
+    <p class="subtitle" data-anim="s">系统提示 + 资料块 + 用户话 + 工具说明</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>给少瞎编</strong><span>给多迷失</span></div>
+      </div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · context-assembly</div><img src="assets/diagrams/context-assembly.svg" alt="讲解图 · context-assembly" /></div>
+  </div>
+</section>
+
+<section id="slide-05-rag-story" class="clip slide" data-track-index="1" data-start="173.974" data-duration="45.766">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>RAG STORY</div>
+    <h1 class="display" data-anim="t">先当开卷考试</h1>
+    <p class="subtitle" data-anim="s">开卷：先翻到相关页再答</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>第五天摘要 ≈ 简化 RAG 思想</strong><span></span></div>
+      </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>闭卷硬背</div>
+      <div class="flow-step"><div class="k">02</div>容易编</div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-06-rag-steps" class="clip slide" data-track-index="1" data-start="219.990" data-duration="35.208">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>RAG STEPS</div>
+    <h1 class="display" data-anim="t">RAG 五步</h1>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>检索质量决定上限</strong><span>先想清再选型</span></div>
+      </div>
+    <div class="flow" data-anim="diagram">
+      <div class="flow-step"><div class="k">01</div>切块</div>
+      <div class="flow-step"><div class="k">02</div>嵌入</div>
+      <div class="flow-step"><div class="k">03</div>入库</div>
+      <div class="flow-step"><div class="k">04</div>检索</div>
+      <div class="flow-step"><div class="k">05</div>拼 Prompt 生成</div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-07-finetune" class="clip slide" data-track-index="1" data-start="255.448" data-duration="40.407">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>FINETUNE</div>
+    <h1 class="display" data-anim="t">微调还是 Prompt</h1>
+    <p class="subtitle" data-anim="s">默认三板斧：Prompt + RAG + Eval</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>双列：改权重贵慢</strong><span>改话术快便宜</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="296.105" data-duration="30.800">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检</h1>
     <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">Prompt → 说明书</span>
-      <span class="tag">Context → 装填</span>
-      <span class="tag">RAG → 外挂记忆</span>
-      <span class="tag">Fine-tune → 最后手段</span>
+      <span class="tag hl">装填术</span>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">下一节：Eval · Guardrails · Vibe Coding</p>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：Eval · Guardrails · Vibe</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="180.550" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 3 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="180.550" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="326.905" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 3 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="326.905" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="180.550" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="326.905" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="180.550" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="326.905" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.000, dur: 25.760 },
-  { id: "#slide-02-prompt", start: 26.010, dur: 32.720 },
-  { id: "#slide-03-context", start: 58.980, dur: 34.880 },
-  { id: "#slide-04-rag", start: 94.110, dur: 33.208 },
-  { id: "#slide-05-finetune", start: 127.568, dur: 30.160 },
-  { id: "#slide-06-close", start: 157.978, dur: 22.572 }
+  { id: "#slide-01-open", start: 0.000, dur: 36.168 },
+  { id: "#slide-02-prompt-bad", start: 36.418, dur: 46.086 },
+  { id: "#slide-03-prompt-good", start: 82.754, dur: 37.680 },
+  { id: "#slide-04-context", start: 120.684, dur: 53.040 },
+  { id: "#slide-05-rag-story", start: 173.974, dur: 45.766 },
+  { id: "#slide-06-rag-steps", start: 219.990, dur: 35.208 },
+  { id: "#slide-07-finetune", start: 255.448, dur: 40.407 },
+  { id: "#slide-08-close", start: 296.105, dur: 30.800 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -184,17 +214,21 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.000);
-  enter("#slide-02-prompt", 26.010);
-  enter("#slide-03-context", 58.980);
-  enter("#slide-04-rag", 94.110);
-  enter("#slide-05-finetune", 127.568);
-  enter("#slide-06-close", 157.978);
-  exit("#slide-01-open", 38.44);
-  exit("#slide-02-prompt", 85.36);
-  exit("#slide-03-context", 133.39);
-  exit("#slide-04-rag", 176.53);
-  exit("#slide-05-finetune", 226.78);
-  exit("#slide-06-close", 263.7);
+  enter("#slide-02-prompt-bad", 36.418);
+  enter("#slide-03-prompt-good", 82.754);
+  enter("#slide-04-context", 120.684);
+  enter("#slide-05-rag-story", 173.974);
+  enter("#slide-06-rag-steps", 219.990);
+  enter("#slide-07-finetune", 255.448);
+  enter("#slide-08-close", 296.105);
+  exit("#slide-01-open", 49.56);
+  exit("#slide-02-prompt-bad", 106.03);
+  exit("#slide-03-prompt-good", 159.61);
+  exit("#slide-04-context", 225.64);
+  exit("#slide-05-rag-story", 281.22);
+  exit("#slide-06-rag-steps", 328.8);
+  exit("#slide-07-finetune", 387.5);
+  exit("#slide-08-close", 425.31);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

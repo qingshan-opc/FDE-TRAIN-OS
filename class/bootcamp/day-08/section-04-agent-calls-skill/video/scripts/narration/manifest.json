@@ -16,11 +16,15 @@
     "file": "04-wrong-pick-map.txt"
   },
   {
-    "id": "05-platform-tips",
-    "file": "05-platform-tips.txt"
+    "id": "05-desc-length",
+    "file": "05-desc-length.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-platform-fallback",
+    "file": "06-platform-fallback.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

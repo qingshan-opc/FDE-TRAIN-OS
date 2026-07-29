@@ -4,23 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-token",
-    "file": "02-token.txt"
+    "id": "02-token-unit",
+    "file": "02-token-unit.txt"
   },
   {
-    "id": "03-window",
-    "file": "03-window.txt"
+    "id": "03-token-cost",
+    "file": "03-token-cost.txt"
   },
   {
-    "id": "04-hallucination",
-    "file": "04-hallucination.txt"
+    "id": "04-window",
+    "file": "04-window.txt"
   },
   {
-    "id": "05-boundary",
-    "file": "05-boundary.txt"
+    "id": "05-window-full",
+    "file": "05-window-full.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-hallucination",
+    "file": "06-hallucination.txt"
+  },
+  {
+    "id": "07-boundary",
+    "file": "07-boundary.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

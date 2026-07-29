@@ -4,23 +4,27 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-eval",
-    "file": "02-eval.txt"
+    "id": "02-eval-why",
+    "file": "02-eval-why.txt"
   },
   {
-    "id": "03-guardrails",
-    "file": "03-guardrails.txt"
+    "id": "03-eval-how",
+    "file": "03-eval-how.txt"
   },
   {
-    "id": "04-vibe",
-    "file": "04-vibe.txt"
+    "id": "04-guardrails",
+    "file": "04-guardrails.txt"
   },
   {
-    "id": "05-triangle",
-    "file": "05-triangle.txt"
+    "id": "05-vibe",
+    "file": "05-vibe.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-triangle",
+    "file": "06-triangle.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

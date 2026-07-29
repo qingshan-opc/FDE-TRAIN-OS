@@ -27,7 +27,17 @@ cd digital-fde-platform
 # 整日：--all
 ```
 
-顺序：bootstrap narration → scaffold（若无 index.html）→ TTS → Wav2Lip → patch timing → hyperframes render → upload MinIO。
+顺序：bootstrap narration（已有 manifest 则跳过）→ scaffold（若无 index.html）→ TTS → Wav2Lip → patch timing → hyperframes render → upload MinIO。
+
+**重写口播后必清旧 wav**（否则 synth 跳过）：
+
+```bash
+rm -f ../digital-human-platform/outputs_dhx/dayNN_sSS_course/tts/*.wav \
+      ../digital-human-platform/outputs_dhx/dayNN_sSS_course/voice.wav \
+      ../digital-human-platform/outputs_dhx/dayNN_sSS_course/avatar.mp4
+```
+
+批量 Day6–10：`scripts/batch_land_days_6_10.py`（按 `section_dirs`；勿把已撤 accept 加回）。
 
 ## 2 · 分步（调试）
 

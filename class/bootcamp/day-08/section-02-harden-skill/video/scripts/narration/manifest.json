@@ -16,11 +16,15 @@
     "file": "04-fix-directions.txt"
   },
   {
-    "id": "05-regression",
-    "file": "05-regression.txt"
+    "id": "05-empty-data-trap",
+    "file": "05-empty-data-trap.txt"
   },
   {
-    "id": "06-close",
-    "file": "06-close.txt"
+    "id": "06-regression",
+    "file": "06-regression.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

@@ -291,7 +291,7 @@ learn:
       title: 口播课件 · 企业数字化五阶段
       object_key: documents/shared/course-media/day05-c2-digital-stages.mp4
       poster_key: documents/shared/course-media/day05-c2-digital-stages-poster.jpg
-      duration_sec: 122
+      duration_sec: 283
     knowledge_cards:
     - id: five-stages
       term: 企业数字化五阶段

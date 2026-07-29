@@ -1,1 +1,0 @@
-Agent 外面那层壳，叫 Harness，编排框架——管工具表、记忆、规划、重试、日志。同一个 GPT-4，套 Cursor 的 Harness 能改十个文件，套个简陋脚本只能问答，能力天差地别。Tool Calling 是模型伸出来的手：它输出结构化请求「我要调 search，参数 q 等于周报」，Harness 执行完，把结果喂回去。第五天 API 里的 function calling，就是这个机制，呢。

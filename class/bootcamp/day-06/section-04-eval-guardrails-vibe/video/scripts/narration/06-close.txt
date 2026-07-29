@@ -1,1 +1,0 @@
-第四节带走一句：「我觉得还行」不是验收标准，Eval 才是。下一节进入 Agent 全家桶——Harness、MCP、Workflow 跟 Agent 怎么分，Copilot 跟 Agent 差在哪。词多，但骨架捋清了，第二周封装 Skill 就不懵，呢。

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第六天 · 第 2 节 · Token / 窗口 / 幻觉</title>
+<title>Token / 窗口 / 幻觉：能力与边界</title>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 <style>
 
@@ -67,109 +67,130 @@ html.browser-preview #preview-hint{display:block}
 </head>
 <body>
 <div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
-<div id="root" data-composition-id="main" data-start="0" data-duration="171.205" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="373.385" data-width="1920" data-height="1080">
 <div class="stage-bg"></div>
 
-<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="34.568">
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="40.960">
   <div class="stage-fill"></div>
   <div class="slide-body">
     <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
-    <h1 class="display" data-anim="t">Token<br/>窗口<br/>幻觉</h1>
-    <p class="subtitle" data-anim="s">API 里的 max_tokens · usage · 对话越长越贵越慢</p>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · LLM 能力与边界</div><img src="assets/diagrams/llm-capability.svg" alt="讲解图 · LLM 能力与边界" /></div>
-  </div>
-</section>
-
-<section id="slide-02-token" class="clip slide" data-track-index="1" data-start="34.818" data-duration="29.609">
-  <div class="stage-fill"></div>
-  <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">02</span>TOKEN</div>
-    <h1 class="display" data-anim="t">Token</h1>
-    <p class="subtitle" data-anim="s">模型读写的最小单位（≠ 一个字）</p>
+    <h1 class="display" data-anim="t">三个绑在一起的词</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">英文</div><strong>≈ 1 词</strong><span>大约一个词</span></div>
-      <div class="card"><div class="k">中文</div><strong>≈ ½–1 字</strong><span>大约半个到一个字</span></div>
-      <div class="card"><div class="k">计费</div><strong>输入 + 输出</strong><span>按 Token 计费</span></div>
+      <div class="card"><div class="k">Token</div><strong>窗口</strong><span>幻觉</span></div>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">压缩 Prompt · 少贴整份 repo</p>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · llm-capability</div><img src="assets/diagrams/llm-capability.svg" alt="讲解图 · llm-capability" /></div>
   </div>
 </section>
 
-<section id="slide-03-window" class="clip slide" data-track-index="1" data-start="64.677" data-duration="33.528">
+<section id="slide-02-token-unit" class="clip slide" data-track-index="1" data-start="41.210" data-duration="53.125">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">03</span>WINDOW</div>
+    <div class="sec-label" data-anim="k"><span class="num">02</span>TOKEN UNIT</div>
+    <h1 class="display" data-anim="t">不是一个汉字</h1>
+    <p class="subtitle" data-anim="s">模型读写的最小切块</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>英文约一词一块</strong><span>中文常半字到一字</span></div>
+      <div class="card"><div class="k">要点</div><strong>不同模型切法可不同</strong><span></span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-03-token-cost" class="clip slide" data-track-index="1" data-start="94.585" data-duration="57.765">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>TOKEN COST</div>
+    <h1 class="display" data-anim="t">钱与注意力</h1>
+    <p class="subtitle" data-anim="s">计费：输入 + 输出一起算</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">要点</div><strong>Cursor 贴整仓 = 烧 Token</strong><span></span></div>
+      <div class="card"><div class="k">省：清废话</div><strong>清重复</strong><span>格式写清</span></div>
+      </div>
+  </div>
+</section>
+
+<section id="slide-04-window" class="clip slide" data-track-index="1" data-start="152.600" data-duration="44.886">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>WINDOW</div>
     <h1 class="display" data-anim="t">上下文窗口</h1>
-    <p class="subtitle" data-anim="s">一次能看到的 Token 硬顶</p>
+    <p class="subtitle" data-anim="s">一次调用能同时看见的硬顶</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">Claude 3.5</div><strong>≈ 200K</strong><span>常见上限</span></div>
-      <div class="card"><div class="k">GPT-4o</div><strong>≈ 128K</strong><span>常见上限</span></div>
-      <div class="card"><div class="k">满了</div><strong>截断 · 摘要 · RAG</strong><span>PRD+架构+契约+聊天</span></div>
+      <div class="card"><div class="k">要点</div><strong>宣传数字大</strong><span>真材料一塞就满</span></div>
       </div>
-    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · Context 装填</div><img src="assets/diagrams/context-assembly.svg" alt="讲解图 · Context 装填" /></div>
+    <div class="diagram-box" data-anim="diagram"><div class="dg-cap">讲解图 · context-assembly</div><img src="assets/diagrams/context-assembly.svg" alt="讲解图 · context-assembly" /></div>
   </div>
 </section>
 
-<section id="slide-04-hallucination" class="clip slide" data-track-index="1" data-start="98.455" data-duration="26.880">
+<section id="slide-05-window-full" class="clip slide" data-track-index="1" data-start="197.736" data-duration="43.686">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">04</span>HALLUCINATION</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">幻觉</h1>
-    <p class="subtitle" data-anim="s">Hallucination · 机制不是偶发 bug</p>
+    <div class="sec-label" data-anim="k"><span class="num">05</span>WINDOW FULL</div>
+    <h1 class="display" data-anim="t">窗口满了怎么办</h1>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">机制</div><strong>最像真的答案</strong><span>不是核实过的</span></div>
-      <div class="card"><div class="k">例子</div><strong>编造 DOI</strong><span>问不存在的论文也编</span></div>
-      <div class="card"><div class="k">FDE</div><strong>关键事实可溯源</strong><span>RAG 或人工验收</span></div>
+      <div class="card"><div class="k">三卡：截断最早对话</div><strong>摘要压缩再喂</strong><span>RAG 只取相关</span></div>
+      </div>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：RAG 下节细讲</p>
+  </div>
+</section>
+
+<section id="slide-06-hallucination" class="clip slide" data-track-index="1" data-start="241.672" data-duration="44.486">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>HALLUCINATION</div>
+    <h1 class="display" data-anim="t">幻觉</h1>
+    <p class="subtitle" data-anim="s">最像真的 ≠ 核实过</p>
+    <div class="card-row" data-anim="diagram">
+      <div class="card"><div class="k">会编 DOI</div><strong>错字段</strong><span>假数据</span></div>
+      <div class="card"><div class="k">要点</div><strong>铁律：可溯源 + 验收</strong><span></span></div>
       </div>
   </div>
 </section>
 
-<section id="slide-05-boundary" class="clip slide" data-track-index="1" data-start="125.585" data-duration="25.370">
+<section id="slide-07-boundary" class="clip slide" data-track-index="1" data-start="286.408" data-duration="47.200">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">05</span>BOUNDARY</div>
-    <h1 class="display" data-anim="t">能力边界</h1>
+    <div class="sec-label" data-anim="k"><span class="num">07</span>BOUNDARY</div>
+    <h1 class="display" data-anim="t">擅长与不擅长</h1>
+    <p class="subtitle" data-anim="s">第五天摘要：必须对照 Rubric</p>
     <div class="card-row" data-anim="diagram">
-      <div class="card"><div class="k">擅长</div><strong>模式匹配</strong><span>语言生成</span></div>
-      <div class="card"><div class="k">不擅长</div><strong>实时数据</strong><span>精确计算 · 私有事实</span></div>
-      <div class="card"><div class="k">必须</div><strong>输出验收</strong><span>对照 Rubric</span></div>
+      <div class="card"><div class="k">擅长：生成</div><strong>归纳</strong><span>结构化输出</span></div>
+      <div class="card"><div class="k">不擅长：实时</div><strong>精确大数</strong><span>未训私有事实</span></div>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">驾驶舱摘要：写得好不好你来判</p>
   </div>
 </section>
 
-<section id="slide-06-close" class="clip slide" data-track-index="1" data-start="151.205" data-duration="20.000">
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="333.858" data-duration="39.527">
   <div class="stage-fill"></div>
   <div class="slide-body">
-    <div class="sec-label" data-anim="k"><span class="num">06</span>TAKEAWAY</div>
-    <h1 class="display" style="font-size:56px" data-anim="t">带走三词</h1>
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE</div>
+    <h1 class="display" style="font-size:56px" data-anim="t">学生自检三问</h1>
     <div class="tag-row" data-anim="diagram">
-      <span class="tag hl">Token = 钱 + 注意力</span>
-      <span class="tag">窗口 = 硬顶</span>
-      <span class="tag">幻觉 = 常态 → 验收</span>
+      <span class="tag hl">窗口=硬顶</span>
       </div>
-    <p class="subtitle" style="margin-top:18px" data-anim="s">下一节：Prompt · Context · RAG</p>
+    <p class="subtitle" style="margin-top:18px" data-anim="s">预告：Prompt / Context / RAG</p>
   </div>
 </section>
 
-<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="171.205" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 2 节</div>
-<div id="avatar-pip" class="clip" data-start="0" data-duration="171.205" data-track-index="5">
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="373.385" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第六天 · 第 2 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="373.385" data-track-index="5">
   <div class="speak-ring"></div>
-  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="171.205" data-track-index="6"></video></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="373.385" data-track-index="6"></video></div>
   <div class="avatar-caption">Lecturer · 口播</div>
 </div>
-<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="171.205" data-track-index="10" data-volume="1"></audio>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="373.385" data-track-index="10" data-volume="1"></audio>
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
 const slides = [
-  { id: "#slide-01-open", start: 0.000, dur: 34.568 },
-  { id: "#slide-02-token", start: 34.818, dur: 29.609 },
-  { id: "#slide-03-window", start: 64.677, dur: 33.528 },
-  { id: "#slide-04-hallucination", start: 98.455, dur: 26.880 },
-  { id: "#slide-05-boundary", start: 125.585, dur: 25.370 },
-  { id: "#slide-06-close", start: 151.205, dur: 20.000 }
+  { id: "#slide-01-open", start: 0.000, dur: 40.960 },
+  { id: "#slide-02-token-unit", start: 41.210, dur: 53.125 },
+  { id: "#slide-03-token-cost", start: 94.585, dur: 57.765 },
+  { id: "#slide-04-window", start: 152.600, dur: 44.886 },
+  { id: "#slide-05-window-full", start: 197.736, dur: 43.686 },
+  { id: "#slide-06-hallucination", start: 241.672, dur: 44.486 },
+  { id: "#slide-07-boundary", start: 286.408, dur: 47.200 },
+  { id: "#slide-08-close", start: 333.858, dur: 39.527 }
 ];
 function enter(id, t0) {
   tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
@@ -183,17 +204,21 @@ function exit(id, tEnd) {
   tl.set(`${id} .slide-body`, { opacity: 0 }, tEnd);
 }
   enter("#slide-01-open", 0.000);
-  enter("#slide-02-token", 34.818);
-  enter("#slide-03-window", 64.677);
-  enter("#slide-04-hallucination", 98.455);
-  enter("#slide-05-boundary", 125.585);
-  enter("#slide-06-close", 151.205);
-  exit("#slide-01-open", 45.56);
-  exit("#slide-02-token", 89.14);
-  exit("#slide-03-window", 130.06);
-  exit("#slide-04-hallucination", 164.53);
-  exit("#slide-05-boundary", 196.78);
-  exit("#slide-06-close", 222.14);
+  enter("#slide-02-token-unit", 41.210);
+  enter("#slide-03-token-cost", 94.585);
+  enter("#slide-04-window", 152.600);
+  enter("#slide-05-window-full", 197.736);
+  enter("#slide-06-hallucination", 241.672);
+  enter("#slide-07-boundary", 286.408);
+  enter("#slide-08-close", 333.858);
+  exit("#slide-01-open", 57.33);
+  exit("#slide-02-token-unit", 128.47);
+  exit("#slide-03-token-cost", 201.61);
+  exit("#slide-04-window", 258.75);
+  exit("#slide-05-window-full", 307.89);
+  exit("#slide-06-hallucination", 369.92);
+  exit("#slide-07-boundary", 427.95);
+  exit("#slide-08-close", 470.19);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
 

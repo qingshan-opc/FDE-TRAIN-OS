@@ -4,15 +4,27 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-four-dimensions",
-    "file": "02-four-dimensions.txt"
+    "id": "02-rules-rotation",
+    "file": "02-rules-rotation.txt"
   },
   {
-    "id": "03-accident-calm",
-    "file": "03-accident-calm.txt"
+    "id": "03-four-dimensions",
+    "file": "03-four-dimensions.txt"
   },
   {
-    "id": "04-fde-graduate",
-    "file": "04-fde-graduate.txt"
+    "id": "04-on-stage",
+    "file": "04-on-stage.txt"
+  },
+  {
+    "id": "05-peer-review",
+    "file": "05-peer-review.txt"
+  },
+  {
+    "id": "06-gate10-ceremony",
+    "file": "06-gate10-ceremony.txt"
+  },
+  {
+    "id": "07-close",
+    "file": "07-close.txt"
   }
 ]

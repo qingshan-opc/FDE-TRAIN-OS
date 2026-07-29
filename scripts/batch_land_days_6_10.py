@@ -100,7 +100,7 @@ def main() -> None:
             else:
                 fail += 1
 
-    run([PYTHON, str(ROOT / "scripts/build_v07_week1_contracts.py")], env={**os.environ, "PYTHONPATH": str(ROOT)})
+    run([PYTHON, str(ROOT / "scripts/build_v07_week1_contracts.py")], env={**os.environ, "PYTHONPATH": f"{ROOT}/backend:{ROOT}"})
     run(
         [
             PYTHON,
@@ -111,7 +111,7 @@ def main() -> None:
             "for t in SEED_VERSION_TAGS:\n"
             " seed_course_version_from_yaml(camp_id=DEFAULT_CAMP_ID, version_tag=t); print('seeded', t)" % str(ROOT),
         ],
-        env={**os.environ, "PYTHONPATH": str(ROOT)},
+        env={**os.environ, "PYTHONPATH": f"{ROOT}/backend:{ROOT}"},
     )
     try:
         run(

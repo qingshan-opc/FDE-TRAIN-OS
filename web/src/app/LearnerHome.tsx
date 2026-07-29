@@ -52,7 +52,6 @@ export function LearnerHome() {
   const [error, setError] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<MobileTab>("content");
   const [showPassport, setShowPassport] = useState(false);
-  const [forceTree, setForceTree] = useState(false);
   const [openCapsuleId, setOpenCapsuleId] = useState<string | null>(null);
   const [readCapsuleIds, setReadCapsuleIds] = useState<Set<string>>(() => new Set());
   const [coachOpen, setCoachOpen] = useState(false);
@@ -98,7 +97,6 @@ export function LearnerHome() {
   useEffect(() => {
     setOpenCapsuleId(null);
     setReadCapsuleIds(new Set());
-    setForceTree(false);
   }, [activeDay, activeNodeId]);
 
   const loadDay = useCallback(
@@ -174,9 +172,6 @@ export function LearnerHome() {
       id: c.id || `c${i + 1}`,
     }));
   }, [dayPkg, activeNode]);
-
-  const syllabusMode =
-    !forceTree && activeNode?.kind === "learn" && learnCapsules.length > 0 ? "capsules" : "tree";
 
   const navigateToTarget = useCallback(
     (target: ReturnType<typeof resolveNextTarget>) => {
@@ -458,7 +453,6 @@ export function LearnerHome() {
             <ErrorState message={error} onRetry={() => void loadDays()} />
           ) : (
             <SyllabusRail
-              mode={syllabusMode}
               days={days}
               weeks={weeks}
               activeDay={activeDay}
@@ -476,7 +470,6 @@ export function LearnerHome() {
                 setOpenCapsuleId(id);
                 setMobileTab("content");
               }}
-              onBackToTree={() => setForceTree(true)}
             />
           )}
         </div>

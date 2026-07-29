@@ -17,7 +17,7 @@ if [[ ! -f .env ]]; then
 fi
 
 export FDE_ENV="${FDE_ENV:-dev}"
-export PYTHONPATH="$ROOT"
+export PYTHONPATH="${ROOT}/backend:${ROOT}"
 export FDE_INTERNAL_BASE="${FDE_INTERNAL_BASE:-http://127.0.0.1:8760}"
 PORT="${FDE_API_PORT:-8760}"
 

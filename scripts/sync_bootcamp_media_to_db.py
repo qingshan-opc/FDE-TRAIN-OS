@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "backend"))
 
 from services.author.bootcamp_sync import preview_day_sync  # noqa: E402
 from services.shared.config import CURRICULUM_VERSION_TAG  # noqa: E402

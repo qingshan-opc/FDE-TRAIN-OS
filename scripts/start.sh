@@ -24,7 +24,8 @@ if command -v docker >/dev/null 2>&1; then
 fi
 
 export FDE_ENV="${FDE_ENV:-dev}"
-export PYTHONPATH="$ROOT"
+# backend/ holds the `services` package; repo root still needed for `sim` etc.
+export PYTHONPATH="${ROOT}/backend:${ROOT}${PYTHONPATH:+:$PYTHONPATH}"
 export FDE_INTERNAL_BASE="${FDE_INTERNAL_BASE:-http://127.0.0.1:8760}"
 export AGENT_MODE="${AGENT_MODE:-auto}"
 PORT="${FDE_API_PORT:-8760}"

@@ -49,5 +49,6 @@ TTS / 口型在兄弟仓库 `digital-human-platform`：
 | [`build_course_media.py`](build_course_media.py) | 早期 HyperFrames 占位 |
 | [`build_v06_media.py`](build_v06_media.py) | v0.6 媒体占位 |
 | [`upload_course_media.py`](upload_course_media.py) | 旧路径 MinIO 上传 |
+| [`sync_course_media_to_minio.py`](sync_course_media_to_minio.py) | 按 day.yaml/合约核对并上传课件到 MinIO（`--verify-only` / `--force`） |
 
 新节请走 Gen2 Bootcamp 流水线。

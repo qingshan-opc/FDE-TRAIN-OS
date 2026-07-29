@@ -76,18 +76,18 @@ for day in range(6, 11):
         else:
             fail += 1
 
-run([PYTHON, str(ROOT / "scripts/build_v07_week1_contracts.py")], env={**os.environ, "PYTHONPATH": str(ROOT)})
+run([PYTHON, str(ROOT / "scripts/build_v07_week1_contracts.py")], env={**os.environ, "PYTHONPATH": f"{ROOT}/backend:{ROOT}"})
 run([PYTHON, "-c",
      "from services.shared.seed import seed_course_version_from_yaml\n"
      "from services.shared.config import DEFAULT_CAMP_ID, SEED_VERSION_TAGS\n"
      "for t in SEED_VERSION_TAGS:\n"
      " seed_course_version_from_yaml(camp_id=DEFAULT_CAMP_ID, version_tag=t); print('seeded', t)"],
-    env={**os.environ, "PYTHONPATH": str(ROOT)})
+    env={**os.environ, "PYTHONPATH": f"{ROOT}/backend:{ROOT}"})
 
 # media_fields sync to published curriculum version
 try:
     run([PYTHON, str(ROOT / "scripts/sync_bootcamp_media_to_db.py"), "--days", "6,7,8,9,10"],
-        env={**os.environ, "PYTHONPATH": str(ROOT)})
+        env={**os.environ, "PYTHONPATH": f"{ROOT}/backend:{ROOT}"})
 except Exception:
     pass
 

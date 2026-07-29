@@ -12,6 +12,11 @@ import type {
   NodeState,
 } from "../lib/types";
 import { resolveCapsuleResources } from "../lib/curriculum/capsuleResources";
+import {
+  checklistItemsFromPrompt,
+  normalizePractice,
+  normalizeQuizQuestions,
+} from "../lib/curriculum/normalizeCapsule";
 import { ErrorState } from "../components/ErrorState";
 import { Empty } from "../components/Empty";
 import { CapsuleMediaStack } from "../components/CapsuleMedia";
@@ -35,6 +40,34 @@ const STEP_LABELS: Record<LearnStep, string> = {
 function stepLabel(id: LearnStep, cap: Capsule | undefined): string {
   if (id === "video") return (cap?.media || []).length ? "课件讲解员" : "课件讲解";
   return STEP_LABELS[id];
+}
+
+function learnUiStorageKey(userId: string, campId: string, day: number): string {
+  return `fde.learn.ui.${userId}.${campId}.${day}`;
+}
+
+type CapsuleUiState = {
+  visited: LearnStep[];
+  quizAnswers: Record<number, number>;
+};
+
+function loadLearnUiState(userId: string, campId: string, day: number): Record<string, CapsuleUiState> {
+  try {
+    const raw = localStorage.getItem(learnUiStorageKey(userId, campId, day));
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, CapsuleUiState>;
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveLearnUiState(userId: string, campId: string, day: number, state: Record<string, CapsuleUiState>) {
+  try {
+    localStorage.setItem(learnUiStorageKey(userId, campId, day), JSON.stringify(state));
+  } catch {
+    // ignore quota / private mode
+  }
 }
 
 function CapsuleProse({ content }: { content: string }) {
@@ -80,25 +113,8 @@ function CapsuleProse({ content }: { content: string }) {
   );
 }
 
-/** `practice` accepts a legacy plain string (implicitly a required text
- * prompt) or a structured `{prompt, input_type?, required?}` object. */
-function normalizePractice(practice: Capsule["practice"]): CapsulePracticeSpec | null {
-  if (!practice) return null;
-  if (typeof practice === "string") {
-    const trimmed = practice.trim();
-    return trimmed ? { prompt: trimmed, input_type: "text", required: true } : null;
-  }
-  if (typeof practice === "object" && practice.prompt) {
-    return { prompt: practice.prompt, input_type: practice.input_type || "text", required: Boolean(practice.required) };
-  }
-  return null;
-}
-
 function checklistItems(spec: CapsulePracticeSpec): string[] {
-  return spec.prompt
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean);
+  return checklistItemsFromPrompt(spec.prompt);
 }
 
 interface PracticeState {
@@ -248,15 +264,47 @@ function StepQuiz({
   );
 }
 
+type LearnBelowTab = "glossary" | "resources" | "tools";
+
 /**
- * 课节底部「资源 / 工具与资料」双 tab。
+ * 课节视频底部：名词解释 / 资源 / 工具与资料 三 tab。
  */
-function LearnAssetsTabs({ resources, tools }: { resources: DayResource[]; tools: CapsuleTool[] }) {
-  const [tab, setTab] = useState<"resources" | "tools">("resources");
-  if (!resources.length && !tools.length) return null;
+function LearnBelowTabs({
+  glossary,
+  resources,
+  tools,
+}: {
+  glossary: NonNullable<Capsule["glossary_terms"]>;
+  resources: DayResource[];
+  tools: CapsuleTool[];
+}) {
+  const defaultTab: LearnBelowTab = glossary.length
+    ? "glossary"
+    : resources.length
+      ? "resources"
+      : "tools";
+  const [tab, setTab] = useState<LearnBelowTab>(defaultTab);
+
+  useEffect(() => {
+    setTab(defaultTab);
+  }, [defaultTab]);
+
+  if (!glossary.length && !resources.length && !tools.length) return null;
+
   return (
-    <section className="learn-assets" aria-label="资源与工具">
+    <section className="learn-assets" aria-label="名词解释与资源">
       <div className="learn-assets-tabs" role="tablist">
+        {glossary.length > 0 && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "glossary"}
+            className={`learn-assets-tab${tab === "glossary" ? " is-on" : ""}`}
+            onClick={() => setTab("glossary")}
+          >
+            名词解释{` (${glossary.length})`}
+          </button>
+        )}
         <button
           type="button"
           role="tab"
@@ -276,8 +324,13 @@ function LearnAssetsTabs({ resources, tools }: { resources: DayResource[]; tools
           工具与资料{tools.length ? ` (${tools.length})` : ""}
         </button>
       </div>
-      {tab === "resources" ? (
-        resources.length ? (
+      {tab === "glossary" && glossary.length > 0 && (
+        <div role="tabpanel">
+          <GlossaryTermsPanel terms={glossary} embedded />
+        </div>
+      )}
+      {tab === "resources" &&
+        (resources.length ? (
           <ul className="learn-resource-list" role="tabpanel">
             {resources.map((r) => (
               <li key={r.id} className="learn-resource-item">
@@ -297,26 +350,27 @@ function LearnAssetsTabs({ resources, tools }: { resources: DayResource[]; tools
           </ul>
         ) : (
           <p className="muted learn-assets-empty">本节暂无资源。</p>
-        )
-      ) : tools.length ? (
-        <ul className="learn-tool-list" role="tabpanel">
-          {tools.map((t, i) => (
-            <li key={`${t.name}-${i}`} className="learn-tool-item">
-              <div>
-                <strong>{t.name}</strong>
-                {t.note && <p className="muted">{t.note}</p>}
-              </div>
-              {t.url && (
-                <a href={t.url} target="_blank" rel="noreferrer">
-                  打开
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="muted learn-assets-empty">本节暂无固定工具与资料。</p>
-      )}
+        ))}
+      {tab === "tools" &&
+        (tools.length ? (
+          <ul className="learn-tool-list" role="tabpanel">
+            {tools.map((t, i) => (
+              <li key={`${t.name}-${i}`} className="learn-tool-item">
+                <div>
+                  <strong>{t.name}</strong>
+                  {t.note && <p className="muted">{t.note}</p>}
+                </div>
+                {t.url && (
+                  <a href={t.url} target="_blank" rel="noreferrer">
+                    打开
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="muted learn-assets-empty">本节暂无固定工具与资料。</p>
+        ))}
     </section>
   );
 }
@@ -366,10 +420,13 @@ export function CapsuleReader({
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<LearnStep>("video");
   const [quizAnswers, setQuizAnswers] = useState<Record<string, Record<number, number>>>({});
+  /** Per-capsule visited steps — drives STEP ✓ tied to this learner. */
+  const [visitedSteps, setVisitedSteps] = useState<Record<string, Set<LearnStep>>>({});
   const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const saveSeq = useRef<Record<string, number>>({});
   const practiceRef = useRef(practice);
   practiceRef.current = practice;
+  const uiPersistRef = useRef<Record<string, CapsuleUiState>>({});
 
   const openId = openCapsuleId !== undefined ? openCapsuleId : internalOpenId;
 
@@ -424,6 +481,7 @@ export function CapsuleReader({
     setReadAndNotify(new Set());
     setPractice({});
     setQuizAnswers({});
+    setVisitedSteps({});
     setStep("video");
 
     (async () => {
@@ -431,6 +489,20 @@ export function CapsuleReader({
         if (capsules[0]) openCapsule(capsules[0]);
         return;
       }
+
+      const stored = loadLearnUiState(user.id, campId, day.day);
+      uiPersistRef.current = stored;
+      const restoredAnswers: Record<string, Record<number, number>> = {};
+      const restoredVisited: Record<string, Set<LearnStep>> = {};
+      for (const [cid, row] of Object.entries(stored)) {
+        if (row.quizAnswers && typeof row.quizAnswers === "object") {
+          restoredAnswers[cid] = row.quizAnswers;
+        }
+        if (Array.isArray(row.visited)) {
+          restoredVisited[cid] = new Set(row.visited.filter(Boolean) as LearnStep[]);
+        }
+      }
+
       let openedIds = new Set<string>();
       const pmap: Record<string, PracticeState> = {};
       try {
@@ -443,8 +515,8 @@ export function CapsuleReader({
         const practiceRes = await practiceApi.list({ camp_id: campId, day: day.day });
         for (const it of practiceRes.items) {
           const checked = new Set<number>();
-          const rawChecked = (it.response_json as { checked?: number[] } | undefined)?.checked;
-          if (Array.isArray(rawChecked)) rawChecked.forEach((i) => checked.add(Number(i)));
+          const raw = (it.response_json || {}) as { checked?: number[]; quiz_answers?: Record<string, number> };
+          if (Array.isArray(raw.checked)) raw.checked.forEach((i) => checked.add(Number(i)));
           pmap[it.capsule_id] = {
             text: it.response_text || "",
             status: it.status === "submitted" ? "submitted" : "draft",
@@ -452,6 +524,15 @@ export function CapsuleReader({
             dirty: false,
             saving: false,
           };
+          // Server-backed quiz answers win over local cache.
+          if (raw.quiz_answers && typeof raw.quiz_answers === "object") {
+            const mapped: Record<number, number> = {};
+            for (const [k, v] of Object.entries(raw.quiz_answers)) {
+              const qi = Number(k);
+              if (Number.isFinite(qi) && typeof v === "number") mapped[qi] = v;
+            }
+            if (Object.keys(mapped).length) restoredAnswers[it.capsule_id] = mapped;
+          }
         }
       } catch {
         // degrade gracefully
@@ -459,6 +540,8 @@ export function CapsuleReader({
       if (cancelled) return;
       setReadAndNotify(openedIds);
       setPractice(pmap);
+      setQuizAnswers(restoredAnswers);
+      setVisitedSteps(restoredVisited);
       if (capsules.length) {
         const preferred =
           (openCapsuleId && capsules.find((c) => c.id === openCapsuleId)) ||
@@ -473,6 +556,30 @@ export function CapsuleReader({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [day.day, node.id, campId, user?.id]);
+
+  const persistUiState = (
+    capsuleId: string,
+    patch: Partial<{ visited: Set<LearnStep>; quizAnswers: Record<number, number> }>,
+  ) => {
+    if (!user || !campId) return;
+    const prev = uiPersistRef.current[capsuleId] || { visited: [], quizAnswers: {} };
+    const next: CapsuleUiState = {
+      visited: patch.visited ? Array.from(patch.visited) : prev.visited,
+      quizAnswers: patch.quizAnswers ?? prev.quizAnswers,
+    };
+    uiPersistRef.current = { ...uiPersistRef.current, [capsuleId]: next };
+    saveLearnUiState(user.id, campId, day.day, uiPersistRef.current);
+  };
+
+  const markStepVisited = (capsuleId: string, stepId: LearnStep) => {
+    setVisitedSteps((prev) => {
+      const cur = prev[capsuleId] || new Set<LearnStep>();
+      if (cur.has(stepId)) return prev;
+      const nextSet = new Set(cur).add(stepId);
+      persistUiState(capsuleId, { visited: nextSet, quizAnswers: quizAnswers[capsuleId] || {} });
+      return { ...prev, [capsuleId]: nextSet };
+    });
+  };
 
   const persistPractice = async (
     capsuleId: string,
@@ -492,6 +599,7 @@ export function CapsuleReader({
     const responseText = isChecklist
       ? checklistItems(spec).filter((_, i) => checked.has(i)).join("\n")
       : text;
+    const answers = quizAnswers[capsuleId] || {};
     const seq = (saveSeq.current[capsuleId] = (saveSeq.current[capsuleId] || 0) + 1);
     setPractice((prev) => ({ ...prev, [capsuleId]: { ...(prev[capsuleId] || prevState), text, checked, saving: true } }));
     try {
@@ -500,7 +608,10 @@ export function CapsuleReader({
         day: day.day,
         capsule_id: capsuleId,
         response_text: responseText,
-        response_json: isChecklist ? { checked: Array.from(checked) } : {},
+        response_json: {
+          ...(isChecklist ? { checked: Array.from(checked) } : {}),
+          quiz_answers: answers,
+        },
         status,
         force_reopen: Boolean(opts?.reopen),
       });
@@ -574,7 +685,14 @@ export function CapsuleReader({
     }
     const pending = capsules.filter((c) => practiceSpecs[c.id]?.required && practice[c.id]?.status !== "submitted");
     if (pending.length) {
-      toast.push(`请先提交必做练习：还差 ${pending.length} 个`, "error");
+      const names = pending
+        .slice(0, 3)
+        .map((c) => c.title || c.id)
+        .join("、");
+      toast.push(
+        `本日还有 ${pending.length} 节必做练习未交${names ? `：${names}${pending.length > 3 ? "…" : ""}` : ""}`,
+        "error",
+      );
       return;
     }
     setBusy(true);
@@ -594,18 +712,27 @@ export function CapsuleReader({
   const activeIndex = active ? capsules.findIndex((c) => c.id === active.id) : -1;
   const activeSpec = active ? practiceSpecs[active.id] : undefined;
   const activePractice = active ? practice[active.id] || emptyPracticeState() : emptyPracticeState();
-  const pendingPracticeCount = capsules.filter(
+  /** Required practices across the whole learn node (all capsules today). */
+  const pendingPracticeCapsules = capsules.filter(
     (c) => practiceSpecs[c.id]?.required && practice[c.id]?.status !== "submitted",
-  ).length;
+  );
+  const pendingPracticeCount = pendingPracticeCapsules.length;
+  const activePracticePending = Boolean(
+    active && practiceSpecs[active.id]?.required && practice[active.id]?.status !== "submitted",
+  );
+  const nextPendingCapsule = pendingPracticeCapsules.find((c) => c.id !== active?.id) || pendingPracticeCapsules[0];
 
   // ---- 步流：课件讲解员 → 知识卡片 → 知识确认 → … → 提交验收（缺件自动隐藏） ----
-  const quizQuestions = active?.quiz?.questions || [];
+  const quizQuestions = useMemo(() => normalizeQuizQuestions(active?.quiz), [active?.quiz]);
   const knowledgeCards = active?.knowledge_cards || [];
   const glossaryTerms = active?.glossary_terms || [];
   const quizAnswersForActive = (active && quizAnswers[active.id]) || {};
-  const quizAllAnswered = quizQuestions.length > 0 && quizQuestions.every((_, i) => quizAnswersForActive[i] !== undefined);
+  // No questions ⇒ answered vacuously (practice-only knowledge-confirm step).
+  const quizAllAnswered =
+    quizQuestions.length === 0 || quizQuestions.every((_, i) => quizAnswersForActive[i] !== undefined);
   const practiceDone = !activeSpec?.required || activePractice.status === "submitted";
   const quizStepDone = quizAllAnswered && practiceDone;
+  const visitedForActive = (active && visitedSteps[active.id]) || new Set<LearnStep>();
 
   const steps = useMemo(() => {
     if (!active) return [] as { id: LearnStep; minutes: number }[];
@@ -613,7 +740,8 @@ export function CapsuleReader({
     const dur = (active.media || []).find((m) => m.duration_sec)?.duration_sec;
     list.push({ id: "video", minutes: dur ? Math.max(1, Math.ceil(dur / 60)) : active.minutes || 5 });
     if (knowledgeCards.length > 0) list.push({ id: "cards", minutes: 3 });
-    if (quizQuestions.length > 0 || activeSpec) list.push({ id: "quiz", minutes: 3 });
+    const qs = normalizeQuizQuestions(active.quiz);
+    if (qs.length > 0 || activeSpec) list.push({ id: "quiz", minutes: 3 });
     // 课节内嵌实验（如 Day 5 第 3 节的终端实验台）：有 lab 配置才出现「实验」tab
     if (active.lab && (active.lab as { sim_kind?: string }).sim_kind) {
       list.push({ id: "lab", minutes: 10 });
@@ -631,24 +759,60 @@ export function CapsuleReader({
   const effectiveStep: LearnStep = stepIds.includes(step) ? step : "video";
   const nextStep = currentStepIdx < steps.length - 1 ? steps[currentStepIdx + 1] : null;
 
-  const isStepDone = (id: LearnStep, idx: number): boolean => {
+  // Tie STEP ✓ to learner progress (visited / quiz+practice / node passed), not "which tab is open".
+  const isStepDone = (id: LearnStep): boolean => {
     if (id === "submit") return node.status === "passed";
     if (id === "quiz") return quizStepDone;
-    if (id === "cards") return idx < currentStepIdx || knowledgeCards.length === 0;
-    return idx < currentStepIdx;
+    if (node.status === "passed" || quizStepDone) return true;
+    if (id === "video") {
+      return (
+        visitedForActive.has("video") ||
+        visitedForActive.has("cards") ||
+        visitedForActive.has("quiz") ||
+        visitedForActive.has("lab") ||
+        visitedForActive.has("local_prep") ||
+        visitedForActive.has("submit")
+      );
+    }
+    if (id === "cards") {
+      return (
+        visitedForActive.has("cards") ||
+        visitedForActive.has("quiz") ||
+        visitedForActive.has("lab") ||
+        visitedForActive.has("local_prep") ||
+        visitedForActive.has("submit")
+      );
+    }
+    return visitedForActive.has(id);
   };
 
-  const goStep = (id: LearnStep) => setStep(id);
+  useEffect(() => {
+    if (!active) return;
+    markStepVisited(active.id, effectiveStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active?.id, effectiveStep]);
+
+  const goStep = (id: LearnStep) => {
+    setStep(id);
+    if (active) markStepVisited(active.id, id);
+  };
   const goNextStep = () => {
-    if (nextStep) setStep(nextStep.id);
+    if (!nextStep) return;
+    if (active) markStepVisited(active.id, effectiveStep);
+    setStep(nextStep.id);
   };
 
   const onQuizAnswer = (qIdx: number, optIdx: number) => {
     if (!active) return;
-    setQuizAnswers((prev) => ({
-      ...prev,
-      [active.id]: { ...(prev[active.id] || {}), [qIdx]: optIdx },
-    }));
+    setQuizAnswers((prev) => {
+      const nextAnswers = { ...(prev[active.id] || {}), [qIdx]: optIdx };
+      persistUiState(active.id, {
+        visited: visitedSteps[active.id] || new Set<LearnStep>(["quiz"]),
+        quizAnswers: nextAnswers,
+      });
+      return { ...prev, [active.id]: nextAnswers };
+    });
+    markStepVisited(active.id, "quiz");
   };
 
   const goPrev = () => {
@@ -682,14 +846,17 @@ export function CapsuleReader({
                   第 {activeIndex + 1} / {capsules.length} 节
                 </span>
                 {pendingPracticeCount > 0 && (
-                  <span className="muted">还需提交 {pendingPracticeCount} 个必做练习</span>
+                  <span className="muted">
+                    本日还有 {pendingPracticeCount} 节必做练习未交
+                    {activePracticePending ? "（含本节）" : ""}
+                  </span>
                 )}
               </div>
             </header>
 
             <div className="learn-steps" role="tablist">
               {steps.map((s, idx) => {
-                const done = isStepDone(s.id, idx);
+                const done = isStepDone(s.id);
                 const isActive = effectiveStep === s.id;
                 return (
                   <button
@@ -715,7 +882,11 @@ export function CapsuleReader({
             </div>
 
             <div
-              className={`learn-step-panel${effectiveStep === "video" || effectiveStep === "cards" ? " is-wide" : ""}`}
+              className={`learn-step-panel${
+                effectiveStep === "video" || effectiveStep === "cards" || effectiveStep === "lab"
+                  ? " is-wide"
+                  : ""
+              }`}
               role="tabpanel"
             >
               {effectiveStep === "video" && (
@@ -724,11 +895,12 @@ export function CapsuleReader({
                   {!active.media?.length && (
                     <CapsuleProse content={active.content || "（本节暂无正文）"} />
                   )}
-                  <div
-                    className={`learn-video-below${glossaryTerms.length ? " has-glossary" : ""}`}
-                  >
-                    {glossaryTerms.length > 0 && <GlossaryTermsPanel terms={glossaryTerms} />}
-                    <LearnAssetsTabs resources={resources} tools={active.tools || []} />
+                  <div className="learn-video-below">
+                    <LearnBelowTabs
+                      glossary={glossaryTerms}
+                      resources={resources}
+                      tools={active.tools || []}
+                    />
                   </div>
                 </div>
               )}
@@ -775,22 +947,57 @@ export function CapsuleReader({
                   <h4>提交前自查</h4>
                   <ul className="learn-submit-checks">
                     <li className={quizStepDone || !stepIds.includes("quiz") ? "is-ok" : ""}>
-                      知识确认{stepIds.includes("quiz") ? (quizStepDone ? "：已完成" : "：未完成") : "（本节无）"}
+                      本节知识确认
+                      {stepIds.includes("quiz") ? (quizStepDone ? "：已完成" : "：未完成") : "（无）"}
                     </li>
-                    <li className={!stepIds.includes("local_prep") || currentStepIdx > stepIds.indexOf("local_prep") || node.status === "passed" ? "is-ok" : ""}>
-                      本地实操{stepIds.includes("local_prep") ? "" : "（本节无）"}
+                    <li
+                      className={
+                        !stepIds.includes("local_prep") ||
+                        currentStepIdx > stepIds.indexOf("local_prep") ||
+                        node.status === "passed"
+                          ? "is-ok"
+                          : ""
+                      }
+                    >
+                      本节本地实操{stepIds.includes("local_prep") ? "" : "（无）"}
+                    </li>
+                    <li className={!activePracticePending ? "is-ok" : ""}>
+                      本节必做练习{!activeSpec?.required ? "（无）" : activePracticePending ? "：未提交" : "：已提交"}
                     </li>
                     <li className={pendingPracticeCount === 0 ? "is-ok" : ""}>
-                      必做练习{pendingPracticeCount === 0 ? "：全部已提交" : `：还差 ${pendingPracticeCount} 个`}
+                      本日全部课节练习
+                      {pendingPracticeCount === 0
+                        ? `：${capsules.filter((c) => practiceSpecs[c.id]?.required).length || 0} 节均已提交`
+                        : `：还差 ${pendingPracticeCount} 节`}
                     </li>
                   </ul>
-                  <p className="muted">
-                    {node.status === "passed"
-                      ? "本节点已完成，可继续后续内容。"
-                      : activeIndex < capsules.length - 1
-                        ? "提交后进入下一节。"
-                        : "这是今天最后一节，提交后记得去完成日级验收。"}
-                  </p>
+                  {pendingPracticeCount > 0 ? (
+                    <div className="learn-submit-pending">
+                      <p className="muted">
+                        学习节点要等<strong>本日每一节</strong>的必做练习都交齐才能验收（不是只交当前这一节）。
+                        未交课节：
+                      </p>
+                      <ul className="learn-submit-pending-list">
+                        {pendingPracticeCapsules.map((c) => {
+                          const idx = capsules.findIndex((x) => x.id === c.id);
+                          return (
+                            <li key={c.id}>
+                              <button type="button" className="linkish" onClick={() => openCapsule(c)}>
+                                第 {idx + 1} 节 · {c.title || c.id}
+                                {c.id === active?.id ? "（当前）" : ""}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className="muted">
+                      {node.status === "passed"
+                        ? "本节点已完成，可继续后续内容。"
+                        : "本日练习已齐，可以提交学习节点验收。"}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -801,23 +1008,62 @@ export function CapsuleReader({
                   {effectiveStep === "cards" && "点卡片看解释，能复述就算会了"}
                   {effectiveStep === "quiz" && (quizStepDone ? "已全部确认，可继续" : "全部作答并提交必做练习后可继续")}
                   {effectiveStep === "local_prep" && "在本地完成后返回平台提交"}
-                  {effectiveStep === "submit" && "确认无误后提交本节学习"}
+                  {effectiveStep === "submit" &&
+                    (pendingPracticeCount > 0
+                      ? "先去未交练习的课节完成提交"
+                      : "确认无误后提交本日学习节点")}
                 </span>
                 {effectiveStep === "submit" ? (
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    disabled={busy || locked || node.status === "passed"}
-                    onClick={() => void complete()}
-                  >
-                    {node.status === "passed" ? "已完成" : busy ? "提交中…" : "我已完成，去提交"}
-                  </button>
+                  pendingPracticeCount > 0 && nextPendingCapsule ? (
+                    <button
+                      type="button"
+                      className="btn-primary"
+                      onClick={() => {
+                        if (nextPendingCapsule.id === active?.id) {
+                          goStep("quiz");
+                          return;
+                        }
+                        openCapsule(nextPendingCapsule);
+                      }}
+                    >
+                      {nextPendingCapsule.id === active?.id
+                        ? "回知识确认交练习"
+                        : `去第 ${capsules.findIndex((c) => c.id === nextPendingCapsule.id) + 1} 节交练习`}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn-primary"
+                      disabled={
+                        busy ||
+                        locked ||
+                        node.status === "passed" ||
+                        pendingPracticeCount > 0 ||
+                        (stepIds.includes("quiz") && !quizStepDone)
+                      }
+                      onClick={() => void complete()}
+                      title={
+                        stepIds.includes("quiz") && !quizStepDone
+                          ? "请先完成本节知识确认（答题 + 练习）"
+                          : undefined
+                      }
+                    >
+                      {node.status === "passed" ? "已完成" : busy ? "提交中…" : "我已完成，去提交"}
+                    </button>
+                  )
                 ) : (
                   <button
                     type="button"
                     className="btn-primary"
                     disabled={!nextStep || (effectiveStep === "quiz" && !quizStepDone)}
                     onClick={goNextStep}
+                    title={
+                      effectiveStep === "quiz" && !quizStepDone
+                        ? quizQuestions.length && !quizAllAnswered
+                          ? "请先答完全部确认题"
+                          : "请先提交必做练习"
+                        : undefined
+                    }
                   >
                     {nextStep ? `下一步：${stepLabel(nextStep.id, active)}` : "下一步"}
                   </button>

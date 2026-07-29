@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "backend"))
 
 from services.author.bootcamp_sync import build_day_package, list_available_days
 from services.shared.config import DEFAULT_CAMP_ID, LEARNER_EMAIL

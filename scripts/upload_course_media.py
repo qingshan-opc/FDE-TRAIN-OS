@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "backend"))
 
 from services.shared.config import COURSE_MEDIA_SHARED_PREFIX, S3_BUCKET_DOCUMENTS  # noqa: E402
 from services.storage import get_store  # noqa: E402

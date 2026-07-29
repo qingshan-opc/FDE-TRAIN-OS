@@ -43,17 +43,29 @@ export function KnowledgeCardsStep({ cards }: { cards: KnowledgeCard[] }) {
   );
 }
 
-/** 视频步底部左侧：本节名词解释（点词看释义）。 */
-export function GlossaryTermsPanel({ terms }: { terms: KnowledgeCard[] }) {
+/** 本节名词解释（点词看释义）。embedded：嵌在底部 tab 内时去掉外框与标题。 */
+export function GlossaryTermsPanel({
+  terms,
+  embedded = false,
+}: {
+  terms: KnowledgeCard[];
+  embedded?: boolean;
+}) {
   const [openId, setOpenId] = useState<string | null>(terms[0]?.id ?? null);
   if (!terms.length) return null;
   const active = terms.find((t) => t.id === openId) || terms[0];
   return (
-    <section className="glossary-terms" aria-label="名词解释">
-      <header className="glossary-terms-head">
-        <h4>名词解释</h4>
-        <p className="muted">本节课里出现的词，点一下看人话。</p>
-      </header>
+    <section
+      className={`glossary-terms${embedded ? " is-embedded" : ""}`}
+      aria-label="名词解释"
+    >
+      {!embedded && (
+        <header className="glossary-terms-head">
+          <h4>名词解释</h4>
+          <p className="muted">本节课里出现的词，点一下看人话。</p>
+        </header>
+      )}
+      {embedded && <p className="muted glossary-terms-hint">本节课里出现的词，点一下看人话。</p>}
       <div className="glossary-terms-list" role="list">
         {terms.map((t) => {
           const on = t.id === active.id;

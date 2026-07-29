@@ -18,13 +18,13 @@ docker build -f deploy/docker/Dockerfile.web -t fde-web:0.4.0 .
 
 ## Migration 路径
 
-按序执行（Kubernetes migration Job / 本地 runner）：
+按序执行（Kubernetes migration Job / 本地 runner）；SQL 位于 `backend/migrations/`：
 
-1. `migrations/001_init.sql`
-2. `migrations/002_production.sql`
-3. `migrations/003_submissions_feedback.sql`
+1. `backend/migrations/001_init.sql`
+2. `backend/migrations/002_production.sql`
+3. `backend/migrations/003_submissions_feedback.sql`
 
-命令：`PYTHONPATH=. python -m services.migrations_runner`
+命令：`PYTHONPATH=backend:. python -m services.migrations_runner`
 
 ## Helm
 

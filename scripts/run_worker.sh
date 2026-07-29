@@ -17,7 +17,7 @@ if [[ ! -f .env ]]; then
 fi
 
 export FDE_ENV="${FDE_ENV:-dev}"
-export PYTHONPATH="$ROOT"
+export PYTHONPATH="${ROOT}/backend:${ROOT}"
 export AGENT_MODE="${AGENT_MODE:-auto}"
 
 echo "Starting FDE worker (AGENT_MODE=$AGENT_MODE)"

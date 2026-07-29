@@ -12,7 +12,7 @@ fi
 source .venv/bin/activate
 
 export FDE_ENV="${FDE_ENV:-dev}"
-export PYTHONPATH="$ROOT"
+export PYTHONPATH="${ROOT}/backend:${ROOT}"
 export AGENT_MODE="${AGENT_MODE:-auto}"
 
 mkdir -p "$ROOT/data"

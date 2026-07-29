@@ -7,6 +7,7 @@ import { ErrorState } from "../components/ErrorState";
 import { Skeleton } from "../components/Skeleton";
 import { rubricTitle } from "../lib/rubricDisplay";
 import { KubernetesWorkbench } from "../components/ide/KubernetesWorkbench";
+import { blockPracticeClipboard } from "../lib/practiceClipboard";
 
 type EvalShape = {
   pass?: boolean;
@@ -217,6 +218,15 @@ export function SimLab({
   };
 
   const passed = Boolean(evalResult?.pass ?? evalResult?.passed);
+  const noClip = blockPracticeClipboard<HTMLElement>();
+  const cwd = String(view?.cwd || "/home/trainee");
+  const promptText = `trainee@fde-server:${cwd.replace("/home/trainee", "~")}$`;
+
+  const execCmd = async () => {
+    if (!cmd.trim()) return;
+    await runAction("terminal.exec", { cmd: cmd.trim() });
+    setCmd("");
+  };
 
   return (
     <div className="stack">
@@ -240,17 +250,21 @@ export function SimLab({
         <p className="muted" style={{ fontSize: 12 }}>
           {isK8s
             ? "Kubernetes 实训运行在仿真对象图上，不会拉起真实集群。"
-            : "仿真状态保存在当前 API 进程内存；重启服务后需重建会话。"}
+            : isTerminal
+              ? "仿真服务器：左侧终端手打命令，右侧为操作说明（禁止复制粘贴）。"
+              : "仿真状态保存在当前 API 进程内存；重启服务后需重建会话。"}
         </p>
       </div>
 
       <div className="row">
         <button type="button" className="btn-primary" disabled={locked || busy} onClick={() => void create()}>
-          {sessionId ? "重建会话" : "创建 Sim 会话"}
+          {sessionId ? "重建会话" : isTerminal ? "进入服务器" : "创建 Sim 会话"}
         </button>
-        <button type="button" disabled={!sessionId || busy} onClick={() => void runEval()}>
-          评测
-        </button>
+        {!isTerminal && (
+          <button type="button" disabled={!sessionId || busy} onClick={() => void runEval()}>
+            评测
+          </button>
+        )}
         <button type="button" disabled={locked || busy || node.status === "passed" || !passed} onClick={() => void finish()}>
           通过并完成
         </button>
@@ -288,49 +302,75 @@ export function SimLab({
       )}
 
       {sessionId && isTerminal && !isK8s && (
-        <div className="panel stack">
-          <h3>终端</h3>
-          {taskBrief && (
-            <p className="muted" style={{ fontSize: 13, whiteSpace: "pre-line" }}>
-              {taskBrief}
-            </p>
-          )}
-          <div className="sim-terminal" aria-live="polite">
-            {termLines.length ? termLines.join("\n") : `输入命令执行仿真 shell（如 ${quickCommands[0] || "pwd"}）`}
-          </div>
-          <div className="row" style={{ flexWrap: "wrap" }}>
-            {quickCommands.map((c) => (
-              <button key={c} type="button" title="填入输入框（自己回车执行）" disabled={busy} onClick={() => setCmd(c)}>
-                {c.length > 36 ? `${c.slice(0, 36)}…` : c}
+        <div className="capsule-sim capsule-sim-workbench" {...noClip}>
+          <section className="capsule-sim-main" aria-label="仿真终端">
+            <header className="capsule-sim-chrome">
+              <span className="capsule-sim-dots" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className="capsule-sim-host mono">trainee@fde-server — ssh</span>
+              <span className="capsule-sim-session mono">{sessionId.slice(0, 8)}</span>
+            </header>
+            <div className="capsule-sim-terminal mono" aria-live="polite">
+              {termLines.length
+                ? termLines.join("\n")
+                : `Welcome to Ubuntu 22.04 LTS (fde-server sim)\nType commands below. Copy/paste is disabled.\n\n${promptText} `}
+            </div>
+            <div className="capsule-sim-prompt-row">
+              <span className="capsule-sim-prompt mono">{promptText}</span>
+              <input
+                id="sim-cmd"
+                className="capsule-sim-cmd mono"
+                value={cmd}
+                placeholder="手打命令，回车执行"
+                disabled={busy}
+                onChange={(e) => setCmd(e.target.value)}
+                onKeyDown={(e) => {
+                  noClip.onKeyDown(e);
+                  if (e.key === "Enter") void execCmd();
+                }}
+                onCopy={noClip.onCopy}
+                onCut={noClip.onCut}
+                onPaste={noClip.onPaste}
+                onDrop={noClip.onDrop}
+                onDragOver={noClip.onDragOver}
+                spellCheck={false}
+                autoComplete="off"
+                data-no-clipboard="true"
+                title="仿真服务器禁止复制粘贴，请手打命令"
+              />
+              <button type="button" className="btn-primary" disabled={busy || !cmd.trim()} onClick={() => void execCmd()}>
+                执行
               </button>
-            ))}
-          </div>
-          <div className="field">
-            <label htmlFor="sim-cmd">命令</label>
-            <input
-              id="sim-cmd"
-              className="mono"
-              value={cmd}
-              onChange={(e) => setCmd(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && cmd.trim()) void runAction("terminal.exec", { cmd: cmd.trim() }).then(() => setCmd(""));
-              }}
-              disabled={busy}
-            />
-          </div>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={busy || !cmd.trim()}
-            onClick={() => void runAction("terminal.exec", { cmd: cmd.trim() }).then(() => setCmd(""))}
-          >
-            执行
-          </button>
-          {view && (
-            <p className="muted mono" style={{ fontSize: 12 }}>
-              ports={JSON.stringify(view.ports || {})} cwd={String(view.cwd || "")}
-            </p>
-          )}
+            </div>
+          </section>
+
+          <aside className="capsule-sim-ops" aria-label="操作说明">
+            <h4>操作说明</h4>
+            <p className="capsule-sim-ops-note">右侧仅供阅读参考，命令须在左侧终端手打。禁止复制。</p>
+            {taskBrief ? <div className="capsule-sim-ops-brief">{taskBrief}</div> : null}
+            <h5>建议命令顺序</h5>
+            <ol className="capsule-sim-ops-steps">
+              {quickCommands.map((c, i) => (
+                <li key={`${c}-${i}`}>
+                  <span className="capsule-sim-ops-idx num">{i + 1}</span>
+                  <code className="mono">{c}</code>
+                </li>
+              ))}
+            </ol>
+            <div className="capsule-sim-ops-actions">
+              <button type="button" disabled={!sessionId || busy} onClick={() => void runEval()}>
+                {busy ? "评测中…" : "评测"}
+              </button>
+            </div>
+            {view && (
+              <p className="muted mono" style={{ fontSize: 11, margin: 0 }}>
+                ports={JSON.stringify(view.ports || {})} cwd={cwd}
+              </p>
+            )}
+          </aside>
         </div>
       )}
 

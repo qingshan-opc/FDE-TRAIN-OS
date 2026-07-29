@@ -15,10 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements-skeleton.txt .
 RUN pip install --no-cache-dir -r requirements-skeleton.txt
 
-COPY services ./services
+COPY backend/services ./services
 COPY contracts ./contracts
-COPY migrations ./migrations
-COPY prototype ./prototype
+COPY backend/migrations ./migrations
 COPY scripts ./scripts
 COPY sim ./sim
 COPY skills ./skills

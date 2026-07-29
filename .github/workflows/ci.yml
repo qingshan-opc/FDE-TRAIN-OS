@@ -59,7 +59,7 @@ jobs:
       FDE_INTERNAL_BASE: http://127.0.0.1:8760
       FDE_API_PORT: "8760"
       CLAMAV_ENABLED: "0"
-      PYTHONPATH: ${{ github.workspace }}
+      PYTHONPATH: ${{ github.workspace }}/backend:${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
 
@@ -88,7 +88,7 @@ jobs:
           exit 1
 
       - name: Run pytest
-        run: python -m pytest -q tests/
+        run: python -m pytest -q backend/tests/
 
       - name: Dump API logs
         if: failure()
@@ -164,7 +164,7 @@ jobs:
       AGENT_MODE: stub
       FDE_SEED_DEMO_USERS: "1"
       FDE_INTERNAL_BASE: http://127.0.0.1:8760
-      PYTHONPATH: ${{ github.workspace }}
+      PYTHONPATH: ${{ github.workspace }}/backend:${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
 

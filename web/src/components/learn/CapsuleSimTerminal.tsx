@@ -252,7 +252,7 @@ export function CapsuleSimTerminal({ day, capsuleId, lab }: { day: number; capsu
                 </li>
               ))}
             </ul>
-            {passed && <p className="muted">课节实验过关。今日 Lab 节点还需正式过闸一次。</p>}
+            {passed && <p className="muted">课节实验过关。</p>}
           </div>
         )}
       </aside>

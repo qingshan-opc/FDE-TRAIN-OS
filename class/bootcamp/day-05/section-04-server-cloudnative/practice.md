@@ -9,7 +9,7 @@
 
 ## 实操任务（10′）
 
-**预习命令手册**：打开资源区「命令手册 · 服务器日常八句」，把八句各读一遍——等下今日 Lab（终端实验台）要全部真敲：
+**预习命令手册**：打开资源区「命令手册 · 服务器日常八句」，把八句各读一遍——等下本节「实验」步骤要全部真敲：
 `pwd` / `ls -l` / `mkdir -p app/logs` / `cd app` / `curl localhost:8000/healthz` / `tail -f logs/server.log` / `chmod +x deploy.sh` / `docker ps`
 
 边读边猜：每个命令敲下去，屏幕上会出现什么？

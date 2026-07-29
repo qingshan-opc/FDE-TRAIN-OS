@@ -144,14 +144,42 @@ export function ProjectSubmit({
     }
   };
 
+  const passed = node.status === "passed";
+  const reviewFailed = submission?.status === "failed";
+  const reviewPassed = submission?.status === "passed";
+  const labNode = useMemo(() => day.nodes?.find((n) => n.kind === "lab"), [day.nodes]);
+  /** 无独立 Lab 节点的日子（如 Day5）：靠课节实验/附件交付，不堵在 Lab 证据上。 */
+  const requiresLabEvidence = Boolean(labNode);
+  const needsSketchUpload = !requiresLabEvidence;
+  const canSubmit =
+    !locked &&
+    !busy &&
+    (!requiresLabEvidence || !!labEvidence) &&
+    (!needsSketchUpload || attachments.length > 0) &&
+    reflection.trim().length >= 40 &&
+    (!passed || reviewFailed);
+  const promptResources = useMemo(
+    () =>
+      (day.resources || []).filter(
+        (r) =>
+          /提示词|prompt/i.test(String(r.title || "")) ||
+          /prompt-toolkit|Prompt\.md/i.test(String(r.url || "")),
+      ),
+    [day.resources],
+  );
+
   const submit = async () => {
     if (locked || !campId) return;
-    if (!labEvidence) {
+    if (requiresLabEvidence && !labEvidence) {
       toast.push("请先完成 Lab 并产出作品证据，再提交企业任务", "error");
       return;
     }
-    if (!reflection.trim()) {
-      toast.push("请填写 1 分钟复盘说明", "error");
+    if (needsSketchUpload && attachments.length === 0) {
+      toast.push("请先上传手绘架构图照片", "error");
+      return;
+    }
+    if (reflection.trim().length < 40) {
+      toast.push("请写清复盘说明（至少 40 字，对着图讲四层）", "error");
       return;
     }
     setBusy(true);
@@ -161,12 +189,13 @@ export function ProjectSubmit({
         camp_id: campId,
         day: day.day,
         node_id: node.id,
-        job_id: labEvidence.jobId,
-        snapshot_id: labEvidence.snapshotId,
+        job_id: labEvidence?.jobId,
+        snapshot_id: labEvidence?.snapshotId,
         eval: {
           reflection: reflection.trim(),
           attachment_ids: attachments.map((a) => a.id),
-          lab_evidence_kind: labEvidence.kind,
+          lab_evidence_kind: labEvidence?.kind,
+          deliverable: needsSketchUpload ? "hand_drawn_arch_sketch" : undefined,
         },
       });
       const subRes = await submissionsApi.get({ camp_id: campId, day: day.day, node_id: node.id });
@@ -187,12 +216,6 @@ export function ProjectSubmit({
     }
   };
 
-  const passed = node.status === "passed";
-  const reviewFailed = submission?.status === "failed";
-  const reviewPassed = submission?.status === "passed";
-  const canSubmit = !locked && !busy && !!labEvidence && (!passed || reviewFailed);
-  const labNode = useMemo(() => day.nodes?.find((n) => n.kind === "lab"), [day.nodes]);
-
   const statusLabel = reviewFailed
     ? "需修改"
     : reviewPassed
@@ -209,7 +232,28 @@ export function ProjectSubmit({
     <div className="stack">
       <div className="panel stack">
         <h2>{node.title}</h2>
-        <p>{String(node.refs?.brief || day.project_brief || "按企业任务交付本日产物。")}</p>
+        <p style={{ whiteSpace: "pre-line", margin: 0 }}>
+          {String(node.refs?.brief || day.project_brief || "按企业任务交付本日产物。")}
+        </p>
+        {promptResources.length > 0 && (
+          <div className="stack" style={{ gap: 6 }}>
+            <strong style={{ fontSize: 13 }}>可用提示词</strong>
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              {promptResources.map((r) => (
+                <li key={r.id}>
+                  {r.url ? (
+                    <a href={r.url} target="_blank" rel="noreferrer">
+                      {r.title}
+                    </a>
+                  ) : (
+                    r.title
+                  )}
+                  {r.summary ? <span className="muted"> — {r.summary}</span> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {submission && (submission.feedback || reviewFailed || reviewPassed) && (
@@ -240,43 +284,45 @@ export function ProjectSubmit({
         </div>
       )}
 
-      <div className="panel stack">
-        <h3 style={{ fontSize: 15 }}>作品证据</h3>
-        {!checkedEvidence ? (
-          <p className="muted">检查中…</p>
-        ) : labEvidence ? (
-          <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-            <p className="muted">
-              来源：{labEvidence.kind === "sim" ? "仿真 Lab" : "Agent 工作区"}
-              {labEvidence.score != null && (
-                <>
-                  {" "}
-                  · 评分 <span className="num">{Math.round(labEvidence.score * 100)}%</span>
-                </>
+      {requiresLabEvidence && (
+        <div className="panel stack">
+          <h3 style={{ fontSize: 15 }}>作品证据</h3>
+          {!checkedEvidence ? (
+            <p className="muted">检查中…</p>
+          ) : labEvidence ? (
+            <div className="row" style={{ justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+              <p className="muted">
+                来源：{labEvidence.kind === "sim" ? "仿真 Lab" : "Agent 工作区"}
+                {labEvidence.score != null && (
+                  <>
+                    {" "}
+                    · 评分 <span className="num">{Math.round(labEvidence.score * 100)}%</span>
+                  </>
+                )}
+                {labEvidence.pass != null && <> · {labEvidence.pass ? "通过" : "未通过"}</>}
+              </p>
+              {labEvidence.kind !== "sim" && (
+                <button type="button" onClick={() => void openPreview()}>
+                  {previewUrl ? "重新预览" : "预览工作区"}
+                </button>
               )}
-              {labEvidence.pass != null && <> · {labEvidence.pass ? "通过" : "未通过"}</>}
+            </div>
+          ) : (
+            <p className="muted" style={{ color: "var(--color-danger)" }}>
+              尚未检测到本日 Lab 的作品证据，请先完成 Lab 评测。
             </p>
-            {labEvidence.kind !== "sim" && (
-              <button type="button" onClick={() => void openPreview()}>
-                {previewUrl ? "重新预览" : "预览工作区"}
-              </button>
-            )}
-          </div>
-        ) : (
-          <p className="muted" style={{ color: "var(--color-danger)" }}>
-            尚未检测到本日 Lab 的作品证据，请先完成 Lab 评测。
-          </p>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       <div className="panel stack">
         <div className="field">
-          <label htmlFor="project-reflection">1 分钟复盘说明</label>
+          <label htmlFor="project-reflection">复盘说明（对着图讲清四层）</label>
           <textarea
             id="project-reflection"
             className="practice-no-clipboard"
             rows={5}
-            placeholder="简述你交付了什么、遇到的关键问题、以及下一步会怎么改进…"
+            placeholder="用 8–12 句话讲：这是什么项目、四层各有什么、关键箭头为什么这样连、下一步你会改哪一层…"
             value={reflection}
             disabled={locked || busy}
             onChange={(e) => setReflection(e.target.value)}
@@ -285,7 +331,7 @@ export function ProjectSubmit({
         </div>
 
         <div className="field">
-          <label>附件（可选）</label>
+          <label>{requiresLabEvidence ? "附件（可选）" : "手绘架构图照片（必传）"}</label>
           {attachments.length > 0 && (
             <ul style={{ margin: "0 0 8px", paddingLeft: 18 }}>
               {attachments.map((a) => (

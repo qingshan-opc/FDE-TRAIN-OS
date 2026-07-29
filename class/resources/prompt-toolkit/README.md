@@ -12,6 +12,7 @@
 | `Web_Client_Agent_Prompt.md` | Web 前端 | Day 3（后） | 前端代码库 |
 | `Backend_Engineer_Agent_Prompt.md` | 后端工程师 | Day 4 | API 定义（OpenAPI）/ 数据库设计 |
 | `Design_Spec_Template.md` | 配套模板（非提示词） | Day 3 | 设计规范四件套 + 三态，填空即用 |
+| `Day5_Arch_Sketch_Prompt.md` | 架构梳理搭档 | Day 5 | 手绘技术架构图前的四层清单（不替你画） |
 
 ## 为什么是这五份
 

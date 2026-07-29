@@ -3,11 +3,25 @@ day: 5
 title: FDE 全栈理论
 week: 1
 project: FDE 全栈理论
-project_brief: 纯理论收束日：世界观白话、企业数字化五阶段、开发流程、服务器与云原生（含部署最小必要与命令行实战）、前后端技术地图（不给选型建议）。产出 theory-map.md，快测 21 题过闸。
+project_brief: '今天不写长文地图。请基于「你自己的项目」（默认：部门周报助手；也可换成你的点子）手绘一张技术架构图，拍照上传。
+
+
+  怎么做：
+
+  1）打开资源「手绘架构图 · 搭档提示词」，整份粘进 AI，先回答它的 4 个约束问题，拿到「该画什么」的四层清单；
+
+  2）自己动手画（纸笔 / 白板 / 手写板均可）——禁止截网上现成架构图充数；
+
+  3）图上至少能看出：前端入口、后端/服务、数据存储、一次外部依赖（有则标，无则写「暂无」）；
+
+  4）上传清晰照片，并在复盘里用 8–12 句话讲清「为什么这样分层」。
+
+
+  过闸标准：是你自己的项目、四层齐、能对着图讲清楚。'
 review_checklist:
-- Lab · 终端实验台：命令行八句全部敲出 + 周报助手启动并 `curl` 验证 200（Rubric 机器判定）
-- 快测 21 题 ≥ 14 题（AI 导师按节级题库里抽问，解析必须看懂，不是蒙对）
-- 企业任务：提交理论地图 theory-map.md（**七大主题**：世界观/五阶段/开发流程/服务器与云原生与部署/命令行/前端地图/后端地图，每主题 2–3 条要点，每条配前四天真实实例或自己的类比，无照抄）
+- 第 4 节课节实验：命令行八句全部敲出 + 服务启动并 `curl` 验证 200（Rubric 机器判定）
+- 快测 21 题 ≥ 14 题（概念验收节点，解析必须看懂）
+- 企业任务：基于自己的项目（默认周报助手，可换成自有点子）**手绘**一张技术架构图并拍照上传；须能讲清用户触点 / 应用服务 / 数据与契约 / 运行部署四层（可用提示词先梳理，图必须自己画）
 resources:
 - id: h5-tech
   title: 交互讲义 · 前后端技术选型地图
@@ -69,6 +83,11 @@ resources:
   kind: download
   summary: 四天四份角色提示词的总索引
   url: /course-assets/resources/prompt-toolkit/README.md
+- id: tk-arch-sketch
+  title: 手绘架构图 · 搭档提示词
+  kind: download
+  summary: 先问清约束，再给四层清单——帮你理清该画什么，不替你画
+  url: /course-assets/resources/prompt-toolkit/Day5_Arch_Sketch_Prompt.md
 - id: glossary
   title: 新概念词典（速查版）
   kind: site
@@ -79,7 +98,7 @@ learn:
   - camp:v0.7
   - day:5
   - project:role-week
-  estimated_minutes: 175
+  estimated_minutes: 150
   require_capsules: true
   capsules:
   - id: c1
@@ -462,7 +481,7 @@ learn:
     - cli-manual
     tools:
     - name: 命令手册（服务器日常八句）
-      note: 查的，不是背的——Lab 里随时翻
+      note: 查的，不是背的——本节实验随时翻
       url: /course-assets/resources/server-cli-manual.md
     - name: 五站类比卡
       note: 物理机→虚拟机→容器→K8s→Serverless
@@ -518,7 +537,7 @@ learn:
     lab:
       sim_kind: server
       task_brief: 课节实验：在仿真服务器上把命令行八句敲一遍——pwd / ls -l 定位 → mkdir -p app/logs → cd app → python3 server.py 启动 → curl localhost:8000/healthz
-        验证 200 → tail -f 看日志 → chmod +x → docker ps 看容器。点「进入实验台」开始，不许复制粘贴。
+        验证 200 → tail -f 看日志 → chmod +x → docker ps 看容器。点「进入服务器」开始，不许复制粘贴。
       quick_commands:
       - pwd
       - ls -l
@@ -579,7 +598,7 @@ learn:
       tag: 演进
     - id: cli-eight
       term: 命令行八句
-      plain: 今天 Lab 真功夫：在终端里把服务起起来、查状态、看日志的八个起步动作。
+      plain: 本节实验真功夫：在仿真终端里把服务起起来、查状态、看日志的八个起步动作。
       tag: 实战
     glossary_terms:
     - id: gt-cloud-native
@@ -843,113 +862,6 @@ learn:
     - id: gt-orm
       term: ORM
       plain: 用对象代码映射表结构，少手写部分 SQL——要懂底层，别只会魔法。
-  - id: c7
-    title: 验收：快测 21 题 + 理论地图过闸
-    minutes: 25
-    form: 验收
-    content_ref: class/bootcamp/day-05/section-07-accept-map/lesson.md
-    content: '同学们，第一周的最后一道手续呢，就是验收。今天过两关：第一关快测，第二关理论地图。快测防的是没学，地图防的是没连起来——两关都过，这一周才算真正带走了，对吧。
-
-      第一关，快测二十一题，对十四题就算过线。范围呢，就是今天讲过的那些——世界观、五阶段、开发流程、服务器与云原生与部署、命令行、前端地图、后端地图，都在里头。提醒一句啊：所有题考理解，不考背诵。哪道题你只能靠背——说明那一节还没真懂，回去看讲解图，晚上补学，明天开课前再补测。
-
-      第二关，理论地图。规格很清楚：七大主题——世界观、五阶段、开发流程、服务器与云原生与部署、命令行、前端地图、后端地图。每个主题写三条要点，每条要点呢，必须配一个你自己前四天的实例——PRD、架构、原型、接口契约都行，或者一句你自己的类比，不许抄课件。后端主题还要写你自己的选型理由——课上没替你选，地图里要交卷。
-
-      过闸标准说白了就三样：快测十二分之上；理论地图六大主题齐全、每条有你自己的实例；还有命令行仿真那八个任务，全部亲手敲过、打勾——不许复制粘贴。写完地图自己当验收官：随便指一条，三十秒能讲给同桌听吗？讲不顺的，改到讲顺为止，对吧。
-
-      五天前，AI 对你们还是个黑话满天飞的陌生领域；今天，你手里有 PRD、有架构、有原型、有接口契约，脑子里有一张地图。带走一句话：地图不是背下来的——是你亲手走过一遍之后，回头画下来的。第一周，毕业了，对吧。'
-    practice: 完成标志：theory-map.md 含全部六大主题，每主题正好 3 条要点；每条要点有实例或自己的类比，无一条照抄课件；快测 18 题 ≥ 12 题；命令行仿真 8 任务全部打勾（不许复制粘贴）。
-    resource_ids:
-    - dg-theory
-    - tk-readme
-    - glossary
-    tools:
-    - name: 快测范围卡
-      note: 18 题过线 12，考理解不考背诵
-    quiz:
-    - - 快测 21 题的过线和正确心态是？
-      - - 对 12 题；考理解，靠背答不出的题说明那节没真懂
-        - 全对才算过；错一题补一周
-        - 对 10 题；不懂的题跳过就行
-      - 0
-      - 过线 14/21——快测防「没学」，解析看懂才算过。
-    - - 理论地图每条要点必须配实例，根本原因是？
-      - - 显得内容多
-        - 「知道」和「带走」是两回事，理论要和你的真实经验对上才长在身上
-        - 导师要求凑字数
-      - 1
-      - 能把「契约先行」和你的 API_Spec.md 对上，这个理论才算你的。
-    - - 理论地图的七大主题是？
-      - - PM/架构/前端/后端/测试/运维
-        - 世界观/五阶段/开发流程/服务器与云原生与部署/命令行/前端地图/后端地图
-        - 浪潮/瀑布/容器/React/Java/K8s
-      - 1
-      - 今天七节课的镜像——概念六节 + 仿真一节 + 验收。
-    - - 为什么理论课放在第五天而不是第一天？
-      - - 第五天比较闲
-        - 先有体感再给名字——每个理论都能指着工作区的文件说「原来这就是」
-        - 理论不重要，放最后
-      - 1
-      - 第一天讲云原生你记不住；现在每个名词背后都有你亲手做过的东西。
-    - - 实例的正确来源是？
-      - - 照抄课件的类比
-        - 前四天工作区真实交付物的内容，或你自己想出的类比
-        - 网上找的高级案例
-      - 1
-      - 要的是「你的」不是「高级的」——抄课件等于没连起来。
-    - - 今日验收除了快测和理论地图，还有什么必须全过？
-      - - 视频全部看完
-        - 命令行仿真 8 个任务全部打勾（不许复制粘贴）
-        - 把所有命令背下来
-      - 1
-      - 命令行是肌肉记忆——敲一遍顶看十遍，所以必须亲手敲。
-    media:
-    - kind: video
-      title: 口播课件 · 验收地图
-      object_key: documents/shared/course-media/day05-c6-accept.mp4
-      poster_key: documents/shared/course-media/day05-c6-accept-poster.jpg
-      duration_sec: 117
-    knowledge_cards:
-    - id: quiz-18
-      term: 快测 21 题
-      plain: 过线 ≥14 题；目的是确认概念站得住，不是蒙对。
-      tag: 验收
-    - id: theory-map
-      term: 理论地图
-      plain: 七大主题各写 2–3 条要点，每条配前四天实例或自己的类比。
-      detail: 世界观 / 五阶段 / 开发流程 / 服务器与云原生与部署 / 命令行 / 前端地图 / 后端地图。
-      tag: 验收
-    - id: seven-themes
-      term: 七大主题
-      plain: 把今天七节概念收成一张你自己的地图，能讲给别人听。
-      tag: 结构
-    - id: no-copy
-      term: 禁止照抄
-      plain: 地图要有你的例子；照抄过不了闸。
-      tag: 红线
-    - id: gate5
-      term: GATE 5
-      plain: 今日闸门：快测 + 理论地图都过，才算 Day 5 收束。
-      tag: 闸门
-    - id: direction-accept
-      term: 定方向 + 做验收
-      plain: 全天理论围着这两件事转——也是你前四天练的肌肉。
-      tag: 主线
-    glossary_terms:
-    - id: gt-rubric
-      term: Rubric
-      plain: 事先写好的评分/过闸标准——用标准验收，不用感觉。
-    - id: gt-theory-map
-      term: theory-map.md
-      plain: 今日企业任务交付物：你的个人全栈理论地图。
-    - id: gt-pass-line
-      term: 过线
-      plain: 21 题至少对 14；错题要看懂解析，不是赌运气。
-    - id: gt-gate
-      term: 过闸
-      plain: 达到当日验收标准才能进入下一段——训练营节奏。
-    - id: gt-analog
-      term: 类比
-      plain: 用自己的生活/前四天经历解释概念——地图里最有价值的部分。
 quiz:
   pass_rate: 0.67
   questions:
@@ -1109,62 +1021,10 @@ quiz:
     explain: 第 6 节：API_Spec.md 与实现语言解耦——契约先行。
 nodes:
 - type: learn
-  title: 今日课节（7 节 · 175′）
+  title: 今日课节（6 节 · 150′）
 - type: quiz
   title: Day5 概念验收
-- type: lab
-  title: 终端实验台：命令行八句 + 启动周报助手
 - type: project
-  title: 企业任务：提交理论地图 theory-map.md
+  title: 企业任务：手绘一张自己项目的技术架构图
 - type: review
   title: 交付自检与 GATE 5
-lab:
-  runner: sim
-  sim_kind: server
-  ui:
-    layout: terminal_plus_panels
-  seed:
-    host_fixture: ubuntu-mini
-    services: []
-  coach:
-    help_mode: explain
-    skill_id: fde-coach
-    max_help_level: 2
-  adapter_version: '1.0'
-  rubric:
-  - check: command_sequence
-    args:
-      contains:
-      - pwd
-      - mkdir -p app/logs
-      - cd app
-      - curl localhost:8000/healthz
-      - tail -f logs/server.log
-      - chmod +x deploy.sh
-      - docker ps
-  - check: port_listening
-    args:
-      port: 8000
-  - check: command_sequence
-    args:
-      contains:
-      - python3 server.py
-  task_brief: '任务：在这台仿真服务器上把「周报助手」跑起来并验证。
-
-    ① 用 pwd / ls -l 定位；② mkdir -p app/logs 给日志安家；③ cd app 进入应用目录；
-
-    ④ python3 server.py 启动服务；⑤ curl localhost:8000/healthz 验证返回 200；
-
-    ⑥ tail -f logs/server.log 看实时日志；⑦ chmod +x deploy.sh 给脚本执行权；⑧ docker ps 看运行的容器。
-
-    规矩：不许复制粘贴，每个字母自己敲。卡住查资源区「命令手册」。'
-  quick_commands:
-  - pwd
-  - ls -l
-  - mkdir -p app/logs
-  - cd app
-  - python3 server.py
-  - curl localhost:8000/healthz
-  - tail -f logs/server.log
-  - chmod +x deploy.sh
-  - docker ps

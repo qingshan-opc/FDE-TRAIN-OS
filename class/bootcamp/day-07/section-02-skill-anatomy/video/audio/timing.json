@@ -1,41 +1,59 @@
 {
-  "total": 125.342,
+  "total": 366.588,
   "segments": [
     {
       "id": "01-open",
       "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/01-open.wav",
       "start": 0.0,
-      "duration": 18.88
+      "duration": 40.24
     },
     {
-      "id": "02-input-steps",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/02-input-steps.wav",
-      "start": 19.13,
-      "duration": 22.572
+      "id": "02-four-parts-map",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/02-four-parts-map.wav",
+      "start": 40.49,
+      "duration": 44.32
     },
     {
-      "id": "03-output-accept",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/03-output-accept.wav",
-      "start": 41.952,
-      "duration": 21.44
+      "id": "03-input",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/03-input.wav",
+      "start": 85.06,
+      "duration": 41.92
     },
     {
-      "id": "04-weekly-example",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/04-weekly-example.wav",
-      "start": 63.642,
-      "duration": 25.44
+      "id": "04-steps",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/04-steps.wav",
+      "start": 127.23,
+      "duration": 39.847
     },
     {
-      "id": "05-common-defects",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/05-common-defects.wav",
-      "start": 89.332,
-      "duration": 16.08
+      "id": "05-output",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/05-output.wav",
+      "start": 167.327,
+      "duration": 39.287
     },
     {
-      "id": "06-close",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/06-close.wav",
-      "start": 105.662,
-      "duration": 19.68
+      "id": "06-accept",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/06-accept.wav",
+      "start": 206.864,
+      "duration": 37.92
+    },
+    {
+      "id": "07-weekly-example",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/07-weekly-example.wav",
+      "start": 245.034,
+      "duration": 40.64
+    },
+    {
+      "id": "08-defects-day5",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/08-defects-day5.wav",
+      "start": 285.924,
+      "duration": 47.446
+    },
+    {
+      "id": "09-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day07_s02_course/tts/09-close.wav",
+      "start": 333.62,
+      "duration": 32.968
     }
   ]
 }

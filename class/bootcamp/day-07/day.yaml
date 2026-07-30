@@ -150,7 +150,7 @@ capsule_extra:
       title: 口播课件 · 四部件
       object_key: documents/shared/course-media/day07-c2-skill-anatomy.mp4
       poster_key: documents/shared/course-media/day07-c2-skill-anatomy-poster.jpg
-      duration_sec: 122
+      duration_sec: 367
   c3:
     resource_ids:
     - dg-skill-anatomy

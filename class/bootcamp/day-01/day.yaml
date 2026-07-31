@@ -156,8 +156,9 @@ lab:
   - docs/D1_团队协作卡.md
   - docs/D1_项目任务书.md
   - docs/PRD.md
+  - docs/D1_command_log.md
   - design/prototypes/index.html
-  prompt: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型。只报告真实存在的文件和验证结果，缺失项标 BLOCKED，不得代替学员批准。
+  prompt: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型，以及指挥日志 docs/D1_command_log.md（含至少一次 REJECTED 与 APPROVED）。只报告真实存在的文件和验证结果，缺失项标 BLOCKED，不得代替学员批准。
   rubric:
   - check: file_exists
     args:
@@ -172,6 +173,21 @@ lab:
   - check: file_exists
     args:
       path: design/prototypes/index.html
+  - check: file_exists
+    args:
+      path: docs/D1_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D1_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D1_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D1_command_log.md
+      needle: 我确认以上批准均为本人作出
 nodes_lab: 第 1 天岗位交接与真实证据验收
 nodes_project: 从专业方向到 PRD 与可点击原型
 knowledge_content:

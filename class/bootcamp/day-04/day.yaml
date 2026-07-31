@@ -153,7 +153,8 @@ lab:
   - docs/D4-L2_缺陷报告.md
   - docs/D4-L4_验收清单.md
   - docs/D4_报审材料清单.md
-  prompt: 审核第四天证据：区分用例数量和实际执行数量；核对真实缺陷、修复提交与复测记录。未执行不得写通过，功能冻结后不得加入新功能。
+  - docs/D4_command_log.md
+  prompt: 审核第四天证据：区分用例数量和实际执行数量；核对真实缺陷、修复提交与复测记录，并检查指挥日志 docs/D4_command_log.md。未执行不得写通过，功能冻结后不得加入新功能。
   rubric:
   - check: file_exists
     args:
@@ -168,6 +169,21 @@ lab:
     args:
       path: docs/D4-L4_验收清单.md
       needle: 证据
+  - check: file_exists
+    args:
+      path: docs/D4_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D4_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D4_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D4_command_log.md
+      needle: 我确认以上批准均为本人作出
 nodes_lab: 第 4 天岗位交接与真实证据验收
 nodes_project: 真实测试、缺陷闭环与 V0.9 冻结
 knowledge_content:

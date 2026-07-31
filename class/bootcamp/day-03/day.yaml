@@ -153,7 +153,8 @@ lab:
   - docs/D3-L3_接口验证.md
   - docs/D3-L4_Week2_AI交接.md
   - docs/D3_冒烟记录.md
-  prompt: 执行第三天全链路验收：必须亲自提交新记录并核对 SQLite、列表、详情和驾驶舱统计。若业务仍使用 Mock，状态必须是 BLOCKED；AI 预留接口不得返回伪造分析。
+  - docs/D3_command_log.md
+  prompt: 执行第三天全链路验收：必须亲自提交新记录并核对 SQLite、列表、详情和驾驶舱统计，并检查指挥日志 docs/D3_command_log.md。若业务仍使用 Mock，状态必须是 BLOCKED；AI 预留接口不得返回伪造分析。
   rubric:
   - check: file_exists
     args:
@@ -168,6 +169,21 @@ lab:
   - check: file_exists
     args:
       path: docs/D3_冒烟记录.md
+  - check: file_exists
+    args:
+      path: docs/D3_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D3_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D3_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D3_command_log.md
+      needle: 我确认以上批准均为本人作出
 nodes_lab: 第 3 天岗位交接与真实证据验收
 nodes_project: SQLite + 真实接口 + 前后端联调 V0.8
 knowledge_content:

@@ -78,19 +78,11 @@ export function Nav({
       }`}
     >
       <div className="flex items-center gap-3 nav-workbench__brand">
-        {variant === "learner-workbench" ? (
-          <button type="button" className="fde-demo-brand" onClick={() => nav("/app")}>
-            <span className="fde-demo-brand__mark">山</span>
-            <strong>青山在</strong>
-            <small>FDE Learning OS</small>
-          </button>
-        ) : (
-          <>
-            <BrandLogo to="/" name="青山在" />
-            <span className="rounded-full bg-fde-accent/10 px-2 py-0.5 text-xs font-medium text-fde-accent">
-              {variant === "author" ? "教研台" : "学习平台"}
-            </span>
-          </>
+        <BrandLogo to={variant === "author" ? "/author" : "/app/courses"} name="青山在" />
+        {variant !== "learner-workbench" && (
+          <span className="rounded-full bg-fde-accent/10 px-2 py-0.5 text-xs font-medium text-fde-accent">
+            {variant === "author" ? "教研台" : "学习平台"}
+          </span>
         )}
       </div>
       {variant === "learner-workbench" && (

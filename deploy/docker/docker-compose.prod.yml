@@ -69,6 +69,9 @@ services:
       FDE_INTERNAL_BASE: http://api:8760
       FDE_CORS_ORIGINS: ${FDE_CORS_ORIGINS:-http://192.168.0.138,http://127.0.0.1}
       FDE_COOKIE_SECURE: ${FDE_COOKIE_SECURE:-0}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_API_BASE: ${DEEPSEEK_API_BASE:-https://api.deepseek.com}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-v4-flash}
       LINGZHI_BASE_URL: http://127.0.0.1:8230
     command: ["python", "-m", "services.migrations_runner"]
     volumes:

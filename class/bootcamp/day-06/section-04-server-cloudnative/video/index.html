@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Day05 S04 · 服务器与云原生 + 部署最小必要 + 命令行实战（30′ · 概念+实战）</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink)}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:72px;line-height:1.12;margin-bottom:18px;max-width:16ch}
+.lede{font-size:22px;line-height:1.55;color:var(--ink-60);max-width:34em}
+.diagram-box{border:1px solid var(--ink);padding:14px;background:#fff;margin-top:16px;max-width:980px}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:10px}
+.diagram-box img{width:100%;max-height:320px;object-fit:contain;display:block}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="292.686" data-width="1920" data-height="1080">
+<div class="stage-bg"></div>
+
+      <section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="20.800">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
+          <h1 class="display" data-anim="t">同学们，上节课呢，咱们讲了软件是怎么开发出来的——流程啊…</h1>
+          <p class="lede" data-anim="s">同学们，上节课呢，咱们讲了软件是怎么开发出来的——流程啊，还有需求调研。这节课呢，浅讲一下服务器与云原生。你写的程序要让大家用，就得搬到一台一直开着呢的电脑上，对吧。这台电脑，二十五年搬了五次家。咱们先把这趟搬家史走一遍。</p>
+        </div>
+      </section>
+      <section id="slide-02-physical" class="clip slide" data-track-index="1" data-start="21.050" data-duration="40.887">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">02</span>PHYSICAL</div>
+          <h1 class="display" data-anim="t">先说第一站，物理机</h1>
+          <p class="lede" data-anim="s">先说第一站，物理机。最早呢，公司自己买一台电脑，塞桌底或者小机房，插电二十四小时开着。解决了什么？总算有个东西能让全公司访问了嘛。可它又带来麻烦：顶配机器平时可能只用百分之五的力气，百分之九十五白花钱；活动一来又不够——买多了浪费，买少了挨骂，对吧。所以啊，服务器严格意义上跟你的个人电脑差不多，都是操作系统加程序；不严格意义上，差在系统不一样、一直开着不关机…</p>
+        </div>
+      </section>
+      <section id="slide-03-vm" class="clip slide" data-track-index="1" data-start="62.187" data-duration="38.095">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">03</span>VM</div>
+          <h1 class="display" data-anim="t">第二站呢，是虚拟机</h1>
+          <p class="lede" data-anim="s">第二站呢，是虚拟机。很多同学听过双系统：一台电脑装 Windows 又装 Linux，开机选一个。更省事的做法呢，是装个 VMware，在 Windows 里面再跑一个 Linux，甚至跑 Kali 这类安全实验系统——不必重启切换，对吧。一台物理机里跑多种系统，这就叫虚拟机。早期常见是软件虚拟化；现在更多是底层拆分出来的虚拟机，性能已经能接近物理机，但仍略…</p>
+        </div>
+      </section>
+      <section id="slide-04-container" class="clip slide" data-track-index="1" data-start="100.532" data-duration="38.960">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">04</span>CONTAINER</div>
+          <h1 class="display" data-anim="t">第三站，容器</h1>
+          <p class="lede" data-anim="s">第三站，容器。去过宁波港的同学可能见过，码头上一排排大型集装箱。早期没箱子的时候呢，货直接堆上船，到岸拆不清、分不清——乱套。后来变成一个企业一个集装箱，物流就顺了。软件里也一样：把应用装进标准箱子，箱子到哪，应用就在哪跑。Docker 最出名。「在我电脑上能跑，到你那就不行」这句话，从此大幅减少，对吧。可以看成虚拟机的轻量进化版——不再为每个应用背一整套系…</p>
+        </div>
+      </section>
+      <section id="slide-05-k8s" class="clip slide" data-track-index="1" data-start="139.742" data-duration="36.968">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">05</span>K8S</div>
+          <h1 class="display" data-anim="t">第四站，Kubernetes，简称 K8s</h1>
+          <p class="lede" data-anim="s">第四站，Kubernetes，简称 K8s。几千个集装箱怎么管？靠人站码头记账不行嘛。海运侧有自动化把箱子搬到对应船上；软件侧对应物呢，就是以 K8s 为代表的容器编排引擎。谁挂了补一个，流量大了多开，小了关掉。容器只是它最底层的一块砖；流量、存储、内部调用这些，平台统一管。解决了什么？几千个容器也能自动管好。又带来什么？这套系统本身很复杂——养懂 K8s …</p>
+          <div class="diagram-box" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 服务器与云原生 + 部署最小必要 + 命令行实战（30′ · 概念+实战）</div>
+            <img src="assets/diagrams/day5-cloud-native.svg" alt="" />
+          </div>
+        </div>
+      </section>
+      <section id="slide-06-serverless" class="clip slide" data-track-index="1" data-start="176.960" data-duration="31.369">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">06</span>SERVERLESS</div>
+          <h1 class="display" data-anim="t">第五站呢，是 Serverless，无服务器</h1>
+          <p class="lede" data-anim="s">第五站呢，是 Serverless，无服务器。名字有点唬人——不是真没服务器，是云厂商全包了；你关心的是一段服务被调用，不是哪台机器。你可能见过微信小程序的云函数——就是一种形态，常见用 Node.js。它是以服务为粒度，不是以整台机为粒度。好处呢，零运维起步、按调用付费，没人用就不花钱。坏处呢，有冷启动、厂商绑定；传统企业内部系统未必先碰它——先听懂概念就…</p>
+        </div>
+      </section>
+      <section id="slide-07-cloud-native" class="clip slide" data-track-index="1" data-start="208.579" data-duration="39.607">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">07</span>CLOUD NATIVE</div>
+          <h1 class="display" data-anim="t">好，把五站连起来，一句话记住：云，就是租别人的服务器用，…</h1>
+          <p class="lede" data-anim="s">好，把五站连起来，一句话记住：云，就是租别人的服务器用，像用电网，不自己发电；云原生呢，就是打娘胎里就按云的方式设计的应用——一出生就装成集装箱、就接受调度、就能按量扩展，而不是半路从桌底搬上来的老系统。再补部署最小必要：管线五步——代码进 Git、构建打包、镜像冻环境、运行七乘二十四、访问拿公网 URL。密钥不进 Git，从环境变量读。V1.0 验收口径是…</p>
+        </div>
+      </section>
+      <section id="slide-08-cli" class="clip slide" data-track-index="1" data-start="248.436" data-duration="30.080">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">08</span>CLI</div>
+          <h1 class="display" data-anim="t">服务器没屏幕、住机房——你摸不到鼠标，只能通过网络发文字…</h1>
+          <p class="lede" data-anim="s">服务器没屏幕、住机房——你摸不到鼠标，只能通过网络发文字过去，这行文字就是命令，对吧。别被黑窗口唬住：命令行只是用文字和电脑对话。今天 Lab 要真敲八句：pwd、ls、mkdir、cd、curl、tail -f、chmod +x、还有 docker ps。规矩一条：不许复制粘贴——命令行是肌肉记忆。卡住了查资源区的命令手册就行。</p>
+        </div>
+      </section>
+      <section id="slide-09-close" class="clip slide" data-track-index="1" data-start="278.766" data-duration="13.920">
+        <div class="stage-fill"></div>
+        <div class="slide-body">
+          <div class="sec-label" data-anim="k"><span class="num">09</span>CLOSE</div>
+          <h1 class="display" data-anim="t">好，本节小课就到这里了，收个尾</h1>
+          <p class="lede" data-anim="s">好，本节小课就到这里了，收个尾。从桌底一台电脑，到集装箱，再到自动码头和打车式的 Serverless——方向只有一个：让你操心的机器越来越少。下一节咱们动手，去实验台把这八句真敲一遍。</p>
+        </div>
+      </section>
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="292.686" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> Day 05 · 04</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="292.686" data-track-index="5">
+<div class="speak-ring"></div>
+<div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="292.686" data-track-index="6"></video></div>
+<div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="292.686" data-track-index="10" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.36);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.5);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+      enter("#slide-01-open", 0.000);
+      exit("#slide-01-open", 20.350, 20.800);
+      enter("#slide-02-physical", 21.050);
+      exit("#slide-02-physical", 61.487, 61.937);
+      enter("#slide-03-vm", 62.187);
+      exit("#slide-03-vm", 99.832, 100.282);
+      enter("#slide-04-container", 100.532);
+      exit("#slide-04-container", 139.042, 139.492);
+      enter("#slide-05-k8s", 139.742);
+      exit("#slide-05-k8s", 176.260, 176.710);
+      enter("#slide-06-serverless", 176.960);
+      exit("#slide-06-serverless", 207.879, 208.329);
+      enter("#slide-07-cloud-native", 208.579);
+      exit("#slide-07-cloud-native", 247.736, 248.186);
+      enter("#slide-08-cli", 248.436);
+      exit("#slide-08-cli", 278.066, 278.516);
+      enter("#slide-09-close", 278.766);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

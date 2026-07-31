@@ -9,6 +9,7 @@ import { DocReaderPage } from "./app/DocReaderPage";
 import { AboutPage } from "./app/AboutPage";
 import { LoginPage } from "./app/Login";
 import { LearnerHome } from "./app/LearnerHome";
+import { CapsuleSimLabPage } from "./app/CapsuleSimLabPage";
 import { CoursePicker } from "./app/CoursePicker";
 import { Profile } from "./app/Profile";
 import { Certificates } from "./app/Certificates";
@@ -87,6 +88,14 @@ export default function App() {
         element={
           <RequireAuth>
             <LearnerHome />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/app/sim/:day/:capsuleId"
+        element={
+          <RequireAuth>
+            <CapsuleSimLabPage />
           </RequireAuth>
         }
       />

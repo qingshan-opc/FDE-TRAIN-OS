@@ -1,0 +1,53 @@
+{
+  "total": 246.008,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 21.932
+    },
+    {
+      "id": "02-research",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/02-research.wav",
+      "start": 22.182,
+      "duration": 46.646
+    },
+    {
+      "id": "03-prototype",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/03-prototype.wav",
+      "start": 69.078,
+      "duration": 32.48
+    },
+    {
+      "id": "04-dev-accept",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/04-dev-accept.wav",
+      "start": 101.808,
+      "duration": 24.72
+    },
+    {
+      "id": "05-launch-uat",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/05-launch-uat.wav",
+      "start": 126.778,
+      "duration": 27.2
+    },
+    {
+      "id": "06-ops-boundary",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/06-ops-boundary.wav",
+      "start": 154.228,
+      "duration": 30.32
+    },
+    {
+      "id": "07-waterfall-agile",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/07-waterfall-agile.wav",
+      "start": 184.798,
+      "duration": 37.04
+    },
+    {
+      "id": "08-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s02_course/tts/08-close.wav",
+      "start": 222.088,
+      "duration": 23.92
+    }
+  ]
+}

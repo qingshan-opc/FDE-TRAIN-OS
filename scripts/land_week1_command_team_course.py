@@ -13,6 +13,16 @@ from typing import Any
 import yaml
 
 
+def command_log_rubric(day: int) -> list[dict[str, Any]]:
+    path = f"docs/D{day}_command_log.md"
+    return [
+        {"check": "file_exists", "args": {"path": path}},
+        {"check": "text_contains", "args": {"path": path, "needle": "REJECTED"}},
+        {"check": "text_contains", "args": {"path": path, "needle": "APPROVED"}},
+        {"check": "text_contains", "args": {"path": path, "needle": "我确认以上批准均为本人作出"}},
+    ]
+
+
 ROOT = Path(__file__).resolve().parents[1]
 BC = ROOT / "class" / "bootcamp"
 
@@ -874,9 +884,9 @@ def day_yaml(day: int, data: dict[str, Any]) -> dict[str, Any]:
         "capsule_extra": capsule_extra,
         "quiz": daily_quiz(day, data["sections"]),
         "lab": {
-            "primary_files": data["primary_files"],
+            "primary_files": [*data["primary_files"], f"docs/D{day}_command_log.md"],
             "prompt": data["lab_prompt"],
-            "rubric": data["rubric"],
+            "rubric": [*data["rubric"], *command_log_rubric(day)],
         },
         "nodes_lab": f"第 {day} 天岗位交接与真实证据验收",
         "nodes_project": data["project"],

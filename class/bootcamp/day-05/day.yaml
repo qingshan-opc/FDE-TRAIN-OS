@@ -162,8 +162,9 @@ lab:
   - docs/D5_项目复盘.md
   - docs/D5_五分钟路演.md
   - docs/D5_综合验收.md
+  - docs/D5_command_log.md
   - README.md
-  prompt: 执行第一周综合验收：要求学员真实运行并演示业务数据链路，再口述岗位交接与系统分层。框架名不是考点；真实证据、诚实边界和能否讲清开发逻辑才是考点。
+  prompt: 执行第一周综合验收：要求学员真实运行并演示业务数据链路，再口述岗位交接与系统分层，并检查指挥日志 docs/D5_command_log.md。框架名不是考点；真实证据、诚实边界和能否讲清开发逻辑才是考点。
   rubric:
   - check: file_exists
     args:
@@ -179,6 +180,21 @@ lab:
     args:
       path: docs/D5_综合验收.md
       needle: Week2
+  - check: file_exists
+    args:
+      path: docs/D5_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D5_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D5_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D5_command_log.md
+      needle: 我确认以上批准均为本人作出
 nodes_lab: 第 5 天岗位交接与真实证据验收
 nodes_project: 系统复盘、本地交付、路演与 Week1 验收
 knowledge_content:

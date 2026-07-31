@@ -731,8 +731,7 @@ export function CapsuleReader({
     clearTimeout(saveTimers.current[capsuleId]);
     try {
       await persistPractice(capsuleId, {}, "submitted");
-      window.dispatchEvent(new CustomEvent("fde:lesson-accepted", { detail: { capsuleId } }));
-      toast.push("本节验收已通过，可以进入下一节", "success");
+      toast.push("本节练习已提交。指挥验收需在工作区维护指挥日志并通过日级 Lab 机评。", "success");
     } catch {
       // toast already shown
     }
@@ -777,10 +776,6 @@ export function CapsuleReader({
   const activeIndex = active ? capsules.findIndex((c) => c.id === active.id) : -1;
   const activeSpec = active ? practiceSpecs[active.id] : undefined;
   const activePractice = active ? practice[active.id] || emptyPracticeState() : emptyPracticeState();
-  useEffect(() => {
-    if (!active || activePractice.status !== "submitted") return;
-    window.dispatchEvent(new CustomEvent("fde:lesson-accepted", { detail: { capsuleId: active.id } }));
-  }, [active?.id, activePractice.status]);
   /** Required practices across the whole learn node (all capsules today). */
   const pendingPracticeCapsules = capsules.filter(
     (c) => practiceSpecs[c.id]?.required && practice[c.id]?.status !== "submitted",
@@ -1016,11 +1011,19 @@ export function CapsuleReader({
               {effectiveStep === "local_prep" && (
                 <>
                   <div className="learn-panel-intro">
-                    <h4>{active.local_prep?.codex_prompt?.trim() ? "在开发工具中完成本节任务" : "完成本节工具准备"}</h4>
+                    <h4>
+                      {active.lab && (active.lab as { sim_kind?: string }).sim_kind
+                        ? "仿真实验台"
+                        : active.local_prep?.codex_prompt?.trim()
+                          ? "在开发工具中完成本节任务"
+                          : "完成本节工具准备"}
+                    </h4>
                     <p>
-                      {active.local_prep?.codex_prompt?.trim()
-                        ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
-                        : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
+                      {active.lab && (active.lab as { sim_kind?: string }).sim_kind
+                        ? "进入服务器后，在黑色终端窗口内直接输入命令，按 Enter 执行。"
+                        : active.local_prep?.codex_prompt?.trim()
+                          ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
+                          : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
                     </p>
                   </div>
                   {active.lab && (active.lab as { sim_kind?: string }).sim_kind ? (

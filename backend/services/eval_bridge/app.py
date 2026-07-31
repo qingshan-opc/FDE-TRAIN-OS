@@ -17,11 +17,28 @@ if str(_PKG_ROOT) not in sys.path:
 from services.shared.config import ROOT as _ROOT  # noqa: E402
 
 from services.shared import db_cursor, now_iso  # noqa: E402
+from services.shared.command_evidence import build_lab_capability_tags  # noqa: E402
 from services.shared.middleware import resolve_camp_id, session_learner_id  # noqa: E402
 from services.shared.rubric_registry import attach_rubric_args, enrich_eval_result  # noqa: E402
 
 router = APIRouter(tags=["eval"])
 app = FastAPI(title="FDE EvalBridge", version="0.2.0")
+
+
+def _evidence_payload(result: dict[str, Any], *, job_id: str | None, sim_session_id: str | None) -> dict[str, Any]:
+    payload: dict[str, Any] = {"eval": result}
+    if job_id:
+        payload["job_id"] = job_id
+    if sim_session_id:
+        payload["sim_session_id"] = sim_session_id
+    if result.get("command_stats"):
+        payload["command_stats"] = result["command_stats"]
+    return payload
+
+
+def _evidence_tags(result: dict[str, Any], *, runner: str, day: int) -> list[str]:
+    evidence_kind = "agent" if runner == "agent" else "sim"
+    return build_lab_capability_tags(day=day, passed=bool(result.get("pass")), evidence_kind=evidence_kind)
 
 
 class EvalRequest(BaseModel):
@@ -93,6 +110,10 @@ def run_eval(body: EvalRequest, request: Request) -> dict[str, Any]:
     evidence_id = None
     if body.write_evidence:
         eid = str(uuid4())
+        day_num = body.day or 1
+        evidence_kind = "agent" if body.runner == "agent" else "sim"
+        payload = _evidence_payload(result, job_id=body.job_id, sim_session_id=body.sim_session_id)
+        tags = _evidence_tags(result, runner=body.runner, day=day_num)
         # natural idempotency: skip if same learner/day/node/kind+job already exists
         with db_cursor() as cur:
             if body.job_id:
@@ -105,9 +126,9 @@ def run_eval(body: EvalRequest, request: Request) -> dict[str, Any]:
                     """,
                     (
                         learner_id,
-                        body.day or 1,
+                        day_num,
                         body.node_id or "lab",
-                        "agent" if body.runner == "agent" else "sim",
+                        evidence_kind,
                         f"%{body.job_id}%",
                     ),
                 )
@@ -125,17 +146,11 @@ def run_eval(body: EvalRequest, request: Request) -> dict[str, Any]:
                             now_iso(),
                             learner_id,
                             "v0.3",
-                            body.day or 1,
+                            day_num,
                             body.node_id or "lab",
-                            "agent" if body.runner == "agent" else "sim",
-                            json.dumps(
-                                {"eval": result, "job_id": body.job_id, "sim_session_id": body.sim_session_id},
-                                ensure_ascii=False,
-                            ),
-                            json.dumps(
-                                [f"eval:{body.runner}", "pass" if result.get("pass") else "fail"],
-                                ensure_ascii=False,
-                            ),
+                            evidence_kind,
+                            json.dumps(payload, ensure_ascii=False),
+                            json.dumps(tags, ensure_ascii=False),
                         ),
                     )
                     evidence_id = eid
@@ -150,17 +165,11 @@ def run_eval(body: EvalRequest, request: Request) -> dict[str, Any]:
                         now_iso(),
                         learner_id,
                         "v0.3",
-                        body.day or 1,
+                        day_num,
                         body.node_id or "lab",
-                        "agent" if body.runner == "agent" else "sim",
-                        json.dumps(
-                            {"eval": result, "sim_session_id": body.sim_session_id},
-                            ensure_ascii=False,
-                        ),
-                        json.dumps(
-                            [f"eval:{body.runner}", "pass" if result.get("pass") else "fail"],
-                            ensure_ascii=False,
-                        ),
+                        evidence_kind,
+                        json.dumps(payload, ensure_ascii=False),
+                        json.dumps(tags, ensure_ascii=False),
                     ),
                 )
                 evidence_id = eid

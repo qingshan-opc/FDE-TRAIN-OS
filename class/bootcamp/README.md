@@ -1,9 +1,10 @@
-# 训练营 · 十天实战主线（业务系统 → Skill / Agent）
+# 训练营 · 实战主线（业务系统 → Skill / Agent）
 
 > 实战为主：每节概念只讲「最小必要版」（5–15′），完整理论在[公开课](../open-course/README.md)。
 > 每天 100–140′，最后一节永远是验收；三道闸不过不进阶。
+> **周六加餐**插在第五天与 LLM 理论日之间（课次编号 Day 6；侧栏显示「周六」）。
 
-## 十天合约
+## 课次合约
 
 | 天 | 主题 | 版本 | 当日产出 | 课件包 |
 |---|------|------|---------|--------|
@@ -11,12 +12,13 @@
 | D2 | 指挥前端完成真实页面 | V0.5 | 四页 Mock 前端 + 五接口契约 | [day-02](day-02/README.md) |
 | D3 | 指挥后端接通真实数据 | V0.8 | SQLite + 业务接口 + 全链路联调 | [day-03](day-03/README.md) |
 | D4 | 指挥测试、修复与冻结 | V0.9 | 用例、缺陷闭环、验收证据 | [day-04](day-04/README.md) |
-| D5 | 看懂产品如何诞生并交付 | V1.0 | 本地交付 + 复盘路演 + 综合验收 | [day-05](day-05/README.md) |
-| D6 | LLM 理论 18 词 | — | 18 词抽测过线 | [day-06](day-06/README.md) |
-| D7 | 第一个 Skill | SKILL | Skill 跑出证据 | [day-07](day-07/README.md) |
-| D8 | Skill 工程化 + 遇见 Agent | AGENT | Agent 正确调用你的 Skill | [day-08](day-08/README.md) |
-| D9 | 多 Skill 编排与人工确认 | 编排 | 部门流程半自动 | [day-09](day-09/README.md) |
-| D10 | V2.0 收官 | V2.0 | 答辩通过 + 90 天自学路线 | [day-10](day-10/README.md) |
+| D5 | 讲清产品怎么做出来并交付 | V1.0 | 本地交付 + 复盘路演 + 综合验收 | [day-05](day-05/README.md) |
+| 周六 | FDE 全栈理论 / 互联网地图 | — | 六节理论地图 + 手绘架构图 | [day-06](day-06/README.md) |
+| D6 | LLM 理论 18 词 | — | 18 词抽测过线 | [day-07](day-07/README.md) |
+| D7 | 第一个 Skill | SKILL | Skill 跑出证据 | [day-08](day-08/README.md) |
+| D8 | Skill 工程化 + 遇见 Agent | AGENT | Agent 正确调用你的 Skill | [day-09](day-09/README.md) |
+| D9 | 多 Skill 编排与人工确认 | 编排 | 部门流程半自动 | [day-10](day-10/README.md) |
+| D10 | V2.0 收官 | V2.0 | 答辩通过 + 90 天自学路线 | [day-11](day-11/README.md) |
 
 ## 每日一包的结构
 

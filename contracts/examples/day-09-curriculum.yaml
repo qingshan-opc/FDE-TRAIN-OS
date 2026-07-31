@@ -1,490 +1,518 @@
 camp_version: v0.7
 day: 9
-title: 多 Skill 编排与人工确认
+title: Skill 工程化 + 遇见 Agent
 week: 2
-project: 多 Skill 编排与人工确认
-project_brief: 工具表从 1 件变 3 件，串成带人工确认闸的 workflow 流水线。掌握编排观（业务流程即 Skill 串联）、确认闸三问与执行日志三要素，再封装两个 Skill，跑通「拦得住、回得来、查得了」的 GATE
-  9。
+project: Skill 工程化 + 遇见 Agent
+project_brief: Skill 从「能跑」到「可依赖」：边界声明 + 异常四分类 + 异常注入测试（≥3 种坏输入按声明失败）。掀开引擎盖理解 Harness 四要素与决策环，让 Agent 在自然语言任务下正确调用你的 Skill。GATE
+  8 闭环演示 + 口答「什么时候会选错」。
 review_checklist:
-- 工具表 3 件：每件有说明书 + 边界声明 + 工具描述
-- 编排文档：步骤定死、数据流清楚、确认闸位置正确（在「不可撤回」步骤之前）
-- 闸口实测：流水线跑到确认闸自动停下等人；批准后继续；驳回有记录
-- 执行日志：每步一条（时间/动作/结果），可回放
-- 'commit：`feat: 三 Skill 编排——确认闸 + 执行日志`'
+- Skill v1 含边界声明（不接受的输入 + 失败时的行为）
+- 异常注入 ≥3 种坏输入，Skill 均「按声明的方式失败」（不胡编、不硬撑）
+- Agent 闭环演示：自然语言下任务 → Agent 选对并调用你的 Skill → 产出过验收
+- 口答：Harness 四要素、决策环、workflow vs agent 的区别、你的 Agent「什么时候会选错」
+- 'commit：`feat: Skill v1 工程化 + Agent v0.1`'
 resources:
-- id: dg-orchestration
-  title: 讲解图 · 编排确认闸与执行日志
+- id: dg-exception
+  title: 讲解图 · 异常四分类
   kind: diagram
-  summary: 步骤定死 + 确认闸 + 每步留痕
-  url: /course-assets/assets/diagrams/orchestration-confirm.svg
+  summary: 输入错 / 环境错 / 能力限 / 目标歧——处置各不相同
+  url: /course-assets/assets/diagrams/exception-taxonomy.svg
+- id: dg-harness
+  title: 讲解图 · Harness 解剖
+  kind: diagram
+  summary: 模型 + 工具表 + 记忆 + 循环
+  url: /course-assets/assets/diagrams/harness-anatomy.svg
+- id: dg-agent-loop
+  title: 讲解图 · Agent 决策环
+  kind: diagram
+  summary: 理解 → 规划 → 调工具 → 观察 → 继续
+  url: /course-assets/assets/diagrams/agent-loop.svg
 - id: dg-workflow-agent
   title: 讲解图 · workflow vs agent
   kind: diagram
-  summary: 编排是 workflow——步骤你定死，AI 当流水线工人
+  summary: 步骤定死 vs 模型现场决策——能写死就写死
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg
 - id: glossary
   title: 新概念词典（速查版）
   kind: site
-  summary: Workflow / HITL / Eval
+  summary: Harness / Agent / Tool Calling / Guardrails
   url: /course-assets/resources/h5/glossary.html
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:9
   - project:role-week
-  estimated_minutes: 95
+  estimated_minutes: 105
   require_capsules: true
   capsules:
   - id: c1
-    title: 概念：业务流程即编排
+    title: 概念：边界与异常——从能跑到可依赖
     minutes: 15
     form: 概念
-    content_ref: class/bootcamp/day-09/section-01-process-as-orchestration/lesson.md
-    content: '同学们，先快答一句：Human-in-the-loop 就是关键步骤要人点头，AI 不能自己拍板。今天咱们把业务流程翻译成流水线，这叫编排。一件工具顶多算助手，一条串起来的流水线才算团队，对吧。
+    content_ref: class/bootcamp/day-09/section-01-boundary-exceptions/lesson.md
+    content: '同学们，第八天第一节。昨天你的 Skill 在乖数据上二连过，恭喜，它能跑了。但能跑和可依赖之间，隔着一份边界声明和一张异常分类表。真实世界的输入不乖：数据是空的、字段缺了、接口超时了，对吧。
 
-      拆分手法呢，对每一步问三个问题。第一，这步是执行还是判断？执行给 Skill，判断和放行人留着。第二，输入从哪来？A 的产出就是 B 的输入，数据流得画清楚。第三，这步错了能撤回吗？不能撤回的，前面必须装人工确认闸。
+      三个场景：老板要周报，但 KPI 接口返回空数组；异常工单缺了逾期天数字段；老板说把两周数据合并一下——到底是哪两周？这时候你的 Skill 会干嘛？如果答案是不知道，那它只是能跑，还不可依赖，嘛。
 
-      咱们再强调一遍数据流。上一步吐什么格式，下一步就吃什么格式，中间对不齐，流水线一定卡。又是契约思想，第六次了嘛——编排不是堆 Skill，是让产出和输入咬合，对吧。
+      异常分四类，处置各不同。输入错——数据为空、字段缺失、格式不对：拒绝执行，明说缺什么，不编数据补洞。环境错——接口超时、文件打不开：重试一次，报环境问题并停止，不假装成功。能力限——超出说明书范围：声明超边界，询问后再动。目标歧——指令有两种以上合理解法：列出理解选项，请求确认，对吧。
 
-      看这条周报流水线：Skill A 拉 KPI 和异常，Skill B 生成草稿，这两步可以全自动连跑。发送之前呢，一个确认闸——你看一眼草稿，批准才发。为什么？消息发出去了就收不回，这个例子咱们后面还会用到。
+      共同原则一句话：停下来、说清楚、等人来。对照你们第五天的数据不足就说不足，是同一道防线的工程化。从今天起，你的 Skill 失败的每一种方式，都是你提前设计好的——这叫按声明的方式失败。失败不可怕，失控地失败才可怕，对吧。
 
-      同学们，注意这是 workflow，步骤你定死，不依赖 Agent 现场瞎想。还记得第八天的铁律吗，能 workflow 别 agent。编排的意思就是：你当流程设计师，AI 当流水线工人。本节带走一句——把流程画成 Skill 串联图，第四节能直接施工，对吧。'
+      边界声明加在说明书里：不接受什么输入；输入不足时停止执行、列出所缺字段；超范围请求声明边界、询问后再继续；指令歧义时列出不超过三种理解、请求确认。让 Skill 拒绝执行，不是显得弱——会拒绝的才可依赖，瞎编的周报比没有周报危害大十倍，嘛。
+
+      收个尾：边界声明是 Skill 从能跑到可依赖的门票。下一节上刑场——故意喂坏输入，看你的 Skill 怎么死。死法符合声明，才算过关，咱们下午再挂 Agent，对吧。'
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-workflow-agent
+    - dg-exception
     tools:
-    - name: 拆分三问卡
-      note: 执行/判断 · 输入来源 · 可撤回性
+    - name: 异常四分类处置卡
+      note: 输入错 / 环境错 / 能力限 / 目标歧
     quiz:
-    - - 编排（orchestration）的核心是？
-      - - 让 Agent 自由发挥
-        - 把业务流程拆成 Skill 串联，数据在步骤间流动
-        - 写更多 Prompt
+    - - 异常四分类不包括？
+      - - 输入错
+        - 环境错
+        - 模型错（厂商 bug）
+      - 2
+      - 四类是输入错/环境错/能力限/目标歧——处置各不相同。
+    - - 输入数据为空时，Skill 应该？
+      - - 编一些 plausible 的数据继续
+        - 拒绝执行，列出所缺字段，请求补充
+        - 静默跳过
       - 1
-      - 你定步骤顺序，AI 当流水线工人——这是 workflow。
-    - - 拆分每一步首先要问？
-      - - 用什么模型
-        - 这步是「执行」还是「判断/放行」
-        - 谁写的代码
+      - 停下来、说清楚、等人来——瞎编比没有更危险。
+    - - 「按声明的方式失败」的意思是？
+      - - 任何失败都算过
+        - 每种失败方式都是你提前设计好的，不是失控乱来
+        - 失败了就重启
       - 1
-      - 执行 → Skill；判断/放行 → 人（确认点）。
-    - - 「这步错了能撤回吗？」决定什么？
-      - - 用什么数据库
-        - 不可撤回的步骤前必须有人工确认闸
-        - 用不用 Docker
+      - 会拒绝的 Skill 才可依赖——体面失败学。
+    - - 边界声明和 Day 5 降级的共同思想是？
+      - - 越快越好
+        - 体面失败：AI 挂了/数据不够，系统不能假装成功
+        - 永远不用 AI
       - 1
-      - 发出去了就收不回——确认闸挡在「不可撤回」之前。
-    - - A 的输出契约必须满足 B 的输入，体现什么思想？
-      - - 契约先行（又一次）
-        - 随机对接
-        - 越厚越好
-      - 0
-      - 数据流格式要对齐——接口契约思想在编排里第三次出现。
+      - 前端三态（D2-3）、LLM/SSE 降级（D6）、Skill 边界（D8）——同一思想的第三次生长。
     media:
     - kind: video
-      title: 口播课件 · 编排
-      object_key: documents/shared/course-media/day09-c1-orchestration.mp4
-      poster_key: documents/shared/course-media/day09-c1-orchestration-poster.jpg
-      duration_sec: 92
+      title: 口播课件 · 边界声明
+      object_key: documents/shared/course-media/day08-c1-boundaries.mp4
+      poster_key: documents/shared/course-media/day08-c1-boundaries-poster.jpg
+      duration_sec: 124
     knowledge_cards:
-    - id: orchestration
-      term: 编排
-      plain: 把多步业务流程拆成 Skill 串联，数据在步骤间流动——你当流程设计师。
+    - id: boundary-decl
+      term: 边界声明
+      plain: Skill 明确「什么输入不接、接不了时怎么表现」——Guardrails 的朴素版。
       tag: 核心
-    - id: workflow-not-agent
-      term: 编排 = workflow
-      plain: 步骤定死，不依赖 Agent 现想——能 workflow 别 agent（Day 8 铁律）。
+    - id: exc-four
+      term: 异常四分类
+      plain: 输入错 / 环境错 / 能力限 / 目标歧——各自处置方式不同。
+      tag: 框架
+    - id: fail-by-design
+      term: 按声明的方式失败
+      plain: 失败不可怕，失控地失败才可怕——每种失败方式都应提前设计好。
       tag: 原则
-    - id: split-three-q
-      term: 拆分三问
-      plain: 执行还是判断？输入从哪来？错了能撤回吗？
-      tag: 方法
+    - id: stop-speak-wait
+      term: 停下来、说清楚、等人来
+      plain: 异常处理的共同原则——对照 Day 5「数据不足就说不足」。
+      tag: 行动
     glossary_terms:
-    - id: gt-orchestration
-      term: 编排（Orchestration）
-      plain: 多 Skill 按固定顺序串联，数据逐步传递——业务流程的工程化表达。
-    - id: gt-hitl
-      term: Human-in-the-loop
-      plain: 人在环：关键步骤必须人工确认或放行。
+    - id: gt-guardrails
+      term: Guardrails（护栏）
+      plain: 拦在输入输出上的规则——Skill 边界声明就是护栏的一种。
+    - id: gt-input-error
+      term: 输入错
+      plain: 数据为空、字段缺失、格式不对——拒绝执行并明说缺什么，不编数据补洞。
     local_prep:
-      codex_prompt: '编排教练。把我的部门流程拆成 Skill 串联图 A→B→(确认闸)→C。
+      codex_prompt: '异常四分类教练。场景：〈我描述坏输入〉。
 
-        每步标注：执行还是判断、输入从哪来、错了能否撤回。不可撤回步前必须留闸位。
-
-        输出可写入 docs/orchestration.md 的 Markdown。'
+        判断属于输入错/环境错/能力限/目标歧，并写出 Skill 应如何「按声明失败」（拒绝/重试/列选项），禁止硬撑编造。'
       checklist: []
   - id: c2
-    title: 概念：人工确认与执行记录
-    minutes: 15
-    form: 概念
-    content_ref: class/bootcamp/day-09/section-02-human-confirm/lesson.md
-    content: '同学们，确认闸最大的敌人不是 AI，是点确定大赛——弹得多了，人看都不看就批。所以闸不能装样子，得按工程设计来做。今天咱们把确认点怎么设计、日志怎么记，一次讲透，对吧。
+    title: 实战：Skill v1 + 异常注入测试
+    minutes: 40
+    form: 实战
+    content_ref: class/bootcamp/day-09/section-02-harden-skill/lesson.md
+    content: '同学们，这节上刑场。注入测试是软件工程的老手艺：故意喂坏的，看它怎么死。你的 Skill 昨天在乖数据上过关，今天要在坏数据上证明——死法符合声明，才算可依赖，对吧。
 
-      确认闸设计时必答三问。看什么？给决策所需的最低信息——草稿加关键数字加风险标红，不是一坨原始日志。谁来看？有责的那个人，训练营里就是你自己。多久看一次？这个咱们下一节讲信任分级。
+      清单按四类各备至少一条：输入错——空数据、缺关键字段、字段名变了、日期范围超限；环境错——模拟接口超时、文件打不开；能力限——顺便翻译成英文直接发给客户；目标歧——把两周数据合并一下。咱们逐条喂，记录实际死法，嘛。
 
-      信任分级呢，新上线每次都看；连续十次通过，改成抽看三分之一；稳定期抽看加定期审计。这就是第七天攒的信任额度兑现的地方——不是偷懒，是风险管理。弹窗太多人会麻木，分级就是治这个，对吧。
+      每条坏输入填一张表：期望死法写声明原文，实际死法看 AI 怎么反应，判定只有两种。✓ 按声明的方式失败——拒绝、重试后报告、列理解请确认，好死。✗ 失控失败——编了数据、硬撑着交付、闷头乱选，必须修，对吧。
 
-      再说执行日志，每步一条：时间、动作、结果。出事故时它能回答三个问题——什么时候、谁干的、干成了什么。没有日志的团队，出事只能靠回忆和甩锅，咱们可不走那条路，对吧。
+      修的时候方向别搞反。死法对但声明没写——补声明，条款缺失补条款。死法不对——改说明书，边界段措辞、示例、红线前置，不是骂 AI。AI 太聪明了，空数据也编一份周报？这正是要抓的失控：红线前置加空数据必须拒绝，再测，对吧。
 
-      反模式也记一下：信息不足逼人盲批、一天弹二十次麻木、批了没记录互相甩锅。避开这三条，你的闸才拦得住。同学们带走一句——确认点加日志，等于信任的工程设计，这个得记牢，对吧。'
+      最后一步别省：乖数据回归。边界加完，好输入也得照常过——别把 Skill 修成什么都拒的废人。今天标准：注入测试至少三条、覆盖至少两类，全部 ✓，再加乖数据回归仍过，才算 Skill v1 达标，嘛。
+
+      证据归档，commit 准备。带走一句：注入测试比十次正确运行都值钱——它告诉你 Skill 在坏输入下会不会失控。下午咱们掀引擎盖，看 Agent 和 Harness 怎么调用你的 Skill，对吧。'
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-orchestration
+    - dg-exception
     tools:
-    - name: 确认闸设计卡
-      note: 三问 + 信任分级 + 反模式三条
+    - name: 注入用例模板
+      note: 坏输入 | 预期行为 | 实际行为 | 过/不过
     quiz:
-    - - 确认闸三问是？
-      - - 谁开发/多少钱/快不快
-        - 看什么 / 谁来看 / 多久看一次
-        - 早上/中午/晚上
+    - - 异常注入测试至少几种坏输入？
+      - - 1 种
+        - ≥3 种（如空数据/错格式/越界请求）
+        - 10 种
       - 1
-      - 看什么 = 决策所需的最低信息，不是日志原文。
-    - - 确认界面必须提供？
-      - - 一句「发送吗？」
-        - 草稿 + 关键数字 + 风险标红
-        - 全部原始日志
+      - 每类异常至少一条用例——按声明失败才算过。
+    - - 注入测试发现 Skill「硬撑成功」，正确动作是？
+      - - 算过，能出结果就行
+        - 回炉改边界声明，直到按声明的方式失败
+        - 换更强的模型
       - 1
-      - 信息不足逼人盲批——闸的第一种死法。
-    - - 执行日志三要素？
-      - - 时间 / 动作 / 结果
-        - 谁 / 什么 / 为什么
-        - 开始 / 结束 / 耗时
-      - 0
-      - 案底三问：什么时候、谁干的、干成了什么。
-    - - 信任分级的含义？
-      - - 永远每次都看
-        - 连续通过攒额度：从每次看降到抽看 + 定期审计
-        - 完全放手
+      - 硬撑 = 失控失败——比拒绝执行危险得多。
+    - - agent-run-log.md 应记录什么？
+      - - 只有成功记录
+        - 每种注入用例的输入、预期行为、实际行为
+        - 聊天记录全文
       - 1
-      - 一天弹 20 次确认，第 21 次一定盲批——分级治麻木。
+      - 注入 + Agent 选型实验都要留痕——Day 10 证据素材。
+    - - Skill v1 相对「能跑」版，工程化多交什么？
+      - - 更漂亮的 Prompt
+        - 边界声明（不接什么 + 失败怎么表现）+ 注入用例过闸
+        - 换更大的模型
+      - 1
+      - GATE 8：可依赖 = 声明在先、坏输入按声明失败。
+    - - 注入用例「空数据 / 错格式 / 越界请求」分别主要测哪类异常？
+      - - 全是模型错
+        - 输入错 / 输入错 / 权限或范围错（按你边界声明归类）
+        - 全是环境错
+      - 1
+      - 四分类要对上用例——测的是设计，不是碰运气。
     media:
     - kind: video
-      title: 口播课件 · 确认闸三问
-      object_key: documents/shared/course-media/day09-c2-multi-skill.mp4
-      poster_key: documents/shared/course-media/day09-c2-multi-skill-poster.jpg
-      duration_sec: 91
+      title: 口播课件 · Skill v1
+      object_key: documents/shared/course-media/day08-c2-exception-test.mp4
+      poster_key: documents/shared/course-media/day08-c2-exception-test-poster.jpg
+      duration_sec: 112
     knowledge_cards:
-    - id: confirm-three
-      term: 确认闸三问
-      plain: 看什么 / 谁来看 / 多久看一次——闸不是「点确定大赛」。
-      tag: 核心
-    - id: trust-tier
-      term: 信任分级
-      plain: 新上线每次看 → 连续通过降抽看 → 稳定期抽看+审计。
-      tag: 方法
-    - id: log-three
-      term: 日志三要素
-      plain: 时间 / 动作 / 结果——出事故能回答「什么时候、谁干的、干成了什么」。
-      tag: 证据
+    - id: skill-v1
+      term: Skill v1
+      plain: 在 v0 基础上补「边界与异常」段 + 通过异常注入测试。
+      tag: 交付
+    - id: inject-test
+      term: 异常注入测试
+      plain: 故意喂 ≥3 种坏输入（空数据/错格式/越界请求），验证按声明失败。
+      tag: 实战
+    - id: no-hard-run
+      term: 不许硬撑
+      plain: 任何「硬扛乱做」都要回炉改边界——胡编周报比没有危害大十倍。
+      tag: 红线
     glossary_terms:
-    - id: gt-confirm-gate
-      term: 确认闸
-      plain: 不可撤回步骤前的强制暂停——人批准才继续。
-    - id: gt-exec-log
-      term: 执行日志
-      plain: 每步一条记录，可回放、可追责——runs/ 是案底。
+    - id: gt-injection
+      term: 异常注入
+      plain: 测试手段：故意给坏输入，看系统是否按设计的方式失败。
     local_prep:
-      codex_prompt: '确认闸设计卡：看什么 / 谁来看 / 多久看一次。
+      codex_prompt: '升级 skills/〈名称〉.md 到 v1：补边界声明（不接受什么、不足时停止、超范围询问、歧义列选项）。
 
-        为我的「发送/改数」步骤写确认界面最低信息：草稿 + 关键数字 + 风险标红。
+        再设计 ≥3 条异常注入用例表：坏输入 | 预期行为 | 我怎么测。
 
-        再写信任分级：什么条件下可以从每次看降到抽看。'
+        改完后自检：乖数据回归仍应通过。'
       checklist: []
   - id: c3
-    title: 实战：再封装两个 Skill
-    minutes: 30
-    form: 实战
-    content_ref: class/bootcamp/day-09/section-03-two-more-skills/lesson.md
-    content: '同学们，扩编开始。工具表从一件变三件，每件大概十三分钟。流程你们熟：倒序写、四部件、边界声明、工具描述——快在你已经会了，不是快在跳过部件，方法沉淀的红利就在这儿，对吧。
+    title: 概念：Agent 与 Harness 解剖
+    minutes: 20
+    form: 概念
+    content_ref: class/bootcamp/day-09/section-03-agent-harness/lesson.md
+    content: '同学们，快答开场：Harness 四要素是什么？模型、工具表、记忆、循环。惊喜来了——这四样你们全摸过：第五天调了模型、做了上下文装配；第七天写的 Skill 就是工具表上的一件工具；你们的迭代闭环就是人工版循环。你们已经在徒手拼
+      Harness 了，对吧。
 
-      两个新要点。第一，输入段写明上游——比如输入：Skill A 的输出 JSON，含 kpi 和 exceptions 数组。契约咬合就靠这一句，别写一些数据这种模糊话。咱们流水线最怕接口对不齐。
+      模型管思考的大脑，就是第五天网关后的 LLM。工具表管能动手做什么，第七天的 Skill 马上挂上去。记忆管上下文里带什么，第五天上下文装配就是这个。循环管反复想-做-看，你们的验收不过改说明书重跑，就是人工版循环，嘛。
 
-      第二，如果第三件是发送或通知类 Skill，步骤第一步必须是等待人工确认结果。边界里写死：未收到批准时，不执行，保持等待。工具描述的何时用也要写明——仅在人工确认通过后，对吧。
+      Agent 是什么？骨架加上角色：你的说明书、人格、目标。你们写的 ai-tutor.yaml，其实就是一份 Agent 角色定义——你们早就在造 Agent 了，只是没人告诉名字。Skill 是给 Agent 预备的工具；Agent
+      拿着工具表上的 Skill 去干活，对吧。
 
-      最后四分钟做数据流对齐三查。A 的输出字段能不能喂饱 B？B 的草稿里有没有确认界面要的关键数字和风险标红？C 的输入从哪来——确认后的草稿加批准记录。查不到咬合点，第四节编排必卡，咱们别留坑，对吧。
+      Agent 的工作方式叫决策环：理解任务、规划步骤、选择并调用工具、观察结果、继续或收尾——一圈一圈转，直到交活。用昨天 Skill 运行当实例：理解生成本周周报、规划四步、调 Skill、看产出、验收通过就收尾。决策环会不会死循环？会，所以工程上要设最大轮数和超时，对吧。
 
-      写不完两件也别硬撑：优先保证发送类那件，闸的训练价值最高。想封装的和串联图不一样？现在二选一，改图或改 Skill，图纸和施工必须一致。带走一句——三件齐了，咱们下一节真正串联，对吧。'
+      最后一个分水岭：workflow 还是 agent？步骤你定死，是 workflow——第九天咱们学编排就是这个；路径它现想，是 agent。能 workflow 的别 agent——企业场景里，可预测是第一美德。报销审批适合 workflow；帮我把这堆乱文件整理成
+      PRD适合 agent，嘛。
+
+      收个尾：Agent 决策，Harness 骨架，Skill 是工具。下一节把你的 Skill 挂上 Agent 的工具表——从今天起，你派活用自然语言，挑工具的活 Agent 自己干，对吧。'
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-orchestration
+    - dg-harness
+    - dg-agent-loop
+    - dg-workflow-agent
     tools:
-    - name: Skill 边界模板
-      note: 复用 Day 8 v1 结构
+    - name: Harness 四要素对照表
+      note: 各要素 ↔ 你 Week 1 已做过的东西
     quiz:
-    - - 工具表 3 件每件必须包含？
-      - - 只有名字
-        - 说明书 + 边界声明 + 工具描述
-        - 只有代码
+    - - Harness 四要素是？
+      - - 前端/后端/数据库/模型
+        - 模型 + 工具表 + 记忆 + 循环
+        - CPU/内存/磁盘/网络
       - 1
-      - 和 Day 7-8 标准一致——可依赖的三件套。
-    - - 再封装两个 Skill 为什么比第一个快？
-      - - AI 变强了
-        - 四部件 + 边界模板已练过，走同一套流程
-        - 不需要验收了
+      - 同一模型换副骨架，能力天差地别——聊天窗 vs Cursor 的差别。
+    - - 决策环的正确顺序？
+      - - 调工具 → 理解 → 规划 → 观察
+        - 理解 → 规划 → 调工具 → 观察 → 继续
+        - 生成 → 验收 → 迭代
       - 1
-      - 第一个练信任，第二三个练吞吐——模板复用。
-    - - 三个 Skill 怎么拆职责最稳？
-      - - 三个 Skill 做同一件事，互为备份
-        - 各管一段可验收步骤，输入输出契约能接上、描述不重叠
-        - 全塞进一个超级 Skill
+      - 观察结果决定是否继续——ReAct 循环的朴素版。
+    - - workflow 和 agent 的选择原则是？
+      - - 永远用 agent 显得高级
+        - 能写死步骤用 workflow，写不死才上 agent
+        - 随机选择
       - 1
-      - 编排靠串联，不靠重复——重叠描述会害 Agent 选型。
-    - - 第 2、3 个 Skill 可以省略边界声明吗？
-      - - 可以，反正模板熟了
-        - 不行——每件工具都要说明书 + 边界 + 描述，标准不降级
-        - 只写代码就够
+      - Agent 的自由度是用不确定性和成本换来的。
+    - - 你的 Skill 在 Harness 里对应哪个要素？
+      - - 模型
+        - 工具表上的一件工具
+        - 记忆
       - 1
-      - 工具表扩容不能降工程标准——可依赖是逐件验收的。
+      - Day 7 的 Skill 从今天起成为 Agent 工具表上的工具。
     media:
     - kind: video
-      title: 口播课件 · 工具表 3 件
-      object_key: documents/shared/course-media/day09-c3-human-confirm.mp4
-      poster_key: documents/shared/course-media/day09-c3-human-confirm-poster.jpg
-      duration_sec: 79
+      title: 口播课件 · Harness 四要素
+      object_key: documents/shared/course-media/day08-c3-harness.mp4
+      poster_key: documents/shared/course-media/day08-c3-harness-poster.jpg
+      duration_sec: 126
     knowledge_cards:
-    - id: three-skills
-      term: 工具表 3 件
-      plain: 复用 Day 7 全流程提速——每件有说明书 + 边界 + 工具描述。
-      tag: 交付
-    - id: speed-up
-      term: 复用提速
-      plain: 第 2、3 个 Skill 走同一套四部件 + 边界模板，不再从零摸索。
-      tag: 技巧
+    - id: harness-four
+      term: Harness 四要素
+      plain: 模型 + 工具表 + 记忆 + 循环——骨架不同，能力差很多。
+      tag: 核心
+    - id: agent-role
+      term: Agent
+      plain: 跑在 Harness 上的角色（说明书/人格/目标）；你的 ai-tutor.yaml 就是一份 Agent 定义。
+      tag: 概念
+    - id: decision-loop
+      term: 决策环
+      plain: 理解 → 规划 → 调工具 → 观察 → 继续，直到完成或求助。
+      tag: 机制
+    - id: workflow-vs-agent
+      term: workflow vs agent
+      plain: 步骤定死用 workflow；写不死才上 agent——自由度换不确定性。
+      tag: 选型
     glossary_terms:
-    - id: gt-tool-table-3
-      term: 三件工具表
-      plain: Agent/workflow 可调用的完整工具集——Day 9 从 1 扩到 3。
+    - id: gt-harness
+      term: Harness
+      plain: 模型之外的循环：工具表、记忆、规划、重试、日志。
+    - id: gt-tool-call
+      term: Tool Calling
+      plain: 模型输出「调用 X 工具、参数 Y」的结构化请求，由 Harness 执行。
     local_prep:
-      codex_prompt: '复用 Day7–8 模板，帮我起草 Skill #2 与 Skill #3 的说明书骨架（四部件+边界+工具描述）。
+      codex_prompt: '用 Harness 四要素（模型/工具表/记忆/循环）和决策环（理解→规划→调工具→观察→继续）重述我昨天跑 Skill 的过程。
 
-        要求：三件职责不重叠、输入输出契约能互相接上；发送类必须含「等待人工确认」。
-
-        先问我两件 Skill 的名字与职责再写。'
+        标出哪一步是人肉、哪一步交给 Agent 后风险最大。'
       checklist: []
   - id: c4
-    title: 实战：编排 + 确认点 + 执行日志
-    minutes: 35
+    title: 实战：让 Agent 调用你的 Skill
+    minutes: 30
     form: 实战
-    content_ref: class/bootcamp/day-09/section-04-orchestrate/lesson.md
-    content: '同学们，施工开始。图纸在 orchestration.md，三件工具已经齐。现在三步：串联、装闸、记日志。顺序定死告诉 Agent，别让它现场改流程——咱们今天做的是 workflow，不是即兴表演，对吧。
+    content_ref: class/bootcamp/day-09/section-04-agent-calls-skill/lesson.md
+    content: '同学们，这节把你的 Skill 挂上 Agent 的工具表。Agent 选工具的时候读什么？不是说明书全文——是货架标签，叫工具描述。名称、何时用、输入要求，三要素写清楚，对吧。
 
-      第一步串联：给 Agent 一条 workflow 指令，A 的输出喂给 B，B 的产出做成确认界面。第二步装闸：不可撤回的步骤前，Agent 必须停，把草稿、关键数字、风险标红摆在你面前，等你一个字——发，或者驳回，对吧。
+      工具描述三要素：何时用——需要生成本周运营周报时，输入为 KPI 与异常工单数据；不用于——写通用文章、创意写作、对外发送任何内容；输入要求——JSON 格式，缺数据时本工具会拒绝。最反直觉的是不用于——它是护栏，防止周报工具被选去写情诗，嘛。
 
-      第三步记日志：每执行一步，往 runs/ 追加一行，时间、步骤、结果。指令里写清楚每步执行后追加到 runs/YYYYMMDD.md，Agent 来记，你负责抽查。能回放，才算有案底，对吧。
+      挂上去，测三个任务。任务 A 该调：用本周数据生成周报——期望选中 weekly-report。任务 B 不该调：帮我写一句朋友圈文案——期望不调工具，直接答。任务 C 易选错：总结一下这周情况——模糊指令，观察它选什么，对吧。
 
-      跑通之后别急着走，两条路径都要实测。批准走一遍，驳回也走一遍——比如驳回：第二段数字不对，流水线得打回 B 重做，日志记下这次驳回。闸拦住一次不算本事，驳回了能退回重做还留下记录，咱们这条线才算有回路，对吧。
+      选错了别怪 Agent 笨，怪标签写得宽。改描述，再测。今天结束前交一张选错图谱：我的 Agent 在什么措辞下会误选或漏选，因为什么，我用什么修了描述。这比十次正确都值钱——它告诉你工具描述的边界在哪，对吧。
 
-      最后两分钟，关掉屏幕别的窗口，只看 runs/ 日志，复述今天发生了什么。到闸停不停、批了动不动、驳回了回不回得来——三个验收点全绿，第五节闸口实测才有底气。带走一句，对吧。'
-    practice: '完成标志：
+      描述写多长？两到四句；长了稀释关键信息，短了护栏不够。平台没有工具表功能？降级玩法：Prompt 里手动提供工具清单加描述，让模型先输出选择再执行。Agent 调用时输入谁准备？今天你在任务里给数据，第九天编排会把拉数据串起来，嘛。
 
-      [ ] 两路径实测表全 ✓
-
-      [ ] runs/ 日志可回放（三问答全）
-
-      [ ] 迭代日志记下今天修过的每一处'
+      收个尾：从今天起你派活用自然语言，挑工具的活 Agent 自己干。选错图谱和 agent-tool-map.md 一起进 Git。下一节第八天验收——Agent v0.1 闭环演示，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-orchestration
+    - dg-agent-loop
+    - dg-harness
     tools:
-    - name: 流水线施工清单
-      note: 串联图 / 数据流 / 闸位置 / 日志格式
+    - name: 选错图谱
+      note: 描述重叠 / 缺边界 / 任务歧义
     quiz:
-    - - 确认闸应放在哪类步骤之前？
-      - - 每一步
-        - 不可撤回的步骤（对外发送/改数据/花钱）
-        - 最快的步骤
+    - - Agent 选错 Skill 最常见原因是？
+      - - 模型版本太旧
+        - 工具描述重叠、模糊、缺「何时不用」
+        - 网络延迟
       - 1
-      - 可撤回的自动连跑——比例通常是 5 步 1 闸。
-    - - 流水线跑到确认闸应该？
-      - - 自动跳过
-        - 自动停下等人；批准后继续；驳回有记录
-        - 发邮件提醒
+      - 第 1 步「理解任务」跑偏——描述写得越清，选型越准。
+    - - Agent 闭环演示的验收标准是？
+      - - Agent 有回复就行
+        - 自然语言任务 → 正确调用 Skill → 产出过验收标准
+        - 必须全自动无人工
       - 1
-      - 拦得住、回得来、查得了——GATE 9 三板斧。
-    - - 不批准时 C 步骤能否执行？
-      - - 可以，反正差不多
-        - 绝不——不批准绝不执行不可撤回步骤
-        - 看 Agent 心情
+      - 闭环 = 理解、选型、执行、验收四步全绿。
+    - - 故意给「不匹配任务」的目的是？
+      - - 为难 Agent
+        - 观察它会不会选错，分析原因写进日志
+        - 测试模型速度
       - 1
-      - 钥匙在你手里——这是信任的工程设计。
-    - - orchestration.md 最少要写清什么？
-      - - 只用画一张好看的图
-        - 串联步骤 + 数据流 + 确认闸位置 + 日志格式
-        - 模型厂商与价格表
+      - 「什么时候会选错」是 GATE 8 口答必考点——Day 10 答辩也会问。
+    - - 工具描述里写清「何时不用」主要防止什么？
+      - - 模型算力不够
+        - Agent 在模糊任务上误选你的 Skill
+        - 日志文件过大
       - 1
-      - 编排文档是施工图——Day 10 证据与答辩都会翻它。
-    - - 驳回路径「必须能退回重做」对应哪条验收？
-      - - 只要批准路径通就行
-        - 闸口驳回有记录、能退回、版本可追踪——不是只有绿灯
-        - 驳回后自动强制执行
+      - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
+    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
+      - - 没区别，都是聊天
+        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
+        - Agent 更便宜所以优先
       - 1
-      - 拦得住还要回得来——单侧幸福路径不算过闸。
+      - 信任对象变了：从「建议」变成「代执行」，必须可回放。
     media:
     - kind: video
-      title: 口播课件 · 流水线
-      object_key: documents/shared/course-media/day09-c4-runbook.mp4
-      poster_key: documents/shared/course-media/day09-c4-runbook-poster.jpg
-      duration_sec: 90
+      title: 口播课件 · Agent 调用 Skill
+      object_key: documents/shared/course-media/day08-c4-agent-loop.mp4
+      poster_key: documents/shared/course-media/day08-c4-agent-loop-poster.jpg
+      duration_sec: 118
     knowledge_cards:
-    - id: pipeline
-      term: 流水线
-      plain: A→B→确认闸→C：步骤定死、数据流清楚、闸在不可撤回步骤前。
+    - id: agent-calls-skill
+      term: Agent 调用 Skill
+      plain: 自然语言下任务 → Agent 选对工具 → 执行 → 产出过验收。
       tag: 实战
-    - id: reject-path
-      term: 驳回路径
-      plain: 闸口驳回必须能退回重做、版本+1、留痕——不是只有批准。
+    - id: wrong-pick
+      term: 什么时候会选错
+      plain: 工具描述重叠、模糊、缺「何时不用」时——选错图谱的第一因。
       tag: 关键
     glossary_terms:
-    - id: gt-orchestration-md
-      term: orchestration.md
-      plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
+    - id: gt-copilot-agent
+      term: Copilot vs Agent
+      plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
     local_prep:
-      codex_prompt: '你现在严格按下列 workflow 执行，顺序不许变（把尖括号换成我的 Skill 名）：
+      codex_prompt: '你是 Agent 工具接入教练。请根据我的 skills/〈名称〉.md 写出工具描述三要素：何时用 / 不用于 / 输入要求。
 
+        然后设计三任务实测脚本：
 
-        1. 调用 Skill A〈名〉，输出存为 step-a
+        A 应调用该 Skill；B 不应调用；C 模糊指令易选错。
 
-        2. 调用 Skill B〈名〉，输入用 step-a；产出草稿后生成确认界面（草稿全文 + 关键数字 + 风险标红）
+        要求我把结果记入 docs/agent-tool-map.md（选错原因与描述修改句）。
 
-        3. 停。不要执行后续。我回复「发」→ 调用 Skill C〈名〉；我回复「驳回：理由」→ 回第 2 步且版本 +1，再次确认
-
-        4. 每步向 runs/〈今天日期〉.md 追加：HH:MM | 步骤 | 结果
-
-
-        先确认三件 Skill 文件存在并复述计划，再开始执行。'
+        若在 Cursor/Agent Lab：指导我如何挂工具表并逐条跑，不要跳过复测。'
       checklist: []
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 编排的核心思想？
+  - q: 「能跑」和「可依赖」之间隔着什么？
     options:
-    - Agent 自由决策
-    - 业务流程拆成 Skill 串联，步骤定死（workflow）
-    - 写一个超级 Prompt
+    - 更强的模型
+    - 边界声明 + 异常注入测试
+    - 更多 Prompt
     answer: 1
-    explain: 你当流程设计师，AI 当流水线工人。
-  - q: 确认闸三问？
+    explain: 乖数据上能跑 ≠ 真实世界可依赖。
+  - q: 异常四分类是？
     options:
-    - 谁/什么/为什么
-    - 看什么 / 谁来看 / 多久看一次
-    - 快/好/省
+    - 前端/后端/数据库/模型
+    - 输入错 / 环境错 / 能力限 / 目标歧
+    - 早/中/晚/夜
     answer: 1
-    explain: 闸不是点确定大赛——信息足够才能决策。
-  - q: 确认界面最低信息？
+    explain: 四类处置各不相同——不能一刀切。
+  - q: 输入数据为空，Skill 应？
     options:
-    - 「发送吗？」
-    - 草稿 + 关键数字 + 风险标红
-    - 全部日志
+    - 编 plausible 数据
+    - 拒绝执行，明说缺什么
+    - 跳过继续
     answer: 1
-    explain: 信息不足 = 逼人盲批。
-  - q: 执行日志三要素？
+    explain: 停下来、说清楚、等人来——不编数据补洞。
+  - q: Harness 是？
     options:
-    - 时间 / 动作 / 结果
-    - 输入 / 步骤 / 输出
-    - 谁 / 在哪 / 用什么
-    answer: 0
-    explain: 案底三问：什么时候、谁干的、干成了什么。
-  - q: 确认闸应放在？
-    options:
-    - 每一步前面
-    - 不可撤回步骤（发送/改数据/花钱）之前
-    - 最后一步后面
+    - 更大的模型
+    - 模型之外的循环：工具表/记忆/规划/重试/日志
+    - 编程框架
     answer: 1
-    explain: 能撤回的自动连跑；不能撤回的必须有人工闸。
-  - q: 信任分级是？
+    explain: 同一模型在聊天窗 vs Agent 工具里差别在 Harness。
+  - q: 决策环顺序？
     options:
-    - 永远全看
-    - 连续通过降抽看 + 定期审计
-    - 完全自动化
+    - 调工具 → 理解 → 规划
+    - 理解 → 规划 → 调工具 → 观察 → 继续
+    - 生成 → 验收
     answer: 1
-    explain: 治「点确定大赛」的麻木——信任是工程设计。
-  - q: 工具表从几件扩到几件？
+    explain: 观察结果决定下一步——循环直到完成或求助。
+  - q: workflow vs agent 选择原则？
     options:
-    - 1 → 2
-    - 1 → 3
-    - 3 → 5
+    - 永远 agent
+    - 能写死用 workflow，写不死才 agent
+    - 看心情
     answer: 1
-    explain: 一件是助手，三件是团队——今天扩工具表。
-  - q: 编排文档 orchestration.md 必须包含？
+    explain: 自由度换不确定性——能 workflow 别 agent。
+  - q: Agent 选错 Skill 最常见原因？
     options:
-    - 只有步骤名
-    - 串联图 + 数据流 + 确认闸位置 + 日志格式
-    - 团队照片
+    - 模型太旧
+    - 工具描述重叠、模糊、缺「何时不用」
+    - 网络问题
     answer: 1
-    explain: 施工图纸——按图施工，闸口才能拦得住。
-  - q: 驳回路径必须？
+    explain: 描述决定第 1 步理解任务是否跑偏。
+  - q: 异常注入测试的做法？
     options:
-    - 静默忽略
-    - 退回重做、版本+1、留痕
-    - 自动批准
+    - 等线上出事
+    - 故意喂坏输入，验证按声明失败
+    - 只测正常路径
     answer: 1
-    explain: 回得来才算完整流水线——不是只有「通过」。
-  - q: 拆分步骤「错了能撤回吗」影响？
+    explain: 失败方式是被设计出来的——体面失败学。
+  - q: Skill 边界声明对应词典里的？
     options:
-    - 用什么框架
-    - 决定确认闸是否必须
-    - 代码风格
+    - RAG
+    - Guardrails（护栏）
+    - Token
     answer: 1
-    explain: 不可撤回 → 前面必须有人工闸。
-  - q: 编排属于 workflow 还是 agent？
+    explain: 什么不接、坏了怎么坏——护栏的朴素版。
+  - q: 你的 Skill 在 Harness 里是什么？
     options:
-    - agent——让模型现想
-    - workflow——步骤你定死
-    - 两者一样
+    - 模型
+    - 工具表上的一件工具
+    - 记忆模块
     answer: 1
-    explain: Day 8 铁律：能 workflow 别 agent——编排就是 workflow。
-  - q: GATE 9 闸口实测要求？
+    explain: Day 7 造工具，Day 8 挂到 Agent 工具表上。
+  - q: Agent 闭环演示验收？
     options:
-    - 口头描述即可
-    - 跑到闸自动停，批准/驳回两条路径都跑通
-    - 只测 happy path
+    - 有回复即可
+    - 自然语言 → 正确调用 Skill → 产出过验收
+    - 必须无人值守
     answer: 1
-    explain: 拦得住、回得来、查得了。
-  - q: 数据流对齐体现？
+    explain: 理解、选型、执行、验收四步全绿。
+  - q: 「硬撑乱做」的正确处理？
     options:
-    - 随机拼接
-    - 契约先行——A 的输出满足 B 的输入
-    - 越厚越好
+    - 算过
+    - 回炉改边界，直到按声明失败
+    - 换模型
     answer: 1
-    explain: 契约思想在编排里继续生效。
-  - q: 一天弹 20 次确认的问题？
+    explain: 胡编产出比拒绝执行危险十倍。
+  - q: Copilot 和 Agent 的区别？
     options:
-    - 效率太高
-    - 第 21 次一定盲批——需要信任分级
-    - 没有 problem
+    - 没区别
+    - Copilot 递扳手；Agent 定目的地它开
+    - Copilot 更贵
     answer: 1
-    explain: 确认闸设计要治麻木，不是治 lazy。
-  - q: 可撤回步骤前面要不要一律加确认闸？
+    explain: 信任要求与验收方式完全不同。
+  - q: ai-tutor.yaml 对应 Agent 的什么？
     options:
-    - 要，每步都闸最安全
-    - 不必——闸留给不可撤回步骤，过多确认会诱发盲批
-    - 永远不要闸
+    - 工具表
+    - 角色/人格/规则（Agent 定义）
+    - 记忆模块
     answer: 1
-    explain: 闸的密度是设计题：太稀失控，太密麻木。
-  - q: GATE 9「查得了」最低靠什么证明？
+    explain: 你早就在造 Agent——今天只是掀引擎盖。
+  - q: GATE 8 对 Skill v1 的硬门槛是？
     options:
-    - 口头复述流程
-    - 每步执行日志（时间/动作/结果）可独立回放
-    - 只要 orchestration.md 写了就行
+    - 只要 Prompt 更长
+    - 有边界声明，且 ≥3 种坏输入均按声明失败
+    - 必须上多 Agent 框架
     answer: 1
-    explain: 文档是施工图，日志是案底——两者都要。
+    explain: 工程化验收看声明与注入，不看「感觉稳」。
+  - q: Harness「记忆」要素主要解决什么？
+    options:
+    - 换更大显卡
+    - 跨步保留上下文，避免每轮从零猜任务状态
+    - 替代工具表
+    answer: 1
+    explain: 四要素缺一不可——没记忆的循环只会原地打转。
 nodes:
 - type: learn
-  title: 今日课节（4 节 · 95′）
+  title: 今日课节（4 节 · 105′）
 - type: quiz
   title: Day9 概念验收
 - type: lab
-  title: 流水线施工：拦得住、回得来、查得了
+  title: 异常注入 + Agent 选得对不对
 - type: project
-  title: 企业任务：三 Skill 编排 + 确认闸 + 执行日志
+  title: 企业任务：Skill v1 + Agent v0.1 闭环
 - type: review
-  title: 交付自检与 GATE 9
+  title: 交付自检与 GATE 8
 lab:
   runner: agent
   workspace_mode: cumulative
   primary_files:
-  - docs/orchestration.md
-  - runs/
+  - skills/skill-01.md
+  - agent-run-log.md
   inherited_files:
   - docs/D1_选题确认单.md
   - docs/D1_团队协作卡.md
@@ -512,28 +540,31 @@ lab:
   - README.md
   - skills/skill-01.md
   - runs/
-  - agent-run-log.md
   coach:
     help_mode: debug
     skill_id: fde-coach
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: '你是流程工程师。背景：FDE 训练营 Day 9，学员已有 3 件 Skill（skills/ 目录）。
+    prompt_template: '你是可靠性工程师。背景：FDE 训练营 Day 8，第一个 Skill（skills/skill-01.md）已能跑。
 
-      任务：1. 生成 docs/orchestration.md——编排文档：步骤定死的串联图（A→B→C）、数据流（谁的输出是谁的输入）、确认闸位置（必须在不可撤回步骤之前）、闸设计卡（三问）、日志格式；2. 按文档把流水线真实跑一遍：A
-      跑 → B 产出确认界面（草稿+关键数字+风险标红）→ 停 → 人批准 → C 执行；再跑一次驳回路径（打回 B 重做、版本+1、留痕）；3. 每步执行后向 runs/ 追加日志行（时间|步骤|结果）。
+      任务：1. 升级 Skill 到 v1——补边界声明（不做什么/异常分类与处置/何时求助人类）；2. 设计 ≥3 条异常注入用例（空数据/错格式/越界请求），逐条执行并把结果记入 agent-run-log.md；3. 用自然语言给
+      Agent 派一个匹配任务和一个故意不匹配的任务，记录它的工具选择，分析「它什么时候会选错」写进日志。
 
-      要求：不批准绝不执行 C；驳回必须能退回重做且留记录；日志可独立回放当天经过。'
+      要求：坏输入必须按声明的方式失败——任何「硬扛乱做」都要回炉改边界。'
   rubric:
+  - check: text_contains
+    args:
+      path: skills/skill-01.md
+      needle: 边界
   - check: file_exists
     args:
-      path: docs/orchestration.md
+      path: agent-run-log.md
   - check: text_contains
     args:
-      path: docs/orchestration.md
-      needle: 确认闸
+      path: agent-run-log.md
+      needle: 注入
   - check: text_contains
     args:
-      path: docs/orchestration.md
-      needle: 日志
+      path: agent-run-log.md
+      needle: 选错

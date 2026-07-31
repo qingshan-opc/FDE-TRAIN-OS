@@ -212,7 +212,7 @@ def build_day_package(day: int) -> dict[str, Any]:
                 capsule["local_prep"] = local_prep
         capsules.append(capsule)
 
-    week = 1 if day <= 5 else 2
+    week = 1 if day <= 6 else 2
     lab = data.get("lab")
     inherited: list[str] = []
     if lab and lab.get("runner") != "sim":

@@ -1,0 +1,594 @@
+camp_version: v0.7
+day: 11
+title: V2.0 收官：答辩与成为 FDE
+week: 2
+project: V2.0 收官：答辩与成为 FDE
+project_brief: 九天收口成一个人：Agent 接入驾驶舱助手位（唤起/状态/闸在页内），十条能力证据 10/10 自证，8 分钟答辩（作品 3′+架构 3′+迭代 2′），提交 final-review.md（两周复盘 + 行业地图自评
+  + 90 天自学路线）。答辩通过即 FDE。
+review_checklist:
+- V2.0 全景：驾驶舱六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作
+- 十条能力证据：自证表 10/10，每条有文件或现场演示支撑
+- 答辩完成：8 分钟结构讲完，互评表收回至少 2 份
+- '`docs/final-review.md`：两周复盘 + 行业地图自评 + 自学路线'
+- 'commit：`feat: V2.0 收官——Agent 接入驾驶舱，答辩完成`'
+resources:
+- id: dg-v2-panorama
+  title: 讲解图 · V2.0 全景
+  kind: diagram
+  summary: 六区块 + Agent + 三 Skill + 十条能力证据
+  url: /course-assets/assets/diagrams/v2-panorama.svg
+- id: dg-ten-day
+  title: 讲解图 · 十天演进
+  kind: diagram
+  summary: V0.1 → V1.0 → V2.0，同一艘驾驶舱逐层接电
+  url: /course-assets/assets/diagrams/ten-day-grid.svg
+- id: dg-orchestration
+  title: 讲解图 · 编排确认闸
+  kind: diagram
+  summary: 确认闸 + 执行日志——答辩架构讲解素材
+  url: /course-assets/assets/diagrams/orchestration-confirm.svg
+- id: glossary
+  title: 新概念词典（速查版）
+  kind: site
+  summary: 十天术语总复习
+  url: /course-assets/resources/h5/glossary.html
+learn:
+  lingzhi_tags:
+  - camp:v0.7
+  - day:11
+  - project:role-week
+  estimated_minutes: 110
+  require_capsules: true
+  capsules:
+  - id: c1
+    title: 实战：Agent 接入驾驶舱
+    minutes: 30
+    form: 实战
+    content_ref: class/bootcamp/day-11/section-01-agent-in-cockpit/lesson.md
+    content: '同学们，驾驶舱右边那个 AI 助手位空了九天了，今天让它活起来——这是 V2.0 最后一块拼图。助手位不是装饰用的聊天框，是驾驶位：状态看得见、刹车踩得到，才叫接入，对吧。
+
+      接入三要件。第一唤起：助手位能发消息给 Agent，Agent 能回话。第二状态：流水线跑到哪一步，助手位实时可见，最小实现读 runs/ 最新日志行就行。第三闸在页内：确认界面出现在驾驶舱里，批准和驳回按钮直接点，对吧。
+
+      最小实现别贪大：对话区接 Agent，状态读 runs/ 日志最新行，闸就是草稿渲染加两个按钮。一件通了再做下一件——别三个半成品堆在一起，咱们宁可做一个能点批准的真闸，对吧。
+
+      时间不够怎么办？优先级记死：闸大于状态大于唤起。对话区接不通真实 Agent 环境？降级方案也行——助手位展示当前步骤加确认按钮，指令复制到 Agent Lab 执行，结果回填。思想不变，咱们打通的是人、Agent、驾驶舱的信息回路，对吧。
+
+      做完对照 V2.0 全景图打勾：六个区块、Agent、三件 Skill——全亮，你的 V2.0 就成了。样式复用驾驶舱既有卡片，助手位别长得像外来的。带走一句：助手位是驾驶位，不是摆设，对吧。'
+    practice: '完成标志：
+
+      [ ] 三要件至少「闸」全通，另两件有最小实现
+
+      [ ] 全景自查无「死区块」
+
+      [ ] 迭代日志记录接入中修过的问题'
+    resource_ids:
+    - dg-v2-panorama
+    tools:
+    - name: 接入三要件清单
+      note: 唤起 / 状态 / 闸 · 优先级闸>状态>唤起
+    quiz:
+    - - 驾驶舱 AI 助手位三要件是？
+      - - 头像/昵称/表情包
+        - 唤起 / 状态可见 / 闸在页内
+        - 聊天/语音/视频
+      - 1
+      - 能唤起、看得见跑到哪、踩得到刹车——才叫接入。
+    - - 接入施工优先级？
+      - - 唤起 > 状态 > 闸
+        - 闸 > 状态 > 唤起
+        - 随机
+      - 1
+      - 宁可只做一个能点批准/驳回的真闸，不要三个半成品。
+    - - 助手位「不是装饰」指？
+      - - 要好看
+        - 状态看得见、刹车踩得到，才叫驾驶位
+        - 必须 24 小时在线
+      - 1
+      - 只挂聊天框叫摆设；读 runs/ 日志 + 页内闸才是真接入。
+    - - V2.0 全景最后一块拼图是？
+      - - 新数据库
+        - Agent 挂上驾驶舱 AI 助手位
+        - 换前端框架
+      - 1
+      - 六区块 + Agent + 三 Skill 全亮——全景图闭合。
+    media:
+    - kind: video
+      title: 口播课件 · 助手位三要件
+      object_key: documents/shared/course-media/day10-c1-v2-scope.mp4
+      poster_key: documents/shared/course-media/day10-c1-v2-scope-poster.jpg
+      duration_sec: 89
+    knowledge_cards:
+    - id: cockpit-three
+      term: 助手位三要件
+      plain: 唤起 / 状态可见 / 闸在页内——助手位是驾驶位，不是装饰聊天框。
+      tag: 核心
+    - id: priority-order
+      term: 施工优先级
+      plain: 闸 > 状态 > 唤起——宁可一个真闸，不要三个半成品。
+      tag: 方法
+    - id: v2-panorama
+      term: V2.0 全景
+      plain: 六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作。
+      tag: 交付
+    glossary_terms:
+    - id: gt-v2
+      term: V2.0
+      plain: 驾驶舱全功能 + Agent 接入 + 三 Skill 编排——训练营毕业形态。
+    - id: gt-cockpit-agent
+      term: 驾驶舱助手位
+      plain: 人-Agent 对话口 + 流水线状态 + 页内确认闸——驾驶位不是摆设。
+    local_prep:
+      codex_prompt: '驾驶舱接入教练。按优先级施工：闸在页内 > 状态可见 > 唤起。
+
+        对照我的仓库，列出要改的文件与最小补丁方案；接不通真实 Agent 时给出「指令面板降级」方案并写书面权衡。
+
+        不要大重构，只求三要件可演示。'
+      checklist: []
+  - id: c2
+    title: 端到端十条能力证据
+    minutes: 20
+    form: 实战
+    content_ref: class/bootcamp/day-11/section-02-ten-evidences/lesson.md
+    content: '同学们，答辩不是讲情怀，是拿证据。十天学了什么，用十件拿得出手的东西回答——方向卡、契约文档、Skill 三件、编排日志、Git 迭代史，每条都得有文件或运行记录撑腰，对吧。
+
+      现在逐条过十条清单。打开文件、点开运行记录——拿得出来打勾，拿不出来打叉，太弱打三角。每条大概一分钟，别讲故事，先证明这东西在、能打开、能说明我会什么。能力不是说出来的，是拿出来的，对吧。
+
+      打完别慌，没人十项全能。圈出你最强的三条，那是答辩主打；最弱的两条，今晚能补就补，补不了就写进诚实声明。六七条打叉不丢人，自证诚实比假装全会强，咱们 FDE 出厂设置就是证据思维，对吧。
+
+      证据在但讲不出来？每条配一句话：这是什么 + 它证明我会什么。比如 orchestration.md 证明你会编排与安全，runs/ 日志证明闸口可回放。现在就写，别拖到上台临场编——评委问的就是这条线，对吧。
+
+      别人的证据比你多？答辩不评比谁多，比谁讲得清自己有什么。知道哪里弱，本身就是第十一条证据。下一节咱们按 3+3+2 结构写提纲，把三条强项和一条修了三遍的 bug 故事排进八分钟，对吧。'
+    practice: '完成标志：
+
+      [ ] 自证表每条都有结论 + 一句话说明
+
+      [ ] 三强两弱圈定，补救/诚实声明写好
+
+      [ ] 自证表进 Git（答辩材料之一）'
+    resource_ids:
+    - dg-v2-panorama
+    - dg-ten-day
+    tools:
+    - name: 十条证据自证表
+      note: 每条：证据路径 + 一句话「证明我会什么」
+    quiz:
+    - - 十条能力证据的核心思想？
+      - - 证明自己很努力
+        - 能力不是说出来的，是拿出来的
+        - 凑够十条就行
+      - 1
+      - 答辩不是讲情怀——打开文件、点开日志，拿得出来打勾。
+    - - 证据
+      - - 前端三态
+        - Skill 封装：说明书 + 边界 + 工具描述（D7–D9）
+        - 部署 URL
+      - 1
+      - skills/ 三件 + 边界 + 工具描述——Week 2 核心产出。
+    - - 六七条打叉应该？
+      - - 放弃答辩
+        - 诚实自证；优先补答辩要讲的那几条
+        - 隐藏弱项
+      - 1
+      - 「我知道哪里弱」本身就是第十一条证据。
+    media:
+    - kind: video
+      title: 口播课件 · 十条能力证据
+      object_key: documents/shared/course-media/day10-c2-ten-evidence.mp4
+      poster_key: documents/shared/course-media/day10-c2-ten-evidence-poster.jpg
+      duration_sec: 80
+    knowledge_cards:
+    - id: ten-evidences
+      term: 十条能力证据
+      plain: 能力不是说出来的，是拿出来的——每条必须有文件或演示支撑。
+      tag: 核心
+    - id: three-strong
+      term: 三强两弱
+      plain: 圈三条主打 + 两条最弱（今晚补或写诚实声明）——没人十项全能。
+      tag: 方法
+    - id: evidence-map
+      term: 证据地图
+      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM+SSE(D6) → Skill(D7-9) → Git(全程)。
+      tag: 结构
+    glossary_terms:
+    - id: gt-evidence-thinking
+      term: 证据思维
+      plain: FDE 出厂设置：每条能力必须挂得上文件、运行记录或现场演示。
+    local_prep:
+      codex_prompt: '十条证据考官。对照清单逐条问我「文件/演示在哪」；缺的标红并给最小补齐动作。
+
+        尤其核对第 7 条：Day6 DeepSeek+SSE 接电与降级记录。'
+      checklist: []
+  - id: c3
+    title: 答辩准备
+    minutes: 15
+    form: 实战
+    content_ref: class/bootcamp/day-11/section-03-defense-prep/lesson.md
+    content: '同学们，答辩八分钟，结构 3+3+2。作品三分钟、架构三分钟、迭代故事两分钟。好答辩不是讲得多，是砍得狠——没讲到的放互评问答里说。现在就开始写提纲，别等到上台才想结构，对吧。
+
+      第一段作品演示，别讲，演。驾驶舱全貌、唤起 Agent、流水线跑一步、闸上驳回一次、再批准放行——让观众记住一个它真的活着的瞬间，胜过十句功能罗列。掐表走三遍，超时就砍，砍到三分钟以内，对吧。
+
+      第二段架构，指着全景图讲四层、三 Skill 编排、闸在哪、为什么在那。弹药是第二节写好的十条一句话。第三段迭代故事，讲一个修了三次才修对的 bug——现象、定位、修错、修对、学到什么。讲好一个失败，比十个成功更像工程师，对吧。
+
+      现在写提纲一页纸，三段各列要点和主打证据。提纲只写关键词，别写逐字稿；三段开头第一句话背下来，其余靠证据现场说。紧张忘词？第一句接第二句，证据在手就不慌，咱们靠材料不靠背稿，对吧。
+
+      演示时系统挂了怎么办？预案准备好：一张昨日成功运行的日志截图兜底。挂了就指着日志讲，处理事故的方式也计分——慌了才扣分，不慌就是第九条证据。带走一句，咱们下一节真上台，对吧。'
+    practice: '完成标志：
+
+      [ ] 提纲一页纸填满，关键词式
+
+      [ ] 作品段掐表 ≤3′，且练过兜底
+
+      [ ] 提纲进 Git'
+    resource_ids:
+    - dg-v2-panorama
+    tools:
+    - name: 答辩提纲模板
+      note: 演示路径 / 架构三点 / 迭代故事 / 诚实声明
+    quiz:
+    - - 答辩 3+3+2 结构指？
+      - - 3 分钟寒暄 + 3 分钟演示 + 2 分钟问答
+        - 作品 3′ + 架构 3′ + 迭代故事 2′
+        - 3 页 PPT + 3 张图 + 2 个视频
+      - 1
+      - 讲好一个失败，比讲好十个成功更像工程师。
+    - - 诚实声明三件套？
+      - - 不好意思/下次一定/谢谢
+        - 程度 + 差距 + 下一步
+        - 不知道/没学过/没做过
+      - 1
+      - 弱项写清楚，比假装全能更加分。
+    - - 架构 3′ 建议讲哪三点？
+      - - 颜色/font/圆角
+        - 四层架构 + Agent/Skill 编排 + 确认闸设计（各一点）
+        - 团队介绍
+      - 1
+      - 从 V2.0 全景图右侧清单挑三条最强的讲。
+    media:
+    - kind: video
+      title: 口播课件 · 答辩 3+3+2
+      object_key: documents/shared/course-media/day10-c3-demo-prep.mp4
+      poster_key: documents/shared/course-media/day10-c3-demo-prep-poster.jpg
+      duration_sec: 87
+    knowledge_cards:
+    - id: defense-332
+      term: 答辩 3+3+2
+      plain: 作品 3′ + 架构 3′ + 迭代故事 2′——一页纸提纲即可。
+      tag: 结构
+    - id: honest-decl
+      term: 诚实声明
+      plain: 程度 + 差距 + 下一步——「我知道哪里弱」是第十一条证据。
+      tag: 技巧
+    glossary_terms:
+    - id: gt-defense-outline
+      term: defense-outline.md
+      plain: 答辩提纲一页纸：演示路径 / 架构三点 / 迭代五要素 / 诚实声明。
+    local_prep:
+      codex_prompt: '帮我生成 docs/defense-outline.md：作品演示路径 3′ / 架构三点 3′ / 迭代故事五要素 2′ / 诚实声明（哪块降级/未完成）。
+
+        用我仓库里的真实路径，不要空话。'
+      checklist: []
+  - id: c4
+    title: 答辩与互评（现场）
+    minutes: 30
+    form: 答辩
+    content_ref: class/bootcamp/day-11/section-04-defense/lesson.md
+    content: '同学们，上台了。每人八分钟，作品三加架构三加故事二，响铃就停。规则简单：讲得清、拦得住、查得了、迭代真——四个维度，就是你的毕业成绩单。第一个上的别紧张，评委还没建立比较基准呢，对吧。
+
+      听的人别走神，互评表每个分都要配一个细节——写不出细节，说明你也没听懂，分也不算数。讲得清是听懂做了什么、为什么；拦得住是确认闸真实演示；查得了是日志证据随手能打开；迭代真是 bug 故事经得起追问，对吧。
+
+      演示挂了不扣分，慌了才扣分——指着昨日成功日志讲，那就是你的第九条证据。被问倒了？这个我现在不会，我的打算是……三件套回答永远安全。互评按细节说话，分低但写得准是帮人，闭眼打高分是害人，咱们都懂。
+
+      GATE 10：答辩完成、互评收回至少两份、导师抽查十条证据三条、闸口演示真实。过了这关，授予 FDE 称号——课程介绍页上写的那个人，今天是你。带走一句：上台不是表演完美，是展示你会交付，对吧。'
+    practice: '完成标志：
+
+      [ ] 完成自己的 8 分钟答辩
+
+      [ ] 交出 ≥2 份带细节的互评表
+
+      [ ] 迭代日志记下被问住的问题'
+    resource_ids:
+    - dg-v2-panorama
+    - dg-orchestration
+    tools:
+    - name: 互评表
+      note: 证据 / 架构 / 表达 / 诚实度
+    quiz:
+    - - 答辩演示中途系统挂了，正确做法？
+      - - 慌神道歉下台
+        - 启用兜底：指着 runs/ 日志讲成功运行记录
+        - 说网络不好跳过
+      - 1
+      - 日志能回放——事故变成第九条证据的现场版。
+    - - GATE 10 互评要求？
+      - - 不需要
+        - 收回至少 2 份互评表
+        - 只互评老师
+      - 1
+      - 互评是答辩的组成部分——给别人反馈也是能力。
+    - - 评委必问「Agent 什么时候会选错」，最佳答法？
+      - - 永远不会
+        - 结合 Day 8 日志：工具描述重叠/缺边界/任务歧义
+        - 换模型就行
+      - 1
+      - 选错图谱 + 你自己的注入测试记录——最有说服力的答案。
+    media:
+    - kind: video
+      title: 口播课件 · GATE 10
+      object_key: documents/shared/course-media/day10-c4-defense.mp4
+      poster_key: documents/shared/course-media/day10-c4-defense-poster.jpg
+      duration_sec: 65
+    knowledge_cards:
+    - id: gate10
+      term: GATE 10
+      plain: 毕业答辩：V2.0 演示 + 十条证据 + 8 分钟结构 + 互评 ≥2 份。
+      tag: 验收
+    - id: demo-fallback
+      term: 演示兜底
+      plain: 系统挂了指着 runs/ 日志讲——处理事故的方式也计分。
+      tag: 技巧
+    - id: fde-title
+      term: FDE
+      plain: 不是第一天发的帽子——答辩通过后自然获得的称号。
+      tag: 里程碑
+    glossary_terms:
+    - id: gt-gate10
+      term: GATE 10
+      plain: 毕业验收闸：V2.0 全景 + 答辩 + 互评——通过后即 FDE。
+    local_prep:
+      codex_prompt: '你是模拟评委。按答辩提纲对我进行 8 分钟压力提问（每次 1 问）；我答后打分并指出证据是否在仓库。
+
+        覆盖：闸是否真拦、SSE/Agent 是否真通、三条迭代故事。'
+      checklist: []
+  - id: c5
+    title: 两周复盘 + 自学路线
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-11/section-05-two-week-review/lesson.md
+    content: '同学们，最后十五分钟，咱们不看代码。把十天折叠成一张地图：十天前我以为这行是什么，现在我知道它是什么；十天前我以为 AI 会怎样，现在我知道它会什么、不会什么。填进 final-review.md，对吧。
+
+      然后在行业地图上标你的位置——前端、接口、数据库、模型层各打勾、三角或叉。编排与安全单独一档，闸、日志、Skill，这是大多数人的空白，你已经有。大多数人学完一堆课还是不知道自己在哪，你知道长板短板，这就值，对吧。
+
+      遇到问题现在怎么干？定位、假设、验证、记录——这套方法比任何单点技巧都管用。十天够入门加方法论加一套真作品，不够精通；精通是接下来九十天的事，咱们别急着一口气吃成胖子，对吧。
+
+      最后选下一站：在职提效、求职转行、深入工程、还是独立产品。路线表在这，按下一站选，别按 hottest 选。想提效就先接真实数据；想求职就把十条证据翻译成简历语言；想深入工程就 WebSocket 和多 Agent——咱们各走各的路。
+
+      课到这里就结束了，路才刚开始。你是 FDE 了，去部署的地方见。以后遇到问题，AI 导师配置在每节目录里，方法也在——你已经不需要被领着走了。带走一句：地图在手，下一站自己选，对吧。'
+    practice: '完成标志：
+
+      [ ] final-review.md 四部分填满，每条具体（不写「继续努力」这种话）
+
+      [ ] 90 天路线有「本周内的第一个动作」
+
+      [ ] commit 进 Git——这是课程的最后一个 commit'
+    resource_ids:
+    - dg-ten-day
+    - dg-v2-panorama
+    - glossary
+    tools:
+    - name: 90 天路线模板
+      note: 目标 / 30d / 60d / 90d / 本周动作
+    quiz:
+    - - final-review.md 必须包含？
+      - - 只有感谢信
+        - 两周复盘 + 行业地图自评 + 90 天自学路线
+        - 代码全文
+      - 1
+      - 复盘是上路的第一步——不是写完就扔。
+    - - 行业地图自评每档必须？
+      - - 凭感觉
+        - 挂证据链接（文件路径或演示）
+        - 抄同学
+      - 1
+      - ✓/△/✗ 都要说得出为什么——和证据思维一致。
+    - - 90 天路线最低要求？
+      - - 「继续学习 AI」
+        - 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作
+        - 买课清单
+      - 1
+      - 拒绝空话——第一个动作本周就要做。
+    media:
+    - kind: video
+      title: 口播课件 · final-review.md
+      object_key: documents/shared/course-media/day10-c5-gate10.mp4
+      poster_key: documents/shared/course-media/day10-c5-gate10-poster.jpg
+      duration_sec: 87
+    knowledge_cards:
+    - id: final-review
+      term: final-review.md
+      plain: 两周复盘 + 行业地图自评（✓/△/✗ 带证据）+ 90 天自学路线。
+      tag: 交付
+    - id: thought-knew
+      term: 我以为 → 我知道
+      plain: 三对认知翻转——训练营真正的个人收获。
+      tag: 复盘
+    - id: ninety-day
+      term: 90 天路线
+      plain: 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作——拒绝空话。
+      tag: 上路
+    glossary_terms:
+    - id: gt-fde
+      term: FDE（Forward Deployed Engineer）
+      plain: 定方向 + 做验收 + 能派活给 AI——答辩通过后你就是这个角色。
+    local_prep:
+      codex_prompt: '协助写 docs/final-review.md：两周复盘（做成/做错/下次）、行业地图自评、90 天自学路线（含更自主 Agent 要补的：幂等/注入/少闸信任分级）。
+
+        要求具体到主题，不要鸡汤。'
+      checklist: []
+quiz:
+  pass_rate: 0.67
+  questions:
+  - q: 驾驶舱助手位三要件？
+    options:
+    - 头像/昵称/表情
+    - 唤起 / 状态可见 / 闸在页内
+    - 语音/视频/文字
+    answer: 1
+    explain: 驾驶位不是聊天框——刹车踩得到才叫接入。
+  - q: 接入施工优先级？
+    options:
+    - 唤起优先
+    - 闸 > 状态 > 唤起
+    - 一样重要
+    answer: 1
+    explain: 一个真闸胜过三个半成品。
+  - q: V2.0 全景包含？
+    options:
+    - 只有前端
+    - 六区块 + Agent + 三 Skill + 助手位活着
+    - 只有 Skill
+    answer: 1
+    explain: 九天逐层接电的最后一块拼图。
+  - q: 十条能力证据的核心？
+    options:
+    - 凑数量
+    - 每条有文件或演示支撑——能力不是说出来的是拿出来的
+    - 背定义
+    answer: 1
+    explain: 答辩 = 拿证据，不是讲情怀。
+  - q: 答辩 3+3+2 是？
+    options:
+    - 3 页纸 + 3 分钟 + 2 人
+    - 作品 3′ + 架构 3′ + 迭代故事 2′
+    - 三个问题 + 三个演示 + 两个评委
+    answer: 1
+    explain: 结构固定——一页纸提纲即可。
+  - q: 演示中途系统挂了的兜底？
+    options:
+    - 跳过演示
+    - 指着 runs/ 日志讲昨日成功记录
+    - 怪网络
+    answer: 1
+    explain: 处理事故的方式也计分——日志是案底。
+  - q: 诚实声明三件套？
+    options:
+    - 抱歉/谢谢/再见
+    - 程度 + 差距 + 下一步
+    - 不知道/没做过/不会
+    answer: 1
+    explain: 「我知道哪里弱」是第十一条证据。
+  - q: GATE 10 互评要求？
+    options:
+    - 不需要
+    - 至少收回 2 份互评表
+    - 只评老师
+    answer: 1
+    explain: 互评是答辩组成部分。
+  - q: final-review.md 包含？
+    options:
+    - 代码 dump
+    - 两周复盘 + 行业地图自评 + 90 天路线
+    - 只有感谢
+    answer: 1
+    explain: 复盘 + 自评 + 上路计划——毕业交付物。
+  - q: FDE 称号何时获得？
+    options:
+    - Day 1 注册就有
+    - 答辩通过后自然获得
+    - 交学费就有
+    answer: 1
+    explain: 不是第一天发的帽子——今天走到那里。
+  - q: 评委常问「Agent 什么时候会选错」，最佳素材？
+    options:
+    - 猜测
+    - Day 8 agent-run-log 里的选错分析
+    - 网上文章
+    answer: 1
+    explain: 用自己的注入测试和选型实验回答——最有说服力。
+  - q: 90 天路线拒绝什么？
+    options:
+    - 具体里程碑
+    - 「继续学习 AI」这类空话
+    - 本周第一个动作
+    answer: 1
+    explain: 可衡量 + 分阶段 + 本周就能做的第一步。
+  - q: 证据
+    options:
+    - 部署 URL
+    - Git 迭代史——能讲演进故事
+    - 方向卡
+    answer: 1
+    explain: commit 历史是十天能力的时间线证据。
+  - q: 行业地图自评 ✓/△/✗ 必须？
+    options:
+    - 凭感觉
+    - 每条挂证据链接
+    - 全打 ✓
+    answer: 1
+    explain: 和证据思维一致——说得出为什么。
+  - q: 迭代故事 2′ 建议讲什么？
+    options:
+    - 十个成功
+    - 一个失败 + 怎么发现 + 怎么改 + 学到什么
+    - 团队八卦
+    answer: 1
+    explain: 讲好一个失败比十个成功更像工程师。
+nodes:
+- type: learn
+  title: 今日课节（5 节 · 110′）
+- type: quiz
+  title: Day11 概念验收
+- type: lab
+  title: V2.0 接入 + 答辩提纲与毕业复盘
+- type: project
+  title: 毕业交付：final-review.md + 答辩完成
+- type: review
+  title: 交付自检与 GATE 10 · 毕业验收
+lab:
+  runner: agent
+  workspace_mode: cumulative
+  primary_files:
+  - docs/final-review.md
+  - docs/defense-outline.md
+  inherited_files:
+  - docs/D1_选题确认单.md
+  - docs/D1_团队协作卡.md
+  - docs/D1_项目任务书.md
+  - docs/PRD.md
+  - design/prototypes/index.html
+  - docs/D2-L4_接口契约.md
+  - docs/D2_前端走查.md
+  - docs/D3-L1_项目地图.md
+  - docs/D3-L2_数据表说明.md
+  - docs/D3-L3_接口验证.md
+  - docs/D3-L4_Week2_AI交接.md
+  - docs/D3_冒烟记录.md
+  - docs/D4-L1_测试用例表.md
+  - docs/D4-L2_执行矩阵.md
+  - docs/D4-L2_缺陷报告.md
+  - docs/D4-L4_验收清单.md
+  - docs/D4_报审材料清单.md
+  - docs/D5-L1_研发全流程图.md
+  - docs/D5-L2_理解补缺.md
+  - docs/D5-L3_本地交付检查.md
+  - docs/D5_项目复盘.md
+  - docs/D5_五分钟路演.md
+  - docs/D5_综合验收.md
+  - README.md
+  - skills/skill-01.md
+  - runs/
+  - agent-run-log.md
+  - docs/orchestration.md
+  coach:
+    help_mode: debug
+    skill_id: fde-coach
+    max_help_level: 3
+  adapter_version: '1.0'
+  agent:
+    prompt_template: '你是收官日教练。背景：FDE 训练营 Day 10，学员要完成 V2.0 接入与毕业复盘。
+
+      任务：1. 协助把 Agent 接入驾驶舱助手位——三要件按优先级施工（闸在页内 > 状态可见 > 唤起），接不通真实环境时采用指令面板降级并写书面权衡；2. 生成 docs/defense-outline.md——答辩提纲一页纸（作品演示路径/架构讲解三点/迭代故事五要素/诚实声明）；3.
+      生成 docs/final-review.md——两周复盘：三对「我以为→我知道」、行业地图自评（五档 ✓/△/✗ 带证据链接）、90 天路线（可衡量目标 + 30/60/90 里程碑 + 本周第一个动作）。
+
+      要求：拒绝空话；每条自评都要挂得上证据路径。'
+  rubric:
+  - check: file_exists
+    args:
+      path: docs/final-review.md
+  - check: text_contains
+    args:
+      path: docs/final-review.md
+      needle: 90 天
+  - check: text_contains
+    args:
+      path: docs/final-review.md
+      needle: 我以为

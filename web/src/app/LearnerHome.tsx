@@ -20,8 +20,8 @@ import { TaskHome } from "./TaskHome";
 type MobileTab = "course" | "content" | "task";
 
 const DEFAULT_WEEKS: Record<string, number[]> = {
-  "1": [1, 2, 3, 4, 5],
-  "2": [6, 7, 8, 9, 10, 11, 12],
+  "1": [1, 2, 3, 4, 5, 6],
+  "2": [7, 8, 9, 10, 11, 12],
 };
 
 function buildPendingCount(days: DaySummary[]): number {
@@ -426,7 +426,7 @@ export function LearnerHome() {
 
   return (
     <LearnerSessionProvider value={sessionValue}>
-      <div className={`app-shell${activeDay ? " learning-demo-shell" : ""}${isLabActive ? " shell-lab" : ""}`}>
+      <div className={`app-shell learning-demo-shell${isLabActive ? " shell-lab" : ""}`}>
         <Nav
           variant="learner-workbench"
           onHomework={goToHomework}

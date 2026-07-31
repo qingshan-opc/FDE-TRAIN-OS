@@ -4,15 +4,19 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-gate-demo",
-    "file": "02-gate-demo.txt"
+    "id": "02-live-demo",
+    "file": "02-live-demo.txt"
   },
   {
-    "id": "03-oral-three",
-    "file": "03-oral-three.txt"
+    "id": "03-oral-four-pack",
+    "file": "03-oral-four-pack.txt"
   },
   {
-    "id": "04-close",
-    "file": "04-close.txt"
+    "id": "04-gate-checklist",
+    "file": "04-gate-checklist.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
   }
 ]

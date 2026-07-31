@@ -1,29 +1,35 @@
 {
-  "total": 73.162,
+  "total": 99.342,
   "segments": [
     {
       "id": "01-open",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/01-open.wav",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s05_course/tts/01-open.wav",
       "start": 0.0,
-      "duration": 12.8
+      "duration": 11.68
     },
     {
-      "id": "02-gate-demo",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/02-gate-demo.wav",
-      "start": 13.05,
-      "duration": 18.24
+      "id": "02-live-demo",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s05_course/tts/02-live-demo.wav",
+      "start": 11.93,
+      "duration": 20.08
     },
     {
-      "id": "03-oral-three",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/03-oral-three.wav",
-      "start": 31.54,
-      "duration": 22.332
+      "id": "03-oral-four-pack",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s05_course/tts/03-oral-four-pack.wav",
+      "start": 32.26,
+      "duration": 24.811
     },
     {
-      "id": "04-close",
-      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day09_s05_course/tts/04-close.wav",
-      "start": 54.122,
-      "duration": 19.04
+      "id": "04-gate-checklist",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s05_course/tts/04-gate-checklist.wav",
+      "start": 57.321,
+      "duration": 24.091
+    },
+    {
+      "id": "05-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day08_s05_course/tts/05-close.wav",
+      "start": 81.662,
+      "duration": 17.68
     }
   ]
 }

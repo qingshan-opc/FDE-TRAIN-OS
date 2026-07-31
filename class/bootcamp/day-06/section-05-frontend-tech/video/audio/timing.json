@@ -1,0 +1,59 @@
+{
+  "total": 228.422,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 20.8
+    },
+    {
+      "id": "02-define",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/02-define.wav",
+      "start": 21.05,
+      "duration": 23.931
+    },
+    {
+      "id": "03-platforms",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/03-platforms.wav",
+      "start": 45.231,
+      "duration": 18.8
+    },
+    {
+      "id": "04-web",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/04-web.wav",
+      "start": 64.281,
+      "duration": 47.76
+    },
+    {
+      "id": "05-app",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/05-app.wav",
+      "start": 112.291,
+      "duration": 24.491
+    },
+    {
+      "id": "06-mini-desk",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/06-mini-desk.wav",
+      "start": 137.032,
+      "duration": 26.96
+    },
+    {
+      "id": "07-four-q",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/07-four-q.wav",
+      "start": 164.242,
+      "duration": 26.4
+    },
+    {
+      "id": "08-day3",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/08-day3.wav",
+      "start": 190.892,
+      "duration": 23.36
+    },
+    {
+      "id": "09-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/09-close.wav",
+      "start": 214.502,
+      "duration": 13.92
+    }
+  ]
+}

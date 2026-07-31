@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="软件开发全流程：需求调研到迭代">
+  <rect width="1200" height="460" fill="#f2f5f0"/>
+  <text x="48" y="52" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">一个软件的完整旅程（六站）</text>
+  <text x="48" y="78" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">FROM "I WANT" TO "I'M USING IT"</text>
+  <!-- six stations -->
+  <g>
+    <rect x="48" y="110" width="172" height="190" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+    <text x="134" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1400ff" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 1</text>
+    <text x="134" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">需求调研</text>
+    <text x="134" y="196" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.6)">谁的什么问题？</text>
+    <text x="134" y="224" text-anchor="middle" font-size="12" fill="#2f9e44">别问想吃什么</text>
+    <text x="134" y="244" text-anchor="middle" font-size="12" fill="#2f9e44">看他剩什么</text>
+    <text x="134" y="278" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">访谈 · 观察 · 问卷 · 竞品</text>
+  </g>
+  <path d="M220 205 L248 205 M248 205 L240 199 M248 205 L240 211" stroke="#231f20" stroke-width="2" fill="none"/>
+  <g>
+    <rect x="250" y="110" width="172" height="190" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+    <text x="336" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1400ff" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 2</text>
+    <text x="336" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">原型确认</text>
+    <text x="336" y="196" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.6)">是这个意思吗？</text>
+    <text x="336" y="224" text-anchor="middle" font-size="12" fill="#2f9e44">先出样板间</text>
+    <text x="336" y="244" text-anchor="middle" font-size="12" fill="#2f9e44">再动工</text>
+    <text x="336" y="278" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">线框图 · 高保真原型</text>
+  </g>
+  <path d="M422 205 L450 205 M450 205 L442 199 M450 205 L442 211" stroke="#231f20" stroke-width="2" fill="none"/>
+  <g>
+    <rect x="452" y="110" width="172" height="190" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+    <text x="538" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1400ff" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 3</text>
+    <text x="538" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">开发</text>
+    <text x="538" y="196" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.6)">把样品变成真的</text>
+    <text x="538" y="224" text-anchor="middle" font-size="12" fill="#2f9e44">你描述 · AI 写</text>
+    <text x="538" y="244" text-anchor="middle" font-size="12" fill="#2f9e44">你盯着</text>
+    <text x="538" y="278" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">成本被压得最快的一站</text>
+  </g>
+  <path d="M624 205 L652 205 M652 205 L644 199 M652 205 L644 211" stroke="#231f20" stroke-width="2" fill="none"/>
+  <g>
+    <rect x="654" y="110" width="172" height="190" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+    <text x="740" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1400ff" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 4</text>
+    <text x="740" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">测试验收</text>
+    <text x="740" y="196" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.6)">说好的都做到了吗</text>
+    <text x="740" y="224" text-anchor="middle" font-size="12" fill="#2f9e44">照单子验货</text>
+    <text x="740" y="244" text-anchor="middle" font-size="12" fill="#2f9e44">不是「我觉得行」</text>
+    <text x="740" y="278" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">Rubric 清单 · 逐条打勾</text>
+  </g>
+  <path d="M826 205 L854 205 M854 205 L846 199 M854 205 L846 211" stroke="#231f20" stroke-width="2" fill="none"/>
+  <g>
+    <rect x="856" y="110" width="172" height="190" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+    <text x="942" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1400ff" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 5</text>
+    <text x="942" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">上线</text>
+    <text x="942" y="196" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.6)">我这能跑→大家能用</text>
+    <text x="942" y="224" text-anchor="middle" font-size="12" fill="#2f9e44">搬到一直开着的</text>
+    <text x="942" y="244" text-anchor="middle" font-size="12" fill="#2f9e44">电脑上（下节）</text>
+    <text x="942" y="278" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">部署 · 上云</text>
+  </g>
+  <path d="M1028 205 L1056 205 M1056 205 L1048 199 M1056 205 L1048 211" stroke="#231f20" stroke-width="2" fill="none"/>
+  <g>
+    <rect x="1058" y="110" width="130" height="190" rx="10" fill="#231f20"/>
+    <text x="1123" y="140" text-anchor="middle" font-size="11" letter-spacing="2" fill="#1cd5b0" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STATION 6</text>
+    <text x="1123" y="168" text-anchor="middle" font-size="18" font-weight="900" fill="#f2f5f0" style="font-family:'Songti SC',serif">迭代</text>
+    <text x="1123" y="196" text-anchor="middle" font-size="12" fill="rgba(242,245,240,.65)">回到第一站</text>
+    <text x="1123" y="224" text-anchor="middle" font-size="12" fill="#1cd5b0">上线不是终点</text>
+    <text x="1123" y="244" text-anchor="middle" font-size="12" fill="#1cd5b0">是起点</text>
+    <text x="1123" y="278" text-anchor="middle" font-size="11" fill="rgba(242,245,240,.5)">软件是改完的</text>
+  </g>
+  <!-- loop arrow -->
+  <path d="M1123 300 C1123 380 134 380 134 306" fill="none" stroke="#1400ff" stroke-width="2" stroke-dasharray="6 5"/>
+  <path d="M134 302 L128 314 L140 314 Z" fill="#1400ff"/>
+  <!-- waterfall vs agile -->
+  <g>
+    <rect x="48" y="396" width="556" height="46" rx="8" fill="none" stroke="#f24e54" stroke-width="1.5"/>
+    <text x="66" y="424" font-size="13.5" font-weight="700" fill="#f24e54">瀑布：先画好整栋楼的图纸，一口气装完——想得全，但住进去才发现厨房不顺手。</text>
+  </g>
+  <g>
+    <rect x="628" y="396" width="524" height="46" rx="8" fill="none" stroke="#2f9e44" stroke-width="1.5"/>
+    <text x="646" y="424" font-size="13.5" font-weight="700" fill="#2f9e44">敏捷：一周装修一间房，住进去再决定下一间——你前四天就是这么干的。</text>
+  </g>
+</svg>

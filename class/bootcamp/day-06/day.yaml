@@ -1,470 +1,829 @@
 day: 6
-project: LLM 理论日
-project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
+project: 周六 · FDE 全栈理论 / 互联网地图
+project_brief: |-
+  今天不写长文地图。请基于「你自己的项目」（默认：部门周报助手；也可换成你的点子）手绘一张技术架构图，拍照上传。
 
+  怎么做：
+  1）打开资源「手绘架构图 · 搭档提示词」，整份粘进 AI，先回答它的 4 个约束问题，拿到「该画什么」的四层清单；
+  2）自己动手画（纸笔 / 白板 / 手写板均可）——禁止截网上现成架构图充数；
+  3）图上至少能看出：前端入口、后端/服务、数据存储、一次外部依赖（有则标，无则写「暂无」）；
+  4）上传清晰照片，并在复盘里用 8–12 句话讲清「为什么这样分层」。
 
-  认知卡怎么做：
-
-  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
-
-  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
-
-  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
-
-  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
-
-
-  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
+  过闸标准：是你自己的项目、四层齐、能对着图讲清楚。
 resources:
-- id: dg-llm-ecosystem
-  title: 讲解图 · LLM 生态分层
+- id: h5-tech
+  title: 交互讲义 · 前后端技术选型地图
+  kind: site
+  summary: 点卡片看每个框架：是什么 / 什么时候选 / 什么时候别选 / AI 写得怎么样
+  url: /course-assets/resources/h5/tech-stack-explorer.html
+- id: dg-stages
+  title: 讲解图 · 企业数字化五阶段
   kind: diagram
-  summary: 基建→模型→编排→应用，标出 FDE 工作层
-  url: /course-assets/assets/diagrams/llm-ecosystem.svg
-- id: dg-four-layer
-  title: 讲解图 · 四层架构地图
+  summary: 信息化→数字化→网络化→智能化→Agent 化
+  url: /course-assets/assets/diagrams/enterprise-digital-stages.svg
+- id: h5-cloud
+  title: 交互讲义 · 云原生演进之旅
+  kind: site
+  summary: 从桌底一台电脑到按量付费，五站可点开
+  url: /course-assets/resources/h5/cloud-native-journey.html
+- id: h5-journey
+  title: 交互讲义 · 软件开发全流程
+  kind: site
+  summary: 需求调研到上线迭代，每步展开看例子
+  url: /course-assets/resources/h5/software-journey.html
+- id: cli-manual
+  title: 命令手册 · 服务器日常八句 + 排障四步
+  kind: doc
+  summary: 查的，不是背的：八句起步 + 第二梯队 + 新人三坑
+  url: /course-assets/resources/server-cli-manual.md
+- id: dg-waves
+  title: 讲解图 · 技术浪潮白话版
   kind: diagram
-  summary: 与驾驶舱模块对齐的生态四层
-  url: /course-assets/assets/diagrams/four-layer.svg
-- id: dg-agent-loop
-  title: 讲解图 · Agent 循环
+  summary: 六次浪潮，每次重排「谁值钱」
+  url: /course-assets/assets/diagrams/day5-waves.svg
+- id: dg-process
+  title: 讲解图 · 软件开发流程
   kind: diagram
-  summary: 理解→规划→Tool Call→观察→继续
-  url: /course-assets/assets/diagrams/agent-loop.svg
-- id: dg-llm-capability
-  title: 讲解图 · LLM 能力与边界
+  summary: 需求调研→原型→开发→验收→上线→迭代
+  url: /course-assets/assets/diagrams/day5-dev-process.svg
+- id: dg-cloud
+  title: 讲解图 · 云原生演进
   kind: diagram
-  summary: Token、窗口、幻觉、擅长与不擅长
-  url: /course-assets/assets/diagrams/llm-capability.svg
-- id: dg-context-assembly
-  title: 讲解图 · Context 组装与 RAG
+  summary: 物理机→虚拟机→容器→K8s→Serverless
+  url: /course-assets/assets/diagrams/day5-cloud-native.svg
+- id: dg-fe-map
+  title: 讲解图 · 前端框架地图
   kind: diagram
-  summary: Prompt 装填 + 检索增强管线
-  url: /course-assets/assets/diagrams/context-assembly.svg
-- id: dg-harness
-  title: 讲解图 · Harness 解剖
+  summary: React/Vue/Angular/Svelte/不用框架 怎么选
+  url: /course-assets/assets/diagrams/day5-frontend-map.svg
+- id: dg-be-map
+  title: 讲解图 · 后端框架地图
   kind: diagram
-  summary: 工具表、记忆、规划、重试、日志
-  url: /course-assets/assets/diagrams/harness-anatomy.svg
-- id: dg-workflow-agent
-  title: 讲解图 · Workflow vs Agent
+  summary: Java/Python/Node/Go 与数据库怎么选
+  url: /course-assets/assets/diagrams/day5-backend-map.svg
+- id: dg-theory
+  title: 讲解图 · 全栈理论地图（今日总收束）
   kind: diagram
-  summary: 写死流程 vs 现场决策
-  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
+  summary: 五大主题围着「定方向 + 做验收」
+  url: /course-assets/assets/diagrams/day5-fullstack-theory.svg
+- id: tk-readme
+  title: 提示词工具包 · 使用说明（回顾）
+  kind: download
+  summary: 四天四份角色提示词的总索引
+  url: /course-assets/resources/prompt-toolkit/README.md
+- id: tk-arch-sketch
+  title: 手绘架构图 · 搭档提示词
+  kind: download
+  summary: 先问清约束，再给四层清单——帮你理清该画什么，不替你画
+  url: /course-assets/resources/prompt-toolkit/Day5_Arch_Sketch_Prompt.md
 - id: glossary
-  title: 新概念词典 · 18 词
+  title: 新概念词典（速查版）
   kind: site
   summary: 可检索卡片：定义 / 哪天遇到 / 延伸阅读
   url: /course-assets/resources/h5/glossary.html
-- id: glossary-md
-  title: 词典完整版 · glossary.md
-  kind: doc
-  summary: 18 词 + 自测 6 题 + 课程落点
-  url: /course-assets/resources/glossary.md
-- id: tk-cognition-card
-  title: LLM 认知卡 · 搭档提示词
-  kind: download
-  summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
-  url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md
 capsule_extra:
   c1:
     resource_ids:
-    - dg-llm-ecosystem
-    - dg-four-layer
+    - dg-waves
     - glossary
     media:
     - kind: video
-      title: 口播课件 · 生态四层地图
-      object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
-      poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
-      duration_sec: 496
+      title: 口播课件 · 互联网地图：这个时代是怎么来的
+      object_key: documents/shared/course-media/day05-c1-worldview.mp4
+      poster_key: documents/shared/course-media/day05-c1-worldview-poster.jpg
+      duration_sec: 391
     knowledge_cards:
-    - id: llm-core
-      term: LLM · 大语言模型
-      plain: 用海量文本训练的「预测下一个词」机器；生成、理解、推理都从这机制长出。
+    - id: wave-law
+      term: 浪潮规律
+      plain: 每波把「动手做」压便宜一层，把「知道该做什么、做得对不对」抬贵一层。
+      detail: 浪潮不淘汰人，淘汰的是「只会动手」。判断与验收一波比一波贵——这就是你坐在这门课里的原因。
       tag: 核心
-    - id: four-layers
-      term: 生态四层
-      plain: 基建→模型→编排→应用；FDE 主要在编排层和应用层动手。
+    - id: cheap-expensive
+      term: 谁变贵 / 谁变便宜
+      plain: 会把纸上的活搬进新工具的人变贵；只守着旧手艺的人变便宜。
+      detail: 算盘→电脑、店面→网页、自建机房→云、桌面→口袋、复制粘贴→Agent——每波都在重排价目表。
       tag: 框架
-    - id: open-closed
-      term: 开源权重 vs 闭源 API
-      plain: 闭源调 endpoint 按 Token 付费；开源下载权重自部署——能力、成本、隐私三角权衡。
-      tag: 选型
-    - id: multimodal-bound
-      term: 多模态边界
-      plain: 不只文本还能看图听音；本课驾驶舱先盯文本 + SSE。
-      tag: 边界
-    - id: sse-stream
-      term: SSE · Server-Sent Events
-      plain: 服务端按事件/Token 一段段推给浏览器；Chat 流式常用。助手位建议 SSE，不是另一种供应商。
-      tag: 接入
-    - id: api-vs-sse
-      term: 一次性响应 vs SSE
-      plain: 一次性等整包 JSON；SSE 边收边显示。API 是调用入口，SSE 是流式通道。
-      tag: 接入
+    - id: ai-intern
+      term: 认字的实习生
+      plain: AI 像认字很快的实习生：你不说清楚他就乱干；干完了也不知道对不对。
+      detail: 定方向（说清楚）和做验收（判断对错）都在你——这两件才是正在变贵的能力。
+      tag: 类比
+    - id: gen-four
+      term: 四代用 AI
+      plain: 对话搬运 → 提示词工程 → Tool Call / Vibe Coding → Agent 原生系统。
+      detail: 第一代你是搬运工；第二代把格式写死仍不稳定；第三代模型自己调工具；第四代记忆/Harness/RAG/流程全部接入。
+      tag: 演进
+    - id: agent-native
+      term: Agent 原生系统
+      plain: Agent 把工具、记忆、Harness、RAG 和企业流程资产接起来，跑超长任务。
+      detail: 这是本课程的地基词——后面所有课都盖在这块上。形态可能是软件、SaaS，甚至未来的操作系统。
+      tag: 地基
+    - id: dispatch-accept
+      term: 派活与验收
+      plain: 派活=把任务写清楚（PRD/提示词）；验收=对照标准判断对不对。
+      detail: 前四天你练的就是这两样——写 PRD、写提示词、过 Rubric。会派活、会验收的人，一波比一波贵。
+      tag: 行动
     glossary_terms:
+    - id: gt-wave
+      term: 技术浪潮
+      plain: 一波新工具把「动手」变便宜、把「判断与验收」变贵的时代切换。
+      detail: 电脑、网页、云、移动、AI 帮写、Agent 原生——六波都在重排谁值钱。
     - id: gt-llm
       term: LLM
-      plain: 大语言模型：预测下一个 Token，不是核实过的事实库。
-    - id: gt-open-closed
-      term: 开源 vs 闭源
-      plain: 云 API 省心按量付；权重自部署换隐私与成本。
-    - id: gt-sse
-      term: SSE
-      plain: Server-Sent Events；流式返回通道，挂在 stream 接口上。
-    - id: gt-multimodal
-      term: 多模态
-      plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
-    quiz:
-    - - LLM 的核心机制是什么？
-      - - 检索互联网最新信息
-        - 预测下一个 Token
-        - 存储企业数据库
-      - 1
-      - 生成、理解、推理都从「接龙」机制长出——不是搜索引擎也不是数据库。
-    - - 闭源 API（如 OpenAI）和开源权重（如 Qwen）的主要权衡是？
-      - - 闭源一定更聪明
-        - 能力、成本、隐私的三角权衡
-        - 开源不能 Tool Call
-      - 1
-      - 闭源快省心；开源可自部署换隐私——没有唯一正确答案，看场景。
-    - - 本课驾驶舱为什么刻意只用文本能力？
-      - - 多模态违法
-        - 聚焦摘要/问答/Tool Call，别用文本模型硬做不擅长的事
-        - 多模态太贵不能用
-      - 1
-      - 知道多模态存在，但训练聚焦文本链路——边界意识是 FDE 基本功。
-    - - API 和 SSE 的正确关系是？
-      - - SSE 是另一家模型供应商
-        - API 是调用入口；SSE 常是流式返回通道（stream）
-        - 有了 SSE 就不必调 API
-      - 1
-      - 别对立：先打到模型 endpoint，再用 SSE 一段段收。
-    - - 驾驶舱助手位本课建议怎么接？
-      - - 只等整包 JSON，别流式
-        - DeepSeek 等云 API + SSE 流式；Key 不进前端
-        - 必须自建 GPU 集群
-      - 1
-      - 体感与可中断靠 SSE；密钥与降级是工程底线。
-  c2:
-    resource_ids:
-    - dg-llm-capability
-    - glossary
-    media:
-    - kind: video
-      title: 口播课件 · Token / 窗口 / 幻觉
-      object_key: documents/shared/course-media/day06-c2-token.mp4
-      poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
-      duration_sec: 373
-    knowledge_cards:
-    - id: token-meter
-      term: Token 计量
-      plain: 模型读写最小单位；中文约 0.6–1 字/Token；API 按 input+output 计费。
-      tag: 核心
-    - id: context-window
-      term: 上下文窗口
-      plain: 一次调用能看到的 Token 上限；满了可截断、摘要或 RAG。
-      tag: 核心
-    - id: hallucination
-      term: 幻觉 Hallucination
-      plain: 给「最像真的」而非「核实过的」答案——机制如此，不是偶发 bug。
-      tag: 核心
-    glossary_terms:
-    - id: gt-token
-      term: Token / 窗口
-      plain: Token 是计费单位；窗口是一次能看多少——对话越长越贵越慢。
+      plain: 大语言模型：用海量文本练出来的「预测下一个词」的机器。
     - id: gt-hallucination
       term: 幻觉
-      plain: 流畅 plausible 优先于 fact-check；关键事实必须可溯源+验收。
-    quiz:
-    - - Token 和「一个汉字」的关系是？
-      - - 完全相等
-        - 中文约 0.6–1 字/Token，不是一字一 Token
-        - Token 只用于英文
-      - 1
-      - API 账单按 Token 计——压缩 Prompt 是真省钱。
-    - - 上下文窗口满了，常见策略不包括？
-      - - 截断最早消息
-        - 无限扩大窗口忽略成本
-        - RAG 只检索相关片段
-      - 1
-      - 窗口是硬顶+成本顶——不能假装无限。
-    - - 为什么说幻觉是「机制」不是 bug？
-      - - 模型坏了要返厂
-        - 训练目标是 plausible 接龙，不是 fact-check
-        - 只有旧模型才幻觉
-      - 1
-      - 对策是 RAG+Eval+Guardrails，不是「再 prompt 一次就会好」。
-  c3:
-    resource_ids:
-    - dg-context-assembly
-    - glossary
-    media:
-    - kind: video
-      title: 口播课件 · Prompt / Context / RAG
-      object_key: documents/shared/course-media/day06-c3-rag.mp4
-      poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
-      duration_sec: 327
-    knowledge_cards:
-    - id: prompt-eng
-      term: Prompt 工程
-      plain: 任务说明书：角色+背景+任务+约束+输出格式，可迭代可验收。
-      tag: 核心
-    - id: context-eng
-      term: Context Engineering
-      plain: 决定这次调用放什么进窗口——给少瞎编，给多迷失。
-      tag: 核心
-    - id: rag-pipeline
-      term: RAG 管线
-      plain: 切块→嵌入→检索→拼 Prompt→生成；治幻觉主流方案之一。
-      tag: 核心
-    - id: finetune-prompt
-      term: Fine-tune vs Prompt
-      plain: 改权重贵慢；改 Prompt 快便宜——90% 场景先用后者。
-      tag: 选型
-    glossary_terms:
-    - id: gt-prompt
-      term: Prompt 工程
-      plain: 四要素+约束+格式；工程师看完不用回来问第二遍。
-    - id: gt-context
-      term: Context Engineering
-      plain: 装填窗口的手艺——PRD 片段 vs 整库，取舍决定质量。
-    - id: gt-rag
-      term: RAG
-      plain: 先检索相关片段再生成；驾驶舱摘要是简化版 RAG 思想。
-    quiz:
-    - - Prompt 工程「四要素」不包括？
-      - - 角色定位
-        - GPU 型号
-        - 输出格式
-      - 1
-      - 四要素：角色、背景、任务、格式——再加约束。
-    - - Context Engineering 主要解决什么问题？
-      - - 让模型更快
-        - 决定这次调用放什么进窗口，避免给少瞎编/给多迷失
-        - 替代 Fine-tuning
-      - 1
-      - 窗口有限——装填是手艺，不是玄学。
-    - - RAG 的正确顺序是？
-      - - 生成→检索→嵌入
-        - 切块→嵌入→检索→拼 Prompt→生成
-        - 检索→Fine-tune→生成
-      - 1
-      - 先捞相关片段再让模型基于片段回答。
-    - - 90% 场景应该优先？
-      - - Fine-tuning
-        - Prompting（+RAG+Eval）
-        - 换更大的模型
-      - 1
-      - Fine-tune 贵慢——Prompt 方案没过闸不升级。
-  c4:
-    resource_ids:
-    - dg-llm-ecosystem
-    - glossary
-    media:
-    - kind: video
-      title: 口播课件 · Eval / Guardrails / Vibe Coding
-      object_key: documents/shared/course-media/day06-c4-eval.mp4
-      poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
-      duration_sec: 272
-    knowledge_cards:
-    - id: eval-core
-      term: Eval · 评测
-      plain: 固定题库+明确判分+可重复跑——代替「我觉得还行」。
-      tag: 核心
-    - id: guardrails
-      term: Guardrails · 护栏
-      plain: 输入过滤、输出约束、越界降级——空结果别瞎编。
-      tag: 核心
-    - id: vibe-coded
-      term: Vibe Coding
-      plain: 自然语言让 AI 写代码；爽点是真的，验收责任也是真的。
-      tag: 全程
-    glossary_terms:
-    - id: gt-eval
-      term: Eval
-      plain: 给 AI 出考卷；模型/Prompt 改版后重跑，分掉别发版。
-    - id: gt-guardrails
-      term: Guardrails
-      plain: 敏感词、空结果、超时——三条降级路径企业必备。
-    - id: gt-vibe
-      term: Vibe Coding
-      plain: diff 可以 vibe，合并进 main 必须 Eval+人工看关键路径。
-    quiz:
-    - - Eval 和「我觉得还行」的本质区别？
-      - - Eval 更贵
-        - Eval 可重复、有固定判分，第三方能客观判过/不过
-        - 没有区别
-      - 1
-      - Rubric 和快测都是 Eval 的朴素版。
-    - - 检索为空时 Guardrails 应该？
-      - - 让模型编造合理答案
-        - 拒答/模板降级/转人工，禁止 hallucinate
-        - 自动 Fine-tune
-      - 1
-      - 空结果瞎编是线上事故高发区。
-    - - 「带验收的 Vibe Coding」指？
-      - - 不许用 AI 写代码
-        - 可以用 AI 写 diff，但合并前必须 Eval 和验收关键路径
-        - 只要 vibe 快就行
-      - 1
-      - 会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
-  c5:
-    resource_ids:
-    - dg-agent-loop
-    - dg-harness
-    - dg-workflow-agent
-    - glossary
-    media:
-    - kind: video
-      title: 口播课件 · Agent / Harness / MCP
-      object_key: documents/shared/course-media/day06-c5-agent.mp4
-      poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
-      duration_sec: 322
-    knowledge_cards:
-    - id: agent-loop
-      term: Agent · 智能体
-      plain: 理解→规划→Tool Call→观察→继续；你定目的地和验收。
-      tag: 核心
-    - id: harness
-      term: Harness · 骨架
-      plain: 模型外循环：工具表、记忆、重试、日志——同模型不同骨架能力天差地别。
-      tag: 核心
-    - id: tool-call
-      term: Tool Calling
-      plain: 模型输出结构化工具请求，Harness 执行后结果喂回上下文。
-      tag: 核心
-    - id: mcp
-      term: MCP
-      plain: AI 接工具/数据源的 USB-C 标准；Skill 是它的朴素版。
-      tag: 地基
-    - id: workflow-agent
-      term: Workflow vs Agent
-      plain: 写死流程 vs 现场决策——能写死就写死，写不死才 Agent。
-      tag: 原则
-    - id: copilot-agent
-      term: Copilot vs Agent
-      plain: 副驾递扳手 vs 自主开车——信任与验收要求完全不同。
-      tag: 对比
-    glossary_terms:
+      plain: 模型给「最像真的」答案，不是「核实过」的答案——机制如此，不是偶发 bug。
     - id: gt-agent
       term: Agent
-      plain: 多步自主决策+调工具；Week 2 封装 Skill 的前置概念。
+      plain: 能自己规划、调工具、看结果、继续干的 AI；你定方向、做验收。
     - id: gt-harness
       term: Harness
-      plain: Cursor vs 简陋脚本——同一 GPT-4 不同骨架。
-    - id: gt-mcp
-      term: MCP
-      plain: Model Context Protocol；写一个 Server 多客户端能插。
-    - id: gt-workflow
-      term: Workflow vs Agent
-      plain: 报销审批适合 Workflow；整理乱文件成 PRD 适合 Agent。
-    - id: gt-copilot
-      term: Copilot vs Agent
-      plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
+      plain: 模型外面那套循环：工具表、记忆、重试、日志——骨架不同，能力差很多。
+    - id: gt-dispatch
+      term: 派活 / 验收
+      plain: 派活=把任务说清楚；验收=对照标准判断对不对。这两件正在变贵。
     quiz:
-    - - Agent 循环的正确顺序？
-      - - Tool Call→理解→规划
-        - 理解→规划→Tool Call→观察→继续
-        - 生成→生成→生成
+    - - 六次浪潮的共同规律是什么？
+      - - 每波都让程序员更贵
+        - 每波都把「动手做」压便宜一层，把「知道该做什么」抬贵一层
+        - 每波都淘汰一半职业
       - 1
-      - Harness 负责执行 Tool 并喂回结果。
-    - - 同一 GPT-4，Cursor Agent 和简陋脚本能力差异主要来自？
-      - - 模型版本不同
-        - Harness（工具表、记忆、重试、日志）不同
-        - 网络速度
+      - 浪潮不淘汰人，淘汰的是「只会动手」——判断与验收一波比一波贵。
+    - - 「AI 是认字的实习生」这个比方里，实习生取代不了你的两个原因是？
+      - - 他不会写代码也不会查资料
+        - 你不说清楚他就乱干；他干完不知道对不对
+        - 他要工资而且经常请假
       - 1
-      - 骨架不同，能力天差地别——Week 2 练的就是 Harness/Skill。
-    - - MCP 最贴切的比喻是？
-      - - 新的编程语言
-        - AI 接工具/数据源的 USB-C 标准
-        - 只能 OpenAI 用的私有协议
+      - 定方向（说清楚）和做验收（判断对错）都在你——这正是变贵的两件事。
+    - - 爷爷用算盘、爸爸用计算器、你用 Excel、下一代用 AI 表格——这条线说明什么？
+      - - 会计这个职业每代都在消失
+        - 「算」这个动作一代比一代便宜，人不断往判断层上移
+        - 工具越贵，人越值钱
       - 1
-      - 按标准写 Server，Cursor/Claude Desktop 都能用。
-    - - 「能写死就写死，写不死才 Agent」说明？
-      - - Agent 永远优于 Workflow
-        - Workflow 稳定可审计；Agent 灵活但需 Eval——按任务选
-        - 不应该用 Agent
+      - 机器每压低一层动手成本，人就上移一层——浪潮的同一个故事。
+    - - Day 3 你的 index.html 大头是 AI 写的，这件事说明什么？
+      - - 你的作品没有价值
+        - 「写」正在变便宜，你做的「定方向+验收」才是价值所在
+        - 以后不用学任何前端知识
       - 1
-      - 报销审批写 Workflow；开放式整理任务才 Agent。
-    - - Copilot 和 Agent 的核心区别？
-      - - Copilot 更贵
-        - Copilot 是你开车它递扳手；Agent 是你定目的地它开
-        - 没有区别
+      - 写变便宜不等于作品没价值——价值在你定的方向和卡的验收。
+    - - 判断「下一波浪潮来了」的信号是？
+      - - 新闻里都是它
+        - 机器又把某件「动手」的事的成本打到接近零
+        - 股票价格涨了
       - 1
-      - Agent 多步跨文件，错了破坏力大——日志和 Eval 更关键。
-    - - Tool Calling 时谁真正执行工具？
-      - - 模型自己连数据库
-        - Harness 收到结构化请求后执行，再把结果塞回上下文
-        - 用户手动执行
+      - 盯住成本变化而非名词热度——规律比名单重要。
+    - - 「会派活、会验收的人一波比一波贵」里的「派活」对应你前四天的哪个动作？
+      - - 每天过 Rubric
+        - 写 PRD、写提示词——把任务说清楚
+        - 在群里提需求
       - 1
-      - 模型只「说我要调什么」；执行在 Harness。
+      - 派活=把任务写清楚（PRD/提示词）；验收=过 Rubric——你两样都练了。
+    tools:
+    - name: 「认字的实习生」便签
+      note: 你不说清楚他就乱干；他不知对错
+  c6:
+    resource_ids:
+    - dg-be-map
+    - h5-tech
+    media:
+    - kind: video
+      title: 口播课件 · 后端技术地图
+      object_key: documents/shared/course-media/day05-c5-backend.mp4
+      poster_key: documents/shared/course-media/day05-c5-backend-poster.jpg
+      duration_sec: 207
+    knowledge_cards:
+    - id: be-three
+      term: 后端三件事
+      plain: 接请求、算逻辑、读写数据——页面背后那一套。
+      tag: 核心
+    - id: db-home
+      term: 数据库是住所
+      plain: 给数据一个能长期住、能按规则查的地方，不是「另一个 Excel」。
+      tag: 基础
+    - id: mysql-pg
+      term: MySQL / PostgreSQL
+      plain: 两款主流关系库；起步也可用 SQLite。选型看生态与约束，不是宗教。
+      tag: 选型
+    - id: ddl-dql
+      term: DDL / DQL
+      plain: DDL 建表改结构；DQL 查询数据——你 Day 4 动手过。
+      tag: 术语
+    - id: be-four
+      term: 四大语言路线
+      plain: Java / Python / Node / Go——语言选边，框架是招牌。
+      tag: 地图
+    - id: contract-first
+      term: 契约先行
+      plain: 先定 API 长什么样，再选语言框架——接口比品牌重要。
+      tag: 原则
+    glossary_terms:
+    - id: gt-backend
+      term: 后端
+      plain: 用户看不见、但负责业务规则与数据持久化的服务端。
+    - id: gt-api
+      term: API
+      plain: 前后端约定好的「取数/办事」接口。
+    - id: gt-sql
+      term: SQL
+      plain: 跟关系库说话的语言：建表、查、改、删。
+    - id: gt-redis
+      term: Redis
+      plain: 内存型加速层，常作缓存，不是主业务库的替代品。
+    - id: gt-orm
+      term: ORM
+      plain: 用对象代码映射表结构，少手写部分 SQL——要懂底层，别只会魔法。
+    quiz:
+    - - 后端三件事是？
+      - - 页面、样式、动画
+        - 业务逻辑、数据、接口
+        - 服务器、域名、备案
+      - 1
+      - 规则（逻辑）、存取（数据）、对话（接口）——后厨的三样活。
+    - - 做「周报汇总 + AI 摘要」小工具，两周要跑起来，首选路线是？
+      - - Java + Spring Boot
+        - Python + FastAPI
+        - Go + Gin
+      - 1
+      - AI 项目首选 Python——模型生态在这，FastAPI 起手最快。
+    - - FastAPI 和你的 API_Spec.md「天生一对」是因为？
+      - - 它能自动生成 OpenAPI 接口文档
+        - 它速度最快
+        - 它是 Java 写的
+      - 0
+      - 给它函数就出 OpenAPI——契约先行的理念在工具里内置了。
+    - - 「契约是合同，语言只是施工队」意味着？
+      - - 先定语言再写接口
+        - 接口契约（路径/参数/响应）可以先定，实现语言后面再挑
+        - 合同签完就不能换语言
+      - 1
+      - API_Spec.md 用 Java 或 Python 实现都行——前端不在乎。
+    - - 三种场景各选什么库？①两周的原型 ②千万用户的订单系统 ③要存商品向量做相似推荐
+      - - 全用 MySQL
+        - ①SQLite ②PostgreSQL/MySQL 集群 ③PostgreSQL（向量插件）
+        - 全用 SQLite
+      - 1
+      - 原型求快、生产求稳、AI 求向量——场景决定数据库，不是名气。
+    - - 200 人团队、要维护十年的银行核心系统，最合理的技术路线是？
+      - - Python + Flask
+        - Java + Spring Boot
+        - Node + Express
+      - 1
+      - 大企业长期系统：规矩全、能扛大场面、十年后来的人也接得住。
+    - - 「两周内给部门上线周报工具，几乎没并发」，数据库最合理的选择是？
+      - - Oracle 集群
+        - SQLite 起步，长大再迁 PostgreSQL
+        - MongoDB 分片
+      - 1
+      - 一个文件就是一个库——先跑起来；契约清晰时迁库不难。
+    tools:
+    - name: 契约先行便签
+      note: 契约是合同，语言只是施工队
+  c5:
+    resource_ids:
+    - dg-fe-map
+    - h5-tech
+    media:
+    - kind: video
+      title: 口播课件 · 前端技术地图
+      object_key: documents/shared/course-media/day05-c4-frontend.mp4
+      poster_key: documents/shared/course-media/day05-c4-frontend-poster.jpg
+      duration_sec: 228
+    knowledge_cards:
+    - id: fe-four
+      term: 前端四大平台
+      plain: Web 网页、手机 App、小程序、桌面软件——用户「摸」到的都算前端。
+      tag: 地图
+    - id: fe-framework
+      term: 前端框架
+      plain: React/Vue/Angular/Svelte 等：帮你组织页面与状态，不是唯一正确答案。
+      tag: 选型
+    - id: native-vs-cross
+      term: 原生 vs 跨端
+      plain: 原生两套（iOS/Android）体验最好；跨端用一套代码换效率。
+      tag: 选型
+    - id: mini-program
+      term: 小程序
+      plain: 长在微信等超级 App 里的轻应用——安装成本接近零。
+      tag: 平台
+    - id: fe-four-q
+      term: 选型四问
+      plain: 用户在哪打开？要不要商店？团队会什么？AI 写这类代码熟不熟？
+      tag: 方法
+    - id: day3-link
+      term: 回扣 Day 3
+      plain: 你做过的页面/交互，就是前端地图上的一格——今天把格填进整张图。
+      tag: 连接
+    glossary_terms:
+    - id: gt-frontend
+      term: 前端
+      plain: 用户直接看见、摸到的那一层界面与交互。
+    - id: gt-react
+      term: React
+      plain: 目前最常见的 Web 前端库之一；生态大，AI 也很熟。
+    - id: gt-vue
+      term: Vue
+      plain: 另一条主流 Web 框架路线，上手曲线通常更平。
+    - id: gt-spa
+      term: SPA
+      plain: 单页应用：页面不整页刷新，靠前端路由切换视图。
+    - id: gt-electron
+      term: Electron
+      plain: 用网页技术包一层壳，做成桌面软件的常见方案。
+    quiz:
+    - - 「前端」的完整范围是？
+      - - 只做网页
+        - 用户直接接触的界面层：Web 网页 / App / 小程序 / 桌面软件
+        - 只写 HTML 的人
+      - 1
+      - 三件套只是 Web 那一支的地基——选型第一步是先定平台。
+    - - 「AI 最会写、网上答案最多」是选 React 的核心理由，它属于四问中的哪一问？
+      - - 团队会什么
+        - 生态大不大（含 AI 生成质量）
+        - 项目有多大
+      - 1
+      - 生态=遇坑有答案+招得到人+AI 写得稳——React 目前占优。
+    - - 要做 iOS 和 Android 两端、团队小、想一套代码，选哪条 App 路线？
+      - - 原生 Swift + Kotlin
+        - Flutter 或 React Native（跨端）
+        - Electron
+      - 1
+      - 原生要养两套代码两拨人；跨端一套代码出两端——小团队默认跨端。
+    - - 团队只有一个会 Vue 的实习生，却要做三十页的内部系统，最合理的选择是？
+      - - React，因为生态最大
+        - Vue，因为团队会什么优先
+        - Angular，因为页面多
+      - 1
+      - 四问按顺序：团队会什么是第一问——学习成本是真实成本。
+    - - Angular 最典型的使用场景是？
+      - - 个人尝鲜小项目
+        - 大企业的长期巨型项目
+        - 一次性活动页
+      - 1
+      - 全家桶+严规矩，十年后来的人也能按同一套规矩接手——大货车不跑菜市场。
+    - - 「框架是项目长大了才需要的装备」意味着？
+      - - 小项目用框架显得专业
+        - 项目变大（多页面/多人/接真实数据）再引入框架不迟
+        - 框架永远不需要
+      - 1
+      - 不是出门必背的包——你们 Day 3 不用框架就是当时的正确答案。
+    - - 做国内「扫码即用、不用下载」的点单应用，选什么平台和框架？
+      - - App：原生 Swift
+        - 小程序：微信原生；要多端就 Taro / uni-app
+        - 桌面：Electron
+      - 1
+      - 轻量+借微信流量→小程序；微信原生最稳，多端用 Taro/uni-app。
+    tools:
+    - name: 三件套比喻卡
+      note: 骨架 · 皮肤 · 肌肉
+  c4:
+    resource_ids:
+    - dg-cloud
+    - h5-cloud
+    - cli-manual
+    media:
+    - kind: video
+      title: 口播课件 · 服务器与云原生
+      object_key: documents/shared/course-media/day05-c3-server.mp4
+      poster_key: documents/shared/course-media/day05-c3-server-poster.jpg
+      duration_sec: 293
+    knowledge_cards:
+    - id: server-vs-laptop
+      term: 服务器 vs 个人电脑
+      plain: 服务器不关机、没屏幕、住机房，只通过网络访问。
+      tag: 基础
+    - id: vm
+      term: 虚拟机
+      plain: 一台物理机里用软件再划出多台「假电脑」，各装各的系统。
+      tag: 演进
+    - id: container
+      term: 容器 / Docker
+      plain: 软件界的集装箱——应用和依赖打包带走，到哪都能同样跑。
+      tag: 演进
+    - id: k8s
+      term: Kubernetes
+      plain: 管几千个集装箱自动调度、挂了重启、流量怎么分的系统。
+      tag: 演进
+    - id: serverless
+      term: Serverless
+      plain: 按「服务调用」计费，不是按「整台机器租满」——有请求才花钱。
+      tag: 演进
+    - id: cli-eight
+      term: 命令行八句
+      plain: 本节实验真功夫：在仿真终端里把服务起起来、查状态、看日志的八个起步动作。
+      tag: 实战
+    glossary_terms:
+    - id: gt-cloud-native
+      term: 云原生
+      plain: 应用按云的方式设计：容器化、可弹性、可自动恢复，而不是绑死一台机器。
+    - id: gt-physical
+      term: 物理机
+      plain: 桌底/机架上那台真电脑——最早的「服务器」。
+    - id: gt-docker
+      term: Docker
+      plain: 最常用的容器工具：把程序打成镜像再跑起来。
+    - id: gt-ssh
+      term: SSH
+      plain: 远程登录服务器的加密通道——你今天会用到。
+    - id: gt-port
+      term: 端口
+      plain: 同一台机器上区分不同服务的「门牌号」，如 8000。
+    quiz:
+    - - 服务器和你笔记本电脑的两个本质差别是？
+      - - 更贵而且更大
+        - 不关机；没屏幕、住机房，只通过网络访问
+        - 用 Linux 而且键盘不同
+      - 1
+      - 7×24 醒着 + 不住你家——这就是「一直开着、专门提供服务的电脑」。
+    - - 「在我电脑上能跑，到你那就不行」这个问题是谁解决的？
+      - - 虚拟机
+        - 容器（Docker）
+        - Serverless
+      - 1
+      - 容器把程序和依赖打成标准集装箱——箱子在哪，哪就能跑。
+    - - K8s 解决的是什么麻烦？
+      - - 程序搬家容易散架
+        - 几千个容器靠人管不过来，需要自动调度
+        - 服务器平时 95% 力气闲置
+      - 1
+      - 集装箱太多需要码头调度：谁挂了自动补、流量大了自动扩。
+    - - 从「买车」到「打车」形容的是哪一站？它最大的好处是？
+      - - 虚拟机；省钱
+        - Serverless；零运维起步、按用量付费
+        - 物理机；性能好
+      - 1
+      - 没人用就不花钱——小团队也能用上大公司的基础设施。
+    - - 为什么服务器只有命令行、没有图形界面？
+      - - 因为服务器太老
+        - 服务器没屏幕、住机房——只能通过网络发文字给它
+        - 命令行比鼠标快
+      - 1
+      - 回到第 3 节：服务器的两个差别——不关机、没屏幕住机房。
+    - - 验证服务是否活着，最直接的动作是？
+      - - curl localhost:8000/healthz
+        - cat server.py
+        - mkdir healthz
+      - 0
+      - curl 就是「敲服务的门」——返回 200 说明它应了。
+    - - '`tail -f logs/server.log` 的 `-f` 是什么意思？怎么退出？'
+      - - 快速模式；按 q 退出
+        - 跟着看（实时滚动）；按 Ctrl+C 退出
+        - 强制删除；按 del 退出
+      - 1
+      - 它不是卡死，是在「跟着看」——Ctrl+C 是通用的「停下来」。
+    - - '`docker ps` 和 `chmod +x` 分别干什么？'
+      - - 看运行中的容器；给文件执行权限
+        - 看磁盘；删文件
+        - 看日志；改密码
+      - 0
+      - 八句里的两句——集装箱清单 + 权限开关。
+    tools:
+    - name: 命令手册（服务器日常八句）
+      note: 查的，不是背的——本节实验随时翻
+      url: /course-assets/resources/server-cli-manual.md
+    - name: 五站类比卡
+      note: 物理机→虚拟机→容器→K8s→Serverless
+    lab:
+      sim_kind: server
+      task_brief: 课节实验：点「新标签页打开实验台」后，在独立终端页输入命令行八句——pwd / ls -l → mkdir -p app/logs → cd app →
+        python3 server.py → curl healthz → tail -f → chmod +x → docker ps。在黑色窗口里敲命令并按 Enter。
+      quick_commands:
+      - pwd
+      - ls -l
+      - mkdir -p app/logs
+      - cd app
+      - python3 server.py
+      - curl localhost:8000/healthz
+      - tail -f logs/server.log
+      - chmod +x deploy.sh
+      - docker ps
+      rubric:
+      - check: command_sequence
+        args:
+          contains:
+          - pwd
+          - mkdir -p app/logs
+          - cd app
+          - curl localhost:8000/healthz
+          - tail -f logs/server.log
+          - chmod +x deploy.sh
+          - docker ps
+      - check: port_listening
+        args:
+          port: 8000
+      - check: command_sequence
+        args:
+          contains:
+          - python3 server.py
+      seed:
+        host_fixture: ubuntu-mini
+        services: []
+  c3:
+    resource_ids:
+    - dg-process
+    - h5-journey
+    media:
+    - kind: video
+      title: 口播课件 · 软件是怎么开发出来的
+      object_key: documents/shared/course-media/day05-c2-sdlc.mp4
+      poster_key: documents/shared/course-media/day05-c2-sdlc-poster.jpg
+      duration_sec: 246
+    knowledge_cards:
+    - id: six-stops
+      term: 软件旅程六站
+      plain: 需求调研 → 原型确认 → 开发 → 测试验收 → 上线 → 迭代运维。
+      detail: 先搞清问题、对齐样子，再让 AI 写、你来验；上线后还要分清「修」和「做新功能」。
+      tag: 核心
+    - id: research-methods
+      term: 调研四法
+      plain: 访谈、观察、问卷、竞品体验——能看行为先看，嘴上说的用来补「为什么」。
+      tag: 方法
+    - id: ask-last-time
+      term: 问「上一次」
+      plain: 访谈忌问「好不好」；问上一次怎么处理，人才不撒谎。
+      tag: 技巧
+    - id: prototype-cheap
+      term: 改图便宜改码贵
+      plain: 原型确认是为了把纠错成本压在「改图」阶段。
+      tag: 原则
+    - id: uat
+      term: UAT
+      plain: 上线前用接近生产的环境让真实用户先用一阵再正式放量。
+      tag: 术语
+    - id: waterfall-agile
+      term: 瀑布 vs 敏捷
+      plain: 瀑布一次规划死再走完；敏捷切小块，每块都快速走完全流程并交付。
+      detail: 你前四天每天一个交付、每天验收——就是敏捷。
+      tag: 节奏
+    glossary_terms:
+    - id: gt-sdlc
+      term: 软件开发流程
+      plain: 从「用户有问题」到「大家能用还能继续改」的固定工程动作链。
+    - id: gt-prd
+      term: PRD
+      plain: 需求调研的产出：用户故事 + 验收标准——你 Day 1 写过。
+    - id: gt-ops-boundary
+      term: 运维边界
+      plain: 修缺陷/约定内优化可走运维；新模块新流程是新需求，另算。
+    - id: gt-observe
+      term: 观察法
+      plain: 看行为不看表态——食堂看倒掉什么，比问「好不好」靠谱。
+    - id: gt-iterate
+      term: 迭代
+      plain: 上线不是终点；收集使用问题，再走一小圈六站。
+    quiz:
+    - - 软件旅程六站的正确顺序是？
+      - - 开发→需求调研→上线→验收
+        - 需求调研→原型确认→开发→测试验收→上线→迭代
+        - 原型→开发→调研→上线
+      - 1
+      - 先搞清楚做什么，出样品，做出来，验货，放出去，再回来改。
+    - - 访谈用户时，最该问的是？
+      - - 你觉得这个功能好不好
+        - 上一次你遇到这个问题是什么时候、怎么处理的
+        - 你愿意为这个产品付多少钱
+      - 1
+      - 人对「好不好」会客气，对「上一次」不会撒谎——具体场景才是真话。
+    - - 「想知道食堂什么菜难吃，别问卷，看他倒掉什么」对应哪种调研方法？
+      - - 访谈
+        - 观察
+        - 竞品体验
+      - 1
+      - 观察：看行为不看表态——行为比嘴诚实。
+    - - 为什么「先出原型再开发」能省钱？
+      - - 原型更好看
+        - 改一张图十分钟，改写好的程序十天
+        - 原型可以卖钱
+      - 1
+      - 纠错的成本随阶段指数上涨——越早确认越便宜，这就是样板间逻辑。
+    - - 瀑布和敏捷的区别，正确的是？
+      - - 瀑布不写文档，敏捷写
+        - 瀑布一次规划死再走完，敏捷切成小块每块都快速走完全流程
+        - 敏捷不需要验收
+      - 1
+      - 全楼一次装修 vs 一周装一间房——你前四天每天一个交付就是敏捷。
+    - - 你 Day 1 写 PRD.md，在六站里属于哪一站的产出？
+      - - 测试验收
+        - 需求调研
+        - 上线
+      - 1
+      - PRD（用户故事+验收标准）就是需求调研的产出物。
+    tools:
+    - name: 访谈提问句式卡
+      note: 问「上一次…」，不问「好不好」
+  c2:
+    resource_ids:
+    - dg-stages
+    media:
+    - kind: video
+      title: 口播课件 · 企业数字化五阶段
+      object_key: documents/shared/course-media/day05-c2-digital-stages.mp4
+      poster_key: documents/shared/course-media/day05-c2-digital-stages-poster.jpg
+      duration_sec: 122
+    knowledge_cards:
+    - id: five-stages
+      term: 企业数字化五阶段
+      plain: 信息化 → 数字化 → 网络化 → 智能化 → Agent 化。
+      detail: 每一级：企业在干什么 / 系统长什么样 / 人的角色。
+      tag: 核心
+    - id: informatization
+      term: 信息化
+      plain: 纸变屏：OA、ERP、Excel——人还是录入员。
+      tag: L1
+    - id: digitalization
+      term: 数字化
+      plain: KPI 入库、可查可对比——驾驶舱有真数据。
+      tag: L2
+    - id: networked
+      term: 网络化
+      plain: API 契约、多端——系统之间能对话。
+      tag: L3
+    - id: intelligent
+      term: 智能化
+      plain: LLM 读数据出建议——Rubric 验收，不是感觉。
+      tag: L4
+    - id: agentization
+      term: Agent 化
+      plain: Skill + Harness 跑流程——Week 2 要去的地方。
+      tag: L5
+    glossary_terms:
+    - id: gt-stages
+      term: 五阶段
+      plain: 企业从 Excel 到 Agent 的常见升级梯子——用来定位，不是一夜爬完。
+    - id: gt-fde-role
+      term: FDE 角色
+      plain: 在 Agent 化阶段：定方向、写验收、指挥 Agent——不替它打字。
+    - id: gt-ladder-not-pick
+      term: 梯子不是选型
+      plain: 诊断「缺哪一级能力」，不是背推荐清单。
+    quiz:
+    - - 企业数字化五阶段的正确顺序是？
+      - - Agent 化 → 智能化 → 网络化 → 数字化 → 信息化
+        - 信息化 → 数字化 → 网络化 → 智能化 → Agent 化
+        - 数字化 → 信息化 → 网络化 → Agent 化 → 智能化
+      - 1
+      - 常见升级路径：先电子化，再数据化，再联网，再模型，再能执行。
+    - - 「KPI 进库、驾驶舱有真数据」主要对应哪一阶段？
+      - - 信息化
+        - 数字化
+        - Agent 化
+      - 1
+      - 数字化：数据有地址——Day 4 的表结构在这一层。
+    - - 「API 契约、前后端对话」主要对应哪一阶段？
+      - - 网络化
+        - 信息化
+        - 智能化
+      - 0
+      - 网络化：系统之间能对话——Day 3 的 API_Spec 在这。
+    - - Agent 化阶段，人的核心角色是？
+      - - 替 AI 写每一行代码
+        - FDE：定方向 + 做验收 + 指挥 Agent
+        - 只负责买模型 API
+      - 1
+      - Agent 化不是更贵的聊天框——是能跑流程，人要会验收。
+    - - 五阶段与驾驶舱的关系，正确的是？
+      - - 驾驶舱只属于信息化
+        - 项目已踩在 L2–L4 之间；Week 2 往 L5 Agent 化走
+        - 五阶段与驾驶舱无关
+      - 1
+      - 你们已有数据、契约、摘要——地图要连到真实交付物。
+    tools:
+    - name: 五阶段梯子卡
+      note: 每级：企业在干什么 / 系统 / 人的角色
 quiz:
-- - LLM 生态四层从底到顶的正确顺序是？
-  - - 应用→编排→模型→基建
-    - 基建→模型→编排→应用
-    - 模型→应用→编排→基建
+- - 六次技术浪潮的共同规律是？
+  - - 每次都让程序员变贵
+    - 每波压低一层「动手做」的成本，抬高「判断与验收」的价值
+    - 每次都发明一种新语言
   - 1
-  - 驾驶舱在应用层；换模型是换编排/模型层的牌子。
-- - 一次性 JSON 响应和 SSE 流式，主要差别是？
-  - - 计费单位不同
-    - 前者等整包再渲染；后者边收边显示（助手位建议 SSE）
-    - SSE 只能用于图像模型
+  - 第 1 节：浪潮不淘汰人，淘汰只会动手的人。
+- - 「AI 是认字的实习生」意味着你最该练的两件事是？
+  - - 打字更快、加班更多
+    - 把任务说清楚（定方向）、判断交付对不对（做验收）
+    - 背更多框架 API
   - 1
-  - Day6 S01：API 负责打到哪，SSE 负责怎么流回来。
-- - Token 与上下文窗口的关系？
-  - - Token 是计费单位，与窗口无关
-    - Token 是读写基本单位；窗口是一次能塞进去的上限
-    - 窗口越大幻觉越少
+  - 第 1 节：这两件事 AI 替代不了，所以变贵。
+- - 「会写」变便宜的直接证据是？
+  - - 程序员都失业了
+    - 你 Day 3 的 index.html 大头由 AI 生成，你负责定方向和验收
+    - 键盘销量下降
   - 1
-  - 给少了瞎编，给多了迷失——Context Engineering 管装填。
-- - 幻觉（Hallucination）的本质是？
-  - - 模型 bug，升级就消失
-    - 机制：永远给「最像真的」而非「经过核实的」
-    - 只有小模型才会幻觉
+  - 第 1 节：写趋零成本，判断与验收才是你的位置。
+- - 企业数字化五阶段的正确顺序是？
+  - - Agent 化 → 智能化 → 网络化 → 数字化 → 信息化
+    - 信息化 → 数字化 → 网络化 → 智能化 → Agent 化
+    - 数字化 → 信息化 → 网络化 → Agent 化 → 智能化
   - 1
-  - 用 RAG、Eval、Guardrails 管理，不是 magic prompt。
-- - RAG 主要解决什么问题？
-  - - 让模型更快
-    - 先从资料库检索片段，再基于片段回答——治幻觉药方之一
-    - 替代 Fine-tune
+  - 常见升级路径：先电子化，再数据化，再联网，再模型，再能执行。
+- - 「KPI 进库、驾驶舱有真数据」主要对应哪一阶段？
+  - - 信息化
+    - 数字化
+    - Agent 化
   - 1
-  - 可溯源比「听起来对」重要。
-- - Fine-tune 与 Prompt 的分工？
-  - - 完全相同
-    - Prompt 改这次输入；Fine-tune 改模型权重——贵、慢，多数业务 Prompt+RAG 够用
-    - Fine-tune 只能用于聊天
+  - 数字化：数据有地址——Day 4 的表结构在这一层。
+- - 「API 契约、前后端对话」主要对应哪一阶段？
+  - - 网络化
+    - 信息化
+    - 智能化
+  - 0
+  - 网络化：系统之间能对话——Day 3 的 API_Spec 在这。
+- - 访谈用户最需要避免的问题是？
+  - - 上一次你遇到这个问题是什么时候
+    - 你觉得这个功能好不好
+    - 你现在是怎么凑合解决的
   - 1
-  - 先 Prompt/Context，真搞不定再考虑 Fine-tune。
-- - Eval 替代的是什么？
-  - - 单元测试
-    - 「我觉得还行」——用固定题库+判分标准验收 AI 产物
-    - 代码审查
+  - 第 2 节：「好不好」得到客气话，「上一次」得到真话。
+- - 「先出原型再开发」省钱的原理是？
+  - - 原型开发工资低
+    - 纠错成本随阶段指数上涨——改图十分钟，改程序十天
+    - 原型可以重复利用
   - 1
-  - Rubric 思维在 LLM 日落地。
-- - Agent 和 Workflow 怎么选？
-  - - 永远用 Agent
-    - 能写死流程就 Workflow；写不死才 Agent
-    - 永远用 Workflow
+  - 第 2 节：样板间逻辑——越早确认越便宜。
+- - 你前四天「每天一个交付、每天一次验收」属于哪种开发方式？
+  - - 瀑布
+    - 敏捷
+    - 无流程
   - 1
-  - Agent 信任成本高——需要 Harness 和日志。
-- - MCP 是什么？
-  - - 一种新的编程语言
-    - 给 AI 接工具/数据源的 USB-C 标准——Skill 是它的朴素版
-    - 只有 OpenAI 支持
+  - 第 2 节：切成小块、每块快速走完全流程——你已经用身体记住了敏捷。
+- - 容器（Docker）解决的核心问题是？
+  - - 服务器闲置浪费
+    - 程序搬家散架——「在我电脑上能跑，到你那就不行」
+    - 容器太多管不过来
   - 1
-  - 标准接口让工具可复用。
-- - Copilot vs Agent？
-  - - Copilot 能自动跑完业务流程
-    - Copilot 递扳手；Agent 你定目的地它开——验收方式完全不同
-    - 没有区别
+  - 第 3 节：标准集装箱，箱子在哪哪就能跑。
+- - 部署管线五步的正确顺序是？
+  - - 访问 → 运行 → 镜像 → 构建 → 代码
+    - 代码 → 构建 → 镜像 → 运行 → 访问
+    - 镜像 → 代码 → 构建 → 运行 → 访问
   - 1
-  - Week 2 主要在 Agent 侧加深。
-- - Harness 包含什么？
-  - - 只有大模型
-    - 工具表、记忆、规划、重试、日志——模型之外的循环骨架
-    - 前端框架
+  - Git 是唯一事实源；构建打包；镜像冻结环境；运行 7×24；公网 URL。
+- - Serverless 的「从买车到打车」意味着？
+  - - 所有人都不需要服务器了
+    - 零运维起步、按用量付费，没人用就不花钱
+    - 只能做打车软件
   - 1
-  - 同一模型换 Harness，能力天差地别。
-nodes_project: 企业任务：提交 LLM 认知卡 llm-cognition-card.md
+  - 第 3 节：不是没有服务器，是云厂商全包了。
+- - 三人的部门小工具为什么不直接上 K8s？
+  - - K8s 不安全
+    - K8s 是给几千个容器准备的——三箱货不该建深水港
+    - K8s 不支持 Python
+  - 1
+  - 第 3 节：选型的本质是匹配规模，不是追高级。
+- - 验证服务是否活着，应该敲？
+  - - curl localhost:8000/healthz
+    - rm -rf /
+    - chmod +x app
+  - 0
+  - 第 3 节：curl 是「敲服务的门」——200 就是「活着」。
+- - 服务器出问题时，第一动作是？
+  - - 直接重启
+    - tail -f 看实时日志，找它在说什么
+    - 重装系统
+  - 1
+  - 第 3 节：先看日志再动手——日志是服务器在「说话」。
+- - 「前端」的完整范围是？
+  - - 只做网页
+    - Web 网页 / App / 小程序 / 桌面软件——用户直接接触的界面层
+    - 只写 CSS 的人
+  - 1
+  - 第 5 节：选型第一步是先定平台。
+- - 小团队要做 iOS+Android 两端、一套代码，选？
+  - - 原生 Swift + Kotlin
+    - Flutter 或 React Native
+    - Electron
+  - 1
+  - 第 5 节：跨端一套代码出两端；原生是两套代码两拨人。
+- - 做国内扫码即用的点单应用，平台选什么？
+  - - 桌面软件
+    - 小程序（微信原生；多端用 Taro/uni-app）
+    - 必须先做 App
+  - 1
+  - 第 5 节：轻量 + 借微信流量 → 小程序。
+- - 内部工具要做桌面版（双击图标那种），最省事的路线是？
+  - - Electron——网页技术包壳，前端团队零门槛
+    - 原生 Swift + Kotlin
+    - 微信原生小程序
+  - 0
+  - 第 4 节：VS Code、飞书都是 Electron 包的；对体积敏感再看 Tauri。
+- - 后端地图里，Python 常见框架包括？
+  - - Django / Flask / FastAPI
+    - Spring Boot / Struts
+    - Gin / Echo only
+  - 0
+  - 列名单是为了认识地图——选型理由留到作业，课里不给建议。
+- - ①两周原型 ②千万用户订单系统 ③向量相似推荐——数据库各选？
+  - - 全用 SQLite
+    - ①SQLite ②PostgreSQL/MySQL ③PostgreSQL（向量插件）
+    - 全用 Oracle
+  - 1
+  - 第 6 节：场景决定数据库——求快 / 求稳 / 求向量。
+- - 「契约是合同，语言只是施工队」的意思是？
+  - - 先签 API 契约，实现语言后面再挑
+    - 合同必须用 Java 写
+    - 语言选好就不能改
+  - 0
+  - 第 6 节：API_Spec.md 与实现语言解耦——契约先行。
+# Day5 动手终端只挂在第 4 节课节实验（capsule_extra.c4.lab），不再单独挂 Lab 节点，避免大纲重复。
+# 第 7 节「验收课」已撤：概念靠快测节点，收束靠企业任务手绘架构图。
+nodes_project: 企业任务：手绘一张自己项目的技术架构图

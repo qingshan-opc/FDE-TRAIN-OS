@@ -1,0 +1,46 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-1990s",
+    "file": "02-1990s.txt"
+  },
+  {
+    "id": "03-2000s",
+    "file": "03-2000s.txt"
+  },
+  {
+    "id": "04-cloud",
+    "file": "04-cloud.txt"
+  },
+  {
+    "id": "05-mobile",
+    "file": "05-mobile.txt"
+  },
+  {
+    "id": "06-ai",
+    "file": "06-ai.txt"
+  },
+  {
+    "id": "07-gen1",
+    "file": "07-gen1.txt"
+  },
+  {
+    "id": "08-gen2",
+    "file": "08-gen2.txt"
+  },
+  {
+    "id": "09-gen3",
+    "file": "09-gen3.txt"
+  },
+  {
+    "id": "10-gen4",
+    "file": "10-gen4.txt"
+  },
+  {
+    "id": "11-close",
+    "file": "11-close.txt"
+  }
+]

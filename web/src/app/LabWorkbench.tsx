@@ -513,6 +513,7 @@ export function LabWorkbench({
         }
       }
       toast.push("Lab 已完成", "success");
+      window.dispatchEvent(new CustomEvent("fde:command-evidence-updated"));
       onCompleted(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "完成失败");

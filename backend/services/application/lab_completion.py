@@ -17,6 +17,7 @@ from typing import Any
 from uuid import uuid4
 
 from services.shared import db_cursor, now_iso
+from services.shared.command_evidence import build_lab_capability_tags
 from services.shared.config import CAMP_VERSION_LABEL
 from services.shared.rubric_registry import enrich_eval_result
 
@@ -115,6 +116,14 @@ def complete_lab_attempt(
         submission_id = row["id"] if row else submission_id
 
         # 2) evidence — always recorded, pass or fail, for a full audit trail
+        payload: dict[str, Any] = {
+            "eval": enriched,
+            "job_id": job_id,
+            "snapshot_id": snapshot_id,
+            "submission_id": submission_id,
+        }
+        if enriched.get("command_stats"):
+            payload["command_stats"] = enriched["command_stats"]
         cur.execute(
             """
             INSERT INTO evidence
@@ -129,11 +138,11 @@ def complete_lab_attempt(
                 day,
                 node_id,
                 evidence_kind,
+                json.dumps(payload, ensure_ascii=False),
                 json.dumps(
-                    {"eval": enriched, "job_id": job_id, "snapshot_id": snapshot_id, "submission_id": submission_id},
+                    build_lab_capability_tags(day=day, passed=passed, evidence_kind=evidence_kind),
                     ensure_ascii=False,
                 ),
-                json.dumps([f"eval:{evidence_kind}", "pass" if passed else "fail", f"day:{day}"], ensure_ascii=False),
             ),
         )
 

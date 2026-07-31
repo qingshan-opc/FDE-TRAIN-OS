@@ -477,7 +477,8 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             summary.locked = not _day_unlocked_from_meta(day, day_meta, progress_map)
 
     items = [found[k] for k in sorted(found)]
-    weeks: dict[str, list[int]] = {"1": [1, 2, 3, 4, 5], "2": [6, 7, 8, 9, 10, 11, 12]}
+    # Day 6 = Saturday intercalary between Week1 Day5 and former Day6 (now Day7).
+    weeks: dict[str, list[int]] = {"1": [1, 2, 3, 4, 5, 6], "2": [7, 8, 9, 10, 11, 12]}
     extra = [d for d in sorted(found) if d > 12]
     if extra:
         weeks["3"] = extra
@@ -569,7 +570,7 @@ def get_day(camp_id: str, day: int, request: Request) -> DayPackageView:
         quiz=quiz,
         nodes=visible_nodes,
         source=source_name,
-        week=1 if day <= 5 else 2,
+        week=int(data.get("week") or (1 if day <= 6 else 2)),
         resources=list(data.get("resources") or []),
     )
 

@@ -1,544 +1,490 @@
 camp_version: v0.7
 day: 10
-title: V2.0 收官：答辩与成为 FDE
+title: 多 Skill 编排与人工确认
 week: 2
-project: V2.0 收官：答辩与成为 FDE
-project_brief: 九天收口成一个人：Agent 接入驾驶舱助手位（唤起/状态/闸在页内），十条能力证据 10/10 自证，8 分钟答辩（作品 3′+架构 3′+迭代 2′），提交 final-review.md（两周复盘 + 行业地图自评
-  + 90 天自学路线）。答辩通过即 FDE。
+project: 多 Skill 编排与人工确认
+project_brief: 工具表从 1 件变 3 件，串成带人工确认闸的 workflow 流水线。掌握编排观（业务流程即 Skill 串联）、确认闸三问与执行日志三要素，再封装两个 Skill，跑通「拦得住、回得来、查得了」的 GATE
+  9。
 review_checklist:
-- V2.0 全景：驾驶舱六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作
-- 十条能力证据：自证表 10/10，每条有文件或现场演示支撑
-- 答辩完成：8 分钟结构讲完，互评表收回至少 2 份
-- '`docs/final-review.md`：两周复盘 + 行业地图自评 + 自学路线'
-- 'commit：`feat: V2.0 收官——Agent 接入驾驶舱，答辩完成`'
+- 工具表 3 件：每件有说明书 + 边界声明 + 工具描述
+- 编排文档：步骤定死、数据流清楚、确认闸位置正确（在「不可撤回」步骤之前）
+- 闸口实测：流水线跑到确认闸自动停下等人；批准后继续；驳回有记录
+- 执行日志：每步一条（时间/动作/结果），可回放
+- 'commit：`feat: 三 Skill 编排——确认闸 + 执行日志`'
 resources:
-- id: dg-v2-panorama
-  title: 讲解图 · V2.0 全景
-  kind: diagram
-  summary: 六区块 + Agent + 三 Skill + 十条能力证据
-  url: /course-assets/assets/diagrams/v2-panorama.svg
-- id: dg-ten-day
-  title: 讲解图 · 十天演进
-  kind: diagram
-  summary: V0.1 → V1.0 → V2.0，同一艘驾驶舱逐层接电
-  url: /course-assets/assets/diagrams/ten-day-grid.svg
 - id: dg-orchestration
-  title: 讲解图 · 编排确认闸
+  title: 讲解图 · 编排确认闸与执行日志
   kind: diagram
-  summary: 确认闸 + 执行日志——答辩架构讲解素材
+  summary: 步骤定死 + 确认闸 + 每步留痕
   url: /course-assets/assets/diagrams/orchestration-confirm.svg
+- id: dg-workflow-agent
+  title: 讲解图 · workflow vs agent
+  kind: diagram
+  summary: 编排是 workflow——步骤你定死，AI 当流水线工人
+  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
 - id: glossary
   title: 新概念词典（速查版）
   kind: site
-  summary: 十天术语总复习
+  summary: Workflow / HITL / Eval
   url: /course-assets/resources/h5/glossary.html
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:10
   - project:role-week
-  estimated_minutes: 110
+  estimated_minutes: 95
   require_capsules: true
   capsules:
   - id: c1
-    title: 实战：Agent 接入驾驶舱
-    minutes: 30
-    form: 实战
-    content_ref: class/bootcamp/day-10/section-01-agent-in-cockpit/lesson.md
-    content: '同学们，驾驶舱右边那个 AI 助手位空了九天了，今天让它活起来——这是 V2.0 最后一块拼图。助手位不是装饰用的聊天框，是驾驶位：状态看得见、刹车踩得到，才叫接入，对吧。
-
-      接入三要件。第一唤起：助手位能发消息给 Agent，Agent 能回话。第二状态：流水线跑到哪一步，助手位实时可见，最小实现读 runs/ 最新日志行就行。第三闸在页内：确认界面出现在驾驶舱里，批准和驳回按钮直接点，对吧。
-
-      最小实现别贪大：对话区接 Agent，状态读 runs/ 日志最新行，闸就是草稿渲染加两个按钮。一件通了再做下一件——别三个半成品堆在一起，咱们宁可做一个能点批准的真闸，对吧。
-
-      时间不够怎么办？优先级记死：闸大于状态大于唤起。对话区接不通真实 Agent 环境？降级方案也行——助手位展示当前步骤加确认按钮，指令复制到 Agent Lab 执行，结果回填。思想不变，咱们打通的是人、Agent、驾驶舱的信息回路，对吧。
-
-      做完对照 V2.0 全景图打勾：六个区块、Agent、三件 Skill——全亮，你的 V2.0 就成了。样式复用驾驶舱既有卡片，助手位别长得像外来的。带走一句：助手位是驾驶位，不是摆设，对吧。'
-    practice: '完成标志：
-
-      [ ] 三要件至少「闸」全通，另两件有最小实现
-
-      [ ] 全景自查无「死区块」
-
-      [ ] 迭代日志记录接入中修过的问题'
-    resource_ids:
-    - dg-v2-panorama
-    tools:
-    - name: 接入三要件清单
-      note: 唤起 / 状态 / 闸 · 优先级闸>状态>唤起
-    quiz:
-    - - 驾驶舱 AI 助手位三要件是？
-      - - 头像/昵称/表情包
-        - 唤起 / 状态可见 / 闸在页内
-        - 聊天/语音/视频
-      - 1
-      - 能唤起、看得见跑到哪、踩得到刹车——才叫接入。
-    - - 接入施工优先级？
-      - - 唤起 > 状态 > 闸
-        - 闸 > 状态 > 唤起
-        - 随机
-      - 1
-      - 宁可只做一个能点批准/驳回的真闸，不要三个半成品。
-    - - 助手位「不是装饰」指？
-      - - 要好看
-        - 状态看得见、刹车踩得到，才叫驾驶位
-        - 必须 24 小时在线
-      - 1
-      - 只挂聊天框叫摆设；读 runs/ 日志 + 页内闸才是真接入。
-    - - V2.0 全景最后一块拼图是？
-      - - 新数据库
-        - Agent 挂上驾驶舱 AI 助手位
-        - 换前端框架
-      - 1
-      - 六区块 + Agent + 三 Skill 全亮——全景图闭合。
-    media:
-    - kind: video
-      title: 口播课件 · 助手位三要件
-      object_key: documents/shared/course-media/day10-c1-v2-scope.mp4
-      poster_key: documents/shared/course-media/day10-c1-v2-scope-poster.jpg
-      duration_sec: 89
-    knowledge_cards:
-    - id: cockpit-three
-      term: 助手位三要件
-      plain: 唤起 / 状态可见 / 闸在页内——助手位是驾驶位，不是装饰聊天框。
-      tag: 核心
-    - id: priority-order
-      term: 施工优先级
-      plain: 闸 > 状态 > 唤起——宁可一个真闸，不要三个半成品。
-      tag: 方法
-    - id: v2-panorama
-      term: V2.0 全景
-      plain: 六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作。
-      tag: 交付
-    glossary_terms:
-    - id: gt-v2
-      term: V2.0
-      plain: 驾驶舱全功能 + Agent 接入 + 三 Skill 编排——训练营毕业形态。
-    - id: gt-cockpit-agent
-      term: 驾驶舱助手位
-      plain: 人-Agent 对话口 + 流水线状态 + 页内确认闸——驾驶位不是摆设。
-    local_prep:
-      codex_prompt: '驾驶舱接入教练。按优先级施工：闸在页内 > 状态可见 > 唤起。
-
-        对照我的仓库，列出要改的文件与最小补丁方案；接不通真实 Agent 时给出「指令面板降级」方案并写书面权衡。
-
-        不要大重构，只求三要件可演示。'
-      checklist: []
-  - id: c2
-    title: 端到端十条能力证据
-    minutes: 20
-    form: 实战
-    content_ref: class/bootcamp/day-10/section-02-ten-evidences/lesson.md
-    content: '同学们，答辩不是讲情怀，是拿证据。十天学了什么，用十件拿得出手的东西回答——方向卡、契约文档、Skill 三件、编排日志、Git 迭代史，每条都得有文件或运行记录撑腰，对吧。
-
-      现在逐条过十条清单。打开文件、点开运行记录——拿得出来打勾，拿不出来打叉，太弱打三角。每条大概一分钟，别讲故事，先证明这东西在、能打开、能说明我会什么。能力不是说出来的，是拿出来的，对吧。
-
-      打完别慌，没人十项全能。圈出你最强的三条，那是答辩主打；最弱的两条，今晚能补就补，补不了就写进诚实声明。六七条打叉不丢人，自证诚实比假装全会强，咱们 FDE 出厂设置就是证据思维，对吧。
-
-      证据在但讲不出来？每条配一句话：这是什么 + 它证明我会什么。比如 orchestration.md 证明你会编排与安全，runs/ 日志证明闸口可回放。现在就写，别拖到上台临场编——评委问的就是这条线，对吧。
-
-      别人的证据比你多？答辩不评比谁多，比谁讲得清自己有什么。知道哪里弱，本身就是第十一条证据。下一节咱们按 3+3+2 结构写提纲，把三条强项和一条修了三遍的 bug 故事排进八分钟，对吧。'
-    practice: '完成标志：
-
-      [ ] 自证表每条都有结论 + 一句话说明
-
-      [ ] 三强两弱圈定，补救/诚实声明写好
-
-      [ ] 自证表进 Git（答辩材料之一）'
-    resource_ids:
-    - dg-v2-panorama
-    - dg-ten-day
-    tools:
-    - name: 十条证据自证表
-      note: 每条：证据路径 + 一句话「证明我会什么」
-    quiz:
-    - - 十条能力证据的核心思想？
-      - - 证明自己很努力
-        - 能力不是说出来的，是拿出来的
-        - 凑够十条就行
-      - 1
-      - 答辩不是讲情怀——打开文件、点开日志，拿得出来打勾。
-    - - 证据
-      - - 前端三态
-        - Skill 封装：说明书 + 边界 + 工具描述（D7–D9）
-        - 部署 URL
-      - 1
-      - skills/ 三件 + 边界 + 工具描述——Week 2 核心产出。
-    - - 六七条打叉应该？
-      - - 放弃答辩
-        - 诚实自证；优先补答辩要讲的那几条
-        - 隐藏弱项
-      - 1
-      - 「我知道哪里弱」本身就是第十一条证据。
-    media:
-    - kind: video
-      title: 口播课件 · 十条能力证据
-      object_key: documents/shared/course-media/day10-c2-ten-evidence.mp4
-      poster_key: documents/shared/course-media/day10-c2-ten-evidence-poster.jpg
-      duration_sec: 80
-    knowledge_cards:
-    - id: ten-evidences
-      term: 十条能力证据
-      plain: 能力不是说出来的，是拿出来的——每条必须有文件或演示支撑。
-      tag: 核心
-    - id: three-strong
-      term: 三强两弱
-      plain: 圈三条主打 + 两条最弱（今晚补或写诚实声明）——没人十项全能。
-      tag: 方法
-    - id: evidence-map
-      term: 证据地图
-      plain: 方向卡(D1) → 线框(D2) → 契约(D3) → 数据库(D4) → LLM+SSE(D6) → Skill(D7-9) → Git(全程)。
-      tag: 结构
-    glossary_terms:
-    - id: gt-evidence-thinking
-      term: 证据思维
-      plain: FDE 出厂设置：每条能力必须挂得上文件、运行记录或现场演示。
-    local_prep:
-      codex_prompt: '十条证据考官。对照清单逐条问我「文件/演示在哪」；缺的标红并给最小补齐动作。
-
-        尤其核对第 7 条：Day6 DeepSeek+SSE 接电与降级记录。'
-      checklist: []
-  - id: c3
-    title: 答辩准备
-    minutes: 15
-    form: 实战
-    content_ref: class/bootcamp/day-10/section-03-defense-prep/lesson.md
-    content: '同学们，答辩八分钟，结构 3+3+2。作品三分钟、架构三分钟、迭代故事两分钟。好答辩不是讲得多，是砍得狠——没讲到的放互评问答里说。现在就开始写提纲，别等到上台才想结构，对吧。
-
-      第一段作品演示，别讲，演。驾驶舱全貌、唤起 Agent、流水线跑一步、闸上驳回一次、再批准放行——让观众记住一个它真的活着的瞬间，胜过十句功能罗列。掐表走三遍，超时就砍，砍到三分钟以内，对吧。
-
-      第二段架构，指着全景图讲四层、三 Skill 编排、闸在哪、为什么在那。弹药是第二节写好的十条一句话。第三段迭代故事，讲一个修了三次才修对的 bug——现象、定位、修错、修对、学到什么。讲好一个失败，比十个成功更像工程师，对吧。
-
-      现在写提纲一页纸，三段各列要点和主打证据。提纲只写关键词，别写逐字稿；三段开头第一句话背下来，其余靠证据现场说。紧张忘词？第一句接第二句，证据在手就不慌，咱们靠材料不靠背稿，对吧。
-
-      演示时系统挂了怎么办？预案准备好：一张昨日成功运行的日志截图兜底。挂了就指着日志讲，处理事故的方式也计分——慌了才扣分，不慌就是第九条证据。带走一句，咱们下一节真上台，对吧。'
-    practice: '完成标志：
-
-      [ ] 提纲一页纸填满，关键词式
-
-      [ ] 作品段掐表 ≤3′，且练过兜底
-
-      [ ] 提纲进 Git'
-    resource_ids:
-    - dg-v2-panorama
-    tools:
-    - name: 答辩提纲模板
-      note: 演示路径 / 架构三点 / 迭代故事 / 诚实声明
-    quiz:
-    - - 答辩 3+3+2 结构指？
-      - - 3 分钟寒暄 + 3 分钟演示 + 2 分钟问答
-        - 作品 3′ + 架构 3′ + 迭代故事 2′
-        - 3 页 PPT + 3 张图 + 2 个视频
-      - 1
-      - 讲好一个失败，比讲好十个成功更像工程师。
-    - - 诚实声明三件套？
-      - - 不好意思/下次一定/谢谢
-        - 程度 + 差距 + 下一步
-        - 不知道/没学过/没做过
-      - 1
-      - 弱项写清楚，比假装全能更加分。
-    - - 架构 3′ 建议讲哪三点？
-      - - 颜色/font/圆角
-        - 四层架构 + Agent/Skill 编排 + 确认闸设计（各一点）
-        - 团队介绍
-      - 1
-      - 从 V2.0 全景图右侧清单挑三条最强的讲。
-    media:
-    - kind: video
-      title: 口播课件 · 答辩 3+3+2
-      object_key: documents/shared/course-media/day10-c3-demo-prep.mp4
-      poster_key: documents/shared/course-media/day10-c3-demo-prep-poster.jpg
-      duration_sec: 87
-    knowledge_cards:
-    - id: defense-332
-      term: 答辩 3+3+2
-      plain: 作品 3′ + 架构 3′ + 迭代故事 2′——一页纸提纲即可。
-      tag: 结构
-    - id: honest-decl
-      term: 诚实声明
-      plain: 程度 + 差距 + 下一步——「我知道哪里弱」是第十一条证据。
-      tag: 技巧
-    glossary_terms:
-    - id: gt-defense-outline
-      term: defense-outline.md
-      plain: 答辩提纲一页纸：演示路径 / 架构三点 / 迭代五要素 / 诚实声明。
-    local_prep:
-      codex_prompt: '帮我生成 docs/defense-outline.md：作品演示路径 3′ / 架构三点 3′ / 迭代故事五要素 2′ / 诚实声明（哪块降级/未完成）。
-
-        用我仓库里的真实路径，不要空话。'
-      checklist: []
-  - id: c4
-    title: 答辩与互评（现场）
-    minutes: 30
-    form: 答辩
-    content_ref: class/bootcamp/day-10/section-04-defense/lesson.md
-    content: '同学们，上台了。每人八分钟，作品三加架构三加故事二，响铃就停。规则简单：讲得清、拦得住、查得了、迭代真——四个维度，就是你的毕业成绩单。第一个上的别紧张，评委还没建立比较基准呢，对吧。
-
-      听的人别走神，互评表每个分都要配一个细节——写不出细节，说明你也没听懂，分也不算数。讲得清是听懂做了什么、为什么；拦得住是确认闸真实演示；查得了是日志证据随手能打开；迭代真是 bug 故事经得起追问，对吧。
-
-      演示挂了不扣分，慌了才扣分——指着昨日成功日志讲，那就是你的第九条证据。被问倒了？这个我现在不会，我的打算是……三件套回答永远安全。互评按细节说话，分低但写得准是帮人，闭眼打高分是害人，咱们都懂。
-
-      GATE 10：答辩完成、互评收回至少两份、导师抽查十条证据三条、闸口演示真实。过了这关，授予 FDE 称号——课程介绍页上写的那个人，今天是你。带走一句：上台不是表演完美，是展示你会交付，对吧。'
-    practice: '完成标志：
-
-      [ ] 完成自己的 8 分钟答辩
-
-      [ ] 交出 ≥2 份带细节的互评表
-
-      [ ] 迭代日志记下被问住的问题'
-    resource_ids:
-    - dg-v2-panorama
-    - dg-orchestration
-    tools:
-    - name: 互评表
-      note: 证据 / 架构 / 表达 / 诚实度
-    quiz:
-    - - 答辩演示中途系统挂了，正确做法？
-      - - 慌神道歉下台
-        - 启用兜底：指着 runs/ 日志讲成功运行记录
-        - 说网络不好跳过
-      - 1
-      - 日志能回放——事故变成第九条证据的现场版。
-    - - GATE 10 互评要求？
-      - - 不需要
-        - 收回至少 2 份互评表
-        - 只互评老师
-      - 1
-      - 互评是答辩的组成部分——给别人反馈也是能力。
-    - - 评委必问「Agent 什么时候会选错」，最佳答法？
-      - - 永远不会
-        - 结合 Day 8 日志：工具描述重叠/缺边界/任务歧义
-        - 换模型就行
-      - 1
-      - 选错图谱 + 你自己的注入测试记录——最有说服力的答案。
-    media:
-    - kind: video
-      title: 口播课件 · GATE 10
-      object_key: documents/shared/course-media/day10-c4-defense.mp4
-      poster_key: documents/shared/course-media/day10-c4-defense-poster.jpg
-      duration_sec: 65
-    knowledge_cards:
-    - id: gate10
-      term: GATE 10
-      plain: 毕业答辩：V2.0 演示 + 十条证据 + 8 分钟结构 + 互评 ≥2 份。
-      tag: 验收
-    - id: demo-fallback
-      term: 演示兜底
-      plain: 系统挂了指着 runs/ 日志讲——处理事故的方式也计分。
-      tag: 技巧
-    - id: fde-title
-      term: FDE
-      plain: 不是第一天发的帽子——答辩通过后自然获得的称号。
-      tag: 里程碑
-    glossary_terms:
-    - id: gt-gate10
-      term: GATE 10
-      plain: 毕业验收闸：V2.0 全景 + 答辩 + 互评——通过后即 FDE。
-    local_prep:
-      codex_prompt: '你是模拟评委。按答辩提纲对我进行 8 分钟压力提问（每次 1 问）；我答后打分并指出证据是否在仓库。
-
-        覆盖：闸是否真拦、SSE/Agent 是否真通、三条迭代故事。'
-      checklist: []
-  - id: c5
-    title: 两周复盘 + 自学路线
+    title: 概念：业务流程即编排
     minutes: 15
     form: 概念
-    content_ref: class/bootcamp/day-10/section-05-two-week-review/lesson.md
-    content: '同学们，最后十五分钟，咱们不看代码。把十天折叠成一张地图：十天前我以为这行是什么，现在我知道它是什么；十天前我以为 AI 会怎样，现在我知道它会什么、不会什么。填进 final-review.md，对吧。
+    content_ref: class/bootcamp/day-10/section-01-process-as-orchestration/lesson.md
+    content: '同学们，先快答一句：Human-in-the-loop 就是关键步骤要人点头，AI 不能自己拍板。今天咱们把业务流程翻译成流水线，这叫编排。一件工具顶多算助手，一条串起来的流水线才算团队，对吧。
 
-      然后在行业地图上标你的位置——前端、接口、数据库、模型层各打勾、三角或叉。编排与安全单独一档，闸、日志、Skill，这是大多数人的空白，你已经有。大多数人学完一堆课还是不知道自己在哪，你知道长板短板，这就值，对吧。
+      拆分手法呢，对每一步问三个问题。第一，这步是执行还是判断？执行给 Skill，判断和放行人留着。第二，输入从哪来？A 的产出就是 B 的输入，数据流得画清楚。第三，这步错了能撤回吗？不能撤回的，前面必须装人工确认闸。
 
-      遇到问题现在怎么干？定位、假设、验证、记录——这套方法比任何单点技巧都管用。十天够入门加方法论加一套真作品，不够精通；精通是接下来九十天的事，咱们别急着一口气吃成胖子，对吧。
+      咱们再强调一遍数据流。上一步吐什么格式，下一步就吃什么格式，中间对不齐，流水线一定卡。又是契约思想，第六次了嘛——编排不是堆 Skill，是让产出和输入咬合，对吧。
 
-      最后选下一站：在职提效、求职转行、深入工程、还是独立产品。路线表在这，按下一站选，别按 hottest 选。想提效就先接真实数据；想求职就把十条证据翻译成简历语言；想深入工程就 WebSocket 和多 Agent——咱们各走各的路。
+      看这条周报流水线：Skill A 拉 KPI 和异常，Skill B 生成草稿，这两步可以全自动连跑。发送之前呢，一个确认闸——你看一眼草稿，批准才发。为什么？消息发出去了就收不回，这个例子咱们后面还会用到。
 
-      课到这里就结束了，路才刚开始。你是 FDE 了，去部署的地方见。以后遇到问题，AI 导师配置在每节目录里，方法也在——你已经不需要被领着走了。带走一句：地图在手，下一站自己选，对吧。'
-    practice: '完成标志：
-
-      [ ] final-review.md 四部分填满，每条具体（不写「继续努力」这种话）
-
-      [ ] 90 天路线有「本周内的第一个动作」
-
-      [ ] commit 进 Git——这是课程的最后一个 commit'
+      同学们，注意这是 workflow，步骤你定死，不依赖 Agent 现场瞎想。还记得第八天的铁律吗，能 workflow 别 agent。编排的意思就是：你当流程设计师，AI 当流水线工人。本节带走一句——把流程画成 Skill 串联图，第四节能直接施工，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-ten-day
-    - dg-v2-panorama
-    - glossary
+    - dg-workflow-agent
     tools:
-    - name: 90 天路线模板
-      note: 目标 / 30d / 60d / 90d / 本周动作
+    - name: 拆分三问卡
+      note: 执行/判断 · 输入来源 · 可撤回性
     quiz:
-    - - final-review.md 必须包含？
-      - - 只有感谢信
-        - 两周复盘 + 行业地图自评 + 90 天自学路线
-        - 代码全文
+    - - 编排（orchestration）的核心是？
+      - - 让 Agent 自由发挥
+        - 把业务流程拆成 Skill 串联，数据在步骤间流动
+        - 写更多 Prompt
       - 1
-      - 复盘是上路的第一步——不是写完就扔。
-    - - 行业地图自评每档必须？
-      - - 凭感觉
-        - 挂证据链接（文件路径或演示）
-        - 抄同学
+      - 你定步骤顺序，AI 当流水线工人——这是 workflow。
+    - - 拆分每一步首先要问？
+      - - 用什么模型
+        - 这步是「执行」还是「判断/放行」
+        - 谁写的代码
       - 1
-      - ✓/△/✗ 都要说得出为什么——和证据思维一致。
-    - - 90 天路线最低要求？
-      - - 「继续学习 AI」
-        - 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作
-        - 买课清单
+      - 执行 → Skill；判断/放行 → 人（确认点）。
+    - - 「这步错了能撤回吗？」决定什么？
+      - - 用什么数据库
+        - 不可撤回的步骤前必须有人工确认闸
+        - 用不用 Docker
       - 1
-      - 拒绝空话——第一个动作本周就要做。
+      - 发出去了就收不回——确认闸挡在「不可撤回」之前。
+    - - A 的输出契约必须满足 B 的输入，体现什么思想？
+      - - 契约先行（又一次）
+        - 随机对接
+        - 越厚越好
+      - 0
+      - 数据流格式要对齐——接口契约思想在编排里第三次出现。
     media:
     - kind: video
-      title: 口播课件 · final-review.md
-      object_key: documents/shared/course-media/day10-c5-gate10.mp4
-      poster_key: documents/shared/course-media/day10-c5-gate10-poster.jpg
-      duration_sec: 87
+      title: 口播课件 · 编排
+      object_key: documents/shared/course-media/day09-c1-orchestration.mp4
+      poster_key: documents/shared/course-media/day09-c1-orchestration-poster.jpg
+      duration_sec: 92
     knowledge_cards:
-    - id: final-review
-      term: final-review.md
-      plain: 两周复盘 + 行业地图自评（✓/△/✗ 带证据）+ 90 天自学路线。
-      tag: 交付
-    - id: thought-knew
-      term: 我以为 → 我知道
-      plain: 三对认知翻转——训练营真正的个人收获。
-      tag: 复盘
-    - id: ninety-day
-      term: 90 天路线
-      plain: 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作——拒绝空话。
-      tag: 上路
+    - id: orchestration
+      term: 编排
+      plain: 把多步业务流程拆成 Skill 串联，数据在步骤间流动——你当流程设计师。
+      tag: 核心
+    - id: workflow-not-agent
+      term: 编排 = workflow
+      plain: 步骤定死，不依赖 Agent 现想——能 workflow 别 agent（Day 8 铁律）。
+      tag: 原则
+    - id: split-three-q
+      term: 拆分三问
+      plain: 执行还是判断？输入从哪来？错了能撤回吗？
+      tag: 方法
     glossary_terms:
-    - id: gt-fde
-      term: FDE（Forward Deployed Engineer）
-      plain: 定方向 + 做验收 + 能派活给 AI——答辩通过后你就是这个角色。
+    - id: gt-orchestration
+      term: 编排（Orchestration）
+      plain: 多 Skill 按固定顺序串联，数据逐步传递——业务流程的工程化表达。
+    - id: gt-hitl
+      term: Human-in-the-loop
+      plain: 人在环：关键步骤必须人工确认或放行。
     local_prep:
-      codex_prompt: '协助写 docs/final-review.md：两周复盘（做成/做错/下次）、行业地图自评、90 天自学路线（含更自主 Agent 要补的：幂等/注入/少闸信任分级）。
+      codex_prompt: '编排教练。把我的部门流程拆成 Skill 串联图 A→B→(确认闸)→C。
 
-        要求具体到主题，不要鸡汤。'
+        每步标注：执行还是判断、输入从哪来、错了能否撤回。不可撤回步前必须留闸位。
+
+        输出可写入 docs/orchestration.md 的 Markdown。'
+      checklist: []
+  - id: c2
+    title: 概念：人工确认与执行记录
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-10/section-02-human-confirm/lesson.md
+    content: '同学们，确认闸最大的敌人不是 AI，是点确定大赛——弹得多了，人看都不看就批。所以闸不能装样子，得按工程设计来做。今天咱们把确认点怎么设计、日志怎么记，一次讲透，对吧。
+
+      确认闸设计时必答三问。看什么？给决策所需的最低信息——草稿加关键数字加风险标红，不是一坨原始日志。谁来看？有责的那个人，训练营里就是你自己。多久看一次？这个咱们下一节讲信任分级。
+
+      信任分级呢，新上线每次都看；连续十次通过，改成抽看三分之一；稳定期抽看加定期审计。这就是第七天攒的信任额度兑现的地方——不是偷懒，是风险管理。弹窗太多人会麻木，分级就是治这个，对吧。
+
+      再说执行日志，每步一条：时间、动作、结果。出事故时它能回答三个问题——什么时候、谁干的、干成了什么。没有日志的团队，出事只能靠回忆和甩锅，咱们可不走那条路，对吧。
+
+      反模式也记一下：信息不足逼人盲批、一天弹二十次麻木、批了没记录互相甩锅。避开这三条，你的闸才拦得住。同学们带走一句——确认点加日志，等于信任的工程设计，这个得记牢，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-orchestration
+    tools:
+    - name: 确认闸设计卡
+      note: 三问 + 信任分级 + 反模式三条
+    quiz:
+    - - 确认闸三问是？
+      - - 谁开发/多少钱/快不快
+        - 看什么 / 谁来看 / 多久看一次
+        - 早上/中午/晚上
+      - 1
+      - 看什么 = 决策所需的最低信息，不是日志原文。
+    - - 确认界面必须提供？
+      - - 一句「发送吗？」
+        - 草稿 + 关键数字 + 风险标红
+        - 全部原始日志
+      - 1
+      - 信息不足逼人盲批——闸的第一种死法。
+    - - 执行日志三要素？
+      - - 时间 / 动作 / 结果
+        - 谁 / 什么 / 为什么
+        - 开始 / 结束 / 耗时
+      - 0
+      - 案底三问：什么时候、谁干的、干成了什么。
+    - - 信任分级的含义？
+      - - 永远每次都看
+        - 连续通过攒额度：从每次看降到抽看 + 定期审计
+        - 完全放手
+      - 1
+      - 一天弹 20 次确认，第 21 次一定盲批——分级治麻木。
+    media:
+    - kind: video
+      title: 口播课件 · 确认闸三问
+      object_key: documents/shared/course-media/day09-c2-multi-skill.mp4
+      poster_key: documents/shared/course-media/day09-c2-multi-skill-poster.jpg
+      duration_sec: 91
+    knowledge_cards:
+    - id: confirm-three
+      term: 确认闸三问
+      plain: 看什么 / 谁来看 / 多久看一次——闸不是「点确定大赛」。
+      tag: 核心
+    - id: trust-tier
+      term: 信任分级
+      plain: 新上线每次看 → 连续通过降抽看 → 稳定期抽看+审计。
+      tag: 方法
+    - id: log-three
+      term: 日志三要素
+      plain: 时间 / 动作 / 结果——出事故能回答「什么时候、谁干的、干成了什么」。
+      tag: 证据
+    glossary_terms:
+    - id: gt-confirm-gate
+      term: 确认闸
+      plain: 不可撤回步骤前的强制暂停——人批准才继续。
+    - id: gt-exec-log
+      term: 执行日志
+      plain: 每步一条记录，可回放、可追责——runs/ 是案底。
+    local_prep:
+      codex_prompt: '确认闸设计卡：看什么 / 谁来看 / 多久看一次。
+
+        为我的「发送/改数」步骤写确认界面最低信息：草稿 + 关键数字 + 风险标红。
+
+        再写信任分级：什么条件下可以从每次看降到抽看。'
+      checklist: []
+  - id: c3
+    title: 实战：再封装两个 Skill
+    minutes: 30
+    form: 实战
+    content_ref: class/bootcamp/day-10/section-03-two-more-skills/lesson.md
+    content: '同学们，扩编开始。工具表从一件变三件，每件大概十三分钟。流程你们熟：倒序写、四部件、边界声明、工具描述——快在你已经会了，不是快在跳过部件，方法沉淀的红利就在这儿，对吧。
+
+      两个新要点。第一，输入段写明上游——比如输入：Skill A 的输出 JSON，含 kpi 和 exceptions 数组。契约咬合就靠这一句，别写一些数据这种模糊话。咱们流水线最怕接口对不齐。
+
+      第二，如果第三件是发送或通知类 Skill，步骤第一步必须是等待人工确认结果。边界里写死：未收到批准时，不执行，保持等待。工具描述的何时用也要写明——仅在人工确认通过后，对吧。
+
+      最后四分钟做数据流对齐三查。A 的输出字段能不能喂饱 B？B 的草稿里有没有确认界面要的关键数字和风险标红？C 的输入从哪来——确认后的草稿加批准记录。查不到咬合点，第四节编排必卡，咱们别留坑，对吧。
+
+      写不完两件也别硬撑：优先保证发送类那件，闸的训练价值最高。想封装的和串联图不一样？现在二选一，改图或改 Skill，图纸和施工必须一致。带走一句——三件齐了，咱们下一节真正串联，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-orchestration
+    tools:
+    - name: Skill 边界模板
+      note: 复用 Day 8 v1 结构
+    quiz:
+    - - 工具表 3 件每件必须包含？
+      - - 只有名字
+        - 说明书 + 边界声明 + 工具描述
+        - 只有代码
+      - 1
+      - 和 Day 7-8 标准一致——可依赖的三件套。
+    - - 再封装两个 Skill 为什么比第一个快？
+      - - AI 变强了
+        - 四部件 + 边界模板已练过，走同一套流程
+        - 不需要验收了
+      - 1
+      - 第一个练信任，第二三个练吞吐——模板复用。
+    - - 三个 Skill 怎么拆职责最稳？
+      - - 三个 Skill 做同一件事，互为备份
+        - 各管一段可验收步骤，输入输出契约能接上、描述不重叠
+        - 全塞进一个超级 Skill
+      - 1
+      - 编排靠串联，不靠重复——重叠描述会害 Agent 选型。
+    - - 第 2、3 个 Skill 可以省略边界声明吗？
+      - - 可以，反正模板熟了
+        - 不行——每件工具都要说明书 + 边界 + 描述，标准不降级
+        - 只写代码就够
+      - 1
+      - 工具表扩容不能降工程标准——可依赖是逐件验收的。
+    media:
+    - kind: video
+      title: 口播课件 · 工具表 3 件
+      object_key: documents/shared/course-media/day09-c3-human-confirm.mp4
+      poster_key: documents/shared/course-media/day09-c3-human-confirm-poster.jpg
+      duration_sec: 79
+    knowledge_cards:
+    - id: three-skills
+      term: 工具表 3 件
+      plain: 复用 Day 7 全流程提速——每件有说明书 + 边界 + 工具描述。
+      tag: 交付
+    - id: speed-up
+      term: 复用提速
+      plain: 第 2、3 个 Skill 走同一套四部件 + 边界模板，不再从零摸索。
+      tag: 技巧
+    glossary_terms:
+    - id: gt-tool-table-3
+      term: 三件工具表
+      plain: Agent/workflow 可调用的完整工具集——Day 9 从 1 扩到 3。
+    local_prep:
+      codex_prompt: '复用 Day7–8 模板，帮我起草 Skill #2 与 Skill #3 的说明书骨架（四部件+边界+工具描述）。
+
+        要求：三件职责不重叠、输入输出契约能互相接上；发送类必须含「等待人工确认」。
+
+        先问我两件 Skill 的名字与职责再写。'
+      checklist: []
+  - id: c4
+    title: 实战：编排 + 确认点 + 执行日志
+    minutes: 35
+    form: 实战
+    content_ref: class/bootcamp/day-10/section-04-orchestrate/lesson.md
+    content: '同学们，施工开始。图纸在 orchestration.md，三件工具已经齐。现在三步：串联、装闸、记日志。顺序定死告诉 Agent，别让它现场改流程——咱们今天做的是 workflow，不是即兴表演，对吧。
+
+      第一步串联：给 Agent 一条 workflow 指令，A 的输出喂给 B，B 的产出做成确认界面。第二步装闸：不可撤回的步骤前，Agent 必须停，把草稿、关键数字、风险标红摆在你面前，等你一个字——发，或者驳回，对吧。
+
+      第三步记日志：每执行一步，往 runs/ 追加一行，时间、步骤、结果。指令里写清楚每步执行后追加到 runs/YYYYMMDD.md，Agent 来记，你负责抽查。能回放，才算有案底，对吧。
+
+      跑通之后别急着走，两条路径都要实测。批准走一遍，驳回也走一遍——比如驳回：第二段数字不对，流水线得打回 B 重做，日志记下这次驳回。闸拦住一次不算本事，驳回了能退回重做还留下记录，咱们这条线才算有回路，对吧。
+
+      最后两分钟，关掉屏幕别的窗口，只看 runs/ 日志，复述今天发生了什么。到闸停不停、批了动不动、驳回了回不回得来——三个验收点全绿，第五节闸口实测才有底气。带走一句，对吧。'
+    practice: '完成标志：
+
+      [ ] 两路径实测表全 ✓
+
+      [ ] runs/ 日志可回放（三问答全）
+
+      [ ] 迭代日志记下今天修过的每一处'
+    resource_ids:
+    - dg-orchestration
+    tools:
+    - name: 流水线施工清单
+      note: 串联图 / 数据流 / 闸位置 / 日志格式
+    quiz:
+    - - 确认闸应放在哪类步骤之前？
+      - - 每一步
+        - 不可撤回的步骤（对外发送/改数据/花钱）
+        - 最快的步骤
+      - 1
+      - 可撤回的自动连跑——比例通常是 5 步 1 闸。
+    - - 流水线跑到确认闸应该？
+      - - 自动跳过
+        - 自动停下等人；批准后继续；驳回有记录
+        - 发邮件提醒
+      - 1
+      - 拦得住、回得来、查得了——GATE 9 三板斧。
+    - - 不批准时 C 步骤能否执行？
+      - - 可以，反正差不多
+        - 绝不——不批准绝不执行不可撤回步骤
+        - 看 Agent 心情
+      - 1
+      - 钥匙在你手里——这是信任的工程设计。
+    - - orchestration.md 最少要写清什么？
+      - - 只用画一张好看的图
+        - 串联步骤 + 数据流 + 确认闸位置 + 日志格式
+        - 模型厂商与价格表
+      - 1
+      - 编排文档是施工图——Day 10 证据与答辩都会翻它。
+    - - 驳回路径「必须能退回重做」对应哪条验收？
+      - - 只要批准路径通就行
+        - 闸口驳回有记录、能退回、版本可追踪——不是只有绿灯
+        - 驳回后自动强制执行
+      - 1
+      - 拦得住还要回得来——单侧幸福路径不算过闸。
+    media:
+    - kind: video
+      title: 口播课件 · 流水线
+      object_key: documents/shared/course-media/day09-c4-runbook.mp4
+      poster_key: documents/shared/course-media/day09-c4-runbook-poster.jpg
+      duration_sec: 90
+    knowledge_cards:
+    - id: pipeline
+      term: 流水线
+      plain: A→B→确认闸→C：步骤定死、数据流清楚、闸在不可撤回步骤前。
+      tag: 实战
+    - id: reject-path
+      term: 驳回路径
+      plain: 闸口驳回必须能退回重做、版本+1、留痕——不是只有批准。
+      tag: 关键
+    glossary_terms:
+    - id: gt-orchestration-md
+      term: orchestration.md
+      plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
+    local_prep:
+      codex_prompt: '你现在严格按下列 workflow 执行，顺序不许变（把尖括号换成我的 Skill 名）：
+
+
+        1. 调用 Skill A〈名〉，输出存为 step-a
+
+        2. 调用 Skill B〈名〉，输入用 step-a；产出草稿后生成确认界面（草稿全文 + 关键数字 + 风险标红）
+
+        3. 停。不要执行后续。我回复「发」→ 调用 Skill C〈名〉；我回复「驳回：理由」→ 回第 2 步且版本 +1，再次确认
+
+        4. 每步向 runs/〈今天日期〉.md 追加：HH:MM | 步骤 | 结果
+
+
+        先确认三件 Skill 文件存在并复述计划，再开始执行。'
       checklist: []
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 驾驶舱助手位三要件？
+  - q: 编排的核心思想？
     options:
-    - 头像/昵称/表情
-    - 唤起 / 状态可见 / 闸在页内
-    - 语音/视频/文字
+    - Agent 自由决策
+    - 业务流程拆成 Skill 串联，步骤定死（workflow）
+    - 写一个超级 Prompt
     answer: 1
-    explain: 驾驶位不是聊天框——刹车踩得到才叫接入。
-  - q: 接入施工优先级？
+    explain: 你当流程设计师，AI 当流水线工人。
+  - q: 确认闸三问？
     options:
-    - 唤起优先
-    - 闸 > 状态 > 唤起
-    - 一样重要
+    - 谁/什么/为什么
+    - 看什么 / 谁来看 / 多久看一次
+    - 快/好/省
     answer: 1
-    explain: 一个真闸胜过三个半成品。
-  - q: V2.0 全景包含？
+    explain: 闸不是点确定大赛——信息足够才能决策。
+  - q: 确认界面最低信息？
     options:
-    - 只有前端
-    - 六区块 + Agent + 三 Skill + 助手位活着
-    - 只有 Skill
+    - 「发送吗？」
+    - 草稿 + 关键数字 + 风险标红
+    - 全部日志
     answer: 1
-    explain: 九天逐层接电的最后一块拼图。
-  - q: 十条能力证据的核心？
+    explain: 信息不足 = 逼人盲批。
+  - q: 执行日志三要素？
     options:
-    - 凑数量
-    - 每条有文件或演示支撑——能力不是说出来的是拿出来的
-    - 背定义
-    answer: 1
-    explain: 答辩 = 拿证据，不是讲情怀。
-  - q: 答辩 3+3+2 是？
+    - 时间 / 动作 / 结果
+    - 输入 / 步骤 / 输出
+    - 谁 / 在哪 / 用什么
+    answer: 0
+    explain: 案底三问：什么时候、谁干的、干成了什么。
+  - q: 确认闸应放在？
     options:
-    - 3 页纸 + 3 分钟 + 2 人
-    - 作品 3′ + 架构 3′ + 迭代故事 2′
-    - 三个问题 + 三个演示 + 两个评委
+    - 每一步前面
+    - 不可撤回步骤（发送/改数据/花钱）之前
+    - 最后一步后面
     answer: 1
-    explain: 结构固定——一页纸提纲即可。
-  - q: 演示中途系统挂了的兜底？
+    explain: 能撤回的自动连跑；不能撤回的必须有人工闸。
+  - q: 信任分级是？
     options:
-    - 跳过演示
-    - 指着 runs/ 日志讲昨日成功记录
-    - 怪网络
+    - 永远全看
+    - 连续通过降抽看 + 定期审计
+    - 完全自动化
     answer: 1
-    explain: 处理事故的方式也计分——日志是案底。
-  - q: 诚实声明三件套？
+    explain: 治「点确定大赛」的麻木——信任是工程设计。
+  - q: 工具表从几件扩到几件？
     options:
-    - 抱歉/谢谢/再见
-    - 程度 + 差距 + 下一步
-    - 不知道/没做过/不会
+    - 1 → 2
+    - 1 → 3
+    - 3 → 5
     answer: 1
-    explain: 「我知道哪里弱」是第十一条证据。
-  - q: GATE 10 互评要求？
+    explain: 一件是助手，三件是团队——今天扩工具表。
+  - q: 编排文档 orchestration.md 必须包含？
     options:
-    - 不需要
-    - 至少收回 2 份互评表
-    - 只评老师
+    - 只有步骤名
+    - 串联图 + 数据流 + 确认闸位置 + 日志格式
+    - 团队照片
     answer: 1
-    explain: 互评是答辩组成部分。
-  - q: final-review.md 包含？
+    explain: 施工图纸——按图施工，闸口才能拦得住。
+  - q: 驳回路径必须？
     options:
-    - 代码 dump
-    - 两周复盘 + 行业地图自评 + 90 天路线
-    - 只有感谢
+    - 静默忽略
+    - 退回重做、版本+1、留痕
+    - 自动批准
     answer: 1
-    explain: 复盘 + 自评 + 上路计划——毕业交付物。
-  - q: FDE 称号何时获得？
+    explain: 回得来才算完整流水线——不是只有「通过」。
+  - q: 拆分步骤「错了能撤回吗」影响？
     options:
-    - Day 1 注册就有
-    - 答辩通过后自然获得
-    - 交学费就有
+    - 用什么框架
+    - 决定确认闸是否必须
+    - 代码风格
     answer: 1
-    explain: 不是第一天发的帽子——今天走到那里。
-  - q: 评委常问「Agent 什么时候会选错」，最佳素材？
+    explain: 不可撤回 → 前面必须有人工闸。
+  - q: 编排属于 workflow 还是 agent？
     options:
-    - 猜测
-    - Day 8 agent-run-log 里的选错分析
-    - 网上文章
+    - agent——让模型现想
+    - workflow——步骤你定死
+    - 两者一样
     answer: 1
-    explain: 用自己的注入测试和选型实验回答——最有说服力。
-  - q: 90 天路线拒绝什么？
+    explain: Day 8 铁律：能 workflow 别 agent——编排就是 workflow。
+  - q: GATE 9 闸口实测要求？
     options:
-    - 具体里程碑
-    - 「继续学习 AI」这类空话
-    - 本周第一个动作
+    - 口头描述即可
+    - 跑到闸自动停，批准/驳回两条路径都跑通
+    - 只测 happy path
     answer: 1
-    explain: 可衡量 + 分阶段 + 本周就能做的第一步。
-  - q: 证据
+    explain: 拦得住、回得来、查得了。
+  - q: 数据流对齐体现？
     options:
-    - 部署 URL
-    - Git 迭代史——能讲演进故事
-    - 方向卡
+    - 随机拼接
+    - 契约先行——A 的输出满足 B 的输入
+    - 越厚越好
     answer: 1
-    explain: commit 历史是十天能力的时间线证据。
-  - q: 行业地图自评 ✓/△/✗ 必须？
+    explain: 契约思想在编排里继续生效。
+  - q: 一天弹 20 次确认的问题？
     options:
-    - 凭感觉
-    - 每条挂证据链接
-    - 全打 ✓
+    - 效率太高
+    - 第 21 次一定盲批——需要信任分级
+    - 没有 problem
     answer: 1
-    explain: 和证据思维一致——说得出为什么。
-  - q: 迭代故事 2′ 建议讲什么？
+    explain: 确认闸设计要治麻木，不是治 lazy。
+  - q: 可撤回步骤前面要不要一律加确认闸？
     options:
-    - 十个成功
-    - 一个失败 + 怎么发现 + 怎么改 + 学到什么
-    - 团队八卦
+    - 要，每步都闸最安全
+    - 不必——闸留给不可撤回步骤，过多确认会诱发盲批
+    - 永远不要闸
     answer: 1
-    explain: 讲好一个失败比十个成功更像工程师。
+    explain: 闸的密度是设计题：太稀失控，太密麻木。
+  - q: GATE 9「查得了」最低靠什么证明？
+    options:
+    - 口头复述流程
+    - 每步执行日志（时间/动作/结果）可独立回放
+    - 只要 orchestration.md 写了就行
+    answer: 1
+    explain: 文档是施工图，日志是案底——两者都要。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 110′）
+  title: 今日课节（4 节 · 95′）
 - type: quiz
   title: Day10 概念验收
 - type: lab
-  title: V2.0 接入 + 答辩提纲与毕业复盘
+  title: 流水线施工：拦得住、回得来、查得了
 - type: project
-  title: 毕业交付：final-review.md + 答辩完成
+  title: 企业任务：三 Skill 编排 + 确认闸 + 执行日志
 - type: review
-  title: 交付自检与 GATE 10 · 毕业验收
+  title: 交付自检与 GATE 9
 lab:
   runner: agent
   workspace_mode: cumulative
   primary_files:
-  - docs/final-review.md
-  - docs/defense-outline.md
+  - docs/orchestration.md
+  - runs/
   inherited_files:
   - docs/D1_选题确认单.md
   - docs/D1_团队协作卡.md
@@ -567,28 +513,27 @@ lab:
   - skills/skill-01.md
   - runs/
   - agent-run-log.md
-  - docs/orchestration.md
   coach:
     help_mode: debug
     skill_id: fde-coach
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: '你是收官日教练。背景：FDE 训练营 Day 10，学员要完成 V2.0 接入与毕业复盘。
+    prompt_template: '你是流程工程师。背景：FDE 训练营 Day 9，学员已有 3 件 Skill（skills/ 目录）。
 
-      任务：1. 协助把 Agent 接入驾驶舱助手位——三要件按优先级施工（闸在页内 > 状态可见 > 唤起），接不通真实环境时采用指令面板降级并写书面权衡；2. 生成 docs/defense-outline.md——答辩提纲一页纸（作品演示路径/架构讲解三点/迭代故事五要素/诚实声明）；3.
-      生成 docs/final-review.md——两周复盘：三对「我以为→我知道」、行业地图自评（五档 ✓/△/✗ 带证据链接）、90 天路线（可衡量目标 + 30/60/90 里程碑 + 本周第一个动作）。
+      任务：1. 生成 docs/orchestration.md——编排文档：步骤定死的串联图（A→B→C）、数据流（谁的输出是谁的输入）、确认闸位置（必须在不可撤回步骤之前）、闸设计卡（三问）、日志格式；2. 按文档把流水线真实跑一遍：A
+      跑 → B 产出确认界面（草稿+关键数字+风险标红）→ 停 → 人批准 → C 执行；再跑一次驳回路径（打回 B 重做、版本+1、留痕）；3. 每步执行后向 runs/ 追加日志行（时间|步骤|结果）。
 
-      要求：拒绝空话；每条自评都要挂得上证据路径。'
+      要求：不批准绝不执行 C；驳回必须能退回重做且留记录；日志可独立回放当天经过。'
   rubric:
   - check: file_exists
     args:
-      path: docs/final-review.md
+      path: docs/orchestration.md
   - check: text_contains
     args:
-      path: docs/final-review.md
-      needle: 90 天
+      path: docs/orchestration.md
+      needle: 确认闸
   - check: text_contains
     args:
-      path: docs/final-review.md
-      needle: 我以为
+      path: docs/orchestration.md
+      needle: 日志

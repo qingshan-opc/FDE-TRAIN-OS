@@ -1,9 +1,8 @@
-"""Coach gateway — KbKernel (RAG) + anyCode fde-coach Skill + evidence.
+"""Coach gateway — DeepSeek-v4-flash chat mentor + evidence.
 
-M5 learning loop: every ask/stream/diagnose/handoff call is built from a
-course/enrollment/node/attempt-scoped context (``services.application.
-coach_context``) — knowledge citations are limited to the current
-course_version/day's authorized tags, never a global/unscoped memory pool.
+M5 learning loop: ask/stream builds course/node-scoped context
+(``services.application.coach_context``) and answers via DeepSeek directly.
+Knowledge-base / LingZhi RAG is intentionally not used.
 """
 
 from __future__ import annotations
@@ -39,6 +38,12 @@ from services.shared.anycode_client import (  # noqa: E402
     run_turn,
 )
 from services.shared.config import ANYCODE_COACH_SKILL_ID  # noqa: E402
+from services.shared.deepseek_client import (  # noqa: E402
+    DEEPSEEK_MODEL,
+    chat_completion,
+    chat_completion_stream,
+    deepseek_configured,
+)
 from services.shared.middleware import resolve_camp_id, session_learner_id  # noqa: E402
 from services.shared.rate_limit import rate_limit  # noqa: E402
 
@@ -72,7 +77,7 @@ class CoachAskResponse(BaseModel):
     reply: str
     citations: list[dict[str, Any]] = Field(default_factory=list)
     level: int
-    coach_mode: Literal["full", "rag_only", "offline"]
+    coach_mode: Literal["full", "rag_only", "offline", "deepseek"]
     evidence_refs: list[str] = Field(default_factory=list)
     kb_mode: str | None = None
     diagnostics: dict[str, Any] = Field(default_factory=dict)
@@ -101,7 +106,34 @@ def _hint(level: int) -> str:
 def _skill_rules() -> str:
     if SKILL_PATH.exists():
         return SKILL_PATH.read_text(encoding="utf-8")[:6000]
-    return "遵循 FDE Coach LEVEL1–3；禁止 Docker/K8s 真命令；知识对错以 citations 为准。"
+    return "你是 FDE 训练营 AI 任务导师。遵循 LEVEL1–3 辅导强度；禁止建议在学员机器启动 Docker/K8s；用中文回答，步骤清晰可验收。"
+
+
+def _deepseek_system_prompt(req: CoachAskRequest, level: int, context_brief: str) -> str:
+    steps = "\n".join(f"- {s}" for s in (req.fallback_steps or [])[:12]) or "（无）"
+    return (
+        "你是 FDE 训练营「AI 任务导师」。用简洁中文辅导学员完成当日任务。\n"
+        "规则：\n"
+        "1. 遵循 LEVEL 分层：LEVEL1 只给检查项；LEVEL2 给关键步骤；LEVEL3 可给更完整示例，但仍引导学员自己动手。\n"
+        "2. 禁止建议在学员本机启动 Docker/Kubernetes 真命令；仿真环境内的动作除外。\n"
+        "3. 全面禁用知识库：不要检索、引用、编造资料条目；不要输出「引用」「知识库」「citations」小节。\n"
+        "4. 输出结构建议：判断 → 下一步动作 → 验收标准。不要加资料引用段。\n"
+        "5. 不要编造不存在的文件路径或 API。\n\n"
+        f"## 本次辅导\n"
+        f"- help_mode: {req.help_mode}\n"
+        f"- LEVEL: {level} — {_hint(level)}\n"
+        f"- Day: {req.day}\n"
+        f"- node_id: {req.node_id or '（未指定）'}\n\n"
+        f"## 学员当前上下文\n{context_brief}\n\n"
+        f"## 当日课节参考\n{steps}\n"
+    )
+
+
+def _deepseek_messages(req: CoachAskRequest, level: int, context_brief: str) -> list[dict[str, str]]:
+    return [
+        {"role": "system", "content": _deepseek_system_prompt(req, level, context_brief)},
+        {"role": "user", "content": req.question},
+    ]
 
 
 def _context_brief(ctx: dict[str, Any]) -> str:
@@ -362,25 +394,39 @@ def ask(req: CoachAskRequest, request: Request) -> CoachAskResponse:
     ctx = _build_context(req)
     effective_fail_count = ctx.get("fail_count") or req.fail_count
     level = _level(effective_fail_count, req.max_help_level)
-    day_tags = ctx.get("day_tags") or req.day_tags
     if not req.sim_summary and ctx.get("sim_summary"):
         req.sim_summary = json.dumps(ctx["sim_summary"], ensure_ascii=False)
     if not req.agent_job_id and ctx.get("latest_job_summary"):
         req.agent_job_id = ctx["latest_job_summary"].get("job_id")
-    kb_answer, kb_mode, citations, job_summary = _kb_ask(req, day_tags)
     context_brief = _context_brief(ctx)
     digest = hashlib.sha256(f"{req.learner_id}:{req.question}:{level}".encode()).hexdigest()[:12]
+    citations: list[dict[str, Any]] = []
 
-    reply, err, skill = _anycode_coach(req, level, kb_answer, citations, job_summary, context_brief)
-    if reply:
-        coach_mode: Literal["full", "rag_only", "offline"] = "full"
-        model = f"anycode:{skill}"
+    if deepseek_configured():
+        try:
+            reply = chat_completion(_deepseek_messages(req, level, context_brief))
+            coach_mode: Literal["full", "rag_only", "offline", "deepseek"] = "deepseek"
+            model = f"deepseek:{DEEPSEEK_MODEL}"
+            kb_mode = "disabled"
+        except Exception as exc:
+            log.warning("deepseek ask failed: %s", exc)
+            reply = (
+                f"【{req.help_mode} / LEVEL{level}】\n{_hint(level)}\n\n"
+                f"你的情况：\n{context_brief}\n\n"
+                f"（DeepSeek 暂不可用：{exc}）"
+            )
+            coach_mode = "offline"
+            model = "fallback:deepseek_error"
+            kb_mode = "disabled"
     else:
-        reply = _local_fallback_reply(req, level, kb_answer, kb_mode, citations, job_summary, context_brief)
-        if err:
-            reply = f"{reply}\n\n（anyCode 降级：{err}）"
-        coach_mode = "offline" if kb_mode in ("offline", "skipped", "error") else "rag_only"
-        model = f"fallback:{kb_mode}"
+        reply = (
+            f"【{req.help_mode} / LEVEL{level}】\n{_hint(level)}\n\n"
+            f"你的情况：\n{context_brief}\n\n"
+            "请配置 DEEPSEEK_API_KEY 后重试。"
+        )
+        coach_mode = "offline"
+        model = "fallback:no_deepseek_key"
+        kb_mode = "disabled"
 
     _write_evidence(req, level, digest)
     _write_coach_turn(req, ctx, reply, citations, model)
@@ -398,77 +444,59 @@ def ask(req: CoachAskRequest, request: Request) -> CoachAskResponse:
 
 @router.post("/api/v1/coach/ask/stream", dependencies=[Depends(rate_limit("coach_ask"))])
 def ask_stream(req: CoachAskRequest, request: Request) -> StreamingResponse:
-    import threading
-    from queue import Empty, Queue
-
     req.learner_id = session_learner_id(request)
     req.camp_id = resolve_camp_id(request, req.camp_id)
     ctx = _build_context(req)
     effective_fail_count = ctx.get("fail_count") or req.fail_count
     level = _level(effective_fail_count, req.max_help_level)
-    day_tags = ctx.get("day_tags") or req.day_tags
     if not req.agent_job_id and ctx.get("latest_job_summary"):
         req.agent_job_id = ctx["latest_job_summary"].get("job_id")
-    kb_answer, kb_mode, citations, job_summary = _kb_ask(req, day_tags)
     context_brief = _context_brief(ctx)
     digest = hashlib.sha256(f"{req.learner_id}:{req.question}:{level}".encode()).hexdigest()[:12]
+    citations: list[dict[str, Any]] = []
+    kb_mode = "disabled"
 
     def gen():
         meta = {
             "level": level,
             "kb_mode": kb_mode,
-            "citations": citations[:5],
+            "citations": [],
             "digest": digest,
+            "model": DEEPSEEK_MODEL,
         }
         yield f"event: meta\ndata: {json.dumps(meta, ensure_ascii=False)}\n\n"
 
-        q: Queue[tuple[str, Any]] = Queue()
-        box: dict[str, Any] = {}
+        final = ""
+        coach_mode: Literal["full", "rag_only", "offline", "deepseek"] = "deepseek"
+        model = f"deepseek:{DEEPSEEK_MODEL}"
 
-        def on_delta(text: str) -> None:
-            q.put(("delta", text))
-
-        def worker() -> None:
-            reply, err, skill = _anycode_coach(
-                req, level, kb_answer, citations, job_summary, context_brief, on_delta=on_delta
+        if not deepseek_configured():
+            final = (
+                f"【{req.help_mode} / LEVEL{level}】\n{_hint(level)}\n\n"
+                f"你的情况：\n{context_brief}\n\n"
+                "请配置 DEEPSEEK_API_KEY 后重试。"
             )
-            box["reply"] = reply
-            box["err"] = err
-            box["skill"] = skill
-            q.put(("end", None))
-
-        t = threading.Thread(target=worker, daemon=True)
-        t.start()
-        streamed = False
-        while True:
-            try:
-                kind, payload = q.get(timeout=1.0)
-            except Empty:
-                if not t.is_alive():
-                    break
-                continue
-            if kind == "delta":
-                streamed = True
-                yield f"event: delta\ndata: {json.dumps({'text': payload}, ensure_ascii=False)}\n\n"
-            elif kind == "end":
-                break
-        t.join(timeout=2.0)
-
-        reply = box.get("reply")
-        err = box.get("err")
-        if reply:
-            if not streamed:
-                yield f"event: delta\ndata: {json.dumps({'text': reply}, ensure_ascii=False)}\n\n"
-            coach_mode = "full"
-            final = reply
-            model = f"anycode:{box.get('skill')}"
-        else:
-            final = _local_fallback_reply(req, level, kb_answer, kb_mode, citations, job_summary, context_brief)
-            if err:
-                final = f"{final}\n\n（anyCode 降级：{err}）"
-            coach_mode = "offline" if kb_mode in ("offline", "skipped", "error") else "rag_only"
-            model = f"fallback:{kb_mode}"
+            coach_mode = "offline"
+            model = "fallback:no_deepseek_key"
             yield f"event: delta\ndata: {json.dumps({'text': final}, ensure_ascii=False)}\n\n"
+        else:
+            try:
+                for delta in chat_completion_stream(_deepseek_messages(req, level, context_brief)):
+                    final += delta
+                    yield f"event: delta\ndata: {json.dumps({'text': delta}, ensure_ascii=False)}\n\n"
+                if not final.strip():
+                    final = "（模型未返回内容，请换个问法再试。）"
+                    yield f"event: delta\ndata: {json.dumps({'text': final}, ensure_ascii=False)}\n\n"
+            except Exception as exc:
+                log.warning("deepseek stream failed: %s", exc)
+                final = (
+                    f"【{req.help_mode} / LEVEL{level}】\n{_hint(level)}\n\n"
+                    f"你的情况：\n{context_brief}\n\n"
+                    f"（DeepSeek 暂不可用：{exc}）"
+                )
+                coach_mode = "offline"
+                model = "fallback:deepseek_error"
+                yield f"event: delta\ndata: {json.dumps({'text': final}, ensure_ascii=False)}\n\n"
 
         _write_evidence(req, level, digest)
         _write_coach_turn(req, ctx, final, citations, model)

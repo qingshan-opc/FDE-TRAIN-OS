@@ -1,0 +1,59 @@
+{
+  "total": 292.686,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/01-open.wav",
+      "start": 0.0,
+      "duration": 20.8
+    },
+    {
+      "id": "02-physical",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/02-physical.wav",
+      "start": 21.05,
+      "duration": 40.887
+    },
+    {
+      "id": "03-vm",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/03-vm.wav",
+      "start": 62.187,
+      "duration": 38.095
+    },
+    {
+      "id": "04-container",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/04-container.wav",
+      "start": 100.532,
+      "duration": 38.96
+    },
+    {
+      "id": "05-k8s",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/05-k8s.wav",
+      "start": 139.742,
+      "duration": 36.968
+    },
+    {
+      "id": "06-serverless",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/06-serverless.wav",
+      "start": 176.96,
+      "duration": 31.369
+    },
+    {
+      "id": "07-cloud-native",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/07-cloud-native.wav",
+      "start": 208.579,
+      "duration": 39.607
+    },
+    {
+      "id": "08-cli",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/08-cli.wav",
+      "start": 248.436,
+      "duration": 30.08
+    },
+    {
+      "id": "09-close",
+      "path": "/Users/qingjiu/workspace/research/digital-human-platform/outputs_dhx/day05_s04_course/tts/09-close.wav",
+      "start": 278.766,
+      "duration": 13.92
+    }
+  ]
+}

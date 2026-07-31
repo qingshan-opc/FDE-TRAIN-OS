@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCapabilityRadar, buildRecentActivity } from "./capabilityRadar";
+import { buildCapabilityRadar, buildRecentActivity, commandAcceptanceScore } from "./capabilityRadar";
 
 describe("buildCapabilityRadar", () => {
   it("returns six axes with scores", () => {
@@ -16,6 +16,17 @@ describe("buildCapabilityRadar", () => {
     );
     expect(axes).toHaveLength(6);
     expect(axes.find((a) => a.key === "agent")?.score).toBeGreaterThan(50);
+  });
+});
+
+describe("commandAcceptanceScore", () => {
+  it("counts passed command days out of five", () => {
+    expect(
+      commandAcceptanceScore(
+        { capability_tags: ["command:day:1", "command:day:2"] } as import("./types").Passport,
+        [],
+      ),
+    ).toBe(40);
   });
 });
 

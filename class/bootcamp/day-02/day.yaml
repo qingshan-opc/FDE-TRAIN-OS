@@ -150,7 +150,8 @@ lab:
   primary_files:
   - docs/D2-L4_接口契约.md
   - docs/D2_前端走查.md
-  prompt: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据。前端未接数据库是正常状态，但不得写成联调完成。
+  - docs/D2_command_log.md
+  prompt: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据，以及指挥日志 docs/D2_command_log.md。前端未接数据库是正常状态，但不得写成联调完成。
   rubric:
   - check: file_exists
     args:
@@ -162,6 +163,21 @@ lab:
   - check: file_exists
     args:
       path: docs/D2_前端走查.md
+  - check: file_exists
+    args:
+      path: docs/D2_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: 我确认以上批准均为本人作出
 nodes_lab: 第 2 天岗位交接与真实证据验收
 nodes_project: 前端四页面 V0.5 与五接口契约
 knowledge_content:

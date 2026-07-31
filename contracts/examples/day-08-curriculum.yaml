@@ -1,518 +1,520 @@
 camp_version: v0.7
 day: 8
-title: Skill 工程化 + 遇见 Agent
+title: 第一个 Skill：把你的工作方式教给 AI
 week: 2
-project: Skill 工程化 + 遇见 Agent
-project_brief: Skill 从「能跑」到「可依赖」：边界声明 + 异常四分类 + 异常注入测试（≥3 种坏输入按声明失败）。掀开引擎盖理解 Harness 四要素与决策环，让 Agent 在自然语言任务下正确调用你的 Skill。GATE
-  8 闭环演示 + 口答「什么时候会选错」。
+project: 第一个 Skill
+project_brief: Week 2 换档日：从「做系统」到「造能力」。把一项每周重复、规则清晰、可验收的工作封装成第一个 Skill 说明书（输入/步骤/输出/验收），现场运行一次并留下可检查证据。Skill 进 Git，GATE 7
+  三问过关。
 review_checklist:
-- Skill v1 含边界声明（不接受的输入 + 失败时的行为）
-- 异常注入 ≥3 种坏输入，Skill 均「按声明的方式失败」（不胡编、不硬撑）
-- Agent 闭环演示：自然语言下任务 → Agent 选对并调用你的 Skill → 产出过验收
-- 口答：Harness 四要素、决策环、workflow vs agent 的区别、你的 Agent「什么时候会选错」
-- 'commit：`feat: Skill v1 工程化 + Agent v0.1`'
+- Skill 三问：它做什么（输入→输出）？步骤谁定？好坏谁判？
+- 现场运行一次 Skill，产出物过验收标准
+- Skill 说明书含验收标准（可判对错），进 Git
+- 'commit：`feat: 第一个 Skill——<你的 Skill 名>`'
 resources:
-- id: dg-exception
-  title: 讲解图 · 异常四分类
+- id: dg-skill-anatomy
+  title: 讲解图 · Skill 解剖四部件
   kind: diagram
-  summary: 输入错 / 环境错 / 能力限 / 目标歧——处置各不相同
-  url: /course-assets/assets/diagrams/exception-taxonomy.svg
-- id: dg-harness
-  title: 讲解图 · Harness 解剖
-  kind: diagram
-  summary: 模型 + 工具表 + 记忆 + 循环
-  url: /course-assets/assets/diagrams/harness-anatomy.svg
-- id: dg-agent-loop
-  title: 讲解图 · Agent 决策环
-  kind: diagram
-  summary: 理解 → 规划 → 调工具 → 观察 → 继续
-  url: /course-assets/assets/diagrams/agent-loop.svg
-- id: dg-workflow-agent
-  title: 讲解图 · workflow vs agent
-  kind: diagram
-  summary: 步骤定死 vs 模型现场决策——能写死就写死
-  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
+  summary: 输入 / 步骤 / 输出 / 验收——缺一个都转不动
+  url: /course-assets/assets/diagrams/skill-anatomy.svg
 - id: glossary
   title: 新概念词典（速查版）
   kind: site
-  summary: Harness / Agent / Tool Calling / Guardrails
+  summary: 18 词随身查：Skill / MCP / Agent 等
   url: /course-assets/resources/h5/glossary.html
+- id: open-o2
+  title: 公开课 O2 · LLM 与编排深化
+  kind: doc
+  summary: Skill 生态、MCP、各平台格式（选读）
+  url: /docs/open-course/o2-llm.md
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:8
   - project:role-week
-  estimated_minutes: 105
+  estimated_minutes: 100
   require_capsules: true
   capsules:
   - id: c1
-    title: 概念：边界与异常——从能跑到可依赖
+    title: 概念：从系统到能力
     minutes: 15
     form: 概念
-    content_ref: class/bootcamp/day-08/section-01-boundary-exceptions/lesson.md
-    content: '同学们，第八天第一节。昨天你的 Skill 在乖数据上二连过，恭喜，它能跑了。但能跑和可依赖之间，隔着一份边界声明和一张异常分类表。真实世界的输入不乖：数据是空的、字段缺了、接口超时了，对吧。
-
-      三个场景：老板要周报，但 KPI 接口返回空数组；异常工单缺了逾期天数字段；老板说把两周数据合并一下——到底是哪两周？这时候你的 Skill 会干嘛？如果答案是不知道，那它只是能跑，还不可依赖，嘛。
-
-      异常分四类，处置各不同。输入错——数据为空、字段缺失、格式不对：拒绝执行，明说缺什么，不编数据补洞。环境错——接口超时、文件打不开：重试一次，报环境问题并停止，不假装成功。能力限——超出说明书范围：声明超边界，询问后再动。目标歧——指令有两种以上合理解法：列出理解选项，请求确认，对吧。
-
-      共同原则一句话：停下来、说清楚、等人来。对照你们第五天的数据不足就说不足，是同一道防线的工程化。从今天起，你的 Skill 失败的每一种方式，都是你提前设计好的——这叫按声明的方式失败。失败不可怕，失控地失败才可怕，对吧。
-
-      边界声明加在说明书里：不接受什么输入；输入不足时停止执行、列出所缺字段；超范围请求声明边界、询问后再继续；指令歧义时列出不超过三种理解、请求确认。让 Skill 拒绝执行，不是显得弱——会拒绝的才可依赖，瞎编的周报比没有周报危害大十倍，嘛。
-
-      收个尾：边界声明是 Skill 从能跑到可依赖的门票。下一节上刑场——故意喂坏输入，看你的 Skill 怎么死。死法符合声明，才算过关，咱们下午再挂 Agent，对吧。'
+    content_ref: class/bootcamp/day-08/section-01-system-to-skill/lesson.md
+    content: 同学们好，我是你们的老师404。第七天换档——第一周做系统，第二周造能力。关键句：**系统被使用，能力被执行**。Prompt 管这次对话，Skill 管长期复用（输入/步骤/输出/验收）。三重价值：可复用、可验收、可交接。反例：低频、不稳定、高风险别碰。详见
+      `PPT_AND_NARRATION.md`。
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-exception
+    - glossary
     tools:
-    - name: 异常四分类处置卡
-      note: 输入错 / 环境错 / 能力限 / 目标歧
+    - name: Prompt vs Skill 对照表
+      note: 寿命 / 结构 / 验收 / 交接四列
     quiz:
-    - - 异常四分类不包括？
-      - - 输入错
-        - 环境错
-        - 模型错（厂商 bug）
-      - 2
-      - 四类是输入错/环境错/能力限/目标歧——处置各不相同。
-    - - 输入数据为空时，Skill 应该？
-      - - 编一些 plausible 的数据继续
-        - 拒绝执行，列出所缺字段，请求补充
-        - 静默跳过
+    - - Week 2 换档后，主工作对象从什么变成什么？
+      - - 从 Prompt 变成代码
+        - 从「做系统」变成「造能力」
+        - 从后端变成前端
       - 1
-      - 停下来、说清楚、等人来——瞎编比没有更危险。
-    - - 「按声明的方式失败」的意思是？
-      - - 任何失败都算过
-        - 每种失败方式都是你提前设计好的，不是失控乱来
-        - 失败了就重启
+      - 系统被使用，能力被执行——Skill 是能力的说明书。
+    - - Prompt 和 Skill 的核心区别是？
+      - - Prompt 更长
+        - Prompt 一次性；Skill 长期复用、有结构、有验收标准
+        - Skill 必须用代码写
       - 1
-      - 会拒绝的 Skill 才可依赖——体面失败学。
-    - - 边界声明和 Day 5 降级的共同思想是？
-      - - 越快越好
-        - 体面失败：AI 挂了/数据不够，系统不能假装成功
-        - 永远不用 AI
+      - Skill 四部件齐全才可交接；Prompt 用完即弃。
+    - - 「系统 vs 能力」里，驾驶舱属于哪一类？
+      - - 能力
+        - 系统
+        - 两者都是
       - 1
-      - 前端三态（D2-3）、LLM/SSE 降级（D6）、Skill 边界（D8）——同一思想的第三次生长。
+      - 驾驶舱回答「发生了什么」；Skill 回答「接下来做什么」。
+    - - 下列哪项最不适合作为第一个 Skill？
+      - - 每周一次的周报生成
+        - 必须老板当场拍板的战略决策
+        - 从驾驶舱拉 KPI 数据
+      - 1
+      - 必须人拍板的不能封装成全自动 Skill——只能封装「准备材料」。
     media:
     - kind: video
-      title: 口播课件 · 边界声明
-      object_key: documents/shared/course-media/day08-c1-boundaries.mp4
-      poster_key: documents/shared/course-media/day08-c1-boundaries-poster.jpg
-      duration_sec: 124
+      title: 口播课件 · 系统 vs 能力
+      object_key: documents/shared/course-media/day07-c1-system-skill.mp4
+      poster_key: documents/shared/course-media/day07-c1-system-skill-poster.jpg
+      duration_sec: 289
     knowledge_cards:
-    - id: boundary-decl
-      term: 边界声明
-      plain: Skill 明确「什么输入不接、接不了时怎么表现」——Guardrails 的朴素版。
+    - id: system-vs-capability
+      term: 系统 vs 能力
+      plain: 驾驶舱是系统（等人来看）；Skill 是能力（被 AI 执行）——Week 2 换档对象变了。
       tag: 核心
-    - id: exc-four
-      term: 异常四分类
-      plain: 输入错 / 环境错 / 能力限 / 目标歧——各自处置方式不同。
+    - id: prompt-vs-skill
+      term: Prompt vs Skill
+      plain: Prompt 是一次性对话；Skill 是可复用说明书，有结构、有验收、可交接。
+      tag: 对比
+    - id: skill-triple
+      term: Skill 三重价值
+      plain: 可复用、可验收、可交接——最后一个最被低估。
       tag: 框架
-    - id: fail-by-design
-      term: 按声明的方式失败
-      plain: 失败不可怕，失控地失败才可怕——每种失败方式都应提前设计好。
-      tag: 原则
-    - id: stop-speak-wait
-      term: 停下来、说清楚、等人来
-      plain: 异常处理的共同原则——对照 Day 5「数据不足就说不足」。
-      tag: 行动
-    glossary_terms:
-    - id: gt-guardrails
-      term: Guardrails（护栏）
-      plain: 拦在输入输出上的规则——Skill 边界声明就是护栏的一种。
-    - id: gt-input-error
-      term: 输入错
-      plain: 数据为空、字段缺失、格式不对——拒绝执行并明说缺什么，不编数据补洞。
-    local_prep:
-      codex_prompt: '异常四分类教练。场景：〈我描述坏输入〉。
-
-        判断属于输入错/环境错/能力限/目标歧，并写出 Skill 应如何「按声明失败」（拒绝/重试/列选项），禁止硬撑编造。'
-      checklist: []
-  - id: c2
-    title: 实战：Skill v1 + 异常注入测试
-    minutes: 40
-    form: 实战
-    content_ref: class/bootcamp/day-08/section-02-harden-skill/lesson.md
-    content: '同学们，这节上刑场。注入测试是软件工程的老手艺：故意喂坏的，看它怎么死。你的 Skill 昨天在乖数据上过关，今天要在坏数据上证明——死法符合声明，才算可依赖，对吧。
-
-      清单按四类各备至少一条：输入错——空数据、缺关键字段、字段名变了、日期范围超限；环境错——模拟接口超时、文件打不开；能力限——顺便翻译成英文直接发给客户；目标歧——把两周数据合并一下。咱们逐条喂，记录实际死法，嘛。
-
-      每条坏输入填一张表：期望死法写声明原文，实际死法看 AI 怎么反应，判定只有两种。✓ 按声明的方式失败——拒绝、重试后报告、列理解请确认，好死。✗ 失控失败——编了数据、硬撑着交付、闷头乱选，必须修，对吧。
-
-      修的时候方向别搞反。死法对但声明没写——补声明，条款缺失补条款。死法不对——改说明书，边界段措辞、示例、红线前置，不是骂 AI。AI 太聪明了，空数据也编一份周报？这正是要抓的失控：红线前置加空数据必须拒绝，再测，对吧。
-
-      最后一步别省：乖数据回归。边界加完，好输入也得照常过——别把 Skill 修成什么都拒的废人。今天标准：注入测试至少三条、覆盖至少两类，全部 ✓，再加乖数据回归仍过，才算 Skill v1 达标，嘛。
-
-      证据归档，commit 准备。带走一句：注入测试比十次正确运行都值钱——它告诉你 Skill 在坏输入下会不会失控。下午咱们掀引擎盖，看 Agent 和 Harness 怎么调用你的 Skill，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
-    resource_ids:
-    - dg-exception
-    tools:
-    - name: 注入用例模板
-      note: 坏输入 | 预期行为 | 实际行为 | 过/不过
-    quiz:
-    - - 异常注入测试至少几种坏输入？
-      - - 1 种
-        - ≥3 种（如空数据/错格式/越界请求）
-        - 10 种
-      - 1
-      - 每类异常至少一条用例——按声明失败才算过。
-    - - 注入测试发现 Skill「硬撑成功」，正确动作是？
-      - - 算过，能出结果就行
-        - 回炉改边界声明，直到按声明的方式失败
-        - 换更强的模型
-      - 1
-      - 硬撑 = 失控失败——比拒绝执行危险得多。
-    - - agent-run-log.md 应记录什么？
-      - - 只有成功记录
-        - 每种注入用例的输入、预期行为、实际行为
-        - 聊天记录全文
-      - 1
-      - 注入 + Agent 选型实验都要留痕——Day 10 证据素材。
-    - - Skill v1 相对「能跑」版，工程化多交什么？
-      - - 更漂亮的 Prompt
-        - 边界声明（不接什么 + 失败怎么表现）+ 注入用例过闸
-        - 换更大的模型
-      - 1
-      - GATE 8：可依赖 = 声明在先、坏输入按声明失败。
-    - - 注入用例「空数据 / 错格式 / 越界请求」分别主要测哪类异常？
-      - - 全是模型错
-        - 输入错 / 输入错 / 权限或范围错（按你边界声明归类）
-        - 全是环境错
-      - 1
-      - 四分类要对上用例——测的是设计，不是碰运气。
-    media:
-    - kind: video
-      title: 口播课件 · Skill v1
-      object_key: documents/shared/course-media/day08-c2-exception-test.mp4
-      poster_key: documents/shared/course-media/day08-c2-exception-test-poster.jpg
-      duration_sec: 112
-    knowledge_cards:
-    - id: skill-v1
-      term: Skill v1
-      plain: 在 v0 基础上补「边界与异常」段 + 通过异常注入测试。
-      tag: 交付
-    - id: inject-test
-      term: 异常注入测试
-      plain: 故意喂 ≥3 种坏输入（空数据/错格式/越界请求），验证按声明失败。
-      tag: 实战
-    - id: no-hard-run
-      term: 不许硬撑
-      plain: 任何「硬扛乱做」都要回炉改边界——胡编周报比没有危害大十倍。
+    - id: anti-patterns
+      term: 不值得封装
+      plain: 一年一次的、每次都不一样的、必须人拍板的——先别封装。
       tag: 红线
     glossary_terms:
-    - id: gt-injection
-      term: 异常注入
-      plain: 测试手段：故意给坏输入，看系统是否按设计的方式失败。
+    - id: gt-skill
+      term: Skill
+      plain: 教 AI 做一件具体事的说明书：输入、步骤、输出、验收四部件。
+    - id: gt-sop
+      term: SOP
+      plain: 标准作业程序——Skill 是人类 SOP 第一次能被 AI 直接执行的形态。
+    - id: gt-capability
+      term: 能力
+      plain: 一件具体可执行的事（生成周报/整理线索），载体是 Skill + 执行者（AI）。
+    - id: gt-mcp-preview
+      term: MCP（预告）
+      plain: 给 AI 接工具的 USB-C 标准——你的 Skill 是它的朴素版（Day 8 深讲）。
     local_prep:
-      codex_prompt: '升级 skills/〈名称〉.md 到 v1：补边界声明（不接受什么、不足时停止、超范围询问、歧义列选项）。
+      codex_prompt: '你是 Skill 教练。帮我把「上周重复做过的一件事」改写成：输入→步骤→输出→怎么判好坏。
 
-        再设计 ≥3 条异常注入用例表：坏输入 | 预期行为 | 我怎么测。
+        判断它是否值得做成 Skill（重复、可说明书化、能验收）。'
+      checklist: []
+  - id: c2
+    title: 概念：Skill 解剖四部件
+    minutes: 15
+    form: 概念
+    content_ref: class/bootcamp/day-08/section-02-skill-anatomy/lesson.md
+    content: '同学们，这节咱们解剖一只 Skill。一份能被 AI 执行的说明书长什么样？四个部件：输入、步骤、输出、验收。缺一个都转不动——输入没写清楚，AI 不知道吃什么料；验收没写清楚，你不知道货好不好，对吧。
 
-        改完后自检：乖数据回归仍应通过。'
+      输入管做这件事吃什么料，要具体到来源和范围。比如周报 Skill：驾驶舱 /api/kpi 和 /api/exceptions，近七天，读者是总监——不能写相关数据，哪相关呢？步骤管怎么做，AI 能一步步执行：拉数据、找变化、找逾期、生成。不能写分析一下，怎么分析嘛，对吧。
+
+      输出管交出什么货：Markdown 四段、三百字以内、数字只用来源里真实存在的。验收管好坏怎么判：四段齐全、每个数字能溯源、建议主语是人且可执行——每条都能判 ✓ 还是 ✗。不能写写得好，谁判、怎么判呢，对吧。
+
+      看这份周报 Skill 完整示例。输入写着两个接口、近七天、读者总监；步骤四条，拉 KPI、找环比变化最大的两个指标、找逾期最久的三张工单、按格式生成；输出 Markdown 四段三百字；验收三条，结构、数字、意图各一。咱们对照这份模板，等会儿就要写自己的，嘛。
+
+      常见缺陷记四个词：相关数据分析一下写个周报写得好——看到这些词，说明书就还没写完。步骤要多细？细到换一个人或 AI 照着做，不会做出第二种理解。写不到这个程度，先拆步骤，对吧。
+
+      眼熟吗？输出加验收，就是你们第五天学的结构化输出加三条军规。第一周的每个概念，在第二周的说明书里都有自己的格子。下一节咱们用三筛法选第一个 Skill——高频、稳定、低险，对吧。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: 四部件缺陷速查
+      note: 相关数据 / 分析一下 / 写个周报 / 写得好
+    quiz:
+    - - Skill 四部件的正确组合是？
+      - - 名字 / 图标 / 颜色 / 版本
+        - 输入 / 步骤 / 输出 / 验收
+        - 前端 / 后端 / 数据库 / 模型
+      - 1
+      - 四部件一个不能少；验收必须可判对错。
+    - - 「分析一下本周数据」作为步骤，主要缺陷是？
+      - - 太短
+        - 不可执行——AI 不知道「怎么分析」
+        - 应该用英文
+      - 1
+      - 步骤要细到换一个人/AI 照着做不会做出第二种理解。
+    - - 输出 + 验收对应 Week 1 的哪两个概念？
+      - - 三态与降级
+        - 结构化输出 + Rubric 验收
+        - 契约与 DDL
+      - 1
+      - Week 1 的每个概念在 Skill 说明书里都有自己的格子。
+    - - 验收标准「写得好」为什么不合格？
+      - - 太主观，第三方无法客观判过/不过
+        - 字数太少
+        - 必须用 Markdown
+      - 0
+      - 验收的铁律是可衡量、可判对错——和 PRD 验收标准同一套逻辑。
+    media:
+    - kind: video
+      title: 口播课件 · 四部件
+      object_key: documents/shared/course-media/day07-c2-skill-anatomy.mp4
+      poster_key: documents/shared/course-media/day07-c2-skill-anatomy-poster.jpg
+      duration_sec: 367
+    knowledge_cards:
+    - id: four-parts
+      term: 四部件
+      plain: 输入、步骤、输出、验收——缺一个说明书就转不动。
+      tag: 核心
+    - id: input-spec
+      term: 输入要求
+      plain: 具体到来源与范围；「相关数据」是常见缺陷。
+      tag: 写作
+    - id: steps-spec
+      term: 步骤要求
+      plain: AI 能逐步执行；「分析一下」不是步骤。
+      tag: 写作
+    - id: output-spec
+      term: 输出要求
+      plain: 格式 + 长度 + 红线；对应 Day 5 结构化输出。
+      tag: 连接
+    - id: accept-spec
+      term: 验收要求
+      plain: 可判对错；「写得好」不是验收标准。
+      tag: 连接
+    glossary_terms:
+    - id: gt-input
+      term: 输入（Skill）
+      plain: 做这件事吃什么料：数据来源、时间范围、读者对象。
+    - id: gt-evidence
+      term: 证据
+      plain: 运行后留下的可检查产物：文件、日志、验收结果——不是口头「跑过了」。
+    local_prep:
+      codex_prompt: '对照 Skill 四部件（输入/步骤/输出/验收）审我下面的草稿（我会粘贴）。
+
+        标出模糊词（如「适当」「差不多」），改成可执行句子；缺哪部件补哪部件。'
       checklist: []
   - id: c3
-    title: 概念：Agent 与 Harness 解剖
-    minutes: 20
-    form: 概念
-    content_ref: class/bootcamp/day-08/section-03-agent-harness/lesson.md
-    content: '同学们，快答开场：Harness 四要素是什么？模型、工具表、记忆、循环。惊喜来了——这四样你们全摸过：第五天调了模型、做了上下文装配；第七天写的 Skill 就是工具表上的一件工具；你们的迭代闭环就是人工版循环。你们已经在徒手拼
-      Harness 了，对吧。
+    title: 方法：选哪项工作先封装
+    minutes: 15
+    form: 方法
+    content_ref: class/bootcamp/day-08/section-03-pick-first/lesson.md
+    content: '同学们，第一个 Skill 选品决定你今天的成就感。选错了，后面写得再漂亮也跑不通，今天就会卡在验收上。咱们先看三个真实失败案例，再学三筛法——高频、稳定、低险，对吧。
 
-      模型管思考的大脑，就是第五天网关后的 LLM。工具表管能动手做什么，第七天的 Skill 马上挂上去。记忆管上下文里带什么，第五天上下文装配就是这个。循环管反复想-做-看，你们的验收不过改说明书重跑，就是人工版循环，嘛。
+      小张封装了一年一次的年报——写完再没用过，封装成本回不来。小李封装了处理客户投诉——每次情况都不同，AI 开盲盒。小王第一个就封装给客户发报价邮件——AI 写错一个数字，发出去了。三个坑：低频、不稳定、高风险，对吧。
 
-      Agent 是什么？骨架加上角色：你的说明书、人格、目标。你们写的 ai-tutor.yaml，其实就是一份 Agent 角色定义——你们早就在造 Agent 了，只是没人告诉名字。Skill 是给 Agent 预备的工具；Agent
-      拿着工具表上的 Skill 去干活，对吧。
+      三筛法按顺序过。第一筛高频：每周至少做一次吗？低频的封装成本回不来。第二筛稳定：步骤能写成无歧义说明书吗？看情况太多的，AI 执行就是开盲盒。第三筛低险：做错了代价小吗？第一个 Skill 是拿来练信任的，对吧。
 
-      Agent 的工作方式叫决策环：理解任务、规划步骤、选择并调用工具、观察结果、继续或收尾——一圈一圈转，直到交活。用昨天 Skill 运行当实例：理解生成本周周报、规划四步、调 Skill、看产出、验收通过就收尾。决策环会不会死循环？会，所以工程上要设最大轮数和超时，对吧。
+      重点说低险——这是硬筛。对外发送、改数据库、花钱的事，先别碰。第一个 Skill 练的是你和 AI 之间的信任，不是练胆子。第九天咱们学人工确认点，学完再碰高风险的事，嘛。
 
-      最后一个分水岭：workflow 还是 agent？步骤你定死，是 workflow——第九天咱们学编排就是这个；路径它现想，是 agent。能 workflow 的别 agent——企业场景里，可预测是第一美德。报销审批适合 workflow；帮我把这堆乱文件整理成
-      PRD适合 agent，嘛。
+      动手打分：每项一到五分，加一列数据可得——输入能直接从驾驶舱或现有文件拿到的，今天就能跑通。拿不定就选周报：高频、稳定、低险，数据就在你驾驶舱里。日报也行，结构一样，对吧。
 
-      收个尾：Agent 决策，Harness 骨架，Skill 是工具。下一节把你的 Skill 挂上 Agent 的工具表——从今天起，你派活用自然语言，挑工具的活 Agent 自己干，对吧。'
+      收个尾：今天只做一个 Skill，做透。可以选两个候选打分，但定品只定一个。下一节开写——四部件齐全，验收可判。咱们把第一个 Skill 写进 skills/ 目录，对吧。'
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-harness
-    - dg-agent-loop
-    - dg-workflow-agent
+    - dg-skill-anatomy
     tools:
-    - name: Harness 四要素对照表
-      note: 各要素 ↔ 你 Week 1 已做过的东西
+    - name: 选品打分表
+      note: 高频 / 稳定 / 低险 / 数据可得 各 1–5 分
     quiz:
-    - - Harness 四要素是？
-      - - 前端/后端/数据库/模型
-        - 模型 + 工具表 + 记忆 + 循环
-        - CPU/内存/磁盘/网络
+    - - 选第一个 Skill 的三筛顺序是？
+      - - 低险 → 高频 → 稳定
+        - 高频 → 稳定 → 低险
+        - 稳定 → 低险 → 高频
       - 1
-      - 同一模型换副骨架，能力天差地别——聊天窗 vs Cursor 的差别。
-    - - 决策环的正确顺序？
-      - - 调工具 → 理解 → 规划 → 观察
-        - 理解 → 规划 → 调工具 → 观察 → 继续
-        - 生成 → 验收 → 迭代
+      - 先筛频率，再筛能否写说明书，最后筛出错代价。
+    - - 为什么第一个 Skill 必须「低险」？
+      - - 低险的工作简单
+        - 第一个 Skill 是练信任——错了代价要小
+        - 导师要求
       - 1
-      - 观察结果决定是否继续——ReAct 循环的朴素版。
-    - - workflow 和 agent 的选择原则是？
-      - - 永远用 agent 显得高级
-        - 能写死步骤用 workflow，写不死才上 agent
-        - 随机选择
+      - 对外发送/改数据/花钱的等高险操作，Day 9 学完确认闸再说。
+    - - 推荐首发「周报生成」同时满足三筛，还因为？
+      - - 最难所以最有价值
+        - 高频、结构稳定、产出不对外发送、数据可从驾驶舱拉
+        - 老板最喜欢
       - 1
-      - Agent 的自由度是用不确定性和成本换来的。
-    - - 你的 Skill 在 Harness 里对应哪个要素？
-      - - 模型
-        - 工具表上的一件工具
-        - 记忆
+      - 四列打分表里「数据可得」是加分项——今天就能跑通。
+    - - 小张封装「年度总结」失败的根本原因是？
+      - - 写得太长
+        - 低频——封装成本回不来
+        - 没有用 Markdown
       - 1
-      - Day 7 的 Skill 从今天起成为 Agent 工具表上的工具。
+      - 一年一次的工作，写完再没用过——第一筛就没过。
     media:
     - kind: video
-      title: 口播课件 · Harness 四要素
-      object_key: documents/shared/course-media/day08-c3-harness.mp4
-      poster_key: documents/shared/course-media/day08-c3-harness-poster.jpg
-      duration_sec: 126
+      title: 口播课件 · 选品三筛
+      object_key: documents/shared/course-media/day07-c3-pick-first.mp4
+      poster_key: documents/shared/course-media/day07-c3-pick-first-poster.jpg
+      duration_sec: 110
     knowledge_cards:
-    - id: harness-four
-      term: Harness 四要素
-      plain: 模型 + 工具表 + 记忆 + 循环——骨架不同，能力差很多。
-      tag: 核心
-    - id: agent-role
-      term: Agent
-      plain: 跑在 Harness 上的角色（说明书/人格/目标）；你的 ai-tutor.yaml 就是一份 Agent 定义。
-      tag: 概念
-    - id: decision-loop
-      term: 决策环
-      plain: 理解 → 规划 → 调工具 → 观察 → 继续，直到完成或求助。
-      tag: 机制
-    - id: workflow-vs-agent
-      term: workflow vs agent
-      plain: 步骤定死用 workflow；写不死才上 agent——自由度换不确定性。
-      tag: 选型
+    - id: three-filters
+      term: 选品三筛
+      plain: 高频（每周≥1）→ 稳定（步骤可写死）→ 低险（出错代价小）。
+      tag: 方法
+    - id: low-risk-first
+      term: 低险优先
+      plain: 第一个 Skill 是练信任——对外发送/改数据/花钱的先别碰（Day 9 再学确认闸）。
+      tag: 原则
+    - id: data-available
+      term: 数据可得
+      plain: 输入能直接从驾驶舱或现有文件拿到，今天就能跑通——加分项。
+      tag: 技巧
     glossary_terms:
-    - id: gt-harness
-      term: Harness
-      plain: 模型之外的循环：工具表、记忆、规划、重试、日志。
-    - id: gt-tool-call
-      term: Tool Calling
-      plain: 模型输出「调用 X 工具、参数 Y」的结构化请求，由 Harness 执行。
+    - id: gt-high-freq
+      term: 高频
+      plain: 每周至少做一次——封装成本才回得来。
+    - id: gt-stable
+      term: 稳定步骤
+      plain: 「看情况」太多的工作，AI 执行就是开盲盒。
     local_prep:
-      codex_prompt: '用 Harness 四要素（模型/工具表/记忆/循环）和决策环（理解→规划→调工具→观察→继续）重述我昨天跑 Skill 的过程。
-
-        标出哪一步是人肉、哪一步交给 Agent 后风险最大。'
+      codex_prompt: 候选 3 个可 Skill 化任务（来自我的周报助手）。用「重复频率 / 说明书化难度 / 验收清晰度」打分，选出今天要做的第 1 个，并写一句为什么不选另外两个。
       checklist: []
   - id: c4
-    title: 实战：让 Agent 调用你的 Skill
+    title: 实战：定义 Skill
     minutes: 30
     form: 实战
-    content_ref: class/bootcamp/day-08/section-04-agent-calls-skill/lesson.md
-    content: '同学们，这节把你的 Skill 挂上 Agent 的工具表。Agent 选工具的时候读什么？不是说明书全文——是货架标签，叫工具描述。名称、何时用、输入要求，三要素写清楚，对吧。
+    content_ref: class/bootcamp/day-08/section-04-define-skill/lesson.md
+    content: '同学们，这节开写。三十分钟后，skills/ 目录里要有你的第一份 Skill 说明书——四部件齐全，验收可判，同桌能读懂。写之前咱们先给两个库：动作动词库和判据句式库，对吧。
 
-      工具描述三要素：何时用——需要生成本周运营周报时，输入为 KPI 与异常工单数据；不用于——写通用文章、创意写作、对外发送任何内容；输入要求——JSON 格式，缺数据时本工具会拒绝。最反直觉的是不用于——它是护栏，防止周报工具被选去写情诗，嘛。
+      步骤段只许出现动作动词：拉取、筛选、对比、汇总、排序、找出、计算、生成、检查、列出。分析一下处理一下优化一下——这些不是动作，是愿望。我巡场见到就划掉，改写成 AI 能执行的具体动作，嘛。
 
-      挂上去，测三个任务。任务 A 该调：用本周数据生成周报——期望选中 weekly-report。任务 B 不该调：帮我写一句朋友圈文案——期望不调工具，直接答。任务 C 易选错：总结一下这周情况——模糊指令，观察它选什么，对吧。
+      验收段用判据句式：结构判X 段齐全、含字段 A/B/C；数字判每个数字能在来源中找到出处；意图判当某情况时，必须某表现——第五天用例格式直接搬。验收写几条？至少三条，结构、数字、意图各一，对吧。
 
-      选错了别怪 Agent 笨，怪标签写得宽。改描述，再测。今天结束前交一张选错图谱：我的 Agent 在什么措辞下会误选或漏选，因为什么，我用什么修了描述。这比十次正确都值钱——它告诉你工具描述的边界在哪，对吧。
+      写作顺序听好：倒着写。先写输出——交什么货；再写验收——怎么判；然后输入——吃什么料；最后步骤——从料到货就是连线题。正着写的人，都在步骤里迷路了。输出段贴一个好示例，是最划算的消歧方式，对吧。
 
-      描述写多长？两到四句；长了稀释关键信息，短了护栏不够。平台没有工具表功能？降级玩法：Prompt 里手动提供工具清单加描述，让模型先输出选择再执行。Agent 调用时输入谁准备？今天你在任务里给数据，第九天编排会把拉数据串起来，嘛。
+      写完做换人测试：同桌只看你的说明书，说出要做什么、怎么判好坏。他说错了，就是你写岔了——改说明书，不怪他。步骤里能写分支吗？能，但每个分支都要落到动作动词；分支超过三层，说明该拆成两个 Skill，嘛。
 
-      收个尾：从今天起你派活用自然语言，挑工具的活 Agent 自己干。选错图谱和 agent-tool-map.md 一起进 Git。下一节第八天验收——Agent v0.1 闭环演示，对吧。'
+      定稿进 Git，预演下一节运行。带走两个库：动作动词写步骤，判据句式写验收，换人测试消歧义。下一节 AI 拿着你的说明书上岗——派活、收货、按标准验收、留证据，对吧。'
     practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - dg-agent-loop
-    - dg-harness
+    - dg-skill-anatomy
     tools:
-    - name: 选错图谱
-      note: 描述重叠 / 缺边界 / 任务歧义
+    - name: Skill 模板四段式
+      note: 输入 / 步骤 / 输出 / 验收 + 工具描述
     quiz:
-    - - Agent 选错 Skill 最常见原因是？
-      - - 模型版本太旧
-        - 工具描述重叠、模糊、缺「何时不用」
-        - 网络延迟
+    - - Skill 说明书中「工具描述」为什么要写「何时不用」？
+      - - 凑字数
+        - 帮 Agent（和人）判断该不该选这件工具
+        - 法律要求
       - 1
-      - 第 1 步「理解任务」跑偏——描述写得越清，选型越准。
-    - - Agent 闭环演示的验收标准是？
-      - - Agent 有回复就行
-        - 自然语言任务 → 正确调用 Skill → 产出过验收标准
-        - 必须全自动无人工
+      - Day 8 的「选错图谱」靠在描述里写清边界。
+    - - 步骤写到什么程度算合格？
+      - - 越厚越好
+        - 换一个人/AI 照着做，不会做出第二种理解
+        - 只要列三步就行
       - 1
-      - 闭环 = 理解、选型、执行、验收四步全绿。
-    - - 故意给「不匹配任务」的目的是？
-      - - 为难 Agent
-        - 观察它会不会选错，分析原因写进日志
-        - 测试模型速度
+      - 可执行性比篇幅重要——「分析一下」永远不合格。
+    - - 今日定稿文件应放在哪里？
+      - - prompts/ 目录
+        - skills/<name>.md 并 commit 进 Git
+        - 只存在聊天记录里
       - 1
-      - 「什么时候会选错」是 GATE 8 口答必考点——Day 10 答辩也会问。
-    - - 工具描述里写清「何时不用」主要防止什么？
-      - - 模型算力不够
-        - Agent 在模糊任务上误选你的 Skill
-        - 日志文件过大
-      - 1
-      - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
-    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
-      - - 没区别，都是聊天
-        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
-        - Agent 更便宜所以优先
-      - 1
-      - 信任对象变了：从「建议」变成「代执行」，必须可回放。
+      - 可复用、可交接——必须版本化进仓库。
     media:
     - kind: video
-      title: 口播课件 · Agent 调用 Skill
-      object_key: documents/shared/course-media/day08-c4-agent-loop.mp4
-      poster_key: documents/shared/course-media/day08-c4-agent-loop-poster.jpg
-      duration_sec: 118
+      title: 口播课件 · skills/<name>.md
+      object_key: documents/shared/course-media/day07-c4-define-skill.mp4
+      poster_key: documents/shared/course-media/day07-c4-define-skill-poster.jpg
+      duration_sec: 115
     knowledge_cards:
-    - id: agent-calls-skill
-      term: Agent 调用 Skill
-      plain: 自然语言下任务 → Agent 选对工具 → 执行 → 产出过验收。
-      tag: 实战
-    - id: wrong-pick
-      term: 什么时候会选错
-      plain: 工具描述重叠、模糊、缺「何时不用」时——选错图谱的第一因。
+    - id: skill-md
+      term: skills/<name>.md
+      plain: 今日交付物：四部件 + 工具描述（何时用/何时不用）写进 Git。
+      tag: 交付
+    - id: tool-desc
+      term: 工具描述
+      plain: 一句话干什么、何时用、何时不用——决定 Day 8 Agent 选不选得对。
       tag: 关键
     glossary_terms:
-    - id: gt-copilot-agent
-      term: Copilot vs Agent
-      plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
+    - id: gt-tool-table
+      term: 工具表
+      plain: Agent 能调用的 Skill 清单——描述写得越清，选型越准。
     local_prep:
-      codex_prompt: '你是 Agent 工具接入教练。请根据我的 skills/〈名称〉.md 写出工具描述三要素：何时用 / 不用于 / 输入要求。
+      codex_prompt: '你现在是 Skill 说明书写作搭档。目标文件：skills/〈名称〉.md。
 
-        然后设计三任务实测脚本：
+        倒序协助我写：输出 → 验收(≥3 可判) → 输入(来源具体) → 步骤(动词、换人无歧义)。
 
-        A 应调用该 Skill；B 不应调用；C 模糊指令易选错。
+        每写完一段先自检，再写下一段。禁止出现「适当/合理/等等」类模糊词。
 
-        要求我把结果记入 docs/agent-tool-map.md（选错原因与描述修改句）。
+        写完后生成「换人三问」答案键，方便同桌测验。'
+      checklist: []
+  - id: c5
+    title: 实战：运行与证据
+    minutes: 25
+    form: 实战
+    content_ref: class/bootcamp/day-08/section-05-run-evidence/lesson.md
+    content: '同学们，这节 AI 拿着你的说明书上岗。你的工作变成四步：派活、收货、按标准验收、留证据——不再是自己打字，而是按标准验货。运行就是说明书加输入，一句按这份 Skill 执行，对吧。
 
-        若在 Cursor/Agent Lab：指导我如何挂工具表并逐条跑，不要跳过复测。'
+      运行方式很简单：Agent Lab 或模型对话里，先粘贴 Skill 说明书全文，再粘贴输入数据——驾驶舱 curl 结果或数据文件，最后一句按这份 Skill 执行。收货后别看感觉，看你写的验收段：逐条判 ✓ 还是 ✗，对吧。
+
+      每次运行留证据三件套：runs/日期-skill名/ 目录下，input.md 是输入快照，output.md 是产出物原文，verdict.md 是验收结果——逐条判 ✓/✗，加总判和改进项。Skill 的信任是攒出来的，连续十次通过，你才敢把每次都看降级成抽看，嘛。
+
+      验收不过怎么办？定位是说明书歧义还是 AI 执行偏差。歧义就改说明书——多数情况是这个；偏差就换表达、加示例、拆步骤，然后重跑。记住：验收不过大概率是说明书的锅，不是 AI 的锅。就像换人测试里读者误解，是作者的锅，对吧。
+
+      AI 没按步骤做、直接跳到生成？在说明书开头加严格按步骤顺序执行，每步完成后简述结果。每次跑结果不一样？正常，模型有概率性；验收标准管的是底线——结构、数字、意图，波动在标准内即可。今天目标：连续两次验收全过，对吧。
+
+      证据归档，迭代日志写清楚改了什么、重跑了几次。下一节是第七天验收——Skill 三问口试，导师看证据链。带走一句：Skill 的信任是攒出来的，证据三件套就是你的本金，嘛。'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - dg-skill-anatomy
+    tools:
+    - name: 运行记录模板
+      note: 时间 | 输入摘要 | 产出路径 | 验收结果
+    quiz:
+    - - Skill 跑完必须留下什么？
+      - - 好印象
+        - 可检查的证据：产物文件 + 运行记录
+        - 完整聊天记录导出
+      - 1
+      - 没有证据的运行等于没跑——和 Eval 思维一致。
+    - - 验收结果应如何记录？
+      - - 口头告诉导师
+        - 对照验收标准逐条判过/不过，写入 runs/
+        - 只记「成功了」
+      - 1
+      - 第三方应能独立复查：打开产物 + 日志即可验证。
+    - - prompts/summary.md 和今日 Skill 的关系是？
+      - - 完全无关
+        - Week 1 的 summary 提示词是「半个 Skill」——今天升级成完全体
+        - 必须删除旧文件
+      - 1
+      - 有契约、有红线，缺运行步骤与验收执行——今天补全。
+    media:
+    - kind: video
+      title: 口播课件 · 运行一次
+      object_key: documents/shared/course-media/day07-c5-run-evidence.mp4
+      poster_key: documents/shared/course-media/day07-c5-run-evidence-poster.jpg
+      duration_sec: 113
+    knowledge_cards:
+    - id: run-once
+      term: 运行一次
+      plain: 按说明书真实执行，不是「我觉得能跑」——证据必须第三方可查。
+      tag: 实战
+    - id: run-log
+      term: 运行记录
+      plain: 时间、输入摘要、产出路径、验收结果——写入 runs/ 目录。
+      tag: 证据
+    glossary_terms:
+    - id: gt-runs-dir
+      term: runs/
+      plain: 存放 Skill 运行记录与产物的目录——可复查、可回放。
+    local_prep:
+      codex_prompt: '你是评测员。按 skills/〈名称〉.md 的验收段，对我粘贴的 output.md 逐条判 ✓/✗ 并指出证据句。
+
+        不通过则只允许改说明书或重跑，不要手改产出凑数。
+
+        输出 verdict.md 表格，并建议下一轮说明书应改的那一句。'
       checklist: []
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 「能跑」和「可依赖」之间隔着什么？
+  - q: Week 2 的主线换档是？
     options:
-    - 更强的模型
-    - 边界声明 + 异常注入测试
-    - 更多 Prompt
+    - 从写代码到写文档
+    - 从「做系统」到「造能力（Skill）」
+    - 从本地到云端
     answer: 1
-    explain: 乖数据上能跑 ≠ 真实世界可依赖。
-  - q: 异常四分类是？
+    explain: 驾驶舱是系统；Skill 是能力——AI 拿着说明书就能干活。
+  - q: Skill 四部件是？
     options:
     - 前端/后端/数据库/模型
-    - 输入错 / 环境错 / 能力限 / 目标歧
-    - 早/中/晚/夜
+    - 输入 / 步骤 / 输出 / 验收
+    - 需求/设计/开发/测试
     answer: 1
-    explain: 四类处置各不相同——不能一刀切。
-  - q: 输入数据为空，Skill 应？
+    explain: 四部件一个不能少；验收必须可判对错。
+  - q: Prompt 和 Skill 的本质区别？
     options:
-    - 编 plausible 数据
-    - 拒绝执行，明说缺什么
-    - 跳过继续
+    - Prompt 更高级
+    - Prompt 一次性对话；Skill 可复用、有验收、可交接
+    - 没有区别
     answer: 1
-    explain: 停下来、说清楚、等人来——不编数据补洞。
-  - q: Harness 是？
+    explain: Week 1 散落在对话里的 Prompt，今天固化为 Skill。
+  - q: 选第一个 Skill 的三筛法是？
     options:
-    - 更大的模型
-    - 模型之外的循环：工具表/记忆/规划/重试/日志
-    - 编程框架
+    - 难/贵/新
+    - 高频 / 稳定 / 低险
+    - 快/省/好
     answer: 1
-    explain: 同一模型在聊天窗 vs Agent 工具里差别在 Harness。
-  - q: 决策环顺序？
+    explain: 第一个 Skill 练信任——低险是硬筛。
+  - q: 「工具描述」为什么要写「何时不用」？
     options:
-    - 调工具 → 理解 → 规划
-    - 理解 → 规划 → 调工具 → 观察 → 继续
-    - 生成 → 验收
+    - 法律免责
+    - 帮 Agent 判断该不该选这件工具（Day 8 选错图谱）
+    - 凑文档厚度
     answer: 1
-    explain: 观察结果决定下一步——循环直到完成或求助。
-  - q: workflow vs agent 选择原则？
+    explain: 描述决定 Agent 第 1 步理解任务时选不选得对。
+  - q: 步骤「分析一下数据」的主要问题是？
     options:
-    - 永远 agent
-    - 能写死用 workflow，写不死才 agent
-    - 看心情
+    - 太短
+    - 不可执行——没有具体操作序列
+    - 应该用 bullet
     answer: 1
-    explain: 自由度换不确定性——能 workflow 别 agent。
-  - q: Agent 选错 Skill 最常见原因？
+    explain: 步骤要细到可照做，不能留「分析」这种黑洞词。
+  - q: Skill 运行后必须留下？
     options:
-    - 模型太旧
-    - 工具描述重叠、模糊、缺「何时不用」
-    - 网络问题
+    - 口头汇报
+    - 可检查的证据（产物 + runs/ 记录）
+    - 截图发群
     answer: 1
-    explain: 描述决定第 1 步理解任务是否跑偏。
-  - q: 异常注入测试的做法？
+    explain: 没有证据 = 没跑；和 Eval 思维一脉相承。
+  - q: 输出 + 验收对应 Week 1 的？
     options:
-    - 等线上出事
-    - 故意喂坏输入，验证按声明失败
-    - 只测正常路径
+    - 三态与降级
+    - 结构化输出 + Rubric
+    - 契约与 DDL
     answer: 1
-    explain: 失败方式是被设计出来的——体面失败学。
-  - q: Skill 边界声明对应词典里的？
+    explain: Week 1 概念在 Skill 说明书里各有一格。
+  - q: 第一个 Skill 不建议封装？
     options:
-    - RAG
-    - Guardrails（护栏）
-    - Token
+    - 每周周报
+    - 给客户发报价邮件（不可撤回、高险）
+    - 从 API 拉 KPI
     answer: 1
-    explain: 什么不接、坏了怎么坏——护栏的朴素版。
-  - q: 你的 Skill 在 Harness 里是什么？
+    explain: 对外发送/改数据/花钱——Day 9 确认闸后再碰。
+  - q: Skill 三问不包括？
     options:
-    - 模型
-    - 工具表上的一件工具
-    - 记忆模块
-    answer: 1
-    explain: Day 7 造工具，Day 8 挂到 Agent 工具表上。
-  - q: Agent 闭环演示验收？
+    - 它做什么（输入→输出）
+    - 步骤谁定
+    - 用哪个 AI 模型
+    answer: 2
+    explain: 三问：做什么、步骤谁定、好坏谁判——模型是 Harness 的事。
+  - q: GATE 7 过闸必须包含？
     options:
-    - 有回复即可
-    - 自然语言 → 正确调用 Skill → 产出过验收
-    - 必须无人值守
+    - 视频看完
+    - 现场运行 + 产出过验收 + 说明书进 Git
+    - 背下四部件定义
     answer: 1
-    explain: 理解、选型、执行、验收四步全绿。
-  - q: 「硬撑乱做」的正确处理？
+    explain: 能跑、有证据、可交接——三问是口答检验理解。
+  - q: 「系统被使用，能力被执行」意思是？
     options:
-    - 算过
-    - 回炉改边界，直到按声明失败
-    - 换模型
+    - 系统和能力一样
+    - 驾驶舱等人看；Skill 被 AI 拿去干活
+    - 能力比系统高级
     answer: 1
-    explain: 胡编产出比拒绝执行危险十倍。
-  - q: Copilot 和 Agent 的区别？
-    options:
-    - 没区别
-    - Copilot 递扳手；Agent 定目的地它开
-    - Copilot 更贵
-    answer: 1
-    explain: 信任要求与验收方式完全不同。
-  - q: ai-tutor.yaml 对应 Agent 的什么？
-    options:
-    - 工具表
-    - 角色/人格/规则（Agent 定义）
-    - 记忆模块
-    answer: 1
-    explain: 你早就在造 Agent——今天只是掀引擎盖。
-  - q: GATE 8 对 Skill v1 的硬门槛是？
-    options:
-    - 只要 Prompt 更长
-    - 有边界声明，且 ≥3 种坏输入均按声明失败
-    - 必须上多 Agent 框架
-    answer: 1
-    explain: 工程化验收看声明与注入，不看「感觉稳」。
-  - q: Harness「记忆」要素主要解决什么？
-    options:
-    - 换更大显卡
-    - 跨步保留上下文，避免每轮从零猜任务状态
-    - 替代工具表
-    answer: 1
-    explain: 四要素缺一不可——没记忆的循环只会原地打转。
+    explain: 你从操作者变成派活的人——Week 2 的核心位移。
 nodes:
 - type: learn
-  title: 今日课节（4 节 · 105′）
+  title: 今日课节（5 节 · 100′）
 - type: quiz
   title: Day8 概念验收
 - type: lab
-  title: 异常注入 + Agent 选得对不对
+  title: 第一个 Skill：跑出可检查的证据
 - type: project
-  title: 企业任务：Skill v1 + Agent v0.1 闭环
+  title: 企业任务：Skill 说明书 + 运行证据
 - type: review
-  title: 交付自检与 GATE 8
+  title: 交付自检与 GATE 7
 lab:
   runner: agent
   workspace_mode: cumulative
   primary_files:
   - skills/skill-01.md
-  - agent-run-log.md
+  - runs/
   inherited_files:
   - docs/D1_选题确认单.md
   - docs/D1_团队协作卡.md
@@ -538,33 +540,31 @@ lab:
   - docs/D5_五分钟路演.md
   - docs/D5_综合验收.md
   - README.md
-  - skills/skill-01.md
-  - runs/
   coach:
     help_mode: debug
     skill_id: fde-coach
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: '你是可靠性工程师。背景：FDE 训练营 Day 8，第一个 Skill（skills/skill-01.md）已能跑。
+    prompt_template: '你是 Skill 架构师。背景：FDE 训练营 Day 7，学员选定了一项高频、规则清晰、可验收的部门工作。
 
-      任务：1. 升级 Skill 到 v1——补边界声明（不做什么/异常分类与处置/何时求助人类）；2. 设计 ≥3 条异常注入用例（空数据/错格式/越界请求），逐条执行并把结果记入 agent-run-log.md；3. 用自然语言给
-      Agent 派一个匹配任务和一个故意不匹配的任务，记录它的工具选择，分析「它什么时候会选错」写进日志。
+      任务：在工作区生成 skills/skill-01.md——第一个 Skill 说明书，含四部件（输入：字段与来源 / 步骤：可执行的操作序列 / 输出：产物格式与存放路径 / 验收：如何判对错）+ 工具描述（一句话干什么、何时用、何时不用）；然后用该
+      Skill 真实执行一次，产物与运行记录写入 runs/ 目录。
 
-      要求：坏输入必须按声明的方式失败——任何「硬扛乱做」都要回炉改边界。'
+      要求：步骤必须具体到可照做；输出路径写死；证据必须第三方可查（文件/日志，不是口头）。'
   rubric:
+  - check: file_exists
+    args:
+      path: skills/skill-01.md
   - check: text_contains
     args:
       path: skills/skill-01.md
-      needle: 边界
-  - check: file_exists
-    args:
-      path: agent-run-log.md
+      needle: 输入
   - check: text_contains
     args:
-      path: agent-run-log.md
-      needle: 注入
+      path: skills/skill-01.md
+      needle: 输出
   - check: text_contains
     args:
-      path: agent-run-log.md
-      needle: 选错
+      path: skills/skill-01.md
+      needle: 何时用

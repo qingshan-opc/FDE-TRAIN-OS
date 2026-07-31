@@ -38,6 +38,7 @@ from services.shared import (  # noqa: E402
 from services.shared.anycode_client import anycode_healthy  # noqa: E402
 from services.shared.middleware import require_user, session_camp_id, session_learner_id  # noqa: E402
 from services.shared.rubric_registry import enrich_eval_result  # noqa: E402
+from services.shared.command_evidence import try_read_command_stats_from_workspace  # noqa: E402
 from services.storage import get_store, hydrate_workspace, snapshot_prefix, snapshot_workspace, temp_workspace  # noqa: E402
 from services.shared.config import S3_BUCKET_WORKSPACES, S3_PRESIGN_GET_EXPIRES  # noqa: E402
 
@@ -608,6 +609,9 @@ def _evaluate_workspace(ws: Path, rubric: list[dict[str, Any]]) -> dict[str, Any
         checks.append({"id": cid, "ok": ok, "detail": detail, "args": args})
     passed = all(c["ok"] for c in checks) if checks else False
     result = {"pass": passed, "checks": checks, "score": sum(1 for c in checks if c["ok"]) / max(len(checks), 1)}
+    stats = try_read_command_stats_from_workspace(ws)
+    if stats:
+        result["command_stats"] = stats
     return enrich_eval_result(result)
 
 

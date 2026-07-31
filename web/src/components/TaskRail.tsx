@@ -1,10 +1,18 @@
-import { useEffect, useState } from "react";
-import type { DayPackage, NodeState } from "../lib/types";
+import { useCallback, useEffect, useState } from "react";
+import type { DayPackage, NodeState, Passport } from "../lib/types";
 import type { TaskTarget } from "../lib/taskTargets";
 import { dayLabel } from "../lib/dayLabel";
 import { RubricList } from "./RubricList";
 import { useLearnerSessionRequired } from "../lib/learnerSessionContext";
 import { checklistItemsFromPrompt, normalizePractice } from "../lib/curriculum/normalizeCapsule";
+import { progressApi } from "../lib/api";
+import { useAuth } from "../lib/auth";
+import {
+  commandAcceptanceScore,
+  dayCommandPassed,
+  latestEvalChecksForDay,
+  type EvidenceItem,
+} from "../lib/capabilityRadar";
 
 function TaskIcon() {
   return (
@@ -43,26 +51,40 @@ export function TaskRail({
   onHomework?: () => void;
 }) {
   const session = useLearnerSessionRequired();
-  const [acceptedCapsules, setAcceptedCapsules] = useState<Set<string>>(() => new Set());
+  const { user } = useAuth();
+  const [passport, setPassport] = useState<Passport | null>(null);
+  const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
   const rubric = (node?.refs?.rubric || day?.lab?.rubric || []) as import("../lib/types").RubricCheck[];
   const checklist = day?.review_checklist || [];
   const visibleNodes = (day?.nodes || []).filter((n) => n.kind !== "unlock");
   const nodePassed = node?.status === "passed";
+  const commandScore = commandAcceptanceScore(passport, evidence);
+
+  const refreshCommandEvidence = useCallback(() => {
+    if (!user?.id) return;
+    void Promise.all([
+      progressApi.passport(user.id).catch(() => null),
+      progressApi.evidence(user.id).then((r) => (r.items || []) as EvidenceItem[]).catch(() => []),
+    ]).then(([p, items]) => {
+      setPassport(p);
+      setEvidence(items);
+    });
+  }, [user?.id]);
 
   useEffect(() => {
-    const onAccepted = (event: Event) => {
-      const capsuleId = (event as CustomEvent<{ capsuleId?: string }>).detail?.capsuleId;
-      if (!capsuleId) return;
-      setAcceptedCapsules((prev) => new Set(prev).add(capsuleId));
-    };
-    window.addEventListener("fde:lesson-accepted", onAccepted);
-    return () => window.removeEventListener("fde:lesson-accepted", onAccepted);
-  }, []);
+    refreshCommandEvidence();
+  }, [refreshCommandEvidence, day?.day, node?.id]);
+
+  useEffect(() => {
+    const onUpdate = () => refreshCommandEvidence();
+    window.addEventListener("fde:command-evidence-updated", onUpdate);
+    return () => window.removeEventListener("fde:command-evidence-updated", onUpdate);
+  }, [refreshCommandEvidence]);
 
   if (day && node?.kind === "learn" && session.activeCapsule) {
     const capsule = session.activeCapsule;
     const practiceSpec = normalizePractice(capsule.practice);
-    const checks =
+    const fallbackChecks =
       capsule.local_prep?.checklist?.length
         ? capsule.local_prep.checklist
         : practiceSpec
@@ -72,8 +94,10 @@ export function TaskRail({
       capsule.tools
         ?.map((tool) => tool.note?.match(/本节交付[：:]\s*(.+)$/)?.[1])
         .find(Boolean) || `${capsule.title}实操证据`;
-    const accepted = acceptedCapsules.has(capsule.id) || node.status === "passed";
-    const score = accepted ? 60 : 20;
+    const commandPassed = dayCommandPassed(day.day, passport, evidence);
+    const evalChecks = latestEvalChecksForDay(evidence, day.day);
+    const evalOk = evalChecks.filter((c) => c.ok).length;
+    const evalTotal = evalChecks.length;
 
     return (
       <aside aria-label="当前任务工作台" className="task-rail task-rail--workbench">
@@ -84,55 +108,143 @@ export function TaskRail({
           <p>{capsule.tools?.[0]?.note || "按本节任务提示词完成实操，并用真实文件与运行结果验收。"}</p>
           <div className="task-workbench-statuses">
             <small>任务已领取</small>
-            <small className={accepted ? "is-pass" : "is-pending"}>{accepted ? "验收通过" : "成果未提交"}</small>
+            <small className={commandPassed ? "is-pass" : "is-pending"}>
+              {commandPassed ? "指挥验收通过" : "待 Lab 机评（含指挥日志）"}
+            </small>
           </div>
         </section>
 
         <section className="task-workbench-checks">
           <header>
             <strong>验收进度</strong>
-            <span>{accepted ? `${Math.max(1, checks.length)} / ${Math.max(1, checks.length)}` : `0 / ${Math.max(1, checks.length)}`}</span>
+            <span>
+              {evalTotal > 0
+                ? `${evalOk} / ${evalTotal}`
+                : commandPassed
+                  ? `${Math.max(1, fallbackChecks.length)} / ${Math.max(1, fallbackChecks.length)}`
+                  : `0 / ${Math.max(1, fallbackChecks.length)}`}
+            </span>
           </header>
           <ul>
-            {(checks.length ? checks : ["完成本节开发工具实操", "检查真实文件与运行证据", "明确批准或要求返工"])
-              .slice(0, 5)
-              .map((item, index) => (
-                <li key={item} className={accepted ? "is-pass" : ""}>
-                  <span>{accepted ? "✓" : index + 1}</span>
-                  <div>
-                    <strong>{item}</strong>
-                    <small>{accepted ? "已通过本节验收" : "等待提交后检查"}</small>
-                  </div>
-                </li>
-              ))}
+            {evalChecks.length > 0
+              ? evalChecks.slice(0, 6).map((item, index) => (
+                  <li key={`${item.id}-${index}`} className={item.ok ? "is-pass" : ""}>
+                    <span>{item.ok ? "✓" : index + 1}</span>
+                    <div>
+                      <strong>{item.title_zh || item.detail}</strong>
+                      <small>{item.ok ? "已通过机评" : item.suggestion || "待补证据或修正工作区文件"}</small>
+                    </div>
+                  </li>
+                ))
+              : (fallbackChecks.length ? fallbackChecks : ["完成本节开发工具实操", "维护 docs/D*_command_log.md", "通过日级 Lab Rubric"])
+                  .slice(0, 5)
+                  .map((item, index) => (
+                    <li key={item} className={commandPassed ? "is-pass" : ""}>
+                      <span>{commandPassed ? "✓" : index + 1}</span>
+                      <div>
+                        <strong>{item}</strong>
+                        <small>{commandPassed ? "已通过日级 Lab 机评" : "完成练习后去 Lab 提交评测"}</small>
+                      </div>
+                    </li>
+                  ))}
           </ul>
           <button
             type="button"
             className="btn-primary"
             onClick={() => window.dispatchEvent(new CustomEvent("fde:open-learn-step", { detail: "submit" }))}
           >
-            {accepted ? "查看验收结果" : "进入提交验收"}
+            {commandPassed ? "查看练习提交" : "进入提交练习"}
           </button>
         </section>
 
         <section className="task-workbench-ability">
           <header>
             <strong>能力证据</strong>
-            <span>{accepted ? "本节已更新" : "通过后更新"}</span>
+            <span>{commandPassed ? "本日已计入" : "Lab 通过后更新"}</span>
           </header>
           <div>
             <strong>
               <span>AI 团队指挥与验收</span>
-              <span>{score}%</span>
+              <span>{commandScore}%</span>
             </strong>
             <span className="task-workbench-ability-bar">
-              <i style={{ width: `${score}%` }} />
+              <i style={{ width: `${commandScore}%` }} />
             </span>
           </div>
         </section>
 
         <p className="task-workbench-note">
-          平台只记录通过验收的成果。浏览讲义或只看 AI 生成结果，不会自动增加能力等级。
+          平台只记录 Lab Rubric 机评通过的证据（含指挥日志 docs/D*_command_log.md）。课节练习提交不等于指挥验收通过。
+        </p>
+        <button type="button" className="task-workbench-mentor" onClick={() => session.setCoachOpen(true)}>
+          ✦ 打开AI任务导师
+        </button>
+      </aside>
+    );
+  }
+
+  if (!day) {
+    const pending = homePendingCount != null && homePendingCount > 0;
+    return (
+      <aside aria-label="今日训练工作台" className="task-rail task-rail--workbench">
+        <h2>今日训练工作台</h2>
+        <section className="task-workbench-current">
+          <span>下一项训练</span>
+          <h3>{homeNextTarget?.label || "选择左侧课节开始"}</h3>
+          <p>
+            {pending
+              ? `你有 ${homePendingCount} 项待办，从下一项开始继续。`
+              : "选择左侧课节，或点击下方按钮继续学习。"}
+          </p>
+          <div className="task-workbench-statuses">
+            <small>{homeNextTarget ? `Day ${homeNextTarget.day}` : "待选择"}</small>
+            <small className={pending ? "is-pending" : "is-pass"}>{pending ? "待继续" : "暂无待办"}</small>
+          </div>
+        </section>
+
+        <section className="task-workbench-checks">
+          <header>
+            <strong>今日路径</strong>
+            <span>{pending ? "1 / 1" : "0 / 0"}</span>
+          </header>
+          <ul>
+            <li className={pending ? "" : "is-pass"}>
+              <span>{pending ? "1" : "✓"}</span>
+              <div>
+                <strong>
+                  {homeNextTarget
+                    ? `${dayLabel(homeNextTarget.day)}${homeNextTarget.label ? ` · ${homeNextTarget.label}` : ""}`
+                    : "从左侧进入任意可学习 Day"}
+                </strong>
+                <small>{pending ? "点击继续进入课节" : "可从左侧目录预览 Week 1"}</small>
+              </div>
+            </li>
+          </ul>
+          {onHomeContinue && (
+            <button type="button" className="btn-primary" onClick={onHomeContinue}>
+              {homeNextTarget?.label ? `继续：${homeNextTarget.label}` : "开始今日训练"}
+            </button>
+          )}
+        </section>
+
+        <section className="task-workbench-ability">
+          <header>
+            <strong>能力证据</strong>
+            <span>{commandScore > 0 ? "Week1 累计" : "进入课节后更新"}</span>
+          </header>
+          <div>
+            <strong>
+              <span>AI 团队指挥与验收</span>
+              <span>{commandScore}%</span>
+            </strong>
+            <span className="task-workbench-ability-bar">
+              <i style={{ width: `${commandScore}%` }} />
+            </span>
+          </div>
+        </section>
+
+        <p className="task-workbench-note">
+          外层目录可浏览全部周次课节；指挥验收证据来自 Day1–5 Lab 机评与指挥日志。
         </p>
         <button type="button" className="task-workbench-mentor" onClick={() => session.setCoachOpen(true)}>
           ✦ 打开AI任务导师
@@ -146,66 +258,41 @@ export function TaskRail({
       <section className="task-rail-section">
         <header className="task-rail-section-head">
           <TaskIcon />
-          <h3>{day ? "本日任务" : "任务概览"}</h3>
+          <h3>本日任务</h3>
         </header>
-        {!day ? (
-          <>
-            <p className="muted">
-              {homePendingCount != null && homePendingCount > 0
-                ? `你有 ${homePendingCount} 项待办，从下一项开始继续。`
-                : "选择左侧课程或点击下方按钮继续学习。"}
-            </p>
-            {homeNextTarget && (
-              <div className="task-rail-home-next">
-                <p className="task-rail-home-next-label">
-                  下一项 · {dayLabel(homeNextTarget.day)}
-                  {homeNextTarget.label ? ` · ${homeNextTarget.label}` : ""}
-                </p>
-                {onHomeContinue && (
-                  <button type="button" className="btn-primary" style={{ width: "100%" }} onClick={onHomeContinue}>
-                    {homeNextTarget.label ? `继续：${homeNextTarget.label}` : "继续学习"}
-                  </button>
-                )}
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {(day.project || day.project_brief) && (
-              <p className="task-rail-brief muted">
-                {(day.project_brief || day.project || "").length > 120
-                  ? `${(day.project_brief || day.project || "").slice(0, 120)}…`
-                  : day.project_brief || day.project}
-              </p>
-            )}
-            <ul className="task-card-list">
-              {visibleNodes.map((n) => {
-                const done = n.status === "passed";
-                const current = node?.id === n.id;
-                const locked = n.status === "locked";
-                return (
-                  <li
-                    key={n.id}
-                    className={`task-card ${done ? "is-done" : ""} ${current ? "is-current" : ""} ${locked ? "is-locked" : ""}`}
-                  >
-                    <span className={`task-card-check ${done ? "is-checked" : ""}`} aria-hidden>
-                      {done ? "✓" : ""}
-                    </span>
-                    <div className="task-card-body">
-                      <span className={`task-card-title ${done ? "is-struck" : ""}`}>{n.title}</span>
-                      <span className={`task-card-due ${current && !done ? "is-urgent" : ""}`}>
-                        {done ? "已完成" : locked ? "未解锁" : current ? "进行中" : "待完成"}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </>
+        {(day.project || day.project_brief) && (
+          <p className="task-rail-brief muted">
+            {(day.project_brief || day.project || "").length > 120
+              ? `${(day.project_brief || day.project || "").slice(0, 120)}…`
+              : day.project_brief || day.project}
+          </p>
         )}
+        <ul className="task-card-list">
+          {visibleNodes.map((n) => {
+            const done = n.status === "passed";
+            const current = node?.id === n.id;
+            const locked = n.status === "locked";
+            return (
+              <li
+                key={n.id}
+                className={`task-card ${done ? "is-done" : ""} ${current ? "is-current" : ""} ${locked ? "is-locked" : ""}`}
+              >
+                <span className={`task-card-check ${done ? "is-checked" : ""}`} aria-hidden>
+                  {done ? "✓" : ""}
+                </span>
+                <div className="task-card-body">
+                  <span className={`task-card-title ${done ? "is-struck" : ""}`}>{n.title}</span>
+                  <span className={`task-card-due ${current && !done ? "is-urgent" : ""}`}>
+                    {done ? "已完成" : locked ? "未解锁" : current ? "进行中" : "待完成"}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
-      {(node || (!day && homeNextTarget && onHomeContinue)) && (primaryLabel || homeworkLabel) && (
+      {node && (primaryLabel || homeworkLabel) && (
         <section className="task-rail-actions">
           {primaryLabel && onPrimary && (
             <button
@@ -229,8 +316,8 @@ export function TaskRail({
       {rubric.length > 0 && (
         <section className="criteria-box">
           <h3>验收标准</h3>
-          <p className="muted criteria-box-hint">完成本日 Lab 前请对照以下标准自检。</p>
-          <RubricList rubric={rubric} passed={nodePassed} />
+          <p className="muted criteria-box-hint">完成本日 Lab 前请对照以下标准自检（含指挥日志）。</p>
+          <RubricList rubric={rubric} passed={nodePassed || dayCommandPassed(day.day, passport, evidence)} />
         </section>
       )}
 
@@ -246,6 +333,24 @@ export function TaskRail({
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {day.day >= 1 && day.day <= 5 && (
+        <section className="task-workbench-ability" style={{ marginTop: 12 }}>
+          <header>
+            <strong>能力证据</strong>
+            <span>{commandScore}%</span>
+          </header>
+          <div>
+            <strong>
+              <span>AI 团队指挥与验收</span>
+              <span>{dayCommandPassed(day.day, passport, evidence) ? "本日已通过" : "待 Lab"}</span>
+            </strong>
+            <span className="task-workbench-ability-bar">
+              <i style={{ width: `${commandScore}%` }} />
+            </span>
+          </div>
         </section>
       )}
     </aside>

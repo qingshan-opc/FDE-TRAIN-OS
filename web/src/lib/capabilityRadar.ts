@@ -12,7 +12,11 @@ export type EvidenceItem = {
   node_id?: string;
   kind?: string;
   capability_tags?: string[];
+  payload?: { eval?: { checks?: Array<{ id: string; ok: boolean; detail: string; title_zh?: string; suggestion?: string }>; pass?: boolean } };
 };
+
+const WEEK1_COMMAND_DAYS = 5;
+export const COMMAND_CAPABILITY_TAG = "capability:ai_team_command";
 
 const AXES: { key: string; label: string }[] = [
   { key: "agent", label: "Agent 实训" },
@@ -52,6 +56,35 @@ function uniqueLearningDays(evidence: EvidenceItem[]): number {
   return new Set(evidence.map((e) => e.day).filter((d) => typeof d === "number")).size;
 }
 
+/** Week1 指挥与验收能力分：按 command:day:N 标签累计（0–100）。 */
+export function commandAcceptanceScore(
+  passport: Passport | null,
+  evidence: EvidenceItem[],
+  targetDays = WEEK1_COMMAND_DAYS,
+): number {
+  const tags = collectTags(passport, evidence);
+  const passedDays = Array.from({ length: targetDays }, (_, i) => `command:day:${i + 1}`).filter((t) => tags.has(t)).length;
+  if (targetDays <= 0) return 0;
+  return clamp(Math.round((100 * passedDays) / targetDays));
+}
+
+export function dayCommandPassed(day: number, passport: Passport | null, evidence: EvidenceItem[]): boolean {
+  const tags = collectTags(passport, evidence);
+  return tags.has(`command:day:${day}`);
+}
+
+export function latestEvalChecksForDay(
+  evidence: EvidenceItem[],
+  day: number,
+): Array<{ id: string; ok: boolean; detail: string; title_zh?: string; suggestion?: string }> {
+  for (const row of evidence) {
+    if (row.day !== day) continue;
+    const checks = row.payload?.eval?.checks;
+    if (checks?.length) return checks;
+  }
+  return [];
+}
+
 /** Map passport + evidence into six learner-facing capability axes (0–100). */
 export function buildCapabilityRadar(passport: Passport | null, evidence: EvidenceItem[]): RadarAxis[] {
   const tags = collectTags(passport, evidence);
@@ -76,7 +109,13 @@ export function buildCapabilityRadar(passport: Passport | null, evidence: Eviden
         [...tags].filter((t) => t.startsWith("capsule:")).length * 5,
       100,
     ),
-    delivery: clamp(10 + labish * 12 + (passport?.evidence_count || 0) * 2, 100),
+    delivery: clamp(
+      10 +
+        labish * 12 +
+        (passport?.evidence_count || 0) * 2 +
+        commandAcceptanceScore(passport, evidence) * 0.35,
+      100,
+    ),
     consistency: clamp(8 + uniqueLearningDays(evidence) * 10 + Math.min(evidence.length, 12) * 3, 100),
   };
 
@@ -110,8 +149,10 @@ export function formatCapabilityTag(tag: string): string {
     sim: "仿真环境",
     agent: "Agent 交付",
     sql: "SQL 与数据",
+    "capability:ai_team_command": "AI 团队指挥与验收",
   };
   if (KNOWN[tag]) return KNOWN[tag];
+  if (tag.startsWith("command:day:")) return `指挥验收 · 第 ${tag.slice("command:day:".length)} 天`;
   if (tag.startsWith("day:")) return `第 ${tag.slice(4)} 课`;
   if (tag.startsWith("agent:")) return `Agent · ${tag.slice(6).replace(/_/g, " ")}`;
   if (tag.startsWith("coach:")) return `教练 · ${tag.slice(6).replace(/_/g, " ")}`;
@@ -129,8 +170,9 @@ export function groupCapabilityTags(tags: string[]): { title: string; items: str
   };
   for (const raw of tags) {
     const label = formatCapabilityTag(raw);
-    if (raw.startsWith("day:") || raw.startsWith("capsule:")) groups["学习进度"].push(label);
-    else if (raw.startsWith("eval:") || raw === "pass" || raw.startsWith("coach:")) groups["认证与评测"].push(label);
+    if (raw.startsWith("day:") || raw.startsWith("capsule:") || raw.startsWith("command:day:")) groups["学习进度"].push(label);
+    else if (raw.startsWith("eval:") || raw === "pass" || raw.startsWith("coach:") || raw === COMMAND_CAPABILITY_TAG)
+      groups["认证与评测"].push(label);
     else if (raw.startsWith("agent:") || raw.startsWith("sim") || raw === "k8s" || raw.includes("sql")) groups["平台技能"].push(label);
     else groups["其他"].push(label);
   }

@@ -3,7 +3,7 @@ import { useCoach } from "../../hooks/useCoach";
 import type { DayPackage, NodeState } from "../../lib/types";
 import { CoachChatPanel } from "./CoachChatPanel";
 
-/** AI coach surface — delegates to LingZhi-style chat panel. */
+/** AI coach surface — delegates to DeepSeek chat panel. */
 export function CoachAskPanel({
   day,
   node,

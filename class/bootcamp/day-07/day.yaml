@@ -1,399 +1,470 @@
 day: 7
-project: 第一个 Skill
-project_brief: Week 2 换档日：从「做系统」到「造能力」。把一项每周重复、规则清晰、可验收的工作封装成第一个 Skill 说明书（输入/步骤/输出/验收），现场运行一次并留下可检查证据。Skill 进 Git，GATE 7
-  三问过关。
+project: LLM 理论日
+project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
+
+
+  认知卡怎么做：
+
+  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+
+  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
+
+  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
+
+  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
+
+
+  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
 resources:
-- id: dg-skill-anatomy
-  title: 讲解图 · Skill 解剖四部件
+- id: dg-llm-ecosystem
+  title: 讲解图 · LLM 生态分层
   kind: diagram
-  summary: 输入 / 步骤 / 输出 / 验收——缺一个都转不动
-  url: /course-assets/assets/diagrams/skill-anatomy.svg
+  summary: 基建→模型→编排→应用，标出 FDE 工作层
+  url: /course-assets/assets/diagrams/llm-ecosystem.svg
+- id: dg-four-layer
+  title: 讲解图 · 四层架构地图
+  kind: diagram
+  summary: 与驾驶舱模块对齐的生态四层
+  url: /course-assets/assets/diagrams/four-layer.svg
+- id: dg-agent-loop
+  title: 讲解图 · Agent 循环
+  kind: diagram
+  summary: 理解→规划→Tool Call→观察→继续
+  url: /course-assets/assets/diagrams/agent-loop.svg
+- id: dg-llm-capability
+  title: 讲解图 · LLM 能力与边界
+  kind: diagram
+  summary: Token、窗口、幻觉、擅长与不擅长
+  url: /course-assets/assets/diagrams/llm-capability.svg
+- id: dg-context-assembly
+  title: 讲解图 · Context 组装与 RAG
+  kind: diagram
+  summary: Prompt 装填 + 检索增强管线
+  url: /course-assets/assets/diagrams/context-assembly.svg
+- id: dg-harness
+  title: 讲解图 · Harness 解剖
+  kind: diagram
+  summary: 工具表、记忆、规划、重试、日志
+  url: /course-assets/assets/diagrams/harness-anatomy.svg
+- id: dg-workflow-agent
+  title: 讲解图 · Workflow vs Agent
+  kind: diagram
+  summary: 写死流程 vs 现场决策
+  url: /course-assets/assets/diagrams/workflow-vs-agent.svg
 - id: glossary
-  title: 新概念词典（速查版）
+  title: 新概念词典 · 18 词
   kind: site
-  summary: 18 词随身查：Skill / MCP / Agent 等
+  summary: 可检索卡片：定义 / 哪天遇到 / 延伸阅读
   url: /course-assets/resources/h5/glossary.html
-- id: open-o2
-  title: 公开课 O2 · LLM 与编排深化
+- id: glossary-md
+  title: 词典完整版 · glossary.md
   kind: doc
-  summary: Skill 生态、MCP、各平台格式（选读）
-  url: /docs/open-course/o2-llm.md
+  summary: 18 词 + 自测 6 题 + 课程落点
+  url: /course-assets/resources/glossary.md
+- id: tk-cognition-card
+  title: LLM 认知卡 · 搭档提示词
+  kind: download
+  summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
+  url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md
 capsule_extra:
   c1:
     resource_ids:
+    - dg-llm-ecosystem
+    - dg-four-layer
     - glossary
-    knowledge_cards:
-    - id: system-vs-capability
-      term: 系统 vs 能力
-      plain: 驾驶舱是系统（等人来看）；Skill 是能力（被 AI 执行）——Week 2 换档对象变了。
-      tag: 核心
-    - id: prompt-vs-skill
-      term: Prompt vs Skill
-      plain: Prompt 是一次性对话；Skill 是可复用说明书，有结构、有验收、可交接。
-      tag: 对比
-    - id: skill-triple
-      term: Skill 三重价值
-      plain: 可复用、可验收、可交接——最后一个最被低估。
-      tag: 框架
-    - id: anti-patterns
-      term: 不值得封装
-      plain: 一年一次的、每次都不一样的、必须人拍板的——先别封装。
-      tag: 红线
-    glossary_terms:
-    - id: gt-skill
-      term: Skill
-      plain: 教 AI 做一件具体事的说明书：输入、步骤、输出、验收四部件。
-    - id: gt-sop
-      term: SOP
-      plain: 标准作业程序——Skill 是人类 SOP 第一次能被 AI 直接执行的形态。
-    - id: gt-capability
-      term: 能力
-      plain: 一件具体可执行的事（生成周报/整理线索），载体是 Skill + 执行者（AI）。
-    - id: gt-mcp-preview
-      term: MCP（预告）
-      plain: 给 AI 接工具的 USB-C 标准——你的 Skill 是它的朴素版（Day 8 深讲）。
-    quiz:
-    - - Week 2 换档后，主工作对象从什么变成什么？
-      - - 从 Prompt 变成代码
-        - 从「做系统」变成「造能力」
-        - 从后端变成前端
-      - 1
-      - 系统被使用，能力被执行——Skill 是能力的说明书。
-    - - Prompt 和 Skill 的核心区别是？
-      - - Prompt 更长
-        - Prompt 一次性；Skill 长期复用、有结构、有验收标准
-        - Skill 必须用代码写
-      - 1
-      - Skill 四部件齐全才可交接；Prompt 用完即弃。
-    - - 「系统 vs 能力」里，驾驶舱属于哪一类？
-      - - 能力
-        - 系统
-        - 两者都是
-      - 1
-      - 驾驶舱回答「发生了什么」；Skill 回答「接下来做什么」。
-    - - 下列哪项最不适合作为第一个 Skill？
-      - - 每周一次的周报生成
-        - 必须老板当场拍板的战略决策
-        - 从驾驶舱拉 KPI 数据
-      - 1
-      - 必须人拍板的不能封装成全自动 Skill——只能封装「准备材料」。
-    tools:
-    - name: Prompt vs Skill 对照表
-      note: 寿命 / 结构 / 验收 / 交接四列
     media:
     - kind: video
-      title: 口播课件 · 系统 vs 能力
-      object_key: documents/shared/course-media/day07-c1-system-skill.mp4
-      poster_key: documents/shared/course-media/day07-c1-system-skill-poster.jpg
-      duration_sec: 289
+      title: 口播课件 · 生态四层地图
+      object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
+      poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
+      duration_sec: 496
+    knowledge_cards:
+    - id: llm-core
+      term: LLM · 大语言模型
+      plain: 用海量文本训练的「预测下一个词」机器；生成、理解、推理都从这机制长出。
+      tag: 核心
+    - id: four-layers
+      term: 生态四层
+      plain: 基建→模型→编排→应用；FDE 主要在编排层和应用层动手。
+      tag: 框架
+    - id: open-closed
+      term: 开源权重 vs 闭源 API
+      plain: 闭源调 endpoint 按 Token 付费；开源下载权重自部署——能力、成本、隐私三角权衡。
+      tag: 选型
+    - id: multimodal-bound
+      term: 多模态边界
+      plain: 不只文本还能看图听音；本课驾驶舱先盯文本 + SSE。
+      tag: 边界
+    - id: sse-stream
+      term: SSE · Server-Sent Events
+      plain: 服务端按事件/Token 一段段推给浏览器；Chat 流式常用。助手位建议 SSE，不是另一种供应商。
+      tag: 接入
+    - id: api-vs-sse
+      term: 一次性响应 vs SSE
+      plain: 一次性等整包 JSON；SSE 边收边显示。API 是调用入口，SSE 是流式通道。
+      tag: 接入
+    glossary_terms:
+    - id: gt-llm
+      term: LLM
+      plain: 大语言模型：预测下一个 Token，不是核实过的事实库。
+    - id: gt-open-closed
+      term: 开源 vs 闭源
+      plain: 云 API 省心按量付；权重自部署换隐私与成本。
+    - id: gt-sse
+      term: SSE
+      plain: Server-Sent Events；流式返回通道，挂在 stream 接口上。
+    - id: gt-multimodal
+      term: 多模态
+      plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
+    quiz:
+    - - LLM 的核心机制是什么？
+      - - 检索互联网最新信息
+        - 预测下一个 Token
+        - 存储企业数据库
+      - 1
+      - 生成、理解、推理都从「接龙」机制长出——不是搜索引擎也不是数据库。
+    - - 闭源 API（如 OpenAI）和开源权重（如 Qwen）的主要权衡是？
+      - - 闭源一定更聪明
+        - 能力、成本、隐私的三角权衡
+        - 开源不能 Tool Call
+      - 1
+      - 闭源快省心；开源可自部署换隐私——没有唯一正确答案，看场景。
+    - - 本课驾驶舱为什么刻意只用文本能力？
+      - - 多模态违法
+        - 聚焦摘要/问答/Tool Call，别用文本模型硬做不擅长的事
+        - 多模态太贵不能用
+      - 1
+      - 知道多模态存在，但训练聚焦文本链路——边界意识是 FDE 基本功。
+    - - API 和 SSE 的正确关系是？
+      - - SSE 是另一家模型供应商
+        - API 是调用入口；SSE 常是流式返回通道（stream）
+        - 有了 SSE 就不必调 API
+      - 1
+      - 别对立：先打到模型 endpoint，再用 SSE 一段段收。
+    - - 驾驶舱助手位本课建议怎么接？
+      - - 只等整包 JSON，别流式
+        - DeepSeek 等云 API + SSE 流式；Key 不进前端
+        - 必须自建 GPU 集群
+      - 1
+      - 体感与可中断靠 SSE；密钥与降级是工程底线。
   c2:
     resource_ids:
-    - dg-skill-anatomy
-    knowledge_cards:
-    - id: four-parts
-      term: 四部件
-      plain: 输入、步骤、输出、验收——缺一个说明书就转不动。
-      tag: 核心
-    - id: input-spec
-      term: 输入要求
-      plain: 具体到来源与范围；「相关数据」是常见缺陷。
-      tag: 写作
-    - id: steps-spec
-      term: 步骤要求
-      plain: AI 能逐步执行；「分析一下」不是步骤。
-      tag: 写作
-    - id: output-spec
-      term: 输出要求
-      plain: 格式 + 长度 + 红线；对应 Day 5 结构化输出。
-      tag: 连接
-    - id: accept-spec
-      term: 验收要求
-      plain: 可判对错；「写得好」不是验收标准。
-      tag: 连接
-    glossary_terms:
-    - id: gt-input
-      term: 输入（Skill）
-      plain: 做这件事吃什么料：数据来源、时间范围、读者对象。
-    - id: gt-evidence
-      term: 证据
-      plain: 运行后留下的可检查产物：文件、日志、验收结果——不是口头「跑过了」。
-    quiz:
-    - - Skill 四部件的正确组合是？
-      - - 名字 / 图标 / 颜色 / 版本
-        - 输入 / 步骤 / 输出 / 验收
-        - 前端 / 后端 / 数据库 / 模型
-      - 1
-      - 四部件一个不能少；验收必须可判对错。
-    - - 「分析一下本周数据」作为步骤，主要缺陷是？
-      - - 太短
-        - 不可执行——AI 不知道「怎么分析」
-        - 应该用英文
-      - 1
-      - 步骤要细到换一个人/AI 照着做不会做出第二种理解。
-    - - 输出 + 验收对应 Week 1 的哪两个概念？
-      - - 三态与降级
-        - 结构化输出 + Rubric 验收
-        - 契约与 DDL
-      - 1
-      - Week 1 的每个概念在 Skill 说明书里都有自己的格子。
-    - - 验收标准「写得好」为什么不合格？
-      - - 太主观，第三方无法客观判过/不过
-        - 字数太少
-        - 必须用 Markdown
-      - 0
-      - 验收的铁律是可衡量、可判对错——和 PRD 验收标准同一套逻辑。
-    tools:
-    - name: 四部件缺陷速查
-      note: 相关数据 / 分析一下 / 写个周报 / 写得好
+    - dg-llm-capability
+    - glossary
     media:
     - kind: video
-      title: 口播课件 · 四部件
-      object_key: documents/shared/course-media/day07-c2-skill-anatomy.mp4
-      poster_key: documents/shared/course-media/day07-c2-skill-anatomy-poster.jpg
-      duration_sec: 367
+      title: 口播课件 · Token / 窗口 / 幻觉
+      object_key: documents/shared/course-media/day06-c2-token.mp4
+      poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
+      duration_sec: 373
+    knowledge_cards:
+    - id: token-meter
+      term: Token 计量
+      plain: 模型读写最小单位；中文约 0.6–1 字/Token；API 按 input+output 计费。
+      tag: 核心
+    - id: context-window
+      term: 上下文窗口
+      plain: 一次调用能看到的 Token 上限；满了可截断、摘要或 RAG。
+      tag: 核心
+    - id: hallucination
+      term: 幻觉 Hallucination
+      plain: 给「最像真的」而非「核实过的」答案——机制如此，不是偶发 bug。
+      tag: 核心
+    glossary_terms:
+    - id: gt-token
+      term: Token / 窗口
+      plain: Token 是计费单位；窗口是一次能看多少——对话越长越贵越慢。
+    - id: gt-hallucination
+      term: 幻觉
+      plain: 流畅 plausible 优先于 fact-check；关键事实必须可溯源+验收。
+    quiz:
+    - - Token 和「一个汉字」的关系是？
+      - - 完全相等
+        - 中文约 0.6–1 字/Token，不是一字一 Token
+        - Token 只用于英文
+      - 1
+      - API 账单按 Token 计——压缩 Prompt 是真省钱。
+    - - 上下文窗口满了，常见策略不包括？
+      - - 截断最早消息
+        - 无限扩大窗口忽略成本
+        - RAG 只检索相关片段
+      - 1
+      - 窗口是硬顶+成本顶——不能假装无限。
+    - - 为什么说幻觉是「机制」不是 bug？
+      - - 模型坏了要返厂
+        - 训练目标是 plausible 接龙，不是 fact-check
+        - 只有旧模型才幻觉
+      - 1
+      - 对策是 RAG+Eval+Guardrails，不是「再 prompt 一次就会好」。
   c3:
     resource_ids:
-    - dg-skill-anatomy
-    knowledge_cards:
-    - id: three-filters
-      term: 选品三筛
-      plain: 高频（每周≥1）→ 稳定（步骤可写死）→ 低险（出错代价小）。
-      tag: 方法
-    - id: low-risk-first
-      term: 低险优先
-      plain: 第一个 Skill 是练信任——对外发送/改数据/花钱的先别碰（Day 9 再学确认闸）。
-      tag: 原则
-    - id: data-available
-      term: 数据可得
-      plain: 输入能直接从驾驶舱或现有文件拿到，今天就能跑通——加分项。
-      tag: 技巧
-    glossary_terms:
-    - id: gt-high-freq
-      term: 高频
-      plain: 每周至少做一次——封装成本才回得来。
-    - id: gt-stable
-      term: 稳定步骤
-      plain: 「看情况」太多的工作，AI 执行就是开盲盒。
-    quiz:
-    - - 选第一个 Skill 的三筛顺序是？
-      - - 低险 → 高频 → 稳定
-        - 高频 → 稳定 → 低险
-        - 稳定 → 低险 → 高频
-      - 1
-      - 先筛频率，再筛能否写说明书，最后筛出错代价。
-    - - 为什么第一个 Skill 必须「低险」？
-      - - 低险的工作简单
-        - 第一个 Skill 是练信任——错了代价要小
-        - 导师要求
-      - 1
-      - 对外发送/改数据/花钱的等高险操作，Day 9 学完确认闸再说。
-    - - 推荐首发「周报生成」同时满足三筛，还因为？
-      - - 最难所以最有价值
-        - 高频、结构稳定、产出不对外发送、数据可从驾驶舱拉
-        - 老板最喜欢
-      - 1
-      - 四列打分表里「数据可得」是加分项——今天就能跑通。
-    - - 小张封装「年度总结」失败的根本原因是？
-      - - 写得太长
-        - 低频——封装成本回不来
-        - 没有用 Markdown
-      - 1
-      - 一年一次的工作，写完再没用过——第一筛就没过。
-    tools:
-    - name: 选品打分表
-      note: 高频 / 稳定 / 低险 / 数据可得 各 1–5 分
+    - dg-context-assembly
+    - glossary
     media:
     - kind: video
-      title: 口播课件 · 选品三筛
-      object_key: documents/shared/course-media/day07-c3-pick-first.mp4
-      poster_key: documents/shared/course-media/day07-c3-pick-first-poster.jpg
-      duration_sec: 110
+      title: 口播课件 · Prompt / Context / RAG
+      object_key: documents/shared/course-media/day06-c3-rag.mp4
+      poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
+      duration_sec: 327
+    knowledge_cards:
+    - id: prompt-eng
+      term: Prompt 工程
+      plain: 任务说明书：角色+背景+任务+约束+输出格式，可迭代可验收。
+      tag: 核心
+    - id: context-eng
+      term: Context Engineering
+      plain: 决定这次调用放什么进窗口——给少瞎编，给多迷失。
+      tag: 核心
+    - id: rag-pipeline
+      term: RAG 管线
+      plain: 切块→嵌入→检索→拼 Prompt→生成；治幻觉主流方案之一。
+      tag: 核心
+    - id: finetune-prompt
+      term: Fine-tune vs Prompt
+      plain: 改权重贵慢；改 Prompt 快便宜——90% 场景先用后者。
+      tag: 选型
+    glossary_terms:
+    - id: gt-prompt
+      term: Prompt 工程
+      plain: 四要素+约束+格式；工程师看完不用回来问第二遍。
+    - id: gt-context
+      term: Context Engineering
+      plain: 装填窗口的手艺——PRD 片段 vs 整库，取舍决定质量。
+    - id: gt-rag
+      term: RAG
+      plain: 先检索相关片段再生成；驾驶舱摘要是简化版 RAG 思想。
+    quiz:
+    - - Prompt 工程「四要素」不包括？
+      - - 角色定位
+        - GPU 型号
+        - 输出格式
+      - 1
+      - 四要素：角色、背景、任务、格式——再加约束。
+    - - Context Engineering 主要解决什么问题？
+      - - 让模型更快
+        - 决定这次调用放什么进窗口，避免给少瞎编/给多迷失
+        - 替代 Fine-tuning
+      - 1
+      - 窗口有限——装填是手艺，不是玄学。
+    - - RAG 的正确顺序是？
+      - - 生成→检索→嵌入
+        - 切块→嵌入→检索→拼 Prompt→生成
+        - 检索→Fine-tune→生成
+      - 1
+      - 先捞相关片段再让模型基于片段回答。
+    - - 90% 场景应该优先？
+      - - Fine-tuning
+        - Prompting（+RAG+Eval）
+        - 换更大的模型
+      - 1
+      - Fine-tune 贵慢——Prompt 方案没过闸不升级。
   c4:
     resource_ids:
-    - dg-skill-anatomy
-    knowledge_cards:
-    - id: skill-md
-      term: skills/<name>.md
-      plain: 今日交付物：四部件 + 工具描述（何时用/何时不用）写进 Git。
-      tag: 交付
-    - id: tool-desc
-      term: 工具描述
-      plain: 一句话干什么、何时用、何时不用——决定 Day 8 Agent 选不选得对。
-      tag: 关键
-    glossary_terms:
-    - id: gt-tool-table
-      term: 工具表
-      plain: Agent 能调用的 Skill 清单——描述写得越清，选型越准。
-    quiz:
-    - - Skill 说明书中「工具描述」为什么要写「何时不用」？
-      - - 凑字数
-        - 帮 Agent（和人）判断该不该选这件工具
-        - 法律要求
-      - 1
-      - Day 8 的「选错图谱」靠在描述里写清边界。
-    - - 步骤写到什么程度算合格？
-      - - 越厚越好
-        - 换一个人/AI 照着做，不会做出第二种理解
-        - 只要列三步就行
-      - 1
-      - 可执行性比篇幅重要——「分析一下」永远不合格。
-    - - 今日定稿文件应放在哪里？
-      - - prompts/ 目录
-        - skills/<name>.md 并 commit 进 Git
-        - 只存在聊天记录里
-      - 1
-      - 可复用、可交接——必须版本化进仓库。
-    tools:
-    - name: Skill 模板四段式
-      note: 输入 / 步骤 / 输出 / 验收 + 工具描述
+    - dg-llm-ecosystem
+    - glossary
     media:
     - kind: video
-      title: 口播课件 · skills/<name>.md
-      object_key: documents/shared/course-media/day07-c4-define-skill.mp4
-      poster_key: documents/shared/course-media/day07-c4-define-skill-poster.jpg
-      duration_sec: 115
+      title: 口播课件 · Eval / Guardrails / Vibe Coding
+      object_key: documents/shared/course-media/day06-c4-eval.mp4
+      poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
+      duration_sec: 272
+    knowledge_cards:
+    - id: eval-core
+      term: Eval · 评测
+      plain: 固定题库+明确判分+可重复跑——代替「我觉得还行」。
+      tag: 核心
+    - id: guardrails
+      term: Guardrails · 护栏
+      plain: 输入过滤、输出约束、越界降级——空结果别瞎编。
+      tag: 核心
+    - id: vibe-coded
+      term: Vibe Coding
+      plain: 自然语言让 AI 写代码；爽点是真的，验收责任也是真的。
+      tag: 全程
+    glossary_terms:
+    - id: gt-eval
+      term: Eval
+      plain: 给 AI 出考卷；模型/Prompt 改版后重跑，分掉别发版。
+    - id: gt-guardrails
+      term: Guardrails
+      plain: 敏感词、空结果、超时——三条降级路径企业必备。
+    - id: gt-vibe
+      term: Vibe Coding
+      plain: diff 可以 vibe，合并进 main 必须 Eval+人工看关键路径。
+    quiz:
+    - - Eval 和「我觉得还行」的本质区别？
+      - - Eval 更贵
+        - Eval 可重复、有固定判分，第三方能客观判过/不过
+        - 没有区别
+      - 1
+      - Rubric 和快测都是 Eval 的朴素版。
+    - - 检索为空时 Guardrails 应该？
+      - - 让模型编造合理答案
+        - 拒答/模板降级/转人工，禁止 hallucinate
+        - 自动 Fine-tune
+      - 1
+      - 空结果瞎编是线上事故高发区。
+    - - 「带验收的 Vibe Coding」指？
+      - - 不许用 AI 写代码
+        - 可以用 AI 写 diff，但合并前必须 Eval 和验收关键路径
+        - 只要 vibe 快就行
+      - 1
+      - 会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
   c5:
     resource_ids:
-    - dg-skill-anatomy
-    knowledge_cards:
-    - id: run-once
-      term: 运行一次
-      plain: 按说明书真实执行，不是「我觉得能跑」——证据必须第三方可查。
-      tag: 实战
-    - id: run-log
-      term: 运行记录
-      plain: 时间、输入摘要、产出路径、验收结果——写入 runs/ 目录。
-      tag: 证据
-    glossary_terms:
-    - id: gt-runs-dir
-      term: runs/
-      plain: 存放 Skill 运行记录与产物的目录——可复查、可回放。
-    quiz:
-    - - Skill 跑完必须留下什么？
-      - - 好印象
-        - 可检查的证据：产物文件 + 运行记录
-        - 完整聊天记录导出
-      - 1
-      - 没有证据的运行等于没跑——和 Eval 思维一致。
-    - - 验收结果应如何记录？
-      - - 口头告诉导师
-        - 对照验收标准逐条判过/不过，写入 runs/
-        - 只记「成功了」
-      - 1
-      - 第三方应能独立复查：打开产物 + 日志即可验证。
-    - - prompts/summary.md 和今日 Skill 的关系是？
-      - - 完全无关
-        - Week 1 的 summary 提示词是「半个 Skill」——今天升级成完全体
-        - 必须删除旧文件
-      - 1
-      - 有契约、有红线，缺运行步骤与验收执行——今天补全。
-    tools:
-    - name: 运行记录模板
-      note: 时间 | 输入摘要 | 产出路径 | 验收结果
+    - dg-agent-loop
+    - dg-harness
+    - dg-workflow-agent
+    - glossary
     media:
     - kind: video
-      title: 口播课件 · 运行一次
-      object_key: documents/shared/course-media/day07-c5-run-evidence.mp4
-      poster_key: documents/shared/course-media/day07-c5-run-evidence-poster.jpg
-      duration_sec: 113
+      title: 口播课件 · Agent / Harness / MCP
+      object_key: documents/shared/course-media/day06-c5-agent.mp4
+      poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
+      duration_sec: 322
+    knowledge_cards:
+    - id: agent-loop
+      term: Agent · 智能体
+      plain: 理解→规划→Tool Call→观察→继续；你定目的地和验收。
+      tag: 核心
+    - id: harness
+      term: Harness · 骨架
+      plain: 模型外循环：工具表、记忆、重试、日志——同模型不同骨架能力天差地别。
+      tag: 核心
+    - id: tool-call
+      term: Tool Calling
+      plain: 模型输出结构化工具请求，Harness 执行后结果喂回上下文。
+      tag: 核心
+    - id: mcp
+      term: MCP
+      plain: AI 接工具/数据源的 USB-C 标准；Skill 是它的朴素版。
+      tag: 地基
+    - id: workflow-agent
+      term: Workflow vs Agent
+      plain: 写死流程 vs 现场决策——能写死就写死，写不死才 Agent。
+      tag: 原则
+    - id: copilot-agent
+      term: Copilot vs Agent
+      plain: 副驾递扳手 vs 自主开车——信任与验收要求完全不同。
+      tag: 对比
+    glossary_terms:
+    - id: gt-agent
+      term: Agent
+      plain: 多步自主决策+调工具；Week 2 封装 Skill 的前置概念。
+    - id: gt-harness
+      term: Harness
+      plain: Cursor vs 简陋脚本——同一 GPT-4 不同骨架。
+    - id: gt-mcp
+      term: MCP
+      plain: Model Context Protocol；写一个 Server 多客户端能插。
+    - id: gt-workflow
+      term: Workflow vs Agent
+      plain: 报销审批适合 Workflow；整理乱文件成 PRD 适合 Agent。
+    - id: gt-copilot
+      term: Copilot vs Agent
+      plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
+    quiz:
+    - - Agent 循环的正确顺序？
+      - - Tool Call→理解→规划
+        - 理解→规划→Tool Call→观察→继续
+        - 生成→生成→生成
+      - 1
+      - Harness 负责执行 Tool 并喂回结果。
+    - - 同一 GPT-4，Cursor Agent 和简陋脚本能力差异主要来自？
+      - - 模型版本不同
+        - Harness（工具表、记忆、重试、日志）不同
+        - 网络速度
+      - 1
+      - 骨架不同，能力天差地别——Week 2 练的就是 Harness/Skill。
+    - - MCP 最贴切的比喻是？
+      - - 新的编程语言
+        - AI 接工具/数据源的 USB-C 标准
+        - 只能 OpenAI 用的私有协议
+      - 1
+      - 按标准写 Server，Cursor/Claude Desktop 都能用。
+    - - 「能写死就写死，写不死才 Agent」说明？
+      - - Agent 永远优于 Workflow
+        - Workflow 稳定可审计；Agent 灵活但需 Eval——按任务选
+        - 不应该用 Agent
+      - 1
+      - 报销审批写 Workflow；开放式整理任务才 Agent。
+    - - Copilot 和 Agent 的核心区别？
+      - - Copilot 更贵
+        - Copilot 是你开车它递扳手；Agent 是你定目的地它开
+        - 没有区别
+      - 1
+      - Agent 多步跨文件，错了破坏力大——日志和 Eval 更关键。
+    - - Tool Calling 时谁真正执行工具？
+      - - 模型自己连数据库
+        - Harness 收到结构化请求后执行，再把结果塞回上下文
+        - 用户手动执行
+      - 1
+      - 模型只「说我要调什么」；执行在 Harness。
 quiz:
-- - Week 2 的主线换档是？
-  - - 从写代码到写文档
-    - 从「做系统」到「造能力（Skill）」
-    - 从本地到云端
+- - LLM 生态四层从底到顶的正确顺序是？
+  - - 应用→编排→模型→基建
+    - 基建→模型→编排→应用
+    - 模型→应用→编排→基建
   - 1
-  - 驾驶舱是系统；Skill 是能力——AI 拿着说明书就能干活。
-- - Skill 四部件是？
-  - - 前端/后端/数据库/模型
-    - 输入 / 步骤 / 输出 / 验收
-    - 需求/设计/开发/测试
+  - 驾驶舱在应用层；换模型是换编排/模型层的牌子。
+- - 一次性 JSON 响应和 SSE 流式，主要差别是？
+  - - 计费单位不同
+    - 前者等整包再渲染；后者边收边显示（助手位建议 SSE）
+    - SSE 只能用于图像模型
   - 1
-  - 四部件一个不能少；验收必须可判对错。
-- - Prompt 和 Skill 的本质区别？
-  - - Prompt 更高级
-    - Prompt 一次性对话；Skill 可复用、有验收、可交接
+  - Day6 S01：API 负责打到哪，SSE 负责怎么流回来。
+- - Token 与上下文窗口的关系？
+  - - Token 是计费单位，与窗口无关
+    - Token 是读写基本单位；窗口是一次能塞进去的上限
+    - 窗口越大幻觉越少
+  - 1
+  - 给少了瞎编，给多了迷失——Context Engineering 管装填。
+- - 幻觉（Hallucination）的本质是？
+  - - 模型 bug，升级就消失
+    - 机制：永远给「最像真的」而非「经过核实的」
+    - 只有小模型才会幻觉
+  - 1
+  - 用 RAG、Eval、Guardrails 管理，不是 magic prompt。
+- - RAG 主要解决什么问题？
+  - - 让模型更快
+    - 先从资料库检索片段，再基于片段回答——治幻觉药方之一
+    - 替代 Fine-tune
+  - 1
+  - 可溯源比「听起来对」重要。
+- - Fine-tune 与 Prompt 的分工？
+  - - 完全相同
+    - Prompt 改这次输入；Fine-tune 改模型权重——贵、慢，多数业务 Prompt+RAG 够用
+    - Fine-tune 只能用于聊天
+  - 1
+  - 先 Prompt/Context，真搞不定再考虑 Fine-tune。
+- - Eval 替代的是什么？
+  - - 单元测试
+    - 「我觉得还行」——用固定题库+判分标准验收 AI 产物
+    - 代码审查
+  - 1
+  - Rubric 思维在 LLM 日落地。
+- - Agent 和 Workflow 怎么选？
+  - - 永远用 Agent
+    - 能写死流程就 Workflow；写不死才 Agent
+    - 永远用 Workflow
+  - 1
+  - Agent 信任成本高——需要 Harness 和日志。
+- - MCP 是什么？
+  - - 一种新的编程语言
+    - 给 AI 接工具/数据源的 USB-C 标准——Skill 是它的朴素版
+    - 只有 OpenAI 支持
+  - 1
+  - 标准接口让工具可复用。
+- - Copilot vs Agent？
+  - - Copilot 能自动跑完业务流程
+    - Copilot 递扳手；Agent 你定目的地它开——验收方式完全不同
     - 没有区别
   - 1
-  - Week 1 散落在对话里的 Prompt，今天固化为 Skill。
-- - 选第一个 Skill 的三筛法是？
-  - - 难/贵/新
-    - 高频 / 稳定 / 低险
-    - 快/省/好
+  - Week 2 主要在 Agent 侧加深。
+- - Harness 包含什么？
+  - - 只有大模型
+    - 工具表、记忆、规划、重试、日志——模型之外的循环骨架
+    - 前端框架
   - 1
-  - 第一个 Skill 练信任——低险是硬筛。
-- - 「工具描述」为什么要写「何时不用」？
-  - - 法律免责
-    - 帮 Agent 判断该不该选这件工具（Day 8 选错图谱）
-    - 凑文档厚度
-  - 1
-  - 描述决定 Agent 第 1 步理解任务时选不选得对。
-- - 步骤「分析一下数据」的主要问题是？
-  - - 太短
-    - 不可执行——没有具体操作序列
-    - 应该用 bullet
-  - 1
-  - 步骤要细到可照做，不能留「分析」这种黑洞词。
-- - Skill 运行后必须留下？
-  - - 口头汇报
-    - 可检查的证据（产物 + runs/ 记录）
-    - 截图发群
-  - 1
-  - 没有证据 = 没跑；和 Eval 思维一脉相承。
-- - 输出 + 验收对应 Week 1 的？
-  - - 三态与降级
-    - 结构化输出 + Rubric
-    - 契约与 DDL
-  - 1
-  - Week 1 概念在 Skill 说明书里各有一格。
-- - 第一个 Skill 不建议封装？
-  - - 每周周报
-    - 给客户发报价邮件（不可撤回、高险）
-    - 从 API 拉 KPI
-  - 1
-  - 对外发送/改数据/花钱——Day 9 确认闸后再碰。
-- - Skill 三问不包括？
-  - - 它做什么（输入→输出）
-    - 步骤谁定
-    - 用哪个 AI 模型
-  - 2
-  - 三问：做什么、步骤谁定、好坏谁判——模型是 Harness 的事。
-- - GATE 7 过闸必须包含？
-  - - 视频看完
-    - 现场运行 + 产出过验收 + 说明书进 Git
-    - 背下四部件定义
-  - 1
-  - 能跑、有证据、可交接——三问是口答检验理解。
-- - 「系统被使用，能力被执行」意思是？
-  - - 系统和能力一样
-    - 驾驶舱等人看；Skill 被 AI 拿去干活
-    - 能力比系统高级
-  - 1
-  - 你从操作者变成派活的人——Week 2 的核心位移。
-lab:
-  primary_files:
-  - skills/skill-01.md
-  - runs/
-  prompt: '你是 Skill 架构师。背景：FDE 训练营 Day 7，学员选定了一项高频、规则清晰、可验收的部门工作。
-
-    任务：在工作区生成 skills/skill-01.md——第一个 Skill 说明书，含四部件（输入：字段与来源 / 步骤：可执行的操作序列 / 输出：产物格式与存放路径 / 验收：如何判对错）+ 工具描述（一句话干什么、何时用、何时不用）；然后用该
-    Skill 真实执行一次，产物与运行记录写入 runs/ 目录。
-
-    要求：步骤必须具体到可照做；输出路径写死；证据必须第三方可查（文件/日志，不是口头）。'
-  rubric:
-  - check: file_exists
-    args:
-      path: skills/skill-01.md
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输入
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输出
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 何时用
-nodes_lab: 第一个 Skill：跑出可检查的证据
-nodes_project: 企业任务：Skill 说明书 + 运行证据
+  - 同一模型换 Harness，能力天差地别。
+nodes_project: 企业任务：提交 LLM 认知卡 llm-cognition-card.md

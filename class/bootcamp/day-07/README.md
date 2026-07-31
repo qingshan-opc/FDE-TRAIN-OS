@@ -1,43 +1,40 @@
-# Day 7 · 第一个 Skill：把你的工作方式教给 AI
+# Day 6 · LLM 理论日：18 词过线
 
-> 结构依据：`docs/spec/0.4/curriculum-v0.6.md`（实战主课 + 公开课拆分）
-> 今日目标：**把一件你每周重复做的事，封装成一个带验收标准的 Skill——AI 按它干活，你按它验收**
-> 总时长 100′ · 5 节 · 概念/方法 45′，实战 55′；GATE 走 Lab / 企业任务，不单开验收课
+> 结构依据：`class/schedule/index.html` 第 02 节 LLM 生态 + 第 03 节新概念词典 18 词
+> 今日目标：**把前五天「用过 AI」的体感，升级为能讲清边界、能查词典、能连到自己项目的 LLM 理论框架；第 1 节补上 DeepSeek + SSE 最小接电**
+> 总时长 115′ · 5 节 · 第 1 节含 SSE 实战，其余以概念为主；抽测走概念验收节点，收束靠企业任务认知卡（带提示词）
 
 ## 这一天在解决什么
 
-Week 2 换档：Week 1 你做了一个**产品**（驾驶舱），Week 2 你要做一个**同事**。
+Day 1 快测和公开课 O4 已经甩给你 18 个行业日常词——Harness、RAG、Eval、Vibe Coding……
+前五天你在 PRD、架构、原型、接口、全栈理论里**碰过**其中大半，但可能还处在「听过、用过大模型、说不清机制」的状态。
 
-Week 1 你每天都在「教 AI 做事」——但那些 Prompt 散落在各次对话里，用完即弃。今天把它固化：**Skill = 教 AI 做一件具体事的说明书**，可复用、可验收、可交接。
+理论课为什么放在第六天？**先有全栈地图，再补 LLM 词典。**
+现在讲 Token 窗口，你能对着 API_Spec 里的请求体说「这段 context 快满了」；讲 RAG，你能指着驾驶舱的摘要接口说「这就是检索增强的一种」。
 
-1. **换档认知**：从系统到能力——驾驶舱是系统，「生成周报」是能力，能力才能被 AI 执行（第 1 节，15′）；
-2. **解剖 Skill**：输入/步骤/输出 + 验收标准四部件（第 2 节，15′）；
-3. **选品**：不是什么事都值得封装——三筛法选出你的第一个（第 3 节，15′）；
-4. **动手**：定义 Skill → 运行 → 留证据（第 4–5 节，55′）。
+今天的节奏：第 1 节讲完四层与接入后，立刻用提示词完成 **DeepSeek-flash + SSE** 最小集成；其余节 18–25 分钟讲授，跟着讲解图把词装进脑子。
+**不再单开一节「验收课」**——抽测走「Day6 概念验收」节点；收束靠企业任务：提交 LLM 认知卡（可用提示词先梳理，实例必须自己填）。
 
-**不再单开一节「验收课」**——Skill 三问与 GATE 7 在 Lab / 企业任务节点完成。
-
-> 概念只讲最小必要版；Skill 市场、MCP 协议、多平台差异 → 公开课 O2。
+> 部署上线 V1.0（旧版 Day 6）材料已归档至 [`_archive/day-06-deploy/`](../_archive/day-06-deploy/)，Week 2 或公开课 O3 按需自学。
 
 ## 章节地图
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-system-to-skill/` | 概念：从系统到能力 | 15′ | 概念 | 口答：Skill 和 Prompt 的区别 |
-| 2 | `section-02-skill-anatomy/` | 概念：Skill 解剖四部件 | 15′ | 概念 | 四部件快答 |
-| 3 | `section-03-pick-first/` | 方法：选哪项工作先封装 | 15′ | 方法 | 三筛法选出第一 Skill |
-| 4 | `section-04-define-skill/` | 实战：定义 Skill | 30′ | 实战 | `skills/<name>.md` 定稿 |
-| 5 | `section-05-run-evidence/` | 实战：运行与证据 | 25′ | 实战 | 运行记录 + 产出物 + 验收结果 |
+| 1 | `section-01-ecosystem-four-layers/` | 生态四层地图 + API/SSE 接入 | 30′ | 概念+实战 | 四层定位 + DeepSeek SSE 流式跑通 |
+| 2 | `section-02-token-window-hallucination/` | Token / 窗口 / 幻觉：能力与边界 | 20′ | 概念 | 快测题依据 |
+| 3 | `section-03-prompt-context-rag/` | Prompt / Context / RAG / Fine-tune vs Prompt | 20′ | 概念 | 快测题依据 |
+| 4 | `section-04-eval-guardrails-vibe/` | Eval / Guardrails / Vibe Coding | 20′ | 概念 | 快测题依据 |
+| 5 | `section-05-agent-harness-mcp/` | Agent / Harness / Tool / MCP / Workflow vs Agent | 25′ | 概念 | 快测题依据 |
 
 ## 每节文件（tabs）
 
-每节目录固定五个文件：`lesson.md`（课件，含 🎬 口播稿位）· `practice.md`（练习）· `resources.md`（资源）· `homework.md`（作业）· `ai-tutor.yaml`（AI 导师配置：规则 / 快捷问题 / 验收规则）。
+每节目录固定：`lesson.md` · `practice.md` · `resources.md` · `homework.md` · `ai-tutor.yaml`（若有）。
 
-口播课件：`video/scripts/narration/`（若有）；第 6 节验收口播已撤出大纲（素材可留在旧目录，不进课表）。
+口播课件：`video/scripts/narration/`；成片在 MinIO（`day06-c1` … `day06-c5`）。第 6 节验收口播已撤出大纲（素材可留在旧目录，不进课表）。
 
-## 今日验收（GATE 7）
+## 今日验收（GATE · LLM 认知过线）
 
-- Skill 三问：它做什么（输入→输出）？步骤谁定？好坏谁判？
-- 现场运行一次 Skill，产出物过验收标准；
-- Skill 说明书含验收标准（可判对错），进 Git；
-- commit：`feat: 第一个 Skill——<你的 Skill 名>`。
+- 第 1 节：能口述「一次性响应 vs SSE」；**DeepSeek + SSE** 最小接电跑通（或书面 blocker + 降级，经助教确认）；
+- 日级快测过线（解析必须看懂）；目标对齐「18 词认知」——题库与词典对照复习；
+- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；每主题 2–3 条要点，每条配前五天真实实例或自己的类比；可用「认知卡 · 搭档提示词」先梳骨架）。

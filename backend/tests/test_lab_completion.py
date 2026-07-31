@@ -7,6 +7,7 @@ node_progress (and unlock the next node) in a single transaction.
 
 from __future__ import annotations
 
+import json
 import uuid
 
 import pytest
@@ -94,11 +95,14 @@ def test_complete_lab_attempt_pass_writes_all_rows_and_unlocks_next(learner):
         assert sub["status"] == "passed"
 
         ev = s.execute(
-            text("SELECT node_id, day FROM evidence WHERE id=:id"), {"id": out["evidence_id"]}
+            text("SELECT node_id, day, capability_tags FROM evidence WHERE id=:id"), {"id": out["evidence_id"]}
         ).mappings().first()
         assert ev is not None
         assert ev["node_id"] == "d1-lab"
         assert ev["day"] == 1
+        tags = json.loads(ev["capability_tags"] or "[]")
+        assert "capability:ai_team_command" in tags
+        assert "command:day:1" in tags
 
         lab_progress = s.execute(
             text(

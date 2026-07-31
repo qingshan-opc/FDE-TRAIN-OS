@@ -44,16 +44,6 @@ export function CoachMessage({ message }: { message: CoachChatMessage }) {
           </>
         )}
       </div>
-      {!isUser && message.citations && message.citations.length > 0 && (
-        <details className="coach-citations-wrap">
-          <summary>引用 {message.citations.length} 条资料</summary>
-          <ul className="coach-citations">
-            {message.citations.slice(0, 5).map((c, i) => (
-              <li key={i}>{c.title || c.id || "citation"}</li>
-            ))}
-          </ul>
-        </details>
-      )}
     </div>
   );
 }

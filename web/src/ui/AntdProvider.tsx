@@ -8,7 +8,7 @@ export function AntdProvider({ children }: { children: ReactNode }) {
   return (
     <ConfigProvider
       locale={zhCN}
-      autoInsertSpaceInButton={false}
+      button={{ autoInsertSpace: false }}
       theme={{
         algorithm: theme.defaultAlgorithm,
         token: {

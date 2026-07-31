@@ -115,8 +115,55 @@ def _practice(day: int, sdir: str) -> str:
             if l.strip().startswith(("-", "*"))
         ]
         if pts:
-            return "完成标志：" + "；".join(pts) + "。"
+            return "完成标志：\n" + "\n".join(f"[ ] {point}" for point in pts)
     return "按本节 practice.md 完成任务并达到完成标志。"
+
+
+def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
+    """Project the hands-on block from practice.md into the learner UI.
+
+    Week 1 practice files deliberately keep the learner instruction, copyable
+    TRAE prompt and acceptance checklist together.  Turning that source into a
+    local_prep payload makes the course follow the same four-step flow on every
+    lesson: explain → confirm → practise in TRAE → submit evidence.
+    """
+
+    p = BC / f"day-{day:02d}" / sdir / "practice.md"
+    if not p.exists():
+        return None
+    txt = _read(p)
+
+    prompt_m = re.search(
+        r"## 一键粘贴提示词\n.*?```(?:text)?\s*\n(.*?)\n```",
+        txt,
+        re.S,
+    )
+    checklist_m = re.search(r"## 学员验收清单\n(.*?)(?=\n## |\Z)", txt, re.S)
+    correction_m = re.search(
+        r"## 纠偏句式\n.*?```(?:text)?\s*\n(.*?)\n```",
+        txt,
+        re.S,
+    )
+
+    prompt = prompt_m.group(1).strip() if prompt_m else ""
+    checklist: list[str] = []
+    if checklist_m:
+        for raw in checklist_m.group(1).splitlines():
+            line = raw.strip()
+            m = re.match(r"^-\s*(?:\[[ xX]\]\s*)?(.+)$", line)
+            if m:
+                checklist.append(m.group(1).strip().rstrip("；。"))
+
+    if not prompt and not checklist:
+        return None
+
+    out: dict[str, Any] = {
+        "codex_prompt": prompt,
+        "checklist": checklist,
+    }
+    if correction_m:
+        out["suggested_questions"] = [correction_m.group(1).strip()]
+    return out
 
 
 def _quiz(raw_questions: list) -> dict[str, Any]:
@@ -152,9 +199,17 @@ def build_day_package(day: int) -> dict[str, Any]:
             "practice": _practice(day, cap["dir"]),
         }
         extra = (data.get("capsule_extra") or {}).get(cid) or {}
-        for key in ("resource_ids", "tools", "quiz", "local_prep", "lab", "media", "knowledge_cards", "glossary_terms"):
+        for key in ("resource_ids", "tools", "quiz", "local_prep", "lab", "media", "knowledge_cards", "glossary_terms", "memory_sentence"):
             if extra.get(key):
                 capsule[key] = extra[key]
+        knowledge = (data.get("knowledge_content") or {}).get(cid) or {}
+        for key in ("knowledge_cards", "memory_sentence", "quiz"):
+            if knowledge.get(key):
+                capsule[key] = knowledge[key]
+        if not capsule.get("local_prep"):
+            local_prep = _local_prep(day, cap["dir"])
+            if local_prep:
+                capsule["local_prep"] = local_prep
         capsules.append(capsule)
 
     week = 1 if day <= 5 else 2
@@ -231,7 +286,7 @@ def build_day_package(day: int) -> dict[str, Any]:
     return pkg
 
 
-_MEDIA_FIELDS = ("content", "practice", "media", "knowledge_cards", "glossary_terms", "resource_ids", "local_prep")
+_MEDIA_FIELDS = ("content", "practice", "media", "knowledge_cards", "glossary_terms", "resource_ids", "local_prep", "memory_sentence")
 
 
 def merge_day_package(

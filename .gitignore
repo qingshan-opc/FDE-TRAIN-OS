@@ -8,6 +8,7 @@ __pycache__/
 node_modules/
 dist/
 *.zip
+!class/resources/prompt-toolkit/FDE_TRAE_7岗位提示词_小白互动版.zip
 *.tar.gz
 test-results/
 playwright-report/

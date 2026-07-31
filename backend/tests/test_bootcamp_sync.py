@@ -24,6 +24,38 @@ def test_build_day6_c1_has_media_and_cards():
     assert len(c1.get("knowledge_cards") or []) >= 1
 
 
+def test_build_day1_capsules_project_four_step_local_practice():
+    pkg = build_day_package(1)
+    capsules = pkg["learn"]["capsules"]
+    assert len(capsules) == 5
+    for capsule in capsules:
+        prep = capsule.get("local_prep") or {}
+        assert prep.get("checklist")
+        if capsule["id"] == "c1":
+            assert not prep.get("codex_prompt")
+        else:
+            assert prep.get("codex_prompt")
+
+
+def test_week1_copy_prompts_are_short_beginner_commands():
+    prompts: list[str] = []
+    for day in range(1, 6):
+        pkg = build_day_package(day)
+        assert len(pkg["learn"]["capsules"]) == 5
+        for capsule in pkg["learn"]["capsules"]:
+            prompt = (capsule.get("local_prep") or {}).get("codex_prompt", "").strip()
+            if day == 1 and capsule["id"] == "c1":
+                assert not prompt
+                continue
+            assert prompt.startswith("@")
+            assert len(prompt) <= 150
+            prompts.append(prompt)
+
+    assert len(prompts) == 24
+    assert any("一次只问我一个问题" in prompt for prompt in prompts)
+    assert all("REVIEW" not in prompt and "APPROVED" not in prompt for prompt in prompts)
+
+
 def test_merge_media_fields_preserves_extra_capsule():
     boot = build_day_package(6)
     existing = {

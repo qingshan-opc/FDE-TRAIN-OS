@@ -54,6 +54,7 @@ export function LearnerHome() {
   const [showPassport, setShowPassport] = useState(false);
   const [openCapsuleId, setOpenCapsuleId] = useState<string | null>(null);
   const [readCapsuleIds, setReadCapsuleIds] = useState<Set<string>>(() => new Set());
+  const [acceptedCapsuleIds, setAcceptedCapsuleIds] = useState<Set<string>>(() => new Set());
   const [coachOpen, setCoachOpen] = useState(false);
   const [studySeconds, setStudySeconds] = useState(0);
 
@@ -97,7 +98,18 @@ export function LearnerHome() {
   useEffect(() => {
     setOpenCapsuleId(null);
     setReadCapsuleIds(new Set());
+    setAcceptedCapsuleIds(new Set());
   }, [activeDay, activeNodeId]);
+
+  useEffect(() => {
+    const onAccepted = (event: Event) => {
+      const capsuleId = (event as CustomEvent<{ capsuleId?: string }>).detail?.capsuleId;
+      if (!capsuleId) return;
+      setAcceptedCapsuleIds((prev) => new Set(prev).add(capsuleId));
+    };
+    window.addEventListener("fde:lesson-accepted", onAccepted);
+    return () => window.removeEventListener("fde:lesson-accepted", onAccepted);
+  }, []);
 
   const loadDay = useCallback(
     async (day: number, preferNodeId?: string | null) => {
@@ -414,7 +426,7 @@ export function LearnerHome() {
 
   return (
     <LearnerSessionProvider value={sessionValue}>
-      <div className={`app-shell${isLabActive ? " shell-lab" : ""}`}>
+      <div className={`app-shell${activeDay ? " learning-demo-shell" : ""}${isLabActive ? " shell-lab" : ""}`}>
         <Nav
           variant="learner-workbench"
           onHomework={goToHomework}
@@ -463,6 +475,7 @@ export function LearnerHome() {
               capsules={learnCapsules}
               openCapsuleId={openCapsuleId}
               readCapsuleIds={readCapsuleIds}
+              acceptedCapsuleIds={acceptedCapsuleIds}
               locked={activeNode?.status === "locked"}
               onSelectDay={handleSelectDay}
               onSelectNode={handleSelectNode}

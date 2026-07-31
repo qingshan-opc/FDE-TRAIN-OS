@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import type { DayPackage, NodeState } from "../lib/types";
 import type { TaskTarget } from "../lib/taskTargets";
 import { dayLabel } from "../lib/dayLabel";
 import { RubricList } from "./RubricList";
+import { useLearnerSessionRequired } from "../lib/learnerSessionContext";
+import { checklistItemsFromPrompt, normalizePractice } from "../lib/curriculum/normalizeCapsule";
 
 function TaskIcon() {
   return (
@@ -39,10 +42,104 @@ export function TaskRail({
   homeworkDisabled?: boolean;
   onHomework?: () => void;
 }) {
+  const session = useLearnerSessionRequired();
+  const [acceptedCapsules, setAcceptedCapsules] = useState<Set<string>>(() => new Set());
   const rubric = (node?.refs?.rubric || day?.lab?.rubric || []) as import("../lib/types").RubricCheck[];
   const checklist = day?.review_checklist || [];
   const visibleNodes = (day?.nodes || []).filter((n) => n.kind !== "unlock");
   const nodePassed = node?.status === "passed";
+
+  useEffect(() => {
+    const onAccepted = (event: Event) => {
+      const capsuleId = (event as CustomEvent<{ capsuleId?: string }>).detail?.capsuleId;
+      if (!capsuleId) return;
+      setAcceptedCapsules((prev) => new Set(prev).add(capsuleId));
+    };
+    window.addEventListener("fde:lesson-accepted", onAccepted);
+    return () => window.removeEventListener("fde:lesson-accepted", onAccepted);
+  }, []);
+
+  if (day && node?.kind === "learn" && session.activeCapsule) {
+    const capsule = session.activeCapsule;
+    const practiceSpec = normalizePractice(capsule.practice);
+    const checks =
+      capsule.local_prep?.checklist?.length
+        ? capsule.local_prep.checklist
+        : practiceSpec
+          ? checklistItemsFromPrompt(practiceSpec.prompt)
+          : [];
+    const deliverable =
+      capsule.tools
+        ?.map((tool) => tool.note?.match(/本节交付[：:]\s*(.+)$/)?.[1])
+        .find(Boolean) || `${capsule.title}实操证据`;
+    const accepted = acceptedCapsules.has(capsule.id) || node.status === "passed";
+    const score = accepted ? 60 : 20;
+
+    return (
+      <aside aria-label="当前任务工作台" className="task-rail task-rail--workbench">
+        <h2>当前任务工作台</h2>
+        <section className="task-workbench-current">
+          <span>本节交付物</span>
+          <h3>{deliverable}</h3>
+          <p>{capsule.tools?.[0]?.note || "按本节任务提示词完成实操，并用真实文件与运行结果验收。"}</p>
+          <div className="task-workbench-statuses">
+            <small>任务已领取</small>
+            <small className={accepted ? "is-pass" : "is-pending"}>{accepted ? "验收通过" : "成果未提交"}</small>
+          </div>
+        </section>
+
+        <section className="task-workbench-checks">
+          <header>
+            <strong>验收进度</strong>
+            <span>{accepted ? `${Math.max(1, checks.length)} / ${Math.max(1, checks.length)}` : `0 / ${Math.max(1, checks.length)}`}</span>
+          </header>
+          <ul>
+            {(checks.length ? checks : ["完成本节开发工具实操", "检查真实文件与运行证据", "明确批准或要求返工"])
+              .slice(0, 5)
+              .map((item, index) => (
+                <li key={item} className={accepted ? "is-pass" : ""}>
+                  <span>{accepted ? "✓" : index + 1}</span>
+                  <div>
+                    <strong>{item}</strong>
+                    <small>{accepted ? "已通过本节验收" : "等待提交后检查"}</small>
+                  </div>
+                </li>
+              ))}
+          </ul>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => window.dispatchEvent(new CustomEvent("fde:open-learn-step", { detail: "submit" }))}
+          >
+            {accepted ? "查看验收结果" : "进入提交验收"}
+          </button>
+        </section>
+
+        <section className="task-workbench-ability">
+          <header>
+            <strong>能力证据</strong>
+            <span>{accepted ? "本节已更新" : "通过后更新"}</span>
+          </header>
+          <div>
+            <strong>
+              <span>AI 团队指挥与验收</span>
+              <span>{score}%</span>
+            </strong>
+            <span className="task-workbench-ability-bar">
+              <i style={{ width: `${score}%` }} />
+            </span>
+          </div>
+        </section>
+
+        <p className="task-workbench-note">
+          平台只记录通过验收的成果。浏览讲义或只看 AI 生成结果，不会自动增加能力等级。
+        </p>
+        <button type="button" className="task-workbench-mentor" onClick={() => session.setCoachOpen(true)}>
+          ✦ 打开AI任务导师
+        </button>
+      </aside>
+    );
+  }
 
   return (
     <aside aria-label="任务面板" className="task-rail">

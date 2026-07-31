@@ -20,6 +20,7 @@ export function LocalPrepPanel({
   const { campId } = useAuth();
   const toast = useToast();
   const checklist = prep.checklist || [];
+  const hasPrompt = Boolean(prep.codex_prompt?.trim());
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const [saving, setSaving] = useState(false);
 
@@ -82,7 +83,7 @@ export function LocalPrepPanel({
     }
     try {
       await navigator.clipboard.writeText(text);
-      toast.push("已复制，请粘贴到本机 AI 工具（Codex / Cursor / openclaw / Kimi 等）", "success");
+      toast.push("任务提示词已复制，请粘贴给对应 AI 员工", "success");
     } catch {
       toast.push("复制失败，请手动选择文本复制", "error");
     }
@@ -90,14 +91,16 @@ export function LocalPrepPanel({
 
   return (
     <div className="local-prep-panel">
-      <p className="local-prep-lead muted">
-        平台提供企业背景与验收边界；请在本机 AI 工具（Codex / Cursor / openclaw / Kimi 等）完成分析与表达，最终判断须由你确认。
-      </p>
-      <div className="local-prep-grid">
+      {hasPrompt && (
+        <p className="local-prep-lead muted">
+          平台提供任务边界和验收标准；请在开发工具中 @ 对应 AI 员工完成任务，最终批准或返工必须由你确认。
+        </p>
+      )}
+      <div className={`local-prep-grid${hasPrompt ? "" : " local-prep-grid--single"}`}>
         <section className="local-prep-card">
           <h4>准备工作</h4>
           {checklist.length === 0 ? (
-            <p className="muted">暂无 checklist，可直接复制右侧任务上下文。</p>
+            <p className="muted">暂无准备事项。</p>
           ) : (
             <ul className="local-prep-checklist">
               {checklist.map((item, i) => (
@@ -111,21 +114,23 @@ export function LocalPrepPanel({
             </ul>
           )}
         </section>
-        <section className="local-prep-card local-prep-card--codex">
-          <h4>复制给本机 AI 工具的任务上下文</h4>
-          {prep.skill_id && <p className="local-prep-skill mono">Skill · {prep.skill_id}</p>}
-          <pre className="local-prep-prompt">{prep.codex_prompt?.trim() || "（教研尚未配置 prompt）"}</pre>
-          <div className="local-prep-actions">
-            <button type="button" className="btn-primary" disabled={disabled || !prep.codex_prompt} onClick={() => void copyPrompt()}>
-              复制任务背景
-            </button>
-            {template?.url && (
-              <a className="btn-ghost" href={template.url} target="_blank" rel="noreferrer">
-                下载任务模板
-              </a>
-            )}
-          </div>
-        </section>
+        {hasPrompt && (
+          <section className="local-prep-card local-prep-card--codex">
+            <h4>复制给对应 AI 员工的任务提示词</h4>
+            {prep.skill_id && <p className="local-prep-skill mono">Skill · {prep.skill_id}</p>}
+            <pre className="local-prep-prompt">{prep.codex_prompt?.trim()}</pre>
+            <div className="local-prep-actions">
+              <button type="button" className="btn-primary" disabled={disabled} onClick={() => void copyPrompt()}>
+                复制任务提示词
+              </button>
+              {template?.url && (
+                <a className="btn-ghost" href={template.url} target="_blank" rel="noreferrer">
+                  下载任务模板
+                </a>
+              )}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

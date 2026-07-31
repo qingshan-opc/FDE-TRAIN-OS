@@ -360,6 +360,24 @@ class CampDaySummary(BaseModel):
     total: int | None = None
     locked: bool = False
     nodes: list[DayNodeSummary] | None = None
+    capsules: list[dict[str, Any]] | None = None
+
+
+def _capsule_summaries(data: dict[str, Any]) -> list[dict[str, Any]]:
+    """Expose the Week/Day lesson menu without unlocking lesson content."""
+
+    items: list[dict[str, Any]] = []
+    for index, capsule in enumerate(((data.get("learn") or {}).get("capsules") or []), start=1):
+        if not isinstance(capsule, dict):
+            continue
+        items.append(
+            {
+                "id": str(capsule.get("id") or f"c{index}"),
+                "title": str(capsule.get("title") or f"第 {index} 节"),
+                "minutes": capsule.get("minutes"),
+            }
+        )
+    return items
 
 
 def _pack_rank(name: str) -> int:
@@ -411,6 +429,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
                     runner=runner,
                     total=node_counts[day],
                     passed=0,
+                    capsules=_capsule_summaries(data),
                 )
             except Exception:
                 continue
@@ -427,6 +446,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
                 if data.get("project") is not None:
                     summary.project = data.get("project")
                 summary.source = source_name
+                summary.capsules = _capsule_summaries(data)
                 for n in data.get("nodes") or []:
                     kinds.append(n.get("type") or n.get("kind"))
                     titles.append(str(n.get("title") or ""))

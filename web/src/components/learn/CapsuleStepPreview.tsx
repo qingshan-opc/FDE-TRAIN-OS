@@ -92,7 +92,7 @@ export function CapsuleStepPreview({
               onClick={() => setStep(s.id)}
             >
               <span className="learn-step-kicker num">
-                STEP 0{idx + 1} · {s.minutes}分钟
+                第 {idx + 1} 步 · {s.minutes}分钟
               </span>
               <span className="learn-step-title">{stepLabel(s.id)}</span>
             </button>

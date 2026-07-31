@@ -173,6 +173,8 @@ def test_day2_locked_before_day1_complete(learner):
     by_day = {d.day: d for d in listing["days"]}
     assert by_day[1].locked is False
     assert by_day[2].locked is True
+    assert len(by_day[2].capsules or []) == 5
+    assert all(capsule["title"] for capsule in by_day[2].capsules or [])
 
 
 def test_day2_unlocked_after_day1_all_passed(learner):

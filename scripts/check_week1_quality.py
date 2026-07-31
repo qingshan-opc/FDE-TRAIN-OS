@@ -54,15 +54,18 @@ def check_day(path: Path) -> None:
             warn(f"{cid}: 重点「」共 {emph} 处（期望 3–6 上下）")
         if not cap.get("practice"):
             fail(f"{cid}: 缺 practice")
-        if not (cap.get("quiz") or {}).get("questions") or len(cap["quiz"]["questions"]) < 2:
+        raw_cap_quiz = cap.get("quiz") or []
+        cap_questions = raw_cap_quiz.get("questions", []) if isinstance(raw_cap_quiz, dict) else raw_cap_quiz
+        if len(cap_questions) < 2:
             fail(f"{cid}: 节级 quiz <2 题")
-        for q in (cap.get("quiz") or {}).get("questions", []):
-            if not q.get("explain"):
+        for question in cap_questions:
+            explain = question.get("explain") if isinstance(question, dict) else (question[3] if len(question) > 3 else "")
+            if not explain:
                 fail(f"{cid}: quiz 缺解析")
         if "media" in cap:
             warn(f"{cid}: 含 media（v0.7 第一周视频应暂缓）")
     dq = day["quiz"]["questions"]
-    expected_quiz = 18 if day["day"] == 5 else 6  # Day5 v0.7.2 起日级快测 18 题
+    expected_quiz = 10 if day["day"] == 5 else 6  # 收官日覆盖五节系统复盘，每节 2 题
     if len(dq) != expected_quiz:
         fail(f"{tag}: 日级 quiz {len(dq)} 题（期望 {expected_quiz}）")
 

@@ -93,6 +93,8 @@ export interface Capsule {
   resources?: DayResource[];
   tools?: CapsuleTool[];
   knowledge_cards?: KnowledgeCard[];
+  /** Teacher-authored memory sentence sourced from the lesson narration. */
+  memory_sentence?: string;
   /** Section glossary shown left of resources under the video step. */
   glossary_terms?: KnowledgeCard[];
   quiz?: { questions?: Array<{ q: string; options: string[]; answer?: number; explain?: string }>; pass_rate?: number };
@@ -138,6 +140,8 @@ export interface DaySummary {
   locked?: boolean;
   /** Tree L2 — per-day node summary (unlock nodes excluded), populated when authenticated. */
   nodes?: DayNodeSummary[];
+  /** Read-only lesson menu; available even while the Day is locked. */
+  capsules?: Array<Pick<Capsule, "id" | "title" | "minutes">>;
 }
 
 /** Returned by `dayApi.completeNode` — drives auto-advance / auto-next-day in LearnerHome. */

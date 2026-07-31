@@ -106,6 +106,13 @@ learn:
     - id: gt-hitl
       term: Human-in-the-loop
       plain: 人在环：关键步骤必须人工确认或放行。
+    local_prep:
+      codex_prompt: '编排教练。把我的部门流程拆成 Skill 串联图 A→B→(确认闸)→C。
+
+        每步标注：执行还是判断、输入从哪来、错了能否撤回。不可撤回步前必须留闸位。
+
+        输出可写入 docs/orchestration.md 的 Markdown。'
+      checklist: []
   - id: c2
     title: 概念：人工确认与执行记录
     minutes: 15
@@ -177,6 +184,13 @@ learn:
     - id: gt-exec-log
       term: 执行日志
       plain: 每步一条记录，可回放、可追责——runs/ 是案底。
+    local_prep:
+      codex_prompt: '确认闸设计卡：看什么 / 谁来看 / 多久看一次。
+
+        为我的「发送/改数」步骤写确认界面最低信息：草稿 + 关键数字 + 风险标红。
+
+        再写信任分级：什么条件下可以从每次看降到抽看。'
+      checklist: []
   - id: c3
     title: 实战：再封装两个 Skill
     minutes: 30
@@ -241,6 +255,13 @@ learn:
     - id: gt-tool-table-3
       term: 三件工具表
       plain: Agent/workflow 可调用的完整工具集——Day 9 从 1 扩到 3。
+    local_prep:
+      codex_prompt: '复用 Day7–8 模板，帮我起草 Skill #2 与 Skill #3 的说明书骨架（四部件+边界+工具描述）。
+
+        要求：三件职责不重叠、输入输出契约能互相接上；发送类必须含「等待人工确认」。
+
+        先问我两件 Skill 的名字与职责再写。'
+      checklist: []
   - id: c4
     title: 实战：编排 + 确认点 + 执行日志
     minutes: 35
@@ -255,7 +276,13 @@ learn:
       跑通之后别急着走，两条路径都要实测。批准走一遍，驳回也走一遍——比如驳回：第二段数字不对，流水线得打回 B 重做，日志记下这次驳回。闸拦住一次不算本事，驳回了能退回重做还留下记录，咱们这条线才算有回路，对吧。
 
       最后两分钟，关掉屏幕别的窗口，只看 runs/ 日志，复述今天发生了什么。到闸停不停、批了动不动、驳回了回不回得来——三个验收点全绿，第五节闸口实测才有底气。带走一句，对吧。'
-    practice: 完成标志：两路径实测表全 ✓；runs/ 日志可回放（三问答全）；迭代日志记下今天修过的每一处。
+    practice: '完成标志：
+
+      [ ] 两路径实测表全 ✓
+
+      [ ] runs/ 日志可回放（三问答全）
+
+      [ ] 迭代日志记下今天修过的每一处'
     resource_ids:
     - dg-orchestration
     tools:
@@ -311,6 +338,21 @@ learn:
     - id: gt-orchestration-md
       term: orchestration.md
       plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
+    local_prep:
+      codex_prompt: '你现在严格按下列 workflow 执行，顺序不许变（把尖括号换成我的 Skill 名）：
+
+
+        1. 调用 Skill A〈名〉，输出存为 step-a
+
+        2. 调用 Skill B〈名〉，输入用 step-a；产出草稿后生成确认界面（草稿全文 + 关键数字 + 风险标红）
+
+        3. 停。不要执行后续。我回复「发」→ 调用 Skill C〈名〉；我回复「驳回：理由」→ 回第 2 步且版本 +1，再次确认
+
+        4. 每步向 runs/〈今天日期〉.md 追加：HH:MM | 步骤 | 结果
+
+
+        先确认三件 Skill 文件存在并复述计划，再开始执行。'
+      checklist: []
 quiz:
   pass_rate: 0.67
   questions:
@@ -444,11 +486,30 @@ lab:
   - docs/orchestration.md
   - runs/
   inherited_files:
-  - PRD.md
-  - architecture.md
-  - index.html
-  - API_Spec.md
-  - DB_Schema.md
+  - docs/D1_选题确认单.md
+  - docs/D1_团队协作卡.md
+  - docs/D1_项目任务书.md
+  - docs/PRD.md
+  - design/prototypes/index.html
+  - docs/D2-L4_接口契约.md
+  - docs/D2_前端走查.md
+  - docs/D3-L1_项目地图.md
+  - docs/D3-L2_数据表说明.md
+  - docs/D3-L3_接口验证.md
+  - docs/D3-L4_Week2_AI交接.md
+  - docs/D3_冒烟记录.md
+  - docs/D4-L1_测试用例表.md
+  - docs/D4-L2_执行矩阵.md
+  - docs/D4-L2_缺陷报告.md
+  - docs/D4-L4_验收清单.md
+  - docs/D4_报审材料清单.md
+  - docs/D5-L1_研发全流程图.md
+  - docs/D5-L2_理解补缺.md
+  - docs/D5-L3_本地交付检查.md
+  - docs/D5_项目复盘.md
+  - docs/D5_五分钟路演.md
+  - docs/D5_综合验收.md
+  - README.md
   - skills/skill-01.md
   - runs/
   - agent-run-log.md

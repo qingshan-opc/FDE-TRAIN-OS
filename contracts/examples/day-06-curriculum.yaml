@@ -90,7 +90,13 @@ learn:
     content: '过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。
 
       真相源：`scripts/section_narrations/day06_s01.yaml`。'
-    practice: 完成标志：[ ] 四层名称顺序正确，且各举一个具体产品/动作；[ ] 能向同桌说清：API 是调用方式，SSE 是流式通道，助手位建议 SSE；[ ] SSE 最小接电跑通（或书面记录 blocker + 降级方案，经助教确认）。
+    practice: '完成标志：
+
+      [ ] [ ] 四层名称顺序正确，且各举一个具体产品/动作
+
+      [ ] [ ] 能向同桌说清：API 是调用方式，SSE 是流式通道，助手位建议 SSE
+
+      [ ] [ ] SSE 最小接电跑通（或书面记录 blocker + 降级方案，经助教确认）'
     resource_ids:
     - dg-llm-ecosystem
     - dg-four-layer
@@ -170,13 +176,38 @@ learn:
     - id: gt-multimodal
       term: 多模态
       plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
+    local_prep:
+      codex_prompt: '我需要接入 DeepSeek-flash（若文档型号名不同，以教务/官方当前 flash 型号为准），采用 SSE 的方式接入。
+
+
+        约束：
+
+        1. 调用云端 Chat Completions（或兼容 OpenAI 协议的）接口，开启 stream / SSE（text/event-stream）。
+
+        2. 前端（或驾驶舱助手位）边收边显示 token/文本片段；支持「生成中」状态与错误态；断流可重试。
+
+        3. API Key 只放在后端或本地 .env（已 gitignore），前端不得硬编码密钥。
+
+        4. 最小验收：发送一句「用三句话介绍你自己」，界面能流式打出回复；失败时显示可读错误，不白屏、不假装成功。
+
+        5. 交付：可运行的最小代码 + 我怎么启动的 3 行说明（README 小节即可）。
+
+
+        先问我：工作区语言栈（纯 HTML / Node / Python）和密钥从哪读；再改代码，不要一次糊一堆无关重构。'
+      checklist: []
   - id: c2
     title: Token / 窗口 / 幻觉：能力与边界
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-02-token-window-hallucination/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: 完成标志：[ ] 能解释 input/output Token 与账单的关系；[ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策；[ ] 说清「验收」比「再 prompt 一次」优先。
+    practice: '完成标志：
+
+      [ ] [ ] 能解释 input/output Token 与账单的关系
+
+      [ ] [ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策
+
+      [ ] [ ] 说清「验收」比「再 prompt 一次」优先'
     resource_ids:
     - dg-llm-capability
     - glossary
@@ -225,13 +256,24 @@ learn:
     - id: gt-hallucination
       term: 幻觉
       plain: 流畅 plausible 优先于 fact-check；关键事实必须可溯源+验收。
+    local_prep:
+      codex_prompt: '你是 LLM 能力边界教练。用我的驾驶舱摘要场景，解释 Token 计费、上下文窗口满了的三条出路、幻觉为什么是机制不是偶发 bug。
+
+        每点配一个「我项目里的坏例子」。最后出 3 道口答题考我。'
+      checklist: []
   - id: c3
     title: Prompt / Context / RAG / Fine-tune vs Prompt
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-03-prompt-context-rag/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: 完成标志：[ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）；[ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别；[ ] Fine-tune 何时才考虑（一句）。
+    practice: '完成标志：
+
+      [ ] [ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）
+
+      [ ] [ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别
+
+      [ ] [ ] Fine-tune 何时才考虑（一句）'
     resource_ids:
     - dg-context-assembly
     - glossary
@@ -293,13 +335,26 @@ learn:
     - id: gt-rag
       term: RAG
       plain: 先检索相关片段再生成；驾驶舱摘要是简化版 RAG 思想。
+    local_prep:
+      codex_prompt: '帮我设计一次调用的 Context 装填清单：系统规则 / 真数据 / 用户原话。
+
+        再写一个最小 RAG 故事：驾驶舱「先查数再摘要」对应哪五步里的哪几步。
+
+        指出 Fine-tune 为什么还轮不到我。'
+      checklist: []
   - id: c4
     title: Eval / Guardrails / Vibe Coding
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-06/section-04-eval-guardrails-vibe/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: 完成标志：[ ] 5 条 case 可被第三方客观判过/不过；[ ] 说清一条 Guardrails 降级策略（空结果）；[ ] 举自己 vibe 写代码的一次经历 + 怎么验收的。
+    practice: '完成标志：
+
+      [ ] [ ] 5 条 case 可被第三方客观判过/不过
+
+      [ ] [ ] 说清一条 Guardrails 降级策略（空结果）
+
+      [ ] [ ] 举自己 vibe 写代码的一次经历 + 怎么验收的'
     resource_ids:
     - dg-llm-ecosystem
     - glossary
@@ -351,13 +406,24 @@ learn:
     - id: gt-vibe
       term: Vibe Coding
       plain: diff 可以 vibe，合并进 main 必须 Eval+人工看关键路径。
+    local_prep:
+      codex_prompt: '为我的摘要功能写：3 条 Eval 题（输入+期望要点）、1 条 Guardrails（空结果/超时怎么降级）、用白话区分 Vibe Coding 与可验收交付。
+
+        输出可直接贴进 llm-cognition-card 的要点。'
+      checklist: []
   - id: c5
     title: Agent / Harness / Tool / MCP / Workflow vs Agent
     minutes: 25
     form: 概念
     content_ref: class/bootcamp/day-06/section-05-agent-harness-mcp/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: 完成标志：[ ] 能画 Agent 循环简图；[ ] 说清 Copilot vs Agent 信任差异；[ ] 指驾驶舱哪块未来适合 Skill/MCP 封装。
+    practice: '完成标志：
+
+      [ ] [ ] 能画 Agent 循环简图
+
+      [ ] [ ] 说清 Copilot vs Agent 信任差异
+
+      [ ] [ ] 指驾驶舱哪块未来适合 Skill/MCP 封装'
     resource_ids:
     - dg-agent-loop
     - dg-harness
@@ -405,7 +471,7 @@ learn:
       title: 口播课件 · Agent / Harness / MCP
       object_key: documents/shared/course-media/day06-c5-agent.mp4
       poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
-      duration_sec: 207
+      duration_sec: 322
     knowledge_cards:
     - id: agent-loop
       term: Agent · 智能体
@@ -447,6 +513,11 @@ learn:
     - id: gt-copilot
       term: Copilot vs Agent
       plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
+    local_prep:
+      codex_prompt: '用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / Copilot vs Agent。
+
+        每词强制配「前五天或 SSE 接电」的一个实例。不要只有定义。'
+      checklist: []
 quiz:
   pass_rate: 0.67
   questions:

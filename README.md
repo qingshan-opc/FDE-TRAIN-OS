@@ -21,6 +21,20 @@ cd web && npm run dev                 # 前端 :5173
 
 演示：`learner@fde.local` / `learner1234`（学员）· `author@fde.local` / `author1234`（教研）
 
+### Windows 一键启动（免 Docker）
+
+```bash
+npm run dev
+```
+
+由 [`scripts/dev.mjs`](scripts/dev.mjs) 依次拉起：内嵌 PostgreSQL(5433，pgserver 二进制，
+以低权限本地用户 `fdepg` 运行；数据在 `data/pgdata/`) → S3 模拟 moto(9000，替代 MinIO)
+→ 幂等迁移 → API(8760) → worker(AGENT_MODE=stub) → Vite(web/)。
+`C:\fde-pgbin` / `C:\fde-pgdata` 是指向工作区的目录联接（PostgreSQL 不支持中文路径）。
+CLI 参数透传给 Vite：`npm run dev -- --host 0.0.0.0 --port 7100`。
+
+Windows 启动器已适配 `backend/` 目录，会同时把仓库根目录加入 Python 模块搜索路径。
+
 ## 渐进披露（从哪进）
 
 | 你想… | 从这里进 |

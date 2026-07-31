@@ -43,6 +43,68 @@ export function KnowledgeCardsStep({ cards }: { cards: KnowledgeCard[] }) {
   );
 }
 
+/**
+ * Demo knowledge-confirmation layout: three key points, a clickable concept map,
+ * and one memorable sentence. Quiz interaction stays in CapsuleReader so its
+ * answer state can continue to be persisted with the lesson.
+ */
+export function KnowledgeConfirmationCards({
+  cards,
+  memorySentence,
+  deliverable,
+}: {
+  cards: KnowledgeCard[];
+  memorySentence: string;
+  deliverable: string;
+}) {
+  const visibleCards = cards.slice(0, 3);
+  const [activeId, setActiveId] = useState<string>(visibleCards[0]?.id || "");
+  const active = visibleCards.find((card) => card.id === activeId) || visibleCards[0];
+
+  return (
+    <section className="knowledge-confirmation-cards" aria-label="三个关键知识点">
+      <div className="knowledge-confirmation-grid">
+        {visibleCards.map((card, index) => (
+          <article className="knowledge-confirmation-card" key={card.id}>
+            <span>知识卡片 {String(index + 1).padStart(2, "0")}</span>
+            <strong>{card.term}</strong>
+            <p>{card.plain}</p>
+          </article>
+        ))}
+      </div>
+
+      <section className="knowledge-map" aria-label="交互式知识图谱">
+        <header>交互式知识图谱 · 点击节点可展开解释</header>
+        <div className="knowledge-map-flow">
+          <span className="knowledge-map-endpoint">本节目标</span>
+          <i aria-hidden="true">→</i>
+          {visibleCards.map((card) => (
+            <span className="knowledge-map-segment" key={card.id}>
+              <button
+                type="button"
+                className={card.id === active?.id ? "is-active" : ""}
+                aria-pressed={card.id === active?.id}
+                onClick={() => setActiveId(card.id)}
+              >
+                {card.term}
+              </button>
+              <i aria-hidden="true">→</i>
+            </span>
+          ))}
+          <span className="knowledge-map-endpoint">{deliverable}</span>
+        </div>
+        {active ? (
+          <p className="knowledge-map-detail" aria-live="polite">
+            <strong>{active.term}：</strong>{active.detail || active.plain}
+          </p>
+        ) : null}
+      </section>
+
+      <p className="knowledge-memory"><strong>记忆句：</strong>{memorySentence}</p>
+    </section>
+  );
+}
+
 /** 本节名词解释（点词看释义）。embedded：嵌在底部 tab 内时去掉外框与标题。 */
 export function GlossaryTermsPanel({
   terms,

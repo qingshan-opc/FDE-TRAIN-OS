@@ -397,6 +397,8 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
     if user:
         require_camp_access(request, camp_id)
 
+    staff_preview = bool(user and getattr(user, "role", None) in ("author", "admin"))
+
     found: dict[int, CampDaySummary] = {}
     node_counts: dict[int, int] = {}
     day_meta: dict[int, tuple[list[str], list[str]]] = {}
@@ -459,6 +461,9 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             node_summaries: list[DayNodeSummary] | None = None
             if ids:
                 statuses = _compute_statuses_from_map(day, ids, progress_map)
+                if staff_preview:
+                    # Authors/admins preview every node as available.
+                    statuses = ["available" if s == "locked" else s for s in statuses]
                 passed = sum(1 for s in statuses if s == "passed")
                 node_summaries = [
                     DayNodeSummary(id=nid, title=titles[i], kind=kinds[i], status=statuses[i])
@@ -474,7 +479,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             summary.passed = passed
             summary.total = total
             summary.nodes = node_summaries
-            summary.locked = not _day_unlocked_from_meta(day, day_meta, progress_map)
+            summary.locked = False if staff_preview else (not _day_unlocked_from_meta(day, day_meta, progress_map))
 
     items = [found[k] for k in sorted(found)]
     # Day 6 = Saturday intercalary between Week1 Day5 and former Day6 (now Day7).
@@ -487,9 +492,10 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
 
 @router.get("/api/v1/camps/{camp_id}/days/{day}", response_model=DayPackageView)
 def get_day(camp_id: str, day: int, request: Request) -> DayPackageView:
-    require_camp_access(request, camp_id)
+    user = require_camp_access(request, camp_id)
     lid = session_learner_id(request)
-    if not _day_unlocked(lid, camp_id, day):
+    staff_preview = user.role in ("author", "admin")
+    if not staff_preview and not _day_unlocked(lid, camp_id, day):
         raise HTTPException(403, "请先完成前一日课程")
     try:
         data, source_name = _load_day_package(day, camp_id, lid)
@@ -588,7 +594,9 @@ def complete_node(node_id: str, body: CompleteBody, request: Request) -> dict[st
     lid = session_learner_id(request)
     camp_id = resolve_camp_id(request, body.camp_id)
     day = body.day
-    if not _day_unlocked(lid, camp_id, day):
+    user = getattr(request.state, "user", None)
+    staff_preview = bool(user and getattr(user, "role", None) in ("author", "admin"))
+    if not staff_preview and not _day_unlocked(lid, camp_id, day):
         raise HTTPException(403, "请先完成前一日课程")
     try:
         data, _ = _load_day_package(day, camp_id, lid)
@@ -600,7 +608,7 @@ def complete_node(node_id: str, body: CompleteBody, request: Request) -> dict[st
         raise HTTPException(400, "unknown node for day")
     idx = ids.index(node_id)
     statuses = _compute_statuses(lid, camp_id, day, ids)
-    if statuses[idx] == "locked":
+    if not staff_preview and statuses[idx] == "locked":
         raise HTTPException(409, "节点未解锁，请先完成前置节点")
     if kinds[idx] == "learn":
         _check_learn_gate(lid, camp_id, day, data)

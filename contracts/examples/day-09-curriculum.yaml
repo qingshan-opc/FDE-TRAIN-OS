@@ -518,25 +518,30 @@ lab:
   - docs/D1_团队协作卡.md
   - docs/D1_项目任务书.md
   - docs/PRD.md
+  - docs/D1_command_log.md
   - design/prototypes/index.html
   - docs/D2-L4_接口契约.md
   - docs/D2_前端走查.md
+  - docs/D2_command_log.md
   - docs/D3-L1_项目地图.md
   - docs/D3-L2_数据表说明.md
   - docs/D3-L3_接口验证.md
   - docs/D3-L4_Week2_AI交接.md
   - docs/D3_冒烟记录.md
+  - docs/D3_command_log.md
   - docs/D4-L1_测试用例表.md
   - docs/D4-L2_执行矩阵.md
   - docs/D4-L2_缺陷报告.md
   - docs/D4-L4_验收清单.md
   - docs/D4_报审材料清单.md
+  - docs/D4_command_log.md
   - docs/D5-L1_研发全流程图.md
   - docs/D5-L2_理解补缺.md
   - docs/D5-L3_本地交付检查.md
   - docs/D5_项目复盘.md
   - docs/D5_五分钟路演.md
   - docs/D5_综合验收.md
+  - docs/D5_command_log.md
   - README.md
   - skills/skill-01.md
   - runs/

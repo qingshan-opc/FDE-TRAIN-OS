@@ -27,11 +27,7 @@ capsule_extra:
     resource_ids:
     - trae-cn-download
     - team-prompts-v11
-    tools:
-    - name: TRAE 国内版
-      note: 本节交付：TRAE 安装完成 + 七岗位提示词包
-    - name: 七岗位提示词包
-      note: 本节只下载解压，下一节再创建 AI 员工
+    tools: []
     quiz:
     - &id001
       - 第一节实操做到哪一步算完成？
@@ -47,6 +43,12 @@ capsule_extra:
         - 没有动画
       - 1
       - 驾驶舱是前端结果，必须能追到真实业务数据。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day01-c1-pm-in-ai-era.mp4
+      poster_key: documents/shared/course-media/day01-c1-pm-in-ai-era-poster.jpg
+      duration_sec: 126
   c2:
     resource_ids:
     - team-prompts-v11
@@ -72,6 +74,12 @@ capsule_extra:
         - 因为文件数量会变少
       - 1
       - 课程目标是看懂研发逻辑，而不是只看到最终产物。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day01-c2-requirement-to-prd.mp4
+      poster_key: documents/shared/course-media/day01-c2-requirement-to-prd-poster.jpg
+      duration_sec: 72
   c3:
     resource_ids:
     - team-prompts-v11
@@ -97,6 +105,12 @@ capsule_extra:
         - PRD 不重要
       - 1
       - 每个岗位只交付自己的成果，下一岗位由学员亲自发起。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy.mp4
+      poster_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy-poster.jpg
+      duration_sec: 66
   c4:
     resource_ids:
     - team-prompts-v11
@@ -120,6 +134,12 @@ capsule_extra:
         - 没有英文
       - 1
       - 验收标准必须可观察、可执行、可判断。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day01-c4-hands-on-mini-prd.mp4
+      poster_key: documents/shared/course-media/day01-c4-hands-on-mini-prd-poster.jpg
+      duration_sec: 68
   c5:
     resource_ids:
     - team-prompts-v11
@@ -143,6 +163,12 @@ capsule_extra:
         - 按钮不能点击
       - 1
       - 状态与来源比操作入口更重要。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day01-c5-accept.mp4
+      poster_key: documents/shared/course-media/day01-c5-accept-poster.jpg
+      duration_sec: 70
 quiz:
 - *id001
 - *id002
@@ -158,7 +184,8 @@ lab:
   - docs/PRD.md
   - docs/D1_command_log.md
   - design/prototypes/index.html
-  prompt: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型，以及指挥日志 docs/D1_command_log.md（含至少一次 REJECTED 与 APPROVED）。只报告真实存在的文件和验证结果，缺失项标 BLOCKED，不得代替学员批准。
+  prompt: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型，以及指挥日志 docs/D1_command_log.md（含至少一次 REJECTED 与 APPROVED）。只报告真实存在的文件和验证结果，缺失项标
+    BLOCKED，不得代替学员批准。
   rubric:
   - check: file_exists
     args:

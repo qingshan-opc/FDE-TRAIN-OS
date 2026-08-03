@@ -78,6 +78,12 @@ learn:
         - 页面配色已经做到最漂亮
       - 1
       - 口播稿把这一阶段比作盖房子先立框架，不要求提前搬进家具。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day02-c1-architect-role.mp4
+      poster_key: documents/shared/course-media/day02-c1-architect-role-poster.jpg
+      duration_sec: 74
     knowledge_cards:
     - id: d2l1-k1
       term: 先列方案再动手
@@ -144,6 +150,12 @@ learn:
         - 让 AI 口头保证已经检查
       - 1
       - 只有真实输入错误内容，才能确认页面真的阻止了错误提交。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day02-c2-four-layer.mp4
+      poster_key: documents/shared/course-media/day02-c2-four-layer-poster.jpg
+      duration_sec: 67
     knowledge_cards:
     - id: d2l2-k1
       term: 填写规则来自需求
@@ -210,6 +222,12 @@ learn:
         - 为了假装已经接入真实数据
       - 1
       - 数据越接近真实情况，越容易在交付前发现页面问题。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day02-c3-arch-selection.mp4
+      poster_key: documents/shared/course-media/day02-c3-arch-selection-poster.jpg
+      duration_sec: 71
     knowledge_cards:
     - id: d2l3-k1
       term: 演示数据要像真的
@@ -273,6 +291,12 @@ learn:
         - 在页面上隐藏这个字段
       - 1
       - 先统一传话约定，才能避免两个岗位长期各说各话。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day02-c4-hands-on-adr.mp4
+      poster_key: documents/shared/course-media/day02-c4-hands-on-adr-poster.jpg
+      duration_sec: 70
     knowledge_cards:
     - id: d2l4-k1
       term: 详情要看清一条记录
@@ -340,6 +364,12 @@ learn:
         - 只查看管理看板的截图
       - 1
       - 课程要求用实际操作和记录证明完成，不能只听 AI 汇报。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day02-c5-accept.mp4
+      poster_key: documents/shared/course-media/day02-c5-accept-poster.jpg
+      duration_sec: 62
     knowledge_cards:
     - id: d2l5-k1
       term: 看板数字要找得到来源
@@ -425,11 +455,13 @@ lab:
   primary_files:
   - docs/D2-L4_接口契约.md
   - docs/D2_前端走查.md
+  - docs/D2_command_log.md
   inherited_files:
   - docs/D1_选题确认单.md
   - docs/D1_团队协作卡.md
   - docs/D1_项目任务书.md
   - docs/PRD.md
+  - docs/D1_command_log.md
   - design/prototypes/index.html
   coach:
     help_mode: debug
@@ -437,7 +469,7 @@ lab:
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据。前端未接数据库是正常状态，但不得写成联调完成。
+    prompt_template: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据，以及指挥日志 docs/D2_command_log.md。前端未接数据库是正常状态，但不得写成联调完成。
   rubric:
   - check: file_exists
     args:

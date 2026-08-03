@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-examples",
+    "file": "02-examples.txt"
+  },
+  {
+    "id": "03-domain-moat",
+    "file": "03-domain-moat.txt"
+  },
+  {
+    "id": "04-owner-role",
+    "file": "04-owner-role.txt"
+  },
+  {
+    "id": "05-tools-prep",
+    "file": "05-tools-prep.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

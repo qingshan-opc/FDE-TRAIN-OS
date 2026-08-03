@@ -41,6 +41,7 @@ from services.sql_lab.app import router as sql_lab_router  # noqa: E402
 from services.billing.app import router as billing_router  # noqa: E402
 from services.partner.app import router as partner_router  # noqa: E402
 from services.chain.app import router as chain_router  # noqa: E402
+from services.wechat_mp.app import router as wechat_mp_router  # noqa: E402
 
 setup_logging()
 ensure_dirs()
@@ -67,6 +68,7 @@ _ROUTERS = [
     (billing_router, "FDE Billing"),
     (partner_router, "FDE Partner"),
     (chain_router, "FDE Chain"),
+    (wechat_mp_router, "FDE WeChat MP"),
 ]
 _SERVICE_TITLES = [title for _, title in _ROUTERS]
 

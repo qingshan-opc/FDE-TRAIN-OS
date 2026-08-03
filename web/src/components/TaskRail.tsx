@@ -29,7 +29,6 @@ export function TaskRail({
   day,
   node,
   homeNextTarget,
-  homePendingCount,
   onHomeContinue,
   onPrimary,
   primaryLabel,
@@ -41,7 +40,6 @@ export function TaskRail({
   day: DayPackage | null;
   node: NodeState | null;
   homeNextTarget?: TaskTarget | null;
-  homePendingCount?: number;
   onHomeContinue?: () => void;
   onPrimary?: () => void;
   primaryLabel?: string;
@@ -184,7 +182,7 @@ export function TaskRail({
   }
 
   if (!day) {
-    const pending = homePendingCount != null && homePendingCount > 0;
+    const hasNext = Boolean(homeNextTarget);
     return (
       <aside aria-label="今日训练工作台" className="task-rail task-rail--workbench">
         <h2>今日训练工作台</h2>
@@ -192,31 +190,31 @@ export function TaskRail({
           <span>下一项训练</span>
           <h3>{homeNextTarget?.label || "选择左侧课节开始"}</h3>
           <p>
-            {pending
-              ? `你有 ${homePendingCount} 项待办，从下一项开始继续。`
+            {hasNext
+              ? "看完课程介绍后，可从下一项训练继续。"
               : "选择左侧课节，或点击下方按钮继续学习。"}
           </p>
           <div className="task-workbench-statuses">
             <small>{homeNextTarget ? `Day ${homeNextTarget.day}` : "待选择"}</small>
-            <small className={pending ? "is-pending" : "is-pass"}>{pending ? "待继续" : "暂无待办"}</small>
+            <small className={hasNext ? "is-pending" : "is-pass"}>{hasNext ? "可继续" : "待选择"}</small>
           </div>
         </section>
 
         <section className="task-workbench-checks">
           <header>
-            <strong>今日路径</strong>
-            <span>{pending ? "1 / 1" : "0 / 0"}</span>
+            <strong>学习路径</strong>
+            <span>{hasNext ? "1 / 1" : "0 / 0"}</span>
           </header>
           <ul>
-            <li className={pending ? "" : "is-pass"}>
-              <span>{pending ? "1" : "✓"}</span>
+            <li className={hasNext ? "" : "is-pass"}>
+              <span>{hasNext ? "1" : "✓"}</span>
               <div>
                 <strong>
                   {homeNextTarget
                     ? `${dayLabel(homeNextTarget.day)}${homeNextTarget.label ? ` · ${homeNextTarget.label}` : ""}`
                     : "从左侧进入任意可学习 Day"}
                 </strong>
-                <small>{pending ? "点击继续进入课节" : "可从左侧目录预览 Week 1"}</small>
+                <small>{hasNext ? "点击继续进入课节" : "可从左侧目录预览 Week 1"}</small>
               </div>
             </li>
           </ul>

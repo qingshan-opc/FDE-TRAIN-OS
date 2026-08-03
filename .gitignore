@@ -3,6 +3,7 @@ data/
 __pycache__/
 *.pyc
 .env
+deploy/k8s/818cloud/.env
 .venv/
 .DS_Store
 node_modules/

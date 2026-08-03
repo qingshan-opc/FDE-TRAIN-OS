@@ -8,7 +8,11 @@ export function PartnerHome() {
   const nav = useNavigate();
   const loc = useLocation();
   const { user, logout } = useAuth();
-  const selected = loc.pathname.startsWith("/partner/shares") ? "/partner/shares" : "/partner";
+  const selected = loc.pathname.startsWith("/partner/posters")
+    ? "/partner/posters"
+    : loc.pathname.startsWith("/partner/shares")
+      ? "/partner/shares"
+      : "/partner";
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -20,6 +24,7 @@ export function PartnerHome() {
           selectedKeys={[selected]}
           items={[
             { key: "/partner", label: "看板" },
+            { key: "/partner/posters", label: "课程海报" },
             { key: "/partner/shares", label: "分账明细" },
           ]}
           onClick={({ key }) => nav(key)}

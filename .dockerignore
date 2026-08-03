@@ -1,10 +1,40 @@
+# VCS / IDE / local env
 .venv
 __pycache__
 *.pyc
 .git
-data
+.gitignore
+.cursor
+.github
+.DS_Store
+terminals
 .env
 *.db
+data
+
+# Secrets & local deploy env
+deploy/k8s/**/.env
+
+# Node build artifacts (rebuilt in image)
+web/node_modules
+node_modules
+web/dist
+
+# Large media — course videos live in MinIO, never bake into image
+videos
+.upload
+**/*.mp4
+**/*.webm
+**/*.mov
+**/*.wav
+**/*.woff2
+**/video/
+**/renders/
+**/.hyperframes/
+
+# Docs / prototypes (not needed at runtime)
 prototype 2
 prototype-gpt.zip
-.DS_Store
+**/*.md
+!README.md
+!class/**/*.md

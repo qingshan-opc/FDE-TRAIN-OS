@@ -19,6 +19,11 @@ import { buildOrgRegisterUrl } from "../../lib/inviteLink";
 type Org = Record<string, unknown> & {
   id: string;
   name: string;
+  contact_name?: string;
+  contact_email?: string;
+  wx_receiver_type?: string;
+  wx_receiver_account?: string;
+  wx_receiver_name?: string;
   stats?: { invited_users: number; paid_users: number; current_rate_pct: number };
 };
 
@@ -157,6 +162,24 @@ export function ChannelSettings() {
         <Button type="primary" onClick={() => { form.resetFields(); setOrgModal(true); }}>
           新建机构
         </Button>
+        <Button
+          disabled={!selectedOrg}
+          onClick={() => {
+            if (!selectedOrg) return;
+            form.setFieldsValue({
+              id: selectedOrg.id,
+              name: selectedOrg.name,
+              contact_name: selectedOrg.contact_name,
+              contact_email: selectedOrg.contact_email,
+              wx_receiver_type: selectedOrg.wx_receiver_type || "PERSONAL_OPENID",
+              wx_receiver_account: selectedOrg.wx_receiver_account,
+              wx_receiver_name: selectedOrg.wx_receiver_name,
+            });
+            setOrgModal(true);
+          }}
+        >
+          编辑机构 / 分账接收方
+        </Button>
         <Button disabled={!selectedOrgId} onClick={() => { codeForm.resetFields(); setCodeModal(true); }}>
           发邀请码
         </Button>
@@ -171,6 +194,12 @@ export function ChannelSettings() {
             <span>邀请 {selectedOrg.stats.invited_users} 人</span>
             <span>付费 {selectedOrg.stats.paid_users} 人</span>
             <span>当前比例 {selectedOrg.stats.current_rate_pct}%</span>
+            <span>
+              微信接收方{" "}
+              {selectedOrg.wx_receiver_account
+                ? `${String(selectedOrg.wx_receiver_type || "")} / ${String(selectedOrg.wx_receiver_name || "")} / ${String(selectedOrg.wx_receiver_account).slice(0, 4)}****`
+                : "未绑定（机构后台可扫码）"}
+            </span>
           </Space>
         </Card>
       )}
@@ -300,8 +329,16 @@ export function ChannelSettings() {
         />
       )}
 
-      <Modal title="机构" open={orgModal} onOk={() => void saveOrg()} onCancel={() => setOrgModal(false)}>
-        <Form form={form} layout="vertical">
+      <Modal
+        title={form.getFieldValue("id") ? "编辑机构" : "新建机构"}
+        open={orgModal}
+        onOk={() => void saveOrg()}
+        onCancel={() => { setOrgModal(false); form.resetFields(); }}
+      >
+        <Form form={form} layout="vertical" initialValues={{ wx_receiver_type: "PERSONAL_OPENID" }}>
+          <Form.Item name="id" hidden>
+            <Input />
+          </Form.Item>
           <Form.Item name="name" label="机构名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
@@ -311,14 +348,23 @@ export function ChannelSettings() {
           <Form.Item name="contact_email" label="联系邮箱">
             <Input type="email" />
           </Form.Item>
+          <Typography.Paragraph type="secondary" style={{ marginBottom: 8 }}>
+            分账接收方优先由机构后台扫码绑定个人微信；此处可手工修正 OpenID。
+          </Typography.Paragraph>
           <Form.Item name="wx_receiver_type" label="微信接收方类型">
-            <Select allowClear options={[{ value: "MERCHANT_ID", label: "商户号" }, { value: "PERSONAL_OPENID", label: "个人 OpenID" }]} />
+            <Select
+              allowClear
+              options={[
+                { value: "PERSONAL_OPENID", label: "个人 OpenID（推荐）" },
+                { value: "MERCHANT_ID", label: "商户号" },
+              ]}
+            />
           </Form.Item>
           <Form.Item name="wx_receiver_account" label="微信接收方账号">
-            <Input />
+            <Input placeholder="openid 或商户号" />
           </Form.Item>
           <Form.Item name="wx_receiver_name" label="接收方名称">
-            <Input />
+            <Input placeholder="个人微信昵称或商户名" />
           </Form.Item>
         </Form>
       </Modal>

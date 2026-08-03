@@ -253,7 +253,7 @@ def list_offerings(
             f"""
             SELECT
               co.id, co.title, co.camp_id, co.course_version_id, co.status,
-              co.starts_at, co.ends_at, co.teacher_id, co.created_at,
+              co.price_fen, co.starts_at, co.ends_at, co.teacher_id, co.created_at,
               cv.version_tag, cv.title AS version_title, cv.status AS version_status,
               c.id AS course_id, c.title AS course_title, c.slug AS course_slug,
               (SELECT COUNT(*) FROM enrollment_records er WHERE er.offering_id=co.id) AS enrollment_count
@@ -274,6 +274,65 @@ def list_offerings(
                     d[key] = d[key].isoformat()
             items.append(d)
     return page_meta(items, total, page_i, size_i)
+
+
+class OfferingPatchBody(BaseModel):
+    price_fen: int | None = None
+    title: str | None = None
+    status: str | None = None
+
+
+@router.patch("/api/v1/author/offerings/{offering_id}")
+def patch_offering(offering_id: str, body: OfferingPatchBody, request: Request) -> dict[str, Any]:
+    """Admin: update offering price / title / status (售卖配置)."""
+    user = require_author(request)
+    updates: list[str] = []
+    args: list[Any] = []
+    if body.price_fen is not None:
+        if body.price_fen < 0 or body.price_fen > 10_000_000:
+            raise HTTPException(400, "价格超出范围（单位：分）")
+        updates.append("price_fen=?")
+        args.append(int(body.price_fen))
+    if body.title is not None:
+        title = body.title.strip()
+        if not title:
+            raise HTTPException(400, "标题不能为空")
+        updates.append("title=?")
+        args.append(title[:200])
+    if body.status is not None:
+        if body.status not in ("active", "upcoming", "ended", "archived"):
+            raise HTTPException(400, "无效状态")
+        updates.append("status=?")
+        args.append(body.status)
+    if not updates:
+        raise HTTPException(400, "无更新字段")
+    with db_cursor() as cur:
+        cur.execute("SELECT id, price_fen, title, status FROM course_offerings WHERE id=?", (offering_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(404, "offering 不存在")
+        cur.execute(
+            f"UPDATE course_offerings SET {', '.join(updates)} WHERE id=?",
+            (*args, offering_id),
+        )
+        cur.execute(
+            """
+            SELECT co.id, co.title, co.price_fen, co.status, co.camp_id,
+                   c.title AS course_title
+            FROM course_offerings co
+            LEFT JOIN course_versions cv ON cv.id = co.course_version_id
+            LEFT JOIN courses c ON c.id = cv.course_id
+            WHERE co.id=?
+            """,
+            (offering_id,),
+        )
+        out = _row(cur.fetchone())
+    write_audit(
+        "author.offering_patch",
+        actor_id=user.id,
+        details={"offering_id": offering_id, "price_fen": out.get("price_fen"), "status": out.get("status")},
+    )
+    return {"item": out}
 
 
 # ---------------------------------------------------------------------------

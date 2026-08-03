@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dis-cloud-migrate
+  namespace: dis-cloud
+  labels:
+    app: dis-cloud
+    component: migrate
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app: dis-cloud
+        component: migrate
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde:dis-cloud-latest
+          imagePullPolicy: Always
+          command: ["python", "-m", "services.migrations_runner"]
+          envFrom:
+            - configMapRef:
+                name: dis-cloud-config
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: JWT_SECRET
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: DATABASE_URL
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

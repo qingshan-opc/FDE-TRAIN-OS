@@ -23,6 +23,7 @@ from services.shared.config import (
     WECHAT_PAY_MCH_ID,
     WECHAT_PAY_PLATFORM_CERT_PATH,
     WECHAT_PAY_PRIVATE_KEY_PATH,
+    WECHAT_PAY_PROFIT_SHARING,
     WECHAT_PAY_SERIAL_NO,
     WECHAT_PAY_SKIP_VERIFY,
 )
@@ -212,8 +213,9 @@ def create_payment_order(
             "out_trade_no": out_trade_no,
             "notify_url": notify_url,
             "amount": {"total": amount_fen, "currency": "CNY"},
-            "settle_info": {"profit_sharing": True},
         }
+        if WECHAT_PAY_PROFIT_SHARING:
+            payload["settle_info"] = {"profit_sharing": True}
         data = _request("POST", "/v3/pay/transactions/native", payload)
         code_url = data.get("code_url")
     elif FDE_ENV != "prod":

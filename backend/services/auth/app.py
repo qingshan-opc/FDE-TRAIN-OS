@@ -11,6 +11,7 @@ from typing import Any
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, Response
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 _PKG_ROOT = Path(__file__).resolve().parents[2]
@@ -132,27 +133,238 @@ def _issue(user: AuthUser, camp_id: str | None, response: Response, request: Req
     }
 
 
+def _resolve_camp_id(user: AuthUser, preferred: str | None = None) -> str | None:
+    camps = user_camps(user.id)
+    camp_id = preferred
+    if camp_id:
+        if user.role not in ("author", "admin") and not user_enrolled(user.id, camp_id):
+            raise HTTPException(403, "未加入该营期，请使用邀请码或联系管理员")
+        return camp_id
+    if camps:
+        return camps[0]["id"]
+    if user.role in ("author", "admin"):
+        with db_cursor() as cur:
+            cur.execute("SELECT id FROM camps ORDER BY id LIMIT 1")
+            row = cur.fetchone()
+            return row["id"] if row else None
+    return None
+
+
 @router.post("/api/v1/auth/login", dependencies=[Depends(rate_limit("login"))])
 def login(body: LoginBody, request: Request, response: Response) -> dict[str, Any]:
     user = authenticate(body.email.strip().lower(), body.password)
     if not user:
         write_audit("auth.login_failed", details={"email": body.email}, ip=request.client.host if request.client else None)
         raise HTTPException(401, "邮箱或密码错误")
-    camps = user_camps(user.id)
-    camp_id = body.camp_id
-    if camp_id:
-        if user.role not in ("author", "admin") and not user_enrolled(user.id, camp_id):
-            raise HTTPException(403, "未加入该营期，请使用邀请码或联系管理员")
-    elif camps:
-        camp_id = camps[0]["id"]
-    elif user.role in ("author", "admin"):
-        with db_cursor() as cur:
-            cur.execute("SELECT id FROM camps ORDER BY id LIMIT 1")
-            row = cur.fetchone()
-            camp_id = row["id"] if row else None
+    camp_id = _resolve_camp_id(user, body.camp_id)
     if camp_id and user.role == "learner":
         _ensure_enrollment_record_safe(user.id, camp_id)
     return _issue(user, camp_id, response, request)
+
+
+@router.post("/api/v1/auth/wechat/login-qr", dependencies=[Depends(rate_limit("login"))])
+def wechat_login_qr() -> dict[str, Any]:
+    """Create MP temporary QR for scan-follow login."""
+    from services.wechat_mp import login as mp_login
+
+    try:
+        return mp_login.create_login_qr()
+    except RuntimeError as exc:
+        raise HTTPException(503, str(exc)) from exc
+
+
+@router.get("/api/v1/auth/wechat/login-status")
+def wechat_login_status(
+    state: str,
+    request: Request,
+    response: Response,
+    expect_role: str | None = None,
+) -> dict[str, Any]:
+    """Poll QR login; when done, set auth cookies and return user + redirect hint."""
+    from services.wechat_mp import login as mp_login
+    from services.partner.app import _partner_org_id
+    from services.partner import wechat_bind
+    from services.partners import service as partners
+
+    if not state or len(state) > 80:
+        raise HTTPException(400, "invalid state")
+    st = mp_login.poll_login_status(state)
+    if st.get("expired"):
+        return {"pending": False, "done": False, "expired": True}
+    if not st.get("done"):
+        return {"pending": True, "done": False, "expired": False}
+
+    # Peek user before consuming / issuing cookies (partner page may require role)
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT u.id, u.email, u.role, u.display_name
+            FROM wechat_login_states s
+            JOIN users u ON u.id = s.user_id
+            WHERE s.id=? AND s.status='done' AND s.user_id IS NOT NULL
+            """,
+            (state,),
+        )
+        peek = cur.fetchone()
+    if not peek:
+        return {"pending": True, "done": False, "expired": False}
+
+    if expect_role == "partner" and peek["role"] not in ("partner", "admin"):
+        return {
+            "pending": False,
+            "done": False,
+            "expired": False,
+            "error": "该微信未关联机构账号。请先用邮箱登录机构后台并扫码绑定收款微信。",
+        }
+
+    user = mp_login.consume_login_user(state)
+    if not user:
+        return {"pending": True, "done": False, "expired": False}
+
+    camp_id = None if user.role == "partner" else _resolve_camp_id(user, None)
+    if camp_id and user.role == "learner":
+        _ensure_enrollment_record_safe(user.id, camp_id)
+    out = _issue(user, camp_id, response, request)
+    _try_bind_pending_invite(request, response, user.id)
+    write_audit("auth.wechat_login", actor_id=user.id, details={"role": user.role})
+
+    redirect = "/app/courses"
+    org_id = None
+    receiver = None
+    if user.role == "partner":
+        org_id = _partner_org_id(user.id)
+        redirect = "/partner"
+        if org_id:
+            receiver = wechat_bind.receiver_status(partners.get_organization(org_id))
+            if receiver and not receiver.get("bound"):
+                redirect = "/partner?bind=1"
+    elif user.role in ("author", "admin"):
+        redirect = "/author"
+
+    out.update(
+        {
+            "pending": False,
+            "done": True,
+            "expired": False,
+            "redirect": redirect,
+            "org_id": org_id,
+            "receiver": receiver,
+        }
+    )
+    return out
+
+
+def _mp_entry_error_html(message: str) -> HTMLResponse:
+    body = f"""<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>进入失败</title>
+<style>
+body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#0f172a;color:#e2e8f0;}}
+.card{{max-width:420px;margin:16vh auto;padding:28px 24px;background:#1e293b;border-radius:16px;text-align:center;}}
+h1{{font-size:20px;margin:0 0 12px;color:#f87171}}
+p{{line-height:1.6;color:#cbd5e1;font-size:15px}}
+a{{color:#2dd4bf}}
+</style></head>
+<body><div class="card">
+<h1>暂时无法进入</h1>
+<p>{message}</p>
+<p><a href="/login">去网页登录</a></p>
+</div></body></html>"""
+    return HTMLResponse(body, status_code=400)
+
+
+def _stash_invite_cookie(response: Response, invite: str | None) -> str | None:
+    """Validate invite and set pending cookie; return normalized code or None."""
+    from services.partners.service import normalize_code, resolve_invite_code
+
+    raw = (invite or "").strip()
+    if not raw:
+        return None
+    ic = resolve_invite_code(raw)
+    if not ic:
+        return None
+    normalized = normalize_code(raw)
+    response.set_cookie(
+        INVITE_PENDING_COOKIE,
+        normalized,
+        max_age=INVITE_PENDING_MAX_AGE,
+        httponly=True,
+        samesite="lax",
+        secure=_secure(),
+        path="/",
+    )
+    return normalized
+
+
+def _try_bind_pending_invite(request: Request, response: Response, user_id: str) -> bool:
+    """Bind fde_invite_pending cookie if user has no attribution yet."""
+    from services.partners.service import bind_invite_code, get_user_attribution
+
+    pending = (request.cookies.get(INVITE_PENDING_COOKIE) or "").strip()
+    if not pending:
+        return False
+    if get_user_attribution(user_id):
+        response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
+        return False
+    # Only attribute learners via invite posters
+    user = get_user_by_id(user_id)
+    if not user or user.role not in ("learner",):
+        return False
+    try:
+        bind_invite_code(user_id, pending)
+        response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
+        write_audit("auth.invite_bound_wechat", actor_id=user_id, details={"code": pending})
+        return True
+    except ValueError as exc:
+        log.info("invite bind skipped user=%s: %s", user_id, exc)
+        return False
+
+
+@router.get("/api/v1/auth/wechat/mp-entry")
+def wechat_mp_entry(
+    next: str = "/app/courses",
+    invite: str | None = None,
+) -> Response:
+    """公众号/海报入口：可选 invite → cookie，再跳转微信网页授权。"""
+    from services.wechat_mp import entry as mp_entry
+
+    try:
+        url = mp_entry.create_oauth_authorize_url(next_path=next)
+    except RuntimeError as exc:
+        return _mp_entry_error_html(str(exc))
+    out = RedirectResponse(url, status_code=302)
+    _stash_invite_cookie(out, invite)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/mp-entry/callback")
+def wechat_mp_entry_callback(
+    request: Request,
+    response: Response,
+    code: str | None = None,
+    state: str | None = None,
+) -> Response:
+    """OAuth callback from WeChat — issue cookies then redirect into SPA."""
+    from services.wechat_mp import entry as mp_entry
+
+    if not code or not state:
+        return _mp_entry_error_html("缺少微信授权参数，请从公众号菜单重新进入")
+    try:
+        user, next_path = mp_entry.complete_oauth_entry(code, state)
+    except Exception as exc:
+        log.warning("mp-entry callback failed: %s", exc)
+        return _mp_entry_error_html(str(exc)[:200])
+
+    camp_id = None if user.role == "partner" else _resolve_camp_id(user, None)
+    if camp_id and user.role == "learner":
+        _ensure_enrollment_record_safe(user.id, camp_id)
+    # _issue sets cookies on response; we still need a RedirectResponse with those cookies
+    out_resp = RedirectResponse(next_path, status_code=302)
+    _issue(user, camp_id, out_resp, request)
+    _try_bind_pending_invite(request, out_resp, user.id)
+    write_audit("auth.wechat_mp_entry", actor_id=user.id, details={"next": next_path, "role": user.role})
+    return out_resp
 
 
 @router.get("/api/v1/auth/invite-link")

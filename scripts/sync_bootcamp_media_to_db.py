@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update day_packages media fields from bootcamp day.yaml after MinIO upload."""
+"""Sync day_packages from bootcamp day.yaml (media_fields merge by default)."""
 from __future__ import annotations
 
 import argparse
@@ -20,7 +20,8 @@ from services.shared.db import db_cursor  # noqa: E402
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--version-tag", default=CURRICULUM_VERSION_TAG)
-    ap.add_argument("--days", default="6,7,8,9,10")
+    ap.add_argument("--days", default="1")
+    ap.add_argument("--merge", default="media_fields", choices=("media_fields", "full"))
     args = ap.parse_args()
     days = [int(x) for x in args.days.split(",") if x.strip()]
 
@@ -33,7 +34,7 @@ def main() -> None:
         if not row:
             raise SystemExit(f"no version_tag={args.version_tag}")
         version_id = row["id"]
-        print(f"sync media_fields → {version_id} ({args.version_tag})")
+        print(f"sync {args.merge} → {version_id} ({args.version_tag})")
 
         for day in days:
             cur.execute(
@@ -46,7 +47,7 @@ def main() -> None:
                 existing = r["package_json"]
                 if isinstance(existing, str):
                     existing = json.loads(existing)
-            preview = preview_day_sync(existing, day, "media_fields")
+            preview = preview_day_sync(existing, day, args.merge)
             pkg = preview["package_json"]
             dp_id = f"{version_id}-day-{day:02d}"
             cur.execute(

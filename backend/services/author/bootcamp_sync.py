@@ -200,7 +200,7 @@ def build_day_package(day: int) -> dict[str, Any]:
         }
         extra = (data.get("capsule_extra") or {}).get(cid) or {}
         for key in ("resource_ids", "tools", "quiz", "local_prep", "lab", "media", "knowledge_cards", "glossary_terms", "memory_sentence"):
-            if extra.get(key):
+            if key in extra:
                 capsule[key] = extra[key]
         knowledge = (data.get("knowledge_content") or {}).get(cid) or {}
         for key in ("knowledge_cards", "memory_sentence", "quiz"):
@@ -286,7 +286,7 @@ def build_day_package(day: int) -> dict[str, Any]:
     return pkg
 
 
-_MEDIA_FIELDS = ("content", "practice", "media", "knowledge_cards", "glossary_terms", "resource_ids", "local_prep", "memory_sentence")
+_MEDIA_FIELDS = ("content", "practice", "media", "knowledge_cards", "glossary_terms", "resource_ids", "tools", "local_prep", "memory_sentence")
 
 
 def merge_day_package(

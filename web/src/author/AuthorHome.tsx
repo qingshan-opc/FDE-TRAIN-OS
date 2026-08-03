@@ -21,6 +21,7 @@ import {
   BranchesOutlined,
   InboxOutlined,
   KeyOutlined,
+  PayCircleOutlined,
 } from "@ant-design/icons";
 import { App as AntApp } from "antd";
 import { useMemo, useRef, useState, type ReactNode } from "react";
@@ -79,6 +80,7 @@ const MENU_GROUPS: MenuGroup[] = [
     label: "系统设置",
     items: [
       { key: "/author/settings/camp-key", icon: leafIcon(<KeyOutlined />), label: "营期 Key" },
+      { key: "/author/settings/pricing", icon: leafIcon(<PayCircleOutlined />), label: "课程定价" },
       { key: "/author/settings/channels", icon: leafIcon(<TeamOutlined />), label: "渠道与分账" },
     ],
   },

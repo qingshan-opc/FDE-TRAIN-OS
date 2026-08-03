@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-charter",
+    "file": "02-charter.txt"
+  },
+  {
+    "id": "03-scope-lock",
+    "file": "03-scope-lock.txt"
+  },
+  {
+    "id": "04-pm-boundary",
+    "file": "04-pm-boundary.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

@@ -66,8 +66,12 @@ def _collect_keys(days: set[int] | None) -> list[str]:
     return sorted(keys)
 
 
-def _find_local(key: str) -> Path | None:
+def _find_local(key: str, source_dir: Path | None = None) -> Path | None:
     name = key.rsplit("/", 1)[-1]
+    if source_dir is not None:
+        direct = source_dir / name
+        if direct.is_file():
+            return direct
     if name.endswith(".mp4"):
         hits = list((ROOT / "class" / "bootcamp").glob(f"day-*/section-*/video/renders/{name}"))
         if hits:
@@ -106,8 +110,16 @@ def main() -> int:
     ap.add_argument("--verify-only", action="store_true")
     ap.add_argument("--force", action="store_true", help="re-upload even if object exists")
     ap.add_argument("--days", default="", help="comma days e.g. 1,6,7 (default: all)")
+    ap.add_argument(
+        "--source-dir",
+        default="",
+        help="flat directory of rendered mp4/jpg keyed by basename (e.g. USB export)",
+    )
     args = ap.parse_args()
     days = {int(x) for x in args.days.split(",") if x.strip()} or None
+    source_dir = Path(args.source_dir).expanduser().resolve() if args.source_dir else None
+    if source_dir is not None and not source_dir.is_dir():
+        raise SystemExit(f"--source-dir not found: {source_dir}")
 
     keys = _collect_keys(days)
     store = get_store()
@@ -131,7 +143,7 @@ def main() -> int:
         if exists and not args.force:
             skipped += 1
             continue
-        local = _find_local(key)
+        local = _find_local(key, source_dir)
         if not local:
             print(f"NO_LOCAL {key}")
             continue

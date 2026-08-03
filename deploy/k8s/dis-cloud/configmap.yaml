@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dis-cloud-config
+  namespace: dis-cloud
+data:
+  FDE_ENV: prod
+  FDE_PUBLIC_BASE_URL: https://fde.818cloud.com
+  FDE_CORS_ORIGINS: https://fde.818cloud.com,http://fde.818cloud.com
+  FDE_COOKIE_SECURE: "1"
+  FDE_SEED_DEMO_USERS: "0"
+  FDE_ALLOW_DEV_HEADERS: "0"
+  FDE_ALLOW_RUNTIME_MIGRATE: "0"
+  FDE_DEFAULT_CAMP_ID: camp-v03
+  FDE_CURRICULUM_VERSION_TAG: v0.7
+  FDE_SEED_VERSION_TAGS: v0.7,fde-v07
+  AGENT_MODE: stub
+  FDE_INTERNAL_BASE: http://127.0.0.1:8760
+  S3_ENDPOINT: http://minio.base-service.svc.cluster.local:9000
+  S3_REGION: cn-zhangjiakou
+  S3_FORCE_PATH_STYLE: "1"
+  S3_BUCKET_DOCUMENTS: fde-documents
+  S3_BUCKET_WORKSPACES: fde-workspaces
+  S3_BUCKET_ARTIFACTS: fde-artifacts
+  S3_BUCKET_BACKUPS: fde-backups
+  CLAMAV_ENABLED: "0"
+  DEEPSEEK_API_BASE: https://api.deepseek.com
+  DEEPSEEK_MODEL: deepseek-v4-flash
+  WECHAT_PAY_PROFIT_SHARING: "1"
+  FDE_DATA_DIR: /data
+  FDE_WORKSPACE_ROOT: /data/workspaces
+  FDE_ARTIFACT_ROOT: /data/artifacts
+  FDE_TEMP_WORKSPACE_ROOT: /data/tmp_workspaces

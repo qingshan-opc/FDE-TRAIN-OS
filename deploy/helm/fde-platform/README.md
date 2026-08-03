@@ -20,6 +20,7 @@ helm upgrade --install fde . -n fde -f values-e2e.yaml --wait
 | `values.yaml` | defaults |
 | `values-e2e.yaml` | k3d / CI — single-replica deps |
 | `values-prod.yaml` | CNPG 3-replica + MinIO Operator Tenant |
+| `values-818cloud.yaml` | 818cloud `fde-study` · http://fde.818cloud.com · 微信支付 |
 
 ## Images
 

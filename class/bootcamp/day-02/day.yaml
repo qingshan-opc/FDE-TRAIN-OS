@@ -43,6 +43,12 @@ capsule_extra:
         - 替学员批准 PRD
       - 0
       - 前端实现交互界面并调用后端接口。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day02-c1-architect-role.mp4
+      poster_key: documents/shared/course-media/day02-c1-architect-role-poster.jpg
+      duration_sec: 74
   c2:
     resource_ids:
     - team-prompts-v11
@@ -68,6 +74,12 @@ capsule_extra:
         - 因为按钮颜色不同
       - 1
       - 后端必须保护真实数据不被非法请求污染。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day02-c2-four-layer.mp4
+      poster_key: documents/shared/course-media/day02-c2-four-layer-poster.jpg
+      duration_sec: 67
   c3:
     resource_ids:
     - team-prompts-v11
@@ -93,6 +105,12 @@ capsule_extra:
         - 只要页面漂亮就可以
       - 1
       - 联调要求前端真实调用后端并读写数据库。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day02-c3-arch-selection.mp4
+      poster_key: documents/shared/course-media/day02-c3-arch-selection-poster.jpg
+      duration_sec: 71
   c4:
     resource_ids:
     - team-prompts-v11
@@ -116,6 +134,12 @@ capsule_extra:
         - 随机建议
       - 1
       - 未接模型就不能伪造 AI 结果。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day02-c4-hands-on-adr.mp4
+      poster_key: documents/shared/course-media/day02-c4-hands-on-adr-poster.jpg
+      duration_sec: 70
   c5:
     resource_ids:
     - team-prompts-v11
@@ -139,6 +163,12 @@ capsule_extra:
         - 写快一点
       - 1
       - 明确现象和目标才能验收修复。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day02-c5-accept.mp4
+      poster_key: documents/shared/course-media/day02-c5-accept-poster.jpg
+      duration_sec: 62
 quiz:
 - *id001
 - *id002

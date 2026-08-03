@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dis-cloud-bootstrap
+  namespace: dis-cloud
+  labels:
+    app: dis-cloud
+    component: bootstrap
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app: dis-cloud
+        component: bootstrap
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: bootstrap
+          image: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde:dis-cloud-latest
+          imagePullPolicy: Always
+          command:
+            - python
+            - -c
+            - |
+              import os
+              os.environ["FDE_ALLOW_RUNTIME_MIGRATE"] = "1"
+              from services.shared import init_schema
+              init_schema()
+              print("bootstrap ok")
+          envFrom:
+            - configMapRef:
+                name: dis-cloud-config
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: JWT_SECRET
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: DATABASE_URL
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: S3_SECRET_KEY
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: data
+          emptyDir: {}

@@ -79,11 +79,7 @@ learn:
     resource_ids:
     - trae-cn-download
     - team-prompts-v11
-    tools:
-    - name: TRAE 国内版
-      note: 本节交付：TRAE 安装完成 + 七岗位提示词包
-    - name: 七岗位提示词包
-      note: 本节只下载解压，下一节再创建 AI 员工
+    tools: []
     quiz:
     - - 第一节完成软件安装后，接下来应该做什么？
       - - 立刻让一个 AI 做完整项目
@@ -91,6 +87,12 @@ learn:
         - 先学习编程语言
       - 1
       - 第一节只完成工具准备，不创建智能体，也不写代码。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day01-c1-pm-in-ai-era.mp4
+      poster_key: documents/shared/course-media/day01-c1-pm-in-ai-era-poster.jpg
+      duration_sec: 126
     knowledge_cards:
     - id: d1l1-k1
       term: 工序没有消失
@@ -151,6 +153,12 @@ learn:
         - 因为 AI 员工的名字必须不同
       - 1
       - 口播稿用“出纳不能兼任审计”说明了岗位隔离的必要性。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day01-c2-requirement-to-prd.mp4
+      poster_key: documents/shared/course-media/day01-c2-requirement-to-prd-poster.jpg
+      duration_sec: 72
     knowledge_cards:
     - id: d1l2-k1
       term: 岗位职责决定能力
@@ -214,6 +222,12 @@ learn:
         - 因为项目经理不会使用开发工具
       - 1
       - 口播稿反复强调“先出方案，你确认了，再让 AI 动手”。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy.mp4
+      poster_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy-poster.jpg
+      duration_sec: 66
     knowledge_cards:
     - id: d1l3-k1
       term: 先出方案再动手
@@ -280,6 +294,12 @@ learn:
         - 先选择页面配色
       - 1
       - 好的需求文档来自澄清对话，不来自 AI 对一句话需求的猜测。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day01-c4-hands-on-mini-prd.mp4
+      poster_key: documents/shared/course-media/day01-c4-hands-on-mini-prd-poster.jpg
+      duration_sec: 68
     knowledge_cards:
     - id: d1l4-k1
       term: 需求文档是问出来的
@@ -343,6 +363,12 @@ learn:
         - 可以，只要 AI 说已经自检
       - 1
       - 口播稿明确指出，可交互原型的验收方式是用鼠标走一遍真实流程。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day01-c5-accept.mp4
+      poster_key: documents/shared/course-media/day01-c5-accept-poster.jpg
+      duration_sec: 70
     knowledge_cards:
     - id: d1l5-k1
       term: 指令只说意图
@@ -430,6 +456,7 @@ lab:
   - docs/D1_团队协作卡.md
   - docs/D1_项目任务书.md
   - docs/PRD.md
+  - docs/D1_command_log.md
   - design/prototypes/index.html
   inherited_files: []
   coach:
@@ -438,7 +465,8 @@ lab:
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型。只报告真实存在的文件和验证结果，缺失项标 BLOCKED，不得代替学员批准。
+    prompt_template: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型，以及指挥日志 docs/D1_command_log.md（含至少一次 REJECTED 与 APPROVED）。只报告真实存在的文件和验证结果，缺失项标
+      BLOCKED，不得代替学员批准。
   rubric:
   - check: file_exists
     args:

@@ -867,10 +867,7 @@ def day_yaml(day: int, data: dict[str, Any]) -> dict[str, Any]:
         ]
         if day == 1 and i == 1:
             resource_ids = ["trae-cn-download", "team-prompts-v11"]
-            tools = [
-                {"name": "TRAE 国内版", "note": "本节交付：TRAE 安装完成 + 七岗位提示词包"},
-                {"name": "七岗位提示词包", "note": "本节只下载解压，下一节再创建 AI 员工"},
-            ]
+            tools = []
         capsule_extra[f"c{i}"] = {
             "resource_ids": resource_ids,
             "tools": tools,

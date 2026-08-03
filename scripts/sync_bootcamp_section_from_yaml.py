@@ -26,7 +26,18 @@ _align_spec = importlib.util.spec_from_file_location(
 align = importlib.util.module_from_spec(_align_spec)
 _align_spec.loader.exec_module(align)  # type: ignore[union-attr]
 
-DAY_CN = {6: "第六天", 7: "第七天", 8: "第八天", 9: "第九天", 10: "第十天"}
+DAY_CN = {
+    1: "第一天",
+    2: "第二天",
+    3: "第三天",
+    4: "第四天",
+    5: "第五天",
+    6: "第六天",
+    7: "第七天",
+    8: "第八天",
+    9: "第九天",
+    10: "第十天",
+}
 
 
 def yaml_path(day: int, sec: str) -> Path:

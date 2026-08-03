@@ -26,10 +26,20 @@ def _node_ids(day: int) -> list[str]:
     return out
 
 
-def set_progress(*, email: str, camp_id: str, target_day: int) -> dict:
+def _capsule_ids(day: int) -> list[str]:
+    pkg = build_day_package(day)
+    ids: list[str] = []
+    for index, capsule in enumerate(((pkg.get("learn") or {}).get("capsules") or []), start=1):
+        if isinstance(capsule, dict):
+            ids.append(str(capsule.get("id") or f"c{index}"))
+    return ids
+
+
+def set_progress(*, email: str, camp_id: str, target_day: int, open_capsules: bool = False) -> dict:
     days = list_available_days()
-    if target_day not in days:
-        raise SystemExit(f"day {target_day} not in bootcamp ({days})")
+    max_day = max(days) if days else 0
+    if target_day < 1 or target_day > max_day + 1:
+        raise SystemExit(f"day {target_day} out of range (1..{max_day + 1})")
 
     with db_cursor() as cur:
         cur.execute("SELECT id FROM users WHERE LOWER(email)=LOWER(?)", (email,))
@@ -75,22 +85,62 @@ def set_progress(*, email: str, camp_id: str, target_day: int) -> dict:
                 )
                 passed += 1
 
+        capsules_opened = 0
+        if open_capsules:
+            for day in range(1, target_day):
+                ts = now_iso()
+                for capsule_id in _capsule_ids(day):
+                    cur.execute(
+                        """
+                        INSERT INTO capsule_progress (learner_id, camp_id, day, capsule_id, opened_at)
+                        VALUES (?,?,?,?,?)
+                        ON CONFLICT (learner_id, camp_id, day, capsule_id) DO NOTHING
+                        """,
+                        (learner_id, camp_id, day, capsule_id, ts),
+                    )
+                    capsules_opened += 1
+
     return {
         "learner_id": learner_id,
         "email": email,
         "camp_id": camp_id,
         "target_day": target_day,
         "passed_nodes": passed,
+        "capsules_opened": capsules_opened if open_capsules else 0,
     }
+
+
+def max_progress(*, email: str, camp_id: str, open_capsules: bool = True) -> dict:
+    days = list_available_days()
+    if not days:
+        raise SystemExit("no bootcamp days")
+    return set_progress(
+        email=email,
+        camp_id=camp_id,
+        target_day=max(days) + 1,
+        open_capsules=open_capsules,
+    )
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Set learner to start bootcamp day N")
     ap.add_argument("--email", default=LEARNER_EMAIL)
     ap.add_argument("--camp-id", default=DEFAULT_CAMP_ID)
-    ap.add_argument("--day", type=int, required=True)
+    ap.add_argument("--day", type=int, default=0, help="unlock this day (prior days passed)")
+    ap.add_argument("--max", action="store_true", help="pass all bootcamp days + open capsules")
+    ap.add_argument("--open-capsules", action="store_true", help="with --day, also mark capsules opened")
     args = ap.parse_args()
-    result = set_progress(email=args.email, camp_id=args.camp_id, target_day=args.day)
+    if args.max:
+        result = max_progress(email=args.email, camp_id=args.camp_id, open_capsules=True)
+    elif args.day:
+        result = set_progress(
+            email=args.email,
+            camp_id=args.camp_id,
+            target_day=args.day,
+            open_capsules=args.open_capsules,
+        )
+    else:
+        ap.error("specify --day N or --max")
     print(result)
 
 

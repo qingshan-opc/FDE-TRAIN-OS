@@ -560,8 +560,8 @@ learn:
       - 八句里的两句——集装箱清单 + 权限开关。
     lab:
       sim_kind: server
-      task_brief: 课节实验：在仿真终端窗口内直接输入命令行八句——pwd / ls -l → mkdir -p app/logs → cd app → python3 server.py → curl healthz → tail
-        -f → chmod +x → docker ps。点「进入服务器」后，在黑色窗口里敲命令并按 Enter。
+      task_brief: 课节实验：点「新标签页打开实验台」后，在独立终端页输入命令行八句——pwd / ls -l → mkdir -p app/logs → cd app → python3 server.py → curl healthz
+        → tail -f → chmod +x → docker ps。在黑色窗口里敲命令并按 Enter。
       quick_commands:
       - pwd
       - ls -l

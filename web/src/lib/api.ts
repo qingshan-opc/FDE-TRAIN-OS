@@ -138,7 +138,26 @@ export const authApi = {
       "/api/v1/auth/login",
       { method: "POST", body: { email, password, camp_id: camp_id || undefined }, skipRefresh: true },
     ),
+  wechatLoginQr: () =>
+    api<{ state: string; qr_content: string; qr_url: string; expire_seconds: number }>(
+      "/api/v1/auth/wechat/login-qr",
+      { method: "POST", skipRefresh: true },
+    ),
+  wechatLoginStatus: (state: string, opts?: { expect_role?: string }) => {
+    const q = new URLSearchParams({ state });
+    if (opts?.expect_role) q.set("expect_role", opts.expect_role);
+    return api<{
+      pending: boolean;
+      done: boolean;
+      expired: boolean;
+      redirect?: string;
+      user?: import("./types").User;
+      org_id?: string | null;
+      error?: string;
+    }>(`/api/v1/auth/wechat/login-status?${q.toString()}`, { skipRefresh: true });
+  },
   me: () => api<import("./types").AuthMe>("/api/v1/auth/me", { skipRefresh: true }),
+
   logout: () => api<{ status: string }>("/api/v1/auth/logout", { method: "POST" }),
   invite: (invite_code: string, display_name: string, email?: string) =>
     api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
@@ -1146,6 +1165,11 @@ export const authorApi = {
     const qs = q.toString();
     return api<any>(`/api/v1/author/offerings${qs ? `?${qs}` : ""}`);
   },
+  patchOffering: (id: string, body: { price_fen?: number; title?: string; status?: string }) =>
+    api<{ item: Record<string, unknown> }>(`/api/v1/author/offerings/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body,
+    }),
   createEnrollment: (body: Record<string, unknown>) =>
     api<any>("/api/v1/author/enrollments", { method: "POST", body }),
   patchEnrollment: (id: string, body: Record<string, unknown>) =>
@@ -1238,17 +1262,84 @@ export const billingApi = {
     }),
 };
 
+export type PartnerReceiverStatus = {
+  bound: boolean;
+  wx_receiver_type?: string | null;
+  wx_receiver_account_masked?: string | null;
+  wx_receiver_name?: string | null;
+  oauth_configured?: boolean;
+};
+
 /** Partner portal */
 export const partnerApi = {
   login: (email: string, password: string) =>
-    api<{ token: string; csrf: string; user: import("./types").User; org_id: string }>(
-      "/api/v1/partner/auth/login",
-      { method: "POST", body: { email, password }, skipRefresh: true },
-    ),
+    api<{
+      token: string;
+      csrf: string;
+      user: import("./types").User;
+      org_id: string;
+      receiver?: PartnerReceiverStatus | null;
+    }>("/api/v1/partner/auth/login", {
+      method: "POST",
+      body: { email, password },
+      skipRefresh: true,
+    }),
   dashboard: () =>
-    api<{ org: Record<string, unknown>; stats: Record<string, unknown>; user: { id: string; email: string } }>(
-      "/api/v1/partner/dashboard",
-    ),
+    api<{
+      org: Record<string, unknown>;
+      stats: Record<string, unknown>;
+      user: { id: string; email: string };
+      receiver?: PartnerReceiverStatus;
+    }>("/api/v1/partner/dashboard"),
   attributions: () => api<{ items: Record<string, unknown>[] }>("/api/v1/partner/attributions"),
   profitShares: () => api<{ items: Record<string, unknown>[] }>("/api/v1/partner/profit-shares"),
+  wechatReceiver: () => api<PartnerReceiverStatus>("/api/v1/partner/wechat/receiver"),
+  wechatBindUrl: () =>
+    api<{ authorize_url: string; state: string; redirect_uri: string; expires_in?: number }>(
+      "/api/v1/partner/wechat/bind-url",
+    ),
+  wechatBindStatus: (state: string) =>
+    api<{
+      pending: boolean;
+      done: boolean;
+      expired: boolean;
+      receiver: PartnerReceiverStatus;
+    }>(`/api/v1/partner/wechat/bind-status?state=${encodeURIComponent(state)}`),
+  offerings: () =>
+    api<{
+      items: Array<{
+        id: string;
+        title: string;
+        course_title?: string | null;
+        description?: string | null;
+        price_fen: number;
+        status: string;
+        cover_image?: string | null;
+        modules?: Array<{ day_index: number; title: string }>;
+        module_count?: number;
+        gallery?: string[];
+      }>;
+      org: { id: string; name?: string | null };
+    }>("/api/v1/partner/offerings"),
+  invites: () =>
+    api<{
+      org: { id: string; name?: string | null };
+      items: Array<{
+        id: string;
+        code: string;
+        status: string;
+        max_uses?: number | null;
+        used_count: number;
+        offering_id?: string | null;
+        register_url?: string | null;
+        enroll_url?: string | null;
+      }>;
+      primary: {
+        id: string;
+        code: string;
+        status: string;
+        register_url?: string | null;
+        enroll_url?: string | null;
+      } | null;
+    }>("/api/v1/partner/invites"),
 };

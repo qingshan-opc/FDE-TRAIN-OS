@@ -43,6 +43,12 @@ capsule_extra:
         - 只负责观看
       - 1
       - AI 负责加速，学员负责决定与验证。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day05-c1-worldview-plain.mp4
+      poster_key: documents/shared/course-media/day05-c1-worldview-plain-poster.jpg
+      duration_sec: 70
   c2:
     resource_ids:
     - team-prompts-v11
@@ -68,6 +74,12 @@ capsule_extra:
         - 口播稿里
       - 1
       - 数据库保存真实业务记录，统计接口据此计算。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day05-c2-enterprise-digital-stages.mp4
+      poster_key: documents/shared/course-media/day05-c2-enterprise-digital-stages-poster.jpg
+      duration_sec: 69
   c3:
     resource_ids:
     - team-prompts-v11
@@ -93,6 +105,12 @@ capsule_extra:
         - AI 不会用
       - 1
       - 第一周聚焦研发逻辑和本地可交付。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day05-c3-how-software-built.mp4
+      poster_key: documents/shared/course-media/day05-c3-how-software-built-poster.jpg
+      duration_sec: 57
   c4:
     resource_ids:
     - team-prompts-v11
@@ -118,6 +136,12 @@ capsule_extra:
         - 可以跳过后端
       - 1
       - 价值和证据要连在一起。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day05-c4-server-cloudnative.mp4
+      poster_key: documents/shared/course-media/day05-c4-server-cloudnative-poster.jpg
+      duration_sec: 70
   c5:
     resource_ids:
     - team-prompts-v11
@@ -143,6 +167,12 @@ capsule_extra:
         - 把演示数据改名为 AI
       - 1
       - 第一周业务系统是第二周智能化的地基。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day05-c5-accept-map.mp4
+      poster_key: documents/shared/course-media/day05-c5-accept-map-poster.jpg
+      duration_sec: 70
 quiz:
 - *id001
 - *id002

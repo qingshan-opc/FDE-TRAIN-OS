@@ -115,6 +115,15 @@ migration:
   backoffLimit: 3
   ttlSecondsAfterFinished: 86400
 
+bootstrap:
+  enabled: false
+
+wechatPay:
+  enabled: false
+  mountCerts: false
+  privateKeySecretKey: WECHAT_PAY_PRIVATE_KEY
+  platformCertSecretKey: WECHAT_PAY_PLATFORM_CERT
+
 config:
   FDE_ENV: prod
   FDE_API_PORT: "8760"

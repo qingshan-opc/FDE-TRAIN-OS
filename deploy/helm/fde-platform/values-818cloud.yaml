@@ -1,0 +1,147 @@
+# 818cloud · fde-study · http://fde.818cloud.com/ (HTTP first; TLS added later)
+# External PostgreSQL + MinIO/OSS — credentials live in Secret only.
+#
+# helm upgrade --install fde deploy/helm/fde-platform \
+#   -n fde-study --create-namespace \
+#   -f deploy/helm/fde-platform/values-818cloud.yaml \
+#   --set image.api.tag=api-TAG --set image.web.tag=web-TAG \
+#   --wait --atomic
+
+fullnameOverride: fde-platform
+
+imagePullSecrets:
+  - name: aliyun-registry
+
+image:
+  api:
+    repository: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde
+    tag: api-latest
+    pullPolicy: IfNotPresent
+  worker:
+    repository: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde
+    tag: api-latest
+    pullPolicy: IfNotPresent
+  web:
+    repository: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde
+    tag: web-latest
+    pullPolicy: IfNotPresent
+  migrate:
+    repository: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde
+    tag: api-latest
+    pullPolicy: IfNotPresent
+  anycode:
+    repository: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde
+    tag: anycode-latest
+    pullPolicy: IfNotPresent
+
+existingSecret: fde-platform-secrets
+
+api:
+  replicaCount: 2
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+
+worker:
+  replicaCount: 1
+  hpa:
+    enabled: false
+  pdb:
+    enabled: false
+  anycode:
+    # Flip to true once anycode-dashboard image is pushed to the same registry.
+    enabled: false
+
+web:
+  replicaCount: 2
+  pdb:
+    enabled: false
+
+migration:
+  enabled: true
+
+bootstrap:
+  enabled: true
+
+wechatPay:
+  enabled: true
+  mountCerts: true
+  privateKeySecretKey: WECHAT_PAY_PRIVATE_KEY
+  platformCertSecretKey: WECHAT_PAY_PLATFORM_CERT
+
+config:
+  FDE_ENV: prod
+  FDE_PUBLIC_BASE_URL: http://fde.818cloud.com
+  FDE_CORS_ORIGINS: http://fde.818cloud.com
+  FDE_COOKIE_SECURE: "0"
+  FDE_SEED_DEMO_USERS: "0"
+  FDE_ALLOW_DEV_HEADERS: "0"
+  FDE_ALLOW_RUNTIME_MIGRATE: "0"
+  FDE_DEFAULT_CAMP_ID: camp-v03
+  FDE_CURRICULUM_VERSION_TAG: v0.7
+  FDE_SEED_VERSION_TAGS: v0.7,fde-v07
+  AGENT_MODE: stub
+  ANYCODE_DASHBOARD_URL: http://127.0.0.1:43180
+  ANYCODE_COACH_SKILL_ID: fde-coach
+  ANYCODE_SSE_TIMEOUT_SEC: "180"
+  LINGZHI_BASE_URL: http://127.0.0.1:8230
+  # Shared MinIO in base-service (same as LingZhi); credentials in Secret S3_ACCESS_KEY/S3_SECRET_KEY
+  S3_ENDPOINT: http://minio.base-service.svc.cluster.local:9000
+  S3_REGION: cn-zhangjiakou
+  S3_FORCE_PATH_STYLE: "1"
+  S3_BUCKET_DOCUMENTS: fde-documents
+  S3_BUCKET_WORKSPACES: fde-workspaces
+  S3_BUCKET_ARTIFACTS: fde-artifacts
+  S3_BUCKET_BACKUPS: fde-backups
+  CLAMAV_ENABLED: "0"
+  DEEPSEEK_API_BASE: https://api.deepseek.com
+  DEEPSEEK_MODEL: deepseek-v4-flash
+  RATE_LIMIT_LOGIN: 20/min
+  RATE_LIMIT_UPLOAD: 30/min
+  RATE_LIMIT_COACH_ASK: 30/min
+  RATE_LIMIT_SQL_EXEC: 60/min
+  FDE_DATA_DIR: /data
+  FDE_WORKSPACE_ROOT: /data/workspaces
+  FDE_ARTIFACT_ROOT: /data/artifacts
+  FDE_TEMP_WORKSPACE_ROOT: /data/tmp_workspaces
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: fde.818cloud.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /healthz
+          pathType: Exact
+          service: api
+        - path: /livez
+          pathType: Exact
+          service: api
+        - path: /readyz
+          pathType: Exact
+          service: api
+        - path: /docs
+          pathType: Prefix
+          service: api
+        - path: /app
+          pathType: Prefix
+          service: web
+        - path: /author
+          pathType: Prefix
+          service: web
+        - path: /
+          pathType: Prefix
+          service: web
+  tls: []
+
+networkPolicy:
+  enabled: true

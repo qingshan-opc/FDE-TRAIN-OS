@@ -1,0 +1,26 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-ask-not-guess",
+    "file": "02-ask-not-guess.txt"
+  },
+  {
+    "id": "03-prd-checklist",
+    "file": "03-prd-checklist.txt"
+  },
+  {
+    "id": "04-acceptance",
+    "file": "04-acceptance.txt"
+  },
+  {
+    "id": "05-veto",
+    "file": "05-veto.txt"
+  },
+  {
+    "id": "06-close",
+    "file": "06-close.txt"
+  }
+]

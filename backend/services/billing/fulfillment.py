@@ -49,5 +49,6 @@ def fulfill_paid_order(payment_order_id: str) -> None:
             )
     try:
         profit_sharing.request_profit_share_for_order(payment_order_id)
+        profit_sharing.sync_profit_share_statuses(limit=10)
     except Exception:
         log.warning("profit share failed for %s", payment_order_id, exc_info=True)

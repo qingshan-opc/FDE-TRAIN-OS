@@ -43,6 +43,12 @@ capsule_extra:
         - 没有截图
       - 1
       - 预期必须具体可判定。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day04-c1-backend-role.mp4
+      poster_key: documents/shared/course-media/day04-c1-backend-role-poster.jpg
+      duration_sec: 69
   c2:
     resource_ids:
     - team-prompts-v11
@@ -68,6 +74,12 @@ capsule_extra:
         - 标题很长
       - 1
       - 可重现才能被定位、修复和复测。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day04-c2-api-design.mp4
+      poster_key: documents/shared/course-media/day04-c2-api-design-poster.jpg
+      duration_sec: 64
   c3:
     resource_ids:
     - team-prompts-v11
@@ -93,6 +105,12 @@ capsule_extra:
         - 市场分析
       - 0
       - 可执行修复单需要具体上下文。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day04-c3-database-design.mp4
+      poster_key: documents/shared/course-media/day04-c3-database-design-poster.jpg
+      duration_sec: 70
   c4:
     resource_ids:
     - team-prompts-v11
@@ -116,6 +134,12 @@ capsule_extra:
         - 自动改成通过
       - 1
       - 诚实披露是可维护交付的一部分。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day04-c4-hands-on-api-db.mp4
+      poster_key: documents/shared/course-media/day04-c4-hands-on-api-db-poster.jpg
+      duration_sec: 58
   c5:
     resource_ids:
     - team-prompts-v11
@@ -139,6 +163,12 @@ capsule_extra:
         - 从清单删除
       - 1
       - 诚实状态比虚假完整更重要。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day04-c5-accept.mp4
+      poster_key: documents/shared/course-media/day04-c5-accept-poster.jpg
+      duration_sec: 70
 quiz:
 - *id001
 - *id002

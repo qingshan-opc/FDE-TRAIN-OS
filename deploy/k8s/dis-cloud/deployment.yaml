@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dis-cloud
+  namespace: dis-cloud
+  labels:
+    app: dis-cloud
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: dis-cloud
+  template:
+    metadata:
+      labels:
+        app: dis-cloud
+    spec:
+      imagePullSecrets:
+        - name: aliyun-registry
+      containers:
+        - name: dis-cloud
+          image: registry.cn-zhangjiakou.aliyuncs.com/818cloud/fde:dis-cloud-latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: dis-cloud-config
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: JWT_SECRET
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: DATABASE_URL
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: S3_SECRET_KEY
+            - name: DEEPSEEK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: DEEPSEEK_API_KEY
+                  optional: true
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 5
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dis-cloud
+  namespace: dis-cloud
+  labels:
+    app: dis-cloud
+spec:
+  type: ClusterIP
+  selector:
+    app: dis-cloud
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP

@@ -26,7 +26,7 @@ def run(cmd: list[str], cwd: Path | None = None, env: dict | None = None) -> Non
     subprocess.run(cmd, cwd=cwd, check=True, env=full_env)
 
 
-def pipeline(day: int, sec: str, skip_render: bool = False) -> None:
+def pipeline(day: int, sec: str, skip_render: bool = False, fast: bool = False, skip_upload: bool = False) -> None:
     sec = sec.zfill(2)
     mapping = section_dirs(day)
     section_path = BC / f"day-{day:02d}" / mapping[sec]
@@ -59,8 +59,17 @@ def pipeline(day: int, sec: str, skip_render: bool = False) -> None:
     cap = data["capsule_extra"][f"c{int(sec)}"]
     slug = cap["media"][0]["object_key"].rsplit("/", 1)[-1].replace(".mp4", "")
     out = video / "renders" / f"{slug}.mp4"
-    run(["npx", f"hyperframes@{FDE_HYPERFRAMES_VERSION}", "render", ".", "-o", str(out)], cwd=video)
-    run([sys.executable, str(ROOT / "scripts/upload_bootcamp_section.py"), "--day", str(day), "--section", sec, "--mp4", str(out)])
+    render_cmd = ["npx", f"hyperframes@{FDE_HYPERFRAMES_VERSION}", "render", ".", "-o", str(out)]
+    if fast:
+        render_cmd += ["--quality", "draft", "--fps", "15", "--crf", "32"]
+    run(render_cmd, cwd=video)
+    if skip_upload:
+        print(f"render ok → {out}")
+        return
+    py = ROOT / ".venv" / "bin" / "python"
+    if not py.is_file():
+        py = Path(sys.executable)
+    run([str(py), str(ROOT / "scripts/upload_bootcamp_section.py"), "--day", str(day), "--section", sec, "--mp4", str(out)])
 
 
 def main() -> None:
@@ -69,13 +78,15 @@ def main() -> None:
     ap.add_argument("--section", default="")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--skip-render", action="store_true")
+    ap.add_argument("--fast", action="store_true", help="draft quality @ 15fps for speed")
+    ap.add_argument("--skip-upload", action="store_true")
     args = ap.parse_args()
     if args.all:
         for sec in section_dirs(args.day):
             print(f"\n=== Day {args.day} Section {sec} ===", flush=True)
-            pipeline(args.day, sec, skip_render=args.skip_render)
+            pipeline(args.day, sec, skip_render=args.skip_render, fast=args.fast, skip_upload=args.skip_upload)
     elif args.section:
-        pipeline(args.day, args.section, skip_render=args.skip_render)
+        pipeline(args.day, args.section, skip_render=args.skip_render, fast=args.fast, skip_upload=args.skip_upload)
     else:
         raise SystemExit("need --section or --all")
 

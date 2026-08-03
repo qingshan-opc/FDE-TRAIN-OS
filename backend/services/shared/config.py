@@ -121,6 +121,13 @@ WECHAT_PAY_PRIVATE_KEY_PATH = os.getenv("WECHAT_PAY_PRIVATE_KEY_PATH", "")
 WECHAT_PAY_PLATFORM_CERT_PATH = os.getenv("WECHAT_PAY_PLATFORM_CERT_PATH", "")
 FDE_PUBLIC_BASE_URL = os.getenv("FDE_PUBLIC_BASE_URL", FDE_INTERNAL_BASE).rstrip("/")
 WECHAT_PAY_SKIP_VERIFY = os.getenv("WECHAT_PAY_SKIP_VERIFY", "0") == "1"
+# Merchant must have WeChat profit-sharing permission before enabling.
+WECHAT_PAY_PROFIT_SHARING = os.getenv("WECHAT_PAY_PROFIT_SHARING", "0") == "1"
+# AppSecret for the same AppID as WECHAT_PAY_APP_ID (公众号/开放平台网页授权换 openid)
+WECHAT_APP_SECRET = os.getenv("WECHAT_APP_SECRET", "")
+# 公众号服务器配置（扫码关注登录）：Token + EncodingAESKey（43 位）
+WECHAT_MP_TOKEN = os.getenv("WECHAT_MP_TOKEN", "")
+WECHAT_MP_AES_KEY = os.getenv("WECHAT_MP_AES_KEY", "")
 PARTNER_DEMO_EMAIL = os.getenv("FDE_PARTNER_DEMO_EMAIL", "partner@fde.local")
 PARTNER_DEMO_PASSWORD = os.getenv("FDE_PARTNER_DEMO_PASSWORD", "partner1234")
 

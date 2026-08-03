@@ -66,6 +66,31 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         )
         if cur.fetchone():
             raise HTTPException(409, "您已拥有该课程")
+        # Reuse recent pending order (avoid spawning QR/orders on every shop refresh)
+        cur.execute(
+            """
+            SELECT id, out_trade_no, amount_fen, code_url, status
+            FROM payment_orders
+            WHERE user_id=? AND offering_id=? AND status='pending'
+              AND created_at > NOW() - INTERVAL '2 hours'
+              AND code_url IS NOT NULL AND code_url <> ''
+            ORDER BY created_at DESC
+            LIMIT 1
+            """,
+            (user.id, body.offering_id),
+        )
+        pending = cur.fetchone()
+        if pending:
+            pending = dict(pending)
+            return {
+                "order_id": pending["id"],
+                "out_trade_no": pending["out_trade_no"],
+                "amount_fen": int(pending["amount_fen"]),
+                "code_url": pending.get("code_url"),
+                "dev_mode": not wechat_pay.configured(),
+                "status": pending.get("status") or "pending",
+                "reused": True,
+            }
     attr = get_user_attribution(user.id)
     org_id = attr.get("org_id") if attr else None
     title = offering.get("title") or offering.get("course_title") or "FDE 课程"
@@ -82,6 +107,7 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         "code_url": order.get("code_url"),
         "dev_mode": not wechat_pay.configured(),
         "status": order.get("status"),
+        "reused": False,
     }
 
 
@@ -107,6 +133,7 @@ def sync_order(order_id: str, request: Request) -> dict[str, Any]:
         raise HTTPException(404, "订单不存在")
     status = wechat_pay.sync_order_status(order_id)
     profit_sharing.retry_pending_shares()
+    profit_sharing.sync_profit_share_statuses()
     order = wechat_pay.get_payment_order(order_id)
     return {"status": status, "order": order}
 
@@ -140,7 +167,9 @@ def list_purchasable_offerings(request: Request) -> dict[str, Any]:
         cur.execute(
             """
             SELECT co.id, co.title, co.price_fen, co.camp_id, co.status,
-                   c.title AS course_title, c.slug AS course_slug
+                   co.course_version_id,
+                   c.title AS course_title, c.slug AS course_slug,
+                   c.description AS course_description
             FROM course_offerings co
             LEFT JOIN course_versions cv ON cv.id = co.course_version_id
             LEFT JOIN courses c ON c.id = cv.course_id
@@ -160,4 +189,36 @@ def list_purchasable_offerings(request: Request) -> dict[str, Any]:
                 (user.id, it["id"]),
             )
             it["enrolled"] = bool(cur.fetchone())
+            vid = it.pop("course_version_id", None)
+            modules: list[dict[str, Any]] = []
+            if vid:
+                cur.execute(
+                    """
+                    SELECT day_index, title
+                    FROM course_modules
+                    WHERE course_version_id=?
+                    ORDER BY sort_order, day_index
+                    LIMIT 12
+                    """,
+                    (vid,),
+                )
+                modules = [dict(r) for r in cur.fetchall()]
+            it["modules"] = modules
+            it["module_count"] = len(modules)
+            # Prefer richer catalog description; thin migration stubs are OK for UI fallback
+            it["description"] = it.pop("course_description", None) or ""
+            it["cover_image"] = "/landing/hero.png"
+            if (it.get("course_slug") or "").startswith("fde"):
+                it["cover_image"] = "/landing/hero.png"
+                it["gallery"] = [
+                    "/landing/story-task.png",
+                    "/landing/story-agent.png",
+                    "/landing/story-cert.png",
+                ]
+            else:
+                it["gallery"] = [
+                    "/landing/story-task.png",
+                    "/landing/story-agent.png",
+                    "/landing/story-cert.png",
+                ]
     return {"items": items}

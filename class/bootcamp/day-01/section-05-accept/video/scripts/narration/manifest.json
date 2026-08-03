@@ -1,0 +1,22 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-four-pages",
+    "file": "02-four-pages.txt"
+  },
+  {
+    "id": "03-ai-reserved",
+    "file": "03-ai-reserved.txt"
+  },
+  {
+    "id": "04-click-test",
+    "file": "04-click-test.txt"
+  },
+  {
+    "id": "05-close",
+    "file": "05-close.txt"
+  }
+]

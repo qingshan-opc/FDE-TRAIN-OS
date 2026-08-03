@@ -15,7 +15,7 @@ import { PassportView } from "./Passport";
 import type { Capsule, DayNodeSummary, DayPackage, DaySummary, NodeCompleteResult } from "../lib/types";
 import { dayLabel } from "../lib/dayLabel";
 import { dayTaskPath, primaryCtaLabel, resolveNextTarget, resolveTargetForDay } from "../lib/taskTargets";
-import { TaskHome } from "./TaskHome";
+import { CourseIntro } from "./CourseIntro";
 
 type MobileTab = "course" | "content" | "task";
 
@@ -23,19 +23,6 @@ const DEFAULT_WEEKS: Record<string, number[]> = {
   "1": [1, 2, 3, 4, 5, 6],
   "2": [7, 8, 9, 10, 11, 12],
 };
-
-function buildPendingCount(days: DaySummary[]): number {
-  let n = 0;
-  for (const d of days) {
-    if (d.locked) continue;
-    for (const node of d.nodes || []) {
-      if (node.kind === "unlock") continue;
-      const s = String(node.status);
-      if (s !== "passed" && s !== "locked") n += 1;
-    }
-  }
-  return n;
-}
 
 export function LearnerHome() {
   const { day: dayParam } = useParams();
@@ -220,15 +207,6 @@ export function LearnerHome() {
     }
     navigateToTarget(target);
   }, [dayPkg, days, toast, focusNode, navigateToTarget]);
-
-  const openTask = useCallback(
-    (day: number, nodeId: string) => {
-      nav(dayTaskPath(day, nodeId));
-      setShowPassport(false);
-      setMobileTab("content");
-    },
-    [nav],
-  );
 
   const homeNextTarget = useMemo(() => resolveNextTarget(days), [days]);
   const displayDay = activeDay ?? homeNextTarget?.day ?? null;
@@ -494,14 +472,7 @@ export function LearnerHome() {
             error && !days.length ? (
               <ErrorState message={error} onRetry={() => void loadDays()} />
             ) : (
-              <TaskHome
-                days={days}
-                weeks={weeks}
-                loading={listLoading}
-                error={error}
-                onOpenTask={openTask}
-                onContinue={goToHomework}
-              />
+              <CourseIntro onContinue={goToHomework} />
             )
           ) : dayLoading && !dayPkg ? (
             <Skeleton rows={10} />
@@ -524,7 +495,6 @@ export function LearnerHome() {
             day={dayPkg}
             node={activeNode}
             homeNextTarget={!activeDay ? homeNextTarget : null}
-            homePendingCount={!activeDay ? buildPendingCount(days) : undefined}
             onHomeContinue={goToHomework}
             primaryLabel={!activeDay && homeNextTarget ? undefined : primary.label}
             primaryDisabled={primary.disabled}

@@ -36,10 +36,12 @@ import { LearnerEnrollmentDetail } from "./author/learners/LearnerEnrollmentDeta
 import { CourseVersions } from "./author/curriculum/CourseVersions";
 import { MaterialPackDetail } from "./author/resources/MaterialPackDetail";
 import { ChannelSettings } from "./author/settings/ChannelSettings";
+import { PricingSettings } from "./author/settings/PricingSettings";
 import { CourseShop } from "./app/CourseShop";
 import { PartnerLoginPage } from "./partner/PartnerLogin";
 import { PartnerHome } from "./partner/PartnerHome";
 import { PartnerDashboard, PartnerShares } from "./partner/PartnerDashboard";
+import { PartnerPosters } from "./partner/PartnerPosters";
 
 function RequireAuth({ children, roles }: { children: ReactNode; roles?: Array<"learner" | "author" | "admin" | "partner"> }) {
   const { user, loading } = useAuth();
@@ -148,6 +150,7 @@ export default function App() {
         }
       >
         <Route index element={<PartnerDashboard />} />
+        <Route path="posters" element={<PartnerPosters />} />
         <Route path="shares" element={<PartnerShares />} />
       </Route>
       <Route
@@ -176,6 +179,7 @@ export default function App() {
         <Route path="learners/:enrollmentId" element={<LearnerEnrollmentDetail />} />
         <Route path="learners" element={<LearnerCourses />} />
         <Route path="settings/camp-key" element={<CampKeySettings />} />
+        <Route path="settings/pricing" element={<PricingSettings />} />
         <Route path="settings/channels" element={<ChannelSettings />} />
 
         {/* Legacy redirects */}

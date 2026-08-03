@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="前端四大平台技术地图">
+  <rect width="1200" height="600" fill="#f2f5f0"/>
+  <text x="48" y="50" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">前端 = 用户直接接触的界面层（四大平台）</text>
+  <text x="48" y="76" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">WEB · APP · MINI PROGRAM · DESKTOP —— 先定平台，再选框架</text>
+
+  <!-- Web -->
+  <rect x="48" y="100" width="264" height="330" rx="10" fill="#fff" stroke="#f24e54" stroke-width="2"/>
+  <text x="68" y="132" font-size="16" font-weight="900" fill="#231f20">Web 网页</text>
+  <text x="68" y="152" font-size="10" letter-spacing="2" fill="#f24e54" style="font-family:'SF Mono',Menlo,monospace">BROWSER · HTML/CSS/JS</text>
+  <text x="68" y="182" font-size="12" fill="rgba(35,31,32,.6)">官网 · 后台系统 · 周报助手</text>
+  <g font-size="12.5" fill="#231f20">
+    <text x="68" y="216" font-weight="700">React <tspan fill="rgba(35,31,32,.5)" font-weight="400">人最多 · AI 最会写</tspan></text>
+    <text x="68" y="242" font-weight="700">Vue <tspan fill="rgba(35,31,32,.5)" font-weight="400">最好学 · 中文文档好</tspan></text>
+    <text x="68" y="268" font-weight="700">Angular <tspan fill="rgba(35,31,32,.5)" font-weight="400">大企业全家桶</tspan></text>
+    <text x="68" y="294" font-weight="700">Svelte <tspan fill="rgba(35,31,32,.5)" font-weight="400">新派简洁</tspan></text>
+    <text x="68" y="320" font-weight="700">Next.js/Nuxt <tspan fill="rgba(35,31,32,.5)" font-weight="400">对外站 SEO</tspan></text>
+    <text x="68" y="346" font-weight="700">不用框架 <tspan fill="#1400ff" font-weight="700">小页面够用（Day 3）</tspan></text>
+  </g>
+  <text x="68" y="386" font-size="11.5" fill="rgba(35,31,32,.5)">工程化两件套：TypeScript · Vite</text>
+  <text x="68" y="412" font-size="12" font-weight="700" fill="#f24e54">场景：对外网站、内部系统</text>
+
+  <!-- App -->
+  <rect x="336" y="100" width="264" height="330" rx="10" fill="#fff" stroke="#f5a947" stroke-width="2"/>
+  <text x="356" y="132" font-size="16" font-weight="900" fill="#231f20">App 开发</text>
+  <text x="356" y="152" font-size="10" letter-spacing="2" fill="#f5a947" style="font-family:'SF Mono',Menlo,monospace">MOBILE · 应用商店</text>
+  <text x="356" y="182" font-size="12" fill="rgba(35,31,32,.6)">微信 · 滴滴 · Keep</text>
+  <g font-size="12.5" fill="#231f20">
+    <text x="356" y="216" font-weight="700">Swift（iOS）<tspan fill="rgba(35,31,32,.5)" font-weight="400"> 苹果官方</tspan></text>
+    <text x="356" y="242" font-weight="700">Kotlin（Android）<tspan fill="rgba(35,31,32,.5)" font-weight="400"> 谷歌官方</tspan></text>
+    <text x="356" y="268" font-weight="700">Flutter <tspan fill="rgba(35,31,32,.5)" font-weight="400"> Dart · 一套代码两端一致</tspan></text>
+    <text x="356" y="294" font-weight="700">React Native <tspan fill="rgba(35,31,32,.5)" font-weight="400"> 会 React 就会写</tspan></text>
+  </g>
+  <text x="356" y="340" font-size="11.5" fill="rgba(35,31,32,.5)">原生 = 两套代码两拨人（大厂重体验）</text>
+  <text x="356" y="362" font-size="11.5" fill="rgba(35,31,32,.5)">跨端 = 一套代码出两端（小团队默认）</text>
+  <text x="356" y="412" font-size="12" font-weight="700" fill="#f5a947">场景：重度使用、要系统能力</text>
+
+  <!-- Mini program -->
+  <rect x="624" y="100" width="264" height="330" rx="10" fill="#fff" stroke="#2f9e44" stroke-width="2"/>
+  <text x="644" y="132" font-size="16" font-weight="900" fill="#231f20">小程序</text>
+  <text x="644" y="152" font-size="10" letter-spacing="2" fill="#2f9e44" style="font-family:'SF Mono',Menlo,monospace">MINI PROGRAM · 扫码即用</text>
+  <text x="644" y="182" font-size="12" fill="rgba(35,31,32,.6)">点单 · 健康码 · 报名</text>
+  <g font-size="12.5" fill="#231f20">
+    <text x="644" y="216" font-weight="700">微信原生 <tspan fill="rgba(35,31,32,.5)" font-weight="400"> WXML/WXSS/JS</tspan></text>
+    <text x="644" y="228" font-weight="400" font-size="11.5" fill="rgba(35,31,32,.5)">能力最全、最稳</text>
+    <text x="644" y="262" font-weight="700">Taro <tspan fill="rgba(35,31,32,.5)" font-weight="400"> React 风格 · 一套代码多端</tspan></text>
+    <text x="644" y="288" font-weight="700">uni-app <tspan fill="rgba(35,31,32,.5)" font-weight="400"> Vue 风格 · 一套代码多端</tspan></text>
+  </g>
+  <text x="644" y="340" font-size="11.5" fill="rgba(35,31,32,.5)">中国特色平台：做国内生意绕不开</text>
+  <text x="644" y="412" font-size="12" font-weight="700" fill="#2f9e44">场景：轻量、用完即走、借微信流量</text>
+
+  <!-- Desktop -->
+  <rect x="912" y="100" width="240" height="330" rx="10" fill="#fff" stroke="#5f52a0" stroke-width="2"/>
+  <text x="932" y="132" font-size="16" font-weight="900" fill="#231f20">桌面软件</text>
+  <text x="932" y="152" font-size="10" letter-spacing="2" fill="#5f52a0" style="font-family:'SF Mono',Menlo,monospace">DESKTOP · 双击图标</text>
+  <text x="932" y="182" font-size="12" fill="rgba(35,31,32,.6)">VS Code · 飞书 · 剪映</text>
+  <g font-size="12.5" fill="#231f20">
+    <text x="932" y="216" font-weight="700">Electron</text>
+    <text x="932" y="236" font-weight="400" font-size="11.5" fill="rgba(35,31,32,.5)">网页技术包壳 · 零门槛</text>
+    <text x="932" y="270" font-weight="700">Tauri</text>
+    <text x="932" y="290" font-weight="400" font-size="11.5" fill="rgba(35,31,32,.5)">Rust · 体积小十倍 · 生态新</text>
+  </g>
+  <text x="932" y="412" font-size="12" font-weight="700" fill="#5f52a0">场景：内部工具桌面版</text>
+
+  <!-- two-step -->
+  <rect x="48" y="458" width="560" height="56" rx="8" fill="#231f20"/>
+  <text x="68" y="482" font-size="13.5" font-weight="900" fill="#f2f5f0">第一步 · 定平台</text>
+  <text x="68" y="502" font-size="12" fill="rgba(242,245,240,.7)">用户在哪用你？浏览器 / 应用商店 / 微信里 / 桌面图标</text>
+  <rect x="632" y="458" width="520" height="56" rx="8" fill="none" stroke="#1400ff" stroke-width="1.5"/>
+  <text x="652" y="482" font-size="13.5" font-weight="900" fill="#1400ff">第二步 · 选框架（四问）</text>
+  <text x="652" y="502" font-size="12" fill="rgba(35,31,32,.65)">团队会什么 → 生态大不大 → AI 写得好不好 → 项目有多大</text>
+  <text x="48" y="552" font-size="12.5" fill="rgba(35,31,32,.55)">每条路线的优势对比与官方链接 → 见资源区「交互讲义 · 技术选型全图」</text>
+</svg>

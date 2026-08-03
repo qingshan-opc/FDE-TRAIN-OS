@@ -78,6 +78,12 @@ learn:
         - 因为页面必须最后一天制作
       - 1
       - 五天流程的价值就是让每一步都有输入、交付和学员批准。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day05-c1-worldview-plain.mp4
+      poster_key: documents/shared/course-media/day05-c1-worldview-plain-poster.jpg
+      duration_sec: 70
     knowledge_cards:
     - id: d5l1-k1
       term: 产品是一棒接一棒交出来的
@@ -144,6 +150,12 @@ learn:
         - AI 说这个数字正确
       - 1
       - 看板是汇总结果，最终事实必须能追到真实业务记录。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day05-c2-enterprise-digital-stages.mp4
+      poster_key: documents/shared/course-media/day05-c2-enterprise-digital-stages-poster.jpg
+      duration_sec: 69
     knowledge_cards:
     - id: d5l2-k1
       term: 页面负责接收和展示
@@ -207,6 +219,12 @@ learn:
         - 算，只要有页面截图
       - 1
       - 可重复运行是交付标准，不能把个人电脑上的偶然成功当成完成。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day05-c3-how-software-built.mp4
+      poster_key: documents/shared/course-media/day05-c3-how-software-built-poster.jpg
+      duration_sec: 57
     knowledge_cards:
     - id: d5l3-k1
       term: 别人能运行才算交付
@@ -271,6 +289,12 @@ learn:
         - 代码文件有多少行
       - 1
       - 业务负责人关心问题、价值和可信度，而不是技术名词清单。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day05-c4-server-cloudnative.mp4
+      poster_key: documents/shared/course-media/day05-c4-server-cloudnative-poster.jpg
+      duration_sec: 70
     knowledge_cards:
     - id: d5l4-k1
       term: 使用说明帮助别人接手
@@ -338,6 +362,12 @@ learn:
         - 页面使用最多动画
       - 1
       - 课程目标是掌握指挥、判断和交付逻辑，而不是追求技术数量。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day05-c5-accept-map.mp4
+      poster_key: documents/shared/course-media/day05-c5-accept-map-poster.jpg
+      duration_sec: 70
     knowledge_cards:
     - id: d5l5-k1
       term: 运行、证据和讲清楚
@@ -456,32 +486,37 @@ lab:
   - docs/D5_项目复盘.md
   - docs/D5_五分钟路演.md
   - docs/D5_综合验收.md
+  - docs/D5_command_log.md
   - README.md
   inherited_files:
   - docs/D1_选题确认单.md
   - docs/D1_团队协作卡.md
   - docs/D1_项目任务书.md
   - docs/PRD.md
+  - docs/D1_command_log.md
   - design/prototypes/index.html
   - docs/D2-L4_接口契约.md
   - docs/D2_前端走查.md
+  - docs/D2_command_log.md
   - docs/D3-L1_项目地图.md
   - docs/D3-L2_数据表说明.md
   - docs/D3-L3_接口验证.md
   - docs/D3-L4_Week2_AI交接.md
   - docs/D3_冒烟记录.md
+  - docs/D3_command_log.md
   - docs/D4-L1_测试用例表.md
   - docs/D4-L2_执行矩阵.md
   - docs/D4-L2_缺陷报告.md
   - docs/D4-L4_验收清单.md
   - docs/D4_报审材料清单.md
+  - docs/D4_command_log.md
   coach:
     help_mode: debug
     skill_id: fde-coach
     max_help_level: 3
   adapter_version: '1.0'
   agent:
-    prompt_template: 执行第一周综合验收：要求学员真实运行并演示业务数据链路，再口述岗位交接与系统分层。框架名不是考点；真实证据、诚实边界和能否讲清开发逻辑才是考点。
+    prompt_template: 执行第一周综合验收：要求学员真实运行并演示业务数据链路，再口述岗位交接与系统分层，并检查指挥日志 docs/D5_command_log.md。框架名不是考点；真实证据、诚实边界和能否讲清开发逻辑才是考点。
   rubric:
   - check: file_exists
     args:

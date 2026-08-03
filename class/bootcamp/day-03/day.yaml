@@ -43,6 +43,12 @@ capsule_extra:
         - Agent 说正确
       - 1
       - 统计结果必须可追溯。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day03-c1-frontend-in-ai-era.mp4
+      poster_key: documents/shared/course-media/day03-c1-frontend-in-ai-era-poster.jpg
+      duration_sec: 77
   c2:
     resource_ids:
     - team-prompts-v11
@@ -68,6 +74,12 @@ capsule_extra:
         - 会让按钮变色
       - 0
       - 受控枚举能保证业务状态一致。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day03-c2-design-spec.mp4
+      poster_key: documents/shared/course-media/day03-c2-design-spec-poster.jpg
+      duration_sec: 60
   c3:
     resource_ids:
     - team-prompts-v11
@@ -93,6 +105,12 @@ capsule_extra:
         - 演示时可以不标
       - 1
       - 写死数字不能反映业务变化。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day03-c3-web-prompt-anatomy.mp4
+      poster_key: documents/shared/course-media/day03-c3-web-prompt-anatomy-poster.jpg
+      duration_sec: 47
   c4:
     resource_ids:
     - team-prompts-v11
@@ -116,6 +134,12 @@ capsule_extra:
         - 代替数据库
       - 1
       - 先稳定契约，后续能力可以在边界内接入。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day03-c4-hands-on-prototype.mp4
+      poster_key: documents/shared/course-media/day03-c4-hands-on-prototype-poster.jpg
+      duration_sec: 48
   c5:
     resource_ids:
     - team-prompts-v11
@@ -139,6 +163,12 @@ capsule_extra:
         - 代码生成工具
       - 1
       - 验收权始终在学员。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day03-c5-accept.mp4
+      poster_key: documents/shared/course-media/day03-c5-accept-poster.jpg
+      duration_sec: 53
 quiz:
 - *id001
 - *id002

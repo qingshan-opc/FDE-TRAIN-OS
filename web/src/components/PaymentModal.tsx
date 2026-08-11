@@ -151,9 +151,17 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
           </Button>
         </Space>
       ) : codeUrl && !codeUrl.startsWith("dev://") ? (
-        <div style={{ textAlign: "center" }}>
-          <QRCode value={codeUrl} size={220} />
-          <Typography.Paragraph type="secondary" style={{ marginTop: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <QRCode value={codeUrl} size={220} style={{ margin: "0 auto" }} />
+          <Typography.Paragraph type="secondary" style={{ marginTop: 12, marginBottom: 0, textAlign: "center" }}>
             {tip}
           </Typography.Paragraph>
         </div>
@@ -161,7 +169,10 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
         <Alert type="warning" message="无法生成支付二维码" showIcon />
       )}
       {status === "pending" && !devMode && !loading && (
-        <Typography.Paragraph type="secondary" style={{ marginTop: 12, marginBottom: 0, fontSize: 12 }}>
+        <Typography.Paragraph
+          type="secondary"
+          style={{ marginTop: 12, marginBottom: 0, fontSize: 12, textAlign: "center" }}
+        >
           支付完成后将自动刷新，请勿关闭此窗口
         </Typography.Paragraph>
       )}

@@ -10,8 +10,7 @@ interface DayStatusEntry {
 
 /**
  * Left-rail syllabus:
- * - New shell header
- * - Original Tree hierarchy: Week → Day → Node (学习/测验/Lab…) → capsules under learn
+ * Week → Day → capsules (no「今日课节」folder) + weekly 概念验收
  */
 export function SyllabusRail({
   days,
@@ -25,6 +24,7 @@ export function SyllabusRail({
   readCapsuleIds,
   onSelectDay,
   onSelectNode,
+  onSelectWeekQuiz,
   onSelectCapsule,
 }: {
   days: DaySummary[];
@@ -41,6 +41,7 @@ export function SyllabusRail({
   locked?: boolean;
   onSelectDay: (day: number) => void;
   onSelectNode?: (day: number, nodeId: string) => void;
+  onSelectWeekQuiz?: (week: number, anchorDay: number) => void;
   onSelectCapsule: (id: string) => void;
 }) {
   const inDay = Boolean(activeDay && dayPkg);
@@ -67,6 +68,7 @@ export function SyllabusRail({
         readCapsuleIds={readCapsuleIds}
         onSelectDay={onSelectDay}
         onSelectNode={onSelectNode}
+        onSelectWeekQuiz={onSelectWeekQuiz}
         onSelectCapsule={onSelectCapsule}
       />
     </nav>

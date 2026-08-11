@@ -11,18 +11,24 @@ import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { useToast } from "../components/Toast";
 import { DayView } from "./DayView";
+import { WeekQuiz } from "./WeekQuiz";
 import { PassportView } from "./Passport";
 import type { Capsule, DayNodeSummary, DayPackage, DaySummary, NodeCompleteResult } from "../lib/types";
 import { dayLabel } from "../lib/dayLabel";
 import { dayTaskPath, primaryCtaLabel, resolveNextTarget, resolveTargetForDay } from "../lib/taskTargets";
 import { CourseIntro } from "./CourseIntro";
+import { parseWeekQuizNodeId, weekQuizNodeId } from "../components/Tree";
 
 type MobileTab = "course" | "content" | "task";
 
 const DEFAULT_WEEKS: Record<string, number[]> = {
   "1": [1, 2, 3, 4, 5, 6],
-  "2": [7, 8, 9, 10, 11, 12],
+  "2": [7, 8, 9, 10, 11],
+  "3": [12, 13, 14, 15, 16, 17],
 };
+
+const LEARNER_DAY_KINDS = new Set(["learn", "lab"]);
+
 
 export function LearnerHome() {
   const { day: dayParam } = useParams();
@@ -107,12 +113,23 @@ export function LearnerHome() {
       try {
         const pkg = await dayApi.get(campId, day);
         setDayPkg(pkg);
-        const prefer =
-          (preferNodeId && pkg.nodes.find((n) => n.id === preferNodeId)) ||
-          pkg.nodes.find((n) => n.status === "available") ||
-          pkg.nodes.find((n) => n.status !== "locked") ||
-          pkg.nodes[0];
-        focusNode(prefer?.id ?? null);
+        // Keep week-quiz deep links; otherwise prefer learn over hidden quiz/project.
+        if (preferNodeId && parseWeekQuizNodeId(preferNodeId) != null) {
+          focusNode(preferNodeId);
+        } else {
+          const prefer =
+            (preferNodeId &&
+              LEARNER_DAY_KINDS.has(
+                String(pkg.nodes.find((n) => n.id === preferNodeId)?.kind || ""),
+              ) &&
+              pkg.nodes.find((n) => n.id === preferNodeId)) ||
+            pkg.nodes.find((n) => n.kind === "learn") ||
+            pkg.nodes.find((n) => LEARNER_DAY_KINDS.has(String(n.kind)) && n.status === "available") ||
+            pkg.nodes.find((n) => LEARNER_DAY_KINDS.has(String(n.kind)) && n.status !== "locked") ||
+            pkg.nodes.find((n) => n.kind === "learn") ||
+            null;
+          focusNode(prefer?.id ?? null);
+        }
         setMobileTab("content");
       } catch (err) {
         setDayPkg(null);
@@ -140,37 +157,46 @@ export function LearnerHome() {
   const dayStatuses = useMemo(() => {
     const map: Record<number, { passed: number; total: number; runner?: string | null; nodes?: DayNodeSummary[] }> = {};
     for (const d of days) {
+      const visible = (d.nodes || []).filter((n) => LEARNER_DAY_KINDS.has(String(n.kind)));
+      const passed = visible.length
+        ? visible.filter((n) => n.status === "passed").length
+        : d.passed ?? 0;
+      const total = visible.length || Math.max(1, Math.min(d.total ?? 1, 2));
       map[d.day] = {
-        passed: d.passed ?? 0,
-        total: d.total ?? 6,
+        passed,
+        total,
         runner: d.runner,
         nodes: d.nodes,
       };
     }
     if (dayPkg) {
-      const visible = dayPkg.nodes.filter((n) => n.kind !== "unlock");
+      const visible = dayPkg.nodes.filter((n) => LEARNER_DAY_KINDS.has(String(n.kind)));
       map[dayPkg.day] = {
         passed: visible.filter((n) => n.status === "passed").length,
-        total: visible.length,
+        total: visible.length || 1,
         runner: dayPkg.lab?.runner,
-        nodes: visible.map((n) => ({ id: n.id, title: n.title, kind: n.kind, status: n.status })),
+        nodes: dayPkg.nodes.map((n) => ({ id: n.id, title: n.title, kind: n.kind, status: n.status })),
       };
     }
     return map;
   }, [days, dayPkg]);
 
-  const activeNode = dayPkg?.nodes.find((n) => n.id === activeNodeId) || null;
+  const weekQuizWeek = parseWeekQuizNodeId(activeNodeId);
+  const activeNode =
+    weekQuizWeek != null ? null : dayPkg?.nodes.find((n) => n.id === activeNodeId) || null;
   const labNode = dayPkg?.nodes.find((n) => n.kind === "lab") || null;
 
   const learnCapsules: Capsule[] = useMemo(() => {
-    if (!dayPkg || activeNode?.kind !== "learn") return [];
-    const fromRefs = (activeNode.refs?.capsules as Capsule[]) || [];
+    if (!dayPkg) return [];
+    // Capsules stay available in the left rail whenever the day is open (incl. week quiz).
+    const learn = dayPkg.nodes.find((n) => n.kind === "learn");
+    const fromRefs = (learn?.refs?.capsules as Capsule[]) || [];
     const fromLearn = dayPkg.learn?.capsules || [];
     return (fromRefs.length ? fromRefs : fromLearn).map((c, i) => ({
       ...c,
       id: c.id || `c${i + 1}`,
     }));
-  }, [dayPkg, activeNode]);
+  }, [dayPkg]);
 
   const navigateToTarget = useCallback(
     (target: ReturnType<typeof resolveNextTarget>) => {
@@ -343,6 +369,20 @@ export function LearnerHome() {
     [days, nav, toast],
   );
 
+  const handleSelectWeekQuiz = useCallback(
+    (week: number, anchorDay: number) => {
+      const id = weekQuizNodeId(week);
+      if (activeDay === anchorDay) {
+        focusNode(id);
+      } else {
+        nav(dayTaskPath(anchorDay, id));
+      }
+      setShowPassport(false);
+      setMobileTab("content");
+    },
+    [activeDay, focusNode, nav],
+  );
+
   // Learn mode: right-rail CTA points to homework / next task (complete stays in center).
   const primary = useMemo(() => {
     if (!activeNode) {
@@ -457,7 +497,10 @@ export function LearnerHome() {
               locked={activeNode?.status === "locked"}
               onSelectDay={handleSelectDay}
               onSelectNode={handleSelectNode}
+              onSelectWeekQuiz={handleSelectWeekQuiz}
               onSelectCapsule={(id) => {
+                const learn = dayPkg?.nodes.find((n) => n.kind === "learn");
+                if (learn && activeDay) handleSelectNode(activeDay, learn.id);
                 setOpenCapsuleId(id);
                 setMobileTab("content");
               }}
@@ -478,6 +521,15 @@ export function LearnerHome() {
             <Skeleton rows={10} />
           ) : error && !dayPkg && activeDay ? (
             <ErrorState title="本日任务未配置" message={error} onRetry={() => activeDay && void loadDay(activeDay)} />
+          ) : weekQuizWeek != null ? (
+            <WeekQuiz
+              week={weekQuizWeek}
+              dayNums={weeks[String(weekQuizWeek)] || []}
+              onCompleted={() => {
+                void loadDays();
+                if (activeDay) void loadDay(activeDay, weekQuizNodeId(weekQuizWeek));
+              }}
+            />
           ) : (
             <DayView
               day={dayPkg}

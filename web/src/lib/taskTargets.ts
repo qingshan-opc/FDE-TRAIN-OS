@@ -46,8 +46,11 @@ export function dayTaskPath(day: number, nodeId: string): string {
   return `/app/day/${day}?node=${encodeURIComponent(nodeId)}`;
 }
 
+/** Learner-facing day nodes after syllabus simplification. */
+const HIDDEN_KINDS = new Set(["unlock", "quiz", "project", "review"]);
+
 function visibleNodes(nodes?: DayNodeSummary[]): DayNodeSummary[] {
-  return (nodes || []).filter((n) => n.kind !== "unlock");
+  return (nodes || []).filter((n) => !HIDDEN_KINDS.has(String(n.kind)));
 }
 
 function isDone(status: string): boolean {

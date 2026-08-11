@@ -132,6 +132,9 @@ WECHAT_APP_SECRET = os.getenv("WECHAT_APP_SECRET", "")
 # 公众号服务器配置（扫码关注登录）：Token + EncodingAESKey（43 位）
 WECHAT_MP_TOKEN = os.getenv("WECHAT_MP_TOKEN", "")
 WECHAT_MP_AES_KEY = os.getenv("WECHAT_MP_AES_KEY", "")
+# Learners must bind 服务号 before entering /app. Default on in prod; off in local/dev
+# so email/password demos work without WECHAT_* credentials.
+REQUIRE_WX_BIND = os.getenv("FDE_REQUIRE_WX_BIND", "1" if FDE_ENV == "prod" else "0") == "1"
 PARTNER_DEMO_EMAIL = os.getenv("FDE_PARTNER_DEMO_EMAIL", "partner@fde.local")
 PARTNER_DEMO_PASSWORD = os.getenv("FDE_PARTNER_DEMO_PASSWORD", "partner1234")
 

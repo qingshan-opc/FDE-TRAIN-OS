@@ -11,7 +11,7 @@
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#0d9488;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 html{margin:0;background:#111}
 html.browser-preview{overflow:hidden;height:100%}
@@ -21,15 +21,15 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 .slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
 .stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
 .slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
-.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label{font-family:var(--mono);font-size:17px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
 .sec-label .num{color:var(--accent);font-weight:700}
-.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
-.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.display{font-family:var(--serif);font-weight:700;font-size:54px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
 .card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
-.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
-.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
-.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card .lab{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:17px;line-height:1.45;color:var(--ink-60)}
 .card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
 .card.hot .lab{color:rgba(255,255,255,.7)}
 .card.hot p{color:rgba(255,255,255,.85)}
@@ -41,19 +41,19 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 .ico svg{width:24px;height:24px;display:block}
 .card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
 .diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
-.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
 .diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
 .diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
 .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
-.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag{font-family:var(--mono);font-size:14px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
 .tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
 .tag.hot{border-color:var(--accent);color:var(--accent)}
-.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
 .avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
 #preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
 html.browser-preview #preview-hint{display:block}
@@ -73,7 +73,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">读取产品交付</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>只做微迭代</h4><p>只做微迭代</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>不重新设计整站</h4><p>不重新设计整站</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>只做微迭代</h4><p>只做微迭代</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>不重新设计整站</h4><p>不重新设计整站</p></div>
         <div class="tag-row"><span class="tag solid">UI 接收第二棒</span><span class="tag hot">读取产品交付</span><span class="tag ">只做微迭代</span></div>
       </div>
       <div class="diagram-box">
@@ -92,7 +92,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">目标用户</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>核心动作</h4><p>核心动作</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>范围与验收</h4><p>范围与验收</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>核心动作</h4><p>核心动作</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>范围与验收</h4><p>范围与验收</p></div>
         <div class="tag-row"><span class="tag solid">先复述再设计</span><span class="tag hot">目标用户</span><span class="tag ">核心动作</span></div>
       </div>
       <div class="diagram-box">
@@ -111,7 +111,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">入口在哪里</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>显示哪些字段</h4><p>显示哪些字段</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>用户怎样操作</h4><p>用户怎样操作</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>显示哪些字段</h4><p>显示哪些字段</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>用户怎样操作</h4><p>用户怎样操作</p></div>
         <div class="tag-row"><span class="tag solid">只改必要区域</span><span class="tag hot">入口在哪里</span><span class="tag ">显示哪些字段</span></div>
       </div>
       <div class="diagram-box">
@@ -130,7 +130,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">加载</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>空数据</h4><p>空数据</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>成功与错误</h4><p>成功与错误</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>空数据</h4><p>空数据</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>成功与错误</h4><p>成功与错误</p></div>
         <div class="tag-row"><span class="tag solid">四种页面状态</span><span class="tag hot">加载</span><span class="tag ">空数据</span></div>
       </div>
       <div class="diagram-box">
@@ -149,7 +149,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">进入</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>操作</h4><p>操作</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>反馈与恢复</h4><p>反馈与恢复</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>操作</h4><p>操作</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>反馈与恢复</h4><p>反馈与恢复</p></div>
         <div class="tag-row"><span class="tag solid">交互顺序</span><span class="tag hot">进入</span><span class="tag ">操作</span></div>
       </div>
       <div class="diagram-box">
@@ -168,7 +168,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">快速生成草案</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>人判断真实习惯</h4><p>人判断真实习惯</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>状态不能遗漏</h4><p>状态不能遗漏</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>人判断真实习惯</h4><p>人判断真实习惯</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>状态不能遗漏</h4><p>状态不能遗漏</p></div>
         <div class="tag-row"><span class="tag solid">AI 时代 UI</span><span class="tag hot">快速生成草案</span><span class="tag ">人判断真实习惯</span></div>
       </div>
       <div class="diagram-box">
@@ -187,7 +187,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">交互说明</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>UI 交接</h4><p>UI 交接</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>对应产品验收</h4><p>对应产品验收</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>UI 交接</h4><p>UI 交接</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>对应产品验收</h4><p>对应产品验收</p></div>
         <div class="tag-row"><span class="tag solid">UI 两份交付</span><span class="tag hot">交互说明</span><span class="tag ">UI 交接</span></div>
       </div>
       <div class="diagram-box">
@@ -206,7 +206,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">范围没有扩大</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态齐全</h4><p>四状态齐全</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一棒前端</h4><p>下一棒前端</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态齐全</h4><p>四状态齐全</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一棒前端</h4><p>下一棒前端</p></div>
         <div class="tag-row"><span class="tag solid">确认原型</span><span class="tag hot">范围没有扩大</span><span class="tag ">四状态齐全</span></div>
       </div>
       <div class="diagram-box">
@@ -225,7 +225,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">需求变成交互</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>状态成为合同</h4><p>状态成为合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>准备真实开发</h4><p>准备真实开发</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>状态成为合同</h4><p>状态成为合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>准备真实开发</h4><p>准备真实开发</p></div>
         <div class="tag-row"><span class="tag solid">第二棒完成</span><span class="tag hot">需求变成交互</span><span class="tag ">状态成为合同</span></div>
       </div>
       <div class="diagram-box">

@@ -84,7 +84,15 @@ def get_user_wx_openid(user_id: str) -> str | None:
 
 
 def role_requires_wx_bind(role: str) -> bool:
-    """Learners must bind OA; staff/partner portals are exempt."""
+    """Learners must bind OA; staff/partner portals are exempt.
+
+    Local/dev can set FDE_REQUIRE_WX_BIND=0 (the default outside prod) to skip
+    the gate when WeChat MP credentials are unavailable.
+    """
+    from services.shared.config import REQUIRE_WX_BIND
+
+    if not REQUIRE_WX_BIND:
+        return False
     return role == "learner"
 
 

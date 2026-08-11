@@ -11,7 +11,7 @@
 @font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
 @font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
-:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#0d9488;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 html{margin:0;background:#111}
 html.browser-preview{overflow:hidden;height:100%}
@@ -21,15 +21,15 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 .slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
 .stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
 .slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
-.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label{font-family:var(--mono);font-size:17px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
 .sec-label .num{color:var(--accent);font-weight:700}
-.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
-.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.display{font-family:var(--serif);font-weight:700;font-size:54px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
 .card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
-.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
-.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
-.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card .lab{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:17px;line-height:1.45;color:var(--ink-60)}
 .card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
 .card.hot .lab{color:rgba(255,255,255,.7)}
 .card.hot p{color:rgba(255,255,255,.85)}
@@ -41,19 +41,19 @@ body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-fa
 .ico svg{width:24px;height:24px;display:block}
 .card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
 .diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
-.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
 .diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
 .diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
 .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
-.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag{font-family:var(--mono);font-size:14px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
 .tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
 .tag.hot{border-color:var(--accent);color:var(--accent)}
-.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
 .avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
-.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
 #preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
 html.browser-preview #preview-hint{display:block}
@@ -73,7 +73,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">产品合同</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>交互合同</h4><p>交互合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>现有代码</h4><p>现有代码</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>交互合同</h4><p>交互合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>现有代码</h4><p>现有代码</p></div>
         <div class="tag-row"><span class="tag solid">前端接收第三棒</span><span class="tag hot">产品合同</span><span class="tag ">交互合同</span></div>
       </div>
       <div class="diagram-box">
@@ -92,7 +92,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">入口文件</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>相关组件</h4><p>相关组件</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>请求位置与复用</h4><p>请求位置与复用</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>相关组件</h4><p>相关组件</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>请求位置与复用</h4><p>请求位置与复用</p></div>
         <div class="tag-row"><span class="tag solid">先检查旧结构</span><span class="tag hot">入口文件</span><span class="tag ">相关组件</span></div>
       </div>
       <div class="diagram-box">
@@ -111,7 +111,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">修改哪些文件</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>为什么修改</h4><p>为什么修改</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>哪些保持不变</h4><p>哪些保持不变</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>为什么修改</h4><p>为什么修改</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>哪些保持不变</h4><p>哪些保持不变</p></div>
         <div class="tag-row"><span class="tag solid">最小改动清单</span><span class="tag hot">修改哪些文件</span><span class="tag ">为什么修改</span></div>
       </div>
       <div class="diagram-box">
@@ -130,7 +130,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">只做确认范围</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态</h4><p>四状态</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>拒绝无关重构</h4><p>拒绝无关重构</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态</h4><p>四状态</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>拒绝无关重构</h4><p>拒绝无关重构</p></div>
         <div class="tag-row"><span class="tag solid">按合同实现</span><span class="tag hot">只做确认范围</span><span class="tag ">四状态</span></div>
       </div>
       <div class="diagram-box">
@@ -149,7 +149,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">页面与交互</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>组装请求</h4><p>组装请求</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>规则交给后端</h4><p>规则交给后端</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>组装请求</h4><p>组装请求</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>规则交给后端</h4><p>规则交给后端</p></div>
         <div class="tag-row"><span class="tag solid">前端岗位边界</span><span class="tag hot">页面与交互</span><span class="tag ">组装请求</span></div>
       </div>
       <div class="diagram-box">
@@ -168,7 +168,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">定位和生成更快</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>人控制范围</h4><p>人控制范围</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>真实运行验收</h4><p>真实运行验收</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>人控制范围</h4><p>人控制范围</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>真实运行验收</h4><p>真实运行验收</p></div>
         <div class="tag-row"><span class="tag solid">AI 时代前端</span><span class="tag hot">定位和生成更快</span><span class="tag ">人控制范围</span></div>
       </div>
       <div class="diagram-box">
@@ -187,7 +187,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">页面能打开</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态</h4><p>四状态</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>控制台与请求</h4><p>控制台与请求</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>四状态</h4><p>四状态</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>控制台与请求</h4><p>控制台与请求</p></div>
         <div class="tag-row"><span class="tag solid">前端自检</span><span class="tag hot">页面能打开</span><span class="tag ">四状态</span></div>
       </div>
       <div class="diagram-box">
@@ -206,7 +206,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">修改文件</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>请求合同</h4><p>请求合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>证据与后端待办</h4><p>证据与后端待办</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>请求合同</h4><p>请求合同</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>证据与后端待办</h4><p>证据与后端待办</p></div>
         <div class="tag-row"><span class="tag solid">前端交付</span><span class="tag hot">修改文件</span><span class="tag ">请求合同</span></div>
       </div>
       <div class="diagram-box">
@@ -225,7 +225,7 @@ html.browser-preview #preview-hint{display:block}
     <p class="lede" data-anim="s">交互落到页面</p>
     <div class="open-split" data-anim="diagram">
       <div class="stack">
-        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>不越过岗位边界</h4><p>不越过岗位边界</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一棒后端</h4><p>下一棒后端</p></div>
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>不越过岗位边界</h4><p>不越过岗位边界</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一棒后端</h4><p>下一棒后端</p></div>
         <div class="tag-row"><span class="tag solid">第三棒完成</span><span class="tag hot">交互落到页面</span><span class="tag ">不越过岗位边界</span></div>
       </div>
       <div class="diagram-box">

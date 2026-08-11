@@ -40,9 +40,13 @@ export default defineConfig({
       ignored: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
     },
     proxy: {
+      // Long timeouts: course video streams via /api/v1/media/stream with Range.
+      // Default proxy timeouts can abort mid-play and make the player flash/retry.
       "/api": {
         target: apiTarget,
         changeOrigin: true,
+        timeout: 10 * 60 * 1000,
+        proxyTimeout: 10 * 60 * 1000,
       },
       "/healthz": {
         target: apiTarget,

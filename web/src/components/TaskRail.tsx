@@ -53,8 +53,9 @@ export function TaskRail({
   const [passport, setPassport] = useState<Passport | null>(null);
   const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
   const rubric = (node?.refs?.rubric || day?.lab?.rubric || []) as import("../lib/types").RubricCheck[];
-  const checklist = day?.review_checklist || [];
-  const visibleNodes = (day?.nodes || []).filter((n) => n.kind !== "unlock");
+  const visibleNodes = (day?.nodes || []).filter(
+    (n) => n.kind === "learn" || n.kind === "lab",
+  );
   const nodePassed = node?.status === "passed";
   const commandScore = commandAcceptanceScore(passport, evidence);
 
@@ -258,18 +259,12 @@ export function TaskRail({
           <TaskIcon />
           <h3>本日任务</h3>
         </header>
-        {(day.project || day.project_brief) && (
-          <p className="task-rail-brief muted">
-            {(day.project_brief || day.project || "").length > 120
-              ? `${(day.project_brief || day.project || "").slice(0, 120)}…`
-              : day.project_brief || day.project}
-          </p>
-        )}
         <ul className="task-card-list">
           {visibleNodes.map((n) => {
             const done = n.status === "passed";
             const current = node?.id === n.id;
             const locked = n.status === "locked";
+            const title = n.kind === "learn" ? "课件学习" : n.title || "Lab";
             return (
               <li
                 key={n.id}
@@ -279,7 +274,7 @@ export function TaskRail({
                   {done ? "✓" : ""}
                 </span>
                 <div className="task-card-body">
-                  <span className={`task-card-title ${done ? "is-struck" : ""}`}>{n.title}</span>
+                  <span className={`task-card-title ${done ? "is-struck" : ""}`}>{title}</span>
                   <span className={`task-card-due ${current && !done ? "is-urgent" : ""}`}>
                     {done ? "已完成" : locked ? "未解锁" : current ? "进行中" : "待完成"}
                   </span>
@@ -316,21 +311,6 @@ export function TaskRail({
           <h3>验收标准</h3>
           <p className="muted criteria-box-hint">完成本日 Lab 前请对照以下标准自检（含指挥日志）。</p>
           <RubricList rubric={rubric} passed={nodePassed || dayCommandPassed(day.day, passport, evidence)} />
-        </section>
-      )}
-
-      {checklist.length > 0 && (
-        <section className="criteria-box criteria-box-checklist">
-          <h3>自检清单</h3>
-          <ul className="checklist">
-            {checklist.map((item, i) => (
-              <li key={i}>
-                <label>
-                  <input type="checkbox" /> {item}
-                </label>
-              </li>
-            ))}
-          </ul>
         </section>
       )}
 

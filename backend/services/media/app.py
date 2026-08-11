@@ -103,7 +103,7 @@ def presign_media(
     }
 
 
-def stream_s3_object(request: Request, key: str, *, cache_control: str = "private, max-age=60") -> Response:
+def stream_s3_object(request: Request, key: str, *, cache_control: str = "private, max-age=300") -> Response:
     """Byte-range stream of an object already validated by the caller."""
     store = get_store()
     client = store._client  # noqa: SLF001 — intentional low-level Range forward

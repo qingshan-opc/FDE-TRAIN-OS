@@ -1639,14 +1639,16 @@ label {
   color: var(--color-ink);
 }
 .syllabus-week-toggle .syllabus-chevron-glyph {
-  flex: 0 0 12px;
-  width: 12px;
+  flex: 0 0 22px;
+  width: 22px;
   text-align: center;
-  opacity: 0.75;
+  opacity: 0.9;
+  font-size: 20px !important;
+  font-weight: 700;
 }
 .syllabus-week-label {
   margin: 0;
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em;
   text-transform: none;
@@ -1703,17 +1705,17 @@ label {
 /* Beat global `button` styles — chevron is icon-only */
 .syllabus-rail .syllabus-chevron,
 .syllabus-tree .syllabus-chevron {
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
-  min-height: 32px !important;
-  margin-top: 4px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-height: 40px !important;
+  margin-top: 2px;
   padding: 0 !important;
   border: none !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   background: transparent !important;
   box-shadow: none !important;
-  color: var(--color-muted);
+  color: var(--color-ink);
   display: inline-grid !important;
   place-items: center;
   justify-content: center;
@@ -1721,7 +1723,7 @@ label {
 }
 .syllabus-rail .syllabus-chevron:hover:not(:disabled),
 .syllabus-tree .syllabus-chevron:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.05) !important;
+  background: rgba(0, 0, 0, 0.06) !important;
   color: var(--color-ink);
 }
 .syllabus-rail .syllabus-chevron:disabled,
@@ -1730,12 +1732,21 @@ label {
 }
 .syllabus-chevron-glyph {
   display: inline-block;
-  font-size: 12px;
+  font-size: 22px;
+  font-weight: 700;
   line-height: 1;
   transition: transform 0.15s ease;
 }
 .syllabus-chevron-glyph.is-open {
   transform: rotate(90deg);
+}
+.syllabus-week-quiz {
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(15, 23, 42, 0.1);
+}
+.syllabus-week-quiz-item {
+  width: 100%;
 }
 
 .syllabus-rail .syllabus-day-hit,

@@ -34,12 +34,16 @@ export function DayView({
   const toast = useToast();
   const [busy, setBusy] = useState(false);
 
-  const visibleNodes = useMemo(() => (day?.nodes || []).filter((n) => n.kind !== "unlock"), [day]);
+  const visibleNodes = useMemo(
+    () => (day?.nodes || []).filter((n) => n.kind === "learn" || n.kind === "lab"),
+    [day],
+  );
 
   const node: NodeState | null = useMemo(() => {
     if (!day) return null;
     return (
       visibleNodes.find((n) => n.id === activeNodeId) ||
+      visibleNodes.find((n) => n.kind === "learn") ||
       visibleNodes.find((n) => n.status === "available") ||
       visibleNodes[0] ||
       null

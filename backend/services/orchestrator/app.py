@@ -39,6 +39,11 @@ app = FastAPI(title="FDE Orchestrator", version="0.3.0")
 init_schema()
 
 REQUIRED_NODE_ORDER = ["learn", "quiz", "lab", "project", "review", "unlock"]
+# Learner UI no longer surfaces daily quiz/project/review; only learn (+ lab)
+# gates cross-day unlock and in-day progression.
+DAY_GATE_KINDS = frozenset({"learn", "lab"})
+# These kinds remain in packages for data/API compat but must not block learn→lab.
+NON_BLOCKING_KINDS = frozenset({"quiz", "project", "review", "unlock"})
 
 
 class NodeState(BaseModel):
@@ -222,19 +227,33 @@ def _status_from_map(progress_map: dict[tuple[int, str], str], day: int, node_id
     return progress_map.get((day, node_id))
 
 
+def _kind_from_node_id(node_id: str) -> str:
+    # ids look like d3-learn / d12-quiz
+    parts = node_id.rsplit("-", 1)
+    return parts[-1] if len(parts) == 2 else node_id
+
+
 def _compute_statuses_from_map(
     day: int,
     node_ids: list[str],
     progress_map: dict[tuple[int, str], str],
+    kinds: list[str] | None = None,
 ) -> list[str]:
-    """Gate: only first incomplete is available; passed stay passed."""
+    """Gate on learn/lab only. quiz/project/review stay non-blocking so the
+    simplified learner syllabus (capsules + weekly quiz) can progress."""
     out: list[str] = []
     unlocked_next = True
-    for nid in node_ids:
+    for i, nid in enumerate(node_ids):
+        kind = (kinds[i] if kinds and i < len(kinds) else None) or _kind_from_node_id(nid)
         stored = _status_from_map(progress_map, day, nid)
         if stored == "passed":
             out.append("passed")
-            unlocked_next = True
+            if kind in DAY_GATE_KINDS:
+                unlocked_next = True
+            continue
+        if kind in NON_BLOCKING_KINDS:
+            # Available once prior gate nodes are done; never blocks later gates.
+            out.append(stored or ("available" if unlocked_next else "locked"))
             continue
         if unlocked_next:
             out.append(stored or "available")
@@ -252,10 +271,25 @@ def _set_status(learner_id: str, camp_id: str, day: int, node_id: str, status: s
         ProgressRepository(session).set_status(learner_id, camp_id, day, node_id, status)
 
 
-def _compute_statuses(learner_id: str, camp_id: str, day: int, node_ids: list[str]) -> list[str]:
-    """Gate: only first incomplete is available; passed stay passed."""
+def _compute_statuses(
+    learner_id: str,
+    camp_id: str,
+    day: int,
+    node_ids: list[str],
+    kinds: list[str] | None = None,
+) -> list[str]:
+    """Gate: only first incomplete gate-node is available; passed stay passed."""
     progress_map = _fetch_progress_map(learner_id, camp_id)
-    return _compute_statuses_from_map(day, node_ids, progress_map)
+    return _compute_statuses_from_map(day, node_ids, progress_map, kinds)
+
+
+def _gate_node_ids(day: int, kinds: list[str]) -> list[str]:
+    ids = [f"d{day}-{k}" for k in kinds]
+    gated = [nid for nid, k in zip(ids, kinds) if k in DAY_GATE_KINDS]
+    if gated:
+        return gated
+    # Fallback: learn-only when package has neither lab nor explicit gates.
+    return [nid for nid, k in zip(ids, kinds) if k == "learn"] or ids[:1]
 
 
 def _day_unlocked_from_meta(
@@ -272,17 +306,12 @@ def _day_unlocked_from_meta(
     kinds, _titles = meta
     if not kinds:
         return True
-    ids = [f"d{prev_day}-{k}" for k in kinds]
-    non_unlock_ids = [nid for nid, k in zip(ids, kinds) if k != "unlock"]
-    check_ids = non_unlock_ids or ids
+    check_ids = _gate_node_ids(prev_day, kinds)
     return all(_status_from_map(progress_map, prev_day, nid) == "passed" for nid in check_ids)
 
 
 def _day_unlocked(learner_id: str, camp_id: str, day: int) -> bool:
-    """Cross-day gate: Day 1 is always unlocked; Day N needs Day N-1's
-    day-ending nodes passed. The ``unlock`` node (when present) is treated as
-    auto-satisfied once every other node has passed, so it never blocks the
-    gate on its own — only the learner-visible nodes matter here."""
+    """Cross-day gate: Day 1 always open; Day N needs Day N-1 learn (+ lab if any)."""
     if day <= 1:
         return True
     prev_day = day - 1
@@ -291,11 +320,9 @@ def _day_unlocked(learner_id: str, camp_id: str, day: int) -> bool:
     except FileNotFoundError:
         return True
     kinds = [(n.get("type") or n.get("kind")) for n in (data.get("nodes") or [])]
-    ids = [f"d{prev_day}-{k}" for k in kinds]
-    if not ids:
+    if not kinds:
         return True
-    non_unlock_ids = [nid for nid, k in zip(ids, kinds) if k != "unlock"]
-    check_ids = non_unlock_ids or ids
+    check_ids = _gate_node_ids(prev_day, kinds)
     return all(_get_status(learner_id, camp_id, prev_day, nid) == "passed" for nid in check_ids)
 
 
@@ -472,7 +499,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             passed = 0
             node_summaries: list[DayNodeSummary] | None = None
             if user and ids:
-                statuses = _compute_statuses_from_map(day, ids, progress_map)
+                statuses = _compute_statuses_from_map(day, ids, progress_map, kinds)
                 if staff_preview:
                     # Authors/admins preview every node as available.
                     statuses = ["available" if s == "locked" else s for s in statuses]
@@ -535,7 +562,7 @@ def get_day(camp_id: str, day: int, request: Request) -> DayPackageView:
         kinds.append(n.get("type") or n.get("kind"))
         titles.append(n.get("title") or "")
     ids = [f"d{day}-{k}" for k in kinds]
-    statuses = _compute_statuses(lid, camp_id, day, ids)
+    statuses = _compute_statuses(lid, camp_id, day, ids, kinds)
 
     nodes_out: list[NodeState] = []
     for i, kind in enumerate(kinds):
@@ -623,32 +650,34 @@ def complete_node(node_id: str, body: CompleteBody, request: Request) -> dict[st
     if node_id not in ids:
         raise HTTPException(400, "unknown node for day")
     idx = ids.index(node_id)
-    statuses = _compute_statuses(lid, camp_id, day, ids)
+    statuses = _compute_statuses(lid, camp_id, day, ids, kinds)
     if not staff_preview and statuses[idx] == "locked":
         raise HTTPException(409, "节点未解锁，请先完成前置节点")
     if kinds[idx] == "learn":
         _check_learn_gate(lid, camp_id, day, data)
     _set_status(lid, camp_id, day, node_id, "passed")
-    next_id = ids[idx + 1] if idx + 1 < len(ids) else None
+    # Prefer unlocking the next gate node (lab) over hidden quiz/project/review.
+    next_id = None
+    for j in range(idx + 1, len(ids)):
+        if kinds[j] in DAY_GATE_KINDS or kinds[j] not in NON_BLOCKING_KINDS:
+            next_id = ids[j]
+            break
     if next_id:
         _set_status(lid, camp_id, day, next_id, "available")
 
     unlocked: str | None = next_id
     unlock_id = ids[kinds.index("unlock")] if "unlock" in kinds else None
-    if unlock_id and unlock_id != node_id:
-        visible_ids = [nid for nid, k in zip(ids, kinds) if k != "unlock"]
-        all_visible_passed = all(
-            _get_status(lid, camp_id, day, nid) == "passed" for nid in visible_ids
-        )
-        if next_id == unlock_id or all_visible_passed:
-            if _get_status(lid, camp_id, day, unlock_id) != "passed":
-                _set_status(lid, camp_id, day, unlock_id, "passed")
-        if unlocked == unlock_id and _get_status(lid, camp_id, day, unlock_id) == "passed":
-            # unlock is hidden from the learner UI — don't surface it as the
-            # "next" node to advance to; day_complete/next_day cover it.
+    gate_ids = _gate_node_ids(day, kinds)
+    gates_passed = bool(gate_ids) and all(
+        _get_status(lid, camp_id, day, nid) == "passed" for nid in gate_ids
+    )
+    if unlock_id and unlock_id != node_id and gates_passed:
+        if _get_status(lid, camp_id, day, unlock_id) != "passed":
+            _set_status(lid, camp_id, day, unlock_id, "passed")
+        if unlocked == unlock_id:
             unlocked = None
 
-    day_complete = bool(ids) and all(_get_status(lid, camp_id, day, nid) == "passed" for nid in ids)
+    day_complete = gates_passed
     next_day = day + 1 if day_complete else None
 
     return {

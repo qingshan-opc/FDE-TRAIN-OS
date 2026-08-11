@@ -33,30 +33,48 @@ function disposeMediaElement(el: HTMLMediaElement | null) {
   }
 }
 
+/**
+ * Presign with stale-while-revalidate: keep the previous URL while refreshing
+ * the same objectKey so the <video> does not unmount/flash (common in local
+ * Vite→API→MinIO Range streams + React StrictMode remounts).
+ */
 function usePresignedUrl(objectKey: string | undefined, campId: string | null | undefined) {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [tick, setTick] = useState(0);
+  const loadedKeyRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
-    // objectKey 变化时立即释放上一个视频的 URL，避免切换课程后
-    // <video> 仍挂载旧地址（点播放播的还是上一课内容）。
-    setUrl(null);
-    setError(null);
     if (!objectKey) {
+      loadedKeyRef.current = undefined;
+      setUrl(null);
+      setError(null);
       setLoading(false);
       return;
     }
+
+    const switched = loadedKeyRef.current !== objectKey;
+    if (switched) {
+      loadedKeyRef.current = objectKey;
+      // Only blank the player when switching lessons — not on retry/StrictMode.
+      setUrl(null);
+      setError(null);
+    }
+
     setLoading(true);
     (async () => {
       try {
         const res = await mediaApi.presign(objectKey, campId || undefined);
-        if (cancelled) return; // 已切到别的课程，丢弃过期响应
-        // Bust browser media cache when reusing the same stream endpoint shape.
-        const sep = res.url.includes("?") ? "&" : "?";
-        setUrl(`${res.url}${sep}_=${tick}-${encodeURIComponent(objectKey)}`);
+        if (cancelled) return;
+        // Cache-bust only on explicit retry; first load stays stable.
+        const next =
+          tick > 0
+            ? `${res.url}${res.url.includes("?") ? "&" : "?"}_r=${tick}`
+            : res.url;
+        setUrl(next);
+        setError(null);
       } catch (err) {
         if (cancelled) return;
         setError(err instanceof ApiError ? err.message : "媒资加载失败");
@@ -99,7 +117,8 @@ export function CapsuleVideo({
   onEnded?: () => void;
 }) {
   const pending = !media.object_key || Boolean(media.pending);
-  const { url, error, loading, retry } = usePresignedUrl(pending ? undefined : media.object_key, campId);
+  const objectKey = pending ? undefined : media.object_key;
+  const { url, error, loading, retry } = usePresignedUrl(objectKey, campId);
   const poster = usePresignedUrl(pending ? undefined : media.poster_key, campId);
   const captions = usePresignedUrl(pending ? undefined : media.captions_vtt_key, campId);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
@@ -119,9 +138,9 @@ export function CapsuleVideo({
       errorTimerRef.current = null;
     }
     playGenerationRef.current += 1;
-  }, [media.object_key, url]);
+  }, [objectKey]);
 
-  // 卸载或换源时彻底释放旧流，避免 Range 请求交叉导致下一课 MEDIA_ERR_NETWORK
+  // 仅在卸载或切换课节时释放旧流；同课 URL 刷新不 dispose，避免播放中闪黑
   useEffect(() => {
     const el = videoRef.current;
     return () => {
@@ -132,13 +151,10 @@ export function CapsuleVideo({
         errorTimerRef.current = null;
       }
     };
-  }, [url]);
+  }, [objectKey]);
 
   const retryPlayback = () => {
     setPlaybackError(null);
-    disposingRef.current = true;
-    disposeMediaElement(videoRef.current);
-    disposingRef.current = false;
     autoRetryRef.current = 0;
     retry();
   };
@@ -147,26 +163,28 @@ export function CapsuleVideo({
     if (disposingRef.current) return;
     const el = videoRef.current;
     if (!el || isAbortMediaError(el)) return;
+    // Local Vite proxy → MinIO often emits a transient network error during
+    // Range seeks while the buffer is already healthy — ignore those.
+    if (el.currentTime > 0.15 && el.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      return;
+    }
     const gen = playGenerationRef.current;
     if (errorTimerRef.current != null) window.clearTimeout(errorTimerRef.current);
-    // 短暂延迟：切换课时时偶发的瞬时 network error 会在 loadeddata 时被取消
     errorTimerRef.current = window.setTimeout(() => {
       if (playGenerationRef.current !== gen) return;
       if (disposingRef.current) return;
-      if (!videoRef.current || isAbortMediaError(videoRef.current)) return;
-      // 已能播放则忽略（有的浏览器先 error 再恢复）
-      if (videoRef.current.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) return;
-      // 切换后第一次网络错误：静默重签 URL，避免学员必须整页刷新
+      const cur = videoRef.current;
+      if (!cur || isAbortMediaError(cur)) return;
+      if (cur.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      if (cur.currentTime > 0.15) return;
+      // Soft retry: keep current element; only re-presign with cache buster.
       if (autoRetryRef.current < 1) {
         autoRetryRef.current += 1;
-        disposingRef.current = true;
-        disposeMediaElement(videoRef.current);
-        disposingRef.current = false;
         retry();
         return;
       }
       setPlaybackError("视频加载或播放出错，请重试");
-    }, 280);
+    }, 400);
   };
 
   const clearTransientError = () => {
@@ -185,7 +203,7 @@ export function CapsuleVideo({
   return (
     <section className="media-block media-video" aria-label={media.title || "视频"}>
       {media.title && <h4 className="media-title">{media.title}</h4>}
-      {loading && <p className="muted">视频加载中…</p>}
+      {loading && !url && <p className="muted">视频加载中…</p>}
       {error && <ErrorState title="视频不可用" message={error} onRetry={retry} />}
       {playbackError && !error && (
         <ErrorState title="视频播放失败" message={playbackError} onRetry={retryPlayback} />
@@ -196,11 +214,11 @@ export function CapsuleVideo({
       {url && (
         <div className="media-video-frame">
           <video
-            key={url}
+            key={objectKey || "video"}
             ref={videoRef}
             controls
             playsInline
-            preload="metadata"
+            preload="auto"
             src={url}
             poster={poster.url || undefined}
             onEnded={onEnded}
@@ -237,7 +255,7 @@ export function CapsuleAudioScreen({
   useEffect(() => {
     const el = audioRef.current;
     return () => disposeMediaElement(el);
-  }, [url]);
+  }, [media.object_key]);
 
   useEffect(() => {
     const el = audioRef.current;
@@ -252,7 +270,7 @@ export function CapsuleAudioScreen({
     };
     el.addEventListener("timeupdate", onTime);
     return () => el.removeEventListener("timeupdate", onTime);
-  }, [lines, url]);
+  }, [lines, media.object_key]);
 
   const seek = (t: number | null) => {
     if (t == null || !audioRef.current) return;
@@ -267,14 +285,14 @@ export function CapsuleAudioScreen({
           <h4 className="media-title">{media.title || "语音讲解"}</h4>
           {media.duration_sec != null && <p className="muted num">约 {media.duration_sec}s</p>}
         </div>
-        {loading && <p className="muted">音频加载中…</p>}
+        {loading && !url && <p className="muted">音频加载中…</p>}
         {error && <ErrorState title="语音不可用" message={error} onRetry={retry} />}
         {url && (
           <audio
-            key={url}
+            key={media.object_key || "audio"}
             ref={audioRef}
             controls
-            preload="metadata"
+            preload="auto"
             src={url}
             onEnded={onEnded}
           />

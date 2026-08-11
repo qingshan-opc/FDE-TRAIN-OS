@@ -170,7 +170,8 @@ export default function App() {
       <Route
         path="/app/shop"
         element={
-          <RequireAuth roles={["learner"]}>
+          // Authors/admins may also purchase (e.g. smoke-test payments); do not bounce to /author.
+          <RequireAuth roles={["learner", "author", "admin"]}>
             <CourseShop />
           </RequireAuth>
         }

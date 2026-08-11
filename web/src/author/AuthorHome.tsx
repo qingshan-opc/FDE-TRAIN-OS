@@ -236,9 +236,14 @@ export function AuthorHome() {
                 />
               ) : null}
               {!isFinanceOnly ? (
-                <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
-                  学员台
-                </Button>
+                <Space size={8}>
+                  <Button size="middle" onClick={() => nav("/app/shop")}>
+                    选购课程
+                  </Button>
+                  <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
+                    学员台
+                  </Button>
+                </Space>
               ) : (
                 <Typography.Text type="secondary">财务人员</Typography.Text>
               )}

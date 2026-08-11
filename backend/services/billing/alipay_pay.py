@@ -94,9 +94,14 @@ def verify_rsa2(message: str, signature_b64: str) -> bool:
 
 
 def _sign_content(params: dict[str, Any]) -> str:
+    """Build Alipay OpenAPI unsigned string (ASCII key order).
+
+    Only ``sign`` is excluded. ``sign_type`` MUST participate in the signature —
+    omitting it yields Alipay's misleading charset error.
+    """
     items = []
     for key in sorted(params.keys()):
-        if key in ("sign", "sign_type"):
+        if key == "sign":
             continue
         val = params[key]
         if val is None or val == "":
@@ -111,7 +116,7 @@ def _gateway_post(method: str, biz: dict[str, Any]) -> dict[str, Any]:
     params: dict[str, Any] = {
         "app_id": ALIPAY_APP_ID,
         "method": method,
-        "format": "JSON",
+        "format": "json",
         "charset": "utf-8",
         "sign_type": "RSA2",
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -122,8 +127,15 @@ def _gateway_post(method: str, biz: dict[str, Any]) -> dict[str, Any]:
         params["notify_url"] = f"{FDE_PUBLIC_BASE_URL.rstrip('/')}/api/v1/billing/alipay/notify"
     unsigned = _sign_content(params)
     params["sign"] = _sign_rsa2(unsigned)
-    # Alipay expects application/x-www-form-urlencoded
-    resp = requests.post(ALIPAY_GATEWAY, data=params, timeout=30)
+    # Alipay requires charset in the URL query string for correct decoding.
+    gateway = ALIPAY_GATEWAY.rstrip("/")
+    url = gateway if "charset=" in gateway else f"{gateway}?charset=utf-8"
+    resp = requests.post(
+        url,
+        data=params,
+        headers={"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"},
+        timeout=30,
+    )
     if resp.status_code >= 400:
         raise RuntimeError(f"Alipay HTTP {resp.status_code}: {resp.text[:400]}")
     data = resp.json()

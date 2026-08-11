@@ -1,0 +1,65 @@
+{
+  "total": 267.636667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 29.397333333333332
+    },
+    {
+      "id": "02-find-entry",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\02-find-entry.wav",
+      "start": 29.647333333333332,
+      "duration": 23.936
+    },
+    {
+      "id": "03-name-role",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\03-name-role.wav",
+      "start": 53.83333333333333,
+      "duration": 24.490666666666666
+    },
+    {
+      "id": "04-paste-prompt",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\04-paste-prompt.wav",
+      "start": 78.574,
+      "duration": 30.890666666666668
+    },
+    {
+      "id": "05-disable-calling",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\05-disable-calling.wav",
+      "start": 109.71466666666666,
+      "duration": 29.525333333333332
+    },
+    {
+      "id": "06-tools-create",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\06-tools-create.wav",
+      "start": 139.48999999999998,
+      "duration": 26.453333333333333
+    },
+    {
+      "id": "07-verify-first",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\07-verify-first.wav",
+      "start": 166.19333333333333,
+      "duration": 25.685333333333332
+    },
+    {
+      "id": "08-boundary-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\08-boundary-check.wav",
+      "start": 192.12866666666667,
+      "duration": 25.216
+    },
+    {
+      "id": "09-switch-inspection",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\09-switch-inspection.wav",
+      "start": 217.59466666666668,
+      "duration": 25.301333333333332
+    },
+    {
+      "id": "10-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-03-build-agent-team\\video\\audio\\segments\\10-close.wav",
+      "start": 243.14600000000002,
+      "duration": 24.490666666666666
+    }
+  ]
+}

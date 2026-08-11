@@ -1,0 +1,59 @@
+{
+  "total": 184.597333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 21.205333333333332
+    },
+    {
+      "id": "02-inputs",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\02-inputs.wav",
+      "start": 21.325333333333333,
+      "duration": 22.954666666666668
+    },
+    {
+      "id": "03-p1",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\03-p1.wav",
+      "start": 44.4,
+      "duration": 20.48
+    },
+    {
+      "id": "04-p2",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\04-p2.wav",
+      "start": 65.0,
+      "duration": 19.2
+    },
+    {
+      "id": "05-p3",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\05-p3.wav",
+      "start": 84.32000000000001,
+      "duration": 19.498666666666665
+    },
+    {
+      "id": "06-environment",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\06-environment.wav",
+      "start": 103.93866666666668,
+      "duration": 20.394666666666666
+    },
+    {
+      "id": "07-p4",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\07-p4.wav",
+      "start": 124.45333333333335,
+      "duration": 20.864
+    },
+    {
+      "id": "08-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\08-gate.wav",
+      "start": 145.43733333333336,
+      "duration": 19.584
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\audio\\segments\\09-close.wav",
+      "start": 165.14133333333336,
+      "duration": 19.456
+    }
+  ]
+}

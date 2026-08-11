@@ -212,7 +212,13 @@ def build_day_package(day: int) -> dict[str, Any]:
                 capsule["local_prep"] = local_prep
         capsules.append(capsule)
 
-    week = 1 if day <= 6 else 2
+    week = 1 if day <= 6 else 2 if day <= 11 else 3
+    delivery_mode = str(data.get("delivery_mode") or "full")
+    if delivery_mode == "video_quiz":
+        # 第三周沟通特训：仅视频+答题，不强制实操/练习提交
+        for capsule in capsules:
+            capsule.pop("practice", None)
+            capsule.pop("local_prep", None)
     lab = data.get("lab")
     inherited: list[str] = []
     if lab and lab.get("runner") != "sim":
@@ -227,7 +233,7 @@ def build_day_package(day: int) -> dict[str, Any]:
                     inherited.append(f)
 
     lab_out: dict[str, Any] | None = None
-    if lab:
+    if lab and delivery_mode != "video_quiz":
         if lab.get("runner") == "sim":
             lab_out = {
                 "runner": "sim",
@@ -258,10 +264,14 @@ def build_day_package(day: int) -> dict[str, Any]:
         {"type": "learn", "title": f"今日课节（{len(meta['caps'])} 节 · {meta['total']}′）"},
         {"type": "quiz", "title": f"Day{day} 概念验收"},
     ]
-    if lab_out:
-        nodes.append({"type": "lab", "title": data.get("nodes_lab", "Lab")})
-    nodes.append({"type": "project", "title": data.get("nodes_project") or f"企业任务：{meta['title']}"})
-    nodes.append({"type": "review", "title": f"交付自检与 {meta['gate']}"})
+    if delivery_mode == "video_quiz":
+        # 第三周沟通特训：仅视频 + 答题，无 Lab/项目节点
+        nodes.append({"type": "review", "title": f"今日复盘与 {meta['gate']}"})
+    else:
+        if lab_out:
+            nodes.append({"type": "lab", "title": data.get("nodes_lab", "Lab")})
+        nodes.append({"type": "project", "title": data.get("nodes_project") or f"企业任务：{meta['title']}"})
+        nodes.append({"type": "review", "title": f"交付自检与 {meta['gate']}"})
 
     pkg: dict[str, Any] = {
         "camp_version": CAMP_VERSION,

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="接口契约图">
+<defs>
+<marker id="api-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
+</marker>
+</defs>
+<rect width="1040" height="440" fill="#f2f5f0"/>
+<!-- 前端 -->
+<rect x="60" y="130" width="220" height="140" fill="#ffffff" stroke="#f24e54" stroke-width="2.5"/>
+<text x="170" y="185" text-anchor="middle" font-size="17" font-weight="800" fill="#231f20">前端</text>
+<text x="170" y="210" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">FRONTEND</text>
+<text x="170" y="238" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.6)">我按契约发请求</text>
+<!-- 后端 -->
+<rect x="760" y="130" width="220" height="140" fill="#ffffff" stroke="#5f52a0" stroke-width="2.5"/>
+<text x="870" y="185" text-anchor="middle" font-size="17" font-weight="800" fill="#231f20">后端</text>
+<text x="870" y="210" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">BACKEND</text>
+<text x="870" y="238" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.6)">我按契约回数据</text>
+<!-- 契约文档 -->
+<rect x="390" y="60" width="260" height="280" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
+<text x="520" y="92" text-anchor="middle" font-size="12" font-weight="800" fill="#1400ff" letter-spacing="2" style="font-family:'SF Mono',Menlo,monospace">契约 · CONTRACT</text>
+<line x1="410" y1="106" x2="630" y2="106" stroke="rgba(35,31,32,.15)"/>
+<g font-size="11.5" style="font-family:'SF Mono',Menlo,monospace" fill="#231f20">
+<text x="410" y="136" font-weight="700">POST /api/kpi/summary</text>
+<text x="410" y="172" fill="rgba(35,31,32,.55)">请求 →</text>
+<text x="410" y="192">{ "month": "2026-07" }</text>
+<text x="410" y="228" fill="rgba(35,31,32,.55)">返回 ←</text>
+<text x="410" y="248">{ "value", "delta", "unit" }</text>
+<text x="410" y="284" fill="rgba(35,31,32,.55)">出错 ✗</text>
+<text x="410" y="304">{ "code", "message" }</text>
+</g>
+<!-- 箭头 -->
+<line x1="282" y1="170" x2="384" y2="170" stroke="#231f20" stroke-width="1.8" marker-end="url(#api-arrow)"/>
+<line x1="652" y1="170" x2="754" y2="170" stroke="#231f20" stroke-width="1.8" marker-end="url(#api-arrow)"/>
+<line x1="754" y1="230" x2="656" y2="230" stroke="rgba(35,31,32,.5)" stroke-width="1.8" marker-end="url(#api-arrow)"/>
+<line x1="384" y1="230" x2="286" y2="230" stroke="rgba(35,31,32,.5)" stroke-width="1.8" marker-end="url(#api-arrow)"/>
+<!-- 底注 -->
+<text x="520" y="392" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">契约先于实现：先定 JSON，前后端再各干各的</text>
+<text x="520" y="418" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">改契约的代价 = 前后端一起改 + 一起重新验收 —— 所以 Day 3 第一件事是定契约</text>
+</svg>

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>你不是从零开始</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{
+  --bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);
+  --ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;
+  --serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:64px;line-height:1.12;margin-bottom:14px;max-width:14ch}
+.display .thin{font-weight:400;color:var(--ink-60)}
+.subtitle,.lede{font-size:20px;line-height:1.5;color:var(--ink-60);max-width:32em;margin-bottom:18px}
+.statement{font-family:var(--serif);font-size:28px;line-height:1.5;max-width:20em;margin-bottom:20px}
+.statement strong{color:var(--accent);font-weight:700;border-bottom:5px solid var(--accent)}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;max-width:980px}
+.trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:8px;max-width:980px}
+.card{border:1px solid var(--ink);padding:20px 22px 22px;background:rgba(255,255,255,.55)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
+.card h4{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:8px;line-height:1.25}
+.card p{font-size:16px;line-height:1.5;color:var(--ink-60)}
+.card.dim{background:var(--ink-05)}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.85)}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);max-width:980px;margin-top:8px}
+.compare-col{padding:22px 26px;background:#fff}
+.compare-col:first-child{border-right:1px solid var(--ink)}
+.compare-col.you{background:rgba(20,0,255,.04)}
+.compare-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;margin-bottom:14px;color:var(--accent)}
+.compare-col ul{list-style:none;font-size:18px;line-height:1.75;color:var(--ink)}
+.compare-col li{display:flex;gap:10px;align-items:flex-start}
+.compare-col li::before{content:"";width:8px;height:8px;margin-top:10px;background:var(--accent);flex:none}
+
+.flow{display:flex;align-items:stretch;gap:0;margin-top:14px;max-width:980px;border:1px solid var(--ink)}
+.flow-step{flex:1;padding:18px 16px;background:#fff;border-right:1px solid var(--ink);font-size:16px;line-height:1.45}
+.flow-step:last-child{border-right:none}
+.flow-step .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-bottom:8px;font-weight:700}
+.flow-step strong{display:block;font-family:var(--serif);font-size:20px;margin-bottom:6px}
+.flow-step.hot{background:var(--accent);color:#fff;border-right-color:var(--accent)}
+.flow-step.hot .k{color:rgba(255,255,255,.7)}
+
+.checklist{border:1px solid var(--ink);background:#fff;margin-top:12px;max-width:980px}
+.checklist li{list-style:none;padding:16px 22px;border-bottom:1px solid var(--ink-08);font-size:18px;display:flex;gap:14px;align-items:flex-start;line-height:1.45}
+.checklist li:last-child{border-bottom:none}
+.checklist li .box{font-family:var(--mono);color:var(--accent);font-weight:700;flex:none;width:1.4em}
+.checklist li b{font-family:var(--serif)}
+.checklist li.example{background:rgba(20,0,255,.05)}
+.checklist li.example .box{color:var(--accent)}
+
+.vs-strip{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-top:12px;max-width:980px}
+.vs-box{border:1px solid var(--ink);padding:20px 22px;background:#fff}
+.vs-box .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--accent);margin-bottom:10px;font-weight:700}
+.vs-box h4{font-family:var(--serif);font-size:22px;margin-bottom:10px}
+.vs-box ul{list-style:none;font-size:16px;line-height:1.65;color:var(--ink-60)}
+.vs-box ul li::before{content:"· ";color:var(--accent);font-weight:700}
+.vs-mid{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent);padding:0 6px}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.tag{font-family:var(--mono);font-size:13px;padding:10px 16px;border:1px solid var(--ink);background:#fff;letter-spacing:.04em}
+.tag.hl,.tag.solid{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+
+.quote-bar{margin-top:18px;border-left:6px solid var(--accent);padding:14px 22px;background:#fff;border-top:1px solid var(--ink);border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);max-width:980px}
+.quote-bar p{font-family:var(--serif);font-size:26px;line-height:1.45;font-weight:700}
+.quote-bar small{display:block;margin-top:8px;font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--ink-40);text-transform:uppercase}
+
+.open-split{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:stretch;margin-top:6px;max-width:1320px;flex:1;min-height:0}
+.open-split .stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.open-split .duo{max-width:none;margin-top:0;grid-template-columns:1fr}
+.open-split .card{padding:18px 20px 20px}
+.open-split .card h4{font-size:22px}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.card-head .lab{margin-bottom:0}
+.ico{width:44px;height:44px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.ico svg{width:26px;height:26px;display:block}
+.card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.card.hot .ico svg{stroke:#fff;fill:none}
+.diagram-box{border:1px solid var(--ink);padding:14px 14px 10px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:10px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
+.open-split .compare-col{padding:16px 18px}
+.open-split .compare-col ul{font-size:16px;line-height:1.6}
+.open-split .card p{font-size:15px}
+.domain-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.domain-chip{font-family:var(--mono);font-size:12px;letter-spacing:.04em;padding:8px 12px;border:1px solid var(--ink);background:#fff;display:inline-flex;align-items:center;gap:8px}
+.domain-chip .dot{width:8px;height:8px;background:var(--accent);flex:none}
+
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="245.675" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div class="stage-bg"></div>
+
+<!-- 01 OPEN -->
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="35.883">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN · 先拆掉第一堵墙</div>
+    <h1 class="display" style="font-size:56px;margin-bottom:10px" data-anim="t">先拆掉第一堵墙</h1>
+    <p class="statement" style="margin-bottom:14px;font-size:26px" data-anim="s">不会写代码 <strong>≠</strong> 不会做软件</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="duo">
+          <div class="card dim">
+            <div class="card-head">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="1.8" stroke-linecap="square">
+                  <path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/>
+                </svg>
+              </div>
+              <div class="lab">误区</div>
+            </div>
+            <h4>必须会写代码</h4>
+            <p>第一次打开开发工具就紧张——屏幕上全是没见过的按钮和文件。</p>
+          </div>
+          <div class="card hot">
+            <div class="card-head">
+              <div class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="square">
+                  <path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7L12 3z"/>
+                </svg>
+              </div>
+              <div class="lab">结论</div>
+            </div>
+            <h4>你不是从零开始</h4>
+            <p>财务、HR、运营、销售、教育等专业经验，就是项目最重要的起点。</p>
+          </div>
+        </div>
+        <div class="domain-chips">
+          <span class="domain-chip"><span class="dot"></span>财务</span>
+          <span class="domain-chip"><span class="dot"></span>HR</span>
+          <span class="domain-chip"><span class="dot"></span>运营</span>
+          <span class="domain-chip"><span class="dot"></span>销售</span>
+          <span class="domain-chip"><span class="dot"></span>教育</span>
+        </div>
+        <div class="tag-row" style="margin-top:2px">
+          <span class="tag solid">专业经验 = 起点</span>
+          <span class="tag">领域判断</span>
+          <span class="tag hot">指挥 AI</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Wall → Domain Start</div>
+        <img src="assets/diagrams/wall-to-start.svg" alt="误区之墙拆掉后，专业经验成为起点" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 DOMAIN VALUE -->
+<section id="slide-02-domain-value" class="clip slide" data-track-index="1" data-start="36.133" data-duration="32.085">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>DOMAIN VALUE · 你来判断</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">AI 会生成<span class="thin">，你来判断</span></h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">AI 能写代码、做页面、整理文档；什么问题值得做、结果是否合格——这是你懂的。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div>
+            <div class="lab">01 · 真实问题</div>
+          </div>
+          <h4>月底为什么加班？</h4>
+          <p>漏斗哪个数字会误导？问题值不值得解决——你懂。</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M4 12h16"/><path d="M12 4l8 8-8 8"/></svg></div>
+            <div class="lab">02 · 业务取舍</div>
+          </div>
+          <h4>曝光还是转化？</h4>
+          <p>第一版砍什么？取舍必须由领域判断拍板。</p>
+        </div>
+        <div class="card hot">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M5 12l4 4L19 6"/></svg></div>
+            <div class="lab">03 · 合格标准</div>
+          </div>
+          <h4>结果算不算有用？</h4>
+          <p>谁来验收？专业判断 → AI 可执行指令。</p>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Generate → Judge</div>
+        <img src="assets/diagrams/judge-loop.svg" alt="AI 生成，你来判断" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 HUMAN AI SPLIT -->
+<section id="slide-03-human-ai-split" class="clip slide" data-track-index="1" data-start="68.468" data-duration="30.549">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>HUMAN · AI · 人机分工</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">你定义与验收<span class="thin">，AI 执行</span></h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">像带一支团队：不必亲手做每个岗位，但要知道找谁、给什么、怎么验。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="compare" style="max-width:none">
+          <div class="compare-col you">
+            <h3>YOU · 你负责</h3>
+            <ul>
+              <li>说清真实问题</li>
+              <li>选择第一版范围</li>
+              <li>确认业务规则</li>
+              <li>判断结果是否合格</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <h3>AI TEAM · 智能体</h3>
+            <ul>
+              <li>整理需求文档</li>
+              <li>设计页面与交互</li>
+              <li>生成技术产物</li>
+              <li>根据反馈重做</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tag-row" style="margin-top:0">
+          <span class="tag solid">定义 · 范围 · 规则 · 合格</span>
+          <span class="tag">整理 · 设计 · 生成 · 重做</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Human / AI Split</div>
+        <img src="assets/diagrams/human-ai-split.svg" alt="人机分工对照图" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 RULE EXAMPLES -->
+<section id="slide-04-rule-examples" class="clip slide" data-track-index="1" data-start="99.267" data-duration="29.184">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>RULE EXAMPLES · 规则来自领域</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">规则来自领域</h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">AI 不知道，领域专家知道——专业知识就是系统里的规则。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M4 18V6h4l2 4 2-4h4v12h-4v-7l-2 3-2-3v7H4z"/></svg></div>
+            <div class="lab">财务 · Finance</div>
+          </div>
+          <h4>费用异常阈值</h4>
+          <p>超过预算 10%，还是比上月增长 20%？阈值由财务经验定，不是 AI 猜。</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c1-3 3.5-5 6-5s5 2 6 5"/><path d="M14 19c.5-2 2-3.5 4-3.5 1.2 0 2.2.5 3 1.5"/></svg></div>
+            <div class="lab">HR · Recruiting</div>
+          </div>
+          <h4>招聘超期规则</h4>
+          <p>哪个阶段停留 7 天算超期，要由真正了解招聘流程的人确认。</p>
+        </div>
+        <div class="tag-row" style="margin-top:0">
+          <span class="tag solid">规则来自领域</span>
+          <span class="tag hot">AI 画图 · 你定标</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Domain Rules</div>
+        <img src="assets/diagrams/domain-rules.svg" alt="财务与 HR 领域规则示意" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 SMALL REAL -->
+<section id="slide-05-small-real" class="clip slide" data-track-index="1" data-start="128.701" data-duration="28.587">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>SMALL REAL · 普通反而更好</div>
+    <h1 class="display" style="font-size:48px;margin-bottom:10px" data-anim="t">第一个项目：普通反而更好</h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">不追求改变世界的大平台——找一个你熟悉、能说清、能判断的真实问题。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="1"/><path d="M7 14l3-3 2 2 4-5"/><path d="M3 20h18"/></svg></div>
+            <div class="lab">日常 01</div>
+          </div>
+          <h4>重复看数据</h4>
+          <p>每天打开同一张表，反复核对变化。</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><rect x="4" y="3" width="12" height="14"/><rect x="8" y="7" width="12" height="14"/><path d="M11 12h6M11 15h4"/></svg></div>
+            <div class="lab">日常 02</div>
+          </div>
+          <h4>复制表格</h4>
+          <p>把数字搬来搬去，手工拼汇报。</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+            <div class="lab">日常 03</div>
+          </div>
+          <h4>追踪进度</h4>
+          <p>跟人追状态、解释异常波动。</p>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Ordinary Daily Work</div>
+        <img src="assets/diagrams/daily-work.svg" alt="日常工作三类场景" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 PROTOTYPE BOUNDARY -->
+<section id="slide-06-prototype-boundary" class="clip slide" data-track-index="1" data-start="157.538" data-duration="26.155">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>PROTOTYPE · 边界</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">交互原型 ≠ 正式上线</h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">像样板间：先用最低成本确认方向，再增加开发成本。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="vs-strip" style="max-width:none;grid-template-columns:1fr">
+          <div class="vs-box">
+            <div class="lab">样板间 · 今天做</div>
+            <h4>交互原型</h4>
+            <ul>
+              <li>门能点 · 流程能走 · 内容看得懂</li>
+              <li>尚未接入正式数据库</li>
+            </ul>
+          </div>
+          <div class="vs-box" style="background:var(--ink-05);margin-top:12px">
+            <div class="lab">正式系统 · 后面做</div>
+            <h4>上线产品</h4>
+            <ul>
+              <li>接入数据库 · 权限与部署</li>
+              <li>完整业务闭环</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tag-row" style="margin-top:0">
+          <span class="tag solid">先确认方向</span>
+          <span class="tag hot">再加开发成本</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Showroom ≠ Product</div>
+        <img src="assets/diagrams/prototype-vs-prod.svg" alt="样板间与正式上线对比" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 DOMAIN INVENTORY -->
+<section id="slide-07-domain-inventory" class="clip slide" data-track-index="1" data-start="183.943" data-duration="27.733">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>INVENTORY · 专业盘点</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">现在做一张专业盘点</h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">写下领域、用户、数据与一条你能一眼判断对错的规则。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <ul class="checklist" style="max-width:none;margin-top:0">
+          <li><span class="box">①</span><span><b>熟悉领域</b>　财务 / HR / 运营 / 销售 / 教育…</span></li>
+          <li><span class="box">②</span><span><b>三类用户</b>　谁每天用、谁看结果、谁拍板</span></li>
+          <li><span class="box">③</span><span><b>三种数据</b>　你每天最常看的指标或表格</span></li>
+          <li class="example"><span class="box">→</span><span><b>示例规则</b>　岗位 7 天无面试 → 标红</span></li>
+        </ul>
+        <div class="tag-row" style="margin-top:0">
+          <span class="tag solid">可交给 AI 的专业规则</span>
+          <span class="tag">写不满也没关系</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Inventory Card</div>
+        <img src="assets/diagrams/inventory-card.svg" alt="专业盘点四项清单" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 CLOSE -->
+<section id="slide-08-close" class="clip slide" data-track-index="1" data-start="211.926" data-duration="33.749">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>CLOSE · 新的自我介绍</div>
+    <h1 class="display" style="font-size:52px;margin-bottom:10px" data-anim="t">新的自我介绍</h1>
+    <p class="lede" style="margin-bottom:12px" data-anim="s">领域专家负责定义、选择与验收；AI 负责把执行速度拉高。</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+            <div class="lab">旧担心</div>
+          </div>
+          <h4>我不懂开发</h4>
+          <p>把畏难放在一边——不会写代码，不等于不会做软件。</p>
+        </div>
+        <div class="card hot">
+          <div class="card-head">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.9L12 14.2 7.7 16.5l.8-4.9L5 8.2l4.8-.7L12 3z"/></svg></div>
+            <div class="lab">新介绍</div>
+          </div>
+          <h4>我懂这个领域</h4>
+          <p>我可以带 AI 把它做出来——今天就指挥产品经理与 UI。</p>
+        </div>
+        <div class="tag-row" style="margin-top:0">
+          <span class="tag solid">我懂这个领域</span>
+          <span class="tag hl">我可以带 AI 把它做出来</span>
+        </div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">New Self-Intro</div>
+        <img src="assets/diagrams/new-intro.svg" alt="旧担心到新自我介绍" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="245.675" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第一天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="245.675" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="245.675" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="245.675" data-track-index="10" data-volume="1"></audio>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.000, dur: 35.883 },
+  { id: "#slide-02-domain-value", start: 36.133, dur: 32.085 },
+  { id: "#slide-03-human-ai-split", start: 68.468, dur: 30.549 },
+  { id: "#slide-04-rule-examples", start: 99.267, dur: 29.184 },
+  { id: "#slide-05-small-real", start: 128.701, dur: 28.587 },
+  { id: "#slide-06-prototype-boundary", start: 157.538, dur: 26.155 },
+  { id: "#slide-07-domain-inventory", start: 183.943, dur: 27.733 },
+  { id: "#slide-08-close", start: 211.926, dur: 33.749 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out", stagger: 0.08 }, t0 + 0.42);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+  enter("#slide-01-open", 0.000);
+  enter("#slide-02-domain-value", 36.133);
+  enter("#slide-03-human-ai-split", 68.468);
+  enter("#slide-04-rule-examples", 99.267);
+  enter("#slide-05-small-real", 128.701);
+  enter("#slide-06-prototype-boundary", 157.538);
+  enter("#slide-07-domain-inventory", 183.943);
+  enter("#slide-08-close", 211.926);
+  exit("#slide-01-open", 35.433, 35.883);
+  exit("#slide-02-domain-value", 67.768, 68.218);
+  exit("#slide-03-human-ai-split", 98.567, 99.017);
+  exit("#slide-04-rule-examples", 128.001, 128.451);
+  exit("#slide-05-small-real", 156.838, 157.288);
+  exit("#slide-06-prototype-boundary", 183.243, 183.693);
+  exit("#slide-07-domain-inventory", 211.226, 211.676);
+  exit("#slide-08-close", 245.225, 245.675);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+</body>
+</html>

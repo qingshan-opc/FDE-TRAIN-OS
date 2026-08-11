@@ -182,26 +182,46 @@ def _enrollment_cert_identity(cur, user_id: str, enrollment_id: str) -> dict[str
     cert_id = None
     cert_status = None
     on_chain = False
+    # Use SAVEPOINT so a missing column / schema drift cannot poison the list txn.
     try:
-        cur.execute(
-            """
-            SELECT cert_id, status, meta_json
-            FROM certificate_issuances
-            WHERE enrollment_id=?
-            ORDER BY issued_at DESC NULLS LAST
-            LIMIT 1
-            """,
-            (enrollment_id,),
-        )
-        cert = cur.fetchone()
+        cur.execute("SAVEPOINT sp_enrollment_cert")
+        try:
+            cur.execute(
+                """
+                SELECT cert_id, status, meta_json
+                FROM certificate_issuances
+                WHERE enrollment_id=?
+                ORDER BY issued_at DESC NULLS LAST
+                LIMIT 1
+                """,
+                (enrollment_id,),
+            )
+            cert = cur.fetchone()
+        except Exception:
+            cur.execute("ROLLBACK TO SAVEPOINT sp_enrollment_cert")
+            cur.execute(
+                """
+                SELECT cert_id, status
+                FROM certificate_issuances
+                WHERE enrollment_id=?
+                ORDER BY issued_at DESC NULLS LAST
+                LIMIT 1
+                """,
+                (enrollment_id,),
+            )
+            cert = cur.fetchone()
         if cert:
             cert_id = cert.get("cert_id")
             cert_status = cert.get("status")
-            meta = _parse_json_field(cert.get("meta_json"))
+            meta = _parse_json_field(cert.get("meta_json")) if "meta_json" in cert else {}
             if isinstance(meta, dict):
                 on_chain = bool(meta.get("chain_tx_hash"))
+        cur.execute("RELEASE SAVEPOINT sp_enrollment_cert")
     except Exception:
-        pass
+        try:
+            cur.execute("ROLLBACK TO SAVEPOINT sp_enrollment_cert")
+        except Exception:
+            pass
 
     return {
         "identity_status": identity_status,

@@ -1,0 +1,71 @@
+{
+  "total": 398.617333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 29.482666666666667
+    },
+    {
+      "id": "02-full-chain",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\02-full-chain.wav",
+      "start": 29.732666666666667,
+      "duration": 34.986666666666665
+    },
+    {
+      "id": "03-product-manager",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\03-product-manager.wav",
+      "start": 64.96933333333334,
+      "duration": 34.432
+    },
+    {
+      "id": "04-ui",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\04-ui.wav",
+      "start": 99.65133333333334,
+      "duration": 38.99733333333333
+    },
+    {
+      "id": "05-frontend",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\05-frontend.wav",
+      "start": 138.89866666666666,
+      "duration": 37.54666666666667
+    },
+    {
+      "id": "06-backend",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\06-backend.wav",
+      "start": 176.69533333333334,
+      "duration": 38.016
+    },
+    {
+      "id": "07-testing",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\07-testing.wav",
+      "start": 214.96133333333333,
+      "duration": 41.13066666666667
+    },
+    {
+      "id": "08-operations",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\08-operations.wav",
+      "start": 256.342,
+      "duration": 33.87733333333333
+    },
+    {
+      "id": "09-handoff-files",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\09-handoff-files.wav",
+      "start": 290.46933333333334,
+      "duration": 33.45066666666666
+    },
+    {
+      "id": "10-project-lead",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\10-project-lead.wav",
+      "start": 324.17,
+      "duration": 34.090666666666664
+    },
+    {
+      "id": "11-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-02-software-flow\\video\\audio\\segments\\11-close.wav",
+      "start": 358.5106666666667,
+      "duration": 40.10666666666667
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-inputs",
+    "file": "02-inputs.txt"
+  },
+  {
+    "id": "03-p1",
+    "file": "03-p1.txt"
+  },
+  {
+    "id": "04-p2",
+    "file": "04-p2.txt"
+  },
+  {
+    "id": "05-p3",
+    "file": "05-p3.txt"
+  },
+  {
+    "id": "06-environment",
+    "file": "06-environment.txt"
+  },
+  {
+    "id": "07-p4",
+    "file": "07-p4.txt"
+  },
+  {
+    "id": "08-gate",
+    "file": "08-gate.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

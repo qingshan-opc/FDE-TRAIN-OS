@@ -7,6 +7,9 @@ import { ToastProvider } from "./components/Toast";
 import { AntdProvider } from "./ui/AntdProvider";
 import "./styles/tailwind.css";
 import "./styles/global.css";
+import "./styles/ink-tokens.css";
+import "./styles/ink-landing.css";
+import "./styles/mk-home.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

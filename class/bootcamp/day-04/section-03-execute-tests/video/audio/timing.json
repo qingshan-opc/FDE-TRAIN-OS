@@ -1,0 +1,59 @@
+{
+  "total": 173.504,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 17.706666666666667
+    },
+    {
+      "id": "02-smoke",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\02-smoke.wav",
+      "start": 17.826666666666668,
+      "duration": 20.864
+    },
+    {
+      "id": "03-why-smoke",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\03-why-smoke.wav",
+      "start": 38.81066666666667,
+      "duration": 19.370666666666665
+    },
+    {
+      "id": "04-main-flow",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\04-main-flow.wav",
+      "start": 58.30133333333333,
+      "duration": 19.029333333333334
+    },
+    {
+      "id": "05-error",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\05-error.wav",
+      "start": 77.45066666666668,
+      "duration": 18.346666666666668
+    },
+    {
+      "id": "06-data",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\06-data.wav",
+      "start": 95.91733333333335,
+      "duration": 19.072
+    },
+    {
+      "id": "07-privacy",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\07-privacy.wav",
+      "start": 115.10933333333335,
+      "duration": 18.048
+    },
+    {
+      "id": "08-evidence",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\08-evidence.wav",
+      "start": 133.27733333333336,
+      "duration": 19.11466666666667
+    },
+    {
+      "id": "09-summary",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-03-execute-tests\\video\\audio\\segments\\09-summary.wav",
+      "start": 152.51200000000003,
+      "duration": 20.992
+    }
+  ]
+}

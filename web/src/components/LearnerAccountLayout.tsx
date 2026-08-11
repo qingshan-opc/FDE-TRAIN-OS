@@ -6,6 +6,7 @@ import {
   IconAccountBack,
   IconAccountCertificate,
   IconAccountIdentity,
+  IconAccountInvite,
   IconAccountProfile,
   IconAccountVerify,
   IconExternal,
@@ -18,12 +19,14 @@ const NAV_ITEMS: Array<{
   Icon: typeof IconAccountProfile;
 }> = [
   { to: "/app/profile", label: "个人中心", end: true, Icon: IconAccountProfile },
+  { to: "/app/invite", label: "邀请分佣", Icon: IconAccountInvite },
   { to: "/app/identity", label: "实名认证", Icon: IconAccountIdentity },
   { to: "/app/certificates", label: "结业证书", Icon: IconAccountCertificate },
 ];
 
 const PAGE_ICONS: Record<string, typeof IconAccountProfile> = {
   "/app/profile": IconAccountProfile,
+  "/app/invite": IconAccountInvite,
   "/app/identity": IconAccountIdentity,
   "/app/certificates": IconAccountCertificate,
 };

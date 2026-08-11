@@ -7,7 +7,7 @@ import { useToast } from "./Toast";
 
 function navUserLabel(user: { display_name?: string; email?: string } | null | undefined): string {
   if (!user) return "学员";
-  const name = user.display_name?.trim();
+  const name = (user.display_name || "").replace(/^\[disabled\]\s*/i, "").trim();
   if (name && /[\u4e00-\u9fff]/.test(name)) return name;
   return "学员";
 }
@@ -114,6 +114,15 @@ export function Nav({
             onClick={() => nav(variant === "author" ? "/app/courses" : "/author")}
           >
             {variant === "author" ? "学员台" : "教研台"}
+          </button>
+        )}
+        {user?.role === "finance" && (
+          <button
+            type="button"
+            className="rounded-md px-2 py-1 hover:bg-fde-bg"
+            onClick={() => nav("/author/finance")}
+          >
+            财务大屏
           </button>
         )}
         <div className="app-nav-user" ref={menuRef}>

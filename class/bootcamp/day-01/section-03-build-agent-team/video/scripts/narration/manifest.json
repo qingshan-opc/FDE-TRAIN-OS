@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-find-entry",
+    "file": "02-find-entry.txt"
+  },
+  {
+    "id": "03-name-role",
+    "file": "03-name-role.txt"
+  },
+  {
+    "id": "04-paste-prompt",
+    "file": "04-paste-prompt.txt"
+  },
+  {
+    "id": "05-disable-calling",
+    "file": "05-disable-calling.txt"
+  },
+  {
+    "id": "06-tools-create",
+    "file": "06-tools-create.txt"
+  },
+  {
+    "id": "07-verify-first",
+    "file": "07-verify-first.txt"
+  },
+  {
+    "id": "08-boundary-check",
+    "file": "08-boundary-check.txt"
+  },
+  {
+    "id": "09-switch-inspection",
+    "file": "09-switch-inspection.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

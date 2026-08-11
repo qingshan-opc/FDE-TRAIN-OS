@@ -8,6 +8,8 @@ const INTRO_ID = "fde-intro";
 export function CourseIntro({ onContinue }: { onContinue: () => void }) {
   const [intro, setIntro] = useState<LandingOpenCourse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [playbackError, setPlaybackError] = useState<string | null>(null);
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,6 +35,14 @@ export function CourseIntro({ onContinue }: { onContinue: () => void }) {
     return LANDING_FALLBACK_OPEN_COURSES.find((c) => c.id === INTRO_ID) || null;
   }, [intro]);
 
+  useEffect(() => {
+    setPlaybackError(null);
+  }, [course?.stream_url, retryTick]);
+
+  const streamSrc = course?.stream_url
+    ? `${course.stream_url}${course.stream_url.includes("?") ? "&" : "?"}v=${retryTick}`
+    : null;
+
   return (
     <div className="course-intro" aria-label="课程介绍">
       <header className="course-intro-head anim-rise" style={{ "--i": 0 } as CSSProperties}>
@@ -49,17 +59,30 @@ export function CourseIntro({ onContinue }: { onContinue: () => void }) {
       <div className="course-intro-media anim-rise" style={{ "--i": 1 } as CSSProperties}>
         {loading && !course?.stream_url ? (
           <div className="course-intro-media-empty muted">加载课程介绍视频…</div>
-        ) : course?.stream_url ? (
-          <video
-            key={course.stream_url}
-            controls
-            playsInline
-            preload="metadata"
-            poster={course.poster_url || undefined}
-            src={course.stream_url}
-          >
-            您的浏览器不支持视频播放。
-          </video>
+        ) : streamSrc ? (
+          <>
+            <video
+              key={streamSrc}
+              controls
+              playsInline
+              preload="metadata"
+              poster={course?.poster_url || undefined}
+              src={streamSrc}
+              onError={() => setPlaybackError("视频加载失败，媒资可能未就绪，请重试")}
+              onLoadedData={() => setPlaybackError(null)}
+              onCanPlay={() => setPlaybackError(null)}
+            >
+              您的浏览器不支持视频播放。
+            </video>
+            {playbackError ? (
+              <div className="course-intro-media-error" role="alert">
+                <p>{playbackError}</p>
+                <button type="button" className="btn-ghost" onClick={() => setRetryTick((t) => t + 1)}>
+                  重试
+                </button>
+              </div>
+            ) : null}
+          </>
         ) : (
           <div className="course-intro-media-empty muted">课程介绍视频待上传</div>
         )}

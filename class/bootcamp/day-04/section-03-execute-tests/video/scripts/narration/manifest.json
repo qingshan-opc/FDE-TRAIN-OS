@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-smoke",
+    "file": "02-smoke.txt"
+  },
+  {
+    "id": "03-why-smoke",
+    "file": "03-why-smoke.txt"
+  },
+  {
+    "id": "04-main-flow",
+    "file": "04-main-flow.txt"
+  },
+  {
+    "id": "05-error",
+    "file": "05-error.txt"
+  },
+  {
+    "id": "06-data",
+    "file": "06-data.txt"
+  },
+  {
+    "id": "07-privacy",
+    "file": "07-privacy.txt"
+  },
+  {
+    "id": "08-evidence",
+    "file": "08-evidence.txt"
+  },
+  {
+    "id": "09-summary",
+    "file": "09-summary.txt"
+  }
+]

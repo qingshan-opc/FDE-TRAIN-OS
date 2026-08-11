@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img">
+  <rect width="560" height="460" fill="#f2f5f0"/>
+  <text x="28" y="36" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM</text>
+  <text x="28" y="68" font-family="serif" font-size="22" font-weight="700" fill="#231f20">生成并检查 PRD.md</text>
+  <rect x="40" y="90" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="118" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">生成并检查 PRD.md</text><rect x="40" y="142" width="480" height="44" fill="#1400ff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="170" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">用户 · 问题 · 流程 · 功能 · 不做</text><rect x="40" y="194" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="222" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">数据 · 页面 · 验收标准</text><rect x="40" y="246" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="274" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">打开文件检查，不只听对话承诺</text>
+</svg>

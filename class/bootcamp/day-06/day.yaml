@@ -192,7 +192,7 @@ capsule_extra:
       title: 口播课件 · 后端技术地图
       object_key: documents/shared/course-media/day05-c5-backend.mp4
       poster_key: documents/shared/course-media/day05-c5-backend-poster.jpg
-      duration_sec: 207
+      duration_sec: 223
     knowledge_cards:
     - id: be-three
       term: 后端三件事
@@ -289,7 +289,7 @@ capsule_extra:
       title: 口播课件 · 前端技术地图
       object_key: documents/shared/course-media/day05-c4-frontend.mp4
       poster_key: documents/shared/course-media/day05-c4-frontend-poster.jpg
-      duration_sec: 228
+      duration_sec: 249
     knowledge_cards:
     - id: fe-four
       term: 前端四大平台
@@ -387,7 +387,7 @@ capsule_extra:
       title: 口播课件 · 服务器与云原生
       object_key: documents/shared/course-media/day05-c3-server.mp4
       poster_key: documents/shared/course-media/day05-c3-server-poster.jpg
-      duration_sec: 293
+      duration_sec: 316
     knowledge_cards:
     - id: server-vs-laptop
       term: 服务器 vs 个人电脑
@@ -528,7 +528,7 @@ capsule_extra:
       title: 口播课件 · 软件是怎么开发出来的
       object_key: documents/shared/course-media/day05-c2-sdlc.mp4
       poster_key: documents/shared/course-media/day05-c2-sdlc-poster.jpg
-      duration_sec: 246
+      duration_sec: 314
     knowledge_cards:
     - id: six-stops
       term: 软件旅程六站
@@ -620,7 +620,7 @@ capsule_extra:
       title: 口播课件 · 企业数字化五阶段
       object_key: documents/shared/course-media/day05-c2-digital-stages.mp4
       poster_key: documents/shared/course-media/day05-c2-digital-stages-poster.jpg
-      duration_sec: 122
+      duration_sec: 314
     knowledge_cards:
     - id: five-stages
       term: 企业数字化五阶段

@@ -12,6 +12,32 @@ export class ApiError extends Error {
   }
 }
 
+/** Fired once when the server indicates this device was replaced by a newer login. */
+let sessionReplacedNotified = false;
+type SessionReplacedHandler = () => void;
+let onSessionReplaced: SessionReplacedHandler | null = null;
+
+export function setSessionReplacedHandler(handler: SessionReplacedHandler | null) {
+  onSessionReplaced = handler;
+  sessionReplacedNotified = false;
+}
+
+export function isSessionReplacedError(err: unknown): boolean {
+  if (!(err instanceof ApiError) || err.status !== 401) return false;
+  const msg = err.message || "";
+  return msg === "session_replaced" || msg.includes("其他设备") || msg.includes("登录已失效");
+}
+
+function maybeNotifySessionReplaced(err: ApiError) {
+  if (!isSessionReplacedError(err) || sessionReplacedNotified) return;
+  sessionReplacedNotified = true;
+  try {
+    onSessionReplaced?.();
+  } catch {
+    /* ignore UI handler errors */
+  }
+}
+
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
@@ -46,6 +72,18 @@ async function tryRefresh(): Promise<boolean> {
         },
         body: "{}",
       });
+      if (!res.ok) {
+        let parsed: unknown = null;
+        try {
+          parsed = JSON.parse(await res.text());
+        } catch {
+          parsed = null;
+        }
+        const msg = messageFromBody(parsed, "");
+        if (msg === "session_replaced") {
+          maybeNotifySessionReplaced(new ApiError(res.status, msg, parsed));
+        }
+      }
       return res.ok;
     } catch {
       return false;
@@ -82,8 +120,21 @@ export async function api<T = unknown>(path: string, options: ApiOptions = {}): 
   });
 
   if (res.status === 401 && !skipRefresh && !path.includes("/auth/login") && !path.includes("/auth/refresh")) {
-    const ok = await tryRefresh();
-    if (ok) return api<T>(path, { ...options, skipRefresh: true });
+    // Peek body first — if already session_replaced, skip refresh (refresh cookie is dead too)
+    const peekText = await res.clone().text();
+    let peekParsed: unknown = null;
+    if (peekText) {
+      try {
+        peekParsed = JSON.parse(peekText);
+      } catch {
+        peekParsed = peekText;
+      }
+    }
+    const peekMsg = messageFromBody(peekParsed, "");
+    if (peekMsg !== "session_replaced") {
+      const ok = await tryRefresh();
+      if (ok) return api<T>(path, { ...options, skipRefresh: true });
+    }
   }
 
   const text = await res.text();
@@ -97,7 +148,9 @@ export async function api<T = unknown>(path: string, options: ApiOptions = {}): 
   }
 
   if (!res.ok) {
-    throw new ApiError(res.status, messageFromBody(parsed, res.statusText || `HTTP ${res.status}`), parsed);
+    const err = new ApiError(res.status, messageFromBody(parsed, res.statusText || `HTTP ${res.status}`), parsed);
+    if (err.status === 401) maybeNotifySessionReplaced(err);
+    throw err;
   }
 
   return parsed as T;
@@ -132,12 +185,23 @@ export function openEventSource(
 }
 
 /** Auth */
+type AuthSession = {
+  token: string;
+  csrf: string;
+  user: import("./types").User;
+  camp_id: string | null;
+  camps: import("./types").Camp[];
+  wx_bound?: boolean;
+  needs_wx_bind?: boolean;
+};
+
 export const authApi = {
-  login: (email: string, password: string, camp_id?: string) =>
-    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
-      "/api/v1/auth/login",
-      { method: "POST", body: { email, password, camp_id: camp_id || undefined }, skipRefresh: true },
-    ),
+  login: (email: string, password: string, camp_id?: string, remember?: boolean) =>
+    api<AuthSession>("/api/v1/auth/login", {
+      method: "POST",
+      body: { email, password, camp_id: camp_id || undefined, remember: Boolean(remember) },
+      skipRefresh: true,
+    }),
   wechatLoginQr: () =>
     api<{ state: string; qr_content: string; qr_url: string; expire_seconds: number }>(
       "/api/v1/auth/wechat/login-qr",
@@ -156,29 +220,68 @@ export const authApi = {
       error?: string;
     }>(`/api/v1/auth/wechat/login-status?${q.toString()}`, { skipRefresh: true });
   },
+  wechatBindStart: () =>
+    api<{
+      already_bound?: boolean;
+      wx_bound?: boolean;
+      ticket?: string;
+      state?: string;
+      qr_content?: string;
+      qr_url?: string;
+      expire_seconds?: number;
+    }>("/api/v1/auth/wechat/bind-start", { method: "POST" }),
+  wechatBindStatus: (ticket: string) =>
+    api<{ pending: boolean; done: boolean; expired: boolean; wx_bound?: boolean }>(
+      `/api/v1/auth/wechat/bind-status?ticket=${encodeURIComponent(ticket)}`,
+    ),
+  passwordResetStart: (email: string) =>
+    api<{
+      ticket: string;
+      state: string;
+      qr_content: string;
+      qr_url: string;
+      expire_seconds: number;
+      hint?: string;
+    }>("/api/v1/auth/password-reset/start", {
+      method: "POST",
+      body: { email },
+      skipRefresh: true,
+    }),
+  passwordResetStatus: (ticket: string) =>
+    api<{ pending: boolean; code_sent: boolean; expired: boolean; used?: boolean }>(
+      `/api/v1/auth/password-reset/status?ticket=${encodeURIComponent(ticket)}`,
+      { skipRefresh: true },
+    ),
+  passwordResetConfirm: (email: string, code: string, new_password: string) =>
+    api<{ ok: boolean }>("/api/v1/auth/password-reset/confirm", {
+      method: "POST",
+      body: { email, code, new_password },
+      skipRefresh: true,
+    }),
   me: () => api<import("./types").AuthMe>("/api/v1/auth/me", { skipRefresh: true }),
 
   logout: () => api<{ status: string }>("/api/v1/auth/logout", { method: "POST" }),
   invite: (invite_code: string, display_name: string, email?: string) =>
-    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
-      "/api/v1/auth/invite",
-      { method: "POST", body: { invite_code, display_name, email: email || undefined }, skipRefresh: true },
-    ),
+    api<AuthSession>("/api/v1/auth/invite", {
+      method: "POST",
+      body: { invite_code, display_name, email: email || undefined },
+      skipRefresh: true,
+    }),
   register: (email: string, password: string, display_name: string) =>
-    api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
-      "/api/v1/auth/register",
-      {
-        method: "POST",
-        body: { email, password, display_name },
-        skipRefresh: true,
-      },
-    ),
+    api<AuthSession>("/api/v1/auth/register", {
+      method: "POST",
+      body: { email, password, display_name },
+      skipRefresh: true,
+    }),
   /** Open org registration link — sets httpOnly cookie used on register. */
   claimInviteLink: (code: string) =>
-    api<{ valid: boolean; code: string; org_name?: string }>(
-      `/api/v1/auth/invite-link?code=${encodeURIComponent(code)}`,
-      { skipRefresh: true },
-    ),
+    api<{
+      valid: boolean;
+      code: string;
+      kind?: "org" | "learner";
+      org_name?: string;
+      referrer_name?: string;
+    }>(`/api/v1/auth/invite-link?code=${encodeURIComponent(code)}`, { skipRefresh: true }),
   switchCamp: (camp_id: string) =>
     api<{ token: string; csrf: string; user: import("./types").User; camp_id: string | null; camps: import("./types").Camp[] }>(
       "/api/v1/auth/switch-camp",
@@ -991,6 +1094,25 @@ export const authorApi = {
       `/api/v1/author/reviews/${encodeURIComponent(reviewId)}/feedback`,
       { method: "POST", body },
     ),
+  listOpenCourseCategories: () =>
+    api<{ items: import("./types").LandingOpenCourseCategory[] }>(
+      "/api/v1/author/site/open-course-categories",
+    ),
+  upsertOpenCourseCategory: (body: {
+    id?: string;
+    name: string;
+    sort_order?: number;
+    published?: boolean;
+  }) =>
+    api<{
+      item: import("./types").LandingOpenCourseCategory;
+      items: import("./types").LandingOpenCourseCategory[];
+    }>("/api/v1/author/site/open-course-categories", { method: "POST", body }),
+  deleteOpenCourseCategory: (categoryId: string) =>
+    api<{ items: import("./types").LandingOpenCourseCategory[] }>(
+      `/api/v1/author/site/open-course-categories/${encodeURIComponent(categoryId)}`,
+      { method: "DELETE" },
+    ),
   listOpenCourses: () =>
     api<{ items: import("./types").LandingOpenCourse[] }>("/api/v1/author/site/open-courses"),
   upsertOpenCourse: (form: FormData | Record<string, unknown>) => {
@@ -1029,6 +1151,10 @@ export const authorApi = {
       learners: number;
       open_courses?: number;
       contact_leads?: number;
+      paid_orders?: number;
+      gross_fen?: number;
+      shared_fen?: number;
+      pending_share_fen?: number;
       recent_actions?: { title: string; at?: string; href?: string }[];
       pending_reviews?: number;
       learn_active_users_7d?: { date: string; users: number }[];
@@ -1038,6 +1164,42 @@ export const authorApi = {
       submission_trend_7d?: { date: string; count: number }[];
       metrics_note?: Record<string, string>;
     }>(`/api/v1/author/overview${campId ? `?camp_id=${encodeURIComponent(campId)}` : ""}`),
+  financeDashboard: () =>
+    api<{
+      ok: boolean;
+      paid_orders: number;
+      paid_users: number;
+      gross_fen: number;
+      shared_fen: number;
+      pending_share_fen: number;
+      failed_share_fen: number;
+      finished_share_count: number;
+      pending_share_count: number;
+      failed_share_count: number;
+      gross_trend_7d?: Array<{ date: string; gross_fen?: number; orders?: number }>;
+      shared_trend_7d?: Array<{ date: string; shared_fen?: number; shares?: number }>;
+      orgs?: Array<{
+        id: string;
+        name: string;
+        paid_orders: number;
+        gross_fen: number;
+        shared_fen: number;
+        pending_share_fen: number;
+      }>;
+      recent_orders?: Array<{
+        id: string;
+        out_trade_no?: string;
+        amount_fen: number;
+        paid_at?: string;
+        org_id?: string | null;
+        org_name?: string | null;
+        user_email?: string | null;
+        share_fen?: number | null;
+        rate_bps?: number | null;
+        wx_state?: string | null;
+        error_message?: string | null;
+      }>;
+    }>("/api/v1/author/finance/dashboard"),
   getSiteLanding: () => api<Record<string, unknown>>("/api/v1/author/site/landing"),
   patchSiteLanding: (body: Record<string, unknown>) =>
     api<Record<string, unknown>>("/api/v1/author/site/landing", { method: "PATCH", body }),
@@ -1342,4 +1504,29 @@ export const partnerApi = {
         enroll_url?: string | null;
       } | null;
     }>("/api/v1/partner/invites"),
+};
+
+export type ReferralDashboard = {
+  code: string;
+  register_url: string;
+  invite_count: number;
+  rate_bps: number;
+  rate_percent: number;
+  next_tier: {
+    min_invites: number;
+    rate_bps: number;
+    rate_percent: number;
+    invites_needed: number;
+  } | null;
+  attributions: Array<Record<string, unknown>>;
+  profit_shares: Array<Record<string, unknown>>;
+  receiver: { bound: boolean; wx_mp_openid?: string | null };
+};
+
+/** Learner referral / commission (profile invite tab). */
+export const referralApi = {
+  dashboard: () => api<ReferralDashboard>("/api/v1/me/referral"),
+  attributions: () => api<{ items: Record<string, unknown>[] }>("/api/v1/me/referral/attributions"),
+  profitShares: () => api<{ items: Record<string, unknown>[] }>("/api/v1/me/referral/profit-shares"),
+  invites: () => api<{ code: string; register_url: string }>("/api/v1/me/referral/invites"),
 };

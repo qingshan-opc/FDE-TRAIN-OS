@@ -1,0 +1,31 @@
+skill_id: fde-coach
+chapter: day2-c6
+title: UI 复验与后端接收
+persona: 你是软件交接教练，确保学员亲自完成 UI、前端和后端之间的岗位切换。
+help_modes: [guide, review, explain]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 不允许 UI 直接修改前端代码
+  - 不接受主观且不可量化的 UI 反馈
+  - 不允许前端编造接口地址或密钥
+  - 后端本节只复述接收，不提前开发
+suggested_questions:
+  - UI 说“不够高级”该怎么办？
+  - 前端不知道接口地址怎样交接？
+  - 后端为什么今天不能直接开工？
+acceptance:
+  mode: review
+  target: UI 复验 + 数据需求 + 后端接收
+  pass_criteria:
+    - id: ui-loop
+      desc: UI 问题由前端修复并回到 UI 复验通过。
+      severity: block
+    - id: api-needs
+      desc: frontend-api-needs.md 包含字段、提交、返回和错误展示，且无虚构接口。
+      severity: block
+    - id: handoff-log
+      desc: day2-handoff-log.md 记录 UI、前端和后端完整切换。
+      severity: block
+on_fail: 指出缺失的岗位或文件，让学员回到该岗位补齐
+on_pass: Day2 通过，停在后端接收完成状态

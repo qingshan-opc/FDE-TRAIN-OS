@@ -1,0 +1,59 @@
+{
+  "total": 174.442667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 15.872
+    },
+    {
+      "id": "02-six-inputs",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\02-six-inputs.wav",
+      "start": 15.991999999999999,
+      "duration": 17.664
+    },
+    {
+      "id": "03-p1",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\03-p1.wav",
+      "start": 33.775999999999996,
+      "duration": 18.56
+    },
+    {
+      "id": "04-p2",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\04-p2.wav",
+      "start": 52.455999999999996,
+      "duration": 20.096
+    },
+    {
+      "id": "05-priority",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\05-priority.wav",
+      "start": 72.672,
+      "duration": 17.621333333333332
+    },
+    {
+      "id": "06-p3",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\06-p3.wav",
+      "start": 90.41333333333333,
+      "duration": 22.784
+    },
+    {
+      "id": "07-p4",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\07-p4.wav",
+      "start": 113.31733333333332,
+      "duration": 20.010666666666665
+    },
+    {
+      "id": "08-coverage",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\08-coverage.wav",
+      "start": 133.44799999999998,
+      "duration": 18.346666666666668
+    },
+    {
+      "id": "09-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-02-test-plan\\video\\audio\\segments\\09-gate.wav",
+      "start": 151.91466666666665,
+      "duration": 22.528
+    }
+  ]
+}

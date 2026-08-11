@@ -1,0 +1,68 @@
+﻿[
+    {
+        "Section":  "section-01-backend-role",
+        "File":  "day03-c1-backend-role.mp4",
+        "Duration":  184.433,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 00000177f8ae0440] mean_volume: -16.6 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 00000177f8ae0440] max_volume: -0.8 dB",
+        "SizeMB":  39.6,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\snapshots\\qa\\contact-sheet.png"
+    },
+    {
+        "Section":  "section-02-backend-handoff",
+        "File":  "day03-c2-backend-handoff.mp4",
+        "Duration":  184.6,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 0000024a41222600] mean_volume: -15.8 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 0000024a41222600] max_volume: -0.6 dB",
+        "SizeMB":  40.1,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-02-backend-handoff\\video\\snapshots\\qa\\contact-sheet.png"
+    },
+    {
+        "Section":  "section-03-api-data-contract",
+        "File":  "day03-c3-api-data-contract.mp4",
+        "Duration":  188.767,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 000001e4f7570540] mean_volume: -17.0 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 000001e4f7570540] max_volume: -0.8 dB",
+        "SizeMB":  40.9,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\snapshots\\qa\\contact-sheet.png"
+    },
+    {
+        "Section":  "section-04-build-local-service",
+        "File":  "day03-c4-build-local-service.mp4",
+        "Duration":  174.467,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 000001a223e3ef00] mean_volume: -16.4 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 000001a223e3ef00] max_volume: -0.9 dB",
+        "SizeMB":  37.7,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\snapshots\\qa\\contact-sheet.png"
+    },
+    {
+        "Section":  "section-05-frontend-integration",
+        "File":  "day03-c5-frontend-integration.mp4",
+        "Duration":  188.667,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 0000014ebca064c0] mean_volume: -16.4 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 0000014ebca064c0] max_volume: -0.9 dB",
+        "SizeMB":  41.4,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\snapshots\\qa\\contact-sheet.png"
+    },
+    {
+        "Section":  "section-06-accept-test-handoff",
+        "File":  "day03-c6-accept-test-handoff.mp4",
+        "Duration":  200.767,
+        "Video":  "h264 1920x1080",
+        "Audio":  "aac",
+        "Mean":  "[Parsed_volumedetect_0 @ 000001246db86600] mean_volume: -17.2 dB",
+        "Peak":  "[Parsed_volumedetect_0 @ 000001246db86600] max_volume: -1.0 dB",
+        "SizeMB":  43.1,
+        "Contact":  "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\snapshots\\qa\\contact-sheet.png"
+    }
+]

@@ -91,7 +91,7 @@ export function VerifyCertificate() {
   };
 
   return (
-    <div className="landing landing-page-verify">
+    <div className="mk-home ink-site landing-page-verify">
       <LandingTopbar
         activeTab="verify"
         headerSolid
@@ -121,7 +121,7 @@ export function VerifyCertificate() {
                 className="mono"
               />
             </label>
-            <button type="submit" className="app-btn app-btn--primary verify-form__submit" disabled={publicLoading}>
+            <button type="submit" className="ink-btn ink-btn--ochre verify-form__submit" disabled={publicLoading}>
               {publicLoading ? "查询中…" : "查询"}
             </button>
           </form>
@@ -163,7 +163,7 @@ export function VerifyCertificate() {
               )}
               {txHash && (publicOk || hasChainPublic) && (
                 <div className="verify-result__actions">
-                  <button type="button" className="app-btn app-btn--primary" onClick={goToChainDetail}>
+                  <button type="button" className="ink-btn ink-btn--ochre" onClick={goToChainDetail}>
                     查看链上详情并核验
                   </button>
                   <p className="muted verify-result__hint">
@@ -187,7 +187,7 @@ export function VerifyCertificate() {
         </div>
       </main>
 
-      <LandingFooter brandName={brandName} appHref={appHref} contactEmail={site.contact?.email} />
+      <LandingFooter brandName={brandName} appHref={appHref} />
     </div>
   );
 }

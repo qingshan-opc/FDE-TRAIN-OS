@@ -1,4 +1,4 @@
-export type UserRole = "learner" | "author" | "admin" | "partner";
+export type UserRole = "learner" | "author" | "admin" | "partner" | "finance";
 
 export interface UserAttribution {
   user_id: string;
@@ -29,6 +29,8 @@ export interface AuthMe {
   csrf?: string | null;
   server_time?: number;
   attribution?: UserAttribution | null;
+  wx_bound?: boolean;
+  needs_wx_bind?: boolean;
 }
 
 export type NodeKind = "learn" | "quiz" | "lab" | "project" | "review" | "unlock";
@@ -45,6 +47,8 @@ export interface CapsuleMedia {
   /** Inline transcript for audio screen; lines may start with mm:ss */
   transcript?: string;
   transcript_key?: string;
+  /** True when video asset is not uploaded yet (Week 3 etc.) */
+  pending?: boolean;
 }
 
 export type CapsulePracticeInputType = "text" | "markdown" | "checklist";
@@ -441,11 +445,19 @@ export interface LandingSeo {
   og_image?: string;
 }
 
+export interface LandingOpenCourseCategory {
+  id: string;
+  name: string;
+  sort_order?: number;
+  published?: boolean;
+}
+
 export interface LandingOpenCourse {
   id: string;
   title: string;
   minutes?: number;
   level?: string;
+  category_id?: string | null;
   summary?: string;
   object_key?: string | null;
   poster_key?: string | null;
@@ -477,6 +489,7 @@ export interface LandingPayload {
   seo?: LandingSeo;
   tabs?: LandingTab[];
   enterprise?: LandingEnterprise;
+  open_course_categories?: LandingOpenCourseCategory[];
   open_courses?: LandingOpenCourse[];
   about?: LandingAbout;
   contact?: LandingContact;

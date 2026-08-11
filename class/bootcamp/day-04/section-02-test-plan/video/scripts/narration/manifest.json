@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-six-inputs",
+    "file": "02-six-inputs.txt"
+  },
+  {
+    "id": "03-p1",
+    "file": "03-p1.txt"
+  },
+  {
+    "id": "04-p2",
+    "file": "04-p2.txt"
+  },
+  {
+    "id": "05-priority",
+    "file": "05-priority.txt"
+  },
+  {
+    "id": "06-p3",
+    "file": "06-p3.txt"
+  },
+  {
+    "id": "07-p4",
+    "file": "07-p4.txt"
+  },
+  {
+    "id": "08-coverage",
+    "file": "08-coverage.txt"
+  },
+  {
+    "id": "09-gate",
+    "file": "09-gate.txt"
+  }
+]

@@ -300,6 +300,11 @@ def handle_mp_xml(xml_text: str) -> str | None:
     openid = msg.get("FromUserName") or ""
     event_key = msg.get("EventKey") or ""
     if event in ("subscribe", "scan"):
+        from services.wechat_mp import bind_reset
+
+        bind_reply = bind_reset.handle_bind_or_reset_scan(event_key, openid)
+        if bind_reply is not None:
+            return bind_reply
         user = complete_scan_login(event_key, openid)
         if user:
             if user.role == "partner":

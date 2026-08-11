@@ -125,6 +125,8 @@ def complete_oauth_entry(code: str, state: str) -> tuple[Any, str]:
     # Role-aware default landing
     if user.role == "partner" and next_path.startswith("/app/"):
         next_path = "/partner"
+    elif user.role == "finance" and next_path.startswith("/app/"):
+        next_path = "/author/finance"
     elif user.role in ("author", "admin") and next_path.startswith("/app/"):
         next_path = "/author"
     return user, next_path

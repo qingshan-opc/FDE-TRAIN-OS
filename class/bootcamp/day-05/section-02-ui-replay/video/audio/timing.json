@@ -1,0 +1,59 @@
+{
+  "total": 184.725333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.84
+    },
+    {
+      "id": "02-restate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\02-restate.wav",
+      "start": 19.96,
+      "duration": 18.176
+    },
+    {
+      "id": "03-area",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\03-area.wav",
+      "start": 38.25599999999999,
+      "duration": 18.944
+    },
+    {
+      "id": "04-states",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\04-states.wav",
+      "start": 57.319999999999986,
+      "duration": 21.973333333333333
+    },
+    {
+      "id": "05-flow",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\05-flow.wav",
+      "start": 79.41333333333333,
+      "duration": 21.930666666666667
+    },
+    {
+      "id": "06-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\06-ai-era.wav",
+      "start": 101.464,
+      "duration": 21.376
+    },
+    {
+      "id": "07-artifacts",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\07-artifacts.wav",
+      "start": 122.96000000000001,
+      "duration": 20.69333333333333
+    },
+    {
+      "id": "08-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\08-gate.wav",
+      "start": 143.77333333333334,
+      "duration": 21.248
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-02-ui-replay\\video\\audio\\segments\\09-close.wav",
+      "start": 165.14133333333334,
+      "duration": 19.584
+    }
+  ]
+}

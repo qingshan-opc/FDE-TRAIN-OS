@@ -16,6 +16,7 @@ from services.shared.config import ROOT as _ROOT  # noqa: E402
 
 from services.billing import profit_sharing, wechat_pay  # noqa: E402
 from services.partners.service import get_user_attribution  # noqa: E402
+from services.referral.service import get_user_referral  # noqa: E402
 from services.shared import db_cursor, init_schema  # noqa: E402
 from services.shared.config import FDE_ENV  # noqa: E402
 from services.shared.middleware import require_user  # noqa: E402
@@ -69,7 +70,7 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         # Reuse recent pending order (avoid spawning QR/orders on every shop refresh)
         cur.execute(
             """
-            SELECT id, out_trade_no, amount_fen, code_url, status
+            SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id
             FROM payment_orders
             WHERE user_id=? AND offering_id=? AND status='pending'
               AND created_at > NOW() - INTERVAL '2 hours'
@@ -80,23 +81,49 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
             (user.id, body.offering_id),
         )
         pending = cur.fetchone()
-        if pending:
-            pending = dict(pending)
-            return {
-                "order_id": pending["id"],
-                "out_trade_no": pending["out_trade_no"],
-                "amount_fen": int(pending["amount_fen"]),
-                "code_url": pending.get("code_url"),
-                "dev_mode": not wechat_pay.configured(),
-                "status": pending.get("status") or "pending",
-                "reused": True,
-            }
+
     attr = get_user_attribution(user.id)
     org_id = attr.get("org_id") if attr else None
+    referrer_user_id = None
+    if not org_id:
+        ref = get_user_referral(user.id)
+        if ref:
+            referrer_user_id = ref.get("referrer_user_id")
+
+    if pending:
+        pending = dict(pending)
+        # 归因可能在生成二维码之后才绑定：复用订单时回写最新 org/referrer
+        stored_org = pending.get("org_id")
+        stored_ref = pending.get("referrer_user_id")
+        if stored_org != org_id or stored_ref != referrer_user_id:
+            with db_cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE payment_orders
+                    SET org_id=?, referrer_user_id=?, updated_at=NOW()
+                    WHERE id=? AND status='pending'
+                    """,
+                    (org_id, referrer_user_id, pending["id"]),
+                )
+        return {
+            "order_id": pending["id"],
+            "out_trade_no": pending["out_trade_no"],
+            "amount_fen": int(pending["amount_fen"]),
+            "code_url": pending.get("code_url"),
+            "dev_mode": not wechat_pay.configured(),
+            "status": pending.get("status") or "pending",
+            "reused": True,
+        }
+
     title = offering.get("title") or offering.get("course_title") or "FDE 课程"
     try:
         order = wechat_pay.create_payment_order(
-            user.id, body.offering_id, price, org_id, f"购买 {title}"
+            user.id,
+            body.offering_id,
+            price,
+            org_id,
+            f"购买 {title}",
+            referrer_user_id=referrer_user_id,
         )
     except RuntimeError as exc:
         raise HTTPException(503, str(exc)) from exc

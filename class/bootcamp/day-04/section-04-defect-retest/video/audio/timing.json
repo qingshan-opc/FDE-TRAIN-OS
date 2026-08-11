@@ -1,0 +1,59 @@
+{
+  "total": 168.213333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 17.408
+    },
+    {
+      "id": "02-defect",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\02-defect.wav",
+      "start": 17.528000000000002,
+      "duration": 20.224
+    },
+    {
+      "id": "03-severity",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\03-severity.wav",
+      "start": 37.872,
+      "duration": 18.048
+    },
+    {
+      "id": "04-owner",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\04-owner.wav",
+      "start": 56.04,
+      "duration": 18.218666666666667
+    },
+    {
+      "id": "05-fix",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\05-fix.wav",
+      "start": 74.37866666666667,
+      "duration": 17.834666666666667
+    },
+    {
+      "id": "06-retest",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\06-retest.wav",
+      "start": 92.33333333333334,
+      "duration": 19.541333333333334
+    },
+    {
+      "id": "07-regression",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\07-regression.wav",
+      "start": 111.99466666666669,
+      "duration": 18.730666666666668
+    },
+    {
+      "id": "08-report",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\08-report.wav",
+      "start": 130.84533333333337,
+      "duration": 19.712
+    },
+    {
+      "id": "09-candidate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-04-defect-retest\\video\\audio\\segments\\09-candidate.wav",
+      "start": 150.67733333333337,
+      "duration": 17.536
+    }
+  ]
+}

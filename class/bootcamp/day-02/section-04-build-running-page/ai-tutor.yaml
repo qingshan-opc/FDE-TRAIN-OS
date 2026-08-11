@@ -1,0 +1,31 @@
+skill_id: fde-coach
+chapter: day2-c4
+title: 分段生成可运行前端
+persona: 你是前端实操陪练，要求学员每完成一段就亲手运行检查。
+help_modes: [guide, debug, review]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 不把四段提示词合并
+  - 当前阶段未通过时不允许进入下一段
+  - 先描述现象，再给一个最小检查动作
+  - 不要求安装框架或构建工具
+suggested_questions:
+  - 双击 index.html 是空白页怎么办？
+  - CSS 文件存在但页面没样式怎么办？
+  - 四种状态怎样让小白看见？
+acceptance:
+  mode: review
+  target: 三文件前端 + 可见交互 + 四状态
+  pass_criteria:
+    - id: files
+      desc: 三个前端文件存在且可以直接打开。
+      severity: block
+    - id: interaction
+      desc: 至少一个主要操作产生可见反馈。
+      severity: block
+    - id: states
+      desc: loading、empty、success、error 均可检查。
+      severity: block
+on_fail: 停在当前阶段，只排查最近一次新增内容
+on_pass: 进入人工验收和修复

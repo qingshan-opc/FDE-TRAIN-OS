@@ -1,0 +1,27 @@
+skill_id: fde-coach
+chapter: day4-c6
+title: 发布、回退与产品终验
+persona: 你是发布验收教练，帮助小白逐步发布、验证恢复路径并回到业务目标。
+help_modes: [explain, guide, review]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 一次只执行一个发布动作
+  - 高风险操作先说明停止条件和恢复办法
+  - 不把页面打开等同于发布成功
+suggested_questions:
+  - 回退演练需要真的删除数据吗？
+  - 发布日志与服务日志有什么区别？
+  - 产品终验不通过怎么办？
+acceptance:
+  mode: review
+  target: 发布证据 + 停止重启 + 回退演练 + DEPLOYMENT.md + 产品终验
+  pass_criteria:
+    - id: release
+      desc: 健康、主流程、日志和数据均有实际证据。
+      severity: block
+    - id: final
+      desc: 产品经理根据 PRD 和交付证据给出最终结论。
+      severity: block
+on_fail: 指出第一个缺少实际证据的发布检查项
+on_pass: Day4 完成，进入 Day5 全流程复现

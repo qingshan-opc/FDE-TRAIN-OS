@@ -1,498 +1,578 @@
 camp_version: v0.7
 day: 2
-title: 做出四个真正能用的页面
+title: 把 UI 原型变成能运行的前端
 week: 1
-project: 四个页面和五条数据传递约定
-project_brief: 学员指挥前端工程师按已批准 PRD 和原型，先搭工程骨架，再逐页完成提交、列表、详情和驾驶舱；业务数据暂用 Mock，同时与后端工程师签下五个接口契约。
-review_checklist:
-- 四个前端页面都能运行和互相跳转
-- 提交、列表和看板当前明确标识为 Mock 状态
-- 详情页 AI 区诚实标记 Week2 与演示数据
-- 五接口契约 v0.1 已经学员批准
-- 学员完成走查、纠偏和复验，而不是只听 Agent 汇报
+project: 把 UI 原型变成能运行的前端
+project_brief: 学员承接 Day 1 已确认的 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html， 在 TRAE 中手动切换 @前端，把交互原型实现为可直接运行的三文件前端；
+  亲手检查页面、交互与四种数据状态，再切回 @UI 验收还原度，最后把 frontend-api-needs.md 交给 @后端。 Day 2 的重点不是背代码，而是学会文件交接、分段指挥、运行验证、责任岗位修复和下游交付。
+review_checklist: []
 resources:
-- id: team-prompts-v11
-  title: 七岗位 AI 员工提示词包
+- id: agent-frontend
+  title: 智能体提示词 · 前端
   kind: download
-  summary: 七名 AI 员工的职责、交接方法和五天协作规则
-  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_Agent_Prompts_V1.1/00_README.md
-- id: week1-day2-source
-  title: 第一周第 2 天课程合约
+  summary: 把 UI 原型实现为可运行页面，并整理后端数据需求
+  url: /course-assets/bootcamp/day-01/agent-prompts/03-frontend.md
+- id: frontend-handoff-card
+  title: 速查卡 · UI 到前端交接
   kind: doc
-  summary: 本日五节课、交付物、岗位交接与验收口径
-  url: /course-assets/bootcamp/day-02/README.md
-- id: domain-packs
-  title: 第一周领域包
+  summary: 四份输入文件、五句复述和确认开发闸门
+  url: /course-assets/bootcamp/day-02/section-02-frontend-handoff/resources.md
+- id: frontend-basics-card
+  title: 速查卡 · 前端三层职责
   kind: doc
-  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
-  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+  summary: HTML 管结构、CSS 管样式、JavaScript 管行为
+  url: /course-assets/bootcamp/day-02/section-03-frontend-basics/resources.md
+- id: frontend-accept-card
+  title: 清单 · 前端运行与四状态验收
+  kind: doc
+  summary: 可打开、可操作、无报错、加载/空/成功/错误齐全
+  url: /course-assets/bootcamp/day-02/section-05-accept-and-repair/resources.md
+- id: api-needs-card
+  title: 模板 · frontend-api-needs.md
+  kind: doc
+  summary: 页面数据、提交字段、期待返回和错误展示的后端交接模板
+  url: /course-assets/bootcamp/day-02/section-06-ui-review-backend-handoff/resources.md
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:2
   - project:role-week
-  estimated_minutes: 130
+  estimated_minutes: 120
   require_capsules: true
   capsules:
   - id: c1
-    title: 先搭一个能运行的页面框架
-    minutes: 20
-    form: 实操
-    content_ref: class/bootcamp/day-02/section-01-architect-role/lesson.md
-    content: '同学们好。盖房子不会一上来就买家具，而是先把地基、房间和通道搭好。做页面也一样。
-
-
-      这一节先让页面工程师只搭框架，不填具体功能。你要能看到项目里有哪些区域，四个页面分别从哪里进入，所有页面共用的顶部和侧边栏放在哪里。
-
-
-      工程师把“进入不同页面的地址”叫页面路由，把“可以重复使用的页面小块”叫组件。你不用背定义，只要能看懂：点击菜单能到正确页面，同样的导航不用每页重做，一块内容出了问题可以单独修改。
-
-
-      给 AI 的要求是：先列出准备怎么拆，再搭四个空页面，启动给我看，等我确认后再继续。这样你能看见项目是一层层长出来的，而不是等 AI 一次性变出一个黑箱。
-
-
-      验收只看三件事：项目能启动，四个页面都能打开，所有页面有统一外框。页面还是空的很正常，这一阶段只验框架。
-
-
-      记住这句话：**先把房间和通道搭好，再往里面放东西；能启动、能打开、有统一外框，框架才算立住。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    title: 原型不等于前端：传统职能 vs AI 时代前端
+    minutes: 15
+    form: 认知+对比
+    content_ref: class/bootcamp/day-02/section-01-prototype-vs-frontend/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day2-source
-    - domain-packs
+    - agent-frontend
     tools:
-    - name: '@前端工程师 Agent'
-      note: 本节交付：可运行工程骨架与四个空路由
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: 原型与前端对比卡
+      note: 样品确认方向；正式前端承担运行、状态和后续数据接入
+    - name: 前端责任边界卡
+      note: 不改需求、不编接口、不把密钥写进页面
     quiz:
-    - - 页面框架阶段最合格的结果是什么？
-      - - 四个页面都已经塞满功能
-        - 项目能启动，四个空页面能打开，并且外框统一
-        - 页面配色已经做到最漂亮
+    - - Day1 的 ui-prototype.html 为什么不能直接当作正式前端完成交付？
+      - - 因为文件名不对
+        - 因为它主要验证设计，未必具备工程结构、完整状态和后端接入边界
+        - 因为 HTML 不能在浏览器打开
       - 1
-      - 口播稿把这一阶段比作盖房子先立框架，不要求提前搬进家具。
+      - 原型解决“方向对不对”，正式前端还要解决“能否稳定运行、怎样维护以及如何连接真实数据”。
+    - - AI 时代前端岗位最重要的变化是什么？
+      - - 不再需要验收
+        - 从只关注手写代码转向定义约束、指挥生成和运行验收
+        - 可以自行修改产品需求
+      - 1
+      - AI 提高生产速度后，人更需要对页面结构、交互状态和最终质量负责。
     media:
     - kind: video
-      title: 口播课件 · 第 1 节
-      object_key: documents/shared/course-media/day02-c1-architect-role.mp4
-      poster_key: documents/shared/course-media/day02-c1-architect-role-poster.jpg
-      duration_sec: 74
+      title: 口播课件 · 原型为什么还不是前端
+      object_key: documents/shared/course-media/day02-c1-prototype-vs-frontend-v2.mp4
+      poster_key: documents/shared/course-media/day02-c1-prototype-vs-frontend-v2-poster.jpg
+      duration_sec: 193
     knowledge_cards:
-    - id: d2l1-k1
-      term: 先列方案再动手
-      plain: 先让页面工程师说清准备怎样拆、有哪些页面，学员确认后再开始制作。
-    - id: d2l1-k2
-      term: 框架阶段保持空白
-      plain: 这一阶段只搭页面入口和统一外框，不提前把具体功能全部塞进去。
-    - id: d2l1-k3
-      term: 用三件事验收
-      plain: 项目能启动、四个页面能打开、所有页面有统一外框，三项都通过才继续。
-    memory_sentence: 先把房间和通道搭好，再往里面放东西；能启动、能打开、有统一外框，框架才算立住。
-    local_prep:
-      codex_prompt: '@前端工程师 Agent 请读已批准的需求和页面样稿，先把项目运行起来，只搭四个空白页面和公共导航。用大白话告诉我主要文件夹各放什么，带我逐页打开检查。等我批准后再做页面内容，不要一次全部做完。'
-      checklist:
-      - 项目能启动
-      - 四个空路由可访问
-      - 能说出页面、组件和公共布局放在哪里
-      - README 记录启动方式
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+    - id: prototype-vs-frontend
+      term: 原型与正式前端
+      plain: 原型确认页面和操作是否合理；正式前端还要可运行、可维护、处理状态并为真实数据留入口。
+      tag: 边界
+    - id: frontend-role-shift
+      term: 前端岗位价值上移
+      plain: 传统前端大量时间用于手写页面；AI 时代更重视拆任务、约束实现、运行检查和交付质量。
+      tag: AI 时代
+    - id: no-self-change-requirement
+      term: 不擅改需求
+      plain: 前端负责实现已确认的页面，发现需求缺口应返回产品经理或 UI，而不是自己增加功能。
+      tag: 责任
+    glossary_terms:
+    - id: gt-prototype
+      term: Prototype · 原型
+      plain: 用较低成本提前确认页面结构与操作路径的样品。
+    - id: gt-frontend
+      term: Frontend · 前端
+      plain: 用户在浏览器里看到并操作的正式界面实现。
   - id: c2
-    title: 做一个会提醒填错内容的提交页
-    minutes: 25
-    form: 实操
-    content_ref: class/bootcamp/day-02/section-02-four-layer/lesson.md
-    content: '提交页是用户把信息交给系统的入口。这个页面做得不好，用户要么填不明白，要么填错后不知道怎么改。
-
-
-      页面有哪些内容，不由页面工程师自由发挥，而是来自昨天已经批准的需求文档。哪些必须填、金额能不能为负数、说明最少写多少字，都要按文档执行。
-
-
-      检查分三层。第一，必须填写的内容不能留空。第二，数字、字数和范围要符合规则。第三，提示必须说人话，要告诉用户哪一项错了、应该怎么改，不能只冒出一串英文或错误编号。
-
-
-      还有一条体验底线：填错一项时，已经填好的其他内容不能被清空。
-
-
-      验收时请故意当一个会犯错的用户：空着提交，填负数，说明只写几个字，再填一份完全正确的内容。只有真正试过错误数据，才能证明提醒不是摆设。
-
-
-      记住这句话：**规则来自需求文档，验收提交页的办法，是亲手输入错误内容。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    title: 把 Day1 四份文件交给 `@前端`
+    minutes: 20
+    form: 交接实操
+    content_ref: class/bootcamp/day-02/section-02-frontend-handoff/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day2-source
-    - domain-packs
+    - agent-frontend
+    - frontend-handoff-card
     tools:
-    - name: '@前端工程师 Agent'
-      note: 本节交付：可填写、可校验的提交页
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: TRAE · @前端
+      note: 先读取、复述、列计划，未确认前不生成代码
+    - name: 四文件交接检查
+      note: PRD / design-spec / ui-flow / ui-prototype
     quiz:
-    - - 怎样才能证明提交页的错误提醒真的有效？
-      - - 看见页面上有红色提示文字
-        - 亲手输入空白、负数等错误内容并尝试提交
-        - 让 AI 口头保证已经检查
+    - - 前端开始生成文件前，第一步应该做什么？
+      - - 先选框架
+        - 读取四份上游文件并复述理解
+        - 先编一个后端接口
       - 1
-      - 只有真实输入错误内容，才能确认页面真的阻止了错误提交。
+      - 先确认输入和理解，才能避免把错误需求快速做成完整页面。
+    - - 缺少 design-spec.md 时，前端正确做法是什么？
+      - - 自己猜一个风格
+        - 停止并提示回到 UI 补齐
+        - 删除 PRD
+      - 1
+      - 上游交付不完整时应回到责任岗位补齐，不能由前端擅自补写设计事实。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节只完成交接确认，不生成前端文件。请逐段操作，每段完成后再继续。
+
+
+        【第 1 段｜切换 @前端并检查文件】
+
+        切换到 @前端，发送：请检查工作区根目录是否存在 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html。现在不要生成代码。缺少文件时只告诉我缺什么、应切回哪个岗位补齐。
+
+
+        【第 2 段｜五句复述】
+
+        四份文件齐全。请用 5 句话复述：目标用户、页面范围、最重要操作、必须出现的数据状态、前端验收标准。输出后停止，等我确认。
+
+
+        【第 3 段｜纠正理解】
+
+        请把我指出的理解偏差写成“原理解 / 文件依据 / 修正后理解”。不要改动上游文件。修正后再次输出五句复述。
+
+
+        【第 4 段｜前端实施清单】
+
+        我确认理解一致。请给出《前端实施清单》：使用 frontend/index.html、frontend/styles.css、frontend/app.js 三个文件；列出页面区块、必须可操作的按钮、演示数据位置、加载/空数据/成功/错误四种状态，以及本节明确不连接的真实接口。输出后停止，等我回复“确认开发”。
+
+        '
+      checklist:
+      - 已切换到 @前端
+      - 四份上游文件均存在并被读取
+      - 前端已完成五句复述，理解偏差已纠正
+      - 实施清单明确采用三文件无构建方案
+      - 学员本人回复了“确认开发”
+      suggested_questions:
+      - 缺少某个 Day1 文件怎么办？
+      - 前端复述和 PRD 不一致怎么办？
+      - 为什么先不用 React 或 Vue？
+      template_resource_id: agent-frontend
     media:
     - kind: video
-      title: 口播课件 · 第 2 节
-      object_key: documents/shared/course-media/day02-c2-four-layer.mp4
-      poster_key: documents/shared/course-media/day02-c2-four-layer-poster.jpg
-      duration_sec: 67
+      title: 口播课件 · 把四份文件交给前端
+      object_key: documents/shared/course-media/day02-c2-frontend-handoff-v2.mp4
+      poster_key: documents/shared/course-media/day02-c2-frontend-handoff-v2-poster.jpg
+      duration_sec: 222
     knowledge_cards:
-    - id: d2l2-k1
-      term: 填写规则来自需求
-      plain: 哪些必须填、数字范围和字数限制，都以已经批准的需求文档为准。
-    - id: d2l2-k2
-      term: 提醒分成三层
-      plain: 检查是否漏填、格式和范围是否正确，再用中文告诉用户怎么修改。
-    - id: d2l2-k3
-      term: 填错不能全部清空
-      plain: 用户只应修改出错的那一项，已经填写正确的内容必须保留。
-    memory_sentence: 规则来自需求文档，验收提交页的办法，是亲手输入错误内容。
-    local_prep:
-      codex_prompt: '@前端工程师 Agent 请按已批准的页面样稿做好提交页。填写错误时要用普通员工能看懂的中文提醒。请边做边告诉我每个输入项从哪条需求来；完成后带我分别试一次正常填写和错误填写，等我批准。'
-      checklist:
-      - 字段与 PRD 逐项一致
-      - 必填和边界校验真实生效
-      - 提示语为中文业务语言
-      - 正常输入能够提交到当前 Mock 数据层
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+    - id: four-inputs
+      term: 前端四份输入
+      plain: PRD 说明做什么，设计规范说明长什么样，UI 流程说明怎样操作，原型提供可观察参考。
+      tag: 交接
+    - id: repeat-before-build
+      term: 开工前复述
+      plain: 前端先复述用户、页面、核心操作、状态和验收标准，学员确认后才开发。
+      tag: 防错
+    - id: implementation-list
+      term: 前端实施清单
+      plain: 写清文件结构、页面区块、交互、演示数据和暂不连接的真实接口。
+      tag: 计划
+    glossary_terms:
+    - id: gt-handoff-input
+      term: 交接输入
+      plain: 下游岗位开工前必须读取并确认的上游文件。
+    - id: gt-confirm-build
+      term: 确认开发
+      plain: 学员确认实施清单后，允许前端开始生成正式文件的人工闸门。
   - id: c3
-    title: 用演示数据做出列表页
-    minutes: 25
-    form: 实操
-    content_ref: class/bootcamp/day-02/section-03-arch-selection/lesson.md
-    content: '数据工程师明天才开始保存真实记录，今天列表页先用演示数据。行业里有人把这种临时数据叫模拟数据，你知道它是假数据即可，不需要记英文名称。
-
-
-      演示数据不能写成“测试一、测试二、测试三”。至少准备五到八条，覆盖待处理、处理中、已完成等不同状态，还要有一条能讲故事的数据，例如金额特别高的费用，或长时间没有处理的员工诉求。
-
-
-      列表页要帮助用户回答三个问题：现在有哪些记录，每条到了什么状态，我想找的那条在哪里。因此需要清楚的字段、状态标记和筛选方式。
-
-
-      所有页面只能使用同一份演示数据。列表里显示金额八百，点进详情也必须是八百。数据不能在每个页面各写一份，否则迟早对不上。
-
-
-      还要把数据删到零条，看看页面有没有告诉用户“现在还没有记录”，而不是留下一块空白。
-
-
-      记住这句话：**演示数据越像真的，越能提前发现问题；数据只有一份，页面只是不同的看法。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    title: 用人话看懂 HTML、CSS、JavaScript 与数据状态
+    minutes: 15
+    form: 概念+练习
+    content_ref: class/bootcamp/day-02/section-03-frontend-basics/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day2-source
-    - domain-packs
+    - frontend-basics-card
     tools:
-    - name: '@前端工程师 Agent'
-      note: 本节交付：列表页、空态与至少 5 条 Mock
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: 前端三件套职责图
+      note: HTML 是骨架，CSS 是衣服，JavaScript 是动作
+    - name: 浏览器控制台
+      note: 学员只需学会打开并判断是否出现红色错误
     quiz:
-    - - 为什么演示数据需要覆盖待处理、处理中和已完成等不同状态？
-      - - 为了让文件变得更大
-        - 为了提前检查不同状态下的页面和筛选是否正确
-        - 为了假装已经接入真实数据
+    - - 点击筛选按钮后列表发生变化，主要是哪一层负责？
+      - - HTML
+        - CSS
+        - JavaScript
+      - 2
+      - 页面行为和数据状态切换由 JavaScript 负责。
+    - - 为什么要在没有后端时演示错误状态？
+      - - 为了让页面更复杂
+        - 为了提前确认出错时用户看到什么、怎样继续操作
+        - 因为错误状态等于真实接口
       - 1
-      - 数据越接近真实情况，越容易在交付前发现页面问题。
+      - 状态设计应在接后端前确认，否则联调时才发现缺页面会增加返工。
     media:
     - kind: video
-      title: 口播课件 · 第 3 节
-      object_key: documents/shared/course-media/day02-c3-arch-selection.mp4
-      poster_key: documents/shared/course-media/day02-c3-arch-selection-poster.jpg
-      duration_sec: 71
+      title: 口播课件 · 用人话看懂前端三件套
+      object_key: documents/shared/course-media/day02-c3-frontend-basics-v2.mp4
+      poster_key: documents/shared/course-media/day02-c3-frontend-basics-v2-poster.jpg
+      duration_sec: 181
     knowledge_cards:
-    - id: d2l3-k1
-      term: 演示数据要像真的
-      plain: 至少准备五到八条，覆盖不同状态，还要有一条能讲清业务问题的数据。
-    - id: d2l3-k2
-      term: 数据只能有一份
-      plain: 列表和详情读取同一份记录，不能在不同页面各写一套数值。
-    - id: d2l3-k3
-      term: 没有数据也要说明
-      plain: 删除全部记录后，页面要明确告诉用户当前没有内容，而不是只留空白。
-    memory_sentence: 演示数据越像真的，越能提前发现问题；数据只有一份，页面只是不同的看法。
-    local_prep:
-      codex_prompt: '@前端工程师 Agent 请做好列表页，先放至少五条演示记录，并补上“没有记录”时的页面。刚在提交页新增的内容要立刻出现在列表里，页面要写明“当前为演示数据”。完成后带我亲手提交、查看和筛选。'
-      checklist:
-      - 至少五条 Mock 且字段合法
-      - 空态可验证
-      - 提交与列表联动
-      - 页面或说明明确当前不是数据库数据
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+    - id: html-structure
+      term: HTML 管结构
+      plain: 决定页面有哪些标题、表格、表单、按钮和内容区块。
+      tag: 三件套
+    - id: css-style
+      term: CSS 管样式
+      plain: 决定颜色、字号、间距、布局以及按钮的不同外观状态。
+      tag: 三件套
+    - id: js-behavior
+      term: JavaScript 管行为
+      plain: 负责点击、筛选、校验、状态切换和演示数据更新。
+      tag: 三件套
+    - id: four-data-states
+      term: 四种数据状态
+      plain: 页面不能只展示顺利结果，还要明确加载、空数据、成功和错误时用户看到什么。
+      tag: 真实页面
+    glossary_terms:
+    - id: gt-browser
+      term: Browser · 浏览器
+      plain: 打开和运行前端页面的应用，例如 Chrome 或 Edge。
+    - id: gt-console
+      term: Console · 控制台
+      plain: 浏览器中查看 JavaScript 报错和调试信息的位置。
+    - id: gt-demo-data
+      term: 演示数据
+      plain: 为验证页面交互而准备的虚构或脱敏数据，不代表真实业务数据已经接通。
   - id: c4
-    title: 做出详情页，约定页面和数据怎么传
+    title: 分段指挥 AI 生成可运行的三文件前端
     minutes: 30
-    form: 实操+交接
-    content_ref: class/bootcamp/day-02/section-04-hands-on-adr/lesson.md
-    content: '列表页让人找到一条记录，详情页让人看清这条记录。字段要完整，当前状态要醒目，该有的操作要放在正确位置。
-
-
-      详情页还要保留“AI 分析区｜第二周接入”。现在没有真正调用 AI，样例只能标“演示数据”。业务页面照常能用，AI 是以后加上的能力，不能让它绑住主流程。
-
-
-      接下来，页面工程师和数据工程师要提前约定怎么传数据。你可以把这份约定理解成双方签的一张送货单：页面问什么，数据部分回答什么，每个名称怎么写，出错时怎么说明。工程师把这条传话通道叫“接口”，你认识这个叫法就够了。
-
-
-      如果不先约定，页面叫“金额”，数据部分叫“费用”，两边各自都觉得做对了，接起来却会出错。所以先把提交、列表、详情、看板统计和第二周 AI 位置五条约定写清，再让双方继续。
-
-
-      记住这句话：**页面和数据先把传话方式说清，双方才能各自开工；约定不清，接起来一定靠猜。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    form: 分段实操
+    content_ref: class/bootcamp/day-02/section-04-build-running-page/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day2-source
-    - domain-packs
+    - agent-frontend
+    - frontend-handoff-card
     tools:
-    - name: '@前端工程师 Agent → @后端工程师 Agent'
-      note: 本节交付：详情页 + docs/D2-L4_接口契约.md
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: TRAE 文件区
+      note: 检查 frontend 目录与三个文件是否真实落盘
+    - name: 浏览器预览
+      note: 每完成一段就重新打开或刷新页面
     quiz:
-    - - 页面和数据部分使用的字段名称不一致时，首先应该做什么？
-      - - 两边继续按自己的理解开发
-        - 回到双方约定，先把名称和格式统一
-        - 在页面上隐藏这个字段
+    - - Day2 为什么优先采用三文件无构建方案？
+      - - 因为框架永远不好
+        - 为了减少环境问题，让小白先看懂运行和验收闭环
+        - 因为 JavaScript 只能写一个文件
       - 1
-      - 先统一传话约定，才能避免两个岗位长期各说各话。
+      - 第一版先控制变量；后续掌握流程后再选择框架，不影响核心工程思维。
+    - - AI 一次生成完所有文件后页面打不开，最合理的改进是什么？
+      - - 重复发送同一句话
+        - 拆成结构、样式、交互三个阶段，每阶段运行检查
+        - 直接跳到后端
+      - 1
+      - 分段生成能更快定位问题，也让学员知道每一步新增了什么能力。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '继续使用 @前端。下面四段必须逐段发送，每段完成后亲手运行再继续。
+
+
+        【第 1 段｜建立三文件骨架】
+
+        我已确认《前端实施清单》。请创建 frontend/index.html、frontend/styles.css、frontend/app.js。第一步只建立完整页面结构和文件引用，不加入复杂交互。完成后告诉我怎样直接打开页面，以及三个文件各自负责什么。
+
+
+        【第 2 段｜按 UI 规范实现样式】
+
+        页面结构已能打开。请读取 design-spec.md 和 ui-prototype.html，把颜色、字号、间距、布局和按钮状态实现到 frontend/styles.css。不要改变 PRD 的页面范围。完成后列出 5 个可以肉眼核对的设计点。
+
+
+        【第 3 段｜加入真实可见交互】
+
+        样式已确认。请读取 ui-flow.md，在 frontend/app.js 中实现原型要求的筛选、表单或主要按钮行为；演示数据集中写在文件顶部。每次操作都必须产生可见反馈，不连接真实后端。
+
+
+        【第 4 段｜补齐四种状态】
+
+        请为页面补齐加载、空数据、成功和错误四种状态，并提供一个小白能找到的演示入口或切换方法。完成后停止，不要替我宣布验收通过。
+
+        '
+      checklist:
+      - frontend 目录中存在 index.html、styles.css、app.js
+      - 双击 index.html 可以打开页面
+      - HTML 正确引用 styles.css 和 app.js
+      - 至少一个主要操作产生可见反馈
+      - 演示数据集中放在 app.js
+      - 加载、空数据、成功和错误四种状态均可检查
+      suggested_questions:
+      - 双击 index.html 是空白页怎么办？
+      - 按钮点击没有反应怎么描述给前端？
+      - 演示数据和真实数据有什么区别？
+      template_resource_id: agent-frontend
     media:
     - kind: video
-      title: 口播课件 · 第 4 节
-      object_key: documents/shared/course-media/day02-c4-hands-on-adr.mp4
-      poster_key: documents/shared/course-media/day02-c4-hands-on-adr-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 分段生成可运行页面
+      object_key: documents/shared/course-media/day02-c4-build-running-page-v2.mp4
+      poster_key: documents/shared/course-media/day02-c4-build-running-page-v2-poster.jpg
+      duration_sec: 220
     knowledge_cards:
-    - id: d2l4-k1
-      term: 详情要看清一条记录
-      plain: 字段完整、状态醒目，并且列表和详情展示的是同一条数据。
-    - id: d2l4-k2
-      term: 先约定怎样传数据
-      plain: 页面问什么、数据部分答什么、名称怎么写和出错怎么说明，都要提前写清楚。
-    - id: d2l4-k3
-      term: AI 能力诚实留位
-      plain: 当前只写第二周接入，样例标演示数据，不能伪装成 AI 已经完成分析。
-    memory_sentence: 页面和数据先把传话方式说清，双方才能各自开工；约定不清，接起来一定靠猜。
-    local_prep:
-      codex_prompt: '@前端工程师 Agent 请做好详情页，让它显示我在列表中选中的那条记录。AI 区先写“AI 分析区｜第二周接入”和“演示数据”，再放按钮。完成后带我检查；我批准后，请只给我一句交给后端工程师的数据约定任务，不要替他执行。'
-      checklist:
-      - 详情字段与 PRD 一致
-      - AI 区状态和演示数据标识清楚
-      - 五个接口齐全
-      - 请求响应字段与页面和 PRD 能对上
-      - 学员批准契约后才允许第三天后端开工
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+    - id: no-build-first
+      term: 无构建三文件方案
+      plain: 首个前端使用 HTML、CSS、JavaScript 三个文件，双击即可运行，先降低环境和依赖风险。
+      tag: 小白友好
+    - id: one-step-one-check
+      term: 一段一验
+      plain: 先建结构、再加样式、再加交互，每完成一段就运行检查，不把全部风险堆到最后。
+      tag: 方法
+    - id: demo-data-center
+      term: 演示数据集中管理
+      plain: 把演示数据集中放在 app.js，后端接入时更容易找到替换位置。
+      tag: 交接
+    glossary_terms:
+    - id: gt-build-tool
+      term: 构建工具
+      plain: 把源码处理成浏览器可运行文件的工程工具；Day2 第一版暂不引入。
+    - id: gt-relative-path
+      term: 相对路径
+      plain: 文件之间按当前目录建立引用，例如 index.html 引入 styles.css。
   - id: c5
-    title: 做出管理看板，把四个页面走一遍
-    minutes: 30
-    form: 实操+验收
-    content_ref: class/bootcamp/day-02/section-05-accept/lesson.md
-    content: '管理看板是负责人一眼看到整体情况的页面：总共有多少条，多少待处理，哪些类型最多，最近有什么变化。
-
-
-      今天看板暂时读取演示数据，但计算方式必须和明天真实数据保持一致。看板上的数字不是装饰，应该能在列表里找到对应记录。
-
-
-      四个页面完成后，不要只听 AI 汇报“已经完成”。像收房一样逐项检查：四个页面能不能互相到达，提交一条后列表有没有变化，详情是否对应，空白状态和错误提示是否清楚，看板数字能不能和列表对上。
-
-
-      发现问题要写清“哪里不对、应该改成什么样”，再交给页面工程师修改。只说“重做”“不好看”，AI 只能继续猜。
-
-
-      最后留下一张走查记录，证明你真的验过，而不是只看了截图。
-
-
-      记住这句话：**交付物要带着“我验过了”的证据；问题发现得越早，修改成本越低。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    title: 亲手验收页面并完成一次修复闭环
+    minutes: 20
+    form: 验收实操
+    content_ref: class/bootcamp/day-02/section-05-accept-and-repair/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day2-source
-    - domain-packs
+    - frontend-accept-card
+    - agent-frontend
     tools:
-    - name: '@前端工程师 Agent'
-      note: 本节交付：四页 Mock 前端 V0.5 + 走查记录
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: 浏览器 + 开发者工具
+      note: 页面看结果，控制台看红色错误
+    - name: 四句问题模板
+      note: 位置 / 操作 / 实际 / 预期
     quiz:
-    - - AI 员工汇报“四个页面都完成了”，学员应该怎样处理？
-      - - 直接批准进入下一天
-        - 亲手走一遍完整流程并留下检查记录
-        - 只查看管理看板的截图
+    - - 文件都存在，但按钮点击没有变化，能否通过？
+      - - 可以，文件存在就行
+        - 不可以，主要操作必须产生可见反馈
+        - 可以，等后端接入再说
       - 1
-      - 课程要求用实际操作和记录证明完成，不能只听 AI 汇报。
+      - Day2 验收的是可运行前端，不是静态截图或只有文件名的空壳。
+    - - 发现问题后，最清楚的反馈格式是什么？
+      - - 不好用，重做
+        - 在什么页面做什么操作、实际看到什么、预期应该什么
+        - 代码肯定错了
+      - 1
+      - 用“位置、操作、实际、预期”描述问题，AI 才能准确修复并让学员复测。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节先由你亲手检查，再让 @前端修复。不要跳过复测。
+
+
+        【第 1 段｜人工运行检查】
+
+        打开 frontend/index.html，依次检查：页面能打开；主要文字和区块齐全；至少一个按钮、筛选或表单能操作；加载、空数据、成功、错误四种状态能看到；浏览器控制台没有红色错误。把结果写成“通过/不通过”。
+
+
+        【第 2 段｜把问题说清楚】
+
+        对每个不通过项写四句话：所在页面或区块、我做了什么、实际出现什么、预期应该什么。不要只说“不好看”或“没反应”。
+
+
+        【第 3 段｜交给 @前端 修复】
+
+        切换到 @前端，发送：请只修复下面的问题，不改变已通过部分和 PRD 范围。逐项说明原因、修改文件和复测步骤。问题清单：〈粘贴你的四句描述〉。
+
+
+        【第 4 段｜亲手复测并记录】
+
+        修复完成后，重新执行完全相同的操作。把第一次结果、修改内容和复测结果写入 frontend-acceptance.md。至少完成一条真实或导师指定的模拟问题闭环。
+
+        '
+      checklist:
+      - 页面可直接打开且没有空白屏
+      - 主要交互产生可见反馈
+      - 四种数据状态均可检查
+      - 控制台没有红色错误
+      - 问题按“位置/操作/实际/预期”描述
+      - frontend-acceptance.md 记录了修复与复测
+      suggested_questions:
+      - 浏览器控制台在哪里打开？
+      - 怎样区分空数据和加载失败？
+      - 修复后怎样确认没有破坏其他功能？
+      template_resource_id: frontend-accept-card
     media:
     - kind: video
-      title: 口播课件 · 第 5 节
-      object_key: documents/shared/course-media/day02-c5-accept.mp4
-      poster_key: documents/shared/course-media/day02-c5-accept-poster.jpg
-      duration_sec: 62
+      title: 口播课件 · 亲手验收并完成一次修复
+      object_key: documents/shared/course-media/day02-c5-accept-and-repair-v2.mp4
+      poster_key: documents/shared/course-media/day02-c5-accept-and-repair-v2-poster.jpg
+      duration_sec: 200
     knowledge_cards:
-    - id: d2l5-k1
-      term: 看板数字要找得到来源
-      plain: 每个数字都应能在列表记录中核对，不能只是为了好看随便填写。
-    - id: d2l5-k2
-      term: 四个页面走完整流程
-      plain: 从提交到列表、详情和看板逐步检查，不能只抽看一张截图。
-    - id: d2l5-k3
-      term: 纠偏要写清目标
-      plain: 明确指出哪里不对、应该改成什么样，AI 才能定向修改并重新验收。
-    memory_sentence: 交付物要带着“我验过了”的证据；问题发现得越早，修改成本越低。
+    - id: run-evidence
+      term: 运行证据
+      plain: 文件存在不等于可用，必须亲手打开页面、操作按钮并观察结果。
+      tag: 验收
+    - id: observable-feedback
+      term: 可见反馈
+      plain: 点击、提交或筛选后，页面必须出现用户能看到的变化，而不是只在代码里写了函数。
+      tag: 交互
+    - id: repair-owner
+      term: 责任岗位修复
+      plain: 学员描述现象和预期，前端负责修改；验收者不越过岗位直接替它改代码。
+      tag: 闭环
+    glossary_terms:
+    - id: gt-console-error
+      term: 控制台错误
+      plain: 浏览器控制台中的红色报错，通常说明脚本、文件路径或运行逻辑有问题。
+    - id: gt-retest
+      term: Retest · 复测
+      plain: 修复完成后重新执行原来的操作，确认问题确实消失且没有引入新问题。
+  - id: c6
+    title: 回到 UI 复验，再交接后端
+    minutes: 20
+    form: 交接实操
+    content_ref: class/bootcamp/day-02/section-06-ui-review-backend-handoff/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - agent-frontend
+    - api-needs-card
+    - frontend-accept-card
+    tools:
+    - name: TRAE · @UI
+      note: 复验设计还原度，不直接改前端代码
+    - name: TRAE · @后端
+      note: 只接收并复述 Day3 输入，不提前开发
+    quiz:
+    - - UI 复验发现间距不符合 design-spec.md，谁负责修改？
+      - - UI 直接改前端代码
+        - 前端按 UI 的可量化问题清单修改，UI 再复验
+        - 后端修改
+      - 1
+      - 验收者指出依据和差距，责任岗位修改，然后回到验收者复验。
+    - - frontend-api-needs.md 应该写什么？
+      - - 虚构完整接口地址
+        - 页面需要的数据字段、提交内容、期待返回和错误展示
+        - 部署服务器密码
+      - 1
+      - 它是给后端的需求输入，不是由前端单方面宣布完成的接口合同。
     local_prep:
-      codex_prompt: '@前端工程师 Agent 请完成驾驶舱，让数字和分类情况都从现有演示记录算出来。然后带我按“提交—列表—详情—驾驶舱”走一遍，把发现的问题记进前端检查表并逐项修复。全部完成后自检，停下来等我批准。'
-      checklist:
-      - 四页可互相到达
-      - 看板指标与选题一致
-      - 统计 Mock 服从契约
-      - 走查至少记录两项真实问题或明确的验证证据
-      - 修复后由学员复验并批准 V0.5
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
+      skill_id: fde-local-prep
+      codex_prompt: '本节包含三次岗位切换，必须逐段完成。
 
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+
+        【第 1 段｜切换 @UI 复验】
+
+        切换到 @UI，发送：请读取 design-spec.md、ui-flow.md 和 frontend 目录中的三个文件。只验收，不直接修改。逐项输出“通过/不通过、文件依据、可量化差距、责任岗位”。
+
+
+        【第 2 段｜切回 @前端 修复】
+
+        如有不通过项，切换到 @前端，发送：请只处理 UI 的问题清单，说明修改文件和复测方法。完成后我会再次切回 UI。然后回到 @UI 复验，直到全部通过。
+
+
+        【第 3 段｜让前端生成后端交接文件】
+
+        切换到 @前端，发送：请根据已通过的页面生成 frontend-api-needs.md。按页面或功能列出：展示所需字段、字段含义、用户提交内容、期待后端返回内容、加载/空数据/错误的展示方式。不要编造接口地址，不要写密钥。
+
+
+        【第 4 段｜切换 @后端 接收】
+
+        切换到 @后端，发送：请先读取 PRD.md 和 frontend-api-needs.md，只复述你收到的业务规则、页面数据需求和需要确认的问题。现在不要开发接口，等我确认 Day3 开工。
+
+
+        【第 5 段｜记录 Day2 交接】
+
+        创建 day2-handoff-log.md，记录 UI → 前端 → UI → 前端 → 后端每次切换的输入文件、输出文件、验收结果和修改轮次。
+
+        '
+      checklist:
+      - UI 已按设计规范和交互流程复验前端
+      - UI 不通过项已由前端修复并完成复验
+      - frontend-api-needs.md 已列出字段、提交、返回和错误展示
+      - 文件中没有虚构接口地址或密钥
+      - 已切换 @后端 完成接收复述但未提前开发
+      - day2-handoff-log.md 记录完整岗位链
+      suggested_questions:
+      - UI 的反馈太主观怎么办？
+      - 前端不知道后端接口地址该怎么写？
+      - 为什么后端这节只能复述不能开发？
+      template_resource_id: api-needs-card
+    media:
+    - kind: video
+      title: 口播课件 · UI 复验与后端交接
+      object_key: documents/shared/course-media/day02-c6-ui-review-backend-handoff-v2.mp4
+      poster_key: documents/shared/course-media/day02-c6-ui-review-backend-handoff-v2-poster.jpg
+      duration_sec: 234
+    knowledge_cards:
+    - id: ui-review
+      term: UI 还原度复验
+      plain: 前端完成后由 UI 对照设计规范和交互流程检查，不让前端自己验收自己。
+      tag: 岗位协作
+    - id: api-needs
+      term: 前端数据需求
+      plain: 前端说明每个页面需要什么字段、提交什么内容、期待怎样返回以及错误如何展示。
+      tag: 后端输入
+    - id: no-fake-api
+      term: 不编造接口
+      plain: Day2 只描述数据需求，不自行承诺不存在的接口地址和返回结构。
+      tag: 边界
+    glossary_terms:
+    - id: gt-field
+      term: Field · 字段
+      plain: 一条数据中有明确含义的项目，例如姓名、金额、状态、日期。
+    - id: gt-api-need
+      term: API Need · 接口需求
+      plain: 前端为了展示和提交数据，对后端提出的可核对信息要求。
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 为什么先做空壳路由？
+  - q: Day2 开始时，前端必须先读取哪组文件？
     options:
-    - 为了少写代码
-    - 为了先确认工程结构和页面边界
-    - 为了跳过原型
-    answer: 1
-    explain: 先确认骨架可以降低一次性生成造成的黑箱感。
-  - q: 前端主要负责什么？
-    options:
-    - 用户看到和操作的界面
-    - 保存所有数据库文件
-    - 替学员批准 PRD
+    - PRD、设计规范、UI 流程、UI 原型
+    - 测试报告、部署说明
+    - 数据库密码、服务器地址
     answer: 0
-    explain: 前端实现交互界面并调用后端接口。
-  - q: 提交页字段冲突时以什么为准？
+    explain: 四份 Day1 文件分别提供需求、设计、交互和可观察参考。
+  - q: HTML、CSS、JavaScript 的职责对应关系是？
     options:
-    - AI 临时判断
-    - 已批准的 PRD
-    - 页面看起来是否整齐
-    answer: 1
-    explain: 已批准 PRD 是当前需求基线。
-  - q: 为什么前端有校验，后端还要再校验？
+    - 结构、样式、行为
+    - 样式、数据库、部署
+    - 行为、结构、测试
+    answer: 0
+    explain: HTML 管结构，CSS 管样式，JavaScript 管行为。
+  - q: 为什么 Day2 第一版不用复杂框架和构建工具？
     options:
-    - 为了重复工作
-    - 前端可被绕过，后端要守住业务规则
-    - 因为按钮颜色不同
+    - 因为以后永远不能用
+    - 为了减少环境变量，先完成运行与验收闭环
+    - 因为浏览器不支持框架
     answer: 1
-    explain: 后端必须保护真实数据不被非法请求污染。
-  - q: Mock 数据的正确定位是什么？
+    explain: 小白先把工程流程走通，再增加工具复杂度更稳妥。
+  - q: 页面只有成功状态，其他状态没有设计，能否通过？
     options:
-    - 真实数据库备份
-    - 按契约制作的临时前端数据
-    - AI 分析结果
+    - 能，成功最重要
+    - 不能，还要检查加载、空数据和错误状态
+    - 能，后端会自动补
     answer: 1
-    explain: Mock 让前端先行，但不能冒充真实接口。
-  - q: 前端使用 Mock 时可以说系统已联调吗？
+    explain: 真正页面必须能解释等待、无数据和失败时用户看到什么。
+  - q: UI 发现前端与设计规范不一致，正确流程是什么？
     options:
-    - 可以
-    - 不可以
-    - 只要页面漂亮就可以
+    - UI 直接改代码
+    - UI 列出依据和差距，前端修改，UI 复验
+    - 产品经理删除需求
     answer: 1
-    explain: 联调要求前端真实调用后端并读写数据库。
+    explain: 岗位职责要清楚：验收者提出问题，责任岗位修复，再回原岗位复验。
+  - q: Day2 最后交给后端的核心文件是什么？
+    options:
+    - frontend-api-needs.md
+    - ui-prototype.html 的截图
+    - 服务器密码
+    answer: 0
+    explain: 后端需要从前端数据需求中理解页面要展示、提交和处理哪些数据。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 130′）
+  title: 今日课节（6 节 · 120′）
 - type: quiz
   title: Day2 概念验收
-- type: lab
-  title: 第 2 天岗位交接与真实证据验收
 - type: project
-  title: 前端四页面 V0.5 与五接口契约
+  title: 企业任务：把 UI 原型变成能运行的前端
 - type: review
   title: 交付自检与 GATE 2
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - docs/D2-L4_接口契约.md
-  - docs/D2_前端走查.md
-  - docs/D2_command_log.md
-  inherited_files:
-  - docs/D1_选题确认单.md
-  - docs/D1_团队协作卡.md
-  - docs/D1_项目任务书.md
-  - docs/PRD.md
-  - docs/D1_command_log.md
-  - design/prototypes/index.html
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据，以及指挥日志 docs/D2_command_log.md。前端未接数据库是正常状态，但不得写成联调完成。
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/D2-L4_接口契约.md
-  - check: text_contains
-    args:
-      path: docs/D2-L4_接口契约.md
-      needle: AI_NOT_CONNECTED
-  - check: file_exists
-    args:
-      path: docs/D2_前端走查.md
-  - check: file_exists
-    args:
-      path: docs/D2_command_log.md
-  - check: text_contains
-    args:
-      path: docs/D2_command_log.md
-      needle: REJECTED
-  - check: text_contains
-    args:
-      path: docs/D2_command_log.md
-      needle: APPROVED
-  - check: text_contains
-    args:
-      path: docs/D2_command_log.md
-      needle: 我确认以上批准均为本人作出

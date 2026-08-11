@@ -101,13 +101,14 @@ def partner_login(body: PartnerLoginBody, request: Request, response: Response) 
         )
     import secrets
 
-    access = create_access_token(user, None)
-    _, refresh = create_refresh_session(
+    sid, refresh = create_refresh_session(
         user.id,
         None,
         user_agent=request.headers.get("user-agent"),
         ip=request.client.host if request.client else None,
+        exclusive=True,
     )
+    access = create_access_token(user, None, session_id=sid)
     csrf = secrets.token_urlsafe(24)
     _set_auth_cookies(response, access, refresh, csrf)
     org_id = _partner_org_id(user.id)

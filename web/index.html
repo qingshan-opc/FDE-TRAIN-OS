@@ -5,32 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="青山在 · FDE Learning OS — 为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。"
+      content="青山在 · FDE 训练营 — 21 天 / 3 周实战：指挥六岗位做产品、企业级 Agent、企业沟通特训。可核验结业，永久回放。"
     />
     <meta
       name="keywords"
-      content="青山在,FDE,数字化人才,企业培训,训练营,Agent实训,结业证书,可验收交付"
+      content="青山在,FDE训练营,21天,企业级Agent,数字化人才,企业培训,结业证书,企业沟通"
     />
-    <meta name="theme-color" content="#0f2e2a" />
+    <meta name="theme-color" content="#0a0a0b" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
-    <meta property="og:title" content="青山在 · FDE Learning OS" />
+    <meta property="og:title" content="青山在 · FDE 训练营" />
     <meta
       property="og:description"
-      content="为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。"
+      content="21 天 / 3 周 FDE 实战：产品交付、企业级 Agent、企业沟通特训。可核验结业。"
     />
     <meta property="og:image" content="/landing/hero.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <title>青山在 · FDE Learning OS</title>
+    <title>青山在 · FDE 训练营</title>
     <link rel="icon" type="image/svg+xml" href="/brand/qingshanzai-mark.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
+    <script>
+      try {
+        var t = localStorage.getItem("fde-mk-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.mkTheme = t;
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480" role="img">
+  <rect width="560" height="480" fill="#f2f5f0"/>
+  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · RULES FROM DOMAIN</text>
+  <rect x="30" y="60" width="240" height="280" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <rect x="30" y="60" width="240" height="48" fill="#1400ff"/>
+  <text x="150" y="90" text-anchor="middle" font-family="Menlo,monospace" font-size="13" font-weight="700" fill="#fff">FINANCE</text>
+  <text x="150" y="140" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#231f20">费用异常</text>
+  <rect x="58" y="165" width="184" height="50" fill="rgba(20,0,255,.06)" stroke="#1400ff" stroke-width="1.5"/>
+  <text x="150" y="196" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#1400ff">&gt; 预算 10% ?</text>
+  <rect x="58" y="230" width="184" height="50" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
+  <text x="150" y="261" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">环比 +20% ?</text>
+  <text x="150" y="315" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.55)">AI DRAWS · YOU SET</text>
+  <rect x="290" y="60" width="240" height="280" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <rect x="290" y="60" width="240" height="48" fill="#231f20"/>
+  <text x="410" y="90" text-anchor="middle" font-family="Menlo,monospace" font-size="13" font-weight="700" fill="#fff">HR</text>
+  <text x="410" y="140" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#231f20">招聘超期</text>
+  <g font-family="sans-serif" font-size="14" fill="#231f20">
+    <text x="318" y="185">筛选 → 面试 → offer</text>
+  </g>
+  <rect x="318" y="210" width="184" height="50" fill="rgba(20,0,255,.06)" stroke="#1400ff" stroke-width="1.5"/>
+  <text x="410" y="241" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#1400ff">停留 7 天 = 超期</text>
+  <text x="410" y="315" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.55)">DOMAIN EXPERT KNOWS</text>
+  <rect x="30" y="370" width="500" height="70" fill="#1400ff"/>
+  <text x="280" y="400" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">专业知识 = 系统规则</text>
+  <text x="280" y="425" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(255,255,255,.75)">NOT BACKGROUND · THE RULE ENGINE</text>
+</svg>

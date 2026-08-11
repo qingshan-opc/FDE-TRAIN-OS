@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { meApi, authApi, ApiError } from "../lib/api";
-import type { UserAttribution } from "../lib/types";
+import { meApi, ApiError } from "../lib/api";
 import { LearnerAccountLayout } from "../components/LearnerAccountLayout";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { useToast } from "../components/Toast";
-import { MemoriesUploader } from "../components/coach/MemoriesUploader";
 import {
   IconAccountCertificate,
   IconAccountIdentity,
+  IconAccountInvite,
   IconSectionCamp,
   IconSectionProfile,
 } from "../components/learnerAccountIcons";
@@ -32,7 +31,6 @@ export function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [displayName, setDisplayName] = useState("");
-  const [attribution, setAttribution] = useState<UserAttribution | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -41,8 +39,6 @@ export function Profile() {
       const profile = await meApi.profile();
       setData(profile);
       setDisplayName(profile.display_name || "");
-      const me = await authApi.me();
-      setAttribution(me.attribution || null);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "加载失败");
     } finally {
@@ -144,30 +140,26 @@ export function Profile() {
                     <span className="mono">{data.email}</span>
                   </div>
                   <div className="row profile-badge-row">
-                    <span className="status-pill">角色 {data.role === "learner" ? "学员" : data.role === "author" ? "教研" : "管理员"}</span>
+                    <span className="status-pill">
+                      角色{" "}
+                      {data.role === "learner"
+                        ? "学员"
+                        : data.role === "author"
+                          ? "教研"
+                          : data.role === "finance"
+                            ? "财务"
+                            : data.role === "partner"
+                              ? "机构"
+                              : data.role === "admin"
+                                ? "超级管理员"
+                                : "管理员"}
+                    </span>
                     <span className={`status-pill ${IDENTITY_CLASS[data.identity_status] || ""}`}>
                       实名 {IDENTITY_LABEL[data.identity_status] || data.identity_status}
                     </span>
                   </div>
                 </div>
               </div>
-            </section>
-
-            <section className="panel profile-base-panel">
-              <h2 className="profile-section-title">渠道归属</h2>
-              {attribution ? (
-                <div className="profile-meta-row">
-                  <span className="muted">已绑定机构</span>
-                  <span>
-                    {attribution.org_name || attribution.org_id}
-                    {attribution.invite_code ? ` · ${attribution.invite_code}` : ""}
-                  </span>
-                </div>
-              ) : (
-                <p className="muted" style={{ margin: 0, lineHeight: 1.55 }}>
-                  未绑定机构渠道。机构归因仅支持通过机构提供的注册链接完成注册时自动绑定，注册后不支持自行填写邀请码。
-                </p>
-              )}
             </section>
 
             <section className="panel profile-status-panel">
@@ -202,6 +194,19 @@ export function Profile() {
                   <span className="profile-status-card__link">查看证书</span>
                   </div>
                 </Link>
+                {data.role === "learner" ? (
+                  <Link to="/app/invite" className="profile-status-card">
+                    <span className="profile-status-card__icon" aria-hidden>
+                      <IconAccountInvite />
+                    </span>
+                    <div className="profile-status-card__body">
+                      <span className="profile-status-card__label">邀请分佣</span>
+                      <strong>邀请好友 · 阶梯佣金</strong>
+                      <p className="muted">默认 20%，邀 5 人 25%，邀 10 人 30%</p>
+                      <span className="profile-status-card__link">去邀请</span>
+                    </div>
+                  </Link>
+                ) : null}
               </div>
             </section>
           </div>
@@ -225,8 +230,6 @@ export function Profile() {
               </div>
             )}
           </section>
-
-          <MemoriesUploader />
         </>
       )}
     </LearnerAccountLayout>

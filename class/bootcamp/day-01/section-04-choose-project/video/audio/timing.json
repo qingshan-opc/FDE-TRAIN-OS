@@ -1,0 +1,53 @@
+{
+  "total": 198.827333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 24.448
+    },
+    {
+      "id": "02-project-formula",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\02-project-formula.wav",
+      "start": 24.698,
+      "duration": 29.269333333333332
+    },
+    {
+      "id": "03-domain-examples",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\03-domain-examples.wav",
+      "start": 54.21733333333333,
+      "duration": 27.605333333333334
+    },
+    {
+      "id": "04-first-version",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\04-first-version.wav",
+      "start": 82.07266666666666,
+      "duration": 26.666666666666668
+    },
+    {
+      "id": "05-data-safety",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\05-data-safety.wav",
+      "start": 108.98933333333333,
+      "duration": 25.173333333333332
+    },
+    {
+      "id": "06-project-brief",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\06-project-brief.wav",
+      "start": 134.41266666666667,
+      "duration": 23.637333333333334
+    },
+    {
+      "id": "07-name-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\07-name-check.wav",
+      "start": 158.3,
+      "duration": 21.504
+    },
+    {
+      "id": "08-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-04-choose-project\\video\\audio\\segments\\08-close.wav",
+      "start": 180.054,
+      "duration": 18.773333333333333
+    }
+  ]
+}

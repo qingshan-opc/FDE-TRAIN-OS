@@ -24,6 +24,9 @@ PLATFORM="${PLATFORM:-linux/amd64}"
 IMAGE="${REGISTRY}:dis-cloud-${TAG}"
 LATEST="${REGISTRY}:dis-cloud-latest"
 LOCAL_TAG="fde-dis-cloud-local:${TAG}"
+# Fail if image is suspiciously large (historical fat builds baked class/*.mp4 → ~2.8GB).
+# Override: MAX_IMAGE_MB=500 ./scripts/push_dis_cloud_image.sh
+MAX_IMAGE_MB="${MAX_IMAGE_MB:-300}"
 
 echo "==> build platform (${PLATFORM}) → local ${LOCAL_TAG}"
 docker buildx build --platform "${PLATFORM}" \
@@ -33,6 +36,17 @@ docker buildx build --platform "${PLATFORM}" \
   -t "${LOCAL_TAG}" \
   --load \
   .
+
+echo "==> size gate (max ${MAX_IMAGE_MB} MB)"
+SIZE_BYTES="$(docker image inspect "${LOCAL_TAG}" --format '{{.Size}}')"
+SIZE_MB=$(( SIZE_BYTES / 1024 / 1024 ))
+echo "  ${LOCAL_TAG} = ${SIZE_MB} MB (${SIZE_BYTES} bytes)"
+if [[ "${SIZE_MB}" -gt "${MAX_IMAGE_MB}" ]]; then
+  echo "ERROR: image ${SIZE_MB} MB exceeds MAX_IMAGE_MB=${MAX_IMAGE_MB}." >&2
+  echo "  Likely media leaked into the image (check .dockerignore: **/*.mp4, **/video/)." >&2
+  echo "  Refusing to push. Override only if intentional: MAX_IMAGE_MB=${SIZE_MB} $0" >&2
+  exit 1
+fi
 
 echo "==> tag + classic docker push (Docker v2 manifest, no OCI index)"
 docker tag "${LOCAL_TAG}" "${IMAGE}"

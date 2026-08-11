@@ -15,6 +15,12 @@ import {
 import { partnerApi, ApiError } from "../lib/api";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
+import { PosterStylePicker } from "../components/PosterStylePicker";
+import {
+  composeSharePoster,
+  downloadDataUrl,
+  type PosterStyleId,
+} from "../lib/sharePosters";
 
 type Offering = {
   id: string;
@@ -32,135 +38,6 @@ function yuan(fen: number) {
   return (fen / 100).toFixed(fen % 100 === 0 ? 0 : 2);
 }
 
-function loadImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error(`图片加载失败: ${src}`));
-    img.src = src;
-  });
-}
-
-function downloadDataUrl(dataUrl: string, filename: string) {
-  const a = document.createElement("a");
-  a.href = dataUrl;
-  a.download = filename;
-  a.click();
-}
-
-async function composePoster(opts: {
-  coverSrc: string;
-  title: string;
-  priceLabel: string;
-  orgName: string;
-  enrollUrl: string;
-  qrCanvas: HTMLCanvasElement | null;
-}): Promise<string> {
-  const W = 750;
-  const H = 1200;
-  const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Canvas 不可用");
-
-  // Background
-  const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, "#0f172a");
-  g.addColorStop(1, "#134e4a");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, W, H);
-
-  // Cover
-  try {
-    const cover = await loadImage(opts.coverSrc);
-    const coverH = 520;
-    const scale = Math.max(W / cover.width, coverH / cover.height);
-    const dw = cover.width * scale;
-    const dh = cover.height * scale;
-    ctx.save();
-    ctx.beginPath();
-    ctx.roundRect(32, 32, W - 64, coverH, 24);
-    ctx.clip();
-    ctx.drawImage(cover, 32 - (dw - (W - 64)) / 2, 32 - (dh - coverH) / 2, dw, dh);
-    ctx.restore();
-  } catch {
-    ctx.fillStyle = "#1e293b";
-    ctx.beginPath();
-    ctx.roundRect(32, 32, W - 64, 520, 24);
-    ctx.fill();
-  }
-
-  // Title
-  ctx.fillStyle = "#f8fafc";
-  ctx.font = "bold 42px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  const title = opts.title.length > 28 ? `${opts.title.slice(0, 28)}…` : opts.title;
-  wrapText(ctx, title, 48, 620, W - 96, 52);
-
-  // Price
-  ctx.fillStyle = "#2dd4bf";
-  ctx.font = "bold 48px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  ctx.fillText(opts.priceLabel, 48, 760);
-
-  // Org
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = "28px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  ctx.fillText(opts.orgName ? `推荐机构 · ${opts.orgName}` : "灵栖智能 · FDE 训练营", 48, 820);
-
-  // QR panel
-  ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.roundRect(W - 280, H - 340, 232, 280, 20);
-  ctx.fill();
-
-  const qrSize = 180;
-  const qrX = W - 280 + 26;
-  const qrY = H - 340 + 24;
-  if (opts.qrCanvas) {
-    ctx.drawImage(opts.qrCanvas, qrX, qrY, qrSize, qrSize);
-  } else {
-    // fallback: draw placeholder, caller should wait for QR
-    ctx.fillStyle = "#e2e8f0";
-    ctx.fillRect(qrX, qrY, qrSize, qrSize);
-  }
-
-  ctx.fillStyle = "#0f172a";
-  ctx.font = "bold 22px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("微信扫码报名", W - 164, H - 100);
-  ctx.textAlign = "start";
-
-  ctx.fillStyle = "#64748b";
-  ctx.font = "22px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-  ctx.fillText("扫码后自动登录并进入选购", 48, H - 80);
-
-  return canvas.toDataURL("image/png");
-}
-
-function wrapText(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  maxWidth: number,
-  lineHeight: number,
-) {
-  let line = "";
-  let yy = y;
-  for (const ch of text) {
-    const test = line + ch;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      ctx.fillText(line, x, yy);
-      line = ch;
-      yy += lineHeight;
-    } else {
-      line = test;
-    }
-  }
-  if (line) ctx.fillText(line, x, yy);
-}
-
 export function PartnerPosters() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -169,6 +46,7 @@ export function PartnerPosters() {
   const [enrollUrl, setEnrollUrl] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
   const [preview, setPreview] = useState<Offering | null>(null);
+  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("brutal");
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const qrHostRef = useRef<HTMLDivElement | null>(null);
@@ -206,19 +84,21 @@ export function PartnerPosters() {
   }, []);
 
   const rebuildPoster = useCallback(
-    async (item: Offering) => {
+    async (item: Offering, style: PosterStyleId) => {
       if (!enrollUrl) return;
       setComposing(true);
       try {
-        // wait a tick for QR canvas paint
         await new Promise((r) => setTimeout(r, 80));
-        const url = await composePoster({
+        const url = await composeSharePoster({
+          style,
+          audience: "org",
           coverSrc: item.cover_image || "/landing/hero.png",
           title: item.course_title || item.title,
           priceLabel: `¥${yuan(item.price_fen)}`,
-          orgName,
-          enrollUrl,
+          issuerLabel: orgName ? `推荐机构 · ${orgName}` : "灵栖智能 · FDE 训练营",
+          slogan: "成为前沿部署工程师，打通AI与业务的最后一公里",
           qrCanvas: getQrCanvas(),
+          scanHint: "扫码后自动登录并进入选购",
         });
         setPosterUrl(url);
       } catch (err) {
@@ -232,11 +112,11 @@ export function PartnerPosters() {
 
   useEffect(() => {
     if (preview && enrollUrl) {
-      void rebuildPoster(preview);
+      void rebuildPoster(preview, posterStyle);
     } else {
       setPosterUrl(null);
     }
-  }, [preview, enrollUrl, rebuildPoster]);
+  }, [preview, enrollUrl, posterStyle, rebuildPoster]);
 
   const hasInvite = Boolean(enrollUrl && inviteCode);
 
@@ -254,7 +134,7 @@ export function PartnerPosters() {
         课程海报
       </Typography.Title>
       <Typography.Paragraph type="secondary">
-        下载带机构邀请二维码的课程海报。学员微信扫码后自动登录并进入选购页，支付后归属本机构。
+        选择海报风格后预览下载。学员微信扫码后自动登录并进入选购页，支付后归属本机构。
       </Typography.Paragraph>
 
       {!hasInvite ? (
@@ -327,7 +207,7 @@ export function PartnerPosters() {
         open={Boolean(preview)}
         title={preview ? `海报预览 · ${preview.course_title || preview.title}` : "海报预览"}
         onCancel={() => setPreview(null)}
-        width={520}
+        width={560}
         footer={
           <Space>
             <Button onClick={() => setPreview(null)}>关闭</Button>
@@ -351,7 +231,7 @@ export function PartnerPosters() {
               onClick={() => {
                 if (!posterUrl || !preview) return;
                 const name = (preview.course_title || preview.title || "course").replace(/\s+/g, "-");
-                downloadDataUrl(posterUrl, `poster-${name}-${inviteCode || "code"}.png`);
+                downloadDataUrl(posterUrl, `poster-${posterStyle}-${name}-${inviteCode || "code"}.png`);
               }}
             >
               下载海报 PNG
@@ -359,12 +239,15 @@ export function PartnerPosters() {
           </Space>
         }
       >
+        <Typography.Paragraph type="secondary" style={{ marginBottom: 8 }}>
+          海报风格
+        </Typography.Paragraph>
+        <PosterStylePicker value={posterStyle} onChange={setPosterStyle} disabled={composing} />
         {posterUrl ? (
           <img src={posterUrl} alt="poster" style={{ width: "100%", borderRadius: 12 }} />
         ) : (
           <Typography.Text type="secondary">{composing ? "正在合成海报…" : "暂无预览"}</Typography.Text>
         )}
-        {/* Hidden QR used as source for canvas compose / download */}
         <div ref={qrHostRef} style={{ position: "absolute", left: -9999, top: 0, opacity: 0 }}>
           {enrollUrl ? <QRCode value={enrollUrl} size={180} type="canvas" /> : null}
         </div>

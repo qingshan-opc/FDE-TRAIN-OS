@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-p1",
+    "file": "02-p1.txt"
+  },
+  {
+    "id": "03-p2",
+    "file": "03-p2.txt"
+  },
+  {
+    "id": "04-p3",
+    "file": "04-p3.txt"
+  },
+  {
+    "id": "05-stop-restart",
+    "file": "05-stop-restart.txt"
+  },
+  {
+    "id": "06-rollback",
+    "file": "06-rollback.txt"
+  },
+  {
+    "id": "07-deployment",
+    "file": "07-deployment.txt"
+  },
+  {
+    "id": "08-pm",
+    "file": "08-pm.txt"
+  },
+  {
+    "id": "09-final",
+    "file": "09-final.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

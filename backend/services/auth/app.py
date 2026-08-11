@@ -57,10 +57,24 @@ init_schema()
 log = logging.getLogger("fde.auth")
 
 
+REMEMBER_TTL_SEC = 30 * 86400
+
+
 class LoginBody(BaseModel):
     email: str
     password: str
     camp_id: str | None = None
+    remember: bool = False
+
+
+class PasswordResetStartBody(BaseModel):
+    email: str
+
+
+class PasswordResetConfirmBody(BaseModel):
+    email: str
+    code: str
+    new_password: str
 
 
 class InviteLoginBody(BaseModel):
@@ -105,31 +119,59 @@ def _secure() -> bool:
     return auth_cookie_secure()
 
 
-def _set_auth_cookies(resp: Response, access: str, refresh: str, csrf: str) -> None:
-    set_auth_cookies(resp, access, refresh, csrf)
+def _set_auth_cookies(
+    resp: Response,
+    access: str,
+    refresh: str,
+    csrf: str,
+    *,
+    refresh_max_age: int | None = None,
+) -> None:
+    set_auth_cookies(resp, access, refresh, csrf, refresh_max_age=refresh_max_age)
 
 
 def _clear_cookies(resp: Response) -> None:
     clear_auth_cookies(resp)
 
 
-def _issue(user: AuthUser, camp_id: str | None, response: Response, request: Request) -> dict[str, Any]:
-    access = create_access_token(user, camp_id)
-    _, refresh = create_refresh_session(
+def _wx_bound_for(user: AuthUser) -> bool:
+    from services.wechat_mp import bind_reset
+
+    if not bind_reset.role_requires_wx_bind(user.role):
+        return True
+    return bind_reset.user_has_wx_openid(user.id)
+
+
+def _issue(
+    user: AuthUser,
+    camp_id: str | None,
+    response: Response,
+    request: Request,
+    *,
+    remember: bool = False,
+) -> dict[str, Any]:
+    ttl = REMEMBER_TTL_SEC if remember else None
+    sid, refresh = create_refresh_session(
         user.id,
         camp_id,
         user_agent=request.headers.get("user-agent"),
         ip=request.client.host if request.client else None,
+        exclusive=True,
+        ttl_sec=ttl,
     )
+    access = create_access_token(user, camp_id, session_id=sid)
     csrf = secrets.token_urlsafe(24)
-    _set_auth_cookies(response, access, refresh, csrf)
+    _set_auth_cookies(response, access, refresh, csrf, refresh_max_age=ttl)
     write_audit("auth.login", actor_id=user.id, camp_id=camp_id, ip=request.client.host if request.client else None)
+    wx_bound = _wx_bound_for(user)
     return {
         "token": access,
         "csrf": csrf,
         "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
         "camp_id": camp_id,
         "camps": user_camps(user.id),
+        "wx_bound": wx_bound,
+        "needs_wx_bind": not wx_bound,
     }
 
 
@@ -159,7 +201,11 @@ def login(body: LoginBody, request: Request, response: Response) -> dict[str, An
     camp_id = _resolve_camp_id(user, body.camp_id)
     if camp_id and user.role == "learner":
         _ensure_enrollment_record_safe(user.id, camp_id)
-    return _issue(user, camp_id, response, request)
+    issued = _issue(user, camp_id, response, request, remember=bool(body.remember))
+    # 邮箱登录同样消费邀请 cookie（机构 / 学员推荐），与微信登录一致
+    if user.role == "learner":
+        _try_bind_pending_invite(request, response, user.id)
+    return issued
 
 
 @router.post("/api/v1/auth/wechat/login-qr", dependencies=[Depends(rate_limit("login"))])
@@ -238,6 +284,8 @@ def wechat_login_status(
             receiver = wechat_bind.receiver_status(partners.get_organization(org_id))
             if receiver and not receiver.get("bound"):
                 redirect = "/partner?bind=1"
+    elif user.role == "finance":
+        redirect = "/author/finance"
     elif user.role in ("author", "admin"):
         redirect = "/author"
 
@@ -274,14 +322,25 @@ a{{color:#2dd4bf}}
     return HTMLResponse(body, status_code=400)
 
 
+def _resolve_any_invite(raw: str) -> dict[str, Any] | None:
+    """Org invite wins lookup; fall back to learner referral code."""
+    from services.partners.service import resolve_invite_code
+    from services.referral.service import resolve_learner_invite_code
+
+    ic = resolve_invite_code(raw)
+    if ic:
+        return ic
+    return resolve_learner_invite_code(raw)
+
+
 def _stash_invite_cookie(response: Response, invite: str | None) -> str | None:
     """Validate invite and set pending cookie; return normalized code or None."""
-    from services.partners.service import normalize_code, resolve_invite_code
+    from services.partners.service import normalize_code
 
     raw = (invite or "").strip()
     if not raw:
         return None
-    ic = resolve_invite_code(raw)
+    ic = _resolve_any_invite(raw)
     if not ic:
         return None
     normalized = normalize_code(raw)
@@ -299,7 +358,8 @@ def _stash_invite_cookie(response: Response, invite: str | None) -> str | None:
 
 def _try_bind_pending_invite(request: Request, response: Response, user_id: str) -> bool:
     """Bind fde_invite_pending cookie if user has no attribution yet."""
-    from services.partners.service import bind_invite_code, get_user_attribution
+    from services.partners.service import get_user_attribution
+    from services.referral.service import bind_any_invite_code, get_user_referral
 
     pending = (request.cookies.get(INVITE_PENDING_COOKIE) or "").strip()
     if not pending:
@@ -307,14 +367,21 @@ def _try_bind_pending_invite(request: Request, response: Response, user_id: str)
     if get_user_attribution(user_id):
         response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
         return False
+    if get_user_referral(user_id):
+        response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
+        return False
     # Only attribute learners via invite posters
     user = get_user_by_id(user_id)
     if not user or user.role not in ("learner",):
         return False
     try:
-        bind_invite_code(user_id, pending)
+        result = bind_any_invite_code(user_id, pending)
         response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
-        write_audit("auth.invite_bound_wechat", actor_id=user_id, details={"code": pending})
+        write_audit(
+            "auth.invite_bound_wechat",
+            actor_id=user_id,
+            details={"code": pending, "kind": result.get("kind")},
+        )
         return True
     except ValueError as exc:
         log.info("invite bind skipped user=%s: %s", user_id, exc)
@@ -369,13 +436,19 @@ def wechat_mp_entry_callback(
 
 @router.get("/api/v1/auth/invite-link")
 def claim_invite_link(code: str, response: Response) -> dict[str, Any]:
-    """Validate org invite link and stash code in httpOnly cookie for registration."""
+    """Validate org or learner invite link and stash code in httpOnly cookie."""
     from services.partners.service import normalize_code, resolve_invite_code
 
     raw = (code or "").strip()
     if not raw:
         raise HTTPException(400, "缺少邀请码")
     ic = resolve_invite_code(raw)
+    kind = "org"
+    if not ic:
+        from services.referral.service import resolve_learner_invite_code
+
+        ic = resolve_learner_invite_code(raw)
+        kind = "learner"
     if not ic:
         raise HTTPException(404, "邀请链接无效或已失效")
     normalized = normalize_code(raw)
@@ -388,16 +461,17 @@ def claim_invite_link(code: str, response: Response) -> dict[str, Any]:
         secure=_secure(),
         path="/",
     )
-    return {
-        "valid": True,
-        "code": normalized,
-        "org_name": ic.get("org_name") or ic.get("org_id"),
-    }
+    out: dict[str, Any] = {"valid": True, "code": normalized, "kind": kind}
+    if kind == "org":
+        out["org_name"] = ic.get("org_name") or ic.get("org_id")
+    else:
+        out["referrer_name"] = ic.get("referrer_display_name") or ic.get("referrer_email")
+    return out
 
 
 @router.post("/api/v1/auth/register", dependencies=[Depends(rate_limit("login"))])
 def register(body: RegisterBody, request: Request, response: Response) -> dict[str, Any]:
-    from services.partners.service import bind_invite_code
+    from services.referral.service import bind_any_invite_code
 
     from services.db import session_scope
     from services.models import User
@@ -423,7 +497,7 @@ def register(body: RegisterBody, request: Request, response: Response) -> dict[s
     pending_invite = (request.cookies.get(INVITE_PENDING_COOKIE) or "").strip()
     if pending_invite:
         try:
-            bind_invite_code(uid, pending_invite)
+            bind_any_invite_code(uid, pending_invite)
             response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
         except ValueError as exc:
             raise HTTPException(400, str(exc)) from exc
@@ -472,11 +546,11 @@ def refresh(request: Request, response: Response) -> dict[str, Any]:
     if not token:
         raise HTTPException(401, "无 refresh session")
     try:
-        user, _sid, new_refresh, camp_id = rotate_refresh_session(token)
+        user, sid, new_refresh, camp_id = rotate_refresh_session(token)
     except ValueError as exc:
         _clear_cookies(response)
-        raise HTTPException(401, "refresh 无效或已过期") from exc
-    access = create_access_token(user, camp_id)
+        raise HTTPException(401, "session_replaced") from exc
+    access = create_access_token(user, camp_id, session_id=sid)
     csrf = secrets.token_urlsafe(24)
     _set_auth_cookies(response, access, new_refresh, csrf)
     return {
@@ -509,8 +583,14 @@ def switch_camp(body: SwitchCampBody, request: Request, response: Response) -> d
 
 @router.get("/api/v1/auth/me")
 def me(request: Request) -> dict[str, Any]:
+    from services.shared import session_is_active
+
+    # Prefer middleware-authenticated user (includes single-session sid check).
+    # Fallback decode must also enforce sid so revoked sessions cannot revive via /me.
     user = getattr(request.state, "user", None)
     if not user:
+        if getattr(request.state, "session_replaced", False):
+            raise HTTPException(401, "session_replaced")
         auth = request.headers.get("Authorization", "")
         token = auth[7:] if auth.startswith("Bearer ") else request.cookies.get(ACCESS_COOKIE)
         if not token:
@@ -519,6 +599,9 @@ def me(request: Request) -> dict[str, Any]:
             payload = decode_access_token(token)
         except Exception as exc:
             raise HTTPException(401, "token 无效") from exc
+        sid = payload.get("sid")
+        if not session_is_active(sid if isinstance(sid, str) else None):
+            raise HTTPException(401, "session_replaced")
         u = get_user_by_id(payload["sub"])
         if not u:
             raise HTTPException(401, "用户不存在")
@@ -529,6 +612,7 @@ def me(request: Request) -> dict[str, Any]:
     from services.partners.service import get_user_attribution
 
     attribution = get_user_attribution(user.id)
+    wx_bound = _wx_bound_for(user)
     return {
         "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
         "camp_id": camp_id,
@@ -536,7 +620,68 @@ def me(request: Request) -> dict[str, Any]:
         "csrf": request.cookies.get(CSRF_COOKIE),
         "server_time": int(time.time()),
         "attribution": attribution,
+        "wx_bound": wx_bound,
+        "needs_wx_bind": not wx_bound,
     }
+
+
+@router.post("/api/v1/auth/wechat/bind-start", dependencies=[Depends(rate_limit("login"))])
+def wechat_bind_start(request: Request) -> dict[str, Any]:
+    from services.shared.middleware import require_user
+    from services.wechat_mp import bind_reset
+
+    user = require_user(request)
+    if not bind_reset.role_requires_wx_bind(user.role):
+        return {"already_bound": True, "wx_bound": True}
+    try:
+        return bind_reset.start_bind(user.id)
+    except RuntimeError as exc:
+        raise HTTPException(503, str(exc)) from exc
+
+
+@router.get("/api/v1/auth/wechat/bind-status")
+def wechat_bind_status(ticket: str, request: Request) -> dict[str, Any]:
+    from services.shared.middleware import require_user
+    from services.wechat_mp import bind_reset
+
+    require_user(request)
+    if not ticket or len(ticket) > 80:
+        raise HTTPException(400, "invalid ticket")
+    return bind_reset.bind_status(ticket)
+
+
+@router.post("/api/v1/auth/password-reset/start", dependencies=[Depends(rate_limit("login"))])
+def password_reset_start(body: PasswordResetStartBody) -> dict[str, Any]:
+    from services.wechat_mp import bind_reset
+
+    email = body.email.strip().lower()
+    if not email or "@" not in email:
+        raise HTTPException(400, "请输入有效邮箱")
+    try:
+        return bind_reset.start_password_reset(email)
+    except RuntimeError as exc:
+        raise HTTPException(429, str(exc)) from exc
+
+
+@router.get("/api/v1/auth/password-reset/status")
+def password_reset_status(ticket: str) -> dict[str, Any]:
+    from services.wechat_mp import bind_reset
+
+    if not ticket or len(ticket) > 80:
+        raise HTTPException(400, "invalid ticket")
+    return bind_reset.reset_status(ticket)
+
+
+@router.post("/api/v1/auth/password-reset/confirm", dependencies=[Depends(rate_limit("login"))])
+def password_reset_confirm(body: PasswordResetConfirmBody) -> dict[str, Any]:
+    from services.wechat_mp import bind_reset
+
+    try:
+        bind_reset.confirm_password_reset(body.email, body.code, body.new_password)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    write_audit("auth.password_reset", details={"email": body.email.strip().lower()})
+    return {"ok": True}
 
 
 @router.get("/api/v1/camps")

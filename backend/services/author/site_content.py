@@ -133,7 +133,11 @@ def _read_hero_media() -> dict[str, Any] | None:
 
 def get_landing_raw() -> dict[str, Any]:
     """Author editable landing payload merged with DEFAULT_LANDING + hero media."""
-    from services.learner.app import DEFAULT_LANDING, list_open_courses
+    from services.learner.app import (
+        DEFAULT_LANDING,
+        list_open_course_categories,
+        list_open_courses,
+    )
 
     page, body = _load_page_and_body()
     cta_raw = page.get("cta_json") or body.get("cta") or DEFAULT_LANDING["cta"]
@@ -162,6 +166,7 @@ def get_landing_raw() -> dict[str, Any]:
         "about": _section("about"),
         "contact": _section("contact"),
         "open_courses": list_open_courses(include_unpublished=True),
+        "open_course_categories": list_open_course_categories(include_unpublished=True),
         "hero_video": _read_hero_media(),
         "status": page.get("status"),
         "updated_at": page.get("updated_at"),
@@ -225,8 +230,9 @@ def patch_landing(payload: dict[str, Any]) -> dict[str, Any]:
     page, body = _load_page_and_body()
     patch = dict(payload)
 
-    # open_courses has dedicated endpoints — ignore accidental full replace here
+    # open_courses / categories have dedicated endpoints — ignore accidental full replace
     patch.pop("open_courses", None)
+    patch.pop("open_course_categories", None)
     patch.pop("hero_video", None)
     patch.pop("status", None)
     patch.pop("updated_at", None)

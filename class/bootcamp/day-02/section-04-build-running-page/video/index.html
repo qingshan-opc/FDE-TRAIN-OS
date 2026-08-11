@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>分段生成可运行页面</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.85)}
+.card.dim{background:var(--ink-05)}
+.open-split{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch;margin-top:4px;max-width:1320px;flex:1;min-height:0}
+.open-split .stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ico{width:40px;height:40px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.ico svg{width:24px;height:24px;display:block}
+.card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="220.319" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div class="stage-bg"></div>
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="19.925">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>01 OPEN</div>
+    <h1 class="display" data-anim="t">今天最重要的实操</h1>
+    <p class="lede" data-anim="s">原型 → 可运行前端</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>一段一验，不一次做完</h4><p>一段一验，不一次做完</p></div>
+        <div class="tag-row"><span class="tag solid">今天最重要的实操</span><span class="tag hot">原型 → 可运行前端</span><span class="tag ">一段一验，不一次做完</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · open</div>
+        <img src="assets/diagrams/01-open.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-02-why-split" class="clip slide" data-track-index="1" data-start="20.175" data-duration="19.883">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>02 WHY-SPLIT</div>
+    <h1 class="display" data-anim="t">为什么要分四段</h1>
+    <p class="lede" data-anim="s">一次全做，出错很难定位</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>每段只增加一种能力</h4><p>每段只增加一种能力</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>最近变化，就是优先检查点</h4><p>最近变化，就是优先检查点</p></div>
+        <div class="tag-row"><span class="tag solid">为什么要分四段</span><span class="tag hot">一次全做，出错很难定位</span><span class="tag ">每段只增加一种能力</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · why-split</div>
+        <img src="assets/diagrams/02-why-split.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-03-stage-one" class="clip slide" data-track-index="1" data-start="40.308" data-duration="22.955">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>03 STAGE-ONE</div>
+    <h1 class="display" data-anim="t">第一段 · 建立三文件骨架</h1>
+    <p class="lede" data-anim="s">frontend/index.html</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>frontend/styles.css</h4><p>frontend/styles.css</p></div><div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>frontend/app.js</h4><p>frontend/app.js</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 12h16"/><path d="M12 4l8 8-8 8"/></svg></div><div class="lab">03</div></div><h4>完成后立刻双击打开</h4><p>完成后立刻双击打开</p></div>
+        <div class="tag-row"><span class="tag solid">第一段 · 建立三文件骨架</span><span class="tag hot">frontend/index.htm</span><span class="tag ">frontend/styles.cs</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stage-one</div>
+        <img src="assets/diagrams/03-stage-one.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-04-stage-one-check" class="clip slide" data-track-index="1" data-start="63.513" data-duration="19.712">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>04 STAGE-ONE-CHECK</div>
+    <h1 class="display" data-anim="t">第一段检查</h1>
+    <p class="lede" data-anim="s">文件真实落盘</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>页面不是空白</h4><p>页面不是空白</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>CSS 与 JS 引用存在</h4><p>CSS 与 JS 引用存在</p></div>
+        <div class="tag-row"><span class="tag solid">第一段检查</span><span class="tag hot">文件真实落盘</span><span class="tag ">页面不是空白</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stage-one-check</div>
+        <img src="assets/diagrams/04-stage-one-check.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-05-stage-two" class="clip slide" data-track-index="1" data-start="83.475" data-duration="23.509">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>05 STAGE-TWO</div>
+    <h1 class="display" data-anim="t">第二段 · 还原 UI 样式</h1>
+    <p class="lede" data-anim="s">读取 design-spec 与原型</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>颜色</h4><p>字号 · 间距 · 布局 · 按钮状态</p></div>
+        <div class="tag-row"><span class="tag solid">第二段 · 还原 UI 样式</span><span class="tag hot">读取 design-spec 与原型</span><span class="tag ">颜色 · 字号 · 间距 · 布局 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stage-two</div>
+        <img src="assets/diagrams/05-stage-two.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-06-stage-three" class="clip slide" data-track-index="1" data-start="107.234" data-duration="24.363">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>06 STAGE-THREE</div>
+    <h1 class="display" data-anim="t">第三段 · 加入主要交互</h1>
+    <p class="lede" data-anim="s">读取 ui-flow.md</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>筛选</h4><p>表单 · 主要按钮</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>操作必须产生可见反馈</h4><p>操作必须产生可见反馈</p></div>
+        <div class="tag-row"><span class="tag solid">第三段 · 加入主要交互</span><span class="tag hot">读取 ui-flow.md</span><span class="tag ">筛选 · 表单 · 主要按钮</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stage-three</div>
+        <img src="assets/diagrams/06-stage-three.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-07-demo-not-api" class="clip slide" data-track-index="1" data-start="131.847" data-duration="19.584">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>07 DEMO-NOT-API</div>
+    <h1 class="display" data-anim="t">当前仍用演示数据</h1>
+    <p class="lede" data-anim="s">不连接真实后端</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>不编造接口地址</h4><p>不编造接口地址</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>先验证页面行为</h4><p>先验证页面行为</p></div>
+        <div class="tag-row"><span class="tag solid">当前仍用演示数据</span><span class="tag hot">不连接真实后端</span><span class="tag ">不编造接口地址</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · demo-not-api</div>
+        <img src="assets/diagrams/07-demo-not-api.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-08-stage-four" class="clip slide" data-track-index="1" data-start="151.681" data-duration="19.968">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>08 STAGE-FOUR</div>
+    <h1 class="display" data-anim="t">第四段 · 补齐四种状态</h1>
+    <p class="lede" data-anim="s">loading · empty</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>success</h4><p>error</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>提供小白能找到的演示入口</h4><p>提供小白能找到的演示入口</p></div>
+        <div class="tag-row"><span class="tag solid">第四段 · 补齐四种状态</span><span class="tag hot">loading · empty</span><span class="tag ">success · error</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stage-four</div>
+        <img src="assets/diagrams/08-stage-four.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-09-run-after-each" class="clip slide" data-track-index="1" data-start="171.899" data-duration="20.992">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>09 RUN-AFTER-EACH</div>
+    <h1 class="display" data-anim="t">每段完成都做同一件事</h1>
+    <p class="lede" data-anim="s">刷新页面 · 亲手操作</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>查看控制台</h4><p>查看控制台</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>不通过就停在当前段</h4><p>不通过就停在当前段</p></div>
+        <div class="tag-row"><span class="tag solid">每段完成都做同一件事</span><span class="tag hot">刷新页面 · 亲手操作</span><span class="tag ">查看控制台</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · run-after-each</div>
+        <img src="assets/diagrams/09-run-after-each.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-10-close" class="clip slide" data-track-index="1" data-start="193.141" data-duration="27.179">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">10</span>10 CLOSE</div>
+    <h1 class="display" data-anim="t">今天使用无构建方案</h1>
+    <p class="lede" data-anim="s">先跑通，再加工具</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>读输入 → 分段实现 → 每段运行</h4><p>读输入 → 分段实现 → 每段运行</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一节</h4><p>人工验收与修复</p></div>
+        <div class="tag-row"><span class="tag solid">今天使用无构建方案</span><span class="tag hot">先跑通，再加工具</span><span class="tag ">读输入 → 分段实现 → 每段运行</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · close</div>
+        <img src="assets/diagrams/10-close.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="220.319" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第二天 · 第 4 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="220.319" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="220.319" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="220.319" data-track-index="10" data-volume="1"></audio>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.000, dur: 19.925 },
+  { id: "#slide-02-why-split", start: 20.175, dur: 19.883 },
+  { id: "#slide-03-stage-one", start: 40.308, dur: 22.955 },
+  { id: "#slide-04-stage-one-check", start: 63.513, dur: 19.712 },
+  { id: "#slide-05-stage-two", start: 83.475, dur: 23.509 },
+  { id: "#slide-06-stage-three", start: 107.234, dur: 24.363 },
+  { id: "#slide-07-demo-not-api", start: 131.847, dur: 19.584 },
+  { id: "#slide-08-stage-four", start: 151.681, dur: 19.968 },
+  { id: "#slide-09-run-after-each", start: 171.899, dur: 20.992 },
+  { id: "#slide-10-close", start: 193.141, dur: 27.179 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out", stagger: 0.06 }, t0 + 0.42);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+  enter("#slide-01-open", 0.000);
+  enter("#slide-02-why-split", 20.175);
+  enter("#slide-03-stage-one", 40.308);
+  enter("#slide-04-stage-one-check", 63.513);
+  enter("#slide-05-stage-two", 83.475);
+  enter("#slide-06-stage-three", 107.234);
+  enter("#slide-07-demo-not-api", 131.847);
+  enter("#slide-08-stage-four", 151.681);
+  enter("#slide-09-run-after-each", 171.899);
+  enter("#slide-10-close", 193.141);
+  exit("#slide-01-open", 19.475, 19.925);
+  exit("#slide-02-why-split", 39.608, 40.058);
+  exit("#slide-03-stage-one", 62.813, 63.263);
+  exit("#slide-04-stage-one-check", 82.775, 83.225);
+  exit("#slide-05-stage-two", 106.534, 106.984);
+  exit("#slide-06-stage-three", 131.147, 131.597);
+  exit("#slide-07-demo-not-api", 150.981, 151.431);
+  exit("#slide-08-stage-four", 171.199, 171.649);
+  exit("#slide-09-run-after-each", 192.441, 192.891);
+  exit("#slide-10-close", 219.869, 220.319);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+
+</body>
+</html>

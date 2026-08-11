@@ -24,7 +24,7 @@ import {
   PayCircleOutlined,
 } from "@ant-design/icons";
 import { App as AntApp } from "antd";
-import { useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo";
 import { AuthorLayoutProvider } from "../lib/authorLayoutContext";
@@ -41,7 +41,10 @@ type MenuGroup = { label: string; items: MenuItem[] };
 const MENU_GROUPS: MenuGroup[] = [
   {
     label: "工作台",
-    items: [{ key: "/author", icon: <DashboardOutlined />, label: "概览" }],
+    items: [
+      { key: "/author", icon: <DashboardOutlined />, label: "概览" },
+      { key: "/author/finance", icon: <PayCircleOutlined />, label: "财务大屏" },
+    ],
   },
   {
     label: "网站维护",
@@ -115,9 +118,27 @@ export function AuthorHome() {
   const headerRef = useRef<HTMLElement>(null);
   const siderRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLElement>(null);
+  const isFinanceOnly = user?.role === "finance";
+
+  const menuGroups = useMemo(() => {
+    if (!isFinanceOnly) return MENU_GROUPS;
+    return MENU_GROUPS.filter((g) => g.label === "工作台").map((g) => ({
+      ...g,
+      items: (g.items || []).filter((it) => {
+        const key = String((it as { key?: string }).key || "");
+        return key === "/author" || key === "/author/finance";
+      }),
+    }));
+  }, [isFinanceOnly]);
 
   const selected = findSelectedKey(loc.pathname);
-  const allItems = useMemo(() => MENU_GROUPS.flatMap((g) => g.items), []);
+  const allItems = useMemo(() => menuGroups.flatMap((g) => g.items), [menuGroups]);
+
+  useEffect(() => {
+    if (!isFinanceOnly) return;
+    const allowed = loc.pathname === "/author" || loc.pathname.startsWith("/author/finance");
+    if (!allowed) nav("/author/finance", { replace: true });
+  }, [isFinanceOnly, loc.pathname, nav]);
 
   const onSwitchCamp = async (nextCampId: string) => {
     if (!nextCampId || nextCampId === campId) return;
@@ -152,7 +173,7 @@ export function AuthorHome() {
             </div>
           </div>
           <div className="author-sider-nav">
-            {MENU_GROUPS.map((group) => (
+            {menuGroups.map((group) => (
               <div key={group.label} className="author-nav-group">
                 <div className="author-nav-section">
                   {GROUP_ICONS[group.label] ? (
@@ -200,7 +221,7 @@ export function AuthorHome() {
               </Typography.Text>
             </div>
             <div className="author-topbar__right">
-              {campOptions.length > 1 ? (
+              {!isFinanceOnly && campOptions.length > 1 ? (
                 <Select
                   aria-label="切换营期"
                   value={campId || undefined}
@@ -213,19 +234,23 @@ export function AuthorHome() {
                   getPopupContainer={() => headerRef.current || document.body}
                   className="author-camp-select"
                 />
+              ) : null}
+              {!isFinanceOnly ? (
+                <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
+                  学员台
+                </Button>
               ) : (
-                campId && <Typography.Text code>{campId}</Typography.Text>
+                <Typography.Text type="secondary">财务人员</Typography.Text>
               )}
-              <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
-                学员台
-              </Button>
               <Dropdown
                 getPopupContainer={() => headerRef.current || document.body}
                 menu={{
                   items: [
                     { key: "profile", icon: <UserOutlined />, label: "个人中心", onClick: () => nav("/app/profile") },
-                    { key: "certs", icon: <BookOutlined />, label: "结业证书", onClick: () => nav("/app/certificates") },
-                    { type: "divider" },
+                    ...(!isFinanceOnly
+                      ? [{ key: "certs", icon: <BookOutlined />, label: "结业证书", onClick: () => nav("/app/certificates") }]
+                      : []),
+                    { type: "divider" as const },
                     { key: "logout", icon: <LogoutOutlined />, label: "退出登录", danger: true, onClick: () => void onLogout() },
                   ],
                 }}
@@ -235,7 +260,7 @@ export function AuthorHome() {
                     <Avatar size="small" style={{ backgroundColor: token.colorPrimary }}>
                       {(user?.display_name || user?.email || "?")[0]?.toUpperCase()}
                     </Avatar>
-                    <span>{user?.display_name || user?.email}</span>
+                    <span>{(user?.display_name || user?.email || "").replace(/^\[disabled\]\s*/i, "")}</span>
                   </Space>
                 </Button>
               </Dropdown>

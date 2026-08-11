@@ -1,0 +1,59 @@
+{
+  "total": 221.904,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 20.949333333333332
+    },
+    {
+      "id": "02-four-files",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\02-four-files.wav",
+      "start": 21.199333333333332,
+      "duration": 30.421333333333333
+    },
+    {
+      "id": "03-missing-file",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\03-missing-file.wav",
+      "start": 51.870666666666665,
+      "duration": 24.021333333333335
+    },
+    {
+      "id": "04-five-sentences",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\04-five-sentences.wav",
+      "start": 76.142,
+      "duration": 22.784
+    },
+    {
+      "id": "05-correct",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\05-correct.wav",
+      "start": 99.17599999999999,
+      "duration": 25.088
+    },
+    {
+      "id": "06-plan",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\06-plan.wav",
+      "start": 124.51399999999998,
+      "duration": 25.173333333333332
+    },
+    {
+      "id": "07-why-simple",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\07-why-simple.wav",
+      "start": 149.9373333333333,
+      "duration": 23.978666666666665
+    },
+    {
+      "id": "08-confirm",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\08-confirm.wav",
+      "start": 174.16599999999997,
+      "duration": 20.48
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-02-frontend-handoff\\video\\audio\\segments\\09-close.wav",
+      "start": 194.89599999999996,
+      "duration": 27.008
+    }
+  ]
+}

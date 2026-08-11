@@ -1,0 +1,59 @@
+{
+  "total": 188.736,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 20.48
+    },
+    {
+      "id": "02-api-six",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\02-api-six.wav",
+      "start": 20.6,
+      "duration": 20.565333333333335
+    },
+    {
+      "id": "03-menu",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\03-menu.wav",
+      "start": 41.285333333333334,
+      "duration": 22.528
+    },
+    {
+      "id": "04-api-doc",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\04-api-doc.wav",
+      "start": 63.93333333333333,
+      "duration": 20.010666666666665
+    },
+    {
+      "id": "05-db",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\05-db.wav",
+      "start": 84.064,
+      "duration": 21.418666666666667
+    },
+    {
+      "id": "06-map",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\06-map.wav",
+      "start": 105.60266666666666,
+      "duration": 20.010666666666665
+    },
+    {
+      "id": "07-regenerate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\07-regenerate.wav",
+      "start": 125.73333333333333,
+      "duration": 21.248
+    },
+    {
+      "id": "08-example",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\08-example.wav",
+      "start": 147.10133333333334,
+      "duration": 21.973333333333333
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-03-api-data-contract\\video\\audio\\segments\\09-close.wav",
+      "start": 169.19466666666668,
+      "duration": 19.541333333333334
+    }
+  ]
+}

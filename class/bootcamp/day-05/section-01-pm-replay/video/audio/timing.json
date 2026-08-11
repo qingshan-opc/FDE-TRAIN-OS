@@ -1,0 +1,59 @@
+{
+  "total": 185.194667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 21.248
+    },
+    {
+      "id": "02-why-replay",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\02-why-replay.wav",
+      "start": 21.368000000000002,
+      "duration": 19.669333333333334
+    },
+    {
+      "id": "03-folder",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\03-folder.wav",
+      "start": 41.157333333333334,
+      "duration": 20.778666666666666
+    },
+    {
+      "id": "04-pm-input",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\04-pm-input.wav",
+      "start": 62.056,
+      "duration": 23.808
+    },
+    {
+      "id": "05-choose",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\05-choose.wav",
+      "start": 85.98400000000001,
+      "duration": 19.754666666666665
+    },
+    {
+      "id": "06-interview",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\06-interview.wav",
+      "start": 105.85866666666668,
+      "duration": 19.626666666666665
+    },
+    {
+      "id": "07-artifacts",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\07-artifacts.wav",
+      "start": 125.60533333333335,
+      "duration": 21.504
+    },
+    {
+      "id": "08-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\08-gate.wav",
+      "start": 147.22933333333336,
+      "duration": 19.541333333333334
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-01-pm-replay\\video\\audio\\segments\\09-close.wav",
+      "start": 166.8906666666667,
+      "duration": 18.304
+    }
+  ]
+}

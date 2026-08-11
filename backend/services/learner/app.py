@@ -44,7 +44,7 @@ from services.shared.config import (  # noqa: E402
     LAB_ATTACHMENT_MAX_BYTES,
     S3_BUCKET_ARTIFACTS,
 )
-from services.storage import course_media_key, legacy_camp_media_prefix  # noqa: E402
+from services.storage import course_media_key, legacy_camp_media_prefix, open_course_key  # noqa: E402
 from services.shared.middleware import (  # noqa: E402
     require_camp_access,
     require_user,
@@ -87,6 +87,7 @@ DEFAULT_LANDING: dict[str, Any] = {
     },
     "cta": {"login": "/login", "app": "/app/courses"},
     "tabs": [
+        {"id": "home", "label": "首页"},
         {"id": "enterprise", "label": "企业培训"},
         {"id": "open", "label": "公开课"},
         {"id": "verify", "label": "证书核验"},
@@ -98,16 +99,22 @@ DEFAULT_LANDING: dict[str, Any] = {
         "facts": [],
         "mentors": [],  # empty -> Landing.tsx renders "导师讲课素材筹备中，可通过后台配置" placeholders
     },
+    "open_course_categories": [
+        {"id": "cat-intro", "name": "入门", "sort_order": 0, "published": True},
+        {"id": "cat-practice", "name": "实操预告", "sort_order": 1, "published": True},
+    ],
     "open_courses": [
         {
             "id": "fde-intro",
             "title": "FDE 是谁：懂业务的技术落地者",
             "minutes": 2,
             "level": "入门",
+            "category_id": "cat-intro",
             "summary": "用两分钟看清 FDE 如何把老板语言翻译成可验收交付。",
-            "object_key": course_media_key("day01-c1-explainer.mp4"),
-            "poster_key": course_media_key("day01-c1-poster.jpg"),
-            "duration_sec": 117,
+            # 营期介绍片（非 Day1 课件）。源文件：.upload/course-intro/camp-intro.mp4
+            "object_key": open_course_key("fde-intro", "video", ".mp4"),
+            "poster_key": open_course_key("fde-intro", "poster", ".jpg"),
+            "duration_sec": 119,
             "published": True,
         },
         {
@@ -115,9 +122,10 @@ DEFAULT_LANDING: dict[str, Any] = {
             "title": "Prompt 准星：写出可验收的指令",
             "minutes": 2,
             "level": "入门",
+            "category_id": "cat-intro",
             "summary": "角色 + 背景 + 任务 + 约束——指挥 AI 的最小公式。",
-            "object_key": course_media_key("day01-c3-explainer.mp4"),
-            "poster_key": course_media_key("day01-c3-poster.jpg"),
+            "object_key": course_media_key("day01-c3-agent-team.mp4"),
+            "poster_key": course_media_key("day01-c3-agent-team-poster.jpg"),
             "duration_sec": 87,
             "published": True,
         },
@@ -126,29 +134,40 @@ DEFAULT_LANDING: dict[str, Any] = {
             "title": "今日交付规格：库存列表页",
             "minutes": 2,
             "level": "实操预告",
+            "category_id": "cat-practice",
             "summary": "看清 Week1 最小可用产物长什么样，再决定是否报名完整营期。",
-            "object_key": course_media_key("day01-c6-explainer.mp4"),
-            "poster_key": course_media_key("day01-c6-poster.jpg"),
+            "object_key": course_media_key("day01-c6-ui-prototype-accept.mp4"),
+            "poster_key": course_media_key("day01-c6-ui-prototype-accept-poster.jpg"),
             "duration_sec": 91,
             "published": True,
         },
     ],
     "about": {
         "title": "关于我们",
-        "body": "青山在是新一代数字化人才训练品牌，由杭州灵梧智能科技有限公司运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
+        "body": "青山在是新一代数字化人才训练品牌，由青山OPC & 灵栖智能运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
     },
     "contact": {
         "title": "联系我们",
         "subtitle": "企业、高校与政府组织培训咨询",
-        "email": "training@qingshanzai.local",
+        "email": "admin@lingqicloud.com",
         "note": "请留下组织名称、培训规模与期望开课时间，我们会安排顾问对接。",
     },
 }
 
 # Static M2 site sections without dedicated DB tables yet (tabs/enterprise/
 # about/contact) — served from DEFAULT_LANDING unless body_json overrides.
-# open_courses is DB-overridable via body_json and may include media keys.
-_STATIC_LANDING_KEYS = ("tabs", "enterprise", "open_courses", "about", "contact", "brand", "hero", "seo")
+# open_courses / open_course_categories are DB-overridable via body_json.
+_STATIC_LANDING_KEYS = (
+    "tabs",
+    "enterprise",
+    "open_course_categories",
+    "open_courses",
+    "about",
+    "contact",
+    "brand",
+    "hero",
+    "seo",
+)
 
 _PUBLIC_OPEN_PREFIXES = (
     COURSE_MEDIA_OPEN_PREFIX,
@@ -165,6 +184,8 @@ def _merge_section(key: str, body: dict[str, Any]) -> Any:
     raw = body.get(key)
     if key == "open_courses":
         return list_open_courses(include_unpublished=False)
+    if key == "open_course_categories":
+        return list_open_course_categories(include_unpublished=False)
     if key == "enterprise":
         ent = raw if isinstance(raw, dict) else {}
         base = dict(DEFAULT_LANDING["enterprise"])
@@ -205,6 +226,27 @@ def _public_hero_video(media_row: dict[str, Any] | None) -> dict[str, Any] | Non
     return out if (out["poster_url"] or out["src_url"]) else None
 
 
+def _normalize_open_course_category(raw: dict[str, Any]) -> dict[str, Any] | None:
+    cid = str(raw.get("id") or "").strip()
+    name = str(raw.get("name") or "").strip()
+    if not cid or not name:
+        return None
+    published = raw.get("published")
+    if published is None:
+        published = True
+    sort_order = raw.get("sort_order")
+    try:
+        sort_order = int(sort_order) if sort_order is not None else 0
+    except (TypeError, ValueError):
+        sort_order = 0
+    return {
+        "id": cid,
+        "name": name,
+        "sort_order": sort_order,
+        "published": bool(published),
+    }
+
+
 def _normalize_open_course(raw: dict[str, Any]) -> dict[str, Any] | None:
     cid = str(raw.get("id") or "").strip()
     title = str(raw.get("title") or "").strip()
@@ -213,11 +255,13 @@ def _normalize_open_course(raw: dict[str, Any]) -> dict[str, Any] | None:
     published = raw.get("published")
     if published is None:
         published = True
+    category_id = str(raw.get("category_id") or "").strip() or None
     course = {
         "id": cid,
         "title": title,
         "minutes": raw.get("minutes"),
         "level": raw.get("level"),
+        "category_id": category_id,
         "summary": raw.get("summary"),
         "object_key": raw.get("object_key") or None,
         "poster_key": raw.get("poster_key") or None,
@@ -228,6 +272,80 @@ def _normalize_open_course(raw: dict[str, Any]) -> dict[str, Any] | None:
         course["stream_url"] = f"/api/v1/site/open-courses/{cid}/stream"
         course["poster_url"] = f"/api/v1/site/open-courses/{cid}/stream?asset=poster" if course["poster_key"] else None
     return course
+
+
+def _slugify_category_id(name: str) -> str:
+    import re
+    from uuid import uuid4
+
+    base = re.sub(r"[^a-zA-Z0-9\u4e00-\u9fff_-]+", "-", (name or "").strip())
+    base = base.strip("-_")[:24] or "cat"
+    return f"cat-{base}-{uuid4().hex[:6]}"
+
+
+def _persist_landing_body(body: dict[str, Any]) -> None:
+    """Write full body_json for slug=landing."""
+    _ensure_landing_row()
+    with db_cursor() as cur:
+        cur.execute("SELECT id FROM site_pages WHERE slug=? LIMIT 1", ("landing",))
+        if not cur.fetchone():
+            raise HTTPException(500, "landing page missing")
+        try:
+            cur.execute(
+                "UPDATE site_pages SET body_json=?::jsonb, updated_at=NOW() WHERE slug=?",
+                (json.dumps(body, ensure_ascii=False), "landing"),
+            )
+        except Exception as exc:
+            raise HTTPException(500, f"无法写入站点配置（需 site_pages.body_json）: {exc}") from exc
+
+
+def _maybe_migrate_open_course_categories(body: dict[str, Any]) -> dict[str, Any]:
+    """If categories missing, derive from course.level (or default) and persist once."""
+    raw_cats = body.get("open_course_categories")
+    if isinstance(raw_cats, list) and raw_cats:
+        return body
+
+    raw_courses = body.get("open_courses")
+    if not isinstance(raw_courses, list) or not raw_courses:
+        # No DB courses — defaults already have categories; don't force-write.
+        return body
+
+    levels: list[str] = []
+    for item in raw_courses:
+        if not isinstance(item, dict):
+            continue
+        lv = str(item.get("level") or "").strip()
+        if lv and lv not in levels:
+            levels.append(lv)
+    if not levels:
+        levels = ["公开课"]
+
+    cats: list[dict[str, Any]] = []
+    level_to_id: dict[str, str] = {}
+    for i, name in enumerate(levels):
+        cid = _slugify_category_id(name)
+        level_to_id[name] = cid
+        cats.append({"id": cid, "name": name, "sort_order": i, "published": True})
+
+    default_id = cats[0]["id"]
+    updated_courses: list[dict[str, Any]] = []
+    for item in raw_courses:
+        if not isinstance(item, dict):
+            continue
+        course = dict(item)
+        if not str(course.get("category_id") or "").strip():
+            lv = str(course.get("level") or "").strip()
+            course["category_id"] = level_to_id.get(lv) or default_id
+        updated_courses.append(course)
+
+    body = dict(body)
+    body["open_course_categories"] = cats
+    body["open_courses"] = updated_courses
+    try:
+        _persist_landing_body(body)
+    except Exception:
+        pass
+    return body
 
 
 def _load_landing_body() -> dict[str, Any]:
@@ -251,8 +369,46 @@ def _load_landing_body() -> dict[str, Any]:
         return {}
 
 
+def list_open_course_categories(*, include_unpublished: bool = False) -> list[dict[str, Any]]:
+    body = _load_landing_body()
+    body = _maybe_migrate_open_course_categories(body)
+    raw_list = body.get("open_course_categories")
+    if not isinstance(raw_list, list) or not raw_list:
+        raw_list = DEFAULT_LANDING["open_course_categories"]
+    out: list[dict[str, Any]] = []
+    for item in raw_list:
+        if not isinstance(item, dict):
+            continue
+        cat = _normalize_open_course_category(item)
+        if not cat:
+            continue
+        if not include_unpublished and not cat["published"]:
+            continue
+        out.append(cat)
+    out.sort(key=lambda c: (int(c.get("sort_order") or 0), str(c.get("name") or "")))
+    return out
+
+
+def save_open_course_categories(categories: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Persist open_course_categories into site_pages.body_json."""
+    normalized: list[dict[str, Any]] = []
+    for item in categories:
+        if not isinstance(item, dict):
+            continue
+        cat = _normalize_open_course_category(item)
+        if cat:
+            normalized.append(cat)
+    normalized.sort(key=lambda c: (int(c.get("sort_order") or 0), str(c.get("name") or "")))
+    body = _load_landing_body()
+    body = dict(body) if body else {}
+    body["open_course_categories"] = normalized
+    _persist_landing_body(body)
+    return list_open_course_categories(include_unpublished=True)
+
+
 def list_open_courses(*, include_unpublished: bool = False) -> list[dict[str, Any]]:
     body = _load_landing_body()
+    body = _maybe_migrate_open_course_categories(body)
     raw_list = body.get("open_courses")
     if not isinstance(raw_list, list) or not raw_list:
         raw_list = DEFAULT_LANDING["open_courses"]
@@ -271,7 +427,6 @@ def list_open_courses(*, include_unpublished: bool = False) -> list[dict[str, An
 
 def save_open_courses(courses: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Persist open_courses into site_pages.body_json (author/admin)."""
-    _ensure_landing_row()
     normalized: list[dict[str, Any]] = []
     for item in courses:
         if not isinstance(item, dict):
@@ -282,25 +437,10 @@ def save_open_courses(courses: list[dict[str, Any]]) -> list[dict[str, Any]]:
             persist = {k: v for k, v in course.items() if k not in ("stream_url", "poster_url")}
             normalized.append(persist)
 
-    with db_cursor() as cur:
-        cur.execute("SELECT * FROM site_pages WHERE slug=? LIMIT 1", ("landing",))
-        row = cur.fetchone()
-        if not row:
-            raise HTTPException(500, "landing page missing")
-        page = dict(row)
-        body: dict[str, Any] = {}
-        raw_body = page.get("body_json")
-        if raw_body:
-            body = raw_body if isinstance(raw_body, dict) else json.loads(raw_body)
-        body["open_courses"] = normalized
-        # Prefer body_json column (004 shape); also try no-op if only 005 shape.
-        try:
-            cur.execute(
-                "UPDATE site_pages SET body_json=?::jsonb, updated_at=NOW() WHERE slug=?",
-                (json.dumps(body, ensure_ascii=False), "landing"),
-            )
-        except Exception as exc:
-            raise HTTPException(500, f"无法写入公开课配置（需 site_pages.body_json）: {exc}") from exc
+    body = _load_landing_body()
+    body = dict(body) if body else {}
+    body["open_courses"] = normalized
+    _persist_landing_body(body)
     return list_open_courses(include_unpublished=True)
 
 def _table_exists(cur, name: str) -> bool:
@@ -383,6 +523,7 @@ def site_landing() -> dict[str, Any]:
 
     def _fallback() -> dict[str, Any]:
         payload = dict(DEFAULT_LANDING)
+        payload["open_course_categories"] = list_open_course_categories(include_unpublished=False)
         payload["open_courses"] = list_open_courses(include_unpublished=False)
         return payload
 
@@ -419,7 +560,7 @@ def site_landing() -> dict[str, Any]:
                 "cta": cta,
             }
             for key in _STATIC_LANDING_KEYS:
-                if key == "open_courses":
+                if key in ("open_courses", "open_course_categories"):
                     payload[key] = _merge_section(key, body)
                 elif key == "enterprise":
                     from services.author.site_content import _normalize_enterprise
@@ -660,6 +801,9 @@ def my_profile(request: Request) -> dict[str, Any]:
 def update_profile(body: ProfileUpdateBody, request: Request) -> dict[str, Any]:
     user = require_user(request)
     display_name = (body.display_name or "").strip() or None
+    if display_name:
+        # Guard against accidental a11y markers (e.g. "[disabled] 昵称") pasted from UI.
+        display_name = display_name.replace("[disabled]", "").strip() or None
     bio = (body.bio or "").strip() if body.bio is not None else None
     if display_name:
         with db_cursor() as cur:

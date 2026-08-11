@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-handoff",
+    "file": "02-handoff.txt"
+  },
+  {
+    "id": "03-scope",
+    "file": "03-scope.txt"
+  },
+  {
+    "id": "04-query",
+    "file": "04-query.txt"
+  },
+  {
+    "id": "05-submit",
+    "file": "05-submit.txt"
+  },
+  {
+    "id": "06-error",
+    "file": "06-error.txt"
+  },
+  {
+    "id": "07-ownership",
+    "file": "07-ownership.txt"
+  },
+  {
+    "id": "08-regression",
+    "file": "08-regression.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

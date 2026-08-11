@@ -1,0 +1,59 @@
+{
+  "total": 185.152,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 21.461333333333332
+    },
+    {
+      "id": "02-inspect",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\02-inspect.wav",
+      "start": 21.581333333333333,
+      "duration": 19.84
+    },
+    {
+      "id": "03-contract",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\03-contract.wav",
+      "start": 41.541333333333334,
+      "duration": 21.461333333333332
+    },
+    {
+      "id": "04-data",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\04-data.wav",
+      "start": 63.12266666666667,
+      "duration": 20.138666666666666
+    },
+    {
+      "id": "05-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\05-gate.wav",
+      "start": 83.38133333333334,
+      "duration": 19.328
+    },
+    {
+      "id": "06-implement",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\06-implement.wav",
+      "start": 102.82933333333335,
+      "duration": 19.754666666666665
+    },
+    {
+      "id": "07-integration",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\07-integration.wav",
+      "start": 122.70400000000002,
+      "duration": 20.138666666666666
+    },
+    {
+      "id": "08-handoff",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\08-handoff.wav",
+      "start": 142.96266666666668,
+      "duration": 23.637333333333334
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-04-backend-replay\\video\\audio\\segments\\09-close.wav",
+      "start": 166.72000000000003,
+      "duration": 18.432
+    }
+  ]
+}

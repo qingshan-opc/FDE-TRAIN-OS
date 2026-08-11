@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-ops-input",
+    "file": "02-ops-input.txt"
+  },
+  {
+    "id": "03-plan",
+    "file": "03-plan.txt"
+  },
+  {
+    "id": "04-release",
+    "file": "04-release.txt"
+  },
+  {
+    "id": "05-rollback",
+    "file": "05-rollback.txt"
+  },
+  {
+    "id": "06-pm-return",
+    "file": "06-pm-return.txt"
+  },
+  {
+    "id": "07-final",
+    "file": "07-final.txt"
+  },
+  {
+    "id": "08-retro",
+    "file": "08-retro.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

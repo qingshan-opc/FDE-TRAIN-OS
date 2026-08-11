@@ -1,0 +1,59 @@
+{
+  "total": 176.192,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.797333333333334
+    },
+    {
+      "id": "02-not-picking",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\02-not-picking.wav",
+      "start": 19.917333333333335,
+      "duration": 18.133333333333333
+    },
+    {
+      "id": "03-evidence",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\03-evidence.wav",
+      "start": 38.17066666666667,
+      "duration": 21.290666666666667
+    },
+    {
+      "id": "04-traditional",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\04-traditional.wav",
+      "start": 59.58133333333333,
+      "duration": 20.181333333333335
+    },
+    {
+      "id": "05-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\05-ai-era.wav",
+      "start": 79.88266666666667,
+      "duration": 16.896
+    },
+    {
+      "id": "06-boundary",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\06-boundary.wav",
+      "start": 96.89866666666667,
+      "duration": 21.717333333333332
+    },
+    {
+      "id": "07-retest",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\07-retest.wav",
+      "start": 118.736,
+      "duration": 18.944
+    },
+    {
+      "id": "08-human",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\08-human.wav",
+      "start": 137.8,
+      "duration": 18.56
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-01-testing-role\\video\\audio\\segments\\09-close.wav",
+      "start": 156.48000000000002,
+      "duration": 19.712
+    }
+  ]
+}

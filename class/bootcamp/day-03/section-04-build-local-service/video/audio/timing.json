@@ -1,0 +1,59 @@
+{
+  "total": 174.442667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 20.949333333333332
+    },
+    {
+      "id": "02-simple-stack",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\02-simple-stack.wav",
+      "start": 21.069333333333333,
+      "duration": 18.730666666666668
+    },
+    {
+      "id": "03-files",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\03-files.wav",
+      "start": 39.919999999999995,
+      "duration": 18.218666666666667
+    },
+    {
+      "id": "04-review",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\04-review.wav",
+      "start": 58.25866666666666,
+      "duration": 18.858666666666668
+    },
+    {
+      "id": "05-start",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\05-start.wav",
+      "start": 77.23733333333334,
+      "duration": 20.010666666666665
+    },
+    {
+      "id": "06-health",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\06-health.wav",
+      "start": 97.36800000000001,
+      "duration": 18.816
+    },
+    {
+      "id": "07-api-tests",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\07-api-tests.wav",
+      "start": 116.30400000000002,
+      "duration": 19.157333333333334
+    },
+    {
+      "id": "08-restart",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\08-restart.wav",
+      "start": 135.58133333333336,
+      "duration": 20.266666666666666
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-04-build-local-service\\video\\audio\\segments\\09-close.wav",
+      "start": 155.96800000000002,
+      "duration": 18.474666666666668
+    }
+  ]
+}

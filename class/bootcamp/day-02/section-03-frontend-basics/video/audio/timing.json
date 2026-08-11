@@ -1,0 +1,53 @@
+{
+  "total": 180.651333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.2
+    },
+    {
+      "id": "02-html",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\02-html.wav",
+      "start": 19.45,
+      "duration": 18.816
+    },
+    {
+      "id": "03-css",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\03-css.wav",
+      "start": 38.516,
+      "duration": 24.149333333333335
+    },
+    {
+      "id": "04-javascript",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\04-javascript.wav",
+      "start": 62.915333333333336,
+      "duration": 22.357333333333333
+    },
+    {
+      "id": "05-links",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\05-links.wav",
+      "start": 85.52266666666667,
+      "duration": 21.717333333333332
+    },
+    {
+      "id": "06-demo-data",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\06-demo-data.wav",
+      "start": 107.49,
+      "duration": 25.813333333333333
+    },
+    {
+      "id": "07-four-states",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\07-four-states.wav",
+      "start": 133.55333333333334,
+      "duration": 20.864
+    },
+    {
+      "id": "08-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-03-frontend-basics\\video\\audio\\segments\\08-close.wav",
+      "start": 154.66733333333335,
+      "duration": 25.984
+    }
+  ]
+}

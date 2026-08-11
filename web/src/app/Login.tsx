@@ -1,22 +1,59 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Alert, Button, Card, Form, Input, QRCode, Tabs, Typography } from "antd";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  QRCode,
+  Typography,
+  message,
+} from "antd";
+import {
+  ArrowRightOutlined,
+  BankOutlined,
+  LockOutlined,
+  MailOutlined,
+  ReloadOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
 import { ApiError, authApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { BrandLogo } from "../components/BrandLogo";
 
-type Mode = "wechat" | "email" | "register";
+type Mode = "email" | "wechat" | "register" | "bind" | "reset";
+
+const REMEMBER_KEY = "fde_login_remember_email";
+
+function roleHome(role: string) {
+  if (role === "partner") return "/partner";
+  if (role === "finance") return "/author/finance";
+  if (role === "author" || role === "admin") return "/author";
+  return "/app/courses";
+}
 
 export function LoginPage() {
-  const { login, user, loading, refreshMe } = useAuth();
+  const { login, user, loading, refreshMe, needsWxBind, logout } = useAuth();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
   const inviteFromUrl = (searchParams.get("invite") || "").trim();
-  const [mode, setMode] = useState<Mode>(inviteFromUrl ? "register" : "wechat");
+  const forceBind = searchParams.get("bind") === "1";
+  const [mode, setMode] = useState<Mode>(
+    forceBind ? "bind" : inviteFromUrl ? "register" : "email",
+  );
   const [loginForm] = Form.useForm();
   const [registerForm] = Form.useForm();
+  const [resetForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inviteLink, setInviteLink] = useState<{ code: string; org_name?: string } | null>(null);
+  const [remember, setRemember] = useState(false);
+  const [inviteLink, setInviteLink] = useState<{
+    code: string;
+    kind?: "org" | "learner";
+    org_name?: string;
+    referrer_name?: string;
+  } | null>(null);
   const [inviteLinkError, setInviteLinkError] = useState<string | null>(null);
   const [claimingInvite, setClaimingInvite] = useState(false);
   const [wxContent, setWxContent] = useState<string | null>(null);
@@ -24,9 +61,14 @@ export function LoginPage() {
   const [wxState, setWxState] = useState<string | null>(null);
   const [wxWaiting, setWxWaiting] = useState(false);
   const [wxError, setWxError] = useState<string | null>(null);
+  const [bindTicket, setBindTicket] = useState<string | null>(null);
+  const [resetTicket, setResetTicket] = useState<string | null>(null);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCodeSent, setResetCodeSent] = useState(false);
+  const [resetHint, setResetHint] = useState<string | null>(null);
   const pollRef = useRef<number | null>(null);
 
-  const stopWxPoll = useCallback(() => {
+  const stopPoll = useCallback(() => {
     if (pollRef.current != null) {
       window.clearInterval(pollRef.current);
       pollRef.current = null;
@@ -34,12 +76,23 @@ export function LoginPage() {
     setWxWaiting(false);
   }, []);
 
+  const goAfterAuth = useCallback(
+    async (role: string, needsBind?: boolean) => {
+      if (role === "learner" && needsBind) {
+        setMode("bind");
+        return;
+      }
+      nav(roleHome(role), { replace: true });
+    },
+    [nav],
+  );
+
   const startWxLogin = useCallback(async () => {
     setWxError(null);
     setWxContent(null);
     setWxImg(null);
     setWxState(null);
-    stopWxPoll();
+    stopPoll();
     try {
       const res = await authApi.wechatLoginQr();
       setWxContent(res.qr_content);
@@ -49,23 +102,64 @@ export function LoginPage() {
     } catch (err) {
       setWxError(err instanceof ApiError ? err.message : "无法生成微信登录码");
     }
-  }, [stopWxPoll]);
+  }, [stopPoll]);
+
+  const startBindQr = useCallback(async () => {
+    setWxError(null);
+    setWxContent(null);
+    setWxImg(null);
+    setBindTicket(null);
+    stopPoll();
+    try {
+      const res = await authApi.wechatBindStart();
+      if (res.already_bound || res.wx_bound) {
+        const me = await refreshMe();
+        if (me?.user) nav(roleHome(me.user.role), { replace: true });
+        return;
+      }
+      setBindTicket(res.ticket || null);
+      setWxContent(res.qr_content || null);
+      setWxImg(res.qr_url || null);
+      setWxWaiting(true);
+    } catch (err) {
+      setWxError(err instanceof ApiError ? err.message : "无法生成绑定二维码");
+    }
+  }, [nav, refreshMe, stopPoll]);
 
   useEffect(() => {
-    if (!loading && user) {
+    if (loading) return;
+    if (user && needsWxBind && user.role === "learner") {
+      setMode("bind");
+      return;
+    }
+    if (!loading && user && !needsWxBind && mode !== "reset") {
       if (user.role === "partner") {
         nav("/partner", { replace: true });
         return;
       }
-      nav(user.role === "author" || user.role === "admin" ? "/author" : "/app/courses", { replace: true });
+      if (forceBind && user.role === "learner") {
+        setMode("bind");
+        return;
+      }
+      nav(roleHome(user.role), { replace: true });
     }
-  }, [loading, user, nav]);
+  }, [loading, user, needsWxBind, nav, mode, forceBind]);
 
   useEffect(() => {
-    registerForm.setFieldsValue({
-      display: "新学员",
-    });
+    registerForm.setFieldsValue({ display: "新学员" });
   }, [registerForm]);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REMEMBER_KEY);
+      if (saved) {
+        setRemember(true);
+        loginForm.setFieldsValue({ email: saved });
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [loginForm]);
 
   useEffect(() => {
     if (!inviteFromUrl) {
@@ -80,7 +174,12 @@ export function LoginPage() {
       .claimInviteLink(inviteFromUrl)
       .then((res) => {
         if (cancelled) return;
-        setInviteLink({ code: res.code, org_name: res.org_name });
+        setInviteLink({
+          code: res.code,
+          kind: res.kind,
+          org_name: res.org_name,
+          referrer_name: res.referrer_name,
+        });
         setMode("register");
       })
       .catch((err) => {
@@ -96,15 +195,16 @@ export function LoginPage() {
     };
   }, [inviteFromUrl]);
 
-  // Only load / poll WeChat QR on the WeChat tab
   useEffect(() => {
     if (mode === "wechat" && !user && !loading) {
       void startWxLogin();
-    } else {
-      stopWxPoll();
+    } else if (mode === "bind" && user && !loading) {
+      void startBindQr();
+    } else if (mode !== "wechat" && mode !== "bind" && mode !== "reset") {
+      stopPoll();
     }
-    return () => stopWxPoll();
-  }, [mode, user, loading, startWxLogin, stopWxPoll]);
+    return () => stopPoll();
+  }, [mode, user, loading, startWxLogin, startBindQr, stopPoll]);
 
   useEffect(() => {
     if (mode !== "wechat" || !wxWaiting || !wxState) return;
@@ -112,13 +212,17 @@ export function LoginPage() {
       try {
         const st = await authApi.wechatLoginStatus(wxState);
         if (st.done) {
-          stopWxPoll();
-          await refreshMe();
-          nav(st.redirect || "/app/courses", { replace: true });
+          stopPoll();
+          const me = await refreshMe();
+          if (me?.user) {
+            await goAfterAuth(me.user.role, me.needs_wx_bind);
+          } else {
+            nav(st.redirect || "/app/courses", { replace: true });
+          }
           return;
         }
         if (st.expired) {
-          stopWxPoll();
+          stopPoll();
           setWxError("二维码已过期，请点击刷新");
         }
       } catch {
@@ -127,22 +231,73 @@ export function LoginPage() {
     };
     void tick();
     pollRef.current = window.setInterval(() => void tick(), 2000);
-    return () => stopWxPoll();
-  }, [mode, wxWaiting, wxState, nav, refreshMe, stopWxPoll]);
+    return () => stopPoll();
+  }, [mode, wxWaiting, wxState, nav, refreshMe, stopPoll, goAfterAuth]);
+
+  useEffect(() => {
+    if (mode !== "bind" || !wxWaiting || !bindTicket) return;
+    const tick = async () => {
+      try {
+        const st = await authApi.wechatBindStatus(bindTicket);
+        if (st.done) {
+          stopPoll();
+          message.success("微信绑定成功");
+          const me = await refreshMe();
+          if (me?.user) nav(roleHome(me.user.role), { replace: true });
+          return;
+        }
+        if (st.expired) {
+          stopPoll();
+          setWxError("绑定二维码已过期，请点击刷新");
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    void tick();
+    pollRef.current = window.setInterval(() => void tick(), 2000);
+    return () => stopPoll();
+  }, [mode, wxWaiting, bindTicket, nav, refreshMe, stopPoll]);
+
+  useEffect(() => {
+    if (mode !== "reset" || !resetTicket || resetCodeSent) return;
+    const tick = async () => {
+      try {
+        const st = await authApi.passwordResetStatus(resetTicket);
+        if (st.code_sent) {
+          setResetCodeSent(true);
+          message.success("验证码已发送到微信，请查收");
+          stopPoll();
+          return;
+        }
+        if (st.expired) {
+          stopPoll();
+          setWxError("二维码已过期，请重新获取");
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    void tick();
+    pollRef.current = window.setInterval(() => void tick(), 2000);
+    return () => stopPoll();
+  }, [mode, resetTicket, resetCodeSent, stopPoll]);
 
   const onLogin = async (values: { email: string; password: string }) => {
     setSubmitting(true);
     setError(null);
     try {
-      await login(values.email.trim(), values.password);
-      const me = await authApi.me();
-      if (me.user.role === "partner") {
-        nav("/partner", { replace: true });
-      } else if (me.user.role === "author" || me.user.role === "admin") {
-        nav("/author", { replace: true });
-      } else {
-        nav("/app/courses", { replace: true });
+      const email = values.email.trim();
+      try {
+        if (remember) localStorage.setItem(REMEMBER_KEY, email);
+        else localStorage.removeItem(REMEMBER_KEY);
+      } catch {
+        /* ignore */
       }
+      const me = await login(email, values.password, { remember });
+      const role = me && "user" in me ? me.user.role : "learner";
+      const needs = me && "needs_wx_bind" in me ? Boolean(me.needs_wx_bind) : false;
+      await goAfterAuth(role, needs);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "登录失败");
     } finally {
@@ -154,9 +309,13 @@ export function LoginPage() {
     setSubmitting(true);
     setError(null);
     try {
-      await authApi.register(values.email.trim(), values.password, (values.display || "").trim() || "学员");
+      const res = await authApi.register(
+        values.email.trim(),
+        values.password,
+        (values.display || "").trim() || "学员",
+      );
       await refreshMe();
-      nav("/app/shop", { replace: true });
+      await goAfterAuth(res.user.role, Boolean(res.needs_wx_bind));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "注册失败");
     } finally {
@@ -164,124 +323,402 @@ export function LoginPage() {
     }
   };
 
-  const title =
-    mode === "wechat" ? "微信登录" : mode === "email" ? "邮箱登录" : "注册";
-  const subtitle = inviteLink
-    ? "机构邀请注册 · 完成注册后自动归属渠道"
-    : mode === "wechat"
-      ? "手机微信扫码关注即可登录 · 机构账号自动识别"
-      : mode === "email"
-        ? "使用邮箱与密码登录"
-        : "自由注册 · 机构渠道请使用邀请链接";
+  const onResetStart = async (values: { email: string }) => {
+    setSubmitting(true);
+    setError(null);
+    setWxError(null);
+    setResetCodeSent(false);
+    try {
+      const email = values.email.trim().toLowerCase();
+      const res = await authApi.passwordResetStart(email);
+      setResetEmail(email);
+      setResetTicket(res.ticket);
+      setWxContent(res.qr_content);
+      setWxImg(res.qr_url);
+      setResetHint(res.hint || null);
+      setWxWaiting(true);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "无法开始重置");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const onResetConfirm = async (values: { code: string; new_password: string }) => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      await authApi.passwordResetConfirm(resetEmail, values.code.trim(), values.new_password);
+      message.success("密码已更新，请使用新密码登录");
+      setMode("email");
+      loginForm.setFieldsValue({ email: resetEmail });
+      setResetTicket(null);
+      setResetCodeSent(false);
+      setWxContent(null);
+      setWxImg(null);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "重置失败");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const cardTitle =
+    mode === "wechat"
+      ? "微信扫码登录"
+      : mode === "register"
+        ? "创建账号"
+        : mode === "bind"
+          ? "绑定微信"
+          : mode === "reset"
+            ? "重置密码"
+            : "欢迎回来";
+  const cardSubtitle =
+    mode === "wechat"
+      ? "手机微信扫码即可登录"
+      : mode === "register"
+        ? inviteLink
+          ? inviteLink.kind === "learner"
+            ? "好友邀请注册 · 完成后计入邀请人"
+            : "机构邀请注册 · 完成后自动归属渠道"
+          : "注册后需扫码绑定微信"
+        : mode === "bind"
+          ? "邮箱账号须绑定服务号后才能进入学习中心"
+          : mode === "reset"
+            ? "扫码后验证码将发送到微信服务号"
+            : "登录学习中心，继续你的课程";
 
   return (
-    <div className="login-page">
-      <div className="login-page__glow" aria-hidden="true" />
-      <Card className="login-card anim-pop" style={{ width: "100%", maxWidth: 420 }}>
-        <Typography.Text type="secondary" style={{ letterSpacing: "0.08em", textTransform: "uppercase", fontSize: 11, fontWeight: 600 }}>
-          FDE Learning OS
-        </Typography.Text>
-        <Typography.Title level={3} style={{ marginTop: 4, marginBottom: 8 }}>
-          {title}
-        </Typography.Title>
-        <Typography.Paragraph type="secondary" style={{ marginBottom: 16 }}>
-          {subtitle}
-        </Typography.Paragraph>
+    <div className="login-split">
+      <aside className="login-split__hero">
+        <div className="login-split__hero-bg" />
+        <div className="login-split__hero-overlay" />
+        <div className="login-split__hero-top">
+          <BrandLogo name="青山在" to="/" variant="light" className="login-split__brand-logo" />
+          <p className="login-split__tagline">数字化人才训练 · 可验收交付</p>
+        </div>
+        <p className="login-split__hero-foot">进入青山在学习中心，完成训练营课程与实践任务。</p>
+      </aside>
 
-        {inviteLinkError && (
-          <Alert type="error" showIcon message={inviteLinkError} style={{ marginBottom: 16 }} />
-        )}
-        {inviteLink && (
-          <Alert
-            type="info"
-            showIcon
-            message={`机构邀请：${inviteLink.org_name || inviteLink.code}`}
-            description={`邀请码 ${inviteLink.code} 将在注册成功后自动绑定，不支持注册后再自行填写。`}
-            style={{ marginBottom: 16 }}
-          />
-        )}
+      <main className="login-split__panel">
+        <div className="login-split__card anim-pop">
+          <header className="login-split__card-head">
+            <h2>{cardTitle}</h2>
+            <p>{cardSubtitle}</p>
+          </header>
 
-        <Tabs
-          activeKey={mode}
-          onChange={(k) => {
-            setMode(k as Mode);
-            setError(null);
-            setWxError(null);
-          }}
-          items={[
-            { key: "wechat", label: "微信登录" },
-            { key: "email", label: "邮箱登录" },
-            { key: "register", label: "注册" },
-          ]}
-        />
+          {inviteLinkError && (
+            <Alert type="error" showIcon message={inviteLinkError} style={{ marginBottom: 12 }} />
+          )}
+          {inviteLink && mode === "register" && (
+            <Alert
+              type="info"
+              showIcon
+              message={
+                inviteLink.kind === "learner"
+                  ? `好友邀请：${inviteLink.referrer_name || inviteLink.code}`
+                  : `机构邀请：${inviteLink.org_name || inviteLink.code}`
+              }
+              style={{ marginBottom: 12 }}
+            />
+          )}
 
-        {mode === "wechat" && (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, paddingTop: 4 }}>
-            {wxContent ? (
-              <QRCode value={wxContent} size={200} />
-            ) : wxImg ? (
-              <img src={wxImg} alt="微信登录码" width={200} height={200} />
-            ) : (
-              <Typography.Text type="secondary">正在生成微信登录码…</Typography.Text>
-            )}
-            <Typography.Text type="secondary" style={{ textAlign: "center", fontSize: 13 }}>
-              请用手机微信扫码；未关注将先关注公众号，已关注直接确认登录
-            </Typography.Text>
-            {wxWaiting && <Typography.Text type="secondary">等待手机确认…</Typography.Text>}
-            {wxError && <Alert type="warning" showIcon message={wxError} style={{ width: "100%" }} />}
-            <Button size="small" onClick={() => void startWxLogin()}>
-              刷新二维码
-            </Button>
-          </div>
-        )}
+          {mode === "email" && (
+            <>
+              <Form
+                form={loginForm}
+                layout="vertical"
+                className="login-split__form"
+                requiredMark={false}
+                onFinish={(v) => void onLogin(v)}
+              >
+                <Form.Item
+                  name="email"
+                  label="邮箱地址"
+                  rules={[
+                    { required: true, message: "请输入邮箱" },
+                    { type: "email", message: "邮箱格式不正确" },
+                  ]}
+                >
+                  <Input
+                    size="large"
+                    prefix={<MailOutlined />}
+                    placeholder="name@example.com"
+                    autoComplete="username"
+                  />
+                </Form.Item>
+                <Form.Item name="password" label="密码" rules={[{ required: true, message: "请输入密码" }]}>
+                  <Input.Password
+                    size="large"
+                    prefix={<LockOutlined />}
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                  />
+                </Form.Item>
 
-        {mode === "email" && (
-          <Form form={loginForm} layout="vertical" onFinish={(v) => void onLogin(v)}>
-            <Form.Item
-              name="email"
-              label="邮箱"
-              rules={[{ required: true, message: "请输入邮箱" }, { type: "email", message: "邮箱格式不正确" }]}
+                <div className="login-split__row">
+                  <Checkbox checked={remember} onChange={(e) => setRemember(e.target.checked)}>
+                    记住我
+                  </Checkbox>
+                  <button
+                    type="button"
+                    className="login-split__link"
+                    onClick={() => {
+                      setError(null);
+                      setWxError(null);
+                      setResetTicket(null);
+                      setResetCodeSent(false);
+                      setMode("reset");
+                    }}
+                  >
+                    忘记密码？
+                  </button>
+                </div>
+
+                {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 12 }} />}
+
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  block
+                  size="large"
+                  className="login-split__submit"
+                  loading={submitting}
+                  icon={<ArrowRightOutlined />}
+                  iconPosition="end"
+                >
+                  登录
+                </Button>
+              </Form>
+
+              <div className="login-split__divider">
+                <span>或通过以下方式继续</span>
+              </div>
+
+              <div className="login-split__sso">
+                <button
+                  type="button"
+                  className="login-split__sso-btn"
+                  onClick={() => {
+                    setError(null);
+                    setWxError(null);
+                    setMode("wechat");
+                  }}
+                >
+                  <WechatOutlined style={{ color: "#07c160", fontSize: 18 }} />
+                  微信
+                </button>
+                <button type="button" className="login-split__sso-btn" onClick={() => nav("/partner/login")}>
+                  <BankOutlined style={{ fontSize: 16 }} />
+                  机构后台
+                </button>
+              </div>
+
+              <div className="login-split__switch">
+                还没有账号？
+                <button
+                  type="button"
+                  className="login-split__link"
+                  onClick={() => {
+                    setError(null);
+                    setMode("register");
+                  }}
+                >
+                  立即注册
+                </button>
+              </div>
+            </>
+          )}
+
+          {(mode === "wechat" || mode === "bind" || (mode === "reset" && resetTicket && !resetCodeSent)) && (
+            <div className="login-split__wx">
+              {wxContent ? (
+                <QRCode value={wxContent} size={168} />
+              ) : wxImg ? (
+                <img src={wxImg} alt="微信二维码" width={168} height={168} />
+              ) : (
+                <Typography.Text type="secondary">正在生成二维码…</Typography.Text>
+              )}
+              <Typography.Text type="secondary" className="login-split__wx-hint">
+                {mode === "bind"
+                  ? "请用微信扫码关注服务号完成绑定"
+                  : mode === "reset"
+                    ? resetHint || "请用已绑定该账号的微信扫码收取验证码"
+                    : "请用手机微信扫码登录"}
+              </Typography.Text>
+              {wxWaiting && mode !== "reset" && (
+                <Typography.Text type="secondary">等待手机确认…</Typography.Text>
+              )}
+              {wxError && <Alert type="warning" showIcon message={wxError} style={{ width: "100%" }} />}
+              <div className="login-split__wx-actions">
+                <button
+                  type="button"
+                  className="login-split__sso-btn"
+                  onClick={() => {
+                    if (mode === "bind") void startBindQr();
+                    else if (mode === "reset") void onResetStart({ email: resetEmail });
+                    else void startWxLogin();
+                  }}
+                >
+                  <ReloadOutlined />
+                  刷新二维码
+                </button>
+                {mode === "bind" ? (
+                  <button
+                    type="button"
+                    className="login-split__link"
+                    onClick={() => {
+                      void logout();
+                      setMode("email");
+                    }}
+                  >
+                    退出并换账号
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="login-split__link"
+                    onClick={() => {
+                      setWxError(null);
+                      setMode("email");
+                    }}
+                  >
+                    返回邮箱登录
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {mode === "reset" && !resetTicket && (
+            <Form
+              form={resetForm}
+              layout="vertical"
+              className="login-split__form"
+              requiredMark={false}
+              onFinish={(v) => void onResetStart(v)}
             >
-              <Input id="email" type="email" autoComplete="username" />
-            </Form.Item>
-            <Form.Item name="password" label="密码" rules={[{ required: true, message: "请输入密码" }]}>
-              <Input.Password id="password" autoComplete="current-password" />
-            </Form.Item>
-            {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 16 }} />}
-            <Button type="primary" htmlType="submit" block loading={submitting}>
-              登录
-            </Button>
-          </Form>
-        )}
+              <Form.Item
+                name="email"
+                label="注册邮箱"
+                rules={[
+                  { required: true, message: "请输入邮箱" },
+                  { type: "email", message: "邮箱格式不正确" },
+                ]}
+              >
+                <Input size="large" prefix={<MailOutlined />} placeholder="name@example.com" />
+              </Form.Item>
+              {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 12 }} />}
+              <Button type="primary" htmlType="submit" block size="large" className="login-split__submit" loading={submitting}>
+                获取验证码二维码
+              </Button>
+              <div className="login-split__switch">
+                <button type="button" className="login-split__link" onClick={() => setMode("email")}>
+                  返回登录
+                </button>
+              </div>
+            </Form>
+          )}
 
-        {mode === "register" && (
-          <Form form={registerForm} layout="vertical" onFinish={(v) => void onRegister(v)}>
-            <Form.Item name="email" label="邮箱" rules={[{ required: true, type: "email" }]}>
-              <Input type="email" autoComplete="username" />
-            </Form.Item>
-            <Form.Item name="password" label="密码" rules={[{ required: true, min: 6, message: "至少 6 位" }]}>
-              <Input.Password autoComplete="new-password" />
-            </Form.Item>
-            <Form.Item name="display" label="显示名" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 16 }} />}
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={submitting || claimingInvite}
-              disabled={Boolean(inviteFromUrl && !inviteLink && !inviteLinkError)}
+          {mode === "reset" && resetCodeSent && (
+            <Form
+              layout="vertical"
+              className="login-split__form"
+              requiredMark={false}
+              onFinish={(v) => void onResetConfirm(v)}
             >
-              {inviteLink ? "通过机构链接注册" : "注册"}
-            </Button>
-          </Form>
-        )}
+              <Form.Item name="code" label="微信验证码" rules={[{ required: true, message: "请输入验证码" }]}>
+                <Input size="large" placeholder="6 位数字" maxLength={8} />
+              </Form.Item>
+              <Form.Item
+                name="new_password"
+                label="新密码"
+                rules={[{ required: true, min: 6, message: "至少 6 位" }]}
+              >
+                <Input.Password size="large" prefix={<LockOutlined />} autoComplete="new-password" />
+              </Form.Item>
+              {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 12 }} />}
+              <Button type="primary" htmlType="submit" block size="large" className="login-split__submit" loading={submitting}>
+                确认重置
+              </Button>
+              <div className="login-split__switch">
+                <button
+                  type="button"
+                  className="login-split__link"
+                  onClick={() => {
+                    setResetCodeSent(false);
+                    setResetTicket(null);
+                    setMode("email");
+                  }}
+                >
+                  返回登录
+                </button>
+              </div>
+            </Form>
+          )}
 
-        <Button type="link" style={{ marginTop: 12, paddingInline: 0 }} onClick={() => nav("/partner/login")}>
-          机构后台
-        </Button>
-      </Card>
+          {mode === "register" && (
+            <>
+              <Form
+                form={registerForm}
+                layout="vertical"
+                className="login-split__form"
+                requiredMark={false}
+                onFinish={(v) => void onRegister(v)}
+              >
+                <Form.Item
+                  name="email"
+                  label="邮箱地址"
+                  rules={[{ required: true, type: "email", message: "请输入有效邮箱" }]}
+                >
+                  <Input size="large" prefix={<MailOutlined />} type="email" autoComplete="username" />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="密码"
+                  rules={[{ required: true, min: 6, message: "至少 6 位" }]}
+                >
+                  <Input.Password size="large" prefix={<LockOutlined />} autoComplete="new-password" />
+                </Form.Item>
+                <Form.Item name="display" label="显示名" rules={[{ required: true, message: "请输入显示名" }]}>
+                  <Input size="large" />
+                </Form.Item>
+                {error && <Alert type="error" showIcon message={error} style={{ marginBottom: 12 }} />}
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  block
+                  size="large"
+                  className="login-split__submit"
+                  loading={submitting || claimingInvite}
+                  disabled={Boolean(inviteFromUrl && !inviteLink && !inviteLinkError)}
+                  icon={<ArrowRightOutlined />}
+                  iconPosition="end"
+                >
+                  {inviteLink
+                    ? inviteLink.kind === "learner"
+                      ? "通过好友邀请注册"
+                      : "通过机构链接注册"
+                    : "注册"}
+                </Button>
+              </Form>
+              <div className="login-split__switch">
+                已有账号？
+                <button
+                  type="button"
+                  className="login-split__link"
+                  onClick={() => {
+                    setError(null);
+                    setMode("email");
+                  }}
+                >
+                  返回登录
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

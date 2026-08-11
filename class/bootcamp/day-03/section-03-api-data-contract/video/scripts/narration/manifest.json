@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-api-six",
+    "file": "02-api-six.txt"
+  },
+  {
+    "id": "03-menu",
+    "file": "03-menu.txt"
+  },
+  {
+    "id": "04-api-doc",
+    "file": "04-api-doc.txt"
+  },
+  {
+    "id": "05-db",
+    "file": "05-db.txt"
+  },
+  {
+    "id": "06-map",
+    "file": "06-map.txt"
+  },
+  {
+    "id": "07-regenerate",
+    "file": "07-regenerate.txt"
+  },
+  {
+    "id": "08-example",
+    "file": "08-example.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

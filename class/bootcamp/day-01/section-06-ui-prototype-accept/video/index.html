@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UI 原型交接与产品验收</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.85)}
+.card.dim{background:var(--ink-05)}
+.open-split{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch;margin-top:4px;max-width:1320px;flex:1;min-height:0}
+.open-split .stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ico{width:40px;height:40px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.ico svg{width:24px;height:24px;display:block}
+.card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="346.393" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div class="stage-bg"></div>
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="25.003">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>01 OPEN</div>
+    <h1 class="display" data-anim="t">最关键的一次闭环</h1>
+    <p class="lede" data-anim="s">@产品经理 → PRD.md → @UI</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>切换岗位，就是一次真实交接</h4><p>切换岗位，就是一次真实交接</p></div>
+        <div class="tag-row"><span class="tag solid">最关键的一次闭环</span><span class="tag hot">@产品经理 → PRD.md → @</span><span class="tag ">切换岗位，就是一次真实交接</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · open</div>
+        <img src="assets/diagrams/01-open.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-02-ui-shift" class="clip slide" data-track-index="1" data-start="25.253" data-duration="26.965">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>02 UI-SHIFT</div>
+    <h1 class="display" data-anim="t">UI · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：线框 · 视觉稿 · 调色 · 组件</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>信息层级 · 操作路径 · 设计约束</p></div>
+        <div class="tag-row"><span class="tag solid">UI · 传统 vs AI 时代</span><span class="tag hot">传统：线框 · 视觉稿 · 调色 ·</span><span class="tag ">现在：信息层级 · 操作路径 · 设</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · ui-shift</div>
+        <img src="assets/diagrams/02-ui-shift.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-03-read-repeat" class="clip slide" data-track-index="1" data-start="52.468" data-duration="34.517">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>03 READ-REPEAT</div>
+    <h1 class="display" data-anim="t">第一段：先读 PRD，暂不生成</h1>
+    <p class="lede" data-anim="s">用 5 句话复述</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>用户</h4><p>问题 · 操作 · 页面 · 验收</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>读不到文件就先停下检查</h4><p>读不到文件就先停下检查</p></div>
+        <div class="tag-row"><span class="tag solid">第一段：先读 PRD，暂不生成</span><span class="tag hot">用 5 句话复述</span><span class="tag ">用户 · 问题 · 操作 · 页面 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · read-repeat</div>
+        <img src="assets/diagrams/03-read-repeat.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-04-design-interview" class="clip slide" data-track-index="1" data-start="87.235" data-duration="25.216">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>04 DESIGN-INTERVIEW</div>
+    <h1 class="display" data-anim="t">第二段：逐题确认设计</h1>
+    <p class="lede" data-anim="s">设备 → 首页重点 → 风格 → 主色 → 常用操作</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>每次只问 1 题，并给推荐理由</h4><p>每次只问 1 题，并给推荐理由</p></div>
+        <div class="tag-row"><span class="tag solid">第二段：逐题确认设计</span><span class="tag hot">设备 → 首页重点 → 风格 → 主</span><span class="tag ">每次只问 1 题，并给推荐理由</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · design-interview</div>
+        <img src="assets/diagrams/04-design-interview.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-05-real-states" class="clip slide" data-track-index="1" data-start="112.701" data-duration="27.861">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>05 REAL-STATES</div>
+    <h1 class="display" data-anim="t">三个真实状态不能漏</h1>
+    <p class="lede" data-anim="s">加载中 · 告诉用户正在处理</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>空数据</h4><p>解释原因与下一步</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>错误</h4><p>诚实提示，不留白屏</p></div>
+        <div class="tag-row"><span class="tag solid">三个真实状态不能漏</span><span class="tag hot">加载中 · 告诉用户正在处理</span><span class="tag ">空数据 · 解释原因与下一步</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · real-states</div>
+        <img src="assets/diagrams/05-real-states.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-06-page-plan" class="clip slide" data-track-index="1" data-start="140.813" data-duration="28.715">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>06 PAGE-PLAN</div>
+    <h1 class="display" data-anim="t">第三段：先确认页面方案</h1>
+    <p class="lede" data-anim="s">页面结构 + 用户操作路径</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>对照 PRD</h4><p>不遗漏、不擅自增加</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>通过后回复</h4><p>确认页面方案</p></div>
+        <div class="tag-row"><span class="tag solid">第三段：先确认页面方案</span><span class="tag hot">页面结构 + 用户操作路径</span><span class="tag ">对照 PRD：不遗漏、不擅自增加</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · page-plan</div>
+        <img src="assets/diagrams/06-page-plan.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-07-generate-files" class="clip slide" data-track-index="1" data-start="169.777" data-duration="26.837">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>07 GENERATE-FILES</div>
+    <h1 class="display" data-anim="t">第四段：生成 UI 交付物</h1>
+    <p class="lede" data-anim="s">design-spec.md</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>ui-flow.md</h4><p>ui-flow.md</p></div><div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>ui-prototype.html</h4><p>ui-prototype.html</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 12h16"/><path d="M12 4l8 8-8 8"/></svg></div><div class="lab">03</div></div><h4>只用演示数据，亲手打开点击</h4><p>只用演示数据，亲手打开点击</p></div>
+        <div class="tag-row"><span class="tag solid">第四段：生成 UI 交付物</span><span class="tag hot">design-spec.md</span><span class="tag ">ui-flow.md</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · generate-files</div>
+        <img src="assets/diagrams/07-generate-files.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-08-return-pm" class="clip slide" data-track-index="1" data-start="196.865" data-duration="37.461">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>08 RETURN-PM</div>
+    <h1 class="display" data-anim="t">第五段：切回 @产品经理验收</h1>
+    <p class="lede" data-anim="s">读取 PRD + 设计规范 + 流程 + 原型</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>逐项输出</h4><p>通过/不通过 · 原需求 · 责任岗位</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>产品经理只检查，不直接改 UI</h4><p>产品经理只检查，不直接改 UI</p></div>
+        <div class="tag-row"><span class="tag solid">第五段：切回 @产品经理验收</span><span class="tag hot">读取 PRD + 设计规范 + 流程</span><span class="tag ">逐项输出：通过/不通过 · 原需求 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · return-pm</div>
+        <img src="assets/diagrams/08-return-pm.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-09-fix-retest" class="clip slide" data-track-index="1" data-start="234.576" data-duration="26.752">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>09 FIX-RETEST</div>
+    <h1 class="display" data-anim="t">不通过就回责任岗位</h1>
+    <p class="lede" data-anim="s">@产品经理 发现问题</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>@UI 按问题清单修改</h4><p>@UI 按问题清单修改</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>@产品经理 再次复验</h4><p>@产品经理 再次复验</p></div>
+        <div class="tag-row"><span class="tag solid">不通过就回责任岗位</span><span class="tag hot">@产品经理 发现问题</span><span class="tag ">@UI 按问题清单修改</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · fix-retest</div>
+        <img src="assets/diagrams/09-fix-retest.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-10-handoff-log" class="clip slide" data-track-index="1" data-start="261.578" data-duration="27.051">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">10</span>10 HANDOFF-LOG</div>
+    <h1 class="display" data-anim="t">留下 Day1 交接证据</h1>
+    <p class="lede" data-anim="s">day1-handoff-log.md</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>产品经理交付</h4><p>UI 交付 · 最终验收</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>如有修改，再记录问题与复验</h4><p>如有修改，再记录问题与复验</p></div>
+        <div class="tag-row"><span class="tag solid">留下 Day1 交接证据</span><span class="tag hot">day1-handoff-log.m</span><span class="tag ">产品经理交付 · UI 交付 · 最</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · handoff-log</div>
+        <img src="assets/diagrams/10-handoff-log.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-11-close" class="clip slide" data-track-index="1" data-start="288.879" data-duration="57.515">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">11</span>11 CLOSE</div>
+    <h1 class="display" data-anim="t">第一天完成的跨越</h1>
+    <p class="lede" data-anim="s">专业问题 → 产品需求 → UI 体验 → 产品验收</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>五问</h4><p>谁 · 上游 · 交付 · 下游 · 验收</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>你正在指挥 AI 团队</h4><p>你正在指挥 AI 团队</p></div>
+        <div class="tag-row"><span class="tag solid">第一天完成的跨越</span><span class="tag hot">专业问题 → 产品需求 → UI 体</span><span class="tag ">五问：谁 · 上游 · 交付 · 下</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · close</div>
+        <img src="assets/diagrams/11-close.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="346.393" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第一天 · 第 6 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="346.393" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="346.393" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="346.393" data-track-index="10" data-volume="1"></audio>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.000, dur: 25.003 },
+  { id: "#slide-02-ui-shift", start: 25.253, dur: 26.965 },
+  { id: "#slide-03-read-repeat", start: 52.468, dur: 34.517 },
+  { id: "#slide-04-design-interview", start: 87.235, dur: 25.216 },
+  { id: "#slide-05-real-states", start: 112.701, dur: 27.861 },
+  { id: "#slide-06-page-plan", start: 140.813, dur: 28.715 },
+  { id: "#slide-07-generate-files", start: 169.777, dur: 26.837 },
+  { id: "#slide-08-return-pm", start: 196.865, dur: 37.461 },
+  { id: "#slide-09-fix-retest", start: 234.576, dur: 26.752 },
+  { id: "#slide-10-handoff-log", start: 261.578, dur: 27.051 },
+  { id: "#slide-11-close", start: 288.879, dur: 57.515 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out", stagger: 0.06 }, t0 + 0.42);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+  enter("#slide-01-open", 0.000);
+  enter("#slide-02-ui-shift", 25.253);
+  enter("#slide-03-read-repeat", 52.468);
+  enter("#slide-04-design-interview", 87.235);
+  enter("#slide-05-real-states", 112.701);
+  enter("#slide-06-page-plan", 140.813);
+  enter("#slide-07-generate-files", 169.777);
+  enter("#slide-08-return-pm", 196.865);
+  enter("#slide-09-fix-retest", 234.576);
+  enter("#slide-10-handoff-log", 261.578);
+  enter("#slide-11-close", 288.879);
+  exit("#slide-01-open", 24.553, 25.003);
+  exit("#slide-02-ui-shift", 51.768, 52.218);
+  exit("#slide-03-read-repeat", 86.535, 86.985);
+  exit("#slide-04-design-interview", 112.001, 112.451);
+  exit("#slide-05-real-states", 140.113, 140.563);
+  exit("#slide-06-page-plan", 169.077, 169.527);
+  exit("#slide-07-generate-files", 196.165, 196.615);
+  exit("#slide-08-return-pm", 233.876, 234.326);
+  exit("#slide-09-fix-retest", 260.878, 261.328);
+  exit("#slide-10-handoff-log", 288.179, 288.629);
+  exit("#slide-11-close", 345.943, 346.393);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+
+</body>
+</html>

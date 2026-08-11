@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-pm-shift",
+    "file": "02-pm-shift.txt"
+  },
+  {
+    "id": "03-first-prompt",
+    "file": "03-first-prompt.txt"
+  },
+  {
+    "id": "04-repeat-confirm",
+    "file": "04-repeat-confirm.txt"
+  },
+  {
+    "id": "05-eight-questions",
+    "file": "05-eight-questions.txt"
+  },
+  {
+    "id": "06-measurable",
+    "file": "06-measurable.txt"
+  },
+  {
+    "id": "07-summary-gate",
+    "file": "07-summary-gate.txt"
+  },
+  {
+    "id": "08-confirm-requirement",
+    "file": "08-confirm-requirement.txt"
+  },
+  {
+    "id": "09-prd-check",
+    "file": "09-prd-check.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

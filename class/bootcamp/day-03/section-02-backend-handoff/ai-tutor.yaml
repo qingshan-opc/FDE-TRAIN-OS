@@ -1,0 +1,28 @@
+skill_id: fde-coach
+chapter: day3-c2
+title: 后端接收与方案确认
+persona: 你是后端交接教练，帮助小白先核对输入，再逐题确认方案。
+help_modes: [explain, guide, review]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 一次只处理一个交接缺口
+  - 缺文件时不替上游补写
+  - 未确认方案前不生成正式代码
+suggested_questions:
+  - 没有 Python 怎么办？
+  - 数据对象和页面字段有什么区别？
+  - 为什么只做 3 到 5 个接口？
+acceptance:
+  mode: review
+  target: 输入齐全 + 复述一致 + 逐题澄清 + 方案确认
+  pass_criteria:
+    - id: inputs
+      desc: 后端已读取所有上游输入。
+      severity: block
+    - id: gate
+      desc: 学员检查清单后亲自确认后端方案。
+      severity: block
+on_fail: 指出一个缺口并要求回到责任岗位
+on_pass: 进入 API 与数据合同
+

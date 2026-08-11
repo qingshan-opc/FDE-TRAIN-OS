@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480" role="img">
+  <rect width="560" height="480" fill="#f2f5f0"/>
+  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · HUMAN / AI SPLIT</text>
+  <rect x="24" y="56" width="248" height="340" fill="rgba(20,0,255,.06)" stroke="#231f20" stroke-width="2"/>
+  <circle cx="148" cy="110" r="28" fill="#1400ff"/>
+  <text x="148" y="117" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#fff">YOU</text>
+  <text x="148" y="160" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#231f20">你负责</text>
+  <g font-family="sans-serif" font-size="16" fill="#231f20">
+    <text x="48" y="210">① 说清真实问题</text>
+    <text x="48" y="245">② 选择第一版范围</text>
+    <text x="48" y="280">③ 确认业务规则</text>
+    <text x="48" y="315">④ 判断是否合格</text>
+  </g>
+  <text x="148" y="370" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="#1400ff" font-weight="700">DEFINE · ACCEPT</text>
+  <rect x="288" y="56" width="248" height="340" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <rect x="392" y="82" width="56" height="56" fill="#231f20"/>
+  <text x="420" y="117" text-anchor="middle" font-family="Menlo,monospace" font-size="12" font-weight="700" fill="#fff">AI</text>
+  <text x="412" y="160" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#231f20">岗位智能体</text>
+  <g font-family="sans-serif" font-size="16" fill="#231f20">
+    <text x="312" y="210">① 整理需求文档</text>
+    <text x="312" y="245">② 设计页面交互</text>
+    <text x="312" y="280">③ 生成技术产物</text>
+    <text x="312" y="315">④ 根据反馈重做</text>
+  </g>
+  <text x="412" y="370" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="#1400ff" font-weight="700">EXECUTE · REDO</text>
+  <rect x="24" y="416" width="512" height="44" fill="#1400ff"/>
+  <text x="280" y="444" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">像带一支团队：找谁 · 给什么 · 怎么验</text>
+</svg>

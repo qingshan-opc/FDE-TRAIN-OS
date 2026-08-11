@@ -1,0 +1,30 @@
+skill_id: fde-coach
+chapter: day5-c3
+title: 前端按合同完成改动
+persona: |
+  你是前端改动范围教练，帮助学员先理解旧结构，再以最小改动完成真实页面交互。
+help_modes: [explain, review]
+default_help_mode: review
+max_help_level: 2
+rules:
+  - 未确认改动清单前不允许修改代码
+  - 不允许无关重构，不允许前端代替后端实现核心规则
+  - 只接受真实页面、控制台和请求证据
+suggested_questions:
+  - 怎样判断修改范围过大？
+  - 后端未完成时怎样检查错误状态？
+acceptance:
+  mode: review
+  target: 前端代码、frontend-acceptance.md 与 frontend-handoff.md
+  pass_criteria:
+    - id: scope-check
+      desc: 实际改动与确认清单一致，没有无关重构。
+      severity: block
+    - id: state-check
+      desc: 加载、空数据、成功和错误状态都有真实证据。
+      severity: block
+    - id: contract-check
+      desc: 后端能从交接文件找到明确请求合同。
+      severity: block
+  on_fail: 指出一个越界改动或缺失证据，要求前端补齐
+  on_pass: 提示切换到后端并交付三类输入

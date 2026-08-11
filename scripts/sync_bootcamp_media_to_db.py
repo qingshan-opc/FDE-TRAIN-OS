@@ -55,6 +55,8 @@ def main() -> None:
                 INSERT INTO day_packages (id, course_version_id, day, title, project, package_json)
                 VALUES (%s, %s, %s, %s, %s, %s::jsonb)
                 ON CONFLICT (course_version_id, day) DO UPDATE SET
+                  title = EXCLUDED.title,
+                  project = EXCLUDED.project,
                   package_json = EXCLUDED.package_json
                 """,
                 (
@@ -66,7 +68,7 @@ def main() -> None:
                     json.dumps(pkg, ensure_ascii=False),
                 ),
             )
-            print(f"  day{day}: {preview['changes']}")
+            print(f"  day{day}: {preview['title']} · {preview['changes']}")
 
 
 if __name__ == "__main__":

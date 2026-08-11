@@ -400,7 +400,7 @@ export function ChainExplorer() {
   else body = <ChainHome />;
 
   return (
-    <div className="landing landing-page-chain">
+    <div className="mk-home ink-site landing-page-chain">
       <LandingTopbar
         activeTab="verify"
         headerSolid

@@ -1,0 +1,65 @@
+{
+  "total": 200.76,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 18.517333333333333
+    },
+    {
+      "id": "02-final-audit",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\02-final-audit.wav",
+      "start": 18.637333333333334,
+      "duration": 18.133333333333333
+    },
+    {
+      "id": "03-fix",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\03-fix.wav",
+      "start": 36.89066666666667,
+      "duration": 18.602666666666668
+    },
+    {
+      "id": "04-handoff-doc",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\04-handoff-doc.wav",
+      "start": 55.61333333333334,
+      "duration": 20.437333333333335
+    },
+    {
+      "id": "05-six-files",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\05-six-files.wav",
+      "start": 76.17066666666668,
+      "duration": 21.973333333333333
+    },
+    {
+      "id": "06-test-receive",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\06-test-receive.wav",
+      "start": 98.26400000000001,
+      "duration": 20.352
+    },
+    {
+      "id": "07-why-wait",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\07-why-wait.wav",
+      "start": 118.73600000000002,
+      "duration": 19.797333333333334
+    },
+    {
+      "id": "08-log",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\08-log.wav",
+      "start": 138.65333333333336,
+      "duration": 21.12
+    },
+    {
+      "id": "09-review",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\09-review.wav",
+      "start": 159.89333333333337,
+      "duration": 19.24266666666667
+    },
+    {
+      "id": "10-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-06-accept-test-handoff\\video\\audio\\segments\\10-close.wav",
+      "start": 179.25600000000006,
+      "duration": 21.504
+    }
+  ]
+}

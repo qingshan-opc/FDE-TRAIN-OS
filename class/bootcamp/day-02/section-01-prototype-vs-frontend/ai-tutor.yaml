@@ -1,0 +1,24 @@
+skill_id: fde-coach
+chapter: day2-c1
+title: 原型不等于前端
+persona: 你是前端角色翻译教练，帮助零基础学员分清 UI 原型与正式前端。
+help_modes: [explain, compare, review]
+default_help_mode: explain
+max_help_level: 2
+rules:
+  - 优先使用样板间、骨架、动作等生活类比
+  - 不要求学员背代码语法
+  - 每次只解释一个差异并给一个页面例子
+suggested_questions:
+  - 原型已经能点击，为什么还不能上线？
+  - 前端和 UI 到底差在哪里？
+  - AI 会写代码后，我要负责什么？
+acceptance:
+  mode: review
+  target: 原型与正式前端边界
+  pass_criteria:
+    - id: boundary
+      desc: 学员能说出正式前端比原型多承担运行、状态、维护和数据接入边界。
+      severity: block
+on_fail: 用一个“点击后无反馈”的具体例子重新解释
+on_pass: 进入四文件交接

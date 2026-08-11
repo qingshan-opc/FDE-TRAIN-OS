@@ -1,0 +1,59 @@
+{
+  "total": 177.685333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.328
+    },
+    {
+      "id": "02-ops-input",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\02-ops-input.wav",
+      "start": 19.448,
+      "duration": 21.589333333333332
+    },
+    {
+      "id": "03-plan",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\03-plan.wav",
+      "start": 41.157333333333334,
+      "duration": 19.328
+    },
+    {
+      "id": "04-release",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\04-release.wav",
+      "start": 60.60533333333333,
+      "duration": 20.608
+    },
+    {
+      "id": "05-rollback",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\05-rollback.wav",
+      "start": 81.33333333333333,
+      "duration": 19.285333333333334
+    },
+    {
+      "id": "06-pm-return",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\06-pm-return.wav",
+      "start": 100.73866666666666,
+      "duration": 18.773333333333333
+    },
+    {
+      "id": "07-final",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\07-final.wav",
+      "start": 119.632,
+      "duration": 17.834666666666667
+    },
+    {
+      "id": "08-retro",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\08-retro.wav",
+      "start": 137.58666666666667,
+      "duration": 22.016
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-06-release-retrospective\\video\\audio\\segments\\09-close.wav",
+      "start": 159.72266666666667,
+      "duration": 17.962666666666667
+    }
+  ]
+}

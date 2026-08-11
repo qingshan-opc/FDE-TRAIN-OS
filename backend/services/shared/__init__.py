@@ -233,7 +233,12 @@ class AuthUser:
     camp_id: str | None = None
 
 
-def create_access_token(user: AuthUser, camp_id: str | None = None) -> str:
+def create_access_token(
+    user: AuthUser,
+    camp_id: str | None = None,
+    *,
+    session_id: str | None = None,
+) -> str:
     payload = {
         "sub": user.id,
         "email": user.email,
@@ -243,6 +248,8 @@ def create_access_token(user: AuthUser, camp_id: str | None = None) -> str:
         "exp": int(time.time()) + JWT_TTL_SEC,
         "iat": int(time.time()),
     }
+    if session_id:
+        payload["sid"] = session_id
     if pyjwt is None:
         raw = json.dumps(payload, separators=(",", ":"))
         sig = hmac.new(JWT_SECRET.encode(), raw.encode(), hashlib.sha256).hexdigest()
@@ -263,19 +270,60 @@ def decode_access_token(token: str) -> dict[str, Any]:
     return pyjwt.decode(token, JWT_SECRET, algorithms=["HS256"])
 
 
-def create_refresh_session(user_id: str, camp_id: str | None = None, user_agent: str | None = None, ip: str | None = None) -> tuple[str, str]:
-    """Return (session_id, refresh_token)."""
+def revoke_other_user_sessions(user_id: str, *, keep_session_id: str) -> int:
+    """Revoke all live sessions for user except keep_session_id. Returns affected rows."""
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            UPDATE sessions
+            SET revoked_at=NOW()
+            WHERE user_id=? AND revoked_at IS NULL AND id <> ?
+            """,
+            (user_id, keep_session_id),
+        )
+        return int(cur.rowcount or 0)
+
+
+def session_is_active(session_id: str | None) -> bool:
+    sid = (session_id or "").strip()
+    if not sid:
+        return False
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT 1 FROM sessions
+            WHERE id=? AND revoked_at IS NULL AND expires_at > NOW()
+            LIMIT 1
+            """,
+            (sid,),
+        )
+        return bool(cur.fetchone())
+
+
+def create_refresh_session(
+    user_id: str,
+    camp_id: str | None = None,
+    user_agent: str | None = None,
+    ip: str | None = None,
+    *,
+    exclusive: bool = False,
+    ttl_sec: int | None = None,
+) -> tuple[str, str]:
+    """Return (session_id, refresh_token). If exclusive, revoke other live sessions."""
     session_id = str(uuid.uuid4())
     refresh = secrets.token_urlsafe(48)
     token_hash = hashlib.sha256(refresh.encode()).hexdigest()
+    ttl = int(ttl_sec if ttl_sec is not None else REFRESH_TTL_SEC)
     with db_cursor() as cur:
         cur.execute(
             """
             INSERT INTO sessions (id, user_id, refresh_token_hash, camp_id, expires_at, user_agent, ip)
             VALUES (?, ?, ?, ?, NOW() + ((?)::text || ' seconds')::interval, ?, ?)
             """,
-            (session_id, user_id, token_hash, camp_id, str(REFRESH_TTL_SEC), user_agent, ip),
+            (session_id, user_id, token_hash, camp_id, str(ttl), user_agent, ip),
         )
+    if exclusive:
+        revoke_other_user_sessions(user_id, keep_session_id=session_id)
     return session_id, refresh
 
 
@@ -296,7 +344,8 @@ def rotate_refresh_session(refresh_token: str) -> tuple[AuthUser, str, str, str 
         cur.execute("UPDATE sessions SET revoked_at=NOW() WHERE id=?", (row["id"],))
         user = AuthUser(id=row["user_id"], email=row["email"], role=row["role"], display_name=row.get("display_name"))
         camp_id = row.get("camp_id")
-    sid, new_refresh = create_refresh_session(user.id, camp_id)
+    # exclusive=False: refresh must not kick the newly created session / itself
+    sid, new_refresh = create_refresh_session(user.id, camp_id, exclusive=False)
     return user, sid, new_refresh, camp_id
 
 

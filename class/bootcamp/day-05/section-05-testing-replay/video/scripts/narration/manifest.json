@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-impact",
+    "file": "02-impact.txt"
+  },
+  {
+    "id": "03-plan",
+    "file": "03-plan.txt"
+  },
+  {
+    "id": "04-gate",
+    "file": "04-gate.txt"
+  },
+  {
+    "id": "05-execute",
+    "file": "05-execute.txt"
+  },
+  {
+    "id": "06-defect",
+    "file": "06-defect.txt"
+  },
+  {
+    "id": "07-retest",
+    "file": "07-retest.txt"
+  },
+  {
+    "id": "08-report",
+    "file": "08-report.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

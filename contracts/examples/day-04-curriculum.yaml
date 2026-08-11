@@ -1,512 +1,642 @@
 camp_version: v0.7
 day: 4
-title: 找问题、修问题、确认能交付
+title: 测试、发布与最终验收
 week: 1
-project: 真实检查、问题修复和交付前稳定版本
-project_brief: 学员指挥测试工程师从 PRD 验收标准倒推用例，但必须亲手执行测试；随后把缺陷分派给责任岗位、复测回归，并以证据清单完成 V0.9 功能冻结。
-review_checklist:
-- 测试用例来自 PRD 且覆盖正常、边界、异常
-- 测试结果由学员亲手执行，不是 Agent 自报
-- 真实缺陷完成责任分派、修复、复测和回归
-- 验收清单的每一项都有证据
-- V0.9 功能冻结后未增加新功能
+project: 测试通过并完成第一次本地发布
+project_brief: 学员承接 Day3 已由 @测试 接收的系统版本，先把 PRD 与交付合同翻译成 test-plan.md， 再亲手执行页面、接口、数据、错误、持久化与隐私测试。发现问题时生成 defect-log.md， 切换到
+  @前端 或 @后端 按责任修复，再回 @测试 复测与回归。 测试通过后交给 @运维，确认 deployment-plan.md 后完成本地发布、健康检查和回退演练， 最后由 @产品经理 根据最初 PRD 完成最终验收。
+review_checklist: []
 resources:
-- id: team-prompts-v11
-  title: 七岗位 AI 员工提示词包
+- id: agent-testing
+  title: 智能体提示词 · 测试工程师
   kind: download
-  summary: 七名 AI 员工的职责、交接方法和五天协作规则
-  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_Agent_Prompts_V1.1/00_README.md
-- id: week1-day4-source
-  title: 第一周第 4 天课程合约
+  summary: 根据需求制定计划、执行测试、提交缺陷并复测
+  url: /course-assets/bootcamp/day-01/agent-prompts/05-testing.md
+- id: agent-operations
+  title: 智能体提示词 · 运维部署工程师
+  kind: download
+  summary: 负责发布计划、环境、健康检查、日志、备份和回退
+  url: /course-assets/bootcamp/day-01/agent-prompts/06-operations.md
+- id: testing-role-card
+  title: 速查卡 · 测试岗位与证据
   kind: doc
-  summary: 本日五节课、交付物、岗位交接与验收口径
-  url: /course-assets/bootcamp/day-04/README.md
-- id: domain-packs
-  title: 第一周领域包
+  summary: 测试职责、证据四要素和岗位边界
+  url: /course-assets/bootcamp/day-04/section-01-testing-role/resources.md
+- id: test-plan-card
+  title: 模板 · 测试计划
   kind: doc
-  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
-  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+  summary: 从 PRD 验收标准生成测试范围与用例
+  url: /course-assets/bootcamp/day-04/section-02-test-plan/resources.md
+- id: defect-card
+  title: 模板 · 缺陷与复测记录
+  kind: doc
+  summary: 编号、级别、步骤、预期、实际、证据和责任岗位
+  url: /course-assets/bootcamp/day-04/section-04-defect-retest/resources.md
+- id: deployment-card
+  title: 清单 · 本地发布与回退
+  kind: doc
+  summary: 环境变量、备份、健康检查、日志、更新和回退
+  url: /course-assets/bootcamp/day-04/section-06-release-final-acceptance/resources.md
 learn:
   lingzhi_tags:
   - camp:v0.7
   - day:4
   - project:role-week
-  estimated_minutes: 130
+  estimated_minutes: 0
   require_capsules: true
   capsules:
   - id: c1
-    title: 把需求变成一张可执行检查清单
-    minutes: 25
-    form: 实操
-    content_ref: class/bootcamp/day-04/section-01-backend-role/lesson.md
-    content: '同学们好。医生体检前会先开检查单，做项目也一样。不能打开页面随便点几下，就说“看起来没问题”。
-
-
-      一条合格的检查项要有三样内容：怎么操作，应该看到什么，实际看到了什么。例如：金额填负数后点击提交；应该不能提交，并提示金额必须大于零；实际结果等操作时填写。
-
-
-      检查项不是凭空编出来的，主要来自两个地方。第一，第一天需求文档里的通过标准。第二，第三天发现过的数据问题。以前写得越具体，今天越容易检查。
-
-
-      检查要覆盖三类情况：正常完成主流程，走驳回或修改等不同分支，输入空白、负数、超长内容等异常情况。
-
-
-      判断清单是否合格有一个简单办法：交给一个完全没做过这个项目的人，他照着文字也能完成相同操作，得到相同判断。
-
-
-      记住这句话：**检查清单就是项目的体检单；步骤能执行，结果能判断，每一条都要有来源。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    title: 测试不是挑错，而是提供可信证据
+    minutes: 15
+    form: 认知+对比
+    content_ref: class/bootcamp/day-04/section-01-testing-role/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day4-source
-    - domain-packs
+    - testing-role-card
+    - agent-testing
     tools:
-    - name: '@测试工程师 Agent'
-      note: 本节交付：至少 10 条测试用例
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: 证据四要素卡
+      note: 条件、操作、预期、实际
+    - name: 测试责任边界
+      note: 测试发现和复测，前端后端负责修复
     quiz:
-    - - 哪一条是合格的检查项？
-      - - 检查提交功能是否正常
-        - 金额填负数后提交，应该被阻止并说明金额必须大于零
-        - 随便点几下，感觉页面没问题
+    - - 测试岗位最重要的交付是什么？
+      - - 替开发修改全部代码
+        - 可复现的通过与失败证据
+        - 让页面看起来更漂亮
       - 1
-      - 合格检查项必须让任何人都能照着操作，并明确判断结果。
+      - 测试负责依据合同提供证据，不越权代替开发。
+    - - AI 能生成很多测试用例后，人更重要的工作是什么？
+      - - 只看用例数量
+        - 判断风险、边界和发布门槛
+        - 自动宣布全部通过
+      - 1
+      - 用例多不等于覆盖关键风险，人要决定什么必须拦住发布。
     media:
     - kind: video
-      title: 口播课件 · 第 1 节
-      object_key: documents/shared/course-media/day04-c1-backend-role.mp4
-      poster_key: documents/shared/course-media/day04-c1-backend-role-poster.jpg
-      duration_sec: 69
+      title: 口播课件 · 测试不是随便点点
+      object_key: documents/shared/course-media/day04-c1-testing-role-v2.mp4
+      poster_key: documents/shared/course-media/day04-c1-testing-role-poster-v2.jpg
+      duration_sec: 176
     knowledge_cards:
-    - id: d4l1-k1
-      term: 每项检查都能执行
-      plain: 写清怎样操作、应该看到什么和实际看到什么，不能只写“检查一下”。
-    - id: d4l1-k2
-      term: 检查内容有来源
-      plain: 主要来自需求文档的通过标准，以及前一天真实发现过的数据问题。
-    - id: d4l1-k3
-      term: 正常和异常都要覆盖
-      plain: 既要走完整主流程，也要检查不同分支、空白、负数和超长内容。
-    memory_sentence: 检查清单就是项目的体检单；步骤能执行，结果能判断，每一条都要有来源。
-    local_prep:
-      codex_prompt: '@测试工程师 Agent 请根据已批准的需求，把“怎样算做对了”整理成一份可亲手执行的检查清单。每项只写我该做什么和应该看到什么，并覆盖正常、填错和没有数据的情况。先让我审核清单，不要替我执行或填写通过。'
-      checklist:
-      - 至少十条并覆盖三类场景
-      - 每条有明确步骤和可判断预期
-      - 可追溯到 PRD
-      - 包含看板与列表核对
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+    - id: testing-evidence
+      term: 测试的核心价值
+      plain: 根据约定执行检查，用可复现证据说明系统能否交付。
+      tag: 岗位
+    - id: testing-shift
+      term: 测试岗位价值上移
+      plain: AI 能快速生成用例，人更要判断风险、设计边界、识别假通过并决定发布门槛。
+      tag: AI 时代
+    - id: expected-actual
+      term: 预期与实际
+      plain: 先写按合同应发生什么，再记录系统真实发生什么，两者不一致才是问题。
+      tag: 证据
+    glossary_terms:
+    - id: gt-test-case
+      term: Test Case · 测试用例
+      plain: 写清条件、操作、预期结果和实际结果的一次检查。
+    - id: gt-smoke
+      term: Smoke Test · 冒烟测试
+      plain: 先检查服务能否启动、核心页面能否打开和主流程能否走通。
+    - id: gt-regression
+      term: Regression Test · 回归测试
+      plain: 修复后重新检查相关功能，确认没有引入新的问题。
   - id: c2
-    title: 亲手操作系统，记录真实问题
-    minutes: 30
-    form: 实操
-    content_ref: class/bootcamp/day-04/section-02-api-design/lesson.md
-    content: '清单写好了，接下来学员自己就是检查员。AI 可以帮你整理，但不能替你点击页面、输入内容和观察结果。
-
-
-      执行时记住三个字：照、记、判。严格照步骤操作；每做完一条马上记录；结果只能是通过、不通过或被其他问题挡住，不能写“基本通过”“应该没问题”。
-
-
-      先走最重要的完整流程。如果提交、保存、列表、详情和看板都走不通，先不要忙着查边角功能。主流程通过后，再查不同分支和异常输入。
-
-
-      页面弹出“提交成功”也不能立刻判通过。要去列表里确认记录出现，刷新后还在，详情内容一致。检查的是事实，不是页面说了什么。
-
-
-      发现问题先记录，不要边查边修。把检查时段和修复时段分开，才不会弄乱哪些已经查过。
-
-
-      记住这句话：**照着做、马上记、明确判；检查的是事实，不是页面自己说的话。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
-    resource_ids:
-    - team-prompts-v11
-    - week1-day4-source
-    - domain-packs
-    tools:
-    - name: 学员亲测 → @测试工程师 Agent 整理
-      note: 本节交付：执行矩阵 + 真实缺陷报告
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - 页面弹出“提交成功”，是否可以立刻判断这一项通过？
-      - - 可以，成功提示就是最终事实
-        - 不可以，还要确认记录已保存、列表出现并且刷新后仍在
-        - 可以，只要 AI 也说成功
-      - 1
-      - 页面提示只是一句话，真实数据变化才是检查对象。
-    media:
-    - kind: video
-      title: 口播课件 · 第 2 节
-      object_key: documents/shared/course-media/day04-c2-api-design.mp4
-      poster_key: documents/shared/course-media/day04-c2-api-design-poster.jpg
-      duration_sec: 64
-    knowledge_cards:
-    - id: d4l2-k1
-      term: 严格照步骤操作
-      plain: 不跳步骤、不凭感觉，保证检查结果可以被另一个人重复得到。
-    - id: d4l2-k2
-      term: 做完马上记录
-      plain: 每一项立即标通过、不通过或被挡住，不能全部做完后靠记忆补写。
-    - id: d4l2-k3
-      term: 检查事实而非提示
-      plain: 页面说提交成功还不够，必须确认记录真的保存、出现并且刷新后还在。
-    memory_sentence: 照着做、马上记、明确判；检查的是事实，不是页面自己说的话。
-    local_prep:
-      codex_prompt: '@测试工程师 Agent 请带我亲手执行检查清单。一次只给我一个操作，等我告诉你实际看到什么，再记录通过或问题。没有执行的必须写“未检查”。发现问题时帮我用大白话写清怎样重现、正确结果和实际结果，但不要直接改程序。'
-      checklist:
-      - 用例都有真实执行状态
-      - 缺陷与实际项目一致
-      - 重现步骤足够他人复现
-      - 学员至少复核一次严重度判断
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
-  - id: c3
-    title: 把问题交给最合适的 AI 员工修复
-    minutes: 30
-    form: 实操+交接
-    content_ref: class/bootcamp/day-04/section-03-database-design/lesson.md
-    content: '“详情页有点怪”不是一份能修的问题报告。合格报告要写清：怎样一步步看到问题，本来应该怎样，实际发生了什么。
-
-
-      描述时只写亲眼看到的事实。可以写“页面显示错误”，不要把“可能是数据仓库坏了”当成事实。猜测可以单独标注，避免 AI 顺着错误方向修改。
-
-
-      然后缩小范围。换一条数据还会出错吗？刷新后还会吗？每次都出错还是偶尔发生？这些信息越清楚，AI 越容易一次找准原因。
-
-
-      页面显示、按钮和跳转问题，通常交给页面工程师；保存、查询和业务规则问题，通常交给数据工程师。拿不准时，可以让项目经理先帮助判断归属，但不能让它自己把所有问题都修了。
-
-
-      修复要求必须包含现象、操作步骤、目标结果和重新检查的方法，并要求 AI 说明改了哪里、为什么会错。
-
-
-      记住这句话：**步骤、应该怎样、实际怎样，三样不齐不动手；报告越具体，AI 修改越准确。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
-    resource_ids:
-    - team-prompts-v11
-    - week1-day4-source
-    - domain-packs
-    tools:
-    - name: '@责任工程师'
-      note: 本节交付：修复单、修复提交与根因说明
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - “详情页有点怪，请修一下”是不是合格的问题报告？
-      - - 是，AI 应该自己猜出问题
-        - 不是，它缺少操作步骤、应该结果和实际结果
-        - 是，只要语气足够严厉
-      - 1
-      - 模糊描述会让 AI 来回猜测，具体事实才能帮助它定位原因。
-    media:
-    - kind: video
-      title: 口播课件 · 第 3 节
-      object_key: documents/shared/course-media/day04-c3-database-design.mp4
-      poster_key: documents/shared/course-media/day04-c3-database-design-poster.jpg
-      duration_sec: 70
-    knowledge_cards:
-    - id: d4l3-k1
-      term: 问题报告写清三件事
-      plain: 说明怎样看到问题、本来应该怎样、实际发生了什么。
-    - id: d4l3-k2
-      term: 事实和猜测分开
-      plain: 写亲眼看到的结果，原因猜测可以标注，但不能把猜测当成事实。
-    - id: d4l3-k3
-      term: 交给合适岗位处理
-      plain: 页面显示问题交页面工程师，保存和规则问题交数据工程师，再按原步骤检查。
-    memory_sentence: 步骤、应该怎样、实际怎样，三样不齐不动手；报告越具体，AI 修改越准确。
-    local_prep:
-      codex_prompt: '@测试工程师 Agent 请根据我选中的问题，先用大白话告诉我应该交给前端还是后端，再生成一句能直接复制的修复任务。等我把修复结果带回来后，请带我重新检查；不要替开发岗位修改程序，也不要提前写“复查通过”。'
-      checklist:
-      - 每张修复单四要素齐全
-      - 派给正确责任岗位
-      - 学员复测失败用例和至少一条相关用例
-      - 根因和修改范围写入记录
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
-  - id: c4
-    title: 修完重新检查，确认不再添加功能
-    minutes: 25
-    form: 实操+验收
-    content_ref: class/bootcamp/day-04/section-04-hands-on-api-db/lesson.md
-    content: '修掉一个问题不难，难的是保证没有把别的地方弄坏。每次修改后，要检查三圈。
-
-
-      第一圈，重新走一遍原来出现问题的步骤，确认它真的好了。第二圈，检查同一部分的相关功能。第三圈，如果改动影响公共内容，就把提交到看板的主流程完整走一遍。
-
-
-      不要只看 AI 说“修复完成”，还要追问根本原因和修改范围。把报错文字藏起来不叫修复，手动改一条数据也不能解决下一次同样的问题。
-
-
-      所有严重问题解决并重新检查后，项目进入交付前的稳定阶段：从现在开始不再增加新功能，只处理已经记录的问题。新的好想法先放进以后再做清单，不能临时插队。
-
-
-      记住这句话：**修原因，不遮现象；修完必须重新检查，准备交付时先停止添加功能。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
-    resource_ids:
-    - team-prompts-v11
-    - week1-day4-source
-    - domain-packs
-    tools:
-    - name: '@测试工程师 Agent + 学员批准'
-      note: 本节交付：验收清单 + 功能冻结声明
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - AI 只修改了一行内容，是否可以不重新检查？
-      - - 可以，一行内容不可能影响其他地方
-        - 不可以，影响大小取决于修改位置，仍要检查相关功能
-        - 可以，只要页面还能打开
-      - 1
-      - 很小的修改也可能碰到公共内容，修完必须用实际操作重新确认。
-    media:
-    - kind: video
-      title: 口播课件 · 第 4 节
-      object_key: documents/shared/course-media/day04-c4-hands-on-api-db.mp4
-      poster_key: documents/shared/course-media/day04-c4-hands-on-api-db-poster.jpg
-      duration_sec: 58
-    knowledge_cards:
-    - id: d4l4-k1
-      term: 修原因不遮现象
-      plain: 要求 AI 解释为什么会错、改了哪里，不能只把错误提示藏起来。
-    - id: d4l4-k2
-      term: 修完检查三圈
-      plain: 重走原问题、检查同一部分、必要时再走完整主流程。
-    - id: d4l4-k3
-      term: 交付前停止加功能
-      plain: 严重问题解决后不再临时插入新想法，只处理已记录问题。
-    memory_sentence: 修原因，不遮现象；修完必须重新检查，准备交付时先停止添加功能。
-    local_prep:
-      codex_prompt: '@测试工程师 Agent 请带我重新检查已修复的问题，并顺手检查相关功能有没有被带坏。一次只检查一项，按我的真实观察记录结果。最后汇总哪些通过、哪些没通过；驾驶舱数字必须和真实记录对得上。等我批准后才能宣布停止加新功能。'
-      checklist:
-      - 四类验收项都有证据
-      - 看板数据可追溯
-      - 未通过项未被隐藏
-      - 冻结由学员明确宣布
-      - 冻结后没有新增功能
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
-
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
-  - id: c5
-    title: 整理能够证明项目质量的材料
+    title: 把需求翻译成测试计划
     minutes: 20
-    form: 实操+验收
-    content_ref: class/bootcamp/day-04/section-05-accept/lesson.md
-    content: '体检结束后要有报告，项目检查结束后也要留下别人看得懂的质量材料。
-
-
-      材料分四块。第一，检查范围：查了什么，哪些没有查。第二，执行数字：总共多少条，通过多少条，未通过多少条。第三，问题清单：发现了多少，修好了多少，还剩哪些。第四，当前结论：主流程是否通过，剩余问题是否影响交付。
-
-
-      没有检查手机端，就明确写没有检查；没有做大量用户同时使用的验证，也要写清楚。没有覆盖的内容写在纸面上叫专业，被别人现场发现却从未说明，才叫事故。
-
-
-      结论要和实际检查范围匹配。只做了有限检查，就不能写“已经完成全部测试、可以正式上线”。
-
-
-      最后让一个不懂技术的人读一遍。如果他能看懂系统现在能不能交、还有什么风险，这份材料才真正有用。
-
-
-      记住这句话：**质量材料里最值钱的是诚实的坏消息；问题写清楚是专业，藏起来才是风险。**'
-    practice: '完成标志：
-
-      [ ] 学员亲自检查完上方清单并保留真实证据
-
-      [ ] 至少能指出一个判断依据，而不是只复述 Agent 的总结
-
-      [ ] 交付先停在 REVIEW，只有学员明确回复 APPROVED 才进入下一步'
+    form: 计划实操
+    content_ref: class/bootcamp/day-04/section-02-test-plan/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
-    - team-prompts-v11
-    - week1-day4-source
-    - domain-packs
+    - test-plan-card
+    - agent-testing
     tools:
-    - name: 通用对话
-      note: 本节交付：报审材料清单与 v0.9
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - name: TRAE · @测试
+      note: 先读取、复述、列目录、生成计划
+    - name: PRD 验收标准
+      note: 每条标准至少对应一条测试用例
     quiz:
-    - - 没有检查手机上的显示效果，质量材料中应该怎样写？
-      - - 不提这件事，让材料看起来更完整
-        - 明确写“本次没有检查手机端”
-        - 直接写手机端已经通过
+    - - 测试计划的标准首先来自哪里？
+      - - 测试人员个人喜好
+        - PRD 和交付合同
+        - 页面颜色
       - 1
-      - 未覆盖内容写在材料里是诚实边界，被现场发现才会损害可信度。
+      - 测试不能凭感觉判定，必须回到已经确认的约定。
+    - - 计划中最应该优先检查什么？
+      - - 字体细微差异
+        - 启动失败、数据丢失和隐私风险
+        - 所有项目随机排序
+      - 1
+      - 高影响风险应先测试，阻塞问题会直接拦住后续执行。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '继续使用 Day3 已接收文件的 @测试。必须逐段完成。
+
+
+        【第 1 段｜检查六类输入】
+
+        请读取 PRD.md、API_Spec.md、DB_Schema.md、RUNBOOK.md、backend-acceptance.md 和 backend-handoff.md。现在不要执行测试。缺少文件时只说明缺什么、应回到哪个岗位补齐。
+
+
+        【第 2 段｜复述范围与风险】
+
+        文件齐全后，请复述目标用户、核心主流程、关键业务规则、接口成功与错误、数据持久化、权限隐私和已知限制。再列出前三项发布风险。输出后停止。
+
+
+        【第 3 段｜只列测试目录】
+
+        请只列测试目录，依次包含启动与健康检查、页面主流程、接口成功与错误、数据保存与重启、加载空数据成功错误状态、权限隐私和 PRD 验收标准。每类写一句通过条件。现在不要展开用例。
+
+
+        【第 4 段｜生成测试计划】
+
+        目录已确认。请生成 test-plan.md。每条用例写编号、优先级、前置条件、操作步骤、预期结果、证据位置和主要责任岗位。标出冒烟测试和回归范围。保存后停止，等我回复“确认测试”。
+
+        '
+      checklist:
+      - 六类 Day3 文件全部读取
+      - 测试范围与 PRD 和接口合同一致
+      - 发布风险已排序
+      - 每条用例有操作、预期和证据位置
+      - 学员检查计划后回复“确认测试”
+      suggested_questions:
+      - 已知限制也需要测试吗？
+      - 页面与接口用例要不要分开？
+      - 怎样判断什么是阻塞问题？
+      template_resource_id: test-plan-card
     media:
     - kind: video
-      title: 口播课件 · 第 5 节
-      object_key: documents/shared/course-media/day04-c5-accept.mp4
-      poster_key: documents/shared/course-media/day04-c5-accept-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 从需求生成测试计划
+      object_key: documents/shared/course-media/day04-c2-test-plan-v2.mp4
+      poster_key: documents/shared/course-media/day04-c2-test-plan-poster-v2.jpg
+      duration_sec: 174
     knowledge_cards:
-    - id: d4l5-k1
-      term: 先写检查范围
-      plain: 明确哪些内容已经检查、哪些没有检查，先划清这份结论的边界。
-    - id: d4l5-k2
-      term: 用真实数字说结果
-      plain: 写清检查总数、通过数、未通过数，以及问题发现和修复数量。
-    - id: d4l5-k3
-      term: 剩余问题必须公开
-      plain: 每个未解决问题说明影响，不能为了好看从材料里删掉。
-    memory_sentence: 质量材料里最值钱的是诚实的坏消息；问题写清楚是专业，藏起来才是风险。
+    - id: plan-inputs
+      term: 测试计划输入
+      plain: PRD 决定测什么，接口合同决定怎样请求，运行手册决定怎样启动，交接单说明风险与限制。
+      tag: 交接
+    - id: risk-priority
+      term: 风险优先级
+      plain: 先测系统不能运行、数据丢失和隐私泄露，再测普通显示细节。
+      tag: 排序
+    - id: testing-gate
+      term: 确认测试
+      plain: 学员核对范围、顺序、证据位置和通过标准后，测试岗位才开始执行。
+      tag: 人工闸门
+    glossary_terms:
+    - id: gt-scope
+      term: Test Scope · 测试范围
+      plain: 本轮需要检查和明确不检查的功能边界。
+    - id: gt-priority
+      term: Priority · 优先级
+      plain: 根据业务影响和发生可能性决定先检查什么。
+  - id: c3
+    title: 按计划执行并留下证据
+    minutes: 25
+    form: 执行实操
+    content_ref: class/bootcamp/day-04/section-03-execute-tests/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - test-plan-card
+    - testing-role-card
+    tools:
+    - name: test-evidence 目录
+      note: 按用例编号保存截图、响应与日志
+    - name: 浏览器请求面板
+      note: 核对方法、路径、状态码和返回内容
+    quiz:
+    - - 冒烟测试失败后应该怎样做？
+      - - 继续执行全部用例
+        - 停止并提交阻塞缺陷
+        - 直接宣布发布通过
+      - 1
+      - 基础启动或主流程失败时，继续全面测试只会制造无效结果。
+    - - 谁负责提供系统真实执行结果？
+      - - 智能体想象
+        - 学员亲手运行并记录
+        - 产品经理猜测
+      - 1
+      - 测试结论必须来自真实运行，不能由 AI 虚构。
     local_prep:
-      codex_prompt: '@项目经理 Agent 请只整理项目里真实存在的成果，带我逐项核对需求、页面样稿、四个页面、真实数据、检查记录和问题修复。一次核对一类，找不到就写“缺失”，不能编造。全部核对后整理成交付材料清单，等我批准功能冻结。'
-      checklist:
-      - 七类证据均可打开
-      - 状态与真实执行一致
-      - 版本标记对应冻结版
-      - 能口述功能、缺陷和 Week2 AI 边界
-      suggested_questions:
-      - '@〈责任岗位〉 我没有批准当前交付。具体问题是：〈哪里不对〉；请改成：〈可判断的目标〉。
+      skill_id: fde-local-prep
+      codex_prompt: 'test-plan.md 已经确认。继续使用 @测试，一次只执行一类。
 
-        修改后请重新执行〈验证动作〉，列出实际文件与证据，并以 REVIEW 状态交付。不要继续下一岗位。'
+
+        【第 1 段｜冒烟测试】
+
+        请只给我冒烟测试步骤。依次检查服务启动、健康接口、前端打开和核心查询。每次只给一个操作和预期结果，等我反馈实际结果与证据后再继续。冒烟失败时停止。
+
+
+        【第 2 段｜核心主流程】
+
+        冒烟通过。请按 test-plan.md 引导我完成一次查询、一次提交、刷新后复查和一条 PRD 核心业务规则。每次只执行一条用例，并把实际结果追加到测试记录。
+
+
+        【第 3 段｜接口与错误】
+
+        请依次验证一个成功请求、缺少必填项、目标不存在和服务不可用。每次说明期望状态码与页面提示，等我反馈后再继续。
+
+
+        【第 4 段｜数据与隐私】
+
+        请引导我检查重启持久化、空数据状态、敏感信息是否出现在前端或日志，以及未授权访问的处理。不要制造危险数据，不要修改代码。
+
+
+        【第 5 段｜汇总实际结果】
+
+        请把我反馈的每条实际结果写入 test-run.md，包含用例编号、实际结果、证据路径和通过状态。失败项只记录，不修复。
+
+        '
+      checklist:
+      - 冒烟测试先于全面测试
+      - 学员逐条执行并反馈实际结果
+      - 查询、提交、刷新和业务规则有证据
+      - 成功与错误接口均已验证
+      - 持久化、空状态和隐私均有记录
+      - 失败项没有被测试岗位直接修改
+      suggested_questions:
+      - 截图和日志应该怎样命名？
+      - 服务不可用怎样安全模拟？
+      - 没有失败项是否正常？
+      template_resource_id: testing-role-card
+    media:
+    - kind: video
+      title: 口播课件 · 按计划执行并留下证据
+      object_key: documents/shared/course-media/day04-c3-execute-tests-v2.mp4
+      poster_key: documents/shared/course-media/day04-c3-execute-tests-poster-v2.jpg
+      duration_sec: 174
+    knowledge_cards:
+    - id: smoke-first
+      term: 先冒烟后全面
+      plain: 先验证启动、健康检查和主流程，冒烟失败时停止后续测试。
+      tag: 顺序
+    - id: evidence-folder
+      term: 证据目录
+      plain: 截图、请求结果和日志按用例编号保存，结论能回到真实文件。
+      tag: 可复现
+    - id: actual-result
+      term: 只记录实际结果
+      plain: 不让测试智能体替学员想象执行结果，学员必须亲手运行并反馈。
+      tag: 防假
+    glossary_terms:
+    - id: gt-precondition
+      term: Precondition · 前置条件
+      plain: 执行某条测试前必须先满足的环境和数据状态。
+    - id: gt-evidence
+      term: Evidence · 测试证据
+      plain: 支持结论的截图、响应内容、日志或数据记录。
+  - id: c4
+    title: 缺陷归责、修复、复测与回归
+    minutes: 25
+    form: 闭环实操
+    content_ref: class/bootcamp/day-04/section-04-defect-retest/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - defect-card
+    - agent-testing
+    tools:
+    - name: 缺陷生命周期卡
+      note: 发现、归责、修复、复测、回归、关闭
+    - name: 发布闸门
+      note: 阻塞缺陷关闭且核心流程回归通过
+    quiz:
+    - - 谁负责修改测试发现的前端缺陷？
+      - - 测试岗位
+        - 前端岗位
+        - 运维岗位
+      - 1
+      - 测试提交证据，责任开发岗位完成修复。
+    - - 原缺陷复测通过后为什么还要回归？
+      - - 增加报告长度
+        - 检查修复是否破坏相关功能
+        - 重新设计需求
+      - 1
+      - 局部修复可能影响其他流程，回归用于发现新的破坏。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '根据 test-run.md 处理失败项。严格保留岗位边界。
+
+
+        【第 1 段｜只生成缺陷清单】
+
+        @测试，请把失败项整理为 defect-log.md。每项写编号、严重程度、主要责任岗位、复现步骤、预期、实际、证据路径和建议方向。相同根因的重复现象合并。现在不要修改代码。
+
+
+        【第 2 段｜逐个交给责任岗位】
+
+        我选择缺陷编号 ______。请告诉我应切换到哪个岗位，并给该岗位一段只修这个缺陷的交接提示词。一次只处理一个缺陷。
+
+
+        【第 3 段｜责任岗位修复】
+
+        @责任岗位，请读取对应缺陷、PRD 和相关合同。先复述根因与改动范围，等我确认后只修这个问题。完成后列出修改文件和自检结果，不得把缺陷直接标为通过。
+
+
+        【第 4 段｜回测试复测】
+
+        @测试，请按原复现步骤复测该缺陷，记录实际结果与证据。通过后再执行受影响的回归用例。只有测试岗位可以更新复测状态。
+
+
+        【第 5 段｜生成测试报告】
+
+        所有阻塞缺陷已关闭。请生成 test-report.md，写明环境、执行范围、通过与失败数量、缺陷状态、回归结果、已知限制、发布风险和是否建议发布。建议发布时同时生成 release-candidate.md，记录当前版本和文件清单。
+
+        '
+      checklist:
+      - defect-log.md 的每个问题可复现
+      - 每个缺陷只有一个主要责任岗位
+      - 修复前由学员确认改动范围
+      - 原缺陷由 @测试 复测
+      - 相关功能完成回归
+      - test-report.md 有明确发布结论
+      suggested_questions:
+      - 严重程度和修复优先级一样吗？
+      - 一个现象涉及前后端怎么办？
+      - 什么缺陷可以作为已知限制发布？
+      template_resource_id: defect-card
+    media:
+    - kind: video
+      title: 口播课件 · 缺陷归责、复测与回归
+      object_key: documents/shared/course-media/day04-c4-defect-retest-v2.mp4
+      poster_key: documents/shared/course-media/day04-c4-defect-retest-poster-v2.jpg
+      duration_sec: 168
+    knowledge_cards:
+    - id: defect-eight
+      term: 可复现缺陷
+      plain: 编号、级别、责任岗位、步骤、预期、实际、证据和复测结果必须齐全。
+      tag: 缺陷
+    - id: one-owner
+      term: 一个主要责任岗位
+      plain: 请求与页面问题优先前端，响应、规则和存储问题优先后端。
+      tag: 归责
+    - id: fix-retest-regress
+      term: 修复、复测、回归
+      plain: 开发岗位修复，测试岗位验证原缺陷，再检查相关功能没有被破坏。
+      tag: 闭环
+    glossary_terms:
+    - id: gt-severity
+      term: Severity · 严重程度
+      plain: 问题对用户和系统造成的影响等级。
+    - id: gt-retest
+      term: Retest · 复测
+      plain: 使用原步骤再次执行，确认缺陷是否真的消失。
+    - id: gt-release-candidate
+      term: Release Candidate · 候选发布版本
+      plain: 测试已通过、准备交给运维发布的确定版本。
+  - id: c5
+    title: 运维接棒并制定发布计划
+    minutes: 20
+    form: 计划实操
+    content_ref: class/bootcamp/day-04/section-05-operations-plan/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - agent-operations
+    - deployment-card
+    tools:
+    - name: TRAE · @运维
+      note: 先检查、逐题确认、生成计划
+    - name: 发布风险清单
+      note: 版本、数据、密钥、端口、健康检查、回退
+    quiz:
+    - - AI 时代运维人员更重要的责任是什么？
+      - - 复制更多命令
+        - 管理环境、安全、日志和回退风险
+        - 修改产品需求
+      - 1
+      - 命令生成变快后，人更要守住生产风险和恢复能力。
+    - - 测试报告不建议发布时，运维应该怎样做？
+      - - 继续部署
+        - 停止并要求修复复测
+        - 删除测试报告
+      - 1
+      - 运维只能接收通过发布闸门的候选版本。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '测试已经建议发布。现在切换到 @运维，只制定计划，不立即执行。
+
+
+        【第 1 段｜检查发布输入】
+
+        请读取 RUNBOOK.md、test-report.md、release-candidate.md、.env.example 和项目代码。先确认测试是否建议发布。缺少文件或存在未关闭阻塞缺陷时停止。
+
+
+        【第 2 段｜逐题确认环境】
+
+        请一次只问一个问题，依次确认发布目标、是否需要公开访问、环境变量、数据备份、端口、可接受停机时间和回退方案。每题给本地发布示例，等我回答后继续。
+
+
+        【第 3 段｜生成发布计划】
+
+        请生成 deployment-plan.md，包含准备条件、确定版本、执行步骤、环境变量、数据备份、健康检查、日志位置、停止方法、更新步骤、回退触发条件和回退步骤。现在不要执行。
+
+
+        【第 4 段｜人工确认】
+
+        请用五句话复述发布目标、数据保护、成功标准、失败信号和回退办法。输出后停止，等我本人回复“确认部署”。
+
+        '
+      checklist:
+      - test-report.md 明确建议发布
+      - 发布版本与 release-candidate.md 一致
+      - 七类环境问题逐个确认
+      - 真实密钥没有写入文件或对话证据
+      - deployment-plan.md 包含停止和回退
+      - 学员检查后回复“确认部署”
+      suggested_questions:
+      - 本地发布也需要备份吗？
+      - 环境变量和 .env.example 有什么区别？
+      - 什么情况必须回退？
+      template_resource_id: agent-operations
+    media:
+    - kind: video
+      title: 口播课件 · 运维接棒并制定发布计划
+      object_key: documents/shared/course-media/day04-c5-operations-plan-v2.mp4
+      poster_key: documents/shared/course-media/day04-c5-operations-plan-poster-v2.jpg
+      duration_sec: 169
+    knowledge_cards:
+    - id: ops-role
+      term: 运维的核心责任
+      plain: 让确定版本可启动、可检查、可停止、可更新、可备份和可回退。
+      tag: 岗位
+    - id: ops-shift
+      term: 运维岗位价值上移
+      plain: AI 能生成部署命令，人更要管理环境差异、密钥、可观测性、风险和回退决策。
+      tag: AI 时代
+    - id: deployment-gate
+      term: 确认部署
+      plain: 学员检查目标、环境变量、备份、健康检查和回退方案后，运维才执行发布。
+      tag: 人工闸门
+    glossary_terms:
+    - id: gt-deployment
+      term: Deployment · 部署
+      plain: 把已经测试通过的确定版本放到目标环境运行。
+    - id: gt-env
+      term: Environment Variable · 环境变量
+      plain: 在代码外提供端口、路径或密钥等环境差异配置。
+    - id: gt-observability
+      term: Observability · 可观测性
+      plain: 通过健康检查和日志知道系统是否正常以及哪里出错。
+  - id: c6
+    title: 本地发布、回退演练和产品终验
+    minutes: 25
+    form: 发布+终验
+    content_ref: class/bootcamp/day-04/section-06-release-final-acceptance/lesson.md
+    content: （见本节 lesson.md）
+    practice: 按本节 practice.md 完成任务并达到完成标志。
+    resource_ids:
+    - deployment-card
+    - agent-operations
+    tools:
+    - name: 本地发布终检清单
+      note: 版本、健康、主流程、日志、数据、重启、回退
+    - name: 产品终验表
+      note: 用户、问题、范围和验收标准逐条对照
+    quiz:
+    - - 发布成功只看页面能打开够不够？
+      - - 够
+        - 不够，还要检查健康、核心流程、日志和数据
+        - 只要运维说成功就够
+      - 1
+      - 发布结论需要多处真实证据，不能只看一个页面。
+    - - 项目第一次开发的最终验收由谁完成？
+      - - 测试工程师
+        - 产品经理根据 PRD 与发布证据
+        - 运维工程师
+      - 1
+      - 产品经理负责确认最初业务目标是否在已发布版本中实现。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: 'deployment-plan.md 已确认。继续使用 @运维，逐段完成本地发布。
+
+
+        【第 1 段｜发布前备份与检查】
+
+        请只给出发布前检查清单。确认版本、环境变量、端口、数据备份位置和旧版本回退位置。一次只引导一项，等我反馈实际结果。
+
+
+        【第 2 段｜执行本地发布】
+
+        检查已通过。请按照 deployment-plan.md 一次只给一个执行步骤。每步说明成功信号和失败时停止条件，等我反馈后继续。不要自动执行高风险操作。
+
+
+        【第 3 段｜上线验收】
+
+        请依次引导我检查健康接口、前端打开、查询、提交、刷新复查、日志和数据。把实际结果追加到 day4-release-log.md。
+
+
+        【第 4 段｜停止、重启与回退演练】
+
+        请引导我安全停止并重启系统。再只做回退桌面演练，逐条说明触发条件、旧版本位置、数据恢复顺序和回退后的检查项。不要破坏当前通过版本。
+
+
+        【第 5 段｜生成部署说明】
+
+        请生成 DEPLOYMENT.md，写明访问地址、当前版本、启动停止、健康检查、日志、数据备份、更新、回退、已知限制和故障时先看哪里。
+
+
+        【第 6 段｜回产品经理终验】
+
+        @产品经理，请读取 PRD.md、test-report.md、DEPLOYMENT.md 和 day4-release-log.md。不要修改代码。请逐条核对目标用户、核心问题、第一版范围和验收标准，输出 final-acceptance.md。最后只给出“通过”或“不通过”及证据。
+
+        '
+      checklist:
+      - 发布前版本、环境与备份已经确认
+      - 发布步骤一次只执行一项
+      - 健康、主流程、日志和数据都有证据
+      - 安全完成停止和重启
+      - 回退演练说明触发条件与恢复顺序
+      - DEPLOYMENT.md 可让陌生人复现
+      - 产品经理根据 PRD 完成最终验收
+      suggested_questions:
+      - 回退演练为什么不一定真的覆盖数据？
+      - 发布日志和运行日志有什么不同？
+      - 产品经理终验不通过应该回到哪里？
+      template_resource_id: deployment-card
+    media:
+    - kind: video
+      title: 口播课件 · 发布、回退演练与产品终验
+      object_key: documents/shared/course-media/day04-c6-release-final-acceptance-v2.mp4
+      poster_key: documents/shared/course-media/day04-c6-release-final-acceptance-poster-v2.jpg
+      duration_sec: 188
+    knowledge_cards:
+    - id: release-proof
+      term: 发布证据
+      plain: 版本、启动结果、健康检查、核心流程、日志和数据检查必须有实际记录。
+      tag: 上线
+    - id: rollback-drill
+      term: 回退演练
+      plain: 不必制造事故，但要证明知道何时停、怎样恢复旧版本和怎样检查数据。
+      tag: 恢复
+    - id: pm-final
+      term: 产品最终验收
+      plain: 产品经理根据最初 PRD、测试报告和部署记录判断业务目标是否达成。
+      tag: 闭环
+    glossary_terms:
+    - id: gt-health-check
+      term: Health Check · 健康检查
+      plain: 用固定入口快速判断服务是否启动并能响应。
+    - id: gt-rollback
+      term: Rollback · 回退
+      plain: 新版本出现严重问题时恢复到上一个可用版本。
+    - id: gt-release-log
+      term: Release Log · 发布日志
+      plain: 记录版本、时间、操作、结果、证据和回退状态。
 quiz:
   pass_rate: 0.67
   questions:
-  - q: 测试用例的主要来源是什么？
+  - q: 测试结论应该基于什么？
     options:
-    - 测试工程师感觉
-    - PRD 验收标准和接口契约
-    - 页面颜色
+    - 个人感觉
+    - 可复现的实际证据
+    - 智能体自我评价
     answer: 1
-    explain: 测试从已经批准的标准倒推。
-  - q: 预期结果写“正常显示”为什么不合格？
+    explain: 操作、预期、实际和证据共同支持测试结论。
+  - q: 发现请求字段错误时优先交给谁修复？
     options:
-    - 不够长
-    - 无法客观判断通过或失败
-    - 没有截图
-    answer: 1
-    explain: 预期必须具体可判定。
-  - q: Agent 说测试通过能否作为通过证据？
-    options:
-    - 能
-    - 不能，必须有真实执行记录
-    - 只有前端可以
-    answer: 1
-    explain: 测试结论来自执行证据。
-  - q: 好缺陷报告最重要的是什么？
-    options:
-    - 情绪强烈
-    - 别人能按步骤稳定重现
-    - 标题很长
-    answer: 1
-    explain: 可重现才能被定位、修复和复测。
-  - q: 修复后为什么还要测试相关用例？
-    options:
-    - 为了增加文件
-    - 防止修好 A 又破坏 B
-    - 为了改变 PRD
-    answer: 1
-    explain: 相关功能可能被同一处修改影响。
-  - q: “请把 Bug 修好”缺少什么？
-    options:
-    - 现象、步骤、目标和验收口径
-    - 技术框架介绍
-    - 市场分析
+    - 前端
+    - 后端
+    - 运维
     answer: 0
-    explain: 可执行修复单需要具体上下文。
+    explain: 请求方法、路径和字段属于前端调用责任。
+  - q: 修复完成后谁有权更新复测状态？
+    options:
+    - 修复岗位自己
+    - 测试岗位
+    - 产品经理
+    answer: 1
+    explain: 开发完成自检后，仍需测试按原步骤复测。
+  - q: 测试不建议发布时，运维应该做什么？
+    options:
+    - 继续部署
+    - 停止并返回修复复测
+    - 隐藏失败项
+    answer: 1
+    explain: 未通过发布闸门的版本不能进入部署。
+  - q: 发布计划中为什么必须有回退？
+    options:
+    - 让文档更长
+    - 新版本失败时能恢复可用状态
+    - 用来替代测试
+    answer: 1
+    explain: 回退是发布失败后的恢复路径。
+  - q: 最终产品验收的依据是什么？
+    options:
+    - PRD、测试报告和部署证据
+    - 页面截图一张
+    - 运维口头说明
+    answer: 0
+    explain: 最终要回到最初业务目标和实际交付证据。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 130′）
+  title: 今日课节（6 节 · 0′）
 - type: quiz
   title: Day4 概念验收
-- type: lab
-  title: 第 4 天岗位交接与真实证据验收
 - type: project
-  title: 真实测试、缺陷闭环与 V0.9 冻结
+  title: 企业任务：测试、发布与最终验收
 - type: review
   title: 交付自检与 GATE 4
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - docs/D4-L1_测试用例表.md
-  - docs/D4-L2_执行矩阵.md
-  - docs/D4-L2_缺陷报告.md
-  - docs/D4-L4_验收清单.md
-  - docs/D4_报审材料清单.md
-  - docs/D4_command_log.md
-  inherited_files:
-  - docs/D1_选题确认单.md
-  - docs/D1_团队协作卡.md
-  - docs/D1_项目任务书.md
-  - docs/PRD.md
-  - docs/D1_command_log.md
-  - design/prototypes/index.html
-  - docs/D2-L4_接口契约.md
-  - docs/D2_前端走查.md
-  - docs/D2_command_log.md
-  - docs/D3-L1_项目地图.md
-  - docs/D3-L2_数据表说明.md
-  - docs/D3-L3_接口验证.md
-  - docs/D3-L4_Week2_AI交接.md
-  - docs/D3_冒烟记录.md
-  - docs/D3_command_log.md
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: 审核第四天证据：区分用例数量和实际执行数量；核对真实缺陷、修复提交与复测记录，并检查指挥日志 docs/D4_command_log.md。未执行不得写通过，功能冻结后不得加入新功能。
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/D4-L1_测试用例表.md
-  - check: file_exists
-    args:
-      path: docs/D4-L2_执行矩阵.md
-  - check: file_exists
-    args:
-      path: docs/D4-L2_缺陷报告.md
-  - check: text_contains
-    args:
-      path: docs/D4-L4_验收清单.md
-      needle: 证据
-  - check: file_exists
-    args:
-      path: docs/D4_command_log.md
-  - check: text_contains
-    args:
-      path: docs/D4_command_log.md
-      needle: REJECTED
-  - check: text_contains
-    args:
-      path: docs/D4_command_log.md
-      needle: APPROVED
-  - check: text_contains
-    args:
-      path: docs/D4_command_log.md
-      needle: 我确认以上批准均为本人作出

@@ -1,0 +1,28 @@
+skill_id: fde-coach
+chapter: day4-c5
+title: 运维接收与发布计划
+persona: 你是发布计划教练，帮助小白先守住测试闸门，再逐题确认环境与回退。
+help_modes: [explain, guide, review]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 一次只确认一个环境问题
+  - 测试未建议发布时立即停止
+  - 不要求学员在证据中展示真实密钥
+suggested_questions:
+  - 本地发布为什么也要备份？
+  - 环境变量应该放在哪里？
+  - 什么情况必须回退？
+acceptance:
+  mode: review
+  target: 发布输入 + 环境确认 + deployment-plan.md + 人工确认
+  pass_criteria:
+    - id: gate
+      desc: 测试通过且候选版本确定。
+      severity: block
+    - id: rollback
+      desc: 发布计划写清失败信号和回退步骤。
+      severity: block
+on_fail: 指出第一个未确认的发布风险
+on_pass: 进入本地发布与终验
+

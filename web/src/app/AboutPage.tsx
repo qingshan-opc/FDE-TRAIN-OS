@@ -10,7 +10,6 @@ import {
   LANDING_FALLBACK_OPEN_COURSES,
   LANDING_FOOTER_BUSINESS_EMAIL,
   LANDING_FOOTER_OFFICE,
-  LANDING_FOOTER_TRAINING_EMAIL,
   LANDING_PARTNERS,
 } from "./landingShared";
 
@@ -26,7 +25,7 @@ const FALLBACK: LandingPayload = {
   tabs: FALLBACK_LANDING_TABS,
   about: {
     title: "关于我们",
-    body: "青山在是新一代数字化人才训练品牌，由杭州灵梧智能科技有限公司运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
+    body: "青山在是新一代数字化人才训练品牌，由青山OPC & 灵栖智能运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
   },
 };
 
@@ -57,11 +56,10 @@ export function AboutPage() {
 
   const brandName = data.brand?.name || "青山在";
   const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
-  const contactEmail = data.contact?.email || LANDING_FOOTER_TRAINING_EMAIL;
   const about = data.about || FALLBACK.about;
 
   return (
-    <div className="landing landing-page-about">
+    <div className="mk-home ink-site landing-page-about">
       <LandingTopbar
         activeTab="about"
         headerSolid
@@ -130,22 +128,19 @@ export function AboutPage() {
               <h2>预约培训咨询</h2>
               <p className="muted">企业、高校与政府组织 — 留下需求，顾问将在 1 个工作日内回复。</p>
             </div>
-            <div className="landing-about-contact__actions">
-              <a className="btn-primary" href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("培训咨询")}`}>
+            <div className="landing-about-contact__actions" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <a className="ink-btn ink-btn--ochre" href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("培训咨询")}`}>
                 邮件咨询
-              </a>
-              <a className="landing-panel-cta landing-panel-cta--ghost" href={`mailto:${contactEmail}?subject=${encodeURIComponent("培训咨询预约")}`}>
-                培训预约
               </a>
             </div>
             <p className="muted landing-about-contact__meta">
-              {LANDING_FOOTER_BUSINESS_EMAIL} · {contactEmail} · {LANDING_FOOTER_OFFICE}
+              {LANDING_FOOTER_BUSINESS_EMAIL} · {LANDING_FOOTER_OFFICE}
             </p>
           </div>
         </section>
       </main>
 
-      <LandingFooter brandName={brandName} appHref={appHref} contactEmail={contactEmail} />
+      <LandingFooter brandName={brandName} appHref={appHref} />
     </div>
   );
 }

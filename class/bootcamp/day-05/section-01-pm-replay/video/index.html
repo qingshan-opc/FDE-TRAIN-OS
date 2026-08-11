@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>产品经理重跑需求与范围</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.85)}
+.card.dim{background:var(--ink-05)}
+.open-split{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch;margin-top:4px;max-width:1320px;flex:1;min-height:0}
+.open-split .stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ico{width:40px;height:40px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.ico svg{width:24px;height:24px;display:block}
+.card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="185.195" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div class="stage-bg"></div>
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="21.248">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>01 OPEN</div>
+    <h1 class="display" data-anim="t">Day5 完整复现</h1>
+    <p class="lede" data-anim="s">一项微迭代</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>六岗位接力</h4><p>六岗位接力</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>证据重新走一遍</h4><p>证据重新走一遍</p></div>
+        <div class="tag-row"><span class="tag solid">Day5 完整复现</span><span class="tag hot">一项微迭代</span><span class="tag ">六岗位接力</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · callout</div>
+        <img src="assets/diagrams/01-open.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-02-why-replay" class="clip slide" data-track-index="1" data-start="21.368" data-duration="19.669">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>02 WHY-REPLAY</div>
+    <h1 class="display" data-anim="t">为什么要复现</h1>
+    <p class="lede" data-anim="s">不靠记忆</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>不靠运气</h4><p>不靠运气</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>换工具仍会做</h4><p>换工具仍会做</p></div>
+        <div class="tag-row"><span class="tag solid">为什么要复现</span><span class="tag hot">不靠记忆</span><span class="tag ">不靠运气</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · library</div>
+        <img src="assets/diagrams/02-why-replay.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-03-folder" class="clip slide" data-track-index="1" data-start="41.157" data-duration="20.779">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>03 FOLDER</div>
+    <h1 class="display" data-anim="t">保护第一版</h1>
+    <p class="lede" data-anim="s">day5-replay</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>旧文件只读</h4><p>旧文件只读</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>新证据隔离</h4><p>新证据隔离</p></div>
+        <div class="tag-row"><span class="tag solid">保护第一版</span><span class="tag hot">day5-replay</span><span class="tag ">旧文件只读</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · hub</div>
+        <img src="assets/diagrams/03-folder.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-04-pm-input" class="clip slide" data-track-index="1" data-start="62.056" data-duration="23.808">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>04 PM-INPUT</div>
+    <h1 class="display" data-anim="t">产品经理先接棒</h1>
+    <p class="lede" data-anim="s">读取真实证据</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>确认当前版本</h4><p>确认当前版本</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>不重新编故事</h4><p>不重新编故事</p></div>
+        <div class="tag-row"><span class="tag solid">产品经理先接棒</span><span class="tag hot">读取真实证据</span><span class="tag ">确认当前版本</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · layers</div>
+        <img src="assets/diagrams/04-pm-input.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-05-choose" class="clip slide" data-track-index="1" data-start="85.984" data-duration="19.755">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>05 CHOOSE</div>
+    <h1 class="display" data-anim="t">选择微迭代</h1>
+    <p class="lede" data-anim="s">一个用户目标</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>一个主要流程</h4><p>一个主要流程</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>当天可以完成</h4><p>当天可以完成</p></div>
+        <div class="tag-row"><span class="tag solid">选择微迭代</span><span class="tag hot">一个用户目标</span><span class="tag ">一个主要流程</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · triad</div>
+        <img src="assets/diagrams/05-choose.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-06-interview" class="clip slide" data-track-index="1" data-start="105.859" data-duration="19.627">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>06 INTERVIEW</div>
+    <h1 class="display" data-anim="t">逐题访谈</h1>
+    <p class="lede" data-anim="s">用户与场景</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>动作与结果</h4><p>动作与结果</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>明确不做范围</h4><p>明确不做范围</p></div>
+        <div class="tag-row"><span class="tag solid">逐题访谈</span><span class="tag hot">用户与场景</span><span class="tag ">动作与结果</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · callout</div>
+        <img src="assets/diagrams/06-interview.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-07-artifacts" class="clip slide" data-track-index="1" data-start="125.605" data-duration="21.504">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>07 ARTIFACTS</div>
+    <h1 class="display" data-anim="t">产品交付物</h1>
+    <p class="lede" data-anim="s">迭代需求</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>产品交接</h4><p>产品交接</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>可判断验收</h4><p>可判断验收</p></div>
+        <div class="tag-row"><span class="tag solid">产品交付物</span><span class="tag hot">迭代需求</span><span class="tag ">产品交接</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · grid</div>
+        <img src="assets/diagrams/07-artifacts.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-08-gate" class="clip slide" data-track-index="1" data-start="147.229" data-duration="19.541">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>08 GATE</div>
+    <h1 class="display" data-anim="t">人工确认闸门</h1>
+    <p class="lede" data-anim="s">检查范围</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>检查规则</h4><p>检查规则</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>回复确认需求</h4><p>回复确认需求</p></div>
+        <div class="tag-row"><span class="tag solid">人工确认闸门</span><span class="tag hot">检查范围</span><span class="tag ">检查规则</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · gate</div>
+        <img src="assets/diagrams/08-gate.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-09-close" class="clip slide" data-track-index="1" data-start="166.891" data-duration="18.304">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>09 CLOSE</div>
+    <h1 class="display" data-anim="t">第一棒完成</h1>
+    <p class="lede" data-anim="s">问题变成合同</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>下一棒 UI</h4><p>下一棒 UI</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>继续保持边界</h4><p>继续保持边界</p></div>
+        <div class="tag-row"><span class="tag solid">第一棒完成</span><span class="tag hot">问题变成合同</span><span class="tag ">下一棒 UI</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · stack</div>
+        <img src="assets/diagrams/09-close.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="185.195" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第五天 · 第 1 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="185.195" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="185.195" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="185.195" data-track-index="10" data-volume="1"></audio>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.000, dur: 21.248 },
+  { id: "#slide-02-why-replay", start: 21.368, dur: 19.669 },
+  { id: "#slide-03-folder", start: 41.157, dur: 20.779 },
+  { id: "#slide-04-pm-input", start: 62.056, dur: 23.808 },
+  { id: "#slide-05-choose", start: 85.984, dur: 19.755 },
+  { id: "#slide-06-interview", start: 105.859, dur: 19.627 },
+  { id: "#slide-07-artifacts", start: 125.605, dur: 21.504 },
+  { id: "#slide-08-gate", start: 147.229, dur: 19.541 },
+  { id: "#slide-09-close", start: 166.891, dur: 18.304 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out", stagger: 0.06 }, t0 + 0.42);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+  enter("#slide-01-open", 0.000);
+  enter("#slide-02-why-replay", 21.368);
+  enter("#slide-03-folder", 41.157);
+  enter("#slide-04-pm-input", 62.056);
+  enter("#slide-05-choose", 85.984);
+  enter("#slide-06-interview", 105.859);
+  enter("#slide-07-artifacts", 125.605);
+  enter("#slide-08-gate", 147.229);
+  enter("#slide-09-close", 166.891);
+  exit("#slide-01-open", 20.798, 21.248);
+  exit("#slide-02-why-replay", 40.587, 41.037);
+  exit("#slide-03-folder", 61.486, 61.936);
+  exit("#slide-04-pm-input", 85.414, 85.864);
+  exit("#slide-05-choose", 105.289, 105.739);
+  exit("#slide-06-interview", 125.035, 125.485);
+  exit("#slide-07-artifacts", 146.659, 147.109);
+  exit("#slide-08-gate", 166.321, 166.771);
+  exit("#slide-09-close", 184.745, 185.195);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-project-formula",
+    "file": "02-project-formula.txt"
+  },
+  {
+    "id": "03-domain-examples",
+    "file": "03-domain-examples.txt"
+  },
+  {
+    "id": "04-first-version",
+    "file": "04-first-version.txt"
+  },
+  {
+    "id": "05-data-safety",
+    "file": "05-data-safety.txt"
+  },
+  {
+    "id": "06-project-brief",
+    "file": "06-project-brief.txt"
+  },
+  {
+    "id": "07-name-check",
+    "file": "07-name-check.txt"
+  },
+  {
+    "id": "08-close",
+    "file": "08-close.txt"
+  }
+]

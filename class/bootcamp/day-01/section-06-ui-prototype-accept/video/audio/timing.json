@@ -1,0 +1,71 @@
+{
+  "total": 346.393333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 25.002666666666666
+    },
+    {
+      "id": "02-ui-shift",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\02-ui-shift.wav",
+      "start": 25.252666666666666,
+      "duration": 26.965333333333334
+    },
+    {
+      "id": "03-read-repeat",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\03-read-repeat.wav",
+      "start": 52.468,
+      "duration": 34.51733333333333
+    },
+    {
+      "id": "04-design-interview",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\04-design-interview.wav",
+      "start": 87.23533333333333,
+      "duration": 25.216
+    },
+    {
+      "id": "05-real-states",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\05-real-states.wav",
+      "start": 112.70133333333334,
+      "duration": 27.861333333333334
+    },
+    {
+      "id": "06-page-plan",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\06-page-plan.wav",
+      "start": 140.81266666666667,
+      "duration": 28.714666666666666
+    },
+    {
+      "id": "07-generate-files",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\07-generate-files.wav",
+      "start": 169.77733333333333,
+      "duration": 26.837333333333333
+    },
+    {
+      "id": "08-return-pm",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\08-return-pm.wav",
+      "start": 196.86466666666666,
+      "duration": 37.461333333333336
+    },
+    {
+      "id": "09-fix-retest",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\09-fix-retest.wav",
+      "start": 234.576,
+      "duration": 26.752
+    },
+    {
+      "id": "10-handoff-log",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\10-handoff-log.wav",
+      "start": 261.578,
+      "duration": 27.050666666666668
+    },
+    {
+      "id": "11-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-06-ui-prototype-accept\\video\\audio\\segments\\11-close.wav",
+      "start": 288.8786666666666,
+      "duration": 57.51466666666666
+    }
+  ]
+}

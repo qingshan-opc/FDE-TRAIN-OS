@@ -1,0 +1,65 @@
+{
+  "total": 187.832,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 18.218666666666667
+    },
+    {
+      "id": "02-p1",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\02-p1.wav",
+      "start": 18.33866666666667,
+      "duration": 17.749333333333333
+    },
+    {
+      "id": "03-p2",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\03-p2.wav",
+      "start": 36.208,
+      "duration": 15.872
+    },
+    {
+      "id": "04-p3",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\04-p3.wav",
+      "start": 52.199999999999996,
+      "duration": 18.901333333333334
+    },
+    {
+      "id": "05-stop-restart",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\05-stop-restart.wav",
+      "start": 71.22133333333333,
+      "duration": 17.664
+    },
+    {
+      "id": "06-rollback",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\06-rollback.wav",
+      "start": 89.00533333333334,
+      "duration": 19.157333333333334
+    },
+    {
+      "id": "07-deployment",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\07-deployment.wav",
+      "start": 108.28266666666667,
+      "duration": 23.04
+    },
+    {
+      "id": "08-pm",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\08-pm.wav",
+      "start": 131.44266666666667,
+      "duration": 21.418666666666667
+    },
+    {
+      "id": "09-final",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\09-final.wav",
+      "start": 152.98133333333334,
+      "duration": 19.413333333333334
+    },
+    {
+      "id": "10-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-06-release-final-acceptance\\video\\audio\\segments\\10-close.wav",
+      "start": 172.51466666666667,
+      "duration": 15.317333333333334
+    }
+  ]
+}

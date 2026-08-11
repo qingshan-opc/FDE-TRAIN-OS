@@ -1,0 +1,59 @@
+{
+  "total": 188.650667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.797333333333334
+    },
+    {
+      "id": "02-handoff",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\02-handoff.wav",
+      "start": 19.917333333333335,
+      "duration": 22.613333333333333
+    },
+    {
+      "id": "03-scope",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\03-scope.wav",
+      "start": 42.650666666666666,
+      "duration": 20.352
+    },
+    {
+      "id": "04-query",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\04-query.wav",
+      "start": 63.12266666666667,
+      "duration": 20.69333333333333
+    },
+    {
+      "id": "05-submit",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\05-submit.wav",
+      "start": 83.936,
+      "duration": 19.797333333333334
+    },
+    {
+      "id": "06-error",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\06-error.wav",
+      "start": 103.85333333333335,
+      "duration": 19.328
+    },
+    {
+      "id": "07-ownership",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\07-ownership.wav",
+      "start": 123.30133333333336,
+      "duration": 20.181333333333335
+    },
+    {
+      "id": "08-regression",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\08-regression.wav",
+      "start": 143.6026666666667,
+      "duration": 20.992
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-05-frontend-integration\\video\\audio\\segments\\09-close.wav",
+      "start": 164.7146666666667,
+      "duration": 23.936
+    }
+  ]
+}

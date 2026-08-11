@@ -1,0 +1,53 @@
+{
+  "total": 193.195333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 25.557333333333332
+    },
+    {
+      "id": "02-showroom",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\02-showroom.wav",
+      "start": 25.807333333333332,
+      "duration": 27.136
+    },
+    {
+      "id": "03-formal-frontend",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\03-formal-frontend.wav",
+      "start": 53.19333333333333,
+      "duration": 24.576
+    },
+    {
+      "id": "04-traditional",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\04-traditional.wav",
+      "start": 78.01933333333332,
+      "duration": 22.869333333333334
+    },
+    {
+      "id": "05-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\05-ai-era.wav",
+      "start": 101.13866666666665,
+      "duration": 23.850666666666665
+    },
+    {
+      "id": "06-boundaries",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\06-boundaries.wav",
+      "start": 125.23933333333332,
+      "duration": 21.461333333333332
+    },
+    {
+      "id": "07-your-role",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\07-your-role.wav",
+      "start": 146.95066666666665,
+      "duration": 22.869333333333334
+    },
+    {
+      "id": "08-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-01-prototype-vs-frontend\\video\\audio\\segments\\08-close.wav",
+      "start": 170.07,
+      "duration": 23.125333333333334
+    }
+  ]
+}

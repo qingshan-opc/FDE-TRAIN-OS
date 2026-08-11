@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+  青山在 · AI 开发训练营 — 营销主页
+  设计风格：暗夜开发者工具风（Dark DevTool Aesthetic）
+───────────────────────────────────────────────────────────────────────────────
+  灵感来源：Linear / Vercel / Raycast 官网 —— 安静、精密、贵
+  配色：
+    · 底色      #0a0a0b（近黑）
+    · 卡片      #18181b
+    · 边框      rgba(255,255,255,.08) 细腻 1px
+    · 主色      #7c8cf8（靛蓝紫）+ 点缀 #4ade80（翠绿，用于"验收通过/成功"语义）
+    · 文字      #f4f4f5 主 / #a1a1aa 次 / #71717a 弱
+  字体：
+    · 正文      系统中文字体栈（PingFang SC / Noto Sans SC / Microsoft YaHei）
+    · 点缀      JetBrains Mono（Google Fonts CDN）—— 用于 badge、数字、代码、标签
+  质感关键词：纯深色、细腻边框、克制渐变高光、按钮内阴影高光、顶部细网格 + 径向光晕
+───────────────────────────────────────────────────────────────────────────────
+  交互清单（全部原生 JS，无框架）：
+    01 吸顶导航：滚动 >24px 后切换毛玻璃 + 边框状态
+    02 平滑滚动锚点（scroll-behavior + JS 兜底偏移吸顶高度）
+    03 移动端汉堡菜单（抽屉式，点击链接自动收起）
+    04 Hero 背景光晕随鼠标微动（requestAnimationFrame 节流）
+    05 十天大纲：手风琴（单开，含每天标题/产出物/时长/GATE）
+    06 学习方式：QRAE 六岗位指挥深色架构图（纯 SVG，hover 高亮连线）
+    07 早鸟倒计时：3 天截止，秒级刷新，到期自动切换文案
+    08 报名弹窗：姓名/微信/手机号正则校验 + 错误提示 + 提交成功态
+    09 滚动 Reveal：IntersectionObserver，元素入场上浮淡入
+    10 FAQ 手风琴（多开）
+    11 数字滚动动画（Hero 信任数据）
+  技术约束：单文件、CSS/JS 全内联、无外部图片（全部 CSS/SVG）、375px 可用
+═══════════════════════════════════════════════════════════════════════════════
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青山在 · AI 开发训练营 — 10 天，指挥 AI 团队做出你的第一个产品</title>
+<meta name="description" content="面向财务/HR/运营/销售/教育等无编程背景专业人士的 10 天线上实战营。在 QRAE 平台指挥六岗位 AI 智能体，走完需求→原型→验收→上线真实闭环，毕业带走可运行产品。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ 基础与变量 ═══════════════ */
+:root{
+  --bg:#0a0a0b;
+  --bg-soft:#0e0e10;
+  --card:#18181b;
+  --card-hover:#1c1c20;
+  --border:rgba(255,255,255,.08);
+  --border-strong:rgba(255,255,255,.14);
+  --text:#f4f4f5;
+  --text-2:#a1a1aa;
+  --text-3:#71717a;
+  --accent:#7c8cf8;
+  --accent-soft:rgba(124,140,248,.12);
+  --green:#4ade80;
+  --green-soft:rgba(74,222,128,.1);
+  --amber:#fbbf24;
+  --red:#f87171;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Sans SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;
+  --radius:12px;
+  --nav-h:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 16px)}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:rgba(124,140,248,.35);color:#fff}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.mono{font-family:var(--mono)}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ═══════════════ 通用小元素 ═══════════════ */
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.02em;
+  color:var(--text-2);
+  border:1px solid var(--border);border-radius:999px;
+  padding:5px 14px;background:rgba(24,24,27,.6);
+}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.section-tag{
+  font-family:var(--mono);font-size:12px;color:var(--accent);
+  letter-spacing:.14em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.section-tag::before{content:'';width:20px;height:1px;background:var(--accent);opacity:.6}
+.section-title{font-size:clamp(26px,4vw,38px);font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.section-sub{color:var(--text-2);font-size:16px;max-width:640px;margin-top:14px}
+section{padding:96px 0;position:relative}
+
+/* 按钮 —— 内阴影高光 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-size:15px;font-weight:600;border-radius:10px;
+  padding:12px 26px;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  white-space:nowrap;
+}
+.btn-primary{
+  color:#0b0b18;
+  background:linear-gradient(180deg,#9aa6fb 0%,#7c8cf8 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.2),0 4px 20px rgba(124,140,248,.35);
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 28px rgba(124,140,248,.45)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{
+  color:var(--text);border:1px solid var(--border-strong);
+  background:rgba(255,255,255,.03);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.btn-ghost:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.22)}
+.btn-sm{padding:8px 18px;font-size:14px;border-radius:8px}
+
+/* ═══════════════ 导航 ═══════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);
+  transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(10,10,11,.72);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border-bottom-color:var(--border);
+}
+.nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:.02em}
+.logo-mark{
+  width:28px;height:28px;border-radius:8px;flex:none;
+  background:linear-gradient(135deg,#1e2030,#12121a);
+  border:1px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.logo-mark svg{width:16px;height:16px}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{
+  font-size:14px;color:var(--text-2);padding:7px 14px;border-radius:8px;
+  transition:color .15s,background .15s;
+}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.nav-cta{display:flex;align-items:center;gap:12px}
+.hamburger{display:none;width:40px;height:40px;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:8px;border:1px solid var(--border)}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--text);transition:transform .25s,opacity .25s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{
+  position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;
+  background:rgba(10,10,11,.96);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:12px 24px 24px;display:none;flex-direction:column;gap:4px;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{padding:13px 8px;font-size:16px;color:var(--text-2);border-bottom:1px solid rgba(255,255,255,.05)}
+.mobile-menu a:last-of-type{border-bottom:none}
+.mobile-menu .btn{margin-top:14px}
+
+/* ═══════════════ Hero ═══════════════ */
+.hero{
+  min-height:100svh;display:flex;align-items:center;
+  padding:calc(var(--nav-h) + 72px) 0 88px;
+  position:relative;overflow:hidden;
+}
+/* 顶部细网格 */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 75%);
+}
+/* 鼠标跟随光晕 */
+.hero-glow{
+  position:absolute;width:720px;height:720px;border-radius:50%;
+  left:50%;top:-18%;transform:translate(-50%,0);
+  background:radial-gradient(circle,rgba(124,140,248,.16) 0%,rgba(124,140,248,.05) 40%,transparent 70%);
+  pointer-events:none;filter:blur(10px);will-change:transform;
+}
+.hero-glow-2{
+  position:absolute;width:480px;height:480px;border-radius:50%;
+  right:-8%;bottom:-12%;
+  background:radial-gradient(circle,rgba(74,222,128,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:2;text-align:center;max-width:860px;margin:0 auto}
+.hero h1{
+  font-size:clamp(34px,6vw,60px);font-weight:800;letter-spacing:-.03em;
+  line-height:1.22;margin:26px 0 20px;
+}
+.hero h1 .grad{
+  background:linear-gradient(100deg,#b7c0ff 0%,#7c8cf8 45%,#4ade80 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{font-size:clamp(16px,2.2vw,19px);color:var(--text-2);max-width:680px;margin:0 auto;line-height:1.8}
+.hero-sub strong{color:var(--text);font-weight:600}
+.hero-ctas{display:flex;gap:14px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+.hero-code{
+  margin:44px auto 0;max-width:620px;text-align:left;
+  background:rgba(15,15,18,.8);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(8px);
+}
+.hero-code-bar{
+  display:flex;align-items:center;gap:6px;padding:10px 14px;
+  border-bottom:1px solid var(--border);
+}
+.hero-code-bar i{width:10px;height:10px;border-radius:50%;display:block}
+.hero-code-bar i:nth-child(1){background:#3f3f46}
+.hero-code-bar i:nth-child(2){background:#3f3f46}
+.hero-code-bar i:nth-child(3){background:#3f3f46}
+.hero-code-bar span{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text-3)}
+.hero-code pre{
+  font-family:var(--mono);font-size:13px;line-height:1.9;
+  padding:16px 18px;overflow-x:auto;color:var(--text-2);
+}
+.hero-code .c-prompt{color:var(--green)}
+.hero-code .c-cmd{color:var(--text)}
+.hero-code .c-flag{color:var(--accent)}
+.hero-code .c-comment{color:var(--text-3)}
+.hero-code .c-ok{color:var(--green)}
+.trust{
+  display:flex;justify-content:center;gap:clamp(20px,5vw,56px);
+  margin-top:48px;flex-wrap:wrap;
+}
+.trust-item{text-align:center}
+.trust-num{font-family:var(--mono);font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--text);letter-spacing:-.02em}
+.trust-num em{font-style:normal;color:var(--accent);font-size:.6em;margin-left:2px}
+.trust-label{font-size:13px;color:var(--text-3);margin-top:2px}
+
+/* ═══════════════ 痛点 ═══════════════ */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.pain-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 24px;position:relative;transition:border-color .2s,transform .2s;
+}
+.pain-card:hover{border-color:rgba(248,113,113,.28);transform:translateY(-3px)}
+.pain-card .pain-id{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:.1em;margin-bottom:14px;display:block}
+.pain-card h3{font-size:17px;font-weight:650;margin-bottom:10px;letter-spacing:-.01em}
+.pain-card p{font-size:14px;color:var(--text-2);line-height:1.75}
+.pain-quote{
+  margin-top:40px;text-align:center;font-size:clamp(18px,2.6vw,24px);
+  font-weight:600;letter-spacing:-.01em;color:var(--text);
+}
+.pain-quote .hl{color:var(--green)}
+.pain-quote small{display:block;margin-top:10px;font-size:14px;color:var(--text-3);font-weight:400}
+
+/* ═══════════════ 亮点 ═══════════════ */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.feat-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 40%),var(--card);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 24px;transition:border-color .2s,transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.feat-card::after{
+  content:'';position:absolute;top:0;left:24px;right:24px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,140,248,.5),transparent);
+  opacity:0;transition:opacity .25s;
+}
+.feat-card:hover{border-color:var(--border-strong);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.feat-card:hover::after{opacity:1}
+.feat-icon{
+  width:40px;height:40px;border-radius:10px;margin-bottom:18px;
+  background:var(--accent-soft);border:1px solid rgba(124,140,248,.25);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.feat-icon.green{background:var(--green-soft);border-color:rgba(74,222,128,.25)}
+.feat-icon svg{width:19px;height:19px}
+.feat-card h3{font-size:17px;font-weight:650;margin-bottom:8px}
+.feat-card p{font-size:14px;color:var(--text-2);line-height:1.75}
+.feat-card .feat-meta{font-family:var(--mono);font-size:11px;color:var(--text-3);margin-top:14px;display:block;letter-spacing:.04em}
+
+/* ═══════════════ 十天大纲（手风琴） ═══════════════ */
+.outline-list{margin-top:48px;display:flex;flex-direction:column;gap:10px}
+.day{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;transition:border-color .2s;
+}
+.day.open{border-color:rgba(124,140,248,.35)}
+.day-head{
+  width:100%;display:flex;align-items:center;gap:18px;
+  padding:18px 22px;text-align:left;transition:background .15s;
+}
+.day-head:hover{background:rgba(255,255,255,.025)}
+.day-num{
+  font-family:var(--mono);font-size:12px;color:var(--accent);
+  border:1px solid rgba(124,140,248,.3);background:var(--accent-soft);
+  border-radius:6px;padding:4px 9px;flex:none;letter-spacing:.05em;
+}
+.day-title{flex:1;font-size:16px;font-weight:600;letter-spacing:-.01em;min-width:0}
+.day-meta{font-family:var(--mono);font-size:12px;color:var(--text-3);flex:none;display:flex;gap:14px;align-items:center}
+.day-chevron{flex:none;width:18px;height:18px;color:var(--text-3);transition:transform .25s}
+.day.open .day-chevron{transform:rotate(180deg);color:var(--accent)}
+.day-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.day-body-inner{
+  border-top:1px solid var(--border);
+  display:grid;grid-template-columns:1.4fr 1fr;gap:24px;
+  padding:18px 0 0;
+}
+.day-desc{font-size:14px;color:var(--text-2);line-height:1.8}
+.day-output{
+  background:rgba(10,10,11,.5);border:1px solid var(--border);border-radius:10px;padding:14px 16px;
+}
+.day-output h4{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:.1em;margin-bottom:10px;font-weight:500}
+.day-output li{
+  list-style:none;font-size:13.5px;color:var(--text-2);padding:4px 0 4px 22px;position:relative;
+}
+.day-output li::before{content:'▸';position:absolute;left:4px;color:var(--accent);font-size:11px;top:7px}
+.day-output li.gate::before{content:'✓';color:var(--green);font-weight:700}
+.day-output li.gate{color:var(--green)}
+.day-body-wrap{padding:0 22px 22px}
+
+/* ═══════════════ QRAE 架构图 ═══════════════ */
+.qrae-diagram{
+  margin-top:48px;background:var(--bg-soft);border:1px solid var(--border);
+  border-radius:16px;padding:clamp(20px,4vw,44px);position:relative;overflow:hidden;
+}
+.qrae-diagram::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.qrae-svg{width:100%;height:auto;display:block;position:relative}
+.qrae-node{cursor:default;transition:filter .2s}
+.qrae-node rect{transition:stroke .2s,fill .2s}
+.qrae-node:hover rect{stroke:rgba(124,140,248,.7)}
+.qrae-flow{stroke:rgba(124,140,248,.35);stroke-dasharray:5 5;animation:dash 20s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-400}}
+.qrae-caption{
+  display:flex;justify-content:center;gap:clamp(14px,4vw,36px);flex-wrap:wrap;
+  margin-top:26px;position:relative;
+}
+.qrae-caption span{font-family:var(--mono);font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:7px}
+.qrae-caption i{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+/* ═══════════════ 学员成果 ═══════════════ */
+.works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.work-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+.work-card:hover{transform:translateY(-4px);border-color:var(--border-strong);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+.work-shot{
+  height:150px;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.work-shot .mock{
+  width:82%;background:rgba(10,10,11,.85);border:1px solid var(--border-strong);
+  border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:10.5px;
+  color:var(--text-3);line-height:1.8;box-shadow:0 12px 30px rgba(0,0,0,.45);
+}
+.work-shot .mock b{color:var(--text-2);font-weight:500}
+.work-shot .mock .ok{color:var(--green)}
+.work-body{padding:20px 22px 22px}
+.work-body h3{font-size:16px;font-weight:650;margin-bottom:6px}
+.work-body p{font-size:13.5px;color:var(--text-2);line-height:1.7}
+.work-author{
+  display:flex;align-items:center;gap:10px;margin-top:16px;
+  font-size:13px;color:var(--text-3);
+}
+.work-author .av{
+  width:28px;height:28px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#0b0b18;
+  font-family:var(--mono);
+}
+.work-author .tag{font-family:var(--mono);font-size:10.5px;border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--text-3)}
+
+/* ═══════════════ 评价 ═══════════════ */
+.review-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.review-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 26px 22px;position:relative;transition:border-color .2s;
+}
+.review-card:hover{border-color:var(--border-strong)}
+.review-card .q-mark{
+  font-family:var(--mono);font-size:34px;line-height:1;color:var(--accent);
+  opacity:.55;display:block;margin-bottom:10px;
+}
+.review-card p{font-size:14.5px;color:var(--text-2);line-height:1.85}
+.review-card p b{color:var(--text);font-weight:600}
+.review-who{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.review-who .av{
+  width:34px;height:34px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#0b0b18;
+}
+.review-who .name{font-size:14px;font-weight:600}
+.review-who .role{font-size:12px;color:var(--text-3);font-family:var(--mono)}
+.review-stars{margin-left:auto;color:var(--amber);font-size:12px;letter-spacing:2px;flex:none}
+
+/* ═══════════════ 定价 ═══════════════ */
+.pricing-wrap{
+  max-width:520px;margin:48px auto 0;position:relative;
+}
+.pricing-card{
+  background:linear-gradient(180deg,rgba(124,140,248,.08),transparent 45%),var(--card);
+  border:1px solid rgba(124,140,248,.35);border-radius:18px;
+  padding:38px 36px 34px;position:relative;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.5),0 0 0 1px rgba(124,140,248,.06),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.pricing-card::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,140,248,.8),transparent);
+}
+.pricing-badge{
+  position:absolute;top:18px;right:-34px;transform:rotate(38deg);
+  background:linear-gradient(180deg,#5eead4,#4ade80);color:#052e16;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;
+  padding:5px 40px;box-shadow:0 4px 14px rgba(74,222,128,.3);
+}
+.price-row{display:flex;align-items:baseline;gap:14px;margin:20px 0 4px}
+.price-now{font-family:var(--mono);font-size:52px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.price-now sup{font-size:20px;top:-18px;position:relative;color:var(--accent)}
+.price-old{font-family:var(--mono);font-size:19px;color:var(--text-3);text-decoration:line-through}
+.price-save{font-family:var(--mono);font-size:12px;color:var(--green);background:var(--green-soft);border:1px solid rgba(74,222,128,.3);border-radius:6px;padding:3px 9px}
+.countdown{
+  margin:20px 0 6px;background:rgba(10,10,11,.55);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+}
+.countdown-label{font-family:var(--mono);font-size:11.5px;color:var(--text-3);letter-spacing:.08em;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.countdown-label .dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 1.4s infinite}
+.countdown-nums{display:flex;gap:10px;align-items:center}
+.cd-cell{
+  flex:1;text-align:center;background:var(--bg);border:1px solid var(--border-strong);
+  border-radius:9px;padding:9px 4px 7px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.cd-cell b{font-family:var(--mono);font-size:24px;font-weight:700;display:block;line-height:1.15;letter-spacing:-.02em}
+.cd-cell span{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.12em}
+.cd-sep{font-family:var(--mono);font-size:20px;color:var(--text-3);padding-bottom:12px}
+.price-feats{margin:22px 0 26px;display:grid;gap:9px}
+.price-feats li{list-style:none;font-size:14px;color:var(--text-2);padding-left:26px;position:relative}
+.price-feats li::before{content:'✓';position:absolute;left:2px;color:var(--green);font-weight:700;font-size:13px}
+.price-feats li b{color:var(--text);font-weight:600}
+.price-note{text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-3);margin-top:16px}
+.price-note b{color:var(--green);font-weight:500}
+.seat-bar{margin-top:18px}
+.seat-bar-track{height:6px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.seat-bar-fill{height:100%;width:73%;border-radius:99px;background:linear-gradient(90deg,#7c8cf8,#4ade80);transition:width 1.2s ease}
+.seat-bar-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text-3);margin-top:7px}
+
+/* ═══════════════ FAQ ═══════════════ */
+.faq-list{max-width:760px;margin:44px auto 0;display:flex;flex-direction:column;gap:10px}
+.faq{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s}
+.faq.open{border-color:var(--border-strong)}
+.faq-q{
+  width:100%;display:flex;align-items:center;gap:14px;
+  padding:19px 22px;text-align:left;font-size:15.5px;font-weight:600;
+  transition:background .15s;
+}
+.faq-q:hover{background:rgba(255,255,255,.025)}
+.faq-q .fx{flex:none;font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+.faq-q span{flex:1}
+.faq-q .faq-chevron{flex:none;width:16px;height:16px;color:var(--text-3);transition:transform .25s}
+.faq.open .faq-chevron{transform:rotate(180deg);color:var(--accent)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .32s ease}
+.faq-a p{padding:0 22px 20px 55px;font-size:14px;color:var(--text-2);line-height:1.85}
+.faq-a b{color:var(--text);font-weight:600}
+
+/* ═══════════════ 最终 CTA + 页脚 ═══════════════ */
+.final-cta{
+  text-align:center;position:relative;overflow:hidden;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 110%,rgba(124,140,248,.13),transparent 65%),
+    var(--bg-soft);
+}
+.final-cta h2{font-size:clamp(28px,4.5vw,42px);font-weight:800;letter-spacing:-.025em;line-height:1.3}
+.final-cta p{color:var(--text-2);margin:16px auto 32px;max-width:520px}
+footer{padding:44px 0 52px;background:var(--bg)}
+.footer-inner{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.footer-brand{max-width:320px}
+.footer-brand p{font-size:13px;color:var(--text-3);margin-top:12px;line-height:1.8}
+.footer-links{display:flex;gap:clamp(28px,6vw,72px)}
+.footer-col h4{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:.14em;margin-bottom:14px;font-weight:500}
+.footer-col a{display:block;font-size:13.5px;color:var(--text-2);padding:4px 0;transition:color .15s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{
+  margin-top:40px;padding-top:22px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11.5px;color:var(--text-3);
+}
+
+/* ═══════════════ 报名弹窗 ═══════════════ */
+.modal-mask{
+  position:fixed;inset:0;z-index:200;background:rgba(5,5,7,.72);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-mask.show{opacity:1;pointer-events:auto}
+.modal{
+  width:100%;max-width:440px;background:var(--card);
+  border:1px solid var(--border-strong);border-radius:16px;
+  padding:32px 30px 30px;position:relative;
+  box-shadow:0 32px 90px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.07);
+  transform:translateY(14px) scale(.98);transition:transform .28s cubic-bezier(.2,.9,.3,1.2);
+}
+.modal-mask.show .modal{transform:translateY(0) scale(1)}
+.modal-close{
+  position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;
+  color:var(--text-3);font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;
+}
+.modal-close:hover{background:rgba(255,255,255,.06);color:var(--text)}
+.modal h3{font-size:21px;font-weight:700;letter-spacing:-.01em}
+.modal .modal-sub{font-size:13.5px;color:var(--text-3);margin:6px 0 24px;font-family:var(--mono)}
+.field{margin-bottom:16px}
+.field label{display:block;font-family:var(--mono);font-size:11.5px;color:var(--text-2);letter-spacing:.08em;margin-bottom:7px}
+.field input{
+  width:100%;background:rgba(10,10,11,.6);border:1px solid var(--border);
+  border-radius:9px;padding:12px 14px;color:var(--text);font-size:15px;
+  font-family:var(--sans);outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,140,248,.18)}
+.field input.err{border-color:rgba(248,113,113,.7);box-shadow:0 0 0 3px rgba(248,113,113,.12)}
+.field .err-msg{font-family:var(--mono);font-size:11px;color:var(--red);margin-top:6px;min-height:14px;display:block}
+.modal .btn{width:100%;margin-top:6px}
+.modal-secure{text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-3);margin-top:14px}
+/* 成功态 */
+.modal-success{display:none;text-align:center;padding:14px 0 4px}
+.modal-success.show{display:block}
+.success-ring{
+  width:72px;height:72px;margin:0 auto 20px;border-radius:50%;
+  background:var(--green-soft);border:1px solid rgba(74,222,128,.4);
+  display:flex;align-items:center;justify-content:center;
+  animation:pop .4s cubic-bezier(.2,.9,.3,1.4);
+}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.success-ring svg{width:32px;height:32px}
+.modal-success h4{font-size:19px;font-weight:700;margin-bottom:8px}
+.modal-success p{font-size:14px;color:var(--text-2);line-height:1.8}
+.modal-success .mono-note{
+  font-family:var(--mono);font-size:11.5px;color:var(--text-3);margin-top:16px;
+  border:1px dashed var(--border-strong);border-radius:8px;padding:10px;
+}
+
+/* ═══════════════ Reveal 动画 ═══════════════ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+
+/* ═══════════════ 响应式 ═══════════════ */
+@media (max-width:900px){
+  .pain-grid,.feat-grid,.works-grid{grid-template-columns:repeat(2,1fr)}
+  .review-grid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  section{padding:68px 0}
+  .nav-links{display:none}
+  .nav-cta .btn{display:none}
+  .hamburger{display:flex}
+  .pain-grid,.feat-grid,.works-grid{grid-template-columns:1fr}
+  .day-body-inner{grid-template-columns:1fr;gap:14px}
+  .day-meta .day-time{display:none}
+  .hero{padding-top:calc(var(--nav-h) + 48px)}
+  .hero-code pre{font-size:11.5px}
+  .pricing-card{padding:30px 24px 26px}
+  .price-now{font-size:44px}
+  .footer-inner{flex-direction:column}
+}
+@media (max-width:400px){
+  .container{padding:0 18px}
+  .hero-ctas .btn{width:100%}
+  .trust{gap:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ 1. 吸顶导航 ═══════════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top" aria-label="青山在 首页">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 17 L9 7 L13 13 L15.5 9.5 L20 17 Z" fill="#4ade80" opacity=".9"/><rect x="3" y="18.5" width="18" height="1.6" rx=".8" fill="#7c8cf8"/></svg>
+      </span>
+      青山在
+    </a>
+    <div class="nav-links">
+      <a href="#outline">十天大纲</a>
+      <a href="#works">学员成果</a>
+      <a href="#reviews">学员评价</a>
+      <a href="#pricing">定价</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn btn-primary btn-sm" data-open-modal>立即报名</button>
+      <button class="hamburger" id="hamburger" aria-label="打开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#outline">十天大纲</a>
+  <a href="#works">学员成果</a>
+  <a href="#reviews">学员评价</a>
+  <a href="#pricing">定价</a>
+  <a href="#faq">FAQ</a>
+  <button class="btn btn-primary" data-open-modal>立即报名 · 早鸟 ¥1,999</button>
+</div>
+
+<!-- ═══════════════ 2. Hero ═══════════════ -->
+<header class="hero" id="top">
+  <div class="hero-glow" id="heroGlow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="container hero-inner">
+    <span class="badge reveal"><span class="dot"></span>v2.0 &nbsp;第七期招募中 · 限 100 席</span>
+    <h1 class="reveal reveal-d1">
+      不写一行代码，<br>
+      <span class="grad">指挥 AI 团队</span>做出你的产品
+    </h1>
+    <p class="hero-sub reveal reveal-d2">
+      「青山在 · AI 开发训练营」—— 面向<strong>财务 / HR / 运营 / 销售 / 教育</strong>等专业人士的 10 天线上实战营。
+      在 QRAE 平台指挥<strong>产品经理、UI、前端、后端、测试、运维</strong>六岗位 AI 智能体，
+      走完"需求 → 原型 → 验收 → 上线"的真实软件闭环。毕业那天，你带走的是一个<strong>真正能运行的产品</strong>。
+    </p>
+    <div class="hero-ctas reveal reveal-d3">
+      <button class="btn btn-primary" data-open-modal>立即报名 · 早鸟 ¥1,999</button>
+      <a class="btn btn-ghost" href="#outline">查看十天大纲 ↓</a>
+    </div>
+
+    <div class="hero-code reveal reveal-d3" aria-hidden="true">
+      <div class="hero-code-bar"><i></i><i></i><i></i><span>qrae — zsh</span></div>
+      <pre><span class="c-prompt">$</span> <span class="c-cmd">qrae create-team</span> <span class="c-flag">--roles</span> pm,ui,fe,be,qa,ops
+<span class="c-ok">✓</span> 6 个岗位智能体已就位，等待你的指令
+
+<span class="c-prompt">$</span> <span class="c-cmd">@产品经理</span> 帮我做一个「班级考勤打卡」小程序
+<span class="c-comment"># 需求文档已写入 workspace/requirements.md</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">@UI设计师</span> 基于需求稿出原型 <span class="c-flag">--handoff</span> 前端
+<span class="c-comment"># 工作区文件传递，像真实团队一样协作</span>
+
+<span class="c-prompt">$</span> <span class="c-cmd">qrae deploy</span> <span class="c-flag">--gate</span> D10
+<span class="c-ok">✓ GATE 验收通过 · 产品已上线 🎉</span></pre>
+    </div>
+
+    <div class="trust reveal reveal-d3">
+      <div class="trust-item">
+        <div class="trust-num"><span data-count="6">0</span><em>期</em></div>
+        <div class="trust-label">已成功毕业</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span data-count="2300">0</span><em>+</em></div>
+        <div class="trust-label">学员完成实战</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span data-count="96">0</span><em>%</em></div>
+        <div class="trust-label">学员满意度</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span data-count="120">0</span><em>min/天</em></div>
+        <div class="trust-label">每天投入时长</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ 3. 痛点区 ═══════════════ -->
+<section id="pain">
+  <div class="container">
+    <span class="section-tag reveal">// 你现在的处境</span>
+    <h2 class="section-title reveal reveal-d1">AI 写代码的时代，<br>你却在旁观席上</h2>
+    <p class="section-sub reveal reveal-d2">你不是不想用 AI，而是没人告诉你：不写代码的人，到底该怎么"下场"。</p>
+
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <span class="pain-id">PAIN_01</span>
+        <h3>学了 Prompt，还是做不出东西</h3>
+        <p>收藏了 200 条提示词模板，真到要做一个完整产品时，AI 给的答案东一榔头西一棒子，拼不起来。</p>
+      </div>
+      <div class="pain-card reveal reveal-d1">
+        <span class="pain-id">PAIN_02</span>
+        <h3>好想法，卡在"找个开发"</h3>
+        <p>你清楚业务痛点在哪，脑子里有完整的产品画面，但报价五万起步的外包和听不懂业务的技术，让想法一拖再拖。</p>
+      </div>
+      <div class="pain-card reveal reveal-d2">
+        <span class="pain-id">PAIN_03</span>
+        <h3>怕被替代，却不知道学什么</h3>
+        <p>编程课学三个月也接不了单；AI 工具课学完还是只会聊天。你缺的不是工具，是"指挥 AI 干活"的完整方法论。</p>
+      </div>
+    </div>
+
+    <div class="pain-quote reveal">
+      留得青山在，不怕没柴烧。<span class="hl">你的专业经验，就是那座青山。</span>
+      <small>AI 负责写代码，你负责懂业务、做判断、下指令 —— 这十天，我们教你当好这个"指挥官"。</small>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 4. 课程亮点 ═══════════════ -->
+<section id="features" style="background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <span class="section-tag reveal">// 为什么不一样</span>
+    <h2 class="section-title reveal reveal-d1">不是教你写代码，<br>是教你<span style="color:var(--accent)">指挥一个开发团队</span></h2>
+
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7c8cf8" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.6c2.6.2 4.4 1.6 5 4.4"/></svg>
+        </div>
+        <h3>六岗位 AI 智能体，全真团队</h3>
+        <p>产品经理、UI、前端、后端、测试、运维 —— 用 <span class="mono" style="font-size:12.5px;color:var(--accent)">@岗位</span> 手动交接任务，像真实软件团队一样协作，你是指挥官。</p>
+        <span class="feat-meta">ROLES: pm · ui · fe · be · qa · ops</span>
+      </div>
+      <div class="feat-card reveal reveal-d1">
+        <div class="feat-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l4.5 4.5L20 6.5"/></svg>
+        </div>
+        <h3>每天一个 GATE 验收</h3>
+        <p>拒绝"学完就忘"。每天有明确交付物和验收标准，过不了 GATE 不进下一天 —— 十天十个里程碑，进度看得见。</p>
+        <span class="feat-meta">GATE × 10 · 每日可评测</span>
+      </div>
+      <div class="feat-card reveal reveal-d2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7c8cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 3-3 3M12.5 15H16"/></svg>
+        </div>
+        <h3>毕业带走可运行产品</h3>
+        <p>不是练习题，是你自己选题、自己验收、真实部署上线的产品 —— 附完整需求文档、原型、测试报告，写进简历掷地有声。</p>
+        <span class="feat-meta">DELIVERABLE: running product</span>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.6 0-3.1-.4-4.4-1.2L3 20l1.2-5.1A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        </div>
+        <h3>AI 导师 1v1 陪跑</h3>
+        <p>卡住了随时问。AI 导师 7×24 秒回，真人助教工作日 2 小时内响应，双保险陪跑到底，不让任何人掉队。</p>
+        <span class="feat-meta">SUPPORT: 24/7 · 2h SLA</span>
+      </div>
+      <div class="feat-card reveal reveal-d1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7c8cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7.5" r="3.5"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 4.1a3.5 3.5 0 0 1 0 6.8"/></svg>
+        </div>
+        <h3>同频班级社群</h3>
+        <p>每期 100 人小班，财务、HR、运营、销售、教育背景的同路人互相验收、彼此启发。很多同学的第一批用户，就来自班级群。</p>
+        <span class="feat-meta">CLASS SIZE: 100 / 期</span>
+      </div>
+      <div class="feat-card reveal reveal-d2">
+        <div class="feat-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 12a11 11 0 1 1-4.2-8.7"/><path d="M23 3v6h-6"/></svg>
+        </div>
+        <h3>永久回放 + 终身更新</h3>
+        <p>所有课程视频、提示词模板、GATE 验收清单永久有效。QRAE 平台升级，老学员同步免费更新，一次报名长期受益。</p>
+        <span class="feat-meta">ACCESS: lifetime</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5. 十天大纲 ═══════════════ -->
+<section id="outline">
+  <div class="container">
+    <span class="section-tag reveal">// 十天路线图</span>
+    <h2 class="section-title reveal reveal-d1">十天，从需求到上线</h2>
+    <p class="section-sub reveal reveal-d2">每天 120 分钟：40 分钟方法课 + 70 分钟实战 + 10 分钟 GATE 验收。点开每一天，看看你的产出物。</p>
+
+    <div class="outline-list reveal" id="outlineList">
+      <!-- D1 -->
+      <div class="day open">
+        <button class="day-head" aria-expanded="true">
+          <span class="day-num">D01</span>
+          <span class="day-title">开机：认识你的 AI 团队</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">开通 QRAE 工作区，认识六岗位智能体的分工与脾气。学会 @岗位 指派任务、读工作区文件、下达清晰指令的三段式结构：背景 / 目标 / 约束。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>个人 QRAE 工作区开通并跑通</li>
+                  <li>《我的产品一句话想法》v1</li>
+                  <li class="gate">GATE：成功指挥 3 个岗位完成一次接力</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D2 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D02</span>
+          <span class="day-title">选题：把你的经验变成需求</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">用"痛点 × 人群 × 场景"框架从自己的专业经验里挖出真需求。指挥 @产品经理 做竞品扫描和用户画像，把模糊的想法收敛成一个 10 天能做完的最小产品。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>《产品选题卡》：痛点 / 用户 / 场景</li>
+                  <li>竞品扫描简报（PM 智能体产出）</li>
+                  <li class="gate">GATE：选题通过"小而真"三问检验</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D3 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D03</span>
+          <span class="day-title">需求文档：让 AI 听懂你要什么</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">学习 PRD 的最小骨架：用户故事、功能清单、验收标准。指挥 @产品经理 把需求写入 workspace/requirements.md，并学会用"追问三轮"法把文档打磨到可开发。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>requirements.md（含验收标准）</li>
+                  <li>功能优先级 P0 / P1 清单</li>
+                  <li class="gate">GATE：PRD 通过完整性 checklist</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D4 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D04</span>
+          <span class="day-title">原型：@UI 出稿，你来拍板</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">把 PRD 交接给 @UI设计师，学会看信息架构和页面流转。掌握"说人话改稿"技巧：不用懂设计术语，用业务语言描述感受，让 UI 智能体迭代到满意。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>可点击交互原型（3-5 个核心页面）</li>
+                  <li>页面流转图一页纸</li>
+                  <li class="gate">GATE：找 1 位同学试用原型并记录反馈</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D5 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D05</span>
+          <span class="day-title">前端：看得见的界面长出来了</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">指挥 @前端 按原型实现页面。学会"截图 + 描述"的走查方法，像甲方验收设计稿一样验收代码成果：像素对得上吗？交互顺不顺？手机上看行不行？</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>前端页面 v1（可本地预览）</li>
+                  <li>走查问题清单（bug & 体验）</li>
+                  <li class="gate">GATE：核心页面与原型一致度 ≥ 90%</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D6 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D06</span>
+          <span class="day-title">后端：数据终于会存了</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">指挥 @后端 设计数据表和接口。你只需要回答好三个业务问题：要存什么？谁能看？错了怎么办？学会用真实业务数据做"端到端冒烟"，验证前后端连通。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>数据模型说明（人话版）</li>
+                  <li>前后端联通的最小闭环</li>
+                  <li class="gate">GATE：真实数据写入 → 查询 → 展示成功</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D7 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D07</span>
+          <span class="day-title">联调：当一次真正的项目经理</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">最像真实职场的一天。多岗位并行时学会排优先级、解决"前端怪后端、后端怪需求"的经典冲突。掌握问题定位三板斧：复现 / 隔离 / 派单。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>联调问题台账（已分级派单）</li>
+                  <li>核心流程全链路打通</li>
+                  <li class="gate">GATE：主流程无阻断性 bug</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D8 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D08</span>
+          <span class="day-title">测试：@测试 帮你挑刺</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">指挥 @测试 编写用例：正常流、异常流、边界值。学会看懂测试报告，判断"这个 bug 要不要现在修"。邀请 3 位班级同学做真实用户测试。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>测试用例表 + 测试报告</li>
+                  <li>真实用户反馈 ≥ 3 份</li>
+                  <li class="gate">GATE：P0 用例 100% 通过</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D9 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D09</span>
+          <span class="day-title">上线：@运维 部署到真实世界</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">指挥 @运维 完成部署：域名、HTTPS、数据备份。理解上线的本质不是"发布按钮"，而是上线 checklist。把产品链接发给第一个真实用户。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>可公开访问的产品链接</li>
+                  <li>上线 checklist（含回滚预案）</li>
+                  <li class="gate">GATE：外部用户成功完成核心操作</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- D10 -->
+      <div class="day">
+        <button class="day-head" aria-expanded="false">
+          <span class="day-num">D10</span>
+          <span class="day-title">毕业路演：把你的产品讲出去</span>
+          <span class="day-meta"><span class="day-time">120 min</span><svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="day-body">
+          <div class="day-body-wrap">
+            <div class="day-body-inner">
+              <p class="day-desc">整理完整项目档案：PRD、原型、测试报告、上线链接。完成 5 分钟毕业路演，领取结业证书。更重要的是：带走一套可复用的"指挥 AI 团队"方法论，下一个产品你可以独立做。</p>
+              <div class="day-output">
+                <h4>DELIVERABLES</h4>
+                <ul>
+                  <li>毕业路演（5 分钟，班级直播）</li>
+                  <li>完整项目档案包 + 结业证书</li>
+                  <li class="gate">GATE：通过毕业评审 · 正式毕业 🎓</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. 学习方式：QRAE 六岗位指挥架构图 ═══════════════ -->
+<section id="method" style="background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <span class="section-tag reveal">// 你怎么学</span>
+    <h2 class="section-title reveal reveal-d1">QRAE 指挥台：你一声令下，六岗协同</h2>
+    <p class="section-sub reveal reveal-d2">工作区文件是唯一的"交接单"：需求文档、原型稿、代码、测试报告在岗位间依次流转，全程留痕、可回滚、可验收。</p>
+
+    <div class="qrae-diagram reveal">
+      <svg class="qrae-svg" viewBox="0 0 960 420" fill="none" role="img" aria-label="QRAE 六岗位指挥架构图：指挥官居中，连接产品经理、UI、前端、后端、测试、运维六个岗位，底部为共享工作区">
+        <defs>
+          <linearGradient id="cmdGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#23263a"/><stop offset="1" stop-color="#17181f"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 连线：指挥官 → 六岗位 -->
+        <g stroke-width="1.4">
+          <path class="qrae-flow" d="M480 132 C 340 150, 180 168, 112 198" fill="none"/>
+          <path class="qrae-flow" d="M480 132 C 400 152, 300 172, 264 198" fill="none"/>
+          <path class="qrae-flow" d="M480 136 C 460 160, 428 178, 416 198" fill="none"/>
+          <path class="qrae-flow" d="M480 136 C 505 160, 542 178, 568 198" fill="none"/>
+          <path class="qrae-flow" d="M480 132 C 570 152, 660 172, 720 198" fill="none"/>
+          <path class="qrae-flow" d="M480 132 C 630 150, 790 168, 872 198" fill="none"/>
+        </g>
+
+        <!-- 岗位 → 工作区 连线 -->
+        <g stroke-width="1.2" stroke="rgba(74,222,128,.3)" stroke-dasharray="4 5">
+          <path d="M112 262 C 112 312, 180 322, 244 336" fill="none"/>
+          <path d="M264 262 C 264 306, 300 322, 340 336" fill="none"/>
+          <path d="M416 262 L416 336" fill="none"/>
+          <path d="M568 262 L568 336" fill="none"/>
+          <path d="M720 262 L720 336" fill="none"/>
+          <path d="M872 262 C 872 312, 800 322, 716 336" fill="none"/>
+        </g>
+
+        <!-- 中央指挥官节点 -->
+        <g class="qrae-node">
+          <rect x="372" y="58" width="216" height="72" rx="14" fill="url(#cmdGrad)" stroke="rgba(124,140,248,.55)" stroke-width="1.5"/>
+          <text x="480" y="88" text-anchor="middle" fill="#f4f4f5" font-size="17" font-weight="700" font-family="-apple-system,'PingFang SC',sans-serif">你 · 指挥官</text>
+          <text x="480" y="110" text-anchor="middle" fill="#7c8cf8" font-size="11" font-family="'JetBrains Mono',monospace" letter-spacing="1">COMMANDER / 业务专家</text>
+        </g>
+
+        <!-- 六岗位节点 -->
+        <g font-family="-apple-system,'PingFang SC',sans-serif">
+          <g class="qrae-node"><rect x="48" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="112" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">产品经理</text><text x="112" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@pm · 需求/竞品</text></g>
+          <g class="qrae-node"><rect x="200" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="264" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">UI 设计</text><text x="264" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@ui · 原型/视觉</text></g>
+          <g class="qrae-node"><rect x="352" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="416" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">前端</text><text x="416" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@fe · 页面/交互</text></g>
+          <g class="qrae-node"><rect x="504" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="568" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">后端</text><text x="568" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@be · 数据/接口</text></g>
+          <g class="qrae-node"><rect x="656" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="720" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">测试</text><text x="720" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@qa · 用例/报告</text></g>
+          <g class="qrae-node"><rect x="808" y="200" width="128" height="62" rx="11" fill="#18181b" stroke="rgba(255,255,255,.12)"/><text x="872" y="226" text-anchor="middle" fill="#f4f4f5" font-size="14.5" font-weight="600">运维</text><text x="872" y="246" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">@ops · 部署/监控</text></g>
+        </g>
+
+        <!-- 工作区 -->
+        <g class="qrae-node">
+          <rect x="240" y="336" width="480" height="56" rx="12" fill="rgba(74,222,128,.05)" stroke="rgba(74,222,128,.4)" stroke-width="1.4"/>
+          <text x="480" y="360" text-anchor="middle" fill="#4ade80" font-size="13.5" font-weight="600" font-family="-apple-system,'PingFang SC',sans-serif">共享工作区 workspace/</text>
+          <text x="480" y="379" text-anchor="middle" fill="#71717a" font-size="10.5" font-family="'JetBrains Mono',monospace">requirements.md → prototype/ → src/ → test-report.md → deploy.log</text>
+        </g>
+      </svg>
+
+      <div class="qrae-caption">
+        <span><i style="background:var(--accent)"></i>@岗位 · 手动交接指令</span>
+        <span><i style="background:var(--green)"></i>工作区文件 · 成果留痕传递</span>
+        <span><i style="background:var(--amber)"></i>每天 GATE · 验收不过不进阶</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 7. 学员成果 ═══════════════ -->
+<section id="works">
+  <div class="container">
+    <span class="section-tag reveal">// 他们做出来的</span>
+    <h2 class="section-title reveal reveal-d1">毕业作品，全部真实上线</h2>
+    <p class="section-sub reveal reveal-d2">每一期 100 位学员，带走 100 个真实产品。以下是近三期的部分毕业作品。</p>
+
+    <div class="works-grid">
+      <div class="work-card reveal">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(124,140,248,.14),rgba(124,140,248,.03))">
+          <div class="mock"><b>POST</b> /api/expense/audit<br><span class="ok">200 OK</span> · 132ms<br>{ "flagged": 3, "risk": "low" }</div>
+        </div>
+        <div class="work-body">
+          <h3>报销单智能初审助手</h3>
+          <p>财务同事拍张报销单照片，自动核对发票真伪、超标项和重复报销，初审时间从 15 分钟缩到 40 秒。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#a5b4fc,#7c8cf8)">陈</span>
+            陈静 · 制造业财务经理
+            <span class="tag">第 5 期</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card reveal reveal-d1">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(74,222,128,.12),rgba(74,222,128,.02))">
+          <div class="mock"><b>GET</b> /api/onboarding/tasks<br><span class="ok">200 OK</span> · 98ms<br>[ "签合同", "开账号", "领设备" ]</div>
+        </div>
+        <div class="work-body">
+          <h3>新员工入职陪跑小程序</h3>
+          <p>把 23 个入职环节变成可视化任务清单，HR 后台一键指派，新员工不再"入职三天找不到门卡"。已在两家公司实际使用。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#86efac,#4ade80)">林</span>
+            林晓芸 · 互联网公司 HRBP
+            <span class="tag">第 4 期</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card reveal reveal-d2">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(251,191,36,.02))">
+          <div class="mock"><b>GET</b> /api/leads/follow-up<br><span class="ok">200 OK</span> · 76ms<br>{ "overdue": 5, "today": 12 }</div>
+        </div>
+        <div class="work-body">
+          <h3>销售线索跟进提醒台</h3>
+          <p>教培销售团队专用：线索自动分级、超时未跟进自动标红、续费节点提前 30 天提醒。团队跟进及时率从 61% 提到 94%。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#fcd34d,#f59e0b)">赵</span>
+            赵鹏 · 教培机构销售总监
+            <span class="tag">第 6 期</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card reveal">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(244,114,182,.12),rgba(244,114,182,.02))">
+          <div class="mock"><b>POST</b> /api/class/check-in<br><span class="ok">200 OK</span> · 88ms<br>{ "present": 28, "absent": 2 }</div>
+        </div>
+        <div class="work-body">
+          <h3>班级考勤与作业打卡</h3>
+          <p>一位小学班主任的作品：扫码考勤、作业拍照提交、家长自动收到未交提醒。全年级 6 个班都在用。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#f9a8d4,#ec4899)">苏</span>
+            苏婉 · 小学教师
+            <span class="tag">第 5 期</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card reveal reveal-d1">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(94,234,212,.12),rgba(94,234,212,.02))">
+          <div class="mock"><b>GET</b> /api/inventory/alert<br><span class="ok">200 OK</span> · 112ms<br>{ "low_stock": [ "SKU-2204" ] }</div>
+        </div>
+        <div class="work-body">
+          <h3>仓库安全库存预警板</h3>
+          <p>电商运营的作品：库存低于安全线自动推送补货建议，大促前缺货率下降 70%，老板直接申请了公司级推广。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#5eead4,#14b8a6)">吴</span>
+            吴国栋 · 电商运营主管
+            <span class="tag">第 6 期</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card reveal reveal-d2">
+        <div class="work-shot" style="background:linear-gradient(135deg,rgba(167,139,250,.12),rgba(167,139,250,.02))">
+          <div class="mock"><b>POST</b> /api/interview/score<br><span class="ok">200 OK</span> · 145ms<br>{ "match": 0.87, "hire": true }</div>
+        </div>
+        <div class="work-body">
+          <h3>结构化面试评分器</h3>
+          <p>HR 面试时实时记录评分，自动汇总多面试官结果并生成录用建议报告，面试纪要时间减少 80%。</p>
+          <div class="work-author">
+            <span class="av" style="background:linear-gradient(135deg,#c4b5fd,#8b5cf6)">郑</span>
+            郑一帆 · 连锁餐饮招聘负责人
+            <span class="tag">第 4 期</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 8. 学员评价 ═══════════════ -->
+<section id="reviews" style="background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <span class="section-tag reveal">// 他们怎么说</span>
+    <h2 class="section-title reveal reveal-d1">2,300+ 学员，96% 满意度</h2>
+
+    <div class="review-grid">
+      <div class="review-card reveal">
+        <span class="q-mark">"</span>
+        <p>做了十二年财务，我以为自己这辈子跟"做产品"无缘。第十天我把报销初审助手的链接发给总监，他回了我四个字：<b>"全部门推广"</b>。那种成就感，比考下 CPA 还猛。</p>
+        <div class="review-who">
+          <span class="av" style="background:linear-gradient(135deg,#a5b4fc,#7c8cf8)">陈</span>
+          <div><div class="name">陈静</div><div class="role">制造业财务经理 · 第 5 期</div></div>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-d1">
+        <span class="q-mark">"</span>
+        <p>最颠覆的是发现<b>难点根本不在技术，在于你能不能把需求说清楚</b>。GATE 验收每天逼着我把话说清楚、把标准定明白 —— 这套本事带回工作里，跟技术部门沟通都顺畅了。</p>
+        <div class="review-who">
+          <span class="av" style="background:linear-gradient(135deg,#86efac,#4ade80)">林</span>
+          <div><div class="name">林晓芸</div><div class="role">互联网 HRBP · 第 4 期</div></div>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <span class="q-mark">"</span>
+        <p>每天 120 分钟，我是哄睡孩子后 21:30 开始学的。有两天差点掉队，AI 导师凌晨一点还在陪我调 bug，助教第二天一早就来问进度。<b>这个营是真的不让人掉队。</b></p>
+        <div class="review-who">
+          <span class="av" style="background:linear-gradient(135deg,#f9a8d4,#ec4899)">苏</span>
+          <div><div class="name">苏婉</div><div class="role">小学教师 · 第 5 期</div></div>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-d1">
+        <span class="q-mark">"</span>
+        <p>报名时销售总监的身份让我将信将疑：十天能做出什么？结果是我们的线索跟进台<b>上线三周，团队跟进及时率从 61% 到 94%</b>。我已经让团队另外两个主管报了第七期。</p>
+        <div class="review-who">
+          <span class="av" style="background:linear-gradient(135deg,#fcd34d,#f59e0b)">赵</span>
+          <div><div class="name">赵鹏</div><div class="role">教培销售总监 · 第 6 期</div></div>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <span class="q-mark">"</span>
+        <p>以前也买过 AI 课，全是工具罗列，学完就忘。这里不一样：<b>每天一个 GATE，不过不能进下一天</b>，逼着真动手。十天下来，方法论是长在手上的，不是躺在收藏夹里的。</p>
+        <div class="review-who">
+          <span class="av" style="background:linear-gradient(135deg,#5eead4,#14b8a6)">吴</span>
+          <div><div class="name">吴国栋</div><div class="role">电商运营主管 · 第 6 期</div></div>
+          <span class="review-stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 9. 定价 ═══════════════ -->
+<section id="pricing">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-tag reveal" style="justify-content:center">// 投资自己</span>
+      <h2 class="section-title reveal reveal-d1">一次报名，带走产品、方法和底气</h2>
+      <p class="section-sub reveal reveal-d2" style="margin-left:auto;margin-right:auto">第七期 · 2026 年 8 月 24 日开营 · 仅限 100 席</p>
+    </div>
+
+    <div class="pricing-wrap reveal">
+      <div class="pricing-card">
+        <span class="pricing-badge">EARLY BIRD</span>
+        <span class="badge"><span class="dot"></span>早鸟价 · 倒计时中</span>
+
+        <div class="price-row">
+          <span class="price-now"><sup>¥</sup><span data-count="1999">0</span></span>
+          <span class="price-old">¥2,999</span>
+          <span class="price-save">立省 ¥1,000</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:12.5px;color:var(--text-3)">支持 3 期免息 · 每月仅 ¥666</div>
+
+        <div class="countdown">
+          <div class="countdown-label"><span class="dot"></span>EARLY_BIRD_EXPIRES_IN</div>
+          <div class="countdown-nums">
+            <div class="cd-cell"><b id="cdD">00</b><span>DAYS</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-cell"><b id="cdH">00</b><span>HRS</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-cell"><b id="cdM">00</b><span>MIN</span></div>
+            <span class="cd-sep">:</span>
+            <div class="cd-cell"><b id="cdS">00</b><span>SEC</span></div>
+          </div>
+          <div class="seat-bar">
+            <div class="seat-bar-track"><div class="seat-bar-fill" id="seatFill"></div></div>
+            <div class="seat-bar-label"><span>已报名 73 / 100 席</span><span>剩余 27 席</span></div>
+          </div>
+        </div>
+
+        <ul class="price-feats">
+          <li><b>10 天实战营</b>：方法课 + 实战 + 每日 GATE 验收</li>
+          <li><b>QRAE 平台</b>六岗位智能体全程使用权限</li>
+          <li><b>AI 导师 1v1</b> 7×24 + 真人助教 2 小时响应</li>
+          <li><b>100 人班级社群</b>，同学互测互评</li>
+          <li>毕业路演 + 结业证书 + <b>可运行产品</b></li>
+          <li>课程视频与模板 <b>永久回放</b>，平台升级终身同步</li>
+        </ul>
+
+        <button class="btn btn-primary" data-open-modal style="width:100%;padding:15px">锁定早鸟价 · 立即报名</button>
+        <div class="price-note"><b>7 天无理由退款</b> · 开营后 7 天内不满意全额退</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 10. FAQ ═══════════════ -->
+<section id="faq" style="background:var(--bg-soft);border-top:1px solid var(--border)">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-tag reveal" style="justify-content:center">// 报名前，你可能想问</span>
+      <h2 class="section-title reveal reveal-d1">常见问题</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq reveal open">
+        <button class="faq-q" aria-expanded="true">
+          <span class="fx">Q.01</span><span>完全没有编程基础，能学会吗？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>完全可以，这正是课程的设计前提。<b>你不需要写任何代码</b> —— 代码由六岗位 AI 智能体完成。你需要学的是"指挥官"的本事：怎么把需求说清楚、怎么验收成果、怎么判断好坏。过去六期 2,300+ 学员中，85% 是纯零基础的财务、HR、运营、销售和教师，毕业率 91%。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.02</span><span>每天要投入多少时间？加班党能跟上吗？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>每天 <b>120 分钟</b>：40 分钟方法课（可 1.5 倍速看回放）+ 70 分钟实战 + 10 分钟 GATE 验收。全部内容支持永久回放，直播不强制到场。很多学员是晚上 21:30 之后学习的，AI 导师 7×24 在线，凌晨提问也秒回。某天实在忙，周末补上也能跟上节奏。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.03</span><span>学不会、跟不上怎么办？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>三层保障：<b>①</b> AI 导师 1v1 随时答疑，卡住不过夜；<b>②</b> 真人助教工作日 2 小时内响应，每周一次集中补课直播；<b>③</b> 若本期确实跟不上，可<b>免费转入下一期重修一次</b>。过去六期，申请转期的学员不到 4%，转期后全部顺利毕业。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.04</span><span>退款政策是怎样的？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p><b>7 天无理由退款</b>：从开营第一天算起，7 天内如果你觉得课程不适合自己，无需任何理由，全额退款，1-3 个工作日原路退回。超过 7 天因个人原因无法继续的，可申请保留名额转入后续任意一期。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.05</span><span>毕业有证书吗？含金量如何？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>通过毕业路演评审后，颁发「青山在 · AI 开发训练营」结业证书（含唯一编号，可在线验证）。但说实话，<b>比证书更有说服力的是你的毕业作品</b>：一个真实上线的产品链接、完整 PRD 和测试报告 —— 写在简历或晋升答辩里，面试官当场就能打开看。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.06</span><span>可以开发票吗？公司报销行吗？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>可以。支持开具<b>增值税普通发票</b>（类目：培训费 / 教育咨询），报名时填写抬头和税号即可，开营后 3 个工作日内发送至你的邮箱。如需盖章的培训协议或邀请函用于公司内部审批，联系班主任即可提供。往期约三成学员通过公司培训预算报销。</p></div>
+      </div>
+      <div class="faq reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span class="fx">Q.07</span><span>3 期免息怎么操作？早鸟价和分期能叠加吗？</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><p>可以叠加。早鸟价 ¥1,999 选择 3 期免息后，<b>每月仅 ¥666</b>，支付时在收银台选择分期即可，无任何手续费。早鸟价在倒计时结束或 100 席报满后（以先到者为准）恢复原价 ¥2,999。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11. 最终 CTA ═══════════════ -->
+<section class="final-cta">
+  <div class="container">
+    <span class="badge reveal"><span class="dot"></span>第七期 · 2026.08.24 开营 · 剩余 27 席</span>
+    <h2 class="reveal reveal-d1" style="margin-top:22px">你的专业经验，<br>值得一个属于自己的产品</h2>
+    <p class="reveal reveal-d2">留得青山在。十天后，当别人还在讨论 AI 会不会取代自己时，<br>你已经在指挥 AI 为你干活了。</p>
+    <div class="reveal reveal-d3">
+      <button class="btn btn-primary" data-open-modal style="padding:15px 40px;font-size:16px">立即报名 · 早鸟 ¥1,999</button>
+      <div style="margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--text-3)">3 期免息 · 7 天无理由退款 · 永久回放</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 页脚 ═══════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="logo" href="#top">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 17 L9 7 L13 13 L15.5 9.5 L20 17 Z" fill="#4ade80" opacity=".9"/><rect x="3" y="18.5" width="18" height="1.6" rx=".8" fill="#7c8cf8"/></svg>
+          </span>
+          青山在
+        </a>
+        <p>留得青山在，不怕没柴烧。你的专业经验就是青山 —— 我们教专业人士指挥 AI 团队，把经验变成产品。</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>COURSE</h4>
+          <a href="#outline">十天大纲</a>
+          <a href="#method">学习方式</a>
+          <a href="#works">学员成果</a>
+          <a href="#pricing">定价报名</a>
+        </div>
+        <div class="footer-col">
+          <h4>SUPPORT</h4>
+          <a href="#faq">常见问题</a>
+          <a href="#faq">退款政策</a>
+          <a href="#faq">发票申请</a>
+        </div>
+        <div class="footer-col">
+          <h4>CONTACT</h4>
+          <a href="#" onclick="return false">班主任微信：qingshan-7</a>
+          <a href="mailto:hi@qingshanzai.cn">hi@qingshanzai.cn</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 青山在 QINGSHANZAI · AI 开发训练营</span>
+      <span>v2.0 · cohort_07 · build 20260805</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ 报名弹窗 ═══════════════ -->
+<div class="modal-mask" id="modalMask" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="关闭">✕</button>
+
+    <div id="modalForm">
+      <h3 id="modalTitle">锁定第七期早鸟席位</h3>
+      <div class="modal-sub">¥1,999 · 剩余 27 席 · 7 天无理由退款</div>
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="fName">姓名 NAME</label>
+          <input type="text" id="fName" placeholder="请输入真实姓名" autocomplete="name">
+          <span class="err-msg" id="errName"></span>
+        </div>
+        <div class="field">
+          <label for="fWechat">微信号 WECHAT</label>
+          <input type="text" id="fWechat" placeholder="班主任将通过微信联系你">
+          <span class="err-msg" id="errWechat"></span>
+        </div>
+        <div class="field">
+          <label for="fPhone">手机号 PHONE</label>
+          <input type="tel" id="fPhone" placeholder="用于开营通知与发票接收" maxlength="11" autocomplete="tel">
+          <span class="err-msg" id="errPhone"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">提交 · 锁定早鸟价 ¥1,999</button>
+        <div class="modal-secure">// 信息仅用于报名联络，绝不外泄</div>
+      </form>
+    </div>
+
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+      </div>
+      <h4>报名意向已锁定！</h4>
+      <p id="successText">班主任将在 24 小时内通过你的微信完成确认，<br>并发送支付链接与开营资料包。</p>
+      <div class="mono-note">ORDER_STATUS: seat_reserved ✓<br>COHORT: 07 · 2026.08.24 开营</div>
+      <button class="btn btn-ghost" id="successClose" style="width:100%;margin-top:20px">好的，等班主任联系我</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ───────── 1. 导航滚动状态（毛玻璃） ───────── */
+var nav = document.getElementById('nav');
+function onScrollNav(){
+  if(window.scrollY > 24){ nav.classList.add('scrolled'); }
+  else{ nav.classList.remove('scrolled'); }
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ───────── 2. 移动端汉堡菜单 ───────── */
+var hamburger = document.getElementById('hamburger');
+var mobileMenu = document.getElementById('mobileMenu');
+function closeMobileMenu(){
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  hamburger.setAttribute('aria-expanded','false');
+}
+hamburger.addEventListener('click', function(){
+  var open = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', String(open));
+});
+mobileMenu.querySelectorAll('a').forEach(function(a){
+  a.addEventListener('click', closeMobileMenu);
+});
+
+/* ───────── 3. 平滑滚动（吸顶偏移兜底） ───────── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href');
+    if(id.length < 2) return;
+    var target = document.querySelector(id);
+    if(!target) return;
+    e.preventDefault();
+    var top = target.getBoundingClientRect().top + window.scrollY - 72;
+    window.scrollTo({top: top, behavior:'smooth'});
+  });
+});
+
+/* ───────── 4. Hero 光晕随鼠标微动（rAF 节流） ───────── */
+var glow = document.getElementById('heroGlow');
+var hero = document.querySelector('.hero');
+var gx = 0, gy = 0, tx = 0, ty = 0, glowRaf = null;
+function animateGlow(){
+  gx += (tx - gx) * 0.06;
+  gy += (ty - gy) * 0.06;
+  glow.style.transform = 'translate(calc(-50% + ' + gx.toFixed(1) + 'px), ' + gy.toFixed(1) + 'px)';
+  if(Math.abs(tx-gx) > .3 || Math.abs(ty-gy) > .3){
+    glowRaf = requestAnimationFrame(animateGlow);
+  } else { glowRaf = null; }
+}
+hero.addEventListener('mousemove', function(e){
+  var r = hero.getBoundingClientRect();
+  tx = ((e.clientX - r.left) / r.width - .5) * 90;
+  ty = ((e.clientY - r.top) / r.height - .5) * 60;
+  if(!glowRaf) glowRaf = requestAnimationFrame(animateGlow);
+});
+
+/* ───────── 5. 十天大纲手风琴（单开） ───────── */
+var days = document.querySelectorAll('#outlineList .day');
+function setDayHeight(day, open){
+  var body = day.querySelector('.day-body');
+  body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
+}
+days.forEach(function(day){
+  var head = day.querySelector('.day-head');
+  head.addEventListener('click', function(){
+    var isOpen = day.classList.contains('open');
+    days.forEach(function(d){
+      d.classList.remove('open');
+      d.querySelector('.day-head').setAttribute('aria-expanded','false');
+      setDayHeight(d, false);
+    });
+    if(!isOpen){
+      day.classList.add('open');
+      head.setAttribute('aria-expanded','true');
+      setDayHeight(day, true);
+    }
+  });
+});
+// 初始：打开第一天
+var firstDay = document.querySelector('#outlineList .day.open');
+if(firstDay){
+  requestAnimationFrame(function(){ setDayHeight(firstDay, true); });
+}
+window.addEventListener('resize', function(){
+  document.querySelectorAll('#outlineList .day.open').forEach(function(d){ setDayHeight(d, true); });
+  document.querySelectorAll('.faq.open').forEach(function(f){ setFaqHeight(f, true); });
+});
+
+/* ───────── 6. FAQ 手风琴（多开） ───────── */
+function setFaqHeight(faq, open){
+  var a = faq.querySelector('.faq-a');
+  a.style.maxHeight = open ? a.scrollHeight + 'px' : '0px';
+}
+document.querySelectorAll('.faq').forEach(function(faq){
+  var q = faq.querySelector('.faq-q');
+  q.addEventListener('click', function(){
+    var open = faq.classList.toggle('open');
+    q.setAttribute('aria-expanded', String(open));
+    setFaqHeight(faq, open);
+  });
+});
+document.querySelectorAll('.faq.open').forEach(function(f){
+  requestAnimationFrame(function(){ setFaqHeight(f, true); });
+});
+
+/* ───────── 7. 早鸟倒计时（3 天） ───────── */
+var cdKey = 'qsz_cohort07_deadline';
+var deadline = parseInt(localStorage.getItem(cdKey) || '0', 10);
+if(!deadline || deadline < Date.now() - 7*24*3600*1000){
+  // 首次访问或旧数据：从现在起 3 天
+  deadline = Date.now() + 3*24*3600*1000;
+  try{ localStorage.setItem(cdKey, String(deadline)); }catch(e){}
+}
+var cdD = document.getElementById('cdD'),
+    cdH = document.getElementById('cdH'),
+    cdM = document.getElementById('cdM'),
+    cdS = document.getElementById('cdS');
+function pad(n){ return (n<10?'0':'') + n; }
+function tick(){
+  var diff = deadline - Date.now();
+  if(diff <= 0){
+    cdD.textContent = cdH.textContent = cdM.textContent = cdS.textContent = '00';
+    var label = document.querySelector('.countdown-label');
+    if(label && !label.dataset.expired){
+      label.dataset.expired = '1';
+      label.innerHTML = '<span class="dot"></span>EARLY_BIRD_ENDING · 以报满为准';
+    }
+    return;
+  }
+  var d = Math.floor(diff / 86400000);
+  var h = Math.floor(diff % 86400000 / 3600000);
+  var m = Math.floor(diff % 3600000 / 60000);
+  var s = Math.floor(diff % 60000 / 1000);
+  cdD.textContent = pad(d); cdH.textContent = pad(h);
+  cdM.textContent = pad(m); cdS.textContent = pad(s);
+}
+tick();
+setInterval(tick, 1000);
+
+/* ───────── 8. 报名弹窗 ───────── */
+var mask = document.getElementById('modalMask');
+var modalForm = document.getElementById('modalForm');
+var modalSuccess = document.getElementById('modalSuccess');
+var lastFocus = null;
+
+function openModal(){
+  lastFocus = document.activeElement;
+  mask.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  closeMobileMenu();
+  setTimeout(function(){ document.getElementById('fName').focus(); }, 250);
+}
+function closeModal(){
+  mask.classList.remove('show');
+  document.body.style.overflow = '';
+  if(lastFocus) lastFocus.focus();
+  // 复位到表单态（下次打开重新填写）
+  setTimeout(function(){
+    modalForm.style.display = '';
+    modalSuccess.classList.remove('show');
+  }, 300);
+}
+document.querySelectorAll('[data-open-modal]').forEach(function(b){
+  b.addEventListener('click', openModal);
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('successClose').addEventListener('click', closeModal);
+mask.addEventListener('click', function(e){ if(e.target === mask) closeModal(); });
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && mask.classList.contains('show')) closeModal();
+});
+
+/* 表单校验 */
+var fName = document.getElementById('fName'),
+    fWechat = document.getElementById('fWechat'),
+    fPhone = document.getElementById('fPhone');
+var errName = document.getElementById('errName'),
+    errWechat = document.getElementById('errWechat'),
+    errPhone = document.getElementById('errPhone');
+
+function setErr(input, el, msg){
+  el.textContent = msg || '';
+  input.classList.toggle('err', !!msg);
+  return !msg;
+}
+function validName(){
+  var v = fName.value.trim();
+  if(!v) return setErr(fName, errName, 'ERR: 请输入姓名');
+  if(v.length < 2 || v.length > 20) return setErr(fName, errName, 'ERR: 姓名长度需为 2-20 个字符');
+  return setErr(fName, errName, '');
+}
+function validWechat(){
+  var v = fWechat.value.trim();
+  if(!v) return setErr(fWechat, errWechat, 'ERR: 请输入微信号');
+  if(!/^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/.test(v))
+    return setErr(fWechat, errWechat, 'ERR: 微信号格式不正确（字母开头，6-20 位字母/数字/_/-）');
+  return setErr(fWechat, errWechat, '');
+}
+function validPhone(){
+  var v = fPhone.value.trim();
+  if(!v) return setErr(fPhone, errPhone, 'ERR: 请输入手机号');
+  if(!/^1[3-9]\d{9}$/.test(v)) return setErr(fPhone, errPhone, 'ERR: 请输入正确的 11 位手机号');
+  return setErr(fPhone, errPhone, '');
+}
+fName.addEventListener('blur', validName);
+fWechat.addEventListener('blur', validWechat);
+fPhone.addEventListener('blur', validPhone);
+[fName, fWechat, fPhone].forEach(function(inp){
+  inp.addEventListener('input', function(){ inp.classList.remove('err'); });
+});
+
+document.getElementById('signupForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var ok = [validName(), validWechat(), validPhone()].every(Boolean);
+  if(!ok) return;
+  var btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = '提交中…';
+  // 模拟提交
+  setTimeout(function(){
+    document.getElementById('successText').innerHTML =
+      '<b style="color:var(--text)">' + fName.value.trim() + '</b>，你的早鸟席位已预留。<br>' +
+      '班主任将在 24 小时内添加微信 <span class="mono" style="color:var(--accent)">' +
+      fWechat.value.trim() + '</span> 完成确认。';
+    modalForm.style.display = 'none';
+    modalSuccess.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = '提交 · 锁定早鸟价 ¥1,999';
+    e.target.reset();
+  }, 900);
+});
+
+/* ───────── 9. 滚动 Reveal ───────── */
+var revealEls = document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, {threshold: .12, rootMargin: '0px 0px -40px 0px'});
+  revealEls.forEach(function(el){ io.observe(el); });
+}else{
+  revealEls.forEach(function(el){ el.classList.add('in'); });
+}
+
+/* ───────── 10. 数字滚动动画 ───────── */
+function animateCount(el){
+  var target = parseInt(el.dataset.count, 10);
+  var dur = 1400, start = null;
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * eased).toLocaleString('en-US');
+    if(p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+var counters = document.querySelectorAll('[data-count]');
+if('IntersectionObserver' in window){
+  var cio = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        animateCount(en.target);
+        cio.unobserve(en.target);
+      }
+    });
+  }, {threshold: .5});
+  counters.forEach(function(c){ cio.observe(c); });
+}else{
+  counters.forEach(function(c){ c.textContent = c.dataset.count; });
+}
+
+/* ───────── 11. 席位进度条入场 ───────── */
+var seatFill = document.getElementById('seatFill');
+if(seatFill && 'IntersectionObserver' in window){
+  seatFill.style.width = '0';
+  var sio = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        requestAnimationFrame(function(){ seatFill.style.width = '73%'; });
+        sio.unobserve(en.target);
+      }
+    });
+  }, {threshold:.4});
+  sio.observe(seatFill);
+}
+
+})();
+</script>
+</body>
+</html>

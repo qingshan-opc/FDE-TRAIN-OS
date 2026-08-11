@@ -1,0 +1,308 @@
+day: 2
+project: 四个页面和五条数据传递约定
+project_brief: 学员指挥前端工程师按已批准 PRD 和原型，先搭工程骨架，再逐页完成提交、列表、详情和驾驶舱；业务数据暂用 Mock，同时与后端工程师签下五个接口契约。
+resources:
+- id: team-prompts-v11
+  title: 七岗位 AI 员工提示词包
+  kind: download
+  summary: 七名 AI 员工的职责、交接方法和五天协作规则
+  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_Agent_Prompts_V1.1/00_README.md
+- id: week1-day2-source
+  title: 第一周第 2 天课程合约
+  kind: doc
+  summary: 本日五节课、交付物、岗位交接与验收口径
+  url: /course-assets/bootcamp/day-02/README.md
+- id: domain-packs
+  title: 第一周领域包
+  kind: doc
+  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
+  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+capsule_extra:
+  c1:
+    resource_ids:
+    - team-prompts-v11
+    - week1-day2-source
+    - domain-packs
+    tools:
+    - name: '@前端工程师 Agent'
+      note: 本节交付：可运行工程骨架与四个空路由
+    - name: REVIEW → APPROVED 状态卡
+      note: 岗位自检不等于学员批准
+    quiz:
+    - &id001
+      - 为什么先做空壳路由？
+      - - 为了少写代码
+        - 为了先确认工程结构和页面边界
+        - 为了跳过原型
+      - 1
+      - 先确认骨架可以降低一次性生成造成的黑箱感。
+    - &id002
+      - 前端主要负责什么？
+      - - 用户看到和操作的界面
+        - 保存所有数据库文件
+        - 替学员批准 PRD
+      - 0
+      - 前端实现交互界面并调用后端接口。
+    media:
+    - kind: video
+      title: 口播课件 · 第 1 节
+      object_key: documents/shared/course-media/day02-c1-architect-role.mp4
+      poster_key: documents/shared/course-media/day02-c1-architect-role-poster.jpg
+      duration_sec: 74
+  c2:
+    resource_ids:
+    - team-prompts-v11
+    - week1-day2-source
+    - domain-packs
+    tools:
+    - name: '@前端工程师 Agent'
+      note: 本节交付：可填写、可校验的提交页
+    - name: REVIEW → APPROVED 状态卡
+      note: 岗位自检不等于学员批准
+    quiz:
+    - &id003
+      - 提交页字段冲突时以什么为准？
+      - - AI 临时判断
+        - 已批准的 PRD
+        - 页面看起来是否整齐
+      - 1
+      - 已批准 PRD 是当前需求基线。
+    - &id004
+      - 为什么前端有校验，后端还要再校验？
+      - - 为了重复工作
+        - 前端可被绕过，后端要守住业务规则
+        - 因为按钮颜色不同
+      - 1
+      - 后端必须保护真实数据不被非法请求污染。
+    media:
+    - kind: video
+      title: 口播课件 · 第 2 节
+      object_key: documents/shared/course-media/day02-c2-four-layer.mp4
+      poster_key: documents/shared/course-media/day02-c2-four-layer-poster.jpg
+      duration_sec: 67
+  c3:
+    resource_ids:
+    - team-prompts-v11
+    - week1-day2-source
+    - domain-packs
+    tools:
+    - name: '@前端工程师 Agent'
+      note: 本节交付：列表页、空态与至少 5 条 Mock
+    - name: REVIEW → APPROVED 状态卡
+      note: 岗位自检不等于学员批准
+    quiz:
+    - &id005
+      - Mock 数据的正确定位是什么？
+      - - 真实数据库备份
+        - 按契约制作的临时前端数据
+        - AI 分析结果
+      - 1
+      - Mock 让前端先行，但不能冒充真实接口。
+    - &id006
+      - 前端使用 Mock 时可以说系统已联调吗？
+      - - 可以
+        - 不可以
+        - 只要页面漂亮就可以
+      - 1
+      - 联调要求前端真实调用后端并读写数据库。
+    media:
+    - kind: video
+      title: 口播课件 · 第 3 节
+      object_key: documents/shared/course-media/day02-c3-arch-selection.mp4
+      poster_key: documents/shared/course-media/day02-c3-arch-selection-poster.jpg
+      duration_sec: 71
+  c4:
+    resource_ids:
+    - team-prompts-v11
+    - week1-day2-source
+    - domain-packs
+    tools:
+    - name: '@前端工程师 Agent → @后端工程师 Agent'
+      note: 本节交付：详情页 + docs/D2-L4_接口契约.md
+    - name: REVIEW → APPROVED 状态卡
+      note: 岗位自检不等于学员批准
+    quiz:
+    - - 接口契约主要解决什么问题？
+      - - 统一按钮颜色
+        - 约定前端请求与后端响应
+        - 代替数据库
+      - 1
+      - 契约让前后端对同一字段和错误结构达成一致。
+    - - Week1 的 AI 接口应该返回什么？
+      - - 固定分析文案
+        - AI_NOT_CONNECTED 等诚实状态
+        - 随机建议
+      - 1
+      - 未接模型就不能伪造 AI 结果。
+    media:
+    - kind: video
+      title: 口播课件 · 第 4 节
+      object_key: documents/shared/course-media/day02-c4-hands-on-adr.mp4
+      poster_key: documents/shared/course-media/day02-c4-hands-on-adr-poster.jpg
+      duration_sec: 70
+  c5:
+    resource_ids:
+    - team-prompts-v11
+    - week1-day2-source
+    - domain-packs
+    tools:
+    - name: '@前端工程师 Agent'
+      note: 本节交付：四页 Mock 前端 V0.5 + 走查记录
+    - name: REVIEW → APPROVED 状态卡
+      note: 岗位自检不等于学员批准
+    quiz:
+    - - 驾驶舱指标应该从哪里来？
+      - - 设计师想象
+        - 业务记录按统计规则聚合
+        - 随机数
+      - 1
+      - 看板必须可追溯到业务数据。
+    - - 合格纠偏指令必须包含什么？
+      - - 重做
+        - 哪里不对以及改成什么样
+        - 写快一点
+      - 1
+      - 明确现象和目标才能验收修复。
+    media:
+    - kind: video
+      title: 口播课件 · 第 5 节
+      object_key: documents/shared/course-media/day02-c5-accept.mp4
+      poster_key: documents/shared/course-media/day02-c5-accept-poster.jpg
+      duration_sec: 62
+quiz:
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+lab:
+  primary_files:
+  - docs/D2-L4_接口契约.md
+  - docs/D2_前端走查.md
+  - docs/D2_command_log.md
+  prompt: 检查第二天前端 V0.5：四页路由、字段一致性、Mock 标识、AI 区边界、五接口契约和学员走查证据，以及指挥日志 docs/D2_command_log.md。前端未接数据库是正常状态，但不得写成联调完成。
+  rubric:
+  - check: file_exists
+    args:
+      path: docs/D2-L4_接口契约.md
+  - check: text_contains
+    args:
+      path: docs/D2-L4_接口契约.md
+      needle: AI_NOT_CONNECTED
+  - check: file_exists
+    args:
+      path: docs/D2_前端走查.md
+  - check: file_exists
+    args:
+      path: docs/D2_command_log.md
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: REJECTED
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: APPROVED
+  - check: text_contains
+    args:
+      path: docs/D2_command_log.md
+      needle: 我确认以上批准均为本人作出
+nodes_lab: 第 2 天岗位交接与真实证据验收
+nodes_project: 前端四页面 V0.5 与五接口契约
+knowledge_content:
+  c1:
+    knowledge_cards:
+    - id: d2l1-k1
+      term: 先列方案再动手
+      plain: 先让页面工程师说清准备怎样拆、有哪些页面，学员确认后再开始制作。
+    - id: d2l1-k2
+      term: 框架阶段保持空白
+      plain: 这一阶段只搭页面入口和统一外框，不提前把具体功能全部塞进去。
+    - id: d2l1-k3
+      term: 用三件事验收
+      plain: 项目能启动、四个页面能打开、所有页面有统一外框，三项都通过才继续。
+    memory_sentence: 先把房间和通道搭好，再往里面放东西；能启动、能打开、有统一外框，框架才算立住。
+    quiz:
+    - - 页面框架阶段最合格的结果是什么？
+      - - 四个页面都已经塞满功能
+        - 项目能启动，四个空页面能打开，并且外框统一
+        - 页面配色已经做到最漂亮
+      - 1
+      - 口播稿把这一阶段比作盖房子先立框架，不要求提前搬进家具。
+  c2:
+    knowledge_cards:
+    - id: d2l2-k1
+      term: 填写规则来自需求
+      plain: 哪些必须填、数字范围和字数限制，都以已经批准的需求文档为准。
+    - id: d2l2-k2
+      term: 提醒分成三层
+      plain: 检查是否漏填、格式和范围是否正确，再用中文告诉用户怎么修改。
+    - id: d2l2-k3
+      term: 填错不能全部清空
+      plain: 用户只应修改出错的那一项，已经填写正确的内容必须保留。
+    memory_sentence: 规则来自需求文档，验收提交页的办法，是亲手输入错误内容。
+    quiz:
+    - - 怎样才能证明提交页的错误提醒真的有效？
+      - - 看见页面上有红色提示文字
+        - 亲手输入空白、负数等错误内容并尝试提交
+        - 让 AI 口头保证已经检查
+      - 1
+      - 只有真实输入错误内容，才能确认页面真的阻止了错误提交。
+  c3:
+    knowledge_cards:
+    - id: d2l3-k1
+      term: 演示数据要像真的
+      plain: 至少准备五到八条，覆盖不同状态，还要有一条能讲清业务问题的数据。
+    - id: d2l3-k2
+      term: 数据只能有一份
+      plain: 列表和详情读取同一份记录，不能在不同页面各写一套数值。
+    - id: d2l3-k3
+      term: 没有数据也要说明
+      plain: 删除全部记录后，页面要明确告诉用户当前没有内容，而不是只留空白。
+    memory_sentence: 演示数据越像真的，越能提前发现问题；数据只有一份，页面只是不同的看法。
+    quiz:
+    - - 为什么演示数据需要覆盖待处理、处理中和已完成等不同状态？
+      - - 为了让文件变得更大
+        - 为了提前检查不同状态下的页面和筛选是否正确
+        - 为了假装已经接入真实数据
+      - 1
+      - 数据越接近真实情况，越容易在交付前发现页面问题。
+  c4:
+    knowledge_cards:
+    - id: d2l4-k1
+      term: 详情要看清一条记录
+      plain: 字段完整、状态醒目，并且列表和详情展示的是同一条数据。
+    - id: d2l4-k2
+      term: 先约定怎样传数据
+      plain: 页面问什么、数据部分答什么、名称怎么写和出错怎么说明，都要提前写清楚。
+    - id: d2l4-k3
+      term: AI 能力诚实留位
+      plain: 当前只写第二周接入，样例标演示数据，不能伪装成 AI 已经完成分析。
+    memory_sentence: 页面和数据先把传话方式说清，双方才能各自开工；约定不清，接起来一定靠猜。
+    quiz:
+    - - 页面和数据部分使用的字段名称不一致时，首先应该做什么？
+      - - 两边继续按自己的理解开发
+        - 回到双方约定，先把名称和格式统一
+        - 在页面上隐藏这个字段
+      - 1
+      - 先统一传话约定，才能避免两个岗位长期各说各话。
+  c5:
+    knowledge_cards:
+    - id: d2l5-k1
+      term: 看板数字要找得到来源
+      plain: 每个数字都应能在列表记录中核对，不能只是为了好看随便填写。
+    - id: d2l5-k2
+      term: 四个页面走完整流程
+      plain: 从提交到列表、详情和看板逐步检查，不能只抽看一张截图。
+    - id: d2l5-k3
+      term: 纠偏要写清目标
+      plain: 明确指出哪里不对、应该改成什么样，AI 才能定向修改并重新验收。
+    memory_sentence: 交付物要带着“我验过了”的证据；问题发现得越早，修改成本越低。
+    quiz:
+    - - AI 员工汇报“四个页面都完成了”，学员应该怎样处理？
+      - - 直接批准进入下一天
+        - 亲手走一遍完整流程并留下检查记录
+        - 只查看管理看板的截图
+      - 1
+      - 课程要求用实际操作和记录证明完成，不能只听 AI 汇报。

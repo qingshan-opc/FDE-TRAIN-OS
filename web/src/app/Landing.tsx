@@ -1,380 +1,104 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { LandingTopbar } from "../components/LandingTopbar";
-import { LandingHeroFocus } from "../components/LandingHeroFocus";
-import { scrollPageToTop } from "../lib/scrollPageToTop";
 import { LandingFooter } from "../components/LandingFooter";
+import { LandingTopbar, LOGIN_PATH, PURCHASE_PATH } from "../components/LandingTopbar";
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { applyPageSeo, SITE_DEFAULT_TITLE } from "../lib/seo";
-import type { LandingHeroCopy, LandingPayload } from "../lib/types";
+import type { LandingPayload } from "../lib/types";
+import { FALLBACK_LANDING_TABS } from "./landingShared";
 import {
-  FALLBACK_LANDING_TABS,
-  LANDING_FALLBACK_OPEN_COURSES,
-  LANDING_FOOTER_TRAINING_EMAIL,
-  LANDING_PARTNERS,
-  resolveLandingTabs,
-} from "./landingShared";
-
-const CONTACT_EMAIL = LANDING_FOOTER_TRAINING_EMAIL;
-const SLOGAN = "为政府、高校与企业交付可验收的数字化人才训练";
-const LANDING_HERO = "/landing/hero.png";
-const LANDING_STORY_REVISION = "20260722-agnes";
-
-const LANDING_STORY_POSTERS = [
-  "/landing/story-task.png",
-  "/landing/story-agent.png",
-  "/landing/story-cert.png",
-] as const;
-
-const LANDING_STORY_VIDEOS = [
-  "/landing/story-task.mp4",
-  "/landing/story-agent.mp4",
-  "/landing/story-cert.mp4",
-] as const;
-
-const PARTNERS = LANDING_PARTNERS;
-
-const STORY_FALLBACK = [
-  {
-    title: "任务驱动课纲",
-    summary: "每一天围绕一个可验收交付展开，学员在真实工作场景中完成产出。",
-  },
-  {
-    title: "Agent 实训环境",
-    summary: "隔离工作区 + 全程留痕，组织能核验每一位学员的真实能力。",
-  },
-  {
-    title: "可核验结业证书",
-    summary: "结业证书公开可查，组织能验证每一位学员的真实产出。",
-  },
-];
-
-type StorySlide = {
-  id: string;
-  title: string;
-  summary: string;
-  poster: string;
-  streamUrl?: string | null;
-};
-
-function buildStorySlides(): StorySlide[] {
-  return STORY_FALLBACK.map((item, i) => ({
-    id: `story-${i}`,
-    title: item.title,
-    summary: item.summary,
-    poster: `${LANDING_STORY_POSTERS[i] || LANDING_STORY_POSTERS[0]}?v=${LANDING_STORY_REVISION}`,
-    streamUrl: `${LANDING_STORY_VIDEOS[i] || LANDING_STORY_VIDEOS[0]}?v=${LANDING_STORY_REVISION}`,
-  }));
-}
-
-const FALLBACK_FACTS = [
-  { n: "01", t: "任务驱动课纲", d: "每一天都是一个可交付的真实工作任务，而不是知识点堆砌。" },
-  { n: "02", t: "Agent 实训环境", d: "学员在隔离工作区内使用真实 Agent 完成交付，过程全程留痕。" },
-  { n: "03", t: "可核验结业证书", d: "结业证书公开可查，组织能验证每一位学员的真实产出。" },
-];
-
-const FALLBACK_HERO: LandingHeroCopy = {
-  eyebrow: "FDE LEARNING OS",
-  empty_title: "课程宣传片筹备中",
-  title_lines: ["让每一次学习", "都留下可验证的证据"],
-  title_em: "可验证",
-  cta_primary: "进入学习",
-  cta_secondary: "了解企业培训",
-  bg_image: LANDING_HERO,
-  proof: [
-    { value: "21", label: "天任务驱动训练" },
-    { value: "100%", label: "交付全程留痕" },
-    { value: "3", label: "类机构同行验证" },
-  ],
-};
+  INK_FAQ,
+  INK_FEATURES,
+  INK_HERO,
+  INK_PAIN_TURN,
+  INK_PAINS,
+  INK_PRICE_PERKS,
+  INK_TRAE_ROLES,
+  INK_SEO,
+  INK_SYLLABUS_WEEKS,
+  INK_VOICES,
+  INK_WORKS,
+} from "./inkCampContent";
 
 const FALLBACK: LandingPayload = {
   title: "青山在",
-  tagline: SLOGAN,
+  tagline: "成为前沿部署工程师，打通AI与业务的最后一公里",
   hero_video: null,
-  brand: { name: "青山在", footer: "© 青山在 · FDE Learning OS" },
-  hero: FALLBACK_HERO,
-  seo: {
-    title: SITE_DEFAULT_TITLE,
-    description: "为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。",
-    keywords: "青山在,FDE,数字化人才,企业培训,训练营,Agent实训,结业证书,可验收交付",
-    og_image: LANDING_HERO,
-  },
+  brand: { name: "青山在", footer: "© 青山在 · FDE 训练营" },
   cta: { login: "/login", app: "/app/courses" },
   tabs: FALLBACK_LANDING_TABS,
-  enterprise: {
-    title: "企业与机构培训",
-    subtitle: "从课纲设计到结业验收，每一天都是可交付的真实工作任务",
-    facts: FALLBACK_FACTS,
-    mentors: [],
-  },
-  open_courses: LANDING_FALLBACK_OPEN_COURSES,
-  about: {
-    title: "关于我们",
-    body: "青山在是新一代数字化人才训练品牌，由杭州灵梧智能科技有限公司运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
+  seo: {
+    title: INK_SEO.title,
+    description: INK_SEO.description,
+    keywords: INK_SEO.keywords,
   },
 };
 
-function emphasizeLine(line: string, em?: string): ReactNode {
-  const needle = (em || "").trim();
-  if (!needle || !line.includes(needle)) return line;
-  const parts = line.split(needle);
-  return parts.map((part, i) => (
-    <Fragment key={i}>
-      {part}
-      {i < parts.length - 1 ? <em>{needle}</em> : null}
-    </Fragment>
-  ));
+const FEAT_META = [
+  "ROLES: pm · ui · fe · be · qa · ops",
+  "LOOP: plan → act → reflect",
+  "SKILL: align · report · push",
+  "EVIDENCE: gated milestones",
+  "DELIVERABLE: running product",
+  "ACCESS: lifetime replay",
+] as const;
+
+const TRUST = [
+  { num: "21", unit: "天", label: "结构化训练" },
+  { num: "3", unit: "周", label: "能力递进" },
+  { num: "6", unit: "岗", label: "AI 岗位协作" },
+  { num: "永久", unit: "", label: "课程回放" },
+] as const;
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function renderHeroTitle(hero: LandingHeroCopy, siteTitle: string): ReactNode {
-  const lines = (hero.title_lines || []).map((s) => String(s || "").trim()).filter(Boolean);
-  if (lines.length > 0) {
-    return lines.map((line, i) => (
-      <Fragment key={i}>
-        {i > 0 ? <br /> : null}
-        {emphasizeLine(line, hero.title_em)}
-      </Fragment>
-    ));
-  }
-  return siteTitle;
-}
-
-function StoryVideoStrip({ slides }: { slides: StorySlide[] }) {
-  const [active, setActive] = useState(0);
-  const count = slides.length;
-
-  if (count === 0) return null;
-
-  const prev = () => setActive((i) => (i - 1 + count) % count);
-  const next = () => setActive((i) => (i + 1) % count);
-  const slot = (offset: number) => slides[(active + offset + count) % count];
-
+function Chevron({ open }: { open: boolean }) {
   return (
-    <section className="landing-story-video scene-section" aria-label="培训现场短视频">
-      <header className="landing-story-video__header">
-        <p className="landing-story-video__tag mono">TRAINING IN ACTION</p>
-        <h2 className="landing-story-video__title">看见真实交付，而不是幻灯片培训</h2>
-        <p className="landing-story-video__lead">
-          三段品牌叙事短片，带你快速感受任务驱动、证据留痕的训练方式。
-        </p>
-      </header>
-
-      <div className="landing-story-video__viewport">
-        {count > 1 && (
-          <button type="button" className="landing-story-video__nav landing-story-video__nav--prev" onClick={prev} aria-label="上一段">
-            ‹
-          </button>
-        )}
-        <ul className="landing-story-video__track">
-          {count > 1 && (
-            <li className="landing-story-video__item is-before" onClick={prev}>
-              <StoryVideoCard slide={slot(-1)} preview />
-            </li>
-          )}
-          <li className="landing-story-video__item is-active">
-            <StoryVideoCard slide={slides[active]} playing muted loop autoPlay playsInline />
-          </li>
-          {count > 1 && (
-            <li className="landing-story-video__item is-after" onClick={next}>
-              <StoryVideoCard slide={slot(1)} preview />
-            </li>
-          )}
-        </ul>
-        {count > 1 && (
-          <button type="button" className="landing-story-video__nav landing-story-video__nav--next" onClick={next} aria-label="下一段">
-            ›
-          </button>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function StoryVideoCard({
-  slide,
-  preview,
-  playing,
-  muted,
-  loop,
-  autoPlay,
-  playsInline,
-}: {
-  slide: StorySlide;
-  preview?: boolean;
-  playing?: boolean;
-  muted?: boolean;
-  loop?: boolean;
-  autoPlay?: boolean;
-  playsInline?: boolean;
-}) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const shouldPlay = Boolean(playing && !preview);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !autoPlay) return;
-    const play = () => {
-      void video.play().catch(() => {});
-    };
-    play();
-    video.addEventListener("loadeddata", play);
-    return () => video.removeEventListener("loadeddata", play);
-  }, [autoPlay, slide.streamUrl]);
-
-  return (
-    <div className="landing-story-video__content">
-      <div className="landing-story-video__frame">
-        {preview || !slide.streamUrl || !shouldPlay ? (
-          <img className="landing-story-video__media" src={slide.poster} alt={slide.title} loading="lazy" />
-        ) : (
-          <video
-            ref={videoRef}
-            className="landing-story-video__media landing-story-video__media--inline"
-            src={slide.streamUrl}
-            poster={slide.poster}
-            muted={muted}
-            loop={loop}
-            autoPlay={autoPlay}
-            playsInline={playsInline ?? true}
-            preload="auto"
-            controls={false}
-            disablePictureInPicture
-            aria-label={slide.title}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-function PartnersPanel({ sectionRef }: { sectionRef?: (el: HTMLElement | null) => void }) {
-  return (
-    <section
-      className="landing-partners scene-section"
-      id="partners"
-      ref={sectionRef}
-      aria-label="合作伙伴"
+    <svg
+      className={`mk-chevron${open ? " is-open" : ""}`}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
     >
-      <header className="landing-partners__header">
-        <p className="landing-partners__tag mono">PARTNERS</p>
-        <h2 className="landing-partners__title">与政府、高校与园区同行</h2>
-        <p className="landing-partners__lead">已为多家机构交付可验收的数字化人才训练项目</p>
-      </header>
-      <div className="landing-partners__grid">
-        {PARTNERS.map((p) => (
-          <article className="landing-partners__card" key={p.id}>
-            <div className="landing-partners__logo">
-              <img src={p.logo} alt={p.logoAlt} loading="lazy" />
-            </div>
-            <p className="landing-partners__name">{p.name}</p>
-            <p className="landing-partners__tagline">{p.tag}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function EnterprisePanel({
-  data,
-  contactEmail,
-  images,
-}: {
-  data: NonNullable<LandingPayload["enterprise"]>;
-  contactEmail: string;
-  images: string[];
-}) {
-  const mentors = data.mentors && data.mentors.length > 0 ? data.mentors : null;
-  const facts =
-    data.facts && data.facts.length > 0
-      ? data.facts.map((f, i) => ({
-          n: f.n || String(i + 1).padStart(2, "0"),
-          t: f.t || "",
-          d: f.d || "",
-        }))
-      : FALLBACK_FACTS;
-  return (
-    <div className="landing-panel-grid">
-      <div className="landing-panel-copy">
-        <p className="landing-eyebrow mono">ENTERPRISE &amp; INSTITUTIONS</p>
-        <h2 className="landing-panel-title">{data.title}</h2>
-        <p className="landing-panel-subtitle">{data.subtitle}</p>
-        <ol className="landing-fact-list">
-          {facts.map((f, i) => (
-            <li key={f.n}>
-              {images[i] ? (
-                <div className="landing-fact-media">
-                  <img src={images[i]} alt="" loading="lazy" />
-                </div>
-              ) : (
-                <span className="landing-fact-n mono">{f.n}</span>
-              )}
-              <div>
-                <strong>{f.t}</strong>
-                <p className="muted">{f.d}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <a
-          className="landing-panel-cta"
-          href={`mailto:${contactEmail}?subject=${encodeURIComponent("培训咨询预约")}`}
-        >
-          预约培训咨询
-          <span className="landing-panel-cta__arrow" aria-hidden="true">
-            →
-          </span>
-        </a>
-      </div>
-
-      <aside className="landing-mentor-rail">
-        <p className="landing-mentor-rail-label mono">授课导师</p>
-        {mentors ? (
-          <div className="landing-mentor-list">
-            {mentors.map((m, i) => (
-              <div className="landing-mentor-card" key={m.id || i}>
-                <div className="landing-mentor-avatar" aria-hidden="true">
-                  {m.avatar_url ? (
-                    <img src={m.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
-                  ) : (
-                    (m.name || "导")[0]
-                  )}
-                </div>
-                <div>
-                  <strong>{m.name || "待补充"}</strong>
-                  {m.title && <p className="muted">{m.title}</p>}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="landing-mentor-list">
-            {[0, 1, 2].map((i) => (
-              <div className="landing-mentor-card is-placeholder" key={i}>
-                <div className="landing-mentor-avatar is-placeholder" aria-hidden="true" />
-                <div>
-                  <strong>待配置真实讲课素材</strong>
-                  <p className="muted">可在后台为该企业培训班配置导师信息</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </aside>
-    </div>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
   );
 }
 
 export function Landing() {
   const { user } = useAuth();
   const [data, setData] = useState<LandingPayload>(FALLBACK);
-  const tabs = resolveLandingTabs(data.tabs);
-  const scrollTabIds = tabs.filter((t) => t.id === "enterprise").map((t) => t.id);
-  const [activeTab, setActiveTab] = useState<string>(scrollTabIds[0] || "enterprise");
   const [headerSolid, setHeaderSolid] = useState(false);
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [openDay, setOpenDay] = useState<string>("W1-D1");
+  const [openFaq, setOpenFaq] = useState<number>(0);
+  const [heroExit, setHeroExit] = useState(0);
+  const [painIn, setPainIn] = useState(false);
+  const [seamActive, setSeamActive] = useState(false);
+  const painRef = useRef<HTMLElement | null>(null);
+  const purchaseHref = user ? PURCHASE_PATH : LOGIN_PATH;
+  const brandName = data.brand?.name || "青山在";
+  const appHref = data.cta?.app || "/app/courses";
+
+  const outlineDays = useMemo(
+    () =>
+      INK_SYLLABUS_WEEKS.flatMap((week, wi) =>
+        (week.days || []).map((day, di) => ({
+          id: `W${wi + 1}-${day.d}`,
+          week: week.week,
+          weekTitle: week.title,
+          ...day,
+          defaultOpen: wi === 0 && di === 0,
+        })),
+      ),
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -382,15 +106,18 @@ export function Landing() {
       try {
         const res = await siteApi.landing();
         if (cancelled) return;
-        // 与本地 FALLBACK 深合并，避免接口缺字段时标题/Hero 跳动
         setData({
           ...FALLBACK,
           ...res,
           brand: { ...FALLBACK.brand, ...(res.brand || {}) },
-          hero: { ...FALLBACK_HERO, ...(res.hero || {}) },
-          seo: { ...FALLBACK.seo, ...(res.seo || {}), title: SITE_DEFAULT_TITLE },
           cta: { ...FALLBACK.cta, ...(res.cta || {}) },
-          enterprise: res.enterprise || FALLBACK.enterprise,
+          tabs: FALLBACK_LANDING_TABS,
+          seo: {
+            ...FALLBACK.seo,
+            ...(res.seo || {}),
+            title: INK_SEO.title,
+            description: res.seo?.description || INK_SEO.description,
+          },
         });
       } catch {
         if (!cancelled) setData(FALLBACK);
@@ -402,134 +129,408 @@ export function Landing() {
   }, []);
 
   useEffect(() => {
-    // 首页页签固定为品牌全称，与 index.html 一致，禁止中途改成「青山在」或「FDE Learning OS」
-    return applyPageSeo({ ...FALLBACK.seo, ...data.seo, title: SITE_DEFAULT_TITLE }, SITE_DEFAULT_TITLE);
-  }, [data.seo?.description, data.seo?.keywords, data.seo?.og_image]);
+    applyPageSeo({
+      title: data.seo?.title || SITE_DEFAULT_TITLE,
+      description: data.seo?.description,
+      keywords: data.seo?.keywords,
+    });
+  }, [data.seo]);
 
   useEffect(() => {
-    const onScroll = () => setHeaderSolid(window.scrollY > 32);
+    const onScroll = () => {
+      setHeaderSolid(window.scrollY > 24);
+      const hero = document.getElementById("top");
+      if (!hero || prefersReducedMotion()) {
+        setHeroExit(0);
+        return;
+      }
+      const rect = hero.getBoundingClientRect();
+      const span = Math.max(rect.height * 0.42, 1);
+      const raw = (-rect.top) / span;
+      setHeroExit(Math.min(1, Math.max(0, raw)));
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const top = visible[0]?.target.id;
-        if (top) setActiveTab(top);
+    const el = painRef.current;
+    if (!el) return;
+    if (prefersReducedMotion()) {
+      setPainIn(true);
+      setSeamActive(false);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setSeamActive(true);
+        setPainIn(true);
+        io.disconnect();
       },
-      { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.15, 0.35] },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
     );
-    scrollTabIds.forEach((id) => {
-      const el = sectionRefs.current[id];
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [scrollTabIds.join("|")]);
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
-  const scrollToSection = (id: string) => {
-    setActiveTab(id);
-    const target = sectionRefs.current[id] || document.getElementById(id);
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 72;
+    window.scrollTo({ top, behavior: "smooth" });
   };
-
-  const onTabClick = (_id: string) => {
-    scrollPageToTop("smooth");
-    setActiveTab("enterprise");
-  };
-
-  const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
-  const enterprise = data.enterprise || FALLBACK.enterprise!;
-  const contactEmail = data.contact?.email || CONTACT_EMAIL;
-  const brandName = data.brand?.name || data.title || FALLBACK.brand?.name || "青山在";
-  const siteTitle = data.title || brandName;
-  const hero = { ...FALLBACK_HERO, ...(data.hero || {}) };
-  const heroEyebrow = hero.eyebrow || FALLBACK_HERO.eyebrow || "FDE LEARNING OS";
-  // 站点信息「标语」→ Hero 副标题；缺省回落默认口号
-  const slogan = (data.tagline || "").trim() || SLOGAN;
-  const footerText = data.brand?.footer || FALLBACK.brand?.footer;
-  const storySlides = buildStorySlides();
-  const storyImages = [...LANDING_STORY_POSTERS];
-  const heroFallback = hero.bg_image || LANDING_HERO;
-  // 有上传海报时优先用流地址；坏图/占位图由 LandingHeroFocus 回退到静态底图
-  const heroBg = data.hero_video?.poster_url || heroFallback;
-  const proof =
-    hero.proof && hero.proof.length > 0
-      ? hero.proof
-      : FALLBACK_HERO.proof || [];
-  const primaryCta = user ? "进入学习平台" : hero.cta_primary || "进入学习";
-  const secondaryCta = hero.cta_secondary || "了解企业培训";
 
   return (
-    <div className="landing">
+    <div className="mk-home">
       <LandingTopbar
-        activeTab={activeTab}
+        activeTab="home"
         headerSolid={headerSolid}
         brandName={brandName}
-        loginHref={data.cta?.login || "/login"}
+        loginHref={data.cta?.login || LOGIN_PATH}
         appHref={appHref}
         user={user}
         tabs={data.tabs}
-        onSectionClick={onTabClick}
+        purchaseHref={purchaseHref}
       />
 
-      <section className="landing-hero scene-product-hero">
-        <LandingHeroFocus src={heroBg} fallbackSrc={heroFallback} />
-        <div className="landing-hero__content">
-          <p className="landing-hero__eyebrow mono">{heroEyebrow}</p>
-          <h1 className="landing-hero__title">{renderHeroTitle(hero, siteTitle)}</h1>
-          <p className="landing-hero__subtitle">{slogan}</p>
-          <div className="landing-hero__actions">
-            <Link to={appHref} className="landing-hero-btn landing-hero-btn--primary">
-              {primaryCta}
-            </Link>
-            <button type="button" className="landing-hero-btn" onClick={() => scrollToSection("enterprise")}>
-              {secondaryCta}
-            </button>
-          </div>
-        </div>
-        <div className="landing-hero__proof" aria-hidden="false">
-          {proof.map((item, i) => (
-            <Fragment key={`${item.value}-${item.label}-${i}`}>
-              {i > 0 ? <span className="landing-hero__proof-divider" aria-hidden="true" /> : null}
-              <div className="landing-hero__proof-item">
-                <strong className="num">{item.value}</strong>
-                <span>{item.label}</span>
+      <main>
+        {/* Hero */}
+        <header
+          className={`mk-hero${heroExit > 0.08 ? " is-leaving" : ""}`}
+          id="top"
+          style={{ ["--mk-hero-exit" as string]: String(heroExit) }}
+        >
+          <div className="mk-hero-glow" aria-hidden="true" />
+          <div className="mk-hero-glow mk-hero-glow--2" aria-hidden="true" />
+          <div className="mk-wrap mk-hero-inner">
+            <span className="mk-badge">
+              <span className="mk-badge__dot" aria-hidden="true" />
+              {INK_HERO.eyebrow}
+            </span>
+            <h1>
+              {INK_HERO.titleLead}
+              <span className="mk-grad">{INK_HERO.titleEm}</span>
+              <br />
+              {INK_HERO.titleLine2}
+            </h1>
+            <p className="mk-hero-sub">
+              {INK_HERO.sub}
+            </p>
+            <div className="mk-hero-ctas">
+              <Link to={purchaseHref} className="mk-btn mk-btn--primary">
+                {INK_HERO.ctaPrimary}
+              </Link>
+              <button type="button" className="mk-btn mk-btn--ghost" onClick={() => scrollTo("outline")}>
+                {INK_HERO.ctaSecondary} ↓
+              </button>
+            </div>
+
+            <div className="mk-terminal" aria-hidden="true">
+              <div className="mk-terminal__bar">
+                <i />
+                <i />
+                <i />
+                <span>trae — zsh</span>
               </div>
-            </Fragment>
-          ))}
+              <pre>
+                <span className="c-prompt">$</span> <span className="c-cmd">trae create-team</span>{" "}
+                <span className="c-flag">--roles</span> pm,ui,fe,be,qa,ops{"\n"}
+                <span className="c-ok">✓</span> 6 个岗位智能体已就位，等待你的指令{"\n\n"}
+                <span className="c-prompt">$</span> <span className="c-cmd">@产品经理</span> 写清本周可验收交付{"\n"}
+                <span className="c-comment"># 需求文档已写入 workspace/PRD.md</span>
+                {"\n\n"}
+                <span className="c-prompt">$</span> <span className="c-cmd">trae gate</span>{" "}
+                <span className="c-flag">--week</span> 1{"\n"}
+                <span className="c-ok">✓ GATE 通过 · 产品可演示</span>
+                <span className="mk-cursor" />
+              </pre>
+            </div>
+
+            <div className="mk-trust">
+              {TRUST.map((t) => (
+                <div className="mk-trust-item" key={t.label}>
+                  <div className="mk-trust-num">
+                    {t.num}
+                    {t.unit ? <em>{t.unit}</em> : null}
+                  </div>
+                  <div className="mk-trust-label">{t.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <div className={`mk-screen-seam${seamActive ? " is-active" : ""}`} aria-hidden="true">
+          <span className="mk-screen-seam__beam" />
         </div>
-      </section>
 
-      <StoryVideoStrip slides={storySlides} />
-      <PartnersPanel
-        sectionRef={(el) => {
-          sectionRefs.current.partners = el;
-        }}
-      />
+        {/* Pain */}
+        <section
+          className={`mk-section mk-reveal-section${painIn ? " is-in" : ""}`}
+          id="pain"
+          ref={painRef}
+        >
+          <div className="mk-wrap">
+            <span className="mk-section-tag mk-reveal-item">// 你现在的处境</span>
+            <h2 className="mk-section-title mk-reveal-item">
+              AI 写代码的时代，
+              <br />
+              你却卡在「会聊不会交」
+            </h2>
+            <p className="mk-section-sub mk-reveal-item">问题不是再买一门课，而是缺一套能交付、能落地、能沟通的 FDE 训练。</p>
+            <div className="mk-pain-grid">
+              {INK_PAINS.map((p, i) => (
+                <div className={`mk-pain-card mk-reveal-item mk-reveal-d${i + 1}`} key={p.title}>
+                  <span className="mk-pain-id">PAIN_0{i + 1}</span>
+                  <h3>{p.title}</h3>
+                  <p>{p.body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mk-pain-quote mk-reveal-item mk-reveal-d4">
+              <span dangerouslySetInnerHTML={{ __html: INK_PAIN_TURN }} />
+            </div>
+          </div>
+        </section>
 
-      <section
-        className="landing-section landing-section--alt"
-        id="enterprise"
-        ref={(el) => {
-          sectionRefs.current.enterprise = el;
-        }}
-      >
-        <div className="landing-section-inner">
-          <EnterprisePanel data={enterprise} images={storyImages} contactEmail={contactEmail} />
-        </div>
-      </section>
+        {/* Features */}
+        <section className="mk-section mk-section--band" id="features">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// 为什么不一样</span>
+            <h2 className="mk-section-title">
+              不是教你写代码，
+              <br />
+              是教你<span className="mk-accent">指挥交付</span>
+            </h2>
+            <div className="mk-feat-grid">
+              {INK_FEATURES.map((f, i) => (
+                <div className="mk-feat-card" key={f.title}>
+                  <div className={`mk-feat-icon${i % 2 === 1 ? " mk-feat-icon--green" : ""}`}>
+                    <span className="mono">{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+                  <h3>{f.title}</h3>
+                  <p>{f.body}</p>
+                  <span className="mk-feat-meta">{FEAT_META[i] || f.no}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <LandingFooter
-        brandName={brandName}
-        appHref={appHref}
-        contactEmail={contactEmail}
-        footerText={footerText}
-      />
+        {/* Outline accordion */}
+        <section className="mk-section" id="outline">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// 三周路线图</span>
+            <h2 className="mk-section-title">21 天，从交付到沟通</h2>
+            <p className="mk-section-sub">
+              点开每一天，查看主题、产出与 GATE。前三周课纲均已开放预览。
+            </p>
+            <div className="mk-outline">
+              {outlineDays.map((day) => {
+                const open = openDay === day.id;
+                return (
+                  <div className={`mk-day${open ? " is-open" : ""}`} key={day.id}>
+                    <button
+                      type="button"
+                      className="mk-day-head"
+                      aria-expanded={open}
+                      onClick={() => setOpenDay(open ? "" : day.id)}
+                    >
+                      <span className="mk-day-num">{day.d}</span>
+                      <span className="mk-day-title">
+                        <span className="mk-day-week">{day.week}</span>
+                        {day.t}
+                      </span>
+                      <span className="mk-day-meta">
+                        <span>{day.s}</span>
+                        <Chevron open={open} />
+                      </span>
+                    </button>
+                    <div className="mk-day-body" hidden={!open}>
+                      <div className="mk-day-body-inner">
+                        <p className="mk-day-desc">
+                          {day.week} · {day.weekTitle}。本日聚焦「{day.t}」，产出物：{day.s}。
+                        </p>
+                        <div className="mk-day-output">
+                          <h4>OUTPUT / GATE</h4>
+                          <ul>
+                            {day.out.map((item) => (
+                              <li key={item} className={item.includes("GATE") ? "is-gate" : undefined}>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Method / roles */}
+        <section className="mk-section mk-section--band" id="method">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// 学习方式</span>
+            <h2 className="mk-section-title">
+              你是指挥官，
+              <br />
+              六岗位 AI 是施工队
+            </h2>
+            <p className="mk-section-sub">用 @岗位 交接任务，像真实软件团队一样协作；你负责判断、验收与推进。</p>
+            <div className="mk-roles">
+              {INK_TRAE_ROLES.map((r) => (
+                <div className="mk-role" key={r.title}>
+                  <div className="mk-role-token mono">{r.token}</div>
+                  <h3>{r.title}</h3>
+                  <p>{r.desc.replace(/\n/g, " · ")}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Works */}
+        <section className="mk-section" id="works">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// 学员成果</span>
+            <h2 className="mk-section-title">毕业带走可运行作品</h2>
+            <p className="mk-section-sub">不是练习题，是能写进述职与协作现场的真实交付。</p>
+            <div className="mk-works">
+              {INK_WORKS.map((w) => (
+                <article className="mk-work" key={w.title}>
+                  <div className="mk-work-shot" style={{ background: `linear-gradient(145deg, ${w.path}, ${w.fill})` }}>
+                    <div className="mk-work-mock">
+                      <b>{w.title}</b>
+                      {"\n"}status: <span className="ok">accepted</span>
+                      {"\n"}owner: {w.who}
+                    </div>
+                  </div>
+                  <div className="mk-work-body">
+                    <span className="mk-work-tag">{w.tag}</span>
+                    <h3>{w.title}</h3>
+                    <p>{w.body}</p>
+                    <div className="mk-work-author">
+                      <span className="mk-work-av" style={{ background: w.sun }}>
+                        {w.who.slice(0, 1)}
+                      </span>
+                      <span>{w.who}</span>
+                      <span className="mk-work-chip">{w.badge}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Reviews */}
+        <section className="mk-section mk-section--band" id="reviews">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// 学员评价</span>
+            <h2 className="mk-section-title">他们怎么说</h2>
+            <div className="mk-reviews">
+              {INK_VOICES.map((v) => (
+                <blockquote className="mk-review" key={v.name}>
+                  <span className="mk-qmark mono" aria-hidden="true">
+                    “
+                  </span>
+                  <p>{v.quote}</p>
+                  <footer className="mk-review-who">
+                    <span className="mk-work-av" style={{ background: "var(--mk-accent-soft)", color: "var(--mk-accent)" }}>
+                      {v.name.slice(0, 1)}
+                    </span>
+                    <div>
+                      <strong>{v.name}</strong>
+                      <span>{v.meta}</span>
+                    </div>
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="mk-section" id="pricing">
+          <div className="mk-wrap mk-price-layout">
+            <div>
+              <span className="mk-section-tag">// 定价</span>
+              <h2 className="mk-section-title">一次报名，三周能力递进</h2>
+              <p className="mk-section-sub">登录后即可选购开通。含课纲、实训资源、答疑支持与永久回放。</p>
+              <ul className="mk-perk-list">
+                {INK_PRICE_PERKS.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mk-price-card">
+              <div className="mk-price-label mono">FDE CAMP · EARLY</div>
+              <div className="mk-price-num">
+                ¥1,980<em>/人</em>
+              </div>
+              <p className="mk-price-note">FDE 训练营 · 开营名额有限</p>
+              <Link to={purchaseHref} className="mk-btn mk-btn--primary mk-btn--block">
+                {INK_HERO.ctaPrimary}
+              </Link>
+              <Link to={user ? appHref : LOGIN_PATH} className="mk-btn mk-btn--ghost mk-btn--block">
+                {user ? "进入学习平台" : "先登录账号"}
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mk-section mk-section--band" id="faq">
+          <div className="mk-wrap">
+            <span className="mk-section-tag">// FAQ</span>
+            <h2 className="mk-section-title">常见问题</h2>
+            <div className="mk-faq">
+              {INK_FAQ.map((item, i) => {
+                const open = openFaq === i;
+                return (
+                  <div className={`mk-faq-item${open ? " is-open" : ""}`} key={item.q}>
+                    <button
+                      type="button"
+                      className="mk-faq-q"
+                      aria-expanded={open}
+                      onClick={() => setOpenFaq(open ? -1 : i)}
+                    >
+                      <span>{item.q}</span>
+                      <Chevron open={open} />
+                    </button>
+                    <div className="mk-faq-a" hidden={!open}>
+                      <p dangerouslySetInnerHTML={{ __html: item.a }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="mk-final-cta">
+          <div className="mk-wrap">
+            <h2>准备好当指挥官了吗？</h2>
+            <p>21 天完成产品交付、Agent 与企业沟通特训——把 AI 真正变成你的施工队。</p>
+            <div className="mk-hero-ctas">
+              <Link to={purchaseHref} className="mk-btn mk-btn--primary mk-btn--lg">
+                {INK_HERO.ctaPrimary}
+              </Link>
+              <button type="button" className="mk-btn mk-btn--ghost mk-btn--lg" onClick={() => scrollTo("outline")}>
+                先看三周大纲
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <LandingFooter brandName={brandName} appHref={appHref} footerText={data.brand?.footer} />
     </div>
   );
 }

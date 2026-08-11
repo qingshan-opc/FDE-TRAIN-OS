@@ -1,0 +1,46 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-ui-shift",
+    "file": "02-ui-shift.txt"
+  },
+  {
+    "id": "03-read-repeat",
+    "file": "03-read-repeat.txt"
+  },
+  {
+    "id": "04-design-interview",
+    "file": "04-design-interview.txt"
+  },
+  {
+    "id": "05-real-states",
+    "file": "05-real-states.txt"
+  },
+  {
+    "id": "06-page-plan",
+    "file": "06-page-plan.txt"
+  },
+  {
+    "id": "07-generate-files",
+    "file": "07-generate-files.txt"
+  },
+  {
+    "id": "08-return-pm",
+    "file": "08-return-pm.txt"
+  },
+  {
+    "id": "09-fix-retest",
+    "file": "09-fix-retest.txt"
+  },
+  {
+    "id": "10-handoff-log",
+    "file": "10-handoff-log.txt"
+  },
+  {
+    "id": "11-close",
+    "file": "11-close.txt"
+  }
+]

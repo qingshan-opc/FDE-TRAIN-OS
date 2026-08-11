@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-open-check",
+    "file": "02-open-check.txt"
+  },
+  {
+    "id": "03-interaction-check",
+    "file": "03-interaction-check.txt"
+  },
+  {
+    "id": "04-state-check",
+    "file": "04-state-check.txt"
+  },
+  {
+    "id": "05-console",
+    "file": "05-console.txt"
+  },
+  {
+    "id": "06-four-sentence",
+    "file": "06-four-sentence.txt"
+  },
+  {
+    "id": "07-owner-fix",
+    "file": "07-owner-fix.txt"
+  },
+  {
+    "id": "08-retest",
+    "file": "08-retest.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

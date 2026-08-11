@@ -11,12 +11,16 @@ from datetime import datetime, timezone
 from typing import Any
 
 from services.shared.config import (
+    ADMIN_EMAIL,
+    ADMIN_PASSWORD,
     AUTHOR_EMAIL,
     AUTHOR_PASSWORD,
     CURRICULUM_VERSION_TAG,
     DEFAULT_CAMP_ID,
     DEMO_EMAIL,
     DEMO_PASSWORD,
+    FINANCE_EMAIL,
+    FINANCE_PASSWORD,
     LEARNER_EMAIL,
     LEARNER_PASSWORD,
     LINGZHI_API_KEY,
@@ -63,6 +67,8 @@ def seed_defaults() -> None:
             (LEARNER_EMAIL, LEARNER_PASSWORD, "learner", "学习账号"),
             (DEMO_EMAIL, DEMO_PASSWORD, "learner", "Demo Learner"),
             (AUTHOR_EMAIL, AUTHOR_PASSWORD, "author", "Demo Author"),
+            (FINANCE_EMAIL, FINANCE_PASSWORD, "finance", "财务人员"),
+            (ADMIN_EMAIL, ADMIN_PASSWORD, "admin", "超级管理员"),
         ):
             cur.execute("SELECT id FROM users WHERE email=?", (email,))
             row = cur.fetchone()
@@ -160,15 +166,46 @@ def _day_yaml_path(day: int):
     return path if path.exists() else None
 
 
-def _upsert_days(cv_id: str) -> int:
+def _iter_seed_days() -> list[int]:
+    """Discover day-NN-curriculum.yaml under CONTRACTS_DIR (not a hard-coded 1..13)."""
+    from services.shared.config import CONTRACTS_DIR
+
+    days: set[int] = set()
+    if CONTRACTS_DIR.is_dir():
+        for path in CONTRACTS_DIR.glob("day-*-curriculum.yaml"):
+            try:
+                days.add(int(path.name.split("-")[1]))
+            except (IndexError, ValueError):
+                continue
+    # Keep a small fallback for fresh envs that only ship early days.
+    if not days:
+        days = set(range(1, 14))
+    return sorted(days)
+
+
+def _upsert_days(cv_id: str, *, overwrite: bool | None = None) -> int:
+    """Seed day_packages from curriculum YAML.
+
+    Default is **insert-missing only**. Blind UPDATE on every bootstrap was
+    wiping author/bootcamp syncs (e.g. Day1 QRAE 6-capsule pack) back to a
+    stale contracts/examples snapshot. Set FDE_SEED_OVERWRITE_PACKAGES=1 to
+    force refresh from YAML (intentional curriculum cutover).
+    """
+    import os
+
     import yaml
 
+    if overwrite is None:
+        overwrite = os.getenv("FDE_SEED_OVERWRITE_PACKAGES", "0") == "1"
+
     count = 0
-    for day in range(1, 14):
+    for day in _iter_seed_days():
         path = _day_yaml_path(day)
         if not path:
             continue
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if not (data.get("nodes") or data.get("learn")):
+            continue
         payload = json.dumps(data, ensure_ascii=False)
         title = str(data.get("title") or f"Day {day}")
         project = data.get("project")
@@ -179,6 +216,8 @@ def _upsert_days(cv_id: str) -> int:
             )
             row = cur.fetchone()
             if row:
+                if not overwrite:
+                    continue
                 cur.execute(
                     """
                     UPDATE day_packages

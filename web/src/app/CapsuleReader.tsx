@@ -368,72 +368,70 @@ function LearnBelowTabs({
             名词解释{` (${glossary.length})`}
           </button>
         )}
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "resources"}
-          className={`learn-assets-tab${tab === "resources" ? " is-on" : ""}`}
-          onClick={() => setTab("resources")}
-        >
-          资源{resources.length ? ` (${resources.length})` : ""}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "tools"}
-          className={`learn-assets-tab${tab === "tools" ? " is-on" : ""}`}
-          onClick={() => setTab("tools")}
-        >
-          工具与资料{tools.length ? ` (${tools.length})` : ""}
-        </button>
+        {resources.length > 0 && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "resources"}
+            className={`learn-assets-tab${tab === "resources" ? " is-on" : ""}`}
+            onClick={() => setTab("resources")}
+          >
+            资源{` (${resources.length})`}
+          </button>
+        )}
+        {tools.length > 0 && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "tools"}
+            className={`learn-assets-tab${tab === "tools" ? " is-on" : ""}`}
+            onClick={() => setTab("tools")}
+          >
+            工具与资料{` (${tools.length})`}
+          </button>
+        )}
       </div>
       {tab === "glossary" && glossary.length > 0 && (
         <div role="tabpanel">
           <GlossaryTermsPanel terms={glossary} embedded />
         </div>
       )}
-      {tab === "resources" &&
-        (resources.length ? (
-          <ul className="learn-resource-list" role="tabpanel">
-            {resources.map((r) => (
-              <li key={r.id} className="learn-resource-item">
-                <div>
-                  <strong>{r.title}</strong>
-                  {r.summary && <p className="muted">{r.summary}</p>}
-                </div>
-                {r.url ? (
-                  <a href={r.url} target="_blank" rel="noreferrer">
-                    打开
-                  </a>
-                ) : (
-                  <span className="muted">{r.kind || "资料"}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="muted learn-assets-empty">本节暂无资源。</p>
-        ))}
-      {tab === "tools" &&
-        (tools.length ? (
-          <ul className="learn-tool-list" role="tabpanel">
-            {tools.map((t, i) => (
-              <li key={`${t.name}-${i}`} className="learn-tool-item">
-                <div>
-                  <strong>{t.name}</strong>
-                  {t.note && <p className="muted">{t.note}</p>}
-                </div>
-                {t.url && (
-                  <a href={t.url} target="_blank" rel="noreferrer">
-                    打开
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="muted learn-assets-empty">本节暂无固定工具与资料。</p>
-        ))}
+      {tab === "resources" && resources.length > 0 && (
+        <ul className="learn-resource-list" role="tabpanel">
+          {resources.map((r) => (
+            <li key={r.id} className="learn-resource-item">
+              <div>
+                <strong>{r.title}</strong>
+                {r.summary && <p className="muted">{r.summary}</p>}
+              </div>
+              {r.url ? (
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  打开
+                </a>
+              ) : (
+                <span className="muted">{r.kind || "资料"}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      {tab === "tools" && tools.length > 0 && (
+        <ul className="learn-tool-list" role="tabpanel">
+          {tools.map((t, i) => (
+            <li key={`${t.name}-${i}`} className="learn-tool-item">
+              <div>
+                <strong>{t.name}</strong>
+                {t.note && <p className="muted">{t.note}</p>}
+              </div>
+              {t.url && (
+                <a href={t.url} target="_blank" rel="noreferrer">
+                  打开
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
@@ -814,14 +812,20 @@ export function CapsuleReader({
     const confirmMinutes = Math.max(3, Math.round(total * 0.15));
     const submitMinutes = Math.max(2, Math.round(total * 0.15));
     const practiceMinutes = Math.max(5, total - videoMinutes - confirmMinutes - submitMinutes);
-    return [
+    const hasHandsOn = Boolean(
+      active.lab ||
+        active.local_prep ||
+        (active.id && practiceSpecs[active.id]?.required),
+    );
+    const base: Array<{ id: LearnStep; minutes: number }> = [
       { id: "video", minutes: videoMinutes },
       { id: "quiz", minutes: confirmMinutes },
-      { id: "local_prep", minutes: practiceMinutes },
-      { id: "submit", minutes: submitMinutes },
     ];
+    if (hasHandsOn) base.push({ id: "local_prep", minutes: practiceMinutes });
+    base.push({ id: "submit", minutes: submitMinutes });
+    return base;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active?.id, active?.minutes, active?.media]);
+  }, [active?.id, active?.minutes, active?.media, active?.lab, active?.local_prep, practiceSpecs]);
 
   const stepIds = steps.map((s) => s.id);
   const currentStepIdx = Math.max(0, stepIds.indexOf(step));
@@ -977,7 +981,11 @@ export function CapsuleReader({
                     <h4>视频讲解：{active.title}</h4>
                     <p>先理解本节判断标准。视频与讲义中的要点会直接用于后面的知识确认和实操任务。</p>
                   </div>
-                  <CapsuleMediaStack items={active.media} campId={campId} />
+                  <CapsuleMediaStack
+                    key={active.id}
+                    items={active.media}
+                    campId={campId}
+                  />
                   {!active.media?.length && (
                     <CapsuleProse content={active.content || "（本节暂无正文）"} />
                   )}
@@ -1118,7 +1126,12 @@ export function CapsuleReader({
               <div className="learn-step-footer">
                 <span className="muted learn-step-hint">
                   {effectiveStep === "video" && "看完视频或讲义后进入知识确认"}
-                  {effectiveStep === "quiz" && (quizStepDone ? "关键判断已确认，可以开始本地实操" : "请先完成全部知识确认")}
+                  {effectiveStep === "quiz" &&
+                    (quizStepDone
+                      ? steps.some((s) => s.id === "local_prep")
+                        ? "关键判断已确认，可以开始本地实操"
+                        : "关键判断已确认，可以提交学习节点"
+                      : "请先完成全部知识确认")}
                   {effectiveStep === "local_prep" &&
                     (active.local_prep?.codex_prompt?.trim()
                       ? "在开发工具中完成并检查真实文件后，返回平台提交验收"

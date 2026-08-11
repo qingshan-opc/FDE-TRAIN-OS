@@ -4,6 +4,7 @@ import { useAuth } from "./lib/auth";
 import { Skeleton } from "./components/Skeleton";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Landing } from "./app/Landing";
+import { EnterprisePage } from "./app/EnterprisePage";
 import { OpenCoursesPage } from "./app/OpenCoursesPage";
 import { DocReaderPage } from "./app/DocReaderPage";
 import { AboutPage } from "./app/AboutPage";
@@ -12,6 +13,7 @@ import { LearnerHome } from "./app/LearnerHome";
 import { CapsuleSimLabPage } from "./app/CapsuleSimLabPage";
 import { CoursePicker } from "./app/CoursePicker";
 import { Profile } from "./app/Profile";
+import { LearnerReferral } from "./app/LearnerReferral";
 import { Certificates } from "./app/Certificates";
 import { Identity } from "./app/Identity";
 import { VerifyCertificate } from "./app/VerifyCertificate";
@@ -42,9 +44,16 @@ import { PartnerLoginPage } from "./partner/PartnerLogin";
 import { PartnerHome } from "./partner/PartnerHome";
 import { PartnerDashboard, PartnerShares } from "./partner/PartnerDashboard";
 import { PartnerPosters } from "./partner/PartnerPosters";
+import { FinanceDashboard } from "./author/FinanceDashboard";
 
-function RequireAuth({ children, roles }: { children: ReactNode; roles?: Array<"learner" | "author" | "admin" | "partner"> }) {
-  const { user, loading } = useAuth();
+function RequireAuth({
+  children,
+  roles,
+}: {
+  children: ReactNode;
+  roles?: Array<"learner" | "author" | "admin" | "partner" | "finance">;
+}) {
+  const { user, loading, needsWxBind } = useAuth();
   if (loading) {
     return (
       <div style={{ padding: 24 }}>
@@ -53,8 +62,24 @@ function RequireAuth({ children, roles }: { children: ReactNode; roles?: Array<"
     );
   }
   if (!user) return <Navigate to="/login" replace />;
+  if (needsWxBind && user.role === "learner") {
+    return <Navigate to="/login?bind=1" replace />;
+  }
   if (roles && !roles.includes(user.role) && user.role !== "admin") {
-    return <Navigate to={user.role === "author" ? "/author" : "/app"} replace />;
+    return (
+      <Navigate
+        to={
+          user.role === "author" || user.role === "finance"
+            ? user.role === "finance"
+              ? "/author/finance"
+              : "/author"
+            : user.role === "partner"
+              ? "/partner"
+              : "/app"
+        }
+        replace
+      />
+    );
   }
   return <>{children}</>;
 }
@@ -65,6 +90,7 @@ export default function App() {
       <ScrollToTop />
       <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/enterprise" element={<EnterprisePage />} />
       <Route path="/open" element={<OpenCoursesPage />} />
       <Route path="/docs/*" element={<DocReaderPage />} />
       <Route path="/about" element={<AboutPage />} />
@@ -118,6 +144,14 @@ export default function App() {
         }
       />
       <Route
+        path="/app/invite"
+        element={
+          <RequireAuth roles={["learner"]}>
+            <LearnerReferral />
+          </RequireAuth>
+        }
+      />
+      <Route
         path="/app/certificates"
         element={
           <RequireAuth>
@@ -156,12 +190,13 @@ export default function App() {
       <Route
         path="/author"
         element={
-          <RequireAuth roles={["author", "admin"]}>
+          <RequireAuth roles={["author", "admin", "finance"]}>
             <AuthorHome />
           </RequireAuth>
         }
       >
         <Route index element={<AuthorOverview />} />
+        <Route path="finance" element={<FinanceDashboard />} />
         <Route path="site/settings" element={<SiteSettings />} />
         <Route path="site/home" element={<SiteHome />} />
         <Route path="site/open-courses" element={<SiteOpenCourses />} />

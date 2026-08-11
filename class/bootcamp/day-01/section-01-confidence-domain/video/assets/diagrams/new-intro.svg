@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" role="img">
+  <rect width="560" height="420" fill="#f2f5f0"/>
+  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · NEW SELF-INTRO</text>
+  <rect x="40" y="70" width="200" height="180" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <text x="140" y="110" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.5)" font-weight="700">OLD</text>
+  <text x="140" y="160" text-anchor="middle" font-family="serif" font-size="24" font-weight="700" fill="#231f20">我不懂开发</text>
+  <text x="140" y="200" text-anchor="middle" font-family="sans-serif" font-size="14" fill="rgba(35,31,32,.55)">畏难 · 观望</text>
+  <polygon points="270,145 310,160 270,175" fill="#1400ff"/>
+  <rect x="320" y="70" width="200" height="180" fill="#1400ff"/>
+  <text x="420" y="110" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(255,255,255,.7)" font-weight="700">NEW</text>
+  <text x="420" y="155" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">我懂这个领域</text>
+  <text x="420" y="195" text-anchor="middle" font-family="sans-serif" font-size="14" fill="rgba(255,255,255,.85)">带 AI 做出来</text>
+  <rect x="40" y="290" width="480" height="80" fill="#fff" stroke="#231f20" stroke-width="2"/>
+  <rect x="40" y="290" width="8" height="80" fill="#1400ff"/>
+  <text x="64" y="325" font-family="serif" font-size="20" font-weight="700" fill="#231f20">下一节：软件公司的完整开发流程</text>
+  <text x="64" y="352" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.55)">PM → UI → FE → BE → QA → OPS</text>
+</svg>

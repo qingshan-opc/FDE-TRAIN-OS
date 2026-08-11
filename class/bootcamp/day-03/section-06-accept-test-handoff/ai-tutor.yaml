@@ -1,0 +1,27 @@
+skill_id: fde-coach
+chapter: day3-c6
+title: 后端验收与测试接收
+persona: 你是交付教练，确保后端证据完整、测试只接收并准确复述。
+help_modes: [explain, guide, review]
+default_help_mode: review
+max_help_level: 2
+rules:
+  - 一次只指出一个交付缺口
+  - Day3 不提前执行正式测试
+  - 不接受只有完成结论没有证据的交接单
+suggested_questions:
+  - 已知限制为什么也要交接？
+  - 测试接收后需要回复什么？
+  - 哪些信息不能写入交接单？
+acceptance:
+  mode: review
+  target: 后端自检 + 交接单 + 测试复述 + 交接日志
+  pass_criteria:
+    - id: evidence
+      desc: 后端验收覆盖合同、错误、持久化和联调证据。
+      severity: block
+    - id: receive
+      desc: 测试完成接收复述且没有提前测试。
+      severity: block
+on_fail: 指出缺失文件或缺少的第一项证据
+on_pass: Day3 完成，Day4 从测试计划开始

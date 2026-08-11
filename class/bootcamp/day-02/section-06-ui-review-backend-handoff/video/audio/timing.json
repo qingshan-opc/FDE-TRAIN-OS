@@ -1,0 +1,65 @@
+{
+  "total": 234.186,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 19.968
+    },
+    {
+      "id": "02-ui-review",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\02-ui-review.wav",
+      "start": 20.218,
+      "duration": 22.954666666666668
+    },
+    {
+      "id": "03-actionable-ui",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\03-actionable-ui.wav",
+      "start": 43.42266666666667,
+      "duration": 20.992
+    },
+    {
+      "id": "04-back-frontend",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\04-back-frontend.wav",
+      "start": 64.66466666666668,
+      "duration": 21.034666666666666
+    },
+    {
+      "id": "05-api-needs",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\05-api-needs.wav",
+      "start": 85.94933333333334,
+      "duration": 22.314666666666668
+    },
+    {
+      "id": "06-fields-example",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\06-fields-example.wav",
+      "start": 108.51400000000001,
+      "duration": 22.997333333333334
+    },
+    {
+      "id": "07-no-fake-api",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\07-no-fake-api.wav",
+      "start": 131.76133333333334,
+      "duration": 21.76
+    },
+    {
+      "id": "08-backend-receive",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\08-backend-receive.wav",
+      "start": 153.77133333333333,
+      "duration": 25.173333333333332
+    },
+    {
+      "id": "09-log",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\09-log.wav",
+      "start": 179.19466666666665,
+      "duration": 22.186666666666667
+    },
+    {
+      "id": "10-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-06-ui-review-backend-handoff\\video\\audio\\segments\\10-close.wav",
+      "start": 201.63133333333332,
+      "duration": 32.55466666666667
+    }
+  ]
+}

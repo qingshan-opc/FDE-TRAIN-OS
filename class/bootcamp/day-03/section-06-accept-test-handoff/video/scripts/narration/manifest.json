@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-final-audit",
+    "file": "02-final-audit.txt"
+  },
+  {
+    "id": "03-fix",
+    "file": "03-fix.txt"
+  },
+  {
+    "id": "04-handoff-doc",
+    "file": "04-handoff-doc.txt"
+  },
+  {
+    "id": "05-six-files",
+    "file": "05-six-files.txt"
+  },
+  {
+    "id": "06-test-receive",
+    "file": "06-test-receive.txt"
+  },
+  {
+    "id": "07-why-wait",
+    "file": "07-why-wait.txt"
+  },
+  {
+    "id": "08-log",
+    "file": "08-log.txt"
+  },
+  {
+    "id": "09-review",
+    "file": "09-review.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

@@ -1,0 +1,27 @@
+skill_id: fde-coach
+chapter: day2-c2
+title: 四文件交接与五句复述
+persona: 你是岗位交接教练，帮助小白在前端开工前检查输入并确认理解。
+help_modes: [explain, guide, review]
+default_help_mode: guide
+max_help_level: 2
+rules:
+  - 一次只处理一个交接缺口
+  - 不替学员补写缺失的上游文件
+  - 未出现“确认开发”前不建议生成代码
+suggested_questions:
+  - 缺少 design-spec.md 应该回到谁？
+  - 五句复述里要写多详细？
+  - 为什么第一版只用三个文件？
+acceptance:
+  mode: review
+  target: 四文件齐全 + 五句复述 + 实施清单
+  pass_criteria:
+    - id: inputs
+      desc: 四份 Day1 文件齐全且前端已读取。
+      severity: block
+    - id: gate
+      desc: 学员检查实施清单后亲自确认开发。
+      severity: block
+on_fail: 指出缺少的一项并要求回到对应岗位
+on_pass: 进入前端三件套

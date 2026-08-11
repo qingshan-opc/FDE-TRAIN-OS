@@ -26,5 +26,10 @@ backups/
 class/**/video/renders/work-*/
 class/**/video/renders/*.mp4
 class/**/video/audio/*.wav
+class/**/video/audio/segments/
 class/**/video/assets/avatar-lipsync.mp4
+
+# 本地上传暂存 / 页面备份（不入库）
+.upload/
+web/_backup_*/
 

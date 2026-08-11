@@ -24,10 +24,18 @@ def auth_cookie_secure() -> bool:
     return FDE_ENV == "prod"
 
 
-def set_auth_cookies(resp: Response, access: str, refresh: str, csrf: str) -> None:
+def set_auth_cookies(
+    resp: Response,
+    access: str,
+    refresh: str,
+    csrf: str,
+    *,
+    refresh_max_age: int | None = None,
+) -> None:
+    refresh_age = int(refresh_max_age if refresh_max_age is not None else REFRESH_TTL_SEC)
     common = {"httponly": True, "samesite": "lax", "secure": auth_cookie_secure(), "path": "/"}
     resp.set_cookie(ACCESS_COOKIE, access, max_age=JWT_TTL_SEC, **common)
-    resp.set_cookie(REFRESH_COOKIE, refresh, max_age=REFRESH_TTL_SEC, **common)
+    resp.set_cookie(REFRESH_COOKIE, refresh, max_age=refresh_age, **common)
     resp.set_cookie(
         CSRF_COOKIE,
         csrf,
@@ -35,7 +43,7 @@ def set_auth_cookies(resp: Response, access: str, refresh: str, csrf: str) -> No
         samesite="lax",
         secure=auth_cookie_secure(),
         path="/",
-        max_age=REFRESH_TTL_SEC,
+        max_age=refresh_age,
     )
 
 

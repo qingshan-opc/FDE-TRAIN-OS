@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-not-picking",
+    "file": "02-not-picking.txt"
+  },
+  {
+    "id": "03-evidence",
+    "file": "03-evidence.txt"
+  },
+  {
+    "id": "04-traditional",
+    "file": "04-traditional.txt"
+  },
+  {
+    "id": "05-ai-era",
+    "file": "05-ai-era.txt"
+  },
+  {
+    "id": "06-boundary",
+    "file": "06-boundary.txt"
+  },
+  {
+    "id": "07-retest",
+    "file": "07-retest.txt"
+  },
+  {
+    "id": "08-human",
+    "file": "08-human.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

@@ -10,7 +10,15 @@ from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
-from services.shared import ALLOW_DEV_HEADERS, AuthUser, FDE_ENV, decode_access_token, get_user_by_id, user_enrolled
+from services.shared import (
+    ALLOW_DEV_HEADERS,
+    AuthUser,
+    FDE_ENV,
+    decode_access_token,
+    get_user_by_id,
+    session_is_active,
+    user_enrolled,
+)
 from services.shared.auth_constants import auth_cookie_secure
 from services.shared.config import DEFAULT_CAMP_ID, HSTS_MAX_AGE_SEC
 from services.shared.auth_constants import ACCESS_COOKIE, CSRF_COOKIE, CSRF_HEADER
@@ -113,10 +121,17 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         elif token:
             try:
                 payload = decode_access_token(token)
-                user = get_user_by_id(payload["sub"])
-                if user:
-                    request.state.user = user
-                    request.state.camp_id = payload.get("camp_id")
+                sid = payload.get("sid")
+                # Tokens without sid (pre single-session) or revoked sid are rejected
+                if not session_is_active(sid if isinstance(sid, str) else None):
+                    request.state.user = None
+                    request.state.session_replaced = True
+                else:
+                    user = get_user_by_id(payload["sub"])
+                    if user:
+                        request.state.user = user
+                        request.state.camp_id = payload.get("camp_id")
+                        request.state.session_id = sid
             except Exception:
                 request.state.user = None
 
@@ -165,6 +180,8 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
 def require_user(request: Request) -> AuthUser:
     user = getattr(request.state, "user", None)
     if not user:
+        if getattr(request.state, "session_replaced", False):
+            raise HTTPException(401, "session_replaced")
         raise HTTPException(401, "未登录")
     return user
 
@@ -173,6 +190,22 @@ def require_author(request: Request) -> AuthUser:
     user = require_user(request)
     if user.role not in ("author", "admin"):
         raise HTTPException(403, "需要教研权限")
+    return user
+
+
+def require_finance_staff(request: Request) -> AuthUser:
+    """Finance dashboard + money KPIs: finance / author / admin."""
+    user = require_user(request)
+    if user.role not in ("finance", "author", "admin"):
+        raise HTTPException(403, "需要财务或教研权限")
+    return user
+
+
+def require_author_portal(request: Request) -> AuthUser:
+    """Author shell access (overview / finance): author / finance / admin."""
+    user = require_user(request)
+    if user.role not in ("author", "finance", "admin"):
+        raise HTTPException(403, "需要教研台权限")
     return user
 
 

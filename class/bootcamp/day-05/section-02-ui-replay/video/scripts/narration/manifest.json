@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-restate",
+    "file": "02-restate.txt"
+  },
+  {
+    "id": "03-area",
+    "file": "03-area.txt"
+  },
+  {
+    "id": "04-states",
+    "file": "04-states.txt"
+  },
+  {
+    "id": "05-flow",
+    "file": "05-flow.txt"
+  },
+  {
+    "id": "06-ai-era",
+    "file": "06-ai-era.txt"
+  },
+  {
+    "id": "07-artifacts",
+    "file": "07-artifacts.txt"
+  },
+  {
+    "id": "08-gate",
+    "file": "08-gate.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

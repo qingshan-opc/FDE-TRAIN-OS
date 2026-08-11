@@ -78,6 +78,10 @@ LEARNER_EMAIL = os.getenv("FDE_LEARNER_EMAIL", "learner@fde.local")
 LEARNER_PASSWORD = os.getenv("FDE_LEARNER_PASSWORD", "learner1234")
 AUTHOR_EMAIL = os.getenv("FDE_AUTHOR_EMAIL", "author@fde.local")
 AUTHOR_PASSWORD = os.getenv("FDE_AUTHOR_PASSWORD", "author1234")
+FINANCE_EMAIL = os.getenv("FDE_FINANCE_EMAIL", "finance@fde.local")
+FINANCE_PASSWORD = os.getenv("FDE_FINANCE_PASSWORD", "finance1234")
+ADMIN_EMAIL = os.getenv("FDE_ADMIN_EMAIL", "admin@fde.local")
+ADMIN_PASSWORD = os.getenv("FDE_ADMIN_PASSWORD", "admin1234")
 _DEFAULT_CORS = (
     f"http://127.0.0.1:{FDE_API_PORT},http://localhost:{FDE_API_PORT},"
     f"http://127.0.0.1:{FDE_DEV_PORT},http://localhost:{FDE_DEV_PORT}"

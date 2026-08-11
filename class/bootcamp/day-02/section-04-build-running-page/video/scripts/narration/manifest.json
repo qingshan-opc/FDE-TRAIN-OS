@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-why-split",
+    "file": "02-why-split.txt"
+  },
+  {
+    "id": "03-stage-one",
+    "file": "03-stage-one.txt"
+  },
+  {
+    "id": "04-stage-one-check",
+    "file": "04-stage-one-check.txt"
+  },
+  {
+    "id": "05-stage-two",
+    "file": "05-stage-two.txt"
+  },
+  {
+    "id": "06-stage-three",
+    "file": "06-stage-three.txt"
+  },
+  {
+    "id": "07-demo-not-api",
+    "file": "07-demo-not-api.txt"
+  },
+  {
+    "id": "08-stage-four",
+    "file": "08-stage-four.txt"
+  },
+  {
+    "id": "09-run-after-each",
+    "file": "09-run-after-each.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

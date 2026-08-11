@@ -1,0 +1,42 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-ui-review",
+    "file": "02-ui-review.txt"
+  },
+  {
+    "id": "03-actionable-ui",
+    "file": "03-actionable-ui.txt"
+  },
+  {
+    "id": "04-back-frontend",
+    "file": "04-back-frontend.txt"
+  },
+  {
+    "id": "05-api-needs",
+    "file": "05-api-needs.txt"
+  },
+  {
+    "id": "06-fields-example",
+    "file": "06-fields-example.txt"
+  },
+  {
+    "id": "07-no-fake-api",
+    "file": "07-no-fake-api.txt"
+  },
+  {
+    "id": "08-backend-receive",
+    "file": "08-backend-receive.txt"
+  },
+  {
+    "id": "09-log",
+    "file": "09-log.txt"
+  },
+  {
+    "id": "10-close",
+    "file": "10-close.txt"
+  }
+]

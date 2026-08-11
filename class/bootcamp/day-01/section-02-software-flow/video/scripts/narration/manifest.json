@@ -1,0 +1,46 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-full-chain",
+    "file": "02-full-chain.txt"
+  },
+  {
+    "id": "03-product-manager",
+    "file": "03-product-manager.txt"
+  },
+  {
+    "id": "04-ui",
+    "file": "04-ui.txt"
+  },
+  {
+    "id": "05-frontend",
+    "file": "05-frontend.txt"
+  },
+  {
+    "id": "06-backend",
+    "file": "06-backend.txt"
+  },
+  {
+    "id": "07-testing",
+    "file": "07-testing.txt"
+  },
+  {
+    "id": "08-operations",
+    "file": "08-operations.txt"
+  },
+  {
+    "id": "09-handoff-files",
+    "file": "09-handoff-files.txt"
+  },
+  {
+    "id": "10-project-lead",
+    "file": "10-project-lead.txt"
+  },
+  {
+    "id": "11-close",
+    "file": "11-close.txt"
+  }
+]

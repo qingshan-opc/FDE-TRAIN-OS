@@ -1,0 +1,59 @@
+{
+  "total": 168.768,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 20.352
+    },
+    {
+      "id": "02-six",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\02-six.wav",
+      "start": 20.472,
+      "duration": 17.92
+    },
+    {
+      "id": "03-traditional",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\03-traditional.wav",
+      "start": 38.512,
+      "duration": 17.322666666666667
+    },
+    {
+      "id": "04-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\04-ai-era.wav",
+      "start": 55.95466666666666,
+      "duration": 17.792
+    },
+    {
+      "id": "05-p1",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\05-p1.wav",
+      "start": 73.86666666666667,
+      "duration": 19.925333333333334
+    },
+    {
+      "id": "06-p2",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\06-p2.wav",
+      "start": 93.912,
+      "duration": 18.645333333333333
+    },
+    {
+      "id": "07-security",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\07-security.wav",
+      "start": 112.67733333333334,
+      "duration": 17.792
+    },
+    {
+      "id": "08-p3",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\08-p3.wav",
+      "start": 130.58933333333334,
+      "duration": 18.986666666666668
+    },
+    {
+      "id": "09-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-04\\section-05-operations-plan\\video\\audio\\segments\\09-gate.wav",
+      "start": 149.69600000000003,
+      "duration": 19.072
+    }
+  ]
+}

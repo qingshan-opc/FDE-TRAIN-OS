@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 520" role="img" aria-label="wall to start">
+  <rect width="560" height="520" fill="#f2f5f0"/>
+  <text x="28" y="36" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · WALL → START</text>
+
+  <g transform="translate(28,64)">
+    <rect x="0" y="0" width="200" height="300" fill="#fff" stroke="#231f20" stroke-width="2"/>
+    <g stroke="#231f20" stroke-width="1.2" opacity=".35">
+      <line x1="0" y1="50" x2="200" y2="50"/>
+      <line x1="0" y1="100" x2="200" y2="100"/>
+      <line x1="0" y1="150" x2="200" y2="150"/>
+      <line x1="0" y1="200" x2="200" y2="200"/>
+      <line x1="0" y1="250" x2="200" y2="250"/>
+      <line x1="100" y1="0" x2="100" y2="50"/>
+      <line x1="50" y1="50" x2="50" y2="100"/>
+      <line x1="150" y1="50" x2="150" y2="100"/>
+      <line x1="100" y1="100" x2="100" y2="150"/>
+      <line x1="50" y1="150" x2="50" y2="200"/>
+      <line x1="150" y1="150" x2="150" y2="200"/>
+      <line x1="100" y1="200" x2="100" y2="250"/>
+      <line x1="50" y1="250" x2="50" y2="300"/>
+      <line x1="150" y1="250" x2="150" y2="300"/>
+    </g>
+    <path d="M110 20 L95 70 L120 110 L90 160 L125 210 L100 260 L118 300" fill="none" stroke="#1400ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="100" y="332" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">误区之墙</text>
+    <text x="100" y="354" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="rgba(35,31,32,.55)">MUST CODE</text>
+  </g>
+
+  <g transform="translate(248,180)">
+    <rect x="0" y="18" width="64" height="36" fill="#1400ff"/>
+    <polygon points="64,8 96,36 64,64" fill="#1400ff"/>
+    <text x="32" y="42" text-anchor="middle" font-family="Menlo,monospace" font-size="12" font-weight="700" fill="#fff">拆</text>
+  </g>
+
+  <g transform="translate(360,64)">
+    <rect x="0" y="0" width="172" height="300" fill="#1400ff"/>
+    <text x="86" y="36" text-anchor="middle" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,.7)">DOMAIN</text>
+    <text x="86" y="68" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">专业起点</text>
+    <g font-family="sans-serif" font-size="14" font-weight="700" fill="#231f20">
+      <rect x="18" y="96" width="136" height="36" fill="#fff"/>
+      <text x="86" y="119" text-anchor="middle">财务 · 报表</text>
+      <rect x="18" y="142" width="136" height="36" fill="#fff"/>
+      <text x="86" y="165" text-anchor="middle">HR · 招聘</text>
+      <rect x="18" y="188" width="136" height="36" fill="#fff"/>
+      <text x="86" y="211" text-anchor="middle">运营 · 转化</text>
+      <rect x="18" y="234" width="136" height="36" fill="#fff"/>
+      <text x="86" y="257" text-anchor="middle">销售 · 教育</text>
+    </g>
+    <text x="86" y="332" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">不是从零开始</text>
+    <text x="86" y="354" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="rgba(35,31,32,.55)">YOU ALREADY KNOW</text>
+  </g>
+
+  <g transform="translate(28,440)">
+    <rect x="0" y="0" width="504" height="56" fill="#fff" stroke="#231f20" stroke-width="2"/>
+    <rect x="0" y="0" width="8" height="56" fill="#1400ff"/>
+    <text x="28" y="35" font-family="serif" font-size="20" font-weight="700" fill="#231f20">不会写代码</text>
+    <text x="148" y="35" font-family="Menlo,monospace" font-size="22" font-weight="700" fill="#1400ff">≠</text>
+    <text x="188" y="35" font-family="serif" font-size="20" font-weight="700" fill="#231f20">不会做软件</text>
+    <text x="360" y="35" font-family="Menlo,monospace" font-size="13" font-weight="700" fill="#1400ff">→ 指挥 AI</text>
+  </g>
+</svg>

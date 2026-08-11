@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-defect",
+    "file": "02-defect.txt"
+  },
+  {
+    "id": "03-severity",
+    "file": "03-severity.txt"
+  },
+  {
+    "id": "04-owner",
+    "file": "04-owner.txt"
+  },
+  {
+    "id": "05-fix",
+    "file": "05-fix.txt"
+  },
+  {
+    "id": "06-retest",
+    "file": "06-retest.txt"
+  },
+  {
+    "id": "07-regression",
+    "file": "07-regression.txt"
+  },
+  {
+    "id": "08-report",
+    "file": "08-report.txt"
+  },
+  {
+    "id": "09-candidate",
+    "file": "09-candidate.txt"
+  }
+]

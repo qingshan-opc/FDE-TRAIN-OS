@@ -64,9 +64,26 @@ def resolve_course_version_for_camp_learner(camp_id: str, learner_id: str | None
 
 
 def resolve_published_version_for_camp(camp_id: str) -> str | None:
+    """Prefer the active offering's version (what learners actually take), then
+    fall back to newest published course_version for the camp."""
     if not camp_id:
         return None
     with session_scope() as session:
+        offering = session.execute(
+            text(
+                """
+                SELECT course_version_id AS cv
+                FROM course_offerings
+                WHERE camp_id = :camp AND status = 'active'
+                  AND course_version_id IS NOT NULL
+                ORDER BY created_at DESC NULLS LAST
+                LIMIT 1
+                """
+            ),
+            {"camp": camp_id},
+        ).first()
+        if offering and offering.cv:
+            return offering.cv
         row = session.execute(
             text(
                 """

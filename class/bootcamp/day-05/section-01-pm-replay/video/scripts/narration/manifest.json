@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-why-replay",
+    "file": "02-why-replay.txt"
+  },
+  {
+    "id": "03-folder",
+    "file": "03-folder.txt"
+  },
+  {
+    "id": "04-pm-input",
+    "file": "04-pm-input.txt"
+  },
+  {
+    "id": "05-choose",
+    "file": "05-choose.txt"
+  },
+  {
+    "id": "06-interview",
+    "file": "06-interview.txt"
+  },
+  {
+    "id": "07-artifacts",
+    "file": "07-artifacts.txt"
+  },
+  {
+    "id": "08-gate",
+    "file": "08-gate.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

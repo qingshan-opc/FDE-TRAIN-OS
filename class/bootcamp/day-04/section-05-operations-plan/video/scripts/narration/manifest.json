@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-six",
+    "file": "02-six.txt"
+  },
+  {
+    "id": "03-traditional",
+    "file": "03-traditional.txt"
+  },
+  {
+    "id": "04-ai-era",
+    "file": "04-ai-era.txt"
+  },
+  {
+    "id": "05-p1",
+    "file": "05-p1.txt"
+  },
+  {
+    "id": "06-p2",
+    "file": "06-p2.txt"
+  },
+  {
+    "id": "07-security",
+    "file": "07-security.txt"
+  },
+  {
+    "id": "08-p3",
+    "file": "08-p3.txt"
+  },
+  {
+    "id": "09-gate",
+    "file": "09-gate.txt"
+  }
+]

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img">
+  <rect width="560" height="460" fill="#f2f5f0"/>
+  <text x="28" y="36" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM</text>
+  <text x="28" y="68" font-family="serif" font-size="22" font-weight="700" fill="#231f20">第一天完成的跨越</text>
+  <rect x="40" y="90" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="118" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">第一天完成的跨越</text><rect x="40" y="142" width="480" height="44" fill="#1400ff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="170" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">专业问题 → 产品需求 → UI 体验 → 产品验收</text><rect x="40" y="194" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="222" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">五问：谁 · 上游 · 交付 · 下游 · 验收</text><rect x="40" y="246" width="480" height="44" fill="#fff" stroke="#231f20" stroke-width="1.5"/><text x="60" y="274" font-family="sans-serif" font-size="16" font-weight="700" fill="#231f20">你正在指挥 AI 团队</text>
+</svg>

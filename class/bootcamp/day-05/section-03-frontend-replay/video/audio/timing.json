@@ -1,0 +1,59 @@
+{
+  "total": 182.592,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 21.034666666666666
+    },
+    {
+      "id": "02-inspect",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\02-inspect.wav",
+      "start": 21.154666666666667,
+      "duration": 21.888
+    },
+    {
+      "id": "03-plan",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\03-plan.wav",
+      "start": 43.16266666666667,
+      "duration": 18.56
+    },
+    {
+      "id": "04-implement",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\04-implement.wav",
+      "start": 61.842666666666666,
+      "duration": 20.224
+    },
+    {
+      "id": "05-boundary",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\05-boundary.wav",
+      "start": 82.18666666666667,
+      "duration": 19.925333333333334
+    },
+    {
+      "id": "06-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\06-ai-era.wav",
+      "start": 102.232,
+      "duration": 19.498666666666665
+    },
+    {
+      "id": "07-selfcheck",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\07-selfcheck.wav",
+      "start": 121.85066666666667,
+      "duration": 18.944
+    },
+    {
+      "id": "08-handoff",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\08-handoff.wav",
+      "start": 140.91466666666668,
+      "duration": 20.309333333333335
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-03-frontend-replay\\video\\audio\\segments\\09-close.wav",
+      "start": 161.34400000000002,
+      "duration": 21.248
+    }
+  ]
+}

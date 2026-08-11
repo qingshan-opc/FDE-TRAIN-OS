@@ -199,6 +199,7 @@ def create_payment_order(
     amount_fen: int,
     org_id: str | None,
     description: str,
+    referrer_user_id: str | None = None,
 ) -> dict[str, Any]:
     oid = f"po-{uuid.uuid4().hex[:16]}"
     out_trade_no = f"FDE{int(time.time())}{uuid.uuid4().hex[:8].upper()}"
@@ -226,10 +227,23 @@ def create_payment_order(
         cur.execute(
             """
             INSERT INTO payment_orders
-              (id, out_trade_no, user_id, offering_id, org_id, amount_fen, status, code_url, created_at, updated_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?)
+              (id, out_trade_no, user_id, offering_id, org_id, referrer_user_id,
+               amount_fen, status, code_url, created_at, updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)
             """,
-            (oid, out_trade_no, user_id, offering_id, org_id, amount_fen, status, code_url, now_iso(), now_iso()),
+            (
+                oid,
+                out_trade_no,
+                user_id,
+                offering_id,
+                org_id,
+                referrer_user_id,
+                amount_fen,
+                status,
+                code_url,
+                now_iso(),
+                now_iso(),
+            ),
         )
         cur.execute("SELECT * FROM payment_orders WHERE id=?", (oid,))
         row = cur.fetchone()

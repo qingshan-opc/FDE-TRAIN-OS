@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Card, Form, Input, QRCode, Tabs, Typography } from "antd";
+import { Alert, Button, Form, Input, QRCode, Typography } from "antd";
+import { ArrowRightOutlined, LockOutlined, MailOutlined, ReloadOutlined, WechatOutlined } from "@ant-design/icons";
 import { ApiError, authApi, partnerApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { BrandLogo } from "../components/BrandLogo";
 
 type Mode = "wechat" | "email";
 
@@ -99,54 +101,102 @@ export function PartnerLoginPage() {
   };
 
   return (
-    <div className="login-page">
-      <Card className="login-card" style={{ width: "100%", maxWidth: 420 }}>
-        <Typography.Title level={3}>{mode === "wechat" ? "微信登录" : "邮箱登录"}</Typography.Title>
-        <Typography.Paragraph type="secondary">
-          {mode === "wechat"
-            ? "微信扫码关注登录（需已绑定收款微信的机构账号）"
-            : "使用机构邮箱与密码登录"}
-        </Typography.Paragraph>
+    <div className="login-split">
+      <aside className="login-split__hero">
+        <div className="login-split__hero-bg" />
+        <div className="login-split__hero-overlay" />
+        <div className="login-split__hero-top">
+          <BrandLogo name="青山在" to="/" variant="light" className="login-split__brand-logo" />
+          <p className="login-split__tagline">青山在机构管理后台</p>
+        </div>
+        <p className="login-split__hero-foot">查看渠道数据、课程海报与分账明细。请使用已开通的机构账号登录。</p>
+      </aside>
 
-        <Tabs
-          activeKey={mode}
-          onChange={(k) => {
-            setMode(k as Mode);
-            setError(null);
-            setWxError(null);
-          }}
-          items={[
-            { key: "wechat", label: "微信登录" },
-            { key: "email", label: "邮箱登录" },
-          ]}
-        />
+      <main className="login-split__panel">
+        <div className="login-split__card anim-pop">
+          <header className="login-split__card-head">
+            <h2>{mode === "wechat" ? "微信登录" : "邮箱登录"}</h2>
+            <p>
+              {mode === "wechat"
+                ? "微信扫码关注登录（需已绑定收款微信的机构账号）"
+                : "使用机构邮箱与密码登录"}
+            </p>
+          </header>
 
-        {mode === "wechat" && (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-            {wxContent ? <QRCode value={wxContent} size={200} /> : <Typography.Text type="secondary">生成登录码…</Typography.Text>}
-            {wxWaiting && <Typography.Text type="secondary">等待手机确认…</Typography.Text>}
-            {wxError && <Alert type="warning" showIcon message={wxError} style={{ width: "100%" }} />}
-            <Button size="small" onClick={() => void startWxLogin()}>
-              刷新二维码
-            </Button>
+          <div className="login-split__sso" style={{ marginTop: 16 }}>
+            <button
+              type="button"
+              className={`login-split__sso-btn${mode === "wechat" ? " is-active" : ""}`}
+              onClick={() => {
+                setMode("wechat");
+                setError(null);
+                setWxError(null);
+              }}
+            >
+              <WechatOutlined style={{ color: "#07c160", fontSize: 18 }} />
+              微信
+            </button>
+            <button
+              type="button"
+              className={`login-split__sso-btn${mode === "email" ? " is-active" : ""}`}
+              onClick={() => {
+                setMode("email");
+                setError(null);
+                setWxError(null);
+              }}
+            >
+              <MailOutlined style={{ fontSize: 16 }} />
+              邮箱
+            </button>
           </div>
-        )}
 
-        {mode === "email" && (
-          <Form form={form} layout="vertical" onFinish={(v) => void onFinish(v)}>
-            <Form.Item name="email" label="邮箱" rules={[{ required: true, type: "email" }]}>
-              <Input autoComplete="username" />
-            </Form.Item>
-            <Form.Item name="password" label="密码" rules={[{ required: true }]}>
-              <Input.Password autoComplete="current-password" />
-            </Form.Item>
-            {error && <Alert type="error" message={error} showIcon style={{ marginBottom: 16 }} />}
-            <Button type="primary" htmlType="submit" block loading={submitting}>
-              登录
-            </Button>
-          </Form>
-        )}
-      </Card>
+          {mode === "wechat" && (
+            <div className="login-split__wx">
+              {wxContent ? (
+                <QRCode value={wxContent} size={168} />
+              ) : (
+                <Typography.Text type="secondary">生成登录码…</Typography.Text>
+              )}
+              {wxWaiting && <Typography.Text type="secondary">等待手机确认…</Typography.Text>}
+              {wxError && <Alert type="warning" showIcon message={wxError} style={{ width: "100%" }} />}
+              <button type="button" className="login-split__sso-btn" onClick={() => void startWxLogin()}>
+                <ReloadOutlined />
+                刷新二维码
+              </button>
+            </div>
+          )}
+
+          {mode === "email" && (
+            <Form form={form} layout="vertical" className="login-split__form" requiredMark={false} onFinish={(v) => void onFinish(v)}>
+              <Form.Item name="email" label="邮箱" rules={[{ required: true, type: "email" }]}>
+                <Input size="large" prefix={<MailOutlined />} autoComplete="username" />
+              </Form.Item>
+              <Form.Item name="password" label="密码" rules={[{ required: true }]}>
+                <Input.Password size="large" prefix={<LockOutlined />} autoComplete="current-password" />
+              </Form.Item>
+              {error && <Alert type="error" message={error} showIcon style={{ marginBottom: 12 }} />}
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                size="large"
+                className="login-split__submit"
+                loading={submitting}
+                icon={<ArrowRightOutlined />}
+                iconPosition="end"
+              >
+                登录
+              </Button>
+            </Form>
+          )}
+
+          <div className="login-split__switch">
+            <button type="button" className="login-split__link" onClick={() => nav("/login")}>
+              返回学员 / 教研登录
+            </button>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

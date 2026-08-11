@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+  「青山在」营销主页 · 设计方案 05 —— 编辑部杂志风 Editorial Magazine
+═══════════════════════════════════════════════════════════════════════════════
+
+  【风格定位】
+  把销售页做成一本关于「AI 时代专业人自救」的深度特刊。
+  灵感来源：纽约时报专题页 / Kinfolk / Monocle，呼应 2026 年 oversized
+  typography 趋势——超大衬线标题、细线分栏、文章编号、页边注释、
+  目录式导航，让销售信息获得「专题报道」的可信度与阅读尊严。
+
+  【配色】
+  · 纸面米白   #f7f4ef（主底）
+  · 墨色       #1c1a16（正文/标题）
+  · 青黛绿     #1f4d3a（品牌点缀：留得青山在的「青」）
+  · 朱砂红     #b3402a（价格/倒计时等极少量的编辑部红）
+  · 灰阶       #8a857c / #d9d4ca（注释、细线、灰度照片占位）
+
+  【字体】
+  全系统字体栈，零外部资源：
+  标题/正文衬线 "Noto Serif SC","Songti SC","STSong","SimSun",serif
+  编号/标签等宽 "SF Mono","Menlo",monospace
+
+  【版面语言】
+  · Hero 标题 clamp(3rem, 8vw, 7.5rem) 超大字
+  · 章节编号 No.01–No.08 + 「第X章」锚点
+  · 卷首语：首字下沉 + 双栏正文 + 页边注释
+  · 十天大纲 = 杂志目录 TOC（虚线引导符 + 可展开详情）
+  · 学员评价 = 「读者来信」栏；FAQ = 「答读者问」
+  · 黑白照片一律用 CSS 灰度渐变块 + 角标图注占位
+
+  【交互清单（原生 JS，无依赖）】
+  1. 平滑滚动锚点 + 导航滚动状态（滚动后加底色/投影）
+  2. 移动端汉堡菜单（全屏抽屉）
+  3. 目录大纲逐天展开/收起
+  4. FAQ 手风琴（答读者问）
+  5. 早鸟倒计时（目标 = 打开页面起 3 天后）
+  6. 报名弹窗：姓名 / 微信号 / 手机号校验 + 成功态
+  7. 滚动 reveal：标题逐行上浮（行级拆分 + IntersectionObserver 交错）
+  8. 响应式：375px 可用，分栏在移动端自动塌缩为单栏
+
+═══════════════════════════════════════════════════════════════════════════════
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青山在 · AI 开发训练营 —— 不会写代码，也能发布软件｜深度特刊</title>
+<meta name="description" content="10 天线上实战营：财务、HR、运营、销售、教育人，在 QRAE 平台指挥六岗位 AI 智能体，走完需求→原型→验收→上线的真实软件闭环。">
+<style>
+/* ─────────────────────────── 基础与变量 ─────────────────────────── */
+:root{
+  --paper:#f7f4ef;
+  --paper-deep:#efe9df;
+  --ink:#1c1a16;
+  --ink-soft:#4a463e;
+  --note:#8a857c;
+  --line:#d9d4ca;
+  --line-dark:#b8b2a6;
+  --green:#1f4d3a;
+  --green-deep:#163629;
+  --cinnabar:#b3402a;
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun","Source Han Serif SC",serif;
+  --mono:"SF Mono","Menlo","Consolas","Courier New",monospace;
+  --maxw:1180px;
+  --nav-h:72px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{background:var(--green);color:var(--paper);}
+img{max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+
+/* 纸面噪点质感（纯 CSS） */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.35;
+  background-image:radial-gradient(rgba(28,26,22,.045) 1px, transparent 1px);
+  background-size:4px 4px;
+}
+
+/* ─────────────────────────── 通用排版 ─────────────────────────── */
+.kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--green);
+  display:flex;align-items:center;gap:16px;
+}
+.kicker::before{content:"";width:42px;height:1px;background:var(--green);}
+.sec-no{
+  font-family:var(--mono);font-size:12px;letter-spacing:.25em;color:var(--note);
+}
+.sec-title{
+  font-size:clamp(2rem,4.6vw,3.6rem);font-weight:900;line-height:1.25;
+  letter-spacing:.02em;margin:18px 0 0;
+}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  border-top:1px solid var(--ink);padding-top:22px;margin-bottom:56px;flex-wrap:wrap;}
+.sec-head .chapter{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--note);
+  writing-mode:horizontal-tb;white-space:nowrap;padding-bottom:10px;}
+.rule{border:none;border-top:1px solid var(--line);}
+section{padding:110px 0;scroll-margin-top:calc(var(--nav-h) + 8px);}
+.lede{font-size:clamp(1.05rem,1.6vw,1.25rem);line-height:2;color:var(--ink-soft);}
+
+/* 灰度照片占位块 */
+.ph{
+  position:relative;overflow:hidden;background:#cfccc4;
+  filter:grayscale(1);
+}
+.ph::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,0) 38%),
+    linear-gradient(20deg, rgba(28,26,22,.34) 0%, rgba(28,26,22,0) 55%),
+    repeating-linear-gradient(115deg, rgba(28,26,22,.05) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg,#dcd9d1,#a9a59b 58%,#8d897f);
+}
+.ph .ph-tag{
+  position:absolute;left:14px;bottom:12px;z-index:2;
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:#f7f4ef;
+  background:rgba(28,26,22,.72);padding:4px 10px;
+}
+.ph .ph-cross{position:absolute;inset:0;z-index:1;}
+.ph .ph-cross::before,.ph .ph-cross::after{
+  content:"";position:absolute;background:rgba(28,26,22,.16);
+}
+.ph .ph-cross::before{left:50%;top:0;bottom:0;width:1px;}
+.ph .ph-cross::after{top:50%;left:0;right:0;height:1px;}
+
+/* 滚动 reveal */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.19,1,.22,1),transform .9s cubic-bezier(.19,1,.22,1);}
+.rv.in{opacity:1;transform:none;}
+.rv-line{display:block;overflow:hidden;}
+.rv-line>span{display:block;transform:translateY(110%);transition:transform 1s cubic-bezier(.19,1,.22,1);}
+.rv-lines.in .rv-line>span{transform:none;}
+
+/* ─────────────────────────── 吸顶导航 ─────────────────────────── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);
+  display:flex;align-items:center;
+  border-bottom:1px solid transparent;
+  transition:background .4s,border-color .4s,box-shadow .4s;
+}
+.nav.scrolled{
+  background:rgba(247,244,239,.92);backdrop-filter:blur(12px);
+  border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(28,26,22,.04);
+}
+.nav .wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.brand{display:flex;align-items:baseline;gap:12px;}
+.brand .logo{font-size:24px;font-weight:900;letter-spacing:.12em;}
+.brand .logo em{font-style:normal;color:var(--green);}
+.brand .issn{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--note);}
+.nav-links{display:flex;gap:26px;align-items:center;}
+.nav-links a{
+  font-size:13px;letter-spacing:.14em;color:var(--ink-soft);position:relative;padding:6px 0;
+  transition:color .3s;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--green);transition:width .35s;
+}
+.nav-links a:hover{color:var(--green);}
+.nav-links a:hover::after{width:100%;}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;border:1px solid var(--ink);
+  background:var(--ink);color:var(--paper);padding:13px 28px;font-size:14px;
+  letter-spacing:.22em;font-family:var(--serif);font-weight:700;
+  transition:background .35s,color .35s,transform .35s,box-shadow .35s;
+}
+.btn:hover{background:var(--green);border-color:var(--green);transform:translateY(-2px);box-shadow:0 10px 24px rgba(31,77,58,.22);}
+.btn.ghost{background:transparent;color:var(--ink);}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);box-shadow:none;}
+.btn.sm{padding:9px 20px;font-size:12px;}
+.burger{display:none;background:none;border:none;width:44px;height:44px;position:relative;z-index:130;}
+.burger span{display:block;width:24px;height:1.5px;background:var(--ink);margin:6px auto;transition:transform .4s,opacity .3s;}
+.burger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+.m-menu{
+  position:fixed;inset:0;z-index:120;background:var(--paper);
+  display:flex;flex-direction:column;justify-content:center;padding:0 40px;gap:6px;
+  transform:translateY(-100%);transition:transform .55s cubic-bezier(.77,0,.18,1);
+}
+.m-menu.open{transform:none;}
+.m-menu a{
+  font-size:30px;font-weight:900;padding:12px 0;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.m-menu a i{font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--note);}
+.m-menu .btn{margin-top:28px;justify-content:center;}
+
+/* ─────────────────────────── Hero ─────────────────────────── */
+.hero{padding:calc(var(--nav-h) + 64px) 0 90px;position:relative;}
+.hero-top{
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.28em;color:var(--note);
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:52px;
+}
+.hero h1{
+  font-size:clamp(3rem,8vw,7.5rem);font-weight:900;line-height:1.14;letter-spacing:.01em;
+}
+.hero h1 .accent{color:var(--green);}
+.hero-sub{
+  display:grid;grid-template-columns:1.2fr .8fr;gap:48px;margin-top:44px;align-items:start;
+}
+.hero-sub .lede{max-width:34em;}
+.hero-meta{
+  border-left:1px solid var(--line-dark);padding-left:28px;
+  font-size:14px;color:var(--ink-soft);line-height:2.1;
+}
+.hero-meta b{color:var(--ink);}
+.hero-cta{display:flex;gap:18px;margin-top:40px;flex-wrap:wrap;align-items:center;}
+.hero-cta .note{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--note);}
+.trust{
+  margin-top:64px;border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(3,1fr);
+}
+.trust div{
+  padding:26px 28px 6px;border-right:1px solid var(--line);
+}
+.trust div:last-child{border-right:none;}
+.trust b{font-size:clamp(2rem,3.6vw,3rem);font-weight:900;display:block;line-height:1.1;}
+.trust b sup{font-size:.42em;color:var(--green);font-weight:700;}
+.trust span{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--note);}
+
+/* ─────────────────────────── 卷首语（痛点） ─────────────────────────── */
+.editors-note{background:var(--paper-deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.note-grid{display:grid;grid-template-columns:1fr 240px;gap:56px;}
+.note-cols{columns:2;column-gap:48px;column-rule:1px solid var(--line);}
+.note-cols p{margin-bottom:1.4em;break-inside:avoid;font-size:16.5px;color:var(--ink-soft);text-align:justify;}
+.note-cols p:first-child::first-letter{
+  font-size:4.6em;font-weight:900;float:left;line-height:.82;
+  padding:8px 14px 0 0;color:var(--green);
+}
+.note-cols p b{color:var(--ink);}
+.margin-note{
+  border-top:1px solid var(--ink);padding-top:18px;
+  font-size:13px;line-height:2;color:var(--note);
+}
+.margin-note h5{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--green);margin-bottom:14px;font-weight:400;}
+.margin-note p{margin-bottom:1.2em;}
+.margin-note .sig{text-align:right;color:var(--ink);font-weight:700;}
+
+/* ─────────────────────────── 亮点 ─────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--ink);}
+.feat{
+  padding:44px 40px 40px;border-bottom:1px solid var(--line);position:relative;
+}
+.feat:nth-child(odd){border-right:1px solid var(--line);}
+.feat .no{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--cinnabar);}
+.feat h3{font-size:clamp(1.35rem,2.2vw,1.8rem);font-weight:900;margin:14px 0 12px;line-height:1.4;}
+.feat p{font-size:15px;color:var(--ink-soft);max-width:30em;}
+.feat .foot{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--note);margin-top:18px;display:block;}
+
+/* ─────────────────────────── 目录 TOC（十天大纲） ─────────────────────────── */
+.toc-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px double var(--ink);padding-bottom:14px;margin-bottom:8px;flex-wrap:wrap;gap:10px;}
+.toc-head h3{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:900;letter-spacing:.06em;}
+.toc-head span{font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--note);}
+.toc-item{border-bottom:1px solid var(--line);}
+.toc-row{
+  width:100%;background:none;border:none;text-align:left;
+  display:flex;align-items:baseline;gap:18px;padding:22px 6px;
+  transition:background .3s;
+}
+.toc-row:hover{background:rgba(31,77,58,.045);}
+.toc-ch{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--green);white-space:nowrap;}
+.toc-name{font-size:clamp(1.05rem,1.9vw,1.45rem);font-weight:900;white-space:nowrap;}
+.toc-dots{flex:1;border-bottom:1px dotted var(--line-dark);transform:translateY(-5px);min-width:24px;}
+.toc-out{font-size:13px;color:var(--note);white-space:nowrap;}
+.toc-plus{font-family:var(--mono);font-size:16px;color:var(--note);transition:transform .4s;width:20px;text-align:center;}
+.toc-item.open .toc-plus{transform:rotate(45deg);color:var(--green);}
+.toc-detail{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.19,1,.22,1);}
+.toc-detail-in{padding:0 6px 30px;display:grid;grid-template-columns:1.4fr .6fr;gap:36px;}
+.toc-detail p{font-size:15px;color:var(--ink-soft);}
+.toc-fact{border-left:1px solid var(--line-dark);padding-left:22px;font-size:13px;line-height:2.2;color:var(--ink-soft);}
+.toc-fact b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--note);font-weight:400;}
+.toc-item.open .toc-name{color:var(--green);}
+
+/* ─────────────────────────── 六岗位插页 ─────────────────────────── */
+.qrae{background:var(--green-deep);color:#e9e4d9;}
+.qrae .sec-head{border-top-color:#e9e4d9;}
+.qrae .kicker{color:#9fc3ae;}
+.qrae .kicker::before{background:#9fc3ae;}
+.qrae .sec-no,.qrae .chapter{color:#7d9484;}
+.qrae .lede{color:#c4bdaa;}
+.org{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(233,228,217,.22);
+  border:1px solid rgba(233,228,217,.22);margin-top:56px;
+}
+.role{background:var(--green-deep);padding:34px 30px 30px;position:relative;transition:background .4s;}
+.role:hover{background:#1d4231;}
+.role .r-no{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:#7d9484;}
+.role h4{font-size:22px;font-weight:900;margin:12px 0 6px;color:#f2eee3;}
+.role .r-at{font-family:var(--mono);font-size:12px;color:#9fc3ae;letter-spacing:.1em;}
+.role p{font-size:13.5px;color:#b3ab97;margin-top:12px;line-height:1.9;}
+.role .r-hand{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#6e8878;margin-top:16px;display:block;}
+.org-cmd{
+  grid-column:1/-1;background:#12291f;text-align:center;padding:30px;
+}
+.org-cmd .who{font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:900;color:#f2eee3;}
+.org-cmd .who em{font-style:normal;color:#9fc3ae;}
+.org-cmd p{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:#7d9484;margin-top:8px;}
+.flow{margin-top:48px;display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+.flow span{
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:#e9e4d9;
+  border:1px solid rgba(233,228,217,.4);padding:10px 18px;white-space:nowrap;
+}
+.flow i{font-style:normal;color:#7d9484;padding:0 14px;font-family:var(--mono);}
+.qrae .caption{font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:#6e8878;margin-top:20px;}
+
+/* ─────────────────────────── 学员成果 ─────────────────────────── */
+.works{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+.work .ph{aspect-ratio:4/3;}
+.work h4{font-size:19px;font-weight:900;margin:18px 0 6px;}
+.work .w-by{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--cinnabar);}
+.work p{font-size:14px;color:var(--ink-soft);margin-top:10px;}
+.work .w-gate{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--note);margin-top:12px;display:block;border-top:1px solid var(--line);padding-top:10px;}
+
+/* ─────────────────────────── 读者来信 ─────────────────────────── */
+.letters{background:var(--paper-deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.letter-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 64px;}
+.letter{border-top:1px solid var(--ink);padding-top:22px;}
+.letter .l-no{font-family:var(--mono);font-size:11px;letter-spacing:.28em;color:var(--note);}
+.letter p{font-size:16px;line-height:2.05;color:var(--ink-soft);margin:16px 0;text-align:justify;}
+.letter p::before{content:"「";}
+.letter p::after{content:"」";}
+.letter .l-sig{font-size:14px;color:var(--ink);font-weight:700;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;}
+.letter .l-sig i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--note);font-weight:400;}
+.letter .l-stars{color:var(--cinnabar);letter-spacing:.2em;font-size:12px;}
+
+/* ─────────────────────────── 定价 ─────────────────────────── */
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.price-card{
+  border:1px solid var(--ink);background:#fbf9f4;position:relative;
+  padding:48px 44px 40px;box-shadow:10px 10px 0 rgba(28,26,22,.08);
+}
+.price-card .p-badge{
+  position:absolute;top:-14px;left:36px;background:var(--cinnabar);color:#fbf9f4;
+  font-family:var(--mono);font-size:11px;letter-spacing:.26em;padding:6px 16px;
+}
+.price-old{font-size:16px;color:var(--note);text-decoration:line-through;}
+.price-now{font-size:clamp(3.2rem,6vw,4.6rem);font-weight:900;line-height:1;color:var(--ink);margin:10px 0 4px;}
+.price-now sup{font-size:.32em;color:var(--cinnabar);font-weight:700;}
+.price-per{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--note);}
+.cd{
+  display:flex;gap:10px;margin:28px 0 8px;align-items:stretch;
+}
+.cd div{
+  flex:1;border:1px solid var(--line-dark);text-align:center;padding:12px 4px 10px;background:var(--paper);
+}
+.cd b{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:900;display:block;line-height:1.1;font-variant-numeric:tabular-nums;}
+.cd span{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--note);}
+.cd-label{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--cinnabar);}
+.price-list{list-style:none;margin:26px 0 32px;border-top:1px solid var(--line);}
+.price-list li{
+  padding:12px 2px;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink-soft);
+  display:flex;gap:12px;align-items:baseline;
+}
+.price-list li::before{content:"—";color:var(--green);font-weight:900;}
+.seats{margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--note);}
+.seats b{color:var(--cinnabar);}
+.price-copy p{font-size:16px;color:var(--ink-soft);margin-bottom:1.3em;text-align:justify;}
+.price-copy b{color:var(--ink);}
+
+/* ─────────────────────────── 答读者问 FAQ ─────────────────────────── */
+.faq{max-width:860px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-item:first-child{border-top:1px solid var(--ink);}
+.faq-q{
+  width:100%;background:none;border:none;text-align:left;
+  display:flex;gap:20px;align-items:baseline;padding:24px 6px;
+  transition:background .3s;
+}
+.faq-q:hover{background:rgba(31,77,58,.045);}
+.faq-q .q-no{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--cinnabar);white-space:nowrap;}
+.faq-q h4{font-size:clamp(1.02rem,1.7vw,1.25rem);font-weight:900;flex:1;line-height:1.6;}
+.faq-q .q-plus{font-family:var(--mono);color:var(--note);transition:transform .4s;font-size:16px;}
+.faq-item.open .q-plus{transform:rotate(45deg);color:var(--green);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.19,1,.22,1);}
+.faq-a p{padding:0 6px 26px 74px;font-size:15px;color:var(--ink-soft);max-width:44em;}
+.faq-item.open h4{color:var(--green);}
+
+/* ─────────────────────────── 最终 CTA / 页脚 ─────────────────────────── */
+.final{padding:140px 0;text-align:center;border-top:1px solid var(--ink);}
+.final h2{font-size:clamp(2.4rem,6.4vw,5.6rem);font-weight:900;line-height:1.2;}
+.final h2 em{font-style:normal;color:var(--green);}
+.final .lede{max-width:32em;margin:26px auto 40px;}
+footer{border-top:1px solid var(--ink);padding:56px 0 40px;font-size:13px;color:var(--note);}
+.foot-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.foot-grid .f-brand{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:.12em;}
+.foot-grid .f-brand em{font-style:normal;color:var(--green);}
+.foot-links{display:flex;gap:22px;flex-wrap:wrap;}
+.foot-links a{transition:color .3s;}
+.foot-links a:hover{color:var(--green);}
+.foot-base{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;}
+
+/* ─────────────────────────── 报名弹窗 ─────────────────────────── */
+.modal{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  padding:20px;visibility:hidden;opacity:0;transition:opacity .4s,visibility .4s;
+}
+.modal.open{visibility:visible;opacity:1;}
+.modal-bg{position:absolute;inset:0;background:rgba(28,26,22,.55);backdrop-filter:blur(4px);}
+.modal-box{
+  position:relative;background:var(--paper);border:1px solid var(--ink);
+  width:100%;max-width:480px;padding:44px 40px 36px;
+  transform:translateY(28px);transition:transform .5s cubic-bezier(.19,1,.22,1);
+  box-shadow:12px 12px 0 rgba(28,26,22,.18);max-height:90vh;overflow:auto;
+}
+.modal.open .modal-box{transform:none;}
+.modal-box .m-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--cinnabar);}
+.modal-box h3{font-size:26px;font-weight:900;margin:12px 0 6px;}
+.modal-box .m-sub{font-size:13.5px;color:var(--note);margin-bottom:26px;}
+.m-close{
+  position:absolute;top:14px;right:16px;background:none;border:none;
+  font-size:22px;color:var(--note);line-height:1;padding:6px;transition:color .3s;
+}
+.m-close:hover{color:var(--cinnabar);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--ink-soft);margin-bottom:8px;}
+.field input{
+  width:100%;border:none;border-bottom:1px solid var(--line-dark);background:transparent;
+  font-family:var(--serif);font-size:17px;padding:8px 2px;color:var(--ink);outline:none;
+  transition:border-color .3s;
+}
+.field input:focus{border-bottom-color:var(--green);}
+.field .err{font-size:12px;color:var(--cinnabar);margin-top:6px;min-height:16px;display:block;font-family:var(--mono);letter-spacing:.05em;}
+.field.invalid input{border-bottom-color:var(--cinnabar);}
+.m-submit{width:100%;justify-content:center;margin-top:8px;}
+.m-fine{margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--note);text-align:center;}
+.m-success{display:none;text-align:center;padding:20px 0 8px;}
+.m-success .ok{
+  width:64px;height:64px;border:1px solid var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 22px;
+  color:var(--green);font-size:28px;
+}
+.m-success h4{font-size:22px;font-weight:900;margin-bottom:10px;}
+.m-success p{font-size:14px;color:var(--ink-soft);line-height:2;}
+.modal.done .m-form{display:none;}
+.modal.done .m-success{display:block;}
+
+/* ─────────────────────────── 响应式 ─────────────────────────── */
+@media (max-width:960px){
+  .nav-links{display:none;}
+  .burger{display:block;}
+  .hero-sub{grid-template-columns:1fr;}
+  .hero-meta{border-left:none;border-top:1px solid var(--line);padding:20px 0 0;}
+  .note-grid{grid-template-columns:1fr;}
+  .margin-note{max-width:420px;}
+  .note-cols{columns:1;}
+  .feat-grid{grid-template-columns:1fr;}
+  .feat:nth-child(odd){border-right:none;}
+  .org{grid-template-columns:repeat(2,1fr);}
+  .works{grid-template-columns:1fr 1fr;}
+  .letter-grid{grid-template-columns:1fr;}
+  .price-grid{grid-template-columns:1fr;}
+}
+@media (max-width:600px){
+  section{padding:80px 0;}
+  .wrap{padding:0 22px;}
+  .trust{grid-template-columns:1fr;}
+  .trust div{border-right:none;border-bottom:1px solid var(--line);padding:20px 4px 14px;}
+  .trust div:last-child{border-bottom:none;}
+  .toc-row{flex-wrap:wrap;gap:8px 14px;}
+  .toc-dots{display:none;}
+  .toc-out{width:100%;order:4;}
+  .toc-detail-in{grid-template-columns:1fr;gap:18px;}
+  .toc-fact{border-left:none;border-top:1px solid var(--line);padding:14px 0 0;}
+  .org{grid-template-columns:1fr;}
+  .works{grid-template-columns:1fr;}
+  .price-card{padding:38px 24px 30px;box-shadow:6px 6px 0 rgba(28,26,22,.08);}
+  .faq-a p{padding-left:6px;}
+  .hero{padding-top:calc(var(--nav-h) + 40px);}
+  .flow i{padding:0 8px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+  html{scroll-behavior:auto;}
+  .rv,.rv-line>span{opacity:1!important;transform:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ 吸顶导航 ═══════════════ -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <span class="logo">青<em>山</em>在</span>
+      <span class="issn">AI 自救特刊 · 第柒期</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#note">卷首语</a>
+      <a href="#features">亮点</a>
+      <a href="#toc">十天目录</a>
+      <a href="#qrae">六岗位</a>
+      <a href="#works">成果</a>
+      <a href="#letters">来信</a>
+      <a href="#faq">答读者问</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="btn sm" data-enroll>立即报名</button>
+      <button class="burger" id="burger" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- 移动端抽屉菜单 -->
+<div class="m-menu" id="mMenu">
+  <a href="#note"><i>第壹章</i>卷首语</a>
+  <a href="#features"><i>第贰章</i>课程亮点</a>
+  <a href="#toc"><i>第叁章</i>十天目录</a>
+  <a href="#qrae"><i>第肆章</i>六岗位插页</a>
+  <a href="#works"><i>第伍章</i>学员成果</a>
+  <a href="#letters"><i>第陆章</i>读者来信</a>
+  <a href="#pricing"><i>第柒章</i>定价</a>
+  <a href="#faq"><i>第捌章</i>答读者问</a>
+  <button class="btn" data-enroll>立即报名 · 早鸟 ¥1,999</button>
+</div>
+
+<main id="top">
+
+<!-- ═══════════════ Hero ═══════════════ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top rv">
+      <span>SPECIAL ISSUE — AI 时代的专业人自救</span>
+      <span>2026 年 8 月 · 第柒期</span>
+      <span>本期专题：不会写代码，也能发布软件</span>
+    </div>
+
+    <h1 class="rv-lines" data-lines>
+      <span class="rv-line"><span>不会写代码，</span></span>
+      <span class="rv-line"><span>也能<span class="accent">发布软件</span>。</span></span>
+    </h1>
+
+    <div class="hero-sub">
+      <div class="rv">
+        <p class="lede">
+          十天线上实战营。财务、HR、运营、销售、教育人，在 QRAE 平台指挥六岗位
+          AI 智能体——产品经理、UI、前端、后端、测试、运维——用 @岗位 交接、
+          用工作区文件传递成果，走完「需求 → 原型 → 验收 → 上线」的真实软件闭环。
+        </p>
+        <div class="hero-cta">
+          <button class="btn" data-enroll>立即报名 · 早鸟 ¥1,999</button>
+          <a class="btn ghost" href="#toc">先读十天目录</a>
+          <span class="note">每天 120 分钟 · 毕业带走可运行产品</span>
+        </div>
+      </div>
+      <aside class="hero-meta rv">
+        <b>本刊立场</b><br>
+        AI 不会取代专业人，但会取代<br>
+        不会指挥 AI 的专业人。<br><br>
+        <b>配套</b>：AI 导师 1v1 · 班级社群 · 永久回放<br>
+        <b>保障</b>：7 天无理由退款 · 3 期免息
+      </aside>
+    </div>
+
+    <div class="trust rv">
+      <div><b>6<sup>期</sup></b><span>已开营期数</span></div>
+      <div><b>2,300<sup>+</sup></b><span>毕业学员</span></div>
+      <div><b>96<sup>%</sup></b><span>结业满意度</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第一章 · 卷首语（痛点） ═══════════════ -->
+<section class="editors-note" id="note">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.01 — FROM THE EDITOR</span>
+        <h2 class="sec-title">卷首语：你的经验，<br>正在被折算成时薪</h2>
+      </div>
+      <span class="chapter">第壹章</span>
+    </div>
+
+    <div class="note-grid">
+      <div class="note-cols rv">
+        <p>做了八年财务的张姐，上个月第一次失眠。公司里新来的实习生，用 AI 半天跑完了她三天的对账表。她突然意识到：自己引以为傲的熟练，在机器眼里只是一段可以被复制的流程。</p>
+        <p>这不是张姐一个人的处境。HR 的简历初筛、运营的周报复盘、销售的客户跟进、教师的教案批改——<b>那些我们曾经用来证明「专业」的事务性工作，正在以季度为单位被 AI 吞掉。</b></p>
+        <p>但请留意另一面：当写代码这件事本身被 AI 接管，软件生产的瓶颈第一次从「技术」转向了「判断力」。谁能把业务痛点讲清楚、把需求拆明白、把验收标准定严格，谁就能指挥 AI 把产品做出来。</p>
+        <p><b>这恰恰是你十年工龄里真正值钱的部分。</b>你不需要成为程序员，你需要成为指挥官——指挥一支由六个 AI 岗位组成的开发小队，像项目经理一样思考，像产品负责人一样拍板。</p>
+        <p>这本特刊，就是一份为期十天的作战地图。我们不教语法，不背框架，只做一件事：让你在 QRAE 平台上，亲手把一个真实想法，从一句需求，推到一个能上线、能给别人用的产品。</p>
+        <p>留得青山在。那座青山，从来不是某份具体的工作，而是<b>你解决问题的能力本身</b>。</p>
+      </div>
+      <aside class="margin-note rv">
+        <h5>页边注 · MARGINALIA</h5>
+        <p>※ 据本刊对 2,300 名毕业学员的回访，87% 的学员在入学前「从未写过一行代码」。</p>
+        <p>※ 第肆期一位 46 岁的财务学员，用营内作品为公司搭建的费用审批小工具，至今仍在部门内日常使用。</p>
+        <p class="sig">—— 本刊编辑部</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第二章 · 课程亮点 ═══════════════ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.02 — HIGHLIGHTS</span>
+        <h2 class="sec-title">为什么这门课<br>和别的 AI 课不一样</h2>
+      </div>
+      <span class="chapter">第贰章</span>
+    </div>
+
+    <div class="feat-grid">
+      <article class="feat rv">
+        <span class="no">No.01</span>
+        <h3>不是学提示词，是指挥一支队伍</h3>
+        <p>市面上教你「跟 AI 聊天」的课太多了。我们直接把你放进一间虚拟软件公司：六个 AI 岗位各司其职，你用 @岗位 手动交接、用工作区文件传递成果——学到的不是话术，是软件工程的组织方式。</p>
+        <span class="foot">关键词 — 六岗位 · 交接 · 工作区</span>
+      </article>
+      <article class="feat rv">
+        <span class="no">No.02</span>
+        <h3>每天一道 GATE，验收不过不能走</h3>
+        <p>每天 120 分钟，以一个明确的验收关卡（GATE）收束：需求文档合格才算完成第一天，原型通过评审才算完成第二天。十天十道关，混不了日子，但也绝不会掉队——AI 导师 1v1 盯着你过线。</p>
+        <span class="foot">关键词 — 每日 GATE · 可评测 · 不掉队</span>
+      </article>
+      <article class="feat rv">
+        <span class="no">No.03</span>
+        <h3>毕业作品，是真能上线的产品</h3>
+        <p>不是作业截图，不是演示 Demo。第十天，你的项目会经过测试工程师的用例验收、由运维岗位完成部署，得到一个可以分享给同事朋友的真实链接。许多人的第一件作品，解决的就是自己岗位上的真问题。</p>
+        <span class="foot">关键词 — 真实闭环 · 可运行 · 可分享</span>
+      </article>
+      <article class="feat rv">
+        <span class="no">No.04</span>
+        <h3>为零基础设计，为忙人设计</h3>
+        <p>不要求任何编程背景，开营第一课从「什么是需求」讲起；每天 120 分钟可拆成两段完成，直播缺席有永久回放，班级社群里助教当晚答疑。过去六期，坚持到第五天的人，96% 走到了毕业。</p>
+        <span class="foot">关键词 — 零基础 · 120min/天 · 永久回放</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第三章 · 十天目录 TOC ═══════════════ -->
+<section id="toc" style="padding-top:40px;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.03 — CONTENTS</span>
+        <h2 class="sec-title">本期目录：十天十道关</h2>
+      </div>
+      <span class="chapter">第叁章</span>
+    </div>
+
+    <div class="toc-head rv">
+      <h3>目 录</h3>
+      <span>CONTENTS · 点击每一天展开详情 · 每天 120 分钟</span>
+    </div>
+
+    <div id="tocList"><!-- JS 渲染十天目录 --></div>
+
+    <p class="rv" style="margin-top:28px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--note);">
+      ※ 每天结构 = 30min 导读课 + 70min 平台实战 + 20min GATE 验收。验收未过，AI 导师当晚 1v1 补位。
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ 第四章 · 六岗位插页 ═══════════════ -->
+<section class="qrae" id="qrae">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="kicker">No.04 — INSERT · 信息图插页</span>
+        <h2 class="sec-title" style="color:#f2eee3;">你的 AI 开发部：<br>六岗位编制图</h2>
+      </div>
+      <span class="chapter">第肆章</span>
+    </div>
+
+    <p class="lede rv" style="max-width:38em;">
+      在 QRAE 平台，你不是「向 AI 提问」，而是像一位真正的产品负责人那样工作：
+      把任务交给对应岗位，验收成果存进工作区，再 @ 下一个岗位接手。
+    </p>
+
+    <div class="org rv">
+      <div class="org-cmd">
+        <div class="who">你 —— <em>产品指挥官</em></div>
+        <p>COMMANDER · 提需求 · 做决策 · 定验收</p>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 01</span>
+        <h4>产品经理</h4>
+        <span class="r-at">@产品经理</span>
+        <p>把你的想法拆成结构化的需求文档：用户是谁、痛点是什么、核心功能如何排序。第一天起你就只跟「文档」打交道，而不是跟「聊天」。</p>
+        <span class="r-hand">交接物 → PRD 需求文档.md</span>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 02</span>
+        <h4>UI 设计师</h4>
+        <span class="r-at">@UI设计师</span>
+        <p>读取工作区里的 PRD，产出页面结构与视觉方案。你学会用「首屏放什么」「按钮给谁看」这样的产品语言提修改意见。</p>
+        <span class="r-hand">交接物 → 原型与视觉稿.html</span>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 03</span>
+        <h4>前端工程师</h4>
+        <span class="r-at">@前端工程师</span>
+        <p>把视觉稿变成能在浏览器里真实点击的界面。你负责验收：每个按钮点下去，要有反应。</p>
+        <span class="r-hand">交接物 → 可交互前端页面</span>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 04</span>
+        <h4>后端工程师</h4>
+        <span class="r-at">@后端工程师</span>
+        <p>搭建数据与接口：用户提交的内容存到哪里、列表从哪里读。你第一次理解「数据是怎么流动的」——这是专业人最重要的技术直觉。</p>
+        <span class="r-hand">交接物 → API 接口与数据库</span>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 05</span>
+        <h4>测试工程师</h4>
+        <span class="r-at">@测试工程师</span>
+        <p>按验收标准逐条跑测试用例，把 bug 写成清单退回给开发。你将学会全营最难的一课：什么叫「做完了」，什么叫「做对了」。</p>
+        <span class="r-hand">交接物 → 测试报告与缺陷清单</span>
+      </div>
+      <div class="role">
+        <span class="r-no">POST 06</span>
+        <h4>运维工程师</h4>
+        <span class="r-at">@运维工程师</span>
+        <p>把通过验收的产品部署上线，生成真实可访问的链接。第十天晚上，你会把这个链接发进家庭群。</p>
+        <span class="r-hand">交接物 → 上线链接与监控面板</span>
+      </div>
+    </div>
+
+    <div class="flow rv">
+      <span>需求</span><i>→</i><span>PRD</span><i>→</i><span>原型</span><i>→</i><span>前端</span><i>→</i><span>后端</span><i>→</i><span>测试</span><i>→</i><span>上线</span>
+    </div>
+    <p class="caption rv">FIG.01 — 成果一律以文件形式存于工作区，岗位之间不「聊天」，只「交接」。</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 第五章 · 学员成果 ═══════════════ -->
+<section id="works">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.05 — PORTFOLIO</span>
+        <h2 class="sec-title">他们从零基础来，<br>带着产品走</h2>
+      </div>
+      <span class="chapter">第伍章</span>
+    </div>
+
+    <div class="works">
+      <article class="work rv">
+        <div class="ph"><span class="ph-cross"></span><span class="ph-tag">FIG.02 — 产品截图 · 费用审批助手</span></div>
+        <h4>部门费用审批助手</h4>
+        <span class="w-by">张姐 · 46 岁 · 制造业财务 · 第肆期</span>
+        <p>把部门里微信群里审批报销的混乱流程，做成一个提交—审批—归档的小工具。结业三个月后，全部门 23 人每天在用。</p>
+        <span class="w-gate">GATE 10/10 通过 · 已上线 · 日均使用 40+ 次</span>
+      </article>
+      <article class="work rv">
+        <div class="ph"><span class="ph-cross"></span><span class="ph-tag">FIG.03 — 产品截图 · 面试题库系统</span></div>
+        <h4>销售面试题库与评分表</h4>
+        <span class="w-by">阿凯 · 31 岁 · 教培行业 HR · 第伍期</span>
+        <p>把散落在 Excel 里的 200 道面试题结构化，面试官在线抽题、打分、自动汇总。校招季帮团队省下了整整一周。</p>
+        <span class="w-gate">GATE 10/10 通过 · 已上线 · 覆盖 3 个招聘组</span>
+      </article>
+      <article class="work rv">
+        <div class="ph"><span class="ph-cross"></span><span class="ph-tag">FIG.04 — 产品截图 · 班级打卡看板</span></div>
+        <h4>学生阅读打卡看板</h4>
+        <span class="w-by">林老师 · 38 岁 · 小学语文教师 · 第陆期</span>
+        <p>家长扫码打卡、孩子攒徽章、老师一键看全班进度。开学家长会上演示时，校长当场问：「这是哪个公司做的？」</p>
+        <span class="w-gate">GATE 10/10 通过 · 已上线 · 两个班 87 个家庭在用</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第六章 · 读者来信 ═══════════════ -->
+<section class="letters" id="letters">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.06 — LETTERS</span>
+        <h2 class="sec-title">读者来信</h2>
+      </div>
+      <span class="chapter">第陆章</span>
+    </div>
+
+    <div class="letter-grid">
+      <article class="letter rv">
+        <span class="l-no">LETTER · 01</span>
+        <p>报名那天我跟先生说，我 46 岁了还去学什么 AI，怕是浪费钱。第十天晚上我把费用审批助手的链接发到部门群里，第二天早上，主管把它置顶了。那一刻我原谅了这十年来所有「你这个年纪就别折腾了」的声音。</p>
+        <div class="l-sig"><span>张姐 · 财务 · 第肆期</span><span class="l-stars">★★★★★</span></div>
+        <div class="l-sig"><i>编辑部注：来信经本人授权刊载，略有删节</i></div>
+      </article>
+      <article class="letter rv">
+        <span class="l-no">LETTER · 02</span>
+        <p>最颠覆我的不是 AI 多厉害，而是「验收」这件事。以前我以为产品做出来就是做完了，第七天测试岗给我退回 17 个 bug 的时候我才明白：能把「做对」的标准说清楚，本身就是一种稀缺能力。这套东西我直接用回了团队管理里。</p>
+        <div class="l-sig"><span>阿凯 · HR · 第伍期</span><span class="l-stars">★★★★★</span></div>
+        <div class="l-sig"><i>编辑部注：该学员现任公司 AI 转型小组成员</i></div>
+      </article>
+      <article class="letter rv">
+        <span class="l-no">LETTER · 03</span>
+        <p>我数学不好，看到代码就头晕，前三天一直是怀疑自己能不能跟下来的状态。是每天那 20 分钟的 GATE 救了我——目标小到「今天的需求文档写到合格就行」，过完一关就踏实一点。原来所谓学会，就是把大山切成十块石头。</p>
+        <div class="l-sig"><span>林老师 · 教育 · 第陆期</span><span class="l-stars">★★★★★</span></div>
+        <div class="l-sig"><i>编辑部注：其毕业作品现于两所小学试用</i></div>
+      </article>
+      <article class="letter rv">
+        <span class="l-no">LETTER · 04</span>
+        <p>做运营八年，我写过无数需求文档给技术团队，从来都是求人排期。这十天我第一次坐在了「指挥官」的位置上：@产品经理 改需求、@测试工程师 卡验收，需求—原型—上线整条链路我自己走了一遍。现在跟开发沟通，他们说我「突然变专业了」。</p>
+        <div class="l-sig"><span>小满 · 电商运营 · 第伍期</span><span class="l-stars">★★★★★</span></div>
+        <div class="l-sig"><i>编辑部注：来信标题为《排期自由》</i></div>
+      </article>
+      <article class="letter rv">
+        <span class="l-no">LETTER · 05</span>
+        <p>我是做销售的，白天跑客户，只能晚上十点后学。永久回放加社群答疑是刚需配置，AI 导师凌晨也会回我的验收问题——虽然知道它不是人，但那种「随时有人接住你」的感觉，是我这些年报过的课里从来没有过的。</p>
+        <div class="l-sig"><span>老周 · 医疗器械销售 · 第陆期</span><span class="l-stars">★★★★★</span></div>
+        <div class="l-sig"><i>编辑部注：凌晨提问平均响应时间 40 秒</i></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第七章 · 定价 ═══════════════ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.07 — SUBSCRIPTION</span>
+        <h2 class="sec-title">订阅本期：第柒期招生</h2>
+      </div>
+      <span class="chapter">第柒章</span>
+    </div>
+
+    <div class="price-grid">
+      <div class="price-card rv">
+        <span class="p-badge">早鸟价 · 限 100 席</span>
+        <span class="price-old">定价 ¥2,999</span>
+        <div class="price-now"><sup>¥</sup>1,999</div>
+        <span class="price-per">EARLY BIRD · 支持 3 期免息 · 约 ¥667/期</span>
+
+        <div style="margin-top:26px;">
+          <span class="cd-label">早鸟截止倒计时 — COUNTDOWN</span>
+          <div class="cd" id="countdown">
+            <div><b id="cdD">0</b><span>天 DAYS</span></div>
+            <div><b id="cdH">00</b><span>时 HRS</span></div>
+            <div><b id="cdM">00</b><span>分 MIN</span></div>
+            <div><b id="cdS">00</b><span>秒 SEC</span></div>
+          </div>
+        </div>
+
+        <ul class="price-list">
+          <li>10 天实战营 · 每天 120 分钟 · 十道 GATE 验收</li>
+          <li>QRAE 平台六岗位 AI 智能体全程使用权限</li>
+          <li>AI 导师 1v1 答疑 · 当晚不过夜的验收辅导</li>
+          <li>班级社群 + 助教带班 · 直播永久回放</li>
+          <li>毕业作品部署上线 · 可写入简历的项目经历</li>
+          <li>7 天无理由退款 · 开营一周内全额退</li>
+        </ul>
+
+        <button class="btn" data-enroll style="width:100%;justify-content:center;">锁定早鸟席位</button>
+        <p class="seats">本期 100 席 · 已锁定 <b id="seatNum">73</b> 席 · 余 <b id="seatLeft">27</b> 席</p>
+      </div>
+
+      <div class="price-copy rv">
+        <p><b>编辑部按：</b>我们建议你把这笔钱和「一次行业大会门票」「一门考完后用不上的证书课」放在一起比较。前两样给你的是信息，而这一期给你的是<b>一个能运行的产品和一套可复用的方法论</b>。</p>
+        <p>早鸟价每期仅限前 100 席，报满即恢复 ¥2,999。过往六期，平均在开营前 9 天售罄。</p>
+        <p>如果你在开营 7 天内觉得这不是为你准备的课，<b>无条件全额退款</b>——我们把风险留给自己，把青山留给你。</p>
+        <p style="font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--note);">GUARANTEE — 7 天无理由退款 · 3 期免息 · 企业团购请联系编辑部</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 第八章 · 答读者问 ═══════════════ -->
+<section id="faq" style="padding-top:40px;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <span class="sec-no">No.08 — Q &amp; A</span>
+        <h2 class="sec-title">答读者问</h2>
+      </div>
+      <span class="chapter">第捌章</span>
+    </div>
+
+    <div class="faq" id="faqList"><!-- JS 渲染 FAQ --></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 最终 CTA ═══════════════ -->
+<section class="final">
+  <div class="wrap">
+    <span class="kicker rv" style="justify-content:center;">EPILOGUE — 刊尾语</span>
+    <h2 class="rv-lines" data-lines style="margin-top:24px;">
+      <span class="rv-line"><span>留得<em>青山</em>在，</span></span>
+      <span class="rv-line"><span>不怕没柴烧。</span></span>
+    </h2>
+    <p class="lede rv">十天之后，当别人还在讨论 AI 会不会取代自己时，<br>你已经是一个发布过软件的人。</p>
+    <div class="rv" style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" data-enroll>立即报名 · 早鸟 ¥1,999</button>
+      <a class="btn ghost" href="#toc">再读一遍目录</a>
+    </div>
+    <p class="rv" style="margin-top:22px;font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--note);">
+      第柒期 · 限 100 席 · 7 天无理由退款
+    </p>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ 页脚 ═══════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="f-brand">青<em>山</em>在</div>
+        <p style="margin-top:10px;max-width:26em;">AI 时代专业人自救特刊 · AI 开发训练营<br>不会写代码，也能发布软件。</p>
+      </div>
+      <div class="foot-links">
+        <a href="#note">卷首语</a>
+        <a href="#toc">十天目录</a>
+        <a href="#pricing">定价</a>
+        <a href="#faq">答读者问</a>
+        <a href="javascript:void(0)" data-enroll>立即报名</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 青山在 QINGSHANZAI · AI BOOTCAMP</span>
+      <span>ISSN-QSZ-007 · 本期 2,300+ 读者已毕业</span>
+      <span>DESIGNED AS A SPECIAL ISSUE</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ 报名弹窗 ═══════════════ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-box">
+    <button class="m-close" data-close aria-label="关闭">×</button>
+    <div class="m-form">
+      <span class="m-kicker">ENROLL — 第柒期 · 早鸟登记</span>
+      <h3>锁定你的席位</h3>
+      <p class="m-sub">填写后助教将在 24 小时内通过微信与你确认报名，早鸟 ¥1,999（原价 ¥2,999），支持 3 期免息。</p>
+      <form id="enrollForm" novalidate>
+        <div class="field" id="fName">
+          <label>姓名 NAME</label>
+          <input type="text" name="name" placeholder="请输入真实姓名" autocomplete="name">
+          <span class="err"></span>
+        </div>
+        <div class="field" id="fWx">
+          <label>微信号 WECHAT ID</label>
+          <input type="text" name="wechat" placeholder="助教将通过微信联系你">
+          <span class="err"></span>
+        </div>
+        <div class="field" id="fPhone">
+          <label>手机号 MOBILE</label>
+          <input type="tel" name="phone" placeholder="用于开通 QRAE 平台账号" autocomplete="tel">
+          <span class="err"></span>
+        </div>
+        <button type="submit" class="btn m-submit">提交报名 · 早鸟 ¥1,999</button>
+        <p class="m-fine">提交即视为同意《学员协议》 · 7 天无理由退款</p>
+      </form>
+    </div>
+    <div class="m-success">
+      <div class="ok">✓</div>
+      <h4>报名登记成功</h4>
+      <p id="successMsg">已为你保留第柒期早鸟席位。<br>助教将在 24 小时内通过微信与你联系，<br>请留意好友申请。</p>
+      <button class="btn ghost" data-close style="margin-top:26px;">返回特刊</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════ 数据 ═══════════════ */
+const TOC = [
+  {d:"DAY 01",ch:"第一章",name:"开营 · 把想法说成需求",out:"一份合格的需求描述 + 选题立项",time:"120min",
+   desc:"不写一行代码的第一天：学会区分「想法」与「需求」，用用户—场景—痛点三段式向 @产品经理 下达第一个任务。晚上通过第一道 GATE，正式立项。",
+   deliver:"产出物",deliverV:"选题卡 + 需求描述 v1",gate:"今日 GATE",gateV:"需求描述通过导师评审"},
+  {d:"DAY 02",ch:"第二章",name:"PRD · 需求文档的诞生",out:"结构化 PRD v1.0",time:"120min",
+   desc:"与 @产品经理 多轮交锋：砍功能、排优先级、写验收标准。你会第一次体会到「做减法」比「做加法」难得多。",
+   deliver:"产出物",deliverV:"PRD 需求文档 v1.0（含验收标准）",gate:"今日 GATE",gateV:"PRD 三要素齐全且优先级合理"},
+  {d:"DAY 03",ch:"第三章",name:"原型 · 让想法被看见",out:"可点击的页面原型",time:"120min",
+   desc:"把工作区里的 PRD 交接给 @UI设计师，产出页面结构与原型。学习用「首屏」「路径」「反馈」的产品语言提出有效修改意见。",
+   deliver:"产出物",deliverV:"原型文件 + 视觉走查记录",gate:"今日 GATE",gateV:"核心路径三步内可达"},
+  {d:"DAY 04",ch:"第四章",name:"前端 · 界面活过来",out:"浏览器里可交互的前端页面",time:"120min",
+   desc:"@前端工程师 将视觉稿变成真实页面。你的工作是逐按钮验收：点下去，要有反应；空数据，要有提示。",
+   deliver:"产出物",deliverV:"可交互前端页面",gate:"今日 GATE",gateV:"全部交互点均有反馈"},
+  {d:"DAY 05",ch:"第五章",name:"后端 · 数据开始流动",out:"API 接口 + 数据库",time:"120min",
+   desc:"@后端工程师 搭建数据与接口。你将画出自己产品的第一张数据流图——这是专业人最值得拥有的技术直觉。",
+   deliver:"产出物",deliverV:"接口清单 + 数据流图",gate:"今日 GATE",gateV:"提交—读取闭环跑通"},
+  {d:"DAY 06",ch:"第六章",name:"联调 · 前后端会师",out:"端到端可用的完整流程",time:"120min",
+   desc:"最手忙脚乱也最有成就感的一天：指挥前端与后端岗位对齐字段、处理异常。完整主流程第一次从起点跑到终点。",
+   deliver:"产出物",deliverV:"联调通过的主流程",gate:"今日 GATE",gateV:"主流程端到端无阻断"},
+  {d:"DAY 07",ch:"第七章",name:"测试 · 什么叫「做对了」",out:"测试用例表 + 缺陷清单",time:"120min",
+   desc:"@测试工程师 按验收标准跑用例，把 bug 写成清单退回开发。全营公认最难的一课：做完 ≠ 做对。",
+   deliver:"产出物",deliverV:"测试报告 + 缺陷修复记录",gate:"今日 GATE",gateV:"致命/严重缺陷清零"},
+  {d:"DAY 08",ch:"第八章",name:"打磨 · 真实用户视角",out:"可用性修复版 v1.1",time:"120min",
+   desc:"邀请一位真实同事/朋友试用你的产品，记录卡住的每一步，指挥各岗位修复。第一次面对「别人用你的东西」这件事。",
+   deliver:"产出物",deliverV:"试用记录 + v1.1 修复版",gate:"今日 GATE",gateV:"新用户无需指导完成主流程"},
+  {d:"DAY 09",ch:"第九章",name:"部署 · 上线前夜",out:"预发布环境 + 上线检查表",time:"120min",
+   desc:"@运维工程师 搭建预发布环境，逐项过上线检查表：数据备份、异常页面、访问速度。明天，它将有一个真实的网址。",
+   deliver:"产出物",deliverV:"预发布链接 + 检查表签字版",gate:"今日 GATE",gateV:"上线检查表全项通过"},
+  {d:"DAY 10",ch:"第十章",name:"上线 · 毕业路演",out:"已上线产品 + 路演演示",time:"120min",
+   desc:"正式上线，获得可分享的真实链接；晚八点班级路演，每个人用三分钟讲自己的产品故事。毕业证书与作品，一起带走。",
+   deliver:"产出物",deliverV:"上线链接 + 路演回放",gate:"今日 GATE",gateV:"产品公网可访问 · 毕业"}
+];
+
+const FAQS = [
+  {q:"我完全没有任何编程基础，真的跟得上吗？",a:"可以。六期 2,300 名学员中，87% 入学前从未写过代码。课程第一天从「什么是需求」讲起，全程不需要你写代码——你学的是指挥：提需求、做决策、定验收。真正的门槛不是技术，而是你是否清楚自己想解决什么问题。"},
+  {q:"每天 120 分钟，上班族时间怎么安排？",a:"120 分钟可拆成两段完成：30 分钟导读课支持永久回放与 1.5 倍速，70 分钟实战 + 20 分钟 GATE 验收可在任意时段进行。过往学员中约六成在晚上 9 点后学习，AI 导师 24 小时在线，凌晨提问平均 40 秒响应。"},
+  {q:"QRAE 平台和直接用 ChatGPT/Claude 有什么区别？",a:"区别在于「组织方式」。QRAE 把 AI 拆成产品经理、UI、前端、后端、测试、运维六个岗位，岗位之间不聊天、只交接文件——你学到的不是提示词技巧，而是一套真实软件工程的工作流。这套方法论可以迁移到你日后使用任何 AI 工具的场景。"},
+  {q:"毕业作品归谁？能商用吗？",a:"完全归你。第十天部署上线的作品，源码、数据、域名链接都在你的账号下，你可以继续迭代、给公司使用，甚至作为副业产品运营。多期学员的毕业作品至今仍在各自单位日常使用。"},
+  {q:"如果中途有事跟不上怎么办？",a:"三种兜底：直播永久回放可补；每天 GATE 未过，AI 导师当晚 1v1 补位直到你过线；实在需要暂停，可申请延期到下一期继续（一次免费）。开营 7 天内退出，全额无理由退款。"},
+  {q:"7 天无理由退款具体怎么算？",a:"自开营第一天起算 7 个自然日，无论你是否已上课、是否通过 GATE，只需在班级群内联系助教提出，无需任何理由，48 小时内全额原路退回，分期订单同步取消。"},
+  {q:"早鸟价和正式价的内容有差别吗？",a:"没有任何差别。早鸟 ¥1,999 是对「提前决策」的奖励，每期仅限前 100 席，报满即恢复 ¥2,999。两档价格享受完全相同的课程、导师、社群与退款权益。"},
+  {q:"学完这门课，我能达到什么程度？",a:"你将能够：独立把一个业务想法拆成结构化需求；指挥 AI 团队完成「需求→原型→验收→上线」全流程；用测试与验收标准把控交付质量。我们不承诺你成为程序员，我们承诺你成为一个「发布过软件的产品负责人」——这在大多数非技术岗位上，是独一份的履历。"}
+];
+
+/* ═══════════════ 渲染：十天目录 TOC ═══════════════ */
+const tocList = document.getElementById("tocList");
+TOC.forEach((t,i)=>{
+  const item = document.createElement("div");
+  item.className = "toc-item rv";
+  item.innerHTML = `
+    <button class="toc-row" aria-expanded="false">
+      <span class="toc-ch">${t.d} · ${t.ch}</span>
+      <span class="toc-name">${t.name}</span>
+      <span class="toc-dots"></span>
+      <span class="toc-out">${t.out} — ${t.time}</span>
+      <span class="toc-plus">+</span>
+    </button>
+    <div class="toc-detail">
+      <div class="toc-detail-in">
+        <p>${t.desc}</p>
+        <div class="toc-fact">
+          <b>${t.deliver}</b>${t.deliverV}<br>
+          <b>${t.gate}</b>${t.gateV}
+        </div>
+      </div>
+    </div>`;
+  const row = item.querySelector(".toc-row");
+  const detail = item.querySelector(".toc-detail");
+  row.addEventListener("click",()=>{
+    const open = item.classList.toggle("open");
+    row.setAttribute("aria-expanded", open);
+    detail.style.maxHeight = open ? detail.scrollHeight + "px" : "0px";
+  });
+  tocList.appendChild(item);
+});
+
+/* ═══════════════ 渲染：FAQ 手风琴 ═══════════════ */
+const faqList = document.getElementById("faqList");
+FAQS.forEach((f,i)=>{
+  const item = document.createElement("div");
+  item.className = "faq-item rv";
+  item.innerHTML = `
+    <button class="faq-q" aria-expanded="false">
+      <span class="q-no">问 · ${String(i+1).padStart(2,"0")}</span>
+      <h4>${f.q}</h4>
+      <span class="q-plus">+</span>
+    </button>
+    <div class="faq-a"><p>${f.a}</p></div>`;
+  const q = item.querySelector(".faq-q");
+  const a = item.querySelector(".faq-a");
+  q.addEventListener("click",()=>{
+    const open = item.classList.toggle("open");
+    q.setAttribute("aria-expanded", open);
+    a.style.maxHeight = open ? a.scrollHeight + "px" : "0px";
+  });
+  faqList.appendChild(item);
+});
+
+/* ═══════════════ 导航：滚动状态 ═══════════════ */
+const nav = document.getElementById("nav");
+const onScroll = ()=> nav.classList.toggle("scrolled", window.scrollY > 24);
+window.addEventListener("scroll", onScroll, {passive:true});
+onScroll();
+
+/* ═══════════════ 汉堡菜单 ═══════════════ */
+const burger = document.getElementById("burger");
+const mMenu = document.getElementById("mMenu");
+const closeMenu = ()=>{ burger.classList.remove("open"); mMenu.classList.remove("open"); document.body.style.overflow=""; };
+burger.addEventListener("click",()=>{
+  const open = mMenu.classList.toggle("open");
+  burger.classList.toggle("open", open);
+  document.body.style.overflow = open ? "hidden" : "";
+});
+mMenu.querySelectorAll("a,button").forEach(el=> el.addEventListener("click", closeMenu));
+
+/* ═══════════════ 平滑滚动（锚点 + 吸顶偏移已由 scroll-margin-top 处理） ═══════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener("click",e=>{
+    const id = a.getAttribute("href");
+    if(id.length < 2) return;
+    const target = document.querySelector(id);
+    if(target){ e.preventDefault(); target.scrollIntoView({behavior:"smooth"}); }
+  });
+});
+
+/* ═══════════════ 滚动 reveal：块级 + 逐行 ═══════════════ */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(!en.isIntersecting) return;
+    const el = en.target;
+    el.classList.add("in");
+    io.unobserve(el);
+  });
+},{threshold:.12, rootMargin:"0px 0px -6% 0px"});
+
+document.querySelectorAll(".rv").forEach((el,i)=>{
+  el.style.transitionDelay = (i % 4) * 60 + "ms";
+  io.observe(el);
+});
+/* 逐行标题：给每行加交错延迟 */
+document.querySelectorAll("[data-lines]").forEach(h=>{
+  h.classList.add("rv-lines");
+  h.querySelectorAll(".rv-line > span").forEach((s,i)=>{
+    s.style.transitionDelay = (i * 140) + "ms";
+  });
+  io.observe(h);
+});
+
+/* ═══════════════ 早鸟倒计时：3 天后 ═══════════════ */
+const cdTarget = Date.now() + 3 * 24 * 3600 * 1000;
+const pad = n => String(n).padStart(2,"0");
+function tick(){
+  let diff = Math.max(0, cdTarget - Date.now());
+  const d = Math.floor(diff / 86400000); diff %= 86400000;
+  const h = Math.floor(diff / 3600000);  diff %= 3600000;
+  const m = Math.floor(diff / 60000);    diff %= 60000;
+  const s = Math.floor(diff / 1000);
+  document.getElementById("cdD").textContent = d;
+  document.getElementById("cdH").textContent = pad(h);
+  document.getElementById("cdM").textContent = pad(m);
+  document.getElementById("cdS").textContent = pad(s);
+}
+tick();
+setInterval(tick, 1000);
+
+/* ═══════════════ 报名弹窗 ═══════════════ */
+const modal = document.getElementById("modal");
+const form = document.getElementById("enrollForm");
+let lastFocus = null;
+
+function openModal(){
+  lastFocus = document.activeElement;
+  modal.classList.add("open");
+  modal.classList.remove("done");
+  document.body.style.overflow = "hidden";
+  setTimeout(()=> form.querySelector("input")?.focus(), 350);
+}
+function closeModal(){
+  modal.classList.remove("open");
+  document.body.style.overflow = "";
+  lastFocus?.focus?.();
+}
+document.querySelectorAll("[data-enroll]").forEach(b=> b.addEventListener("click", e=>{ e.preventDefault(); openModal(); }));
+modal.querySelectorAll("[data-close]").forEach(b=> b.addEventListener("click", closeModal));
+document.addEventListener("keydown", e=>{ if(e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
+/* 校验规则 */
+const rules = {
+  name:  v => v.trim().length >= 2 || "请输入至少 2 个字的姓名",
+  wechat:v => /^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/.test(v.trim()) || "微信号格式：字母开头，6–20 位字母/数字/_/-",
+  phone: v => /^1[3-9]\d{9}$/.test(v.trim()) || "请输入正确的 11 位手机号"
+};
+function validateField(input){
+  const wrap = input.closest(".field");
+  const err = wrap.querySelector(".err");
+  const res = rules[input.name](input.value);
+  if(res === true){ wrap.classList.remove("invalid"); err.textContent = ""; return true; }
+  wrap.classList.add("invalid"); err.textContent = res; return false;
+}
+form.querySelectorAll("input").forEach(inp=>{
+  inp.addEventListener("blur", ()=> validateField(inp));
+  inp.addEventListener("input", ()=>{ if(inp.closest(".field").classList.contains("invalid")) validateField(inp); });
+});
+form.addEventListener("submit", e=>{
+  e.preventDefault();
+  const inputs = [...form.querySelectorAll("input")];
+  const ok = inputs.map(validateField).every(Boolean);
+  if(!ok){ form.querySelector(".field.invalid input")?.focus(); return; }
+  const name = form.name.value.trim();
+  document.getElementById("successMsg").innerHTML =
+    `${name}，已为你保留第柒期早鸟席位。<br>助教将在 24 小时内通过微信与你联系，<br>请留意好友申请。`;
+  modal.classList.add("done");
+  form.reset();
+});
+</script>
+</body>
+</html>

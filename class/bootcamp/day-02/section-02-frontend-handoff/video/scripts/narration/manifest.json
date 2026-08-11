@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-four-files",
+    "file": "02-four-files.txt"
+  },
+  {
+    "id": "03-missing-file",
+    "file": "03-missing-file.txt"
+  },
+  {
+    "id": "04-five-sentences",
+    "file": "04-five-sentences.txt"
+  },
+  {
+    "id": "05-correct",
+    "file": "05-correct.txt"
+  },
+  {
+    "id": "06-plan",
+    "file": "06-plan.txt"
+  },
+  {
+    "id": "07-why-simple",
+    "file": "07-why-simple.txt"
+  },
+  {
+    "id": "08-confirm",
+    "file": "08-confirm.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

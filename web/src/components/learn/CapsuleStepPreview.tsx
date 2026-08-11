@@ -70,7 +70,7 @@ export function CapsuleStepPreview({
   const knowledgeCards = capsule.knowledge_cards || [];
   const glossaryTerms = capsule.glossary_terms || [];
   const quizQuestions = capsule.quiz?.questions || [];
-  const media = (capsule.media || []).filter((m) => m.object_key);
+  const media = (capsule.media || []).filter((m) => m.object_key || m.pending);
 
   return (
     <div className="learn-shell learn-shell--preview">
@@ -107,7 +107,7 @@ export function CapsuleStepPreview({
         {effectiveStep === "video" && (
           <div className="learn-video-stage">
             {media.length > 0 ? (
-              <CapsuleMediaStack items={media} campId={campId} />
+              <CapsuleMediaStack key={capsule.id} items={media} campId={campId} />
             ) : (
               <PreviewProse content={capsule.content || "（本节暂无正文）"} />
             )}

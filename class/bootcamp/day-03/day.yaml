@@ -1,314 +1,567 @@
 day: 3
-project: 真实数据保存、读取和完整流程
-project_brief: 学员先用自己的项目看懂前端、后端和数据库的数据链路，再指挥后端按已批准契约建表和实现真实接口，最后让前端从 Mock 切换到真实 API。AI 只保留 Week2 入口。
+project: 给前端接上真实规则与数据
+project_brief: 学员承接 Day2 已通过 UI 复验的 frontend 目录和 frontend-api-needs.md， 指挥 @后端 先确认业务、数据与权限，再生成 API_Spec.md、DB_Schema.md 和本地后端服务；
+  由 @前端 按接口合同完成联调，最后让 @测试 接收完整交付物。 Day3 重点是先合同后代码、单独验证再联调、责任岗位修复，不是背后端框架。
 resources:
-- id: team-prompts-v11
-  title: 七岗位 AI 员工提示词包
+- id: agent-backend
+  title: 智能体提示词 · 后端
   kind: download
-  summary: 七名 AI 员工的职责、交接方法和五天协作规则
-  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_Agent_Prompts_V1.1/00_README.md
-- id: week1-day3-source
-  title: 第一周第 3 天课程合约
+  summary: 负责业务规则、接口、数据存储、本地服务和运行手册
+  url: /course-assets/bootcamp/day-01/agent-prompts/04-backend.md
+- id: backend-role-card
+  title: 速查卡 · 后端三件事
   kind: doc
-  summary: 本日五节课、交付物、岗位交接与验收口径
-  url: /course-assets/bootcamp/day-03/README.md
-- id: domain-packs
-  title: 第一周领域包
+  summary: 业务规则、数据存取、接口对话
+  url: /course-assets/bootcamp/day-03/section-01-backend-role/resources.md
+- id: api-contract-card
+  title: 模板 · API 与数据合同
   kind: doc
-  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
-  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+  summary: 方法、路径、请求、成功、错误以及接口—表映射
+  url: /course-assets/bootcamp/day-03/section-03-api-data-contract/resources.md
+- id: local-service-card
+  title: 速查卡 · 本地后端启动与检查
+  kind: doc
+  summary: Python 环境、健康检查、SQLite 和停止服务
+  url: /course-assets/bootcamp/day-03/section-04-build-local-service/resources.md
+- id: integration-card
+  title: 清单 · 前后端联调
+  kind: doc
+  summary: 地址、字段、成功、错误、控制台和服务日志
+  url: /course-assets/bootcamp/day-03/section-05-frontend-integration/resources.md
 capsule_extra:
   c1:
     resource_ids:
-    - team-prompts-v11
-    - week1-day3-source
-    - domain-packs
-    tools:
-    - name: 通用对话
-      note: 本节交付：docs/D3-L1_项目地图.md
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id001
-      - 用户提交一条记录后，数据首先由谁接收并校验？
-      - - 驾驶舱图表
-        - 后端接口
-        - README
-      - 1
-      - 前端发请求，后端执行规则并写入数据库。
-    - &id002
-      - 看板数字的可信证据是什么？
-      - - 颜色好看
-        - 能与列表和数据库记录核对
-        - Agent 说正确
-      - 1
-      - 统计结果必须可追溯。
+    - backend-role-card
+    - agent-backend
     media:
     - kind: video
-      title: 口播课件 · 第 1 节
-      object_key: documents/shared/course-media/day03-c1-frontend-in-ai-era.mp4
-      poster_key: documents/shared/course-media/day03-c1-frontend-in-ai-era-poster.jpg
-      duration_sec: 77
+      title: 口播课件 · 后端不是黑窗口
+      object_key: documents/shared/course-media/day03-c1-backend-role-v2.mp4
+      poster_key: documents/shared/course-media/day03-c1-backend-role-poster-v2.jpg
+      duration_sec: 184
+    knowledge_cards:
+    - id: backend-three
+      term: 后端三件事
+      plain: 业务规则决定能不能做，数据库负责记真账，API 负责与前端按约定对话。
+      tag: 全景
+    - id: backend-role-shift
+      term: 后端岗位价值上移
+      plain: AI 能快速生成增删改查代码，人更要负责接口合同、数据模型、安全边界和故障处理。
+      tag: AI 时代
+    - id: frontend-no-db
+      term: 前端不直连数据库
+      plain: 所有数据访问经过后端统一校验、权限和规则，避免浏览器直接进入数据仓库。
+      tag: 安全
+    glossary_terms:
+    - id: gt-backend
+      term: Backend · 后端
+      plain: 用户通常看不见、负责规则、数据和接口的服务层。
+    - id: gt-api
+      term: API · 接口
+      plain: 前端向后端提出请求并接收结果的约定窗口。
+    - id: gt-db
+      term: Database · 数据库
+      plain: 按固定结构保存和查询真实记录的系统。
+    quiz:
+    - - 后端的三件核心工作是什么？
+      - - 颜色、字号、间距
+        - 业务规则、数据存取、接口对话
+        - 需求、原型、部署
+      - 1
+      - 后端负责规则、数据和前后端对话。
+    - - AI 时代后端人员更重要的责任是什么？
+      - - 只追求生成代码数量
+        - 定义合同、模型、安全和错误处理并验收
+        - 自行修改前端设计
+      - 1
+      - 代码生成变快后，错误合同会被更快放大。
+    tools:
+    - name: 餐厅类比图
+      note: 前端点菜、API 菜单、后端厨房、数据库仓库
+    - name: 后端责任边界
+      note: 不改需求、不改 UI、不编业务规则、不写真实密钥
   c2:
     resource_ids:
-    - team-prompts-v11
-    - week1-day3-source
-    - domain-packs
-    tools:
-    - name: '@后端工程师 Agent'
-      note: 本节交付：数据库与字段说明
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id003
-      - 数据库字段的上游依据是什么？
-      - - PRD 字段清单和接口契约
-        - 页面配色
-        - 测试报告
-      - 0
-      - 数据结构要保持跨岗位一致。
-    - &id004
-      - 状态为什么不宜任意输入？
-      - - 会让统计和流程判断混乱
-        - 会让页面变慢
-        - 会让按钮变色
-      - 0
-      - 受控枚举能保证业务状态一致。
+    - agent-backend
+    - backend-role-card
     media:
     - kind: video
-      title: 口播课件 · 第 2 节
-      object_key: documents/shared/course-media/day03-c2-design-spec.mp4
-      poster_key: documents/shared/course-media/day03-c2-design-spec-poster.jpg
-      duration_sec: 60
+      title: 口播课件 · 后端接收并确认方案
+      object_key: documents/shared/course-media/day03-c2-backend-handoff-v2.mp4
+      poster_key: documents/shared/course-media/day03-c2-backend-handoff-poster-v2.jpg
+      duration_sec: 185
+    knowledge_cards:
+    - id: backend-inputs
+      term: 后端开工输入
+      plain: PRD 提供业务规则，frontend-api-needs 提供页面数据需求，frontend 文件提供真实调用位置。
+      tag: 交接
+    - id: clarify-one
+      term: 后端逐题澄清
+      plain: 数据来源、对象、权限、隐私和运行环境一次只确认一个，不能用猜测开工。
+      tag: 防错
+    - id: backend-gate
+      term: 确认后端方案
+      plain: 学员确认系统结构、接口清单、数据表和运行方式后，后端才生成正式合同与代码。
+      tag: 人工闸门
+    glossary_terms:
+    - id: gt-data-object
+      term: 数据对象
+      plain: 项目中需要长期保存的一类事物，例如用户、订单、记录或任务。
+    - id: gt-permission
+      term: Permission · 权限
+      plain: 决定谁可以查看、创建、修改或删除哪些数据。
+    quiz:
+    - - 后端缺少 frontend-api-needs.md 时应该怎样做？
+      - - 自己从页面猜接口
+        - 停止并要求前端补齐
+        - 直接创建数据库
+      - 1
+      - 下游不能用猜测替代上游交接文件。
+    - - “确认后端方案”之前允许做什么？
+      - - 生成全部代码
+        - 读取、复述、逐题澄清和展示实施清单
+        - 修改 PRD
+      - 1
+      - 方案确认前只消除理解偏差，不扩大开发成本。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节只确认后端方案，不生成正式代码。请逐段发送。
+
+
+        【第 1 段｜切换 @后端 并检查输入】
+
+        请读取 PRD.md、frontend-api-needs.md、frontend/index.html、frontend/app.js 和 frontend-acceptance.md。现在不要设计接口或写代码。缺少文件时只说明缺什么、应回到哪个岗位。
+
+
+        【第 2 段｜复述收到的需求】
+
+        文件齐全后，请分别复述：核心业务规则、页面展示数据、用户提交内容、四种页面状态、仍待确认的问题。输出后停止。
+
+
+        【第 3 段｜逐题澄清】
+
+        请一次只问 1 个问题，依次确认数据来源、核心数据对象、谁可以访问、隐私限制和本机是否有 Python 3。每题给当前项目的回答示例，等我回答后再继续。
+
+
+        【第 4 段｜后端实施清单】
+
+        请展示最小后端方案：Python 标准库 + SQLite；列出 3—5 个接口、2—3 个数据表、本地运行方式、健康检查、错误处理和明确不做项。现在不要创建文件，等我回复“确认后端方案”。
+
+        '
+      checklist:
+      - 已切换到 @后端 并读取全部输入
+      - 后端复述与 PRD、前端数据需求一致
+      - 五类问题一次只问一个
+      - 已确认本机 Python 3 环境
+      - 学员检查实施清单后回复“确认后端方案”
+      suggested_questions:
+      - 没有 Python 该怎么办？
+      - 数据对象和页面字段有什么区别？
+      - 为什么本节还不能写接口？
+      template_resource_id: agent-backend
+    tools:
+    - name: TRAE · @后端
+      note: 先读取、复述、澄清、列方案
+    - name: 终端环境检查
+      note: 只运行 python --version 或 py --version
   c3:
     resource_ids:
-    - team-prompts-v11
-    - week1-day3-source
-    - domain-packs
-    tools:
-    - name: '@后端工程师 Agent'
-      note: 本节交付：提交、列表、详情、看板统计接口
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
+    - api-contract-card
+    - agent-backend
+    media:
+    - kind: video
+      title: 口播课件 · 先定 API 与数据合同
+      object_key: documents/shared/course-media/day03-c3-api-data-contract-v2.mp4
+      poster_key: documents/shared/course-media/day03-c3-api-data-contract-poster-v2.jpg
+      duration_sec: 189
+    knowledge_cards:
+    - id: contract-first
+      term: 先合同后代码
+      plain: 先确认接口清单、请求、响应和数据表，避免前端与后端各写一套字段。
+      tag: 方法
+    - id: api-six
+      term: 接口六要素
+      plain: 方法、路径、用途、请求、成功响应、错误响应。
+      tag: API
+    - id: api-table-map
+      term: 接口—表对账
+      plain: 每个请求与响应字段都能追到明确的数据表列或可计算规则。
+      tag: 数据
+    glossary_terms:
+    - id: gt-http-method
+      term: HTTP Method · 请求方法
+      plain: GET 通常查询，POST 通常创建，PATCH 修改，DELETE 删除。
+    - id: gt-status-code
+      term: 状态码
+      plain: 后端用数字快速说明成功、参数错误、未找到或服务故障。
+    - id: gt-primary-key
+      term: Primary Key · 主键
+      plain: 唯一识别一条记录的字段，例如 id。
     quiz:
-    - &id005
-      - 生成了接口代码是否等于接口完成？
-      - - 是
-        - 否，还要用真实请求验证数据库读写和错误响应
-        - 只要不报错就是
+    - - 一个完整接口至少应同时说明什么？
+      - - 只有路径
+        - 方法、路径、请求、成功和错误响应
+        - 只有数据库表名
       - 1
-      - 运行证据才是完成依据。
-    - &id006
-      - 看板统计能否写死？
+      - 前端必须知道怎样请求、成功和失败分别会收到什么。
+    - - 接口—表对账的目的是什么？
+      - - 让接口数等于表数
+        - 确保每个业务字段都有明确来源
+        - 让表名与路径相同
+      - 1
+      - 对账能发现虚构字段、遗漏数据和没人使用的表。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '继续使用 @后端，必须按顺序完成。
+
+
+        【第 1 段｜只列接口菜单】
+
+        方案已确认。请只列 3—5 个接口，每行写“方法、路径、一句话用途、对应页面操作”。不要展开参数和响应，等我回复“确认接口清单”。
+
+
+        【第 2 段｜生成 API 合同】
+
+        接口清单已确认。请生成 API_Spec.md。每个接口写全方法、路径、用途、请求参数或请求体、成功状态码与 JSON 示例、至少一个错误状态码与触发场景。保存后停止。
+
+
+        【第 3 段｜生成数据合同】
+
+        请根据已确认接口生成 DB_Schema.md，只设计当前第一版需要的 2—3 张表。每张表写字段、类型、主键、非空和必要关系，并说明 SQLite 文件位置。保存后停止。
+
+
+        【第 4 段｜只对账不修改】
+
+        请逐个接口列出读取或写入的“表名.字段名”。接口字段无来源、表字段无人使用或命名不一致时标为不通过。只列问题，等我确认修正。
+
+
+        【第 5 段｜完整修正】
+
+        我确认修正方案。请完整重生成 API_Spec.md 和 DB_Schema.md，不要只给补丁。最后列出页面操作 → 接口 → 数据表的完整链路。
+
+        '
+      checklist:
+      - 接口清单与前端页面操作一一对应
+      - 每个接口六要素齐全
+      - 数据表均有主键且范围不过度设计
+      - 每个接口字段都能追到表字段或业务计算
+      - 两份合同已完整重生成并落盘
+      suggested_questions:
+      - 所有错误都返回 500 可以吗？
+      - 页面字段不需要保存怎么办？
+      - 接口比页面操作多要不要删？
+      template_resource_id: api-contract-card
+    tools:
+    - name: 接口菜单
+      note: 先确认 3—5 行，再展开详细合同
+    - name: 页面—接口—表对账表
+      note: 字段必须能追溯
+  c4:
+    resource_ids:
+    - local-service-card
+    - api-contract-card
+    media:
+    - kind: video
+      title: 口播课件 · 生成并启动本地后端
+      object_key: documents/shared/course-media/day03-c4-build-local-service-v2.mp4
+      poster_key: documents/shared/course-media/day03-c4-build-local-service-poster-v2.jpg
+      duration_sec: 174
+    knowledge_cards:
+    - id: minimal-backend
+      term: 最小可运行后端
+      plain: 使用 Python 标准库提供 HTTP 接口，使用 SQLite 持久保存数据，不额外安装框架。
+      tag: 小白友好
+    - id: health-check
+      term: 健康检查
+      plain: 用固定接口确认服务进程正在运行，例如 GET /api/health。
+      tag: 运行
+    - id: persistence
+      term: 数据持久化
+      plain: 服务重启后数据仍存在，区别于只保存在内存里的临时数组。
+      tag: 数据
+    glossary_terms:
+    - id: gt-localhost
+      term: localhost · 本机地址
+      plain: 只在自己电脑上运行和访问的服务地址，通常是 127.0.0.1。
+    - id: gt-port
+      term: Port · 端口
+      plain: 同一台电脑上区分不同服务的数字门牌，例如 8000。
+    - id: gt-sqlite
+      term: SQLite
+      plain: 保存到单个本地文件的小型关系数据库，适合第一版练习。
+    quiz:
+    - - 健康检查成功能证明什么？
+      - - 所有业务都正确
+        - 后端进程已启动并能响应
+        - 数据库绝不会出错
+      - 1
+      - 健康检查只证明服务可达，业务接口仍需单独验收。
+    - - 怎样证明数据已持久化？
+      - - 页面显示过一次
+        - 重启服务后仍能查询到已保存记录
+        - AI 说已经保存
+      - 1
+      - 重启后仍存在才说明数据没有只留在内存中。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '继续使用 @后端。每段完成后必须在终端验证。
+
+
+        【第 1 段｜只生成后端文件】
+
+        请根据已确认的 API_Spec.md 和 DB_Schema.md 创建 backend/server.py、backend/data/app.db、.env.example、RUNBOOK.md。使用 Python 3 标准库和
+        SQLite，不安装第三方框架；服务同时提供 /api/health 和合同中的业务接口。不要修改 frontend 文件。
+
+
+        【第 2 段｜环境与启动说明】
+
+        请检查并说明应使用 python backend/server.py 还是 py backend/server.py，默认只监听 127.0.0.1:8000。把启动、健康检查、停止和常见错误写进 RUNBOOK.md。不要自动长期占用终端。
+
+
+        【第 3 段｜启动并检查健康】
+
+        在终端按 RUNBOOK 启动服务，浏览器打开 http://127.0.0.1:8000/api/health。必须看到明确 JSON 成功结果，否则停止，不进入业务接口测试。
+
+
+        【第 4 段｜单独测试业务接口】
+
+        按 API_Spec.md 测试至少一个查询、一个提交和两个错误场景。逐项记录请求、实际状态码、响应和是否符合合同，保存 backend-acceptance.md。
+
+
+        【第 5 段｜重启验证持久化】
+
+        停止服务后重新启动，再查询刚才提交的数据。能查到才标记持久化通过；查不到则交回 @后端 修复。
+
+        '
+      checklist:
+      - 后端文件和运行手册均已落盘
+      - 服务只监听本机地址且可正常停止
+      - /api/health 返回成功 JSON
+      - 查询、提交和至少两个错误场景符合合同
+      - 重启服务后数据仍可查询
+      - 代码和文档没有真实密钥或隐私数据
+      suggested_questions:
+      - 端口 8000 被占用怎么办？
+      - health 成功但业务接口失败怎么办？
+      - SQLite 文件在哪里？
+      template_resource_id: local-service-card
+    tools:
+    - name: TRAE 终端
+      note: 启动和停止本地后端
+    - name: 浏览器地址栏
+      note: 先检查 health，再检查业务接口
+  c5:
+    resource_ids:
+    - integration-card
+    - api-contract-card
+    media:
+    - kind: video
+      title: 口播课件 · 完成前后端联调
+      object_key: documents/shared/course-media/day03-c5-frontend-integration-v2.mp4
+      poster_key: documents/shared/course-media/day03-c5-frontend-integration-poster-v2.jpg
+      duration_sec: 189
+    knowledge_cards:
+    - id: integration
+      term: 前后端联调
+      plain: 前端按接口合同发送请求，后端按同一合同返回，双方一起验证完整用户操作。
+      tag: 闭环
+    - id: contract-debug
+      term: 按合同定位
+      plain: 地址、方法、字段、状态码或响应结构哪一项不一致，就由对应岗位修复。
+      tag: 调试
+    - id: owner-fix
+      term: 各修各的
+      plain: 前端请求错误由前端修改，后端响应错误由后端修改，验收者不跨岗位乱改。
+      tag: 责任
+    glossary_terms:
+    - id: gt-fetch
+      term: Fetch · 请求
+      plain: 浏览器 JavaScript 向后端 API 发送 HTTP 请求的常见方式。
+    - id: gt-network
+      term: Network · 网络面板
+      plain: 浏览器开发者工具中查看请求地址、状态码和响应的位置。
+    quiz:
+    - - 联调出现 404，第一步检查什么？
+      - - 页面颜色
+        - 请求方法和路径是否与 API_Spec 一致
+        - 数据库主键
+      - 1
+      - 404 常表示路径或资源不存在，先按合同核对地址和方法。
+    - - 后端返回字段正确，但前端取错字段，谁负责修改？
+      - - 后端
+        - 前端
+        - UI
+      - 1
+      - 合同正确时，错误发生在哪个岗位就由哪个岗位修复。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节包含 @前端 与 @后端 切换，不能交给一个岗位全改。
+
+
+        【第 1 段｜切换 @前端 读取合同】
+
+        请读取 API_Spec.md 和 RUNBOOK.md，先列出 frontend/app.js 中每个演示数据操作将调用哪个接口。只做映射，不改代码，等我确认。
+
+
+        【第 2 段｜前端接入 API】
+
+        映射已确认。请只修改 frontend/app.js，让查询和提交通过 http://127.0.0.1:8000 的已确认接口完成；保留 loading、empty、success、error 展示。不要修改接口合同或后端代码。
+
+
+        【第 3 段｜运行完整用户路径】
+
+        保持后端服务运行，通过 RUNBOOK 指定的页面地址打开前端。完成一次查询和一次提交，再刷新页面确认数据来自后端。记录浏览器 Network 的路径、方法、状态码和响应。
+
+
+        【第 4 段｜按责任定位】
+
+        不通过时先对照 API_Spec：请求地址、方法或请求字段错误，切换 @前端 修复；后端状态码、响应字段或存储错误，切换 @后端 修复。每次只改责任岗位的文件。
+
+
+        【第 5 段｜回归复测】
+
+        修复后重新执行查询、提交、空数据和错误四条路径，把结果追加到 backend-acceptance.md。
+
+        '
+      checklist:
+      - 前端接口映射先确认后修改
+      - 页面通过 HTTP API 查询和提交
+      - 四种状态在真实请求下仍能显示
+      - Network 中方法、路径、状态码符合合同
+      - 问题由责任岗位修复并完成回归复测
+      suggested_questions:
+      - 页面提示 Failed to fetch 怎么排查？
+      - 404 和 500 分别先找谁？
+      - 怎样确认数据不是本地演示数组？
+      template_resource_id: integration-card
+    tools:
+    - name: 浏览器 Network
+      note: 查看请求、状态码和 JSON 响应
+    - name: 服务终端日志
+      note: 查看后端是否收到请求和报错
+  c6:
+    resource_ids:
+    - integration-card
+    - agent-backend
+    media:
+    - kind: video
+      title: 口播课件 · 后端过闸并交给测试
+      object_key: documents/shared/course-media/day03-c6-accept-test-handoff-v2.mp4
+      poster_key: documents/shared/course-media/day03-c6-accept-test-handoff-poster-v2.jpg
+      duration_sec: 201
+    knowledge_cards:
+    - id: backend-gate
+      term: 后端过闸
+      plain: 合同、健康检查、业务接口、持久化、错误处理、安全和联调证据全部通过。
+      tag: 验收
+    - id: runbook-handoff
+      term: 运行手册交接
+      plain: 测试人员按文档就能启动、检查、停止服务，不依赖开发者口头解释。
+      tag: 可复现
+    - id: test-receive
+      term: 测试接收
+      plain: 测试先读取需求、合同、运行手册和验收记录，Day4 再制定测试计划。
+      tag: 下一棒
+    glossary_terms:
+    - id: gt-runbook
+      term: RUNBOOK · 运行手册
+      plain: 记录怎样启动、检查、停止和排查服务的操作文档。
+    - id: gt-regression
+      term: Regression · 回归
+      plain: 修复后重新检查主要流程，确认旧功能没有被破坏。
+    quiz:
+    - - 只有健康检查通过，能否交给测试？
       - - 能
-        - 不能，必须由真实记录聚合
-        - 演示时可以不标
+        - 不能，还要验证业务、持久化、错误、安全和联调
+        - 能，只要文件齐全
       - 1
-      - 写死数字不能反映业务变化。
-    media:
-    - kind: video
-      title: 口播课件 · 第 3 节
-      object_key: documents/shared/course-media/day03-c3-web-prompt-anatomy.mp4
-      poster_key: documents/shared/course-media/day03-c3-web-prompt-anatomy-poster.jpg
-      duration_sec: 47
-  c4:
-    resource_ids:
-    - team-prompts-v11
-    - week1-day3-source
-    - domain-packs
+      - health 只是服务可达证据，不是完整业务通过。
+    - - 为什么测试岗位必须先读 RUNBOOK？
+      - - 为了学习写后端
+        - 为了能独立复现启动和检查环境
+        - 为了修改接口
+      - 1
+      - 可复现的运行方法是测试接收的基础。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节先完成后端过闸，再切换测试接收。
+
+
+        【第 1 段｜后端最终自检】
+
+        切换 @后端，只检查不修改：API 与数据合同对账、health、查询、提交、两个错误、重启持久化、无密钥、前后端联调。逐项给出通过/不通过和证据文件。
+
+
+        【第 2 段｜修复并回归】
+
+        不通过项由责任岗位修复。修复后重新执行查询、提交、空数据和错误路径，更新 backend-acceptance.md。
+
+
+        【第 3 段｜整理测试交接】
+
+        请生成 backend-handoff.md，列出 PRD.md、API_Spec.md、DB_Schema.md、RUNBOOK.md、backend-acceptance.md、frontend 目录和后端目录；写明启动命令、地址、已知限制和测试环境数据。
+
+
+        【第 4 段｜切换 @测试 接收】
+
+        切换到 @测试，发送：请读取 PRD.md、API_Spec.md、DB_Schema.md、RUNBOOK.md、backend-acceptance.md 和 backend-handoff.md，只复述测试目标、启动方法、核心接口、风险和缺失项。今天不要开始执行测试。
+
+
+        【第 5 段｜记录交接链】
+
+        创建 day3-handoff-log.md，记录后端 → 前端 → 后端/前端修复 → 测试接收的输入、输出、验收和轮次。
+
+        '
+      checklist:
+      - 后端过闸项目均有证据
+      - backend-handoff.md 包含完整文件、命令、地址和限制
+      - '@测试 已完成接收复述但未提前测试'
+      - day3-handoff-log.md 能还原完整联调和交接
+      suggested_questions:
+      - 哪些证据才算后端通过？
+      - 测试接收时发现文件缺失怎么办？
+      - 为什么今天不让测试立刻执行？
+      template_resource_id: integration-card
     tools:
-    - name: '@后端工程师 Agent'
-      note: 本节交付：AI 预留接口 + Week2 交接文档
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - 固定分析文案为什么不能冒充 AI？
-      - - 字数不够
-        - 来源不真实，会误导用户和验收
-        - 颜色不对
-      - 1
-      - 系统必须诚实说明能力状态和数据来源。
-    - - 预留接口的价值是什么？
-      - - 提前伪装功能完成
-        - 为第二周接入定义稳定边界
-        - 代替数据库
-      - 1
-      - 先稳定契约，后续能力可以在边界内接入。
-    media:
-    - kind: video
-      title: 口播课件 · 第 4 节
-      object_key: documents/shared/course-media/day03-c4-hands-on-prototype.mp4
-      poster_key: documents/shared/course-media/day03-c4-hands-on-prototype-poster.jpg
-      duration_sec: 48
-  c5:
-    resource_ids:
-    - team-prompts-v11
-    - week1-day3-source
-    - domain-packs
-    tools:
-    - name: '@前端工程师 Agent + 学员亲测'
-      note: 本节交付：真实数据全链路 V0.8 + 冒烟记录
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - 前端切换真实接口后首先怎样定位空白页？
-      - - 重写项目
-        - 先直接请求接口，再检查前端参数和渲染
-        - 换颜色
-      - 1
-      - 分段验证可以判断问题在哪一层。
-    - - 谁有权宣布全链路通过？
-      - - 任一 Agent
-        - 亲自执行验收的学员
-        - 代码生成工具
-      - 1
-      - 验收权始终在学员。
-    media:
-    - kind: video
-      title: 口播课件 · 第 5 节
-      object_key: documents/shared/course-media/day03-c5-accept.mp4
-      poster_key: documents/shared/course-media/day03-c5-accept-poster.jpg
-      duration_sec: 53
+    - name: 后端过闸清单
+      note: 合同、运行、业务、数据、错误、安全、联调
+    - name: TRAE · @测试
+      note: 只接收和复述，Day4 正式测试
 quiz:
-- *id001
-- *id002
-- *id003
-- *id004
-- *id005
-- *id006
-lab:
-  primary_files:
-  - docs/D3-L1_项目地图.md
-  - docs/D3-L2_数据表说明.md
-  - docs/D3-L3_接口验证.md
-  - docs/D3-L4_Week2_AI交接.md
-  - docs/D3_冒烟记录.md
-  - docs/D3_command_log.md
-  prompt: 执行第三天全链路验收：必须亲自提交新记录并核对 SQLite、列表、详情和驾驶舱统计，并检查指挥日志 docs/D3_command_log.md。若业务仍使用 Mock，状态必须是 BLOCKED；AI 预留接口不得返回伪造分析。
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/D3-L1_项目地图.md
-  - check: file_exists
-    args:
-      path: docs/D3-L3_接口验证.md
-  - check: text_contains
-    args:
-      path: docs/D3-L4_Week2_AI交接.md
-      needle: 人工确认
-  - check: file_exists
-    args:
-      path: docs/D3_冒烟记录.md
-  - check: file_exists
-    args:
-      path: docs/D3_command_log.md
-  - check: text_contains
-    args:
-      path: docs/D3_command_log.md
-      needle: REJECTED
-  - check: text_contains
-    args:
-      path: docs/D3_command_log.md
-      needle: APPROVED
-  - check: text_contains
-    args:
-      path: docs/D3_command_log.md
-      needle: 我确认以上批准均为本人作出
-nodes_lab: 第 3 天岗位交接与真实证据验收
-nodes_project: SQLite + 真实接口 + 前后端联调 V0.8
-knowledge_content:
-  c1:
-    knowledge_cards:
-    - id: d3l1-k1
-      term: 页面负责收和看
-      plain: 用户在页面提交内容，也通过列表、详情和看板查看结果。
-    - id: d3l1-k2
-      term: 数据服务负责检查和传
-      plain: 它接收页面送来的内容，执行规则，再把合格记录交给数据仓库保存。
-    - id: d3l1-k3
-      term: 数据仓库负责记
-      plain: 真实记录保存在统一位置，列表、详情和看板都从这里获得事实。
-    memory_sentence: 页面负责收和看，数据服务负责检查和传，数据仓库负责记；一条记录走通，系统才真正活起来。
-    quiz:
-    - - 用户提交一条记录后，正确的旅程是什么？
-      - - 页面直接把数字画到看板上
-        - 页面送出内容，数据服务检查并保存，其他页面再读取和汇总
-        - AI 自动生成一条新的业务记录
-      - 1
-      - 口播稿用一条记录的旅程解释了页面、数据服务和数据仓库的分工。
-  c2:
-    knowledge_cards:
-    - id: d3l2-k1
-      term: 保存内容来自需求
-      plain: 页面要求填写什么，数据仓库就要有对应位置，不能由工程师临时发明。
-    - id: d3l2-k2
-      term: 每条记录要能追查
-      plain: 不重复的编号和创建、修改时间，帮助确认记录是谁、什么时候发生变化。
-    - id: d3l2-k3
-      term: 状态变化要有规矩
-      plain: 待处理、处理中、已完成等状态不能随意跳转，必须符合真实业务过程。
-    memory_sentence: 保存规则来自业务，不来自工程师的想象；每项内容有位置，每种状态有规矩。
-    quiz:
-    - - 已经完成的记录能否无条件改回待处理？
-      - - 可以，状态只是随便填写的文字
-        - 不可以，必须遵守事先确定的状态变化规则
-        - 可以，只要换一种颜色
-      - 1
-      - 状态表示真实业务进展，不能脱离规则任意变化。
-  c3:
-    knowledge_cards:
-    - id: d3l3-k1
-      term: 真实记录要能进能出
-      plain: 提交后必须保存，列表能查到，详情能打开，看板数字能随记录变化。
-    - id: d3l3-k2
-      term: 数据服务再次守规则
-      plain: 即使页面已经提醒过，数据服务仍要拒绝空白、负数或其他不合格内容。
-    - id: d3l3-k3
-      term: 运行结果才算完成
-      plain: AI 生成文件不等于功能完成，必须用真实操作证明每一步都有效。
-    memory_sentence: 页面提醒是为了好用，数据检查是为了安全；生成了文件不算完成，真实记录能进能出才算。
-    quiz:
-    - - 页面已经阻止负数金额，数据服务是否还需要再次检查？
-      - - 不需要，页面永远不会被绕过
-        - 需要，数据服务必须保护真实记录不被坏数据污染
-        - 只在演示时需要
-      - 1
-      - 页面提醒改善体验，数据服务检查保护真实数据，两层职责不同。
-  c4:
-    knowledge_cards:
-    - id: d3l4-k1
-      term: 第一周先把数据做真
-      plain: 提交、保存、查询和统计先形成稳定流程，AI 分析放到第二周增加。
-    - id: d3l4-k2
-      term: 没接入就明确说明
-      plain: 当前分析通道要回答 AI 尚未接入，不能用固定文字冒充真实分析。
-    - id: d3l4-k3
-      term: 提前写好下周交接
-      plain: 说明 AI 将读取什么、返回什么、结果放哪里以及最后由谁确认。
-    memory_sentence: 第一周把数据做真，第二周把智能接上；没有接入，就诚实标记。
-    quiz:
-    - - 当前还没有真正调用 AI，页面上的分析样例应该怎样标记？
-      - - 标记为 AI 已完成分析
-        - 醒目标记为演示数据，并说明第二周接入
-        - 不做任何说明
-      - 1
-      - 口播稿强调分期开发要诚实，未来能力不能冒充当前成果。
-  c5:
-    knowledge_cards:
-    - id: d3l5-k1
-      term: 先按约定逐项核对
-      plain: 名称或格式对不上时先查双方约定，不让两个 AI 各自猜答案。
-    - id: d3l5-k2
-      term: 每接一段就检查一段
-      plain: 依次检查列表、提交、详情和看板，避免所有问题最后缠在一起。
-    - id: d3l5-k3
-      term: 完成后赶走假数据
-      plain: 确保所有业务页面都读取真实记录，不再偷偷使用演示数据入口。
-    memory_sentence: 对不上时先查约定，不靠猜；接完以后赶走假数据，用一条真实记录证明全流程。
-    quiz:
-    - - 页面显示的名称和数据服务返回的名称对不上，第一步是什么？
-      - - 让两个岗位各自修改直到碰巧成功
-        - 查看双方传话约定，先判断谁没有遵守或约定哪里不清
-        - 把演示数据重新放回页面
-      - 1
-      - 先修正约定，再修改实现，才能让问题不再重复出现。
+- - 后端三件事是？
+  - - 结构、样式、行为
+    - 规则、数据、接口
+    - 需求、设计、部署
+  - 1
+  - 后端负责业务规则、数据存取和接口对话。
+- - Day3 为什么先写 API_Spec.md 再写代码？
+  - - 为了增加文档
+    - 为了让前端和后端使用同一字段与错误约定
+    - 因为代码不能修改
+  - 1
+  - 先合同能避免双方各猜一套。
+- - 数据库表中主键的作用是什么？
+  - - 控制颜色
+    - 唯一识别一条记录
+    - 启动服务
+  - 1
+  - 主键让每条记录可准确查询和修改。
+- - 怎样证明 SQLite 数据已持久化？
+  - - AI 说已保存
+    - 服务重启后仍能查询
+    - 页面显示成功提示
+  - 1
+  - 重启仍存在是最直接证据。
+- - 联调时前端请求路径与合同不一致，谁修改？
+  - - UI
+    - 前端
+    - 测试
+  - 1
+  - 请求由前端发出，因此前端按合同修复。
+- - Day3 最终应该停在哪个状态？
+  - - 测试已经全部执行
+    - 测试读取交付物并完成接收复述
+    - 运维已经上线
+  - 1
+  - Day4 才开始测试，Day3 只完成测试接收。
+# Day3 不再单独挂 Lab 节点（已去掉：可运行后端 · 前后端联调与测试接收）；实操保留在课节 local_prep / 项目交付。

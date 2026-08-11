@@ -1,0 +1,65 @@
+{
+  "total": 281.844667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 25.344
+    },
+    {
+      "id": "02-pm-shift",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\02-pm-shift.wav",
+      "start": 25.594,
+      "duration": 25.813333333333333
+    },
+    {
+      "id": "03-first-prompt",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\03-first-prompt.wav",
+      "start": 51.657333333333334,
+      "duration": 24.96
+    },
+    {
+      "id": "04-repeat-confirm",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\04-repeat-confirm.wav",
+      "start": 76.86733333333333,
+      "duration": 26.197333333333333
+    },
+    {
+      "id": "05-eight-questions",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\05-eight-questions.wav",
+      "start": 103.31466666666667,
+      "duration": 24.490666666666666
+    },
+    {
+      "id": "06-measurable",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\06-measurable.wav",
+      "start": 128.05533333333335,
+      "duration": 27.349333333333334
+    },
+    {
+      "id": "07-summary-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\07-summary-gate.wav",
+      "start": 155.65466666666669,
+      "duration": 24.576
+    },
+    {
+      "id": "08-confirm-requirement",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\08-confirm-requirement.wav",
+      "start": 180.48066666666668,
+      "duration": 22.4
+    },
+    {
+      "id": "09-prd-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\09-prd-check.wav",
+      "start": 203.13066666666668,
+      "duration": 29.44
+    },
+    {
+      "id": "10-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-05-pm-requirements\\video\\audio\\segments\\10-close.wav",
+      "start": 232.82066666666668,
+      "duration": 49.024
+    }
+  ]
+}

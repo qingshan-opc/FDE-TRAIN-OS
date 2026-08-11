@@ -1,0 +1,53 @@
+{
+  "total": 183.496,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 24.832
+    },
+    {
+      "id": "02-three-things",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\02-three-things.wav",
+      "start": 24.952,
+      "duration": 24.149333333333335
+    },
+    {
+      "id": "03-restaurant",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\03-restaurant.wav",
+      "start": 49.221333333333334,
+      "duration": 23.424
+    },
+    {
+      "id": "04-no-direct-db",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\04-no-direct-db.wav",
+      "start": 72.76533333333333,
+      "duration": 21.589333333333332
+    },
+    {
+      "id": "05-traditional",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\05-traditional.wav",
+      "start": 94.47466666666666,
+      "duration": 21.888
+    },
+    {
+      "id": "06-ai-era",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\06-ai-era.wav",
+      "start": 116.48266666666667,
+      "duration": 23.04
+    },
+    {
+      "id": "07-boundary",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\07-boundary.wav",
+      "start": 139.64266666666668,
+      "duration": 19.712
+    },
+    {
+      "id": "08-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-03\\section-01-backend-role\\video\\audio\\segments\\08-close.wav",
+      "start": 159.47466666666668,
+      "duration": 24.021333333333335
+    }
+  ]
+}

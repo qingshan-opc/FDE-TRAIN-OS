@@ -1,0 +1,53 @@
+{
+  "total": 245.675333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 35.882666666666665
+    },
+    {
+      "id": "02-domain-value",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\02-domain-value.wav",
+      "start": 36.132666666666665,
+      "duration": 32.08533333333333
+    },
+    {
+      "id": "03-human-ai-split",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\03-human-ai-split.wav",
+      "start": 68.46799999999999,
+      "duration": 30.549333333333333
+    },
+    {
+      "id": "04-rule-examples",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\04-rule-examples.wav",
+      "start": 99.26733333333333,
+      "duration": 29.184
+    },
+    {
+      "id": "05-small-real",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\05-small-real.wav",
+      "start": 128.70133333333334,
+      "duration": 28.586666666666666
+    },
+    {
+      "id": "06-prototype-boundary",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\06-prototype-boundary.wav",
+      "start": 157.538,
+      "duration": 26.154666666666667
+    },
+    {
+      "id": "07-domain-inventory",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\07-domain-inventory.wav",
+      "start": 183.94266666666667,
+      "duration": 27.733333333333334
+    },
+    {
+      "id": "08-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-01\\section-01-confidence-domain\\video\\audio\\segments\\08-close.wav",
+      "start": 211.926,
+      "duration": 33.74933333333333
+    }
+  ]
+}

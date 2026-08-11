@@ -1,325 +1,595 @@
 day: 5
-project: 产品复盘、本地交付、五分钟讲解和第一周验收
-project_brief: 前四天先做后懂，第五天把自己的真实项目摊开，系统讲清需求、原型、前端、接口、数据库、测试和交付如何连接；随后由运维和项目经理协助完成本地交付、README、路演和综合验收。
+project: 用一项微迭代复现完整软件开发流程
+project_brief: 学员在 Day1 到 Day4 已发布项目上选择一项小而真实的改进。 先由产品经理确认用户问题和范围，再依次交给 UI、前端、后端、测试和运维。 每个岗位只读取上游交付物，在人工确认后执行，并留下可验证文件与运行证据。
+  最后回到产品经理完成业务终验，同时生成完整流程复盘。
 resources:
-- id: team-prompts-v11
-  title: 七岗位 AI 员工提示词包
+- id: agent-pm
+  title: 智能体提示词 · 产品经理
   kind: download
-  summary: 七名 AI 员工的职责、交接方法和五天协作规则
-  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_Agent_Prompts_V1.1/00_README.md
-- id: week1-day5-source
-  title: 第一周第 5 天课程合约
+  summary: 访谈需求、控制范围并生成产品交接
+  url: /course-assets/bootcamp/day-01/agent-prompts/01-product-manager.md
+- id: agent-ui
+  title: 智能体提示词 · UI
+  kind: download
+  summary: 把需求变成状态完整的交互原型合同
+  url: /course-assets/bootcamp/day-01/agent-prompts/02-ui.md
+- id: agent-frontend
+  title: 智能体提示词 · 前端
+  kind: download
+  summary: 按原型和接口合同实现页面交互
+  url: /course-assets/bootcamp/day-01/agent-prompts/03-frontend.md
+- id: agent-backend
+  title: 智能体提示词 · 后端
+  kind: download
+  summary: 按业务规则实现接口、数据与运行能力
+  url: /course-assets/bootcamp/day-01/agent-prompts/04-backend.md
+- id: agent-testing
+  title: 智能体提示词 · 测试
+  kind: download
+  summary: 制定计划、执行验证并完成缺陷闭环
+  url: /course-assets/bootcamp/day-01/agent-prompts/05-testing.md
+- id: agent-operations
+  title: 智能体提示词 · 运维
+  kind: download
+  summary: 负责发布、健康检查、日志和回退
+  url: /course-assets/bootcamp/day-01/agent-prompts/06-operations.md
+- id: replay-map
+  title: 速查卡 · 六岗位接力地图
   kind: doc
-  summary: 本日五节课、交付物、岗位交接与验收口径
-  url: /course-assets/bootcamp/day-05/README.md
-- id: domain-packs
-  title: 第一周领域包
-  kind: doc
-  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
-  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+  summary: 每个岗位的输入、输出、退回条件和下一棒
+  url: /course-assets/bootcamp/day-05/section-06-release-retrospective/resources.md
 capsule_extra:
   c1:
     resource_ids:
-    - team-prompts-v11
-    - week1-day5-source
-    - domain-packs
-    tools:
-    - name: '@项目经理 Agent'
-      note: 本节交付：研发全流程图
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id001
-      - 软件为什么不是一次提示词生成出来的？
-      - - 模型速度不够
-        - 需求、设计、实现和验证需要逐步交接与确认
-        - 文件太多
-      - 1
-      - 逐步批准能控制范围和质量。
-    - &id002
-      - 学员在 AI 团队中的核心职责是什么？
-      - - 手写全部代码
-        - 方向、判断、验收和最终责任
-        - 只负责观看
-      - 1
-      - AI 负责加速，学员负责决定与验证。
+    - agent-pm
+    - replay-map
     media:
     - kind: video
-      title: 口播课件 · 第 1 节
-      object_key: documents/shared/course-media/day05-c1-worldview-plain.mp4
-      poster_key: documents/shared/course-media/day05-c1-worldview-plain-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 产品经理重跑需求与范围
+      object_key: documents/shared/course-media/day05-c1-pm-replay-v2.mp4
+      poster_key: documents/shared/course-media/day05-c1-pm-replay-poster-v2.jpg
+      duration_sec: 185
+    knowledge_cards:
+    - id: micro-iteration
+      term: 微迭代
+      plain: 在现有项目上完成一项小而可验收的改进，不借机重做整个系统。
+      tag: 范围
+    - id: replay-folder
+      term: 独立复现目录
+      plain: Day5 新证据统一放入 day5-replay，原项目文件作为输入保留。
+      tag: 保护成果
+    - id: pm-gate
+      term: 确认需求
+      plain: 学员确认用户、问题、范围和验收标准以后，才允许交给 UI。
+      tag: 人工闸门
+    glossary_terms:
+    - id: gt-iteration
+      term: Iteration · 迭代
+      plain: 在已有版本上完成一组明确且可验证的改进。
+    - id: gt-scope-freeze
+      term: Scope Freeze · 范围冻结
+      plain: 确认本轮做什么和不做什么，后续岗位不得自行扩展。
+    quiz:
+    - - Day5 为什么选择微迭代而不是重做整个系统？
+      - - 为了减少岗位数量
+        - 为了在可控范围内完整复现流程
+        - 为了跳过测试
+      - 1
+      - 范围越小，越容易看清岗位交接和完整闭环。
+    - - 产品经理交给 UI 前必须确认什么？
+      - - 代码语言
+        - 用户问题、范围和验收标准
+        - 服务器价格
+      - 1
+      - UI 的设计输入来自确认后的产品目标与范围。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '现在开始 Day5 全流程复现。请使用 @产品经理。每段完成后必须停止。
+
+
+        【第 1 段｜检查现有项目】
+
+        请只读取 Day1 到 Day4 的 PRD、交接文件、测试报告、部署说明和最终验收。先复述当前版本已经解决什么问题。不要修改任何文件。
+
+
+        【第 2 段｜选择一项微迭代】
+
+        请结合我的专业领域，一次只问一个问题。帮助我从现有项目中选择一项当天可完成的改进。给三个例子，但不要替我决定。确认后把新文件统一放入 day5-replay。
+
+
+        【第 3 段｜完成需求访谈】
+
+        围绕目标用户、使用场景、当前困难、期望动作、成功结果和不做范围逐题访谈。每次只问一题，等我回答后继续。
+
+
+        【第 4 段｜生成产品交付】
+
+        请生成 day5-replay/iteration-prd.md 和 day5-replay/pm-handoff.md。写清用户故事、第一版范围、不做范围、业务规则、页面状态和可判断验收标准。保存后停止，等我回复“确认需求”。
+
+        '
+      checklist:
+      - 已读取第一版真实交付物
+      - 微迭代当天可完成
+      - 新证据统一放入 day5-replay
+      - 用户故事和不做范围明确
+      - 每条验收标准能够判断通过或失败
+      - 学员回复“确认需求”
+      suggested_questions:
+      - 什么样的改进算微迭代？
+      - 如果需求同时涉及很多页面怎么办？
+      - 为什么要保护原有交付文件？
+      template_resource_id: agent-pm
+    tools:
+    - name: TRAE · @产品经理
+      note: 先复述现状，再访谈和冻结范围
+    - name: day5-replay 目录
+      note: 隔离本次复现产生的文件与证据
   c2:
     resource_ids:
-    - team-prompts-v11
-    - week1-day5-source
-    - domain-packs
-    tools:
-    - name: 通用对话
-      note: 本节交付：一条可讲清的数据链路
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id003
-      - 驾驶舱看板属于系统的哪一部分？
-      - - 前端展示
-        - 数据库
-        - 测试报告
-      - 0
-      - 看板是用户看到的前端，但数据来自后端统计。
-    - &id004
-      - 支撑看板数字的最终事实在哪里？
-      - - 按钮里
-        - 数据库业务记录中
-        - 口播稿里
-      - 1
-      - 数据库保存真实业务记录，统计接口据此计算。
+    - agent-ui
+    - replay-map
     media:
     - kind: video
-      title: 口播课件 · 第 2 节
-      object_key: documents/shared/course-media/day05-c2-enterprise-digital-stages.mp4
-      poster_key: documents/shared/course-media/day05-c2-enterprise-digital-stages-poster.jpg
-      duration_sec: 69
+      title: 口播课件 · UI 重跑交互原型
+      object_key: documents/shared/course-media/day05-c2-ui-replay-v2.mp4
+      poster_key: documents/shared/course-media/day05-c2-ui-replay-poster-v2.jpg
+      duration_sec: 185
+    knowledge_cards:
+    - id: ui-input
+      term: UI 的输入
+      plain: 只接受已确认的迭代需求和产品交接，不根据口头想法扩大范围。
+      tag: 交接
+    - id: ui-four-states
+      term: 四种页面状态
+      plain: 加载、空数据、成功和错误状态都要在原型中明确。
+      tag: 完整性
+    - id: ui-contract
+      term: 原型也是合同
+      plain: 前端根据原型中的字段、动作、反馈和状态实现，不凭感觉补设计。
+      tag: 合同
+    glossary_terms:
+    - id: gt-interaction-flow
+      term: Interaction Flow · 交互流程
+      plain: 用户从进入页面到完成目标所经历的动作与反馈顺序。
+    - id: gt-state
+      term: UI State · 页面状态
+      plain: 页面在加载、无数据、成功或失败时应呈现的明确样子。
+    quiz:
+    - - UI 可以在已确认需求之外增加功能吗？
+      - - 可以自由增加
+        - 不可以，应退回产品经理确认
+        - 只要好看就可以
+      - 1
+      - UI 负责翻译需求，不负责擅自扩大产品范围。
+    - - 前端最需要从 UI 交接中看到什么？
+      - - 只有颜色
+        - 字段、动作、反馈与页面状态
+        - 公司组织架构
+      - 1
+      - 可实现的原型必须覆盖交互和状态合同。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '需求已经确认。现在切换到 @UI。每段完成后必须停止。
+
+
+        【第 1 段｜读取并复述】
+
+        请读取 day5-replay/iteration-prd.md 和 pm-handoff.md。只复述目标用户、核心动作、范围、业务规则和验收标准。发现矛盾时停止并要求回到 @产品经理。
+
+
+        【第 2 段｜列出页面与状态】
+
+        请只列本次需要修改的页面区域。逐项写输入、显示字段、用户动作、反馈、加载、空数据、成功和错误状态。不要生成代码。
+
+
+        【第 3 段｜生成交互说明】
+
+        请生成 day5-replay/iteration-ui-spec.md。用文字线框说明布局、操作顺序、状态变化和异常提示。每条设计必须对应产品验收标准。
+
+
+        【第 4 段｜生成 UI 交接】
+
+        请生成 day5-replay/ui-handoff.md。写清前端必须实现的元素、交互、状态、文案和证据要求。保存后停止，等我回复“确认原型”。
+
+        '
+      checklist:
+      - UI 已读取产品交付物
+      - 页面改动没有超出范围
+      - 四种页面状态齐全
+      - 交互与验收标准逐条对应
+      - ui-handoff.md 可直接交给前端
+      - 学员回复“确认原型”
+      suggested_questions:
+      - 微迭代还需要画完整页面吗？
+      - 原页面与新原型冲突怎么办？
+      - 错误提示应该由谁确定？
+      template_resource_id: agent-ui
+    tools:
+    - name: TRAE · @UI
+      note: 需求翻译、状态补齐和前端交接
+    - name: 状态对照表
+      note: 加载、空数据、成功和错误
   c3:
     resource_ids:
-    - team-prompts-v11
-    - week1-day5-source
-    - domain-packs
-    tools:
-    - name: '@运维工程师 Agent'
-      note: 本节交付：本地交付检查与运行证据
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id005
-      - 本地能打开能否称为已上线？
-      - - 能
-        - 不能，最多说明可本地演示
-        - 有截图就能
-      - 1
-      - 发布状态必须与实际部署事实一致。
-    - &id006
-      - 第一周为什么不教 Docker？
-      - - Docker 没价值
-        - 它会增加与课程目标无关的环境复杂度
-        - AI 不会用
-      - 1
-      - 第一周聚焦研发逻辑和本地可交付。
+    - agent-frontend
+    - replay-map
     media:
     - kind: video
-      title: 口播课件 · 第 3 节
-      object_key: documents/shared/course-media/day05-c3-how-software-built.mp4
-      poster_key: documents/shared/course-media/day05-c3-how-software-built-poster.jpg
-      duration_sec: 57
+      title: 口播课件 · 前端按合同完成改动
+      object_key: documents/shared/course-media/day05-c3-frontend-replay-v2.mp4
+      poster_key: documents/shared/course-media/day05-c3-frontend-replay-poster-v2.jpg
+      duration_sec: 183
+    knowledge_cards:
+    - id: inspect-first
+      term: 先检查再改动
+      plain: 前端先找到现有入口、组件和请求位置，再提出最小改动范围。
+      tag: 控制风险
+    - id: frontend-boundary
+      term: 前端边界
+      plain: 页面、交互和请求组装由前端负责，业务规则和数据存储交给后端。
+      tag: 岗位
+    - id: frontend-evidence
+      term: 前端自检证据
+      plain: 页面四状态、请求内容和控制台结果都要形成可查看证据。
+      tag: 验收
+    glossary_terms:
+    - id: gt-change-list
+      term: Change List · 改动清单
+      plain: 开工前列出准备修改的文件与原因，防止改动范围失控。
+    - id: gt-integration-contract
+      term: Integration Contract · 联调合同
+      plain: 前后端共同遵守的请求方法、路径、字段、响应和错误约定。
+    quiz:
+    - - 前端开工前第一步是什么？
+      - - 直接重写页面
+        - 检查现有入口并列最小改动清单
+        - 修改数据库
+      - 1
+      - 先理解已有结构才能避免重复和破坏。
+    - - 业务规则应该由前端自行实现吗？
+      - - 全部放前端
+        - 按合同交给后端并在前端呈现结果
+        - 让测试决定
+      - 1
+      - 前端负责交互，核心规则需要后端统一执行。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '原型已经确认。现在切换到 @前端。每段完成后必须停止。
+
+
+        【第 1 段｜检查现有前端】
+
+        请读取 iteration-prd.md、iteration-ui-spec.md、ui-handoff.md 和现有前端代码。只说明入口文件、相关组件、当前请求位置和可复用部分。不要修改代码。
+
+
+        【第 2 段｜提出最小改动】
+
+        请列出准备修改的文件、每个文件的修改目的、保持不变的部分和需要后端配合的合同。输出后停止，等我回复“确认前端改动”。
+
+
+        【第 3 段｜实现前端】
+
+        已确认。请只按 UI 交接实现本次改动。覆盖加载、空数据、成功和错误状态。不得修改后端业务规则，不得重构无关文件。
+
+
+        【第 4 段｜自检与交接】
+
+        请运行现有前端检查。生成 day5-replay/frontend-acceptance.md 和 frontend-handoff.md。写明修改文件、页面入口、请求合同、四状态结果、证据路径和需要后端完成的事项。
+
+        '
+      checklist:
+      - 已检查现有代码并复用结构
+      - 学员确认最小改动清单
+      - 没有修改无关文件
+      - 四种页面状态均可检查
+      - 前端自检有真实结果
+      - 前端交接明确后端合同
+      suggested_questions:
+      - 找不到请求代码应该怎么办？
+      - 后端还没完成时前端怎样自检？
+      - 哪些改动算无关重构？
+      template_resource_id: agent-frontend
+    tools:
+    - name: TRAE · @前端
+      note: 先检查、再列改动、确认后实现
+    - name: 浏览器控制台与请求面板
+      note: 检查页面报错和请求合同
   c4:
     resource_ids:
-    - team-prompts-v11
-    - week1-day5-source
-    - domain-packs
-    tools:
-    - name: 通用对话
-      note: 本节交付：正式 README + 项目复盘 + 路演提纲
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id007
-      - README 最重要的读者是谁？
-      - - 刚写完代码的自己
-        - 第一次接手项目的人
-        - 只有 AI
-      - 1
-      - README 要让陌生接手者能够理解和运行。
-    - &id008
-      - 路演为什么从驾驶舱开始？
-      - - 图表好看
-        - 先展示管理价值，再用一条记录证明数据链路
-        - 可以跳过后端
-      - 1
-      - 价值和证据要连在一起。
+    - agent-backend
+    - replay-map
     media:
     - kind: video
-      title: 口播课件 · 第 4 节
-      object_key: documents/shared/course-media/day05-c4-server-cloudnative.mp4
-      poster_key: documents/shared/course-media/day05-c4-server-cloudnative-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 后端完成接口与数据联调
+      object_key: documents/shared/course-media/day05-c4-backend-replay-v2.mp4
+      poster_key: documents/shared/course-media/day05-c4-backend-replay-poster-v2.jpg
+      duration_sec: 185
+    knowledge_cards:
+    - id: backend-input
+      term: 后端接收三类输入
+      plain: 产品规则、前端请求合同和现有运行手册共同决定后端改动。
+      tag: 交接
+    - id: schema-decision
+      term: 数据变更先判断
+      plain: 能复用现有字段就不改表，确需变更时必须说明兼容与回退。
+      tag: 数据
+    - id: integration-proof
+      term: 联调证据
+      plain: 成功请求、错误请求、持久化和前端真实调用都需要实际记录。
+      tag: 验收
+    glossary_terms:
+    - id: gt-compatibility
+      term: Compatibility · 兼容性
+      plain: 新改动不能让原有接口、数据或页面失去正常能力。
+    - id: gt-migration
+      term: Data Migration · 数据迁移
+      plain: 数据结构变化时让旧数据安全适配新结构的过程。
+    quiz:
+    - - 后端什么时候应该修改数据表？
+      - - 每次迭代都修改
+        - 只有现有结构无法满足且方案已确认时
+        - 前端颜色变化时
+      - 1
+      - 数据结构改动影响较大，应先证明必要性并准备兼容方案。
+    - - 联调通过只看接口返回成功够不够？
+      - - 够
+        - 不够，还要看前端真实调用、错误和数据结果
+        - 只看日志
+      - 1
+      - 联调要证明合同两端和实际数据都一致。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '前端已经交接。现在切换到 @后端。每段完成后必须停止。
+
+
+        【第 1 段｜检查现有后端】
+
+        请读取 iteration-prd.md、frontend-handoff.md、原 API_Spec.md、DB_Schema.md、RUNBOOK.md 和现有后端代码。只复述业务规则、请求合同、相关入口和现有数据结构。
+
+
+        【第 2 段｜提出接口与数据方案】
+
+        请生成 day5-replay/iteration-api-spec.md 和 iteration-db-change.md。数据无需变化时也要写明理由。列出修改文件、兼容风险和回退方法。输出后停止，等我回复“确认后端改动”。
+
+
+        【第 3 段｜实现后端】
+
+        已确认。请只实现本次接口与业务规则。保持原接口兼容。不得修改无关模块，不得把真实密钥写入代码。
+
+
+        【第 4 段｜联调与交接】
+
+        请运行启动、健康、成功请求、错误请求、持久化和前端真实调用检查。生成 day5-replay/backend-acceptance.md 和 backend-handoff.md。写明命令、实际结果、证据、已知限制与测试入口。
+
+        '
+      checklist:
+      - 后端读取产品、前端和原合同
+      - 数据是否变化有明确结论
+      - 学员确认接口与数据方案
+      - 原有接口保持兼容
+      - 成功、错误和持久化有证据
+      - 前端真实调用完成联调
+      suggested_questions:
+      - 不改数据库为什么也要写说明？
+      - 原接口与新接口冲突怎么办？
+      - 前端真实调用失败先查哪里？
+      template_resource_id: agent-backend
+    tools:
+    - name: TRAE · @后端
+      note: 先对合同，再实现规则和数据
+    - name: 健康接口与请求工具
+      note: 检查启动、成功、错误和持久化
   c5:
     resource_ids:
-    - team-prompts-v11
-    - week1-day5-source
-    - domain-packs
-    tools:
-    - name: '@项目经理 Agent + 学员演示'
-      note: 本节交付：Week1 验收包与 Week2 交接
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id009
-      - 第一周最重要的学习成果是什么？
-      - - 记住某个框架
-        - 能指挥 AI 团队并讲清产品如何逐步形成
-        - 生成最多文件
-      - 1
-      - 工具会变，开发与验收逻辑可以迁移。
-    - &id010
-      - 第二周应该从哪里继续？
-      - - 推翻第一周重做
-        - 在预留接口接入 Skill、Agent 和真实 AI
-        - 把演示数据改名为 AI
-      - 1
-      - 第一周业务系统是第二周智能化的地基。
+    - agent-testing
+    - replay-map
     media:
     - kind: video
-      title: 口播课件 · 第 5 节
-      object_key: documents/shared/course-media/day05-c5-accept-map.mp4
-      poster_key: documents/shared/course-media/day05-c5-accept-map-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 测试重跑计划与缺陷闭环
+      object_key: documents/shared/course-media/day05-c5-testing-replay-v2.mp4
+      poster_key: documents/shared/course-media/day05-c5-testing-replay-poster-v2.jpg
+      duration_sec: 185
+    knowledge_cards:
+    - id: test-from-diff
+      term: 测试围绕变化展开
+      plain: 既验证新功能，也回归与本次改动相关的原有能力。
+      tag: 风险
+    - id: same-defect-loop
+      term: 缺陷闭环不变
+      plain: 测试记录、责任岗位修复、测试复测和相关回归缺一不可。
+      tag: 闭环
+    - id: release-gate
+      term: 发布结论
+      plain: 阻塞缺陷关闭且核心流程回归通过后，测试才能建议发布。
+      tag: 闸门
+    glossary_terms:
+    - id: gt-change-impact
+      term: Change Impact · 变更影响
+      plain: 本次修改可能直接或间接影响到的功能和数据范围。
+    - id: gt-release-gate
+      term: Release Gate · 发布闸门
+      plain: 版本进入部署前必须满足的测试和风险条件。
+    quiz:
+    - - 微迭代测试只验证新功能够不够？
+      - - 够
+        - 不够，还要回归受影响的原功能
+        - 只测页面
+      - 1
+      - 修改可能破坏相关能力，必须做针对性回归。
+    - - 修复岗位可以自己关闭缺陷吗？
+      - - 可以
+        - 不可以，测试复测后才能关闭
+        - 运维关闭
+      - 1
+      - 修复岗位提供自检，测试岗位负责独立复测。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '前后端已完成交接。现在切换到 @测试。每段完成后必须停止。
+
+
+        【第 1 段｜读取变更与风险】
+
+        请读取 iteration-prd.md、ui-handoff.md、frontend-handoff.md、iteration-api-spec.md 和 backend-handoff.md。只列新增能力、受影响原功能和前三项风险。
+
+
+        【第 2 段｜生成测试计划】
+
+        请生成 day5-replay/iteration-test-plan.md。覆盖启动、健康、页面四状态、成功与错误请求、业务规则、数据持久化和受影响回归。每条写步骤、预期和证据位置。保存后停止，等我回复“确认测试”。
+
+
+        【第 3 段｜逐条执行】
+
+        已确认。一次只给我一条测试操作。等我反馈实际结果和证据后再继续。不得想象执行结果，不得在测试岗位修改代码。
+
+
+        【第 4 段｜缺陷闭环】
+
+        失败时生成 iteration-defect-log.md，并告诉我切换到哪个责任岗位。修复后回到 @测试，按原步骤复测并执行相关回归。
+
+
+        【第 5 段｜生成测试报告】
+
+        请生成 day5-replay/iteration-test-report.md。写明环境、范围、结果、缺陷、回归、限制、风险和是否建议发布。输出后停止。
+
+        '
+      checklist:
+      - 计划覆盖新增与受影响原功能
+      - 学员回复“确认测试”
+      - 每条结果来自真实执行
+      - 缺陷由责任岗位修复
+      - 缺陷由测试复测并回归
+      - 报告有明确发布结论
+      suggested_questions:
+      - 怎样确定受影响的原功能？
+      - 没有缺陷还要写缺陷记录吗？
+      - 什么风险可以作为已知限制？
+      template_resource_id: agent-testing
+    tools:
+    - name: TRAE · @测试
+      note: 围绕变化执行测试与回归
+    - name: day5-evidence 目录
+      note: 按用例编号保存截图、响应与日志
+  c6:
+    resource_ids:
+    - agent-operations
+    - agent-pm
+    - replay-map
+    media:
+    - kind: video
+      title: 口播课件 · 发布终验与流程复盘
+      object_key: documents/shared/course-media/day05-c6-release-retrospective-v2.mp4
+      poster_key: documents/shared/course-media/day05-c6-release-retrospective-poster-v2.jpg
+      duration_sec: 178
+    knowledge_cards:
+    - id: ops-last-mile
+      term: 运维完成技术最后一棒
+      plain: 确定版本、备份、发布、健康检查、日志和回退证据必须齐全。
+      tag: 发布
+    - id: pm-return
+      term: 最后回到产品经理
+      plain: 产品经理根据最初需求和真实发布证据完成业务终验。
+      tag: 闭环
+    - id: reusable-map
+      term: 可迁移流程地图
+      plain: 换项目或换工具以后，六岗位的输入、输出和退回条件仍然成立。
+      tag: 迁移
+    glossary_terms:
+    - id: gt-release-evidence
+      term: Release Evidence · 发布证据
+      plain: 支持版本已成功运行并可恢复的日志、检查和结果记录。
+    - id: gt-retrospective
+      term: Retrospective · 复盘
+      plain: 根据真实过程总结有效做法、问题和下一次改进。
+    quiz:
+    - - 技术发布完成后为什么还要回产品经理？
+      - - 修改代码
+        - 判断最初业务目标是否真的达成
+        - 重做原型
+      - 1
+      - 技术成功不等于业务验收通过，终点要回到最初需求。
+    - - 换一个 AI 工具后完整流程还成立吗？
+      - - 不成立
+        - 成立，岗位输入输出和证据要求不依赖具体工具
+        - 只保留前端
+      - 1
+      - 工具会变化，工程责任与交接逻辑更稳定。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '测试已经建议发布。现在切换到 @运维。每段完成后必须停止。
+
+
+        【第 1 段｜生成迭代发布计划】
+
+        请读取 iteration-test-report.md、原 DEPLOYMENT.md 和当前代码。生成 day5-replay/iteration-deployment-plan.md。写清版本、备份、步骤、健康检查、日志、停止、回退触发条件和回退步骤。保存后停止，等我回复“确认部署”。
+
+
+        【第 2 段｜执行并留证】
+
+        已确认。一次只给一个发布操作和成功信号。等我反馈后继续。完成后生成 day5-replay/iteration-release-log.md，记录真实结果与证据。
+
+
+        【第 3 段｜回产品经理终验】
+
+        @产品经理，请读取 iteration-prd.md、iteration-test-report.md 和 iteration-release-log.md。不要修改代码。逐条核对用户故事、范围和验收标准，生成 day5-replay/iteration-final-acceptance.md。最后只给出通过或不通过。
+
+
+        【第 4 段｜生成完整流程复盘】
+
+        请根据本次真实文件生成 day5-replay/process-retrospective.md。用六行说明每个岗位的输入、输出、交给谁和退回条件。再写三条做得好的地方、三条下次改进和一份可复用的六步清单。
+
+        '
+      checklist:
+      - 学员回复“确认部署”
+      - 发布版本与测试通过版本一致
+      - 健康、主流程、日志和数据有证据
+      - 回退触发条件与步骤明确
+      - 产品经理逐条完成终验
+      - 复盘包含六岗位输入输出与退回条件
+      suggested_questions:
+      - 微迭代发布也需要备份吗？
+      - 技术测试通过但产品终验失败怎么办？
+      - 怎样把这套流程迁移到别的工具？
+      template_resource_id: replay-map
+    tools:
+    - name: TRAE · @运维 与 @产品经理
+      note: 先完成技术发布，再回业务终验
+    - name: 六岗位流程复盘表
+      note: 输入、输出、下一棒和退回条件
 quiz:
-- *id001
-- *id002
-- *id003
-- *id004
-- *id005
-- *id006
-- *id007
-- *id008
-- *id009
-- *id010
-lab:
-  primary_files:
-  - docs/D5-L1_研发全流程图.md
-  - docs/D5-L2_理解补缺.md
-  - docs/D5-L3_本地交付检查.md
-  - docs/D5_项目复盘.md
-  - docs/D5_五分钟路演.md
-  - docs/D5_综合验收.md
-  - docs/D5_command_log.md
-  - README.md
-  prompt: 执行第一周综合验收：要求学员真实运行并演示业务数据链路，再口述岗位交接与系统分层，并检查指挥日志 docs/D5_command_log.md。框架名不是考点；真实证据、诚实边界和能否讲清开发逻辑才是考点。
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/D5-L1_研发全流程图.md
-  - check: file_exists
-    args:
-      path: docs/D5-L3_本地交付检查.md
-  - check: text_contains
-    args:
-      path: README.md
-      needle: 已知限制
-  - check: text_contains
-    args:
-      path: docs/D5_综合验收.md
-      needle: Week2
-  - check: file_exists
-    args:
-      path: docs/D5_command_log.md
-  - check: text_contains
-    args:
-      path: docs/D5_command_log.md
-      needle: REJECTED
-  - check: text_contains
-    args:
-      path: docs/D5_command_log.md
-      needle: APPROVED
-  - check: text_contains
-    args:
-      path: docs/D5_command_log.md
-      needle: 我确认以上批准均为本人作出
-nodes_lab: 第 5 天岗位交接与真实证据验收
-nodes_project: 系统复盘、本地交付、路演与 Week1 验收
-knowledge_content:
-  c1:
-    knowledge_cards:
-    - id: d5l1-k1
-      term: 产品是一棒接一棒交出来的
-      plain: 问题、计划、需求、页面、数据、检查和交付前后相接，不能跳过中间步骤。
-    - id: d5l1-k2
-      term: 下一岗位使用已批准成果
-      plain: 每一步都从上一岗位确认过的文件开始，避免团队各自按自己的理解猜。
-    - id: d5l1-k3
-      term: 学员负责方向和质量
-      plain: AI 加快产出，学员负责下达任务、查看证据、纠偏和批准。
-    memory_sentence: 产品不是一句话生成的，而是一棒接一棒交出来的；AI 负责加速，你负责方向和质量。
-    quiz:
-    - - 为什么产品不能只靠一句话让 AI 一次生成？
-      - - 因为 AI 不能创建文件
-        - 因为需求、页面、数据和检查需要逐步确认，才能控制方向和质量
-        - 因为页面必须最后一天制作
-      - 1
-      - 五天流程的价值就是让每一步都有输入、交付和学员批准。
-  c2:
-    knowledge_cards:
-    - id: d5l2-k1
-      term: 页面负责接收和展示
-      plain: 用户在页面填写、查看和操作，但页面不是保存事实的最终位置。
-    - id: d5l2-k2
-      term: 数据仓库保存事实
-      plain: 列表、详情和看板都应该来自同一批可追查的真实记录。
-    - id: d5l2-k3
-      term: 看板数字必须能追查
-      plain: 每个管理数字都要能一路找到具体记录，否则再漂亮也不可信。
-    memory_sentence: 数据只有一份事实，页面只是不同的看法；看板数字能追到记录，才值得相信。
-    quiz:
-    - - 管理看板显示“本月 20 条记录”，最可靠的证明是什么？
-      - - 看板上的数字字体很醒目
-        - 能从列表和数据仓库找到对应的 20 条真实记录
-        - AI 说这个数字正确
-      - 1
-      - 看板是汇总结果，最终事实必须能追到真实业务记录。
-  c3:
-    knowledge_cards:
-    - id: d5l3-k1
-      term: 别人能运行才算交付
-      plain: 换一个人、换一个文件夹，只看说明也能把项目打开。
-    - id: d5l3-k2
-      term: 说明要覆盖完整步骤
-      plain: 写清需要什么、怎样启动、从哪里访问、数据放哪以及怎样关闭。
-    - id: d5l3-k3
-      term: 本地运行不是正式上线
-      plain: 第一周只验收电脑本地运行，不能把本地地址说成已经发布到公网。
-    memory_sentence: “在我电脑上是好的”不值钱；别人按说明也能运行，才算真正交付。
-    quiz:
-    - - 项目只能在自己的电脑上打开，是否已经算完成交付？
-      - - 算，因为开发者本人能看到
-        - 不算，还要让另一个人按说明成功运行
-        - 算，只要有页面截图
-      - 1
-      - 可重复运行是交付标准，不能把个人电脑上的偶然成功当成完成。
-  c4:
-    knowledge_cards:
-    - id: d5l4-k1
-      term: 使用说明帮助别人接手
-      plain: 说清项目用途、运行步骤、主要内容和已知限制。
-    - id: d5l4-k2
-      term: 复盘帮助下次少走弯路
-      plain: 记录目标、实际结果、返工原因和可以复用的经验。
-    - id: d5l4-k3
-      term: 讲价值不报功能菜单
-      plain: 从具体痛点、实际变化和可信证据出发，不向老板堆技术名称。
-    memory_sentence: 痛点要具体，价值要看得见，质量要拿证据说话；别人讲口号时，你展示事实。
-    quiz:
-    - - 向企业负责人讲解项目时，他最关心的是什么？
-      - - 使用了多少个专业技术名称
-        - 解决了什么麻烦、带来什么变化、有什么证据
-        - 代码文件有多少行
-      - 1
-      - 业务负责人关心问题、价值和可信度，而不是技术名词清单。
-  c5:
-    knowledge_cards:
-    - id: d5l5-k1
-      term: 运行、证据和讲清楚
-      plain: 最终验收看项目能否运行、材料是否完整、学员能否说明制作过程。
-    - id: d5l5-k2
-      term: 能力由证据指出来
-      plain: 文件、操作记录和真实结果，比“我已经掌握”更有说服力。
-    - id: d5l5-k3
-      term: 第二周只增加 AI 能力
-      plain: 第一周业务系统不推倒重来，只在预留位置接入专业知识和分析流程。
-    memory_sentence: 五天前你指挥 AI，五天后你交付信任；第一周结束，真正的项目才刚开始。
-    quiz:
-    - - 第一周最终验收最看重什么？
-      - - 代码行数最多
-        - 项目真实运行、证据完整，并且学员能讲清制作过程
-        - 页面使用最多动画
-      - 1
-      - 课程目标是掌握指挥、判断和交付逻辑，而不是追求技术数量。
+- - Day5 新文件为什么统一放进 day5-replay？
+  - - 方便删除原项目
+    - 隔离复现证据并保护第一版成果
+    - 跳过交接
+  - 1
+  - 独立目录可以清楚看到本次迭代的完整证据链。
+- - 岗位切换时最重要的动作是什么？
+  - - 重新描述全部背景
+    - 明确 @岗位 并让其读取上游交接文件
+    - 删除旧文件
+  - 1
+  - 文件交接能减少上下文丢失，也能让责任边界清楚。
+- - 前端与后端联调以什么为共同标准？
+  - - 个人习惯
+    - 请求与响应合同
+    - 页面颜色
+  - 1
+  - 双方必须对方法、路径、字段、响应和错误保持一致。
+- - 测试发现缺陷后的正确闭环是什么？
+  - - 测试直接改代码
+    - 责任岗位修复，测试复测并回归
+    - 运维忽略
+  - 1
+  - 岗位边界和独立复测共同保证结论可信。
+- - 发布以后谁完成业务终验？
+  - - 产品经理
+    - 前端
+    - 运维
+  - 0
+  - 产品经理负责回到最初用户问题和验收标准判断价值。
+- - Day5 真正要掌握的是什么？
+  - - 记住某个工具按钮
+    - 六岗位输入输出、人工闸门和证据链
+    - 学会更多编程语言
+  - 1
+  - 换工具仍然能用的，是完整工程结构与交接方法。
+# Day5 不再单独挂 Lab 节点（已去掉：一项微迭代 · 六岗位完整复现）；实操保留在课节 local_prep / 项目交付。

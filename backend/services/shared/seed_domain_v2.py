@@ -68,27 +68,49 @@ def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:
         )
         summary["course_id"] = course.id
 
-        # 2) course_version: prefer the camp version that actually has stored day
-        # packages (so the orchestrator dual-read has something to serve), then
-        # fall back to newest published / newest any.
-        version = session.execute(
+        # 2) course_version selection:
+        # Prefer the version already bound to an active offering (so bootstrap
+        # cannot flip learners onto a stale seed that merely has more day rows).
+        # Only when no offering exists / current version has zero packages, pick
+        # the richest published version.
+        existing_offering = session.execute(
             text(
                 """
-                SELECT cv.id AS id, COUNT(dp.id) AS pkgs
-                FROM course_versions cv
-                LEFT JOIN day_packages dp ON dp.course_version_id = cv.id
-                WHERE cv.camp_id = :camp
-                GROUP BY cv.id, cv.status, cv.published_at, cv.created_at
-                ORDER BY pkgs DESC,
-                         (cv.status = 'published') DESC,
-                         cv.published_at DESC NULLS LAST,
-                         cv.created_at DESC
+                SELECT o.id AS id, o.course_version_id AS cv,
+                       (SELECT COUNT(*) FROM day_packages dp
+                        WHERE dp.course_version_id = o.course_version_id) AS pkgs
+                FROM course_offerings o
+                WHERE o.camp_id = :camp AND o.status = 'active'
+                ORDER BY o.created_at DESC NULLS LAST
                 LIMIT 1
                 """
             ),
             {"camp": camp_id},
         ).first()
-        version_id = version.id if version else None
+
+        version_id = None
+        if existing_offering and existing_offering.cv and int(existing_offering.pkgs or 0) > 0:
+            version_id = existing_offering.cv
+        else:
+            version = session.execute(
+                text(
+                    """
+                    SELECT cv.id AS id, COUNT(dp.id) AS pkgs
+                    FROM course_versions cv
+                    LEFT JOIN day_packages dp ON dp.course_version_id = cv.id
+                    WHERE cv.camp_id = :camp
+                    GROUP BY cv.id, cv.status, cv.published_at, cv.created_at
+                    ORDER BY pkgs DESC,
+                             (cv.status = 'published') DESC,
+                             cv.published_at DESC NULLS LAST,
+                             cv.created_at DESC
+                    LIMIT 1
+                    """
+                ),
+                {"camp": camp_id},
+            ).first()
+            version_id = version.id if version else None
+
         if version_id:
             course_repo.link_version_to_course(version_id, course.id)
         summary["course_version_id"] = version_id
@@ -99,14 +121,24 @@ def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:
             except Exception as exc:
                 log.warning("seed_rubric_definitions skipped for %s: %s", version_id, exc)
 
-        # 3) offering bound to the camp + version. If an offering already exists
-        # but points at a different (e.g. package-less) version, correct it.
+        # 3) offering bound to the camp + version.
+        # Do NOT re-point an existing offering that already has packages — that
+        # previously yanked learners from fde-v07 (good Day1) back to v0.7 after
+        # bootstrap seeded extra week-3 stub days onto the stale version.
         offering = course_repo.get_or_create_offering(
             title=course.title,
             course_version_id=version_id,
             camp_id=camp_id,
         )
-        if version_id and offering.course_version_id != version_id:
+        current_pkgs = session.execute(
+            text("SELECT COUNT(*) AS c FROM day_packages WHERE course_version_id = :cv"),
+            {"cv": offering.course_version_id},
+        ).scalar()
+        if (
+            version_id
+            and offering.course_version_id != version_id
+            and int(current_pkgs or 0) == 0
+        ):
             offering.course_version_id = version_id
             session.flush()
         summary["offering_id"] = offering.id

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-inspect",
+    "file": "02-inspect.txt"
+  },
+  {
+    "id": "03-contract",
+    "file": "03-contract.txt"
+  },
+  {
+    "id": "04-data",
+    "file": "04-data.txt"
+  },
+  {
+    "id": "05-gate",
+    "file": "05-gate.txt"
+  },
+  {
+    "id": "06-implement",
+    "file": "06-implement.txt"
+  },
+  {
+    "id": "07-integration",
+    "file": "07-integration.txt"
+  },
+  {
+    "id": "08-handoff",
+    "file": "08-handoff.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

@@ -9,6 +9,8 @@
 #
 # 1. 本地构建推送
 #    TAG=v0.7.2-20260803 ./scripts/push_dis_cloud_image.sh
+#    （默认体积门禁 MAX_IMAGE_MB=300，防止 class 视频再次打进镜像）
+#    清理历史胖 tag：./scripts/cleanup_dis_cloud_fat_images.sh
 #
 # 2. SSH 隧道 + 配置 Secret
 #    cp deploy/k8s/dis-cloud/secret.example.env deploy/k8s/dis-cloud/.env

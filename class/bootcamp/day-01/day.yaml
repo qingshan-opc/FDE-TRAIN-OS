@@ -1,315 +1,465 @@
 day: 1
-project: 从真实问题到需求文档和可点击页面草图
-project_brief: 学员以项目负责人身份，在 TRAE 中组建七岗位 AI 软件团队，选择与自己专业或工作相关的业务问题，依次指挥项目经理、产品经理和 UI/UX 设计师，完成项目任务书、PRD 与四页可点击原型。
+project: 第一次指挥 AI 开发
+project_brief: 学员从自己熟悉的财务、HR、运营、销售、教育或其他专业领域选择一个真实问题， 在 TRAE 创建产品经理、UI、前端、后端、测试、运维六个岗位智能体， 亲自完成“产品经理确认需求 → UI 生成交互原型 → 产品经理按原需求验收”的第一次软件工程交接。
+  Day 1 的重点不是学习代码，而是建立完整开发流程、岗位边界、交接物和验收意识。
 resources:
-- id: trae-cn-download
-  title: TRAE 国内版官方下载
+- id: trae-download
+  title: TRAE 国内版 · 官方下载
   kind: link
-  summary: Windows 与 macOS 安装入口；本课程使用 TRAE 中国版
+  summary: 打开 TRAE 官方下载页，选择对应系统完成安装与登录
   url: https://www.trae.cn/ide/download
-- id: team-prompts-v11
-  title: 七岗位 AI 员工提示词包
+- id: day1-agent-pack
+  title: Day 1 · 六岗位智能体提示词包
   kind: download
-  summary: 下载后解压，可看到项目经理到运维工程师七份岗位提示词
-  url: /course-assets/resources/prompt-toolkit/FDE_TRAE_7岗位提示词_小白互动版.zip
-- id: week1-day1-source
-  title: 第一周第 1 天课程合约
+  summary: 产品经理、UI、前端、后端、测试、运维六份 TRAE 自定义智能体提示词（ZIP）
+  url: /course-assets/bootcamp/day-01/agent-prompts/Day1_TRAE_六岗位智能体提示词.zip
+- id: agent-pm
+  title: 智能体提示词 · 产品经理
+  kind: download
+  summary: 逐题澄清专业领域需求，并负责业务验收
+  url: /course-assets/bootcamp/day-01/agent-prompts/01-product-manager.md
+- id: agent-ui
+  title: 智能体提示词 · UI
+  kind: download
+  summary: 把确认后的 PRD 转成交互流程、设计规范和可点击原型
+  url: /course-assets/bootcamp/day-01/agent-prompts/02-ui.md
+- id: role-handoff-map
+  title: 速查卡 · 六岗位交接地图
   kind: doc
-  summary: 本日五节课、交付物、岗位交接与验收口径
-  url: /course-assets/bootcamp/day-01/README.md
-- id: domain-packs
-  title: 第一周领域包
+  summary: 每个岗位接收什么、交付什么、下一步切换到谁
+  url: /course-assets/bootcamp/day-01/section-02-software-flow/resources.md
+- id: project-selection-card
+  title: 速查卡 · 专业领域项目选题公式
   kind: doc
-  summary: 财务、员工管理、经营问题三个参考方向，也可选择自己的专业方向
-  url: /course-assets/teaching/week1-command-team/Week1_Domain_Packs.md
+  summary: 专业领域 + 明确用户 + 高频问题 + 可视化结果
+  url: /course-assets/bootcamp/day-01/section-04-choose-project/resources.md
 capsule_extra:
   c1:
     resource_ids:
-    - trae-cn-download
-    - team-prompts-v11
-    tools: []
-    quiz:
-    - &id001
-      - 第一节实操做到哪一步算完成？
-      - - 写出需求文档
-        - TRAE 能正常打开，七份岗位提示词已下载并解压
-        - 做出完整项目
-      - 1
-      - 第一节只负责准备工具，下一节才开始创建 AI 员工。
-    - &id002
-      - 驾驶舱只有漂亮图表为什么不算完整系统？
-      - - 没有手机端
-        - 图表背后还缺业务数据的产生、存储和统计链路
-        - 没有动画
-      - 1
-      - 驾驶舱是前端结果，必须能追到真实业务数据。
+    - trae-download
+    - day1-agent-pack
+    - project-selection-card
     media:
     - kind: video
-      title: 口播课件 · 第 1 节
-      object_key: documents/shared/course-media/day01-c1-pm-in-ai-era.mp4
-      poster_key: documents/shared/course-media/day01-c1-pm-in-ai-era-poster.jpg
-      duration_sec: 126
+      title: 口播课件 · 你不是从零开始
+      object_key: documents/shared/course-media/day01-c1-confidence-domain.mp4
+      poster_key: documents/shared/course-media/day01-c1-confidence-domain-poster.jpg
+      duration_sec: 246
+    knowledge_cards:
+    - id: domain-advantage
+      term: 专业领域优势
+      plain: 你对真实业务、数据含义和好坏标准的理解，是 AI 无法凭空获得的项目起点。
+      tag: 信心
+    - id: human-ai-split
+      term: 人机分工
+      plain: 人负责问题、选择和验收，AI 负责文档、设计和技术执行。
+      tag: 方法
+    - id: first-win
+      term: 第一次成功
+      plain: 第一天先完成一个可点击、可验收的交互原型，不要求立刻上线完整系统。
+      tag: 边界
+    glossary_terms:
+    - id: gt-domain
+      term: 专业领域
+      plain: 你真正理解其规则、数据和工作流程的行业或职能，例如财务、HR、运营。
+    - id: gt-visual-system
+      term: 可视化系统
+      plain: 把业务数据和流程放到页面上，让使用者能看、能操作、能判断。
+    quiz:
+    - - 软件开发小白在 AI 项目中最重要的起点是什么？
+      - - 先背会编程语法
+        - 选择自己真正熟悉的专业问题
+        - 先购买最贵的模型
+      - 1
+      - AI 可以补技术执行，但无法替学员提供真实领域判断；从熟悉的问题出发最容易做出可验收项目。
+    - - Day 1 为什么只要求先做可点击原型？
+      - - 因为原型不需要需求
+        - 为了先验证需求与交互，再逐步接入技术和数据
+        - 因为后端永远不重要
+      - 1
+      - 原型让小白快速看到成果并验证方向，后续再由前端、后端、测试和运维逐步把它变成真实系统。
   c2:
     resource_ids:
-    - team-prompts-v11
-    - week1-day1-source
-    - domain-packs
-    tools:
-    - name: TRAE 手动操作 + 通用对话
-      note: 本节交付：七岗位团队 + 团队协作卡
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id003
-      - Agent 完成岗位任务并自检后应该处于什么状态？
-      - - RELEASED
-        - REVIEW
-        - APPROVED
-      - 1
-      - 岗位只能提交 REVIEW，批准必须由学员明确给出。
-    - &id004
-      - 为什么不让一个 Agent 自动把全部岗位做完？
-      - - 因为模型不会写代码
-        - 因为学员会失去交接、判断和验收过程
-        - 因为文件数量会变少
-      - 1
-      - 课程目标是看懂研发逻辑，而不是只看到最终产物。
+    - role-handoff-map
     media:
     - kind: video
-      title: 口播课件 · 第 2 节
-      object_key: documents/shared/course-media/day01-c2-requirement-to-prd.mp4
-      poster_key: documents/shared/course-media/day01-c2-requirement-to-prd-poster.jpg
-      duration_sec: 72
+      title: 口播课件 · 软件公司的六岗位接力
+      object_key: documents/shared/course-media/day01-c2-software-flow.mp4
+      poster_key: documents/shared/course-media/day01-c2-software-flow-poster.jpg
+      duration_sec: 399
+    knowledge_cards:
+    - id: six-role-chain
+      term: 六岗位开发链
+      plain: 产品经理 → UI → 前端 → 后端 → 测试 → 运维，最后回到产品经理做业务验收。
+      tag: 全景
+    - id: role-handoff
+      term: 岗位交接
+      plain: 上游把确认后的文件交给下游继续工作，不靠口头记忆传递需求。
+      tag: 协作
+    - id: role-shift
+      term: 岗位价值上移
+      plain: AI 接管大量制作工作后，各岗位更重视定义、取舍、检查和责任。
+      tag: AI 时代
+    glossary_terms:
+    - id: gt-product-manager
+      term: 产品经理
+      plain: 负责确认做什么、为什么做以及怎样算合格。
+    - id: gt-ui
+      term: UI/UX
+      plain: 负责页面信息结构、操作流程和视觉体验。
+    - id: gt-frontend
+      term: 前端
+      plain: 把设计实现为用户能看到和操作的正式页面。
+    - id: gt-backend
+      term: 后端
+      plain: 负责业务规则、接口、数据存储和基础系统结构。
+    - id: gt-test
+      term: 测试
+      plain: 按需求和验收标准发现问题、留下证据并组织复测。
+    - id: gt-ops
+      term: 运维
+      plain: 负责部署、运行监控、备份、更新和故障回退。
+    quiz:
+    - - 六岗位流程中，UI 开工前最关键的上游文件是什么？
+      - - 测试报告
+        - PRD.md
+        - 部署说明
+      - 1
+      - UI 必须先读取产品经理和学员确认后的 PRD，才能把需求转成交互设计。
+    - - AI 时代测试岗位的核心价值更接近哪一项？
+      - - 机械重复点击
+        - 设计测试标准、发现边界问题并提供证据
+        - 替产品经理决定需求
+      - 1
+      - AI 能自动执行大量测试，但测试人员仍需决定测什么、哪些风险最重要以及证据是否足够。
   c3:
     resource_ids:
-    - team-prompts-v11
-    - week1-day1-source
-    - domain-packs
-    tools:
-    - name: '@项目经理 Agent'
-      note: 本节交付：项目任务书
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - &id005
-      - 项目经理最先要控制的是什么？
-      - - 按钮颜色
-        - 范围、里程碑和风险
-        - 数据库语法
-      - 1
-      - 项目经理确保团队在同一范围和节奏内交付。
-    - &id006
-      - 项目经理为什么不能顺手写完 PRD？
-      - - 他不会写
-        - 岗位边界和验收责任会被打乱
-        - PRD 不重要
-      - 1
-      - 每个岗位只交付自己的成果，下一岗位由学员亲自发起。
+    - day1-agent-pack
+    - agent-pm
+    - agent-ui
     media:
     - kind: video
-      title: 口播课件 · 第 3 节
-      object_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy.mp4
-      poster_key: documents/shared/course-media/day01-c3-pm-prompt-anatomy-poster.jpg
-      duration_sec: 66
+      title: 口播课件 · 在 TRAE 创建六岗位团队
+      object_key: documents/shared/course-media/day01-c3-agent-team.mp4
+      poster_key: documents/shared/course-media/day01-c3-agent-team-poster.jpg
+      duration_sec: 268
+    knowledge_cards:
+    - id: custom-agent
+      term: 自定义智能体
+      plain: 把岗位职责、工作流程和边界写进提示词后保存成可重复调用的 AI 角色。
+      tag: 工具
+    - id: manual-switch
+      term: 手动切换岗位
+      plain: 学员通过 @产品经理、@UI 等入口亲自推动交接，完整看见项目如何向前流动。
+      tag: 指挥
+    - id: shared-files
+      term: 工作区文件交接
+      plain: PRD、设计规范、测试报告等文件是岗位之间共同认可的工作依据。
+      tag: 协作
+    glossary_terms:
+    - id: gt-agent
+      term: Agent · 智能体
+      plain: 按固定角色、规则和步骤持续完成任务的 AI 工作单元。
+    - id: gt-system-prompt
+      term: 角色提示词
+      plain: 规定智能体是谁、怎么工作、不能做什么以及交付什么的长期说明书。
+    - id: gt-at-switch
+      term: '@岗位'
+      plain: 在 TRAE 对话中选择当前要指挥的岗位智能体。
+    quiz:
+    - - 本课程为什么要求学员手动切换 @岗位？
+      - - 为了增加操作步骤
+        - 为了看清每次岗位交接和责任变化
+        - 因为智能体不能读取文件
+      - 1
+      - 手动切换让小白亲自控制开发流程，知道当前是谁在工作、接收了什么、下一步交给谁。
+    - - 创建岗位智能体时，提示词最重要的作用是什么？
+      - - 改变编辑器颜色
+        - 固定岗位职责、流程、边界和交付物
+        - 自动购买模型额度
+      - 1
+      - 角色提示词相当于岗位说明书，保证同一智能体多次工作时仍遵守相同规则。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节不是让 AI 替你自动创建团队，而是由你在 TRAE 中亲手完成六次创建。
+
+
+        【第 1 步｜打开创建入口】
+
+        点击对话框当前的 @Agent，在智能体列表底部点击“创建智能体”。
+
+
+        【第 2 步｜创建产品经理】
+
+        名称填“产品经理”，把课程资源中的产品经理提示词正文完整粘入“提示词”，关闭“可被其他智能体调用”，点击“创建”。
+
+
+        【第 3 步｜创建 UI】
+
+        重复创建流程，名称填“UI”，粘贴 UI 提示词，关闭“可被其他智能体调用”，点击“创建”。
+
+
+        【第 4 步｜创建剩余岗位】
+
+        按同样方法依次创建“前端、后端、测试、运维”。一次只创建一个，创建后回到列表检查名称。
+
+
+        【第 5 步｜验证切换】
+
+        回到对话框，依次切换 @产品经理、@UI、@前端、@后端、@测试、@运维。不要发送任务，只确认六个岗位都能被手动选中。
+
+        '
+      checklist:
+      - 已创建产品经理、UI、前端、后端、测试、运维六个智能体
+      - 六个智能体均已关闭“可被其他智能体调用”
+      - 已通过 @岗位名称逐个完成切换验证
+      - 岗位名称与课程一致，没有随意使用相近名称
+      suggested_questions:
+      - 找不到“创建智能体”入口怎么办？
+      - 为什么要关闭“可被其他智能体调用”？
+      - 提示词应该复制文件的哪一部分？
+      template_resource_id: day1-agent-pack
   c4:
     resource_ids:
-    - team-prompts-v11
-    - week1-day1-source
-    - domain-packs
-    tools:
-    - name: '@产品经理 Agent'
-      note: 本节交付：docs/PRD.md
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - 产品经理收到老板一句话后正确的第一步是什么？
-      - - 直接生成 PRD
-        - 先澄清影响范围和验收的问题
-        - 开始画页面
-      - 1
-      - 先澄清才能避免把假设写成需求。
-    - - “页面要好用”为什么不是合格验收标准？
-      - - 字数太少
-        - 第三方无法客观判断通过或失败
-        - 没有英文
-      - 1
-      - 验收标准必须可观察、可执行、可判断。
+    - project-selection-card
     media:
     - kind: video
-      title: 口播课件 · 第 4 节
-      object_key: documents/shared/course-media/day01-c4-hands-on-mini-prd.mp4
-      poster_key: documents/shared/course-media/day01-c4-hands-on-mini-prd-poster.jpg
-      duration_sec: 68
+      title: 口播课件 · 从专业领域选择第一个项目
+      object_key: documents/shared/course-media/day01-c4-choose-project.mp4
+      poster_key: documents/shared/course-media/day01-c4-choose-project-poster.jpg
+      duration_sec: 199
+    knowledge_cards:
+    - id: project-formula
+      term: 选题公式
+      plain: 专业领域 + 明确用户 + 高频问题 + 可视化结果。
+      tag: 选题
+    - id: small-first-version
+      term: 第一版边界
+      plain: 第一版只解决一个核心问题，用三到五个页面区块展示，不追求包办整个部门。
+      tag: 范围
+    - id: real-domain-demo-data
+      term: 真实业务，演示数据
+      plain: 业务规则来自真实经验，但 Day 1 可以先用脱敏或虚构数据验证页面。
+      tag: 安全
+    glossary_terms:
+    - id: gt-project-brief
+      term: PROJECT_BRIEF
+      plain: 用一页说明项目领域、用户、问题、当前流程和期望结果的项目卡。
+    - id: gt-first-version
+      term: 第一版
+      plain: 用最小范围验证价值和流程的首个可用版本。
+    quiz:
+    - - 下面哪个更适合作为 Day 1 项目？
+      - - 做一个解决所有企业问题的平台
+        - 为招聘负责人展示招聘漏斗和超期岗位
+        - 开发一个全自动银行核心系统
+      - 1
+      - Day 1 项目应来自熟悉领域、用户明确、问题具体，并能用少量页面区块表现。
+    - - 为什么建议先使用脱敏或演示数据？
+      - - 因为真实业务不重要
+        - 为了在不暴露隐私的前提下先验证需求和交互
+        - 因为系统以后不能接真实数据
+      - 1
+      - 第一阶段先验证方向和界面，避免把个人信息或企业敏感数据直接交给工具。
   c5:
     resource_ids:
-    - team-prompts-v11
-    - week1-day1-source
-    - domain-packs
-    tools:
-    - name: '@UI/UX 设计师 Agent'
-      note: 本节交付：四页可点击原型 + 第一次岗位交接
-    - name: REVIEW → APPROVED 状态卡
-      note: 岗位自检不等于学员批准
-    quiz:
-    - - UI 原型完成后能不能称为正式前端？
-      - - 能，只要好看
-        - 不能，它用于确认结构和交互，正式工程在第二天实现
-        - 能，只要能点击
-      - 1
-      - 原型和正式前端是两个不同交付状态。
-    - - AI 区为什么要先写标识再画按钮？
-      - - 文字更便宜
-        - 用户必须先知道能力状态和内容来源，按钮不能掩盖边界
-        - 按钮不能点击
-      - 1
-      - 状态与来源比操作入口更重要。
+    - agent-pm
+    - project-selection-card
     media:
     - kind: video
-      title: 口播课件 · 第 5 节
-      object_key: documents/shared/course-media/day01-c5-accept.mp4
-      poster_key: documents/shared/course-media/day01-c5-accept-poster.jpg
-      duration_sec: 70
+      title: 口播课件 · 与产品经理澄清需求
+      object_key: documents/shared/course-media/day01-c5-pm-requirements.mp4
+      poster_key: documents/shared/course-media/day01-c5-pm-requirements-poster.jpg
+      duration_sec: 282
+    knowledge_cards:
+    - id: clarify-one-by-one
+      term: 逐题澄清
+      plain: 产品经理一次只问一个问题，学员回答后先复述确认，再进入下一题。
+      tag: 对话
+    - id: requirement-gate
+      term: 需求确认闸
+      plain: 学员回复“确认需求”前，产品经理不能生成正式 PRD。
+      tag: 责任
+    - id: prd-handoff
+      term: PRD 交接
+      plain: PRD 把领域问题、目标用户、功能范围和验收标准交给 UI 继续工作。
+      tag: 交接
+    glossary_terms:
+    - id: gt-prd
+      term: PRD
+      plain: 产品需求文档，是产品经理与下游岗位共同使用的开工依据。
+    - id: gt-acceptance-criteria
+      term: 验收标准
+      plain: 能让不同的人得出同一“通过/不通过”结论的检查条件。
+    quiz:
+    - - 产品经理为什么不能听完第一句话就直接生成 PRD？
+      - - 因为必须先买模板
+        - 因为用户、数据、范围和验收标准还没有确认
+        - 因为 PRD 只能由程序员写
+      - 1
+      - 未澄清就生成会让 AI 用猜测补空白，后面的 UI 和开发岗位会沿着错误方向继续工作。
+    - - 学员回复“确认需求”意味着什么？
+      - - 把所有责任交给 AI
+        - 对需求摘要和第一版范围承担确认责任
+        - 要求 UI 直接开始写后端
+      - 1
+      - AI 可以整理需求，但最终确认做什么、不做什么以及怎样算合格，仍由学员负责。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '先在 TRAE 对话框切换到 @产品经理。下面内容必须逐段发送，每段完成并出现等待点后再继续。
+
+
+        【第 1 段｜介绍领域，不生成文档】
+
+        我熟悉的专业领域是〈财务 / HR / 运营 / 销售 / 教育 / 其他〉。请先读取 PROJECT_BRIEF.md。现在不要生成 PRD。用小白能听懂的话，一次只问我 1 个问题；每题给一个回答示例，我回答后请先复述，再问下一题。
+
+
+        【第 2 段｜检查是否问全】
+
+        请确认你已经逐项问清目标用户、当前流程、最痛的问题、数据来源、主要操作、使用平台、第一版范围和验收标准。缺哪项就继续一次问一题，不要生成文档。
+
+
+        【第 3 段｜需求确认摘要】
+
+        请输出一份不超过一页的《需求确认摘要》，包含目标用户、核心问题、主要流程、页面清单、数据来源、第一版必须做、暂时不做和验收标准。输出后停止，等我回复“确认需求”。
+
+
+        【第 4 段｜生成正式 PRD】
+
+        我回复“确认需求”后，请生成并保存完整 PRD.md。不要添加摘要中没有确认的功能。最后写明：下一岗位是 UI，需要读取 PRD.md。
+
+        '
+      checklist:
+      - 已切换到 @产品经理
+      - 产品经理一次只问一个问题，并在每次回答后复述确认
+      - 需求摘要覆盖用户、问题、数据、流程、范围和验收标准
+      - 已由学员本人回复“确认需求”
+      - 工作区根目录存在 PRD.md
+      suggested_questions:
+      - 产品经理一次问了很多问题怎么办？
+      - 我不知道验收标准怎么写怎么办？
+      - 产品经理加入了我没说过的功能怎么办？
+      template_resource_id: agent-pm
+  c6:
+    resource_ids:
+    - agent-ui
+    - agent-pm
+    media:
+    - kind: video
+      title: 口播课件 · UI 原型交接与产品验收
+      object_key: documents/shared/course-media/day01-c6-ui-prototype-accept.mp4
+      poster_key: documents/shared/course-media/day01-c6-ui-prototype-accept-poster.jpg
+      duration_sec: 346
+    knowledge_cards:
+    - id: ui-handoff
+      term: UI 交接
+      plain: UI 先读取并复述 PRD，学员确认理解一致后才设计页面。
+      tag: 交接
+    - id: interactive-prototype
+      term: 交互原型
+      plain: 能点击并看到页面反馈、但尚未连接真实后端的产品体验样品。
+      tag: 产出
+    - id: return-to-pm
+      term: 回到产品经理验收
+      plain: UI 完成后重新切换 @产品经理，按最初需求逐条检查，而不是让 UI 自己验收自己。
+      tag: 闭环
+    glossary_terms:
+    - id: gt-design-spec
+      term: Design Spec · 设计规范
+      plain: 记录颜色、字体、间距、组件和各种页面状态的设计说明。
+    - id: gt-iteration
+      term: 迭代
+      plain: 根据验收发现的问题回到责任岗位修改，再重新验收。
+    quiz:
+    - - UI 完成原型后，为什么要回到 @产品经理验收？
+      - - 因为产品经理最会写代码
+        - 因为需求负责人应按原始目标检查交付，避免 UI 自己验收自己
+        - 因为测试岗位不需要存在
+      - 1
+      - 产品经理代表需求与业务目标，必须检查原型是否真正回应已经确认的 PRD。
+    - - 产品经理发现原型不符合 PRD，正确流程是什么？
+      - - 产品经理直接修改 UI 文件
+        - 切回 @UI 按问题清单修改，再回 @产品经理复验
+        - 删除 PRD 重新选题
+      - 1
+      - 责任岗位负责修改，需求岗位负责验收；循环直到原需求和原型一致。
+    local_prep:
+      skill_id: fde-local-prep
+      codex_prompt: '本节包含三次岗位切换。不要一次把所有任务发给同一个智能体。
+
+
+        【第 1 段｜切换 @UI 并复述需求】
+
+        切换到 @UI，发送：请读取 PRD.md。先用 5 句话复述目标用户、核心问题、主要操作、页面范围和验收标准。现在不要生成原型，等我确认理解一致。
+
+
+        【第 2 段｜UI 逐题确认设计】
+
+        我确认需求理解一致。请一次只问 1 个设计问题，依次确认主要使用设备、首页最重要信息、页面风格、主色、最常用操作，以及加载/空数据/错误状态。每题给推荐示例，等我回答后再继续。
+
+
+        【第 3 段｜UI 生成交付物】
+
+        请先展示页面结构和操作路径，等我回复“确认页面方案”后，再生成 design-spec.md、ui-flow.md 和可直接打开的 ui-prototype.html。只用演示数据，不连接真实后端。
+
+
+        【第 4 段｜回到 @产品经理验收】
+
+        切换回 @产品经理，发送：请读取 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html，按原始需求逐条输出“通过/不通过、对应需求、责任岗位”。不要直接修改 UI 文件。
+
+
+        【第 5 段｜不通过时迭代】
+
+        如有不通过项，切回 @UI，只处理产品经理列出的问题；完成后再次回到 @产品经理复验。全部通过后，把三次切换和验收结果写入 day1-handoff-log.md。
+
+        '
+      checklist:
+      - UI 已先复述 PRD，学员确认后才开始设计
+      - 工作区存在 design-spec.md、ui-flow.md、ui-prototype.html
+      - ui-prototype.html 可直接打开并产生可见交互
+      - 已切换回 @产品经理按 PRD 验收
+      - 不通过项已回到 @UI 修改并完成复验
+      - day1-handoff-log.md 记录了岗位、输入、输出和验收结果
+      suggested_questions:
+      - UI 没读 PRD 就直接生成页面怎么办？
+      - 原型可以使用真实公司数据吗？
+      - 产品经理和 UI 对需求理解不一致怎么办？
+      template_resource_id: agent-ui
 quiz:
-- *id001
-- *id002
-- *id003
-- *id004
-- *id005
-- *id006
-lab:
-  primary_files:
-  - docs/D1_选题确认单.md
-  - docs/D1_团队协作卡.md
-  - docs/D1_项目任务书.md
-  - docs/PRD.md
-  - docs/D1_command_log.md
-  - design/prototypes/index.html
-  prompt: 检查第一天交付链：选题确认单 → 团队协作卡 → 项目任务书 → PRD → 四页原型，以及指挥日志 docs/D1_command_log.md（含至少一次 REJECTED 与 APPROVED）。只报告真实存在的文件和验证结果，缺失项标
-    BLOCKED，不得代替学员批准。
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/D1_团队协作卡.md
-  - check: file_exists
-    args:
-      path: docs/D1_项目任务书.md
-  - check: text_contains
-    args:
-      path: docs/PRD.md
-      needle: 验收标准
-  - check: file_exists
-    args:
-      path: design/prototypes/index.html
-  - check: file_exists
-    args:
-      path: docs/D1_command_log.md
-  - check: text_contains
-    args:
-      path: docs/D1_command_log.md
-      needle: REJECTED
-  - check: text_contains
-    args:
-      path: docs/D1_command_log.md
-      needle: APPROVED
-  - check: text_contains
-    args:
-      path: docs/D1_command_log.md
-      needle: 我确认以上批准均为本人作出
-nodes_lab: 第 1 天岗位交接与真实证据验收
-nodes_project: 从专业方向到 PRD 与可点击原型
-knowledge_content:
-  c1:
-    knowledge_cards:
-    - id: d1l1-k1
-      term: 工序没有消失
-      plain: 从想法到系统仍要经过需求、设计、页面、数据和检查，AI 改变的是执行者，不是做事顺序。
-    - id: d1l1-k2
-      term: 先说清业务问题
-      plain: AI 时代的第一道门槛不是会不会写代码，而是能不能说清楚要解决谁的什么问题。
-    - id: d1l1-k3
-      term: 先把工具准备好
-      plain: 第一节只完成 TRAE 安装和七岗位提示词包下载，下一节再创建 AI 员工。
-    memory_sentence: 先选你懂的问题，再把工具准备好；本节不写代码，能打开 TRAE、能看到七份提示词就完成。
-    quiz:
-    - - 第一节完成软件安装后，接下来应该做什么？
-      - - 立刻让一个 AI 做完整项目
-        - 确认七份提示词已解压，下一节再逐个创建 AI 员工
-        - 先学习编程语言
-      - 1
-      - 第一节只完成工具准备，不创建智能体，也不写代码。
-  c2:
-    knowledge_cards:
-    - id: d1l2-k1
-      term: 岗位职责决定能力
-      plain: 创建 AI 员工的关键不是名字，而是写清它负责什么、按什么标准交付、什么情况必须拒绝。
-    - id: d1l2-k2
-      term: 岗位隔离标准
-      plain: 产品负责把需求说清，测试负责挑毛病；标准冲突的岗位不能塞进一个“全能助手”。
-    - id: d1l2-k3
-      term: 产出者不能自批
-      plain: AI 员工完成自检只能提交待检查，学员看到证据后才能明确批准。
-    memory_sentence: 智能体不是越多越好，是各守一段标准；每个岗位都是一道质量关。
-    quiz:
-    - - 为什么不应该只创建一个“全能 AI 员工”包办所有岗位？
-      - - 因为一个 AI 员工不能生成文件
-        - 因为不同岗位的标准会互相妥协，产出者还会变成自己的裁判
-        - 因为 AI 员工的名字必须不同
-      - 1
-      - 口播稿用“出纳不能兼任审计”说明了岗位隔离的必要性。
-  c3:
-    knowledge_cards:
-    - id: d1l3-k1
-      term: 先出方案再动手
-      plain: 项目负责人先确认目标、范围和顺序，再允许岗位 AI 员工开始产出。
-    - id: d1l3-k2
-      term: 五天只做第一版
-      plain: 把本周必须完成的主流程锁住，超出范围的想法进入待建设清单。
-    - id: d1l3-k3
-      term: 阶段感属于负责人
-      plain: AI 恨不得一次做完，什么时候停、何时交接、能否继续必须由学员决定。
-    memory_sentence: 先出方案再动手，阶段感属于项目负责人；边界锁得住，团队才不会越做越乱。
-    quiz:
-    - - 项目经理为什么应该先交项目任务书，而不是直接开始写代码？
-      - - 因为代码必须最后一天写
-        - 因为要先让学员确认目标、第一版边界、每天交付和风险
-        - 因为项目经理不会使用开发工具
-      - 1
-      - 口播稿反复强调“先出方案，你确认了，再让 AI 动手”。
-  c4:
-    knowledge_cards:
-    - id: d1l4-k1
-      term: 需求文档是问出来的
-      plain: 产品经理收到老板一句话后先澄清用户、流程、规则和痛点，而不是马上生成文档。
-    - id: d1l4-k2
-      term: 四项内容不能少
-      plain: 需求文档至少要有字段清单、第一版范围、验收标准和待确认事项。
-    - id: d1l4-k3
-      term: 标准必须可判定
-      plain: “合理”“好用”不是验收标准，每一条都要让第三方能用是或否判断。
-    memory_sentence: 需求是问出来的，不是猜出来的；含糊的话，最后都会变成明确的问题。
-    quiz:
-    - - 产品经理收到“我要做一个费用报销系统”后，合格的第一步是什么？
-      - - 直接写完整需求文档
-        - 先提出关键问题，把业务范围和规则问清楚
-        - 先选择页面配色
-      - 1
-      - 好的需求文档来自澄清对话，不来自 AI 对一句话需求的猜测。
-  c5:
-    knowledge_cards:
-    - id: d1l5-k1
-      term: 指令只说意图
-      plain: 学员告诉页面设计师要读取需求文档并产出页面草图，具体标准由岗位职责和已批准需求提供。
-    - id: d1l5-k2
-      term: 原型必须可操作
-      plain: 验收时要亲手提交空表单、增加数据、检查空态，不能只看页面是否漂亮。
-    - id: d1l5-k3
-      term: 先标识能力状态
-      plain: AI 区先写“Week2 接入”和“演示数据”，再设计按钮，不能把未来能力伪装成已经完成。
-    memory_sentence: 指令说意图，岗位管标准，验收靠动手；原型不是用来看的，是用来点的。
-    quiz:
-    - - 页面草图看起来很漂亮，是否就可以批准交付？
-      - - 可以，视觉效果就是原型的全部标准
-        - 不可以，还要亲手验证字段、校验、主流程和空态
-        - 可以，只要 AI 说已经自检
-      - 1
-      - 口播稿明确指出，可交互原型的验收方式是用鼠标走一遍真实流程。
+- - AI 项目中，领域专业学员最不可替代的价值是什么？
+  - - 手写所有代码
+    - 提供真实业务判断并确认验收标准
+    - 记住所有框架名称
+  - 1
+  - AI 能生成技术产物，但真实业务问题、数据含义、取舍和合格标准需要领域人员负责。
+- - 六岗位软件开发流程的正确顺序是？
+  - - 产品经理→UI→前端→后端→测试→运维
+    - UI→运维→产品经理→测试→后端→前端
+    - 后端→产品经理→运维→UI→测试→前端
+  - 0
+  - 本课程使用产品经理、UI、前端、后端、测试、运维的顺序，最终再回产品经理做业务验收。
+- - AI 时代产品经理相较传统产品经理，哪项能力变得更重要？
+  - - 整理更多格式文档
+    - 定方向、确认范围并按标准验收
+    - 代替前端写页面
+  - 1
+  - AI 降低文档制作成本后，产品经理的价值更集中在方向、取舍和验收责任。
+- - 为什么岗位之间要使用工作区文件交接？
+  - - 为了增加文件数量
+    - 为了让需求和决策可读取、可复查、可验收
+    - 因为 TRAE 不能对话
+  - 1
+  - 文件让每个岗位看到同一版本的事实，减少口头转述和上下文丢失。
+- - 下面哪个项目更符合 Day 1 选题原则？
+  - - 做一个无所不能的企业平台
+    - 为财务负责人展示预算执行和异常费用
+    - 一天内重建全国物流网络
+  - 1
+  - 合格选题来自熟悉领域，用户和问题明确，并能先用可视化原型验证。
+- - UI 原型完成后的正确下一步是什么？
+  - - 直接宣布项目上线
+    - 回到 @产品经理按 PRD 验收，不通过再交回 @UI
+    - 让 UI 自己判断是否合格
+  - 1
+  - 需求负责人必须回看最初目标并验收，形成“交付—检查—修改—复验”的工程闭环。
+# Day1 不再单独挂 Lab 节点；实操已融入各课节 local_prep / 项目交付。

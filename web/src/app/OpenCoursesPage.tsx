@@ -4,16 +4,22 @@ import { LandingFooter } from "../components/LandingFooter";
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import type { LandingPayload } from "../lib/types";
-import { LANDING_FALLBACK_OPEN_COURSES } from "./landingShared";
+import {
+  FALLBACK_LANDING_TABS,
+  LANDING_FALLBACK_OPEN_CATEGORIES,
+  LANDING_FALLBACK_OPEN_COURSES,
+} from "./landingShared";
 import { OpenCoursesPanel } from "./OpenCoursesPanel";
 
 const FALLBACK: LandingPayload = {
   title: "青山在",
   tagline: "",
   hero_video: null,
+  open_course_categories: LANDING_FALLBACK_OPEN_CATEGORIES,
   open_courses: LANDING_FALLBACK_OPEN_COURSES,
   brand: { name: "青山在" },
   cta: { login: "/login", app: "/app/courses" },
+  tabs: FALLBACK_LANDING_TABS,
 };
 
 export function OpenCoursesPage() {
@@ -25,7 +31,7 @@ export function OpenCoursesPage() {
     (async () => {
       try {
         const res = await siteApi.landing();
-        if (!cancelled) setData(res);
+        if (!cancelled) setData({ ...FALLBACK, ...res, tabs: FALLBACK_LANDING_TABS });
       } catch {
         if (!cancelled) setData(FALLBACK);
       }
@@ -37,10 +43,9 @@ export function OpenCoursesPage() {
 
   const brandName = data.brand?.name || "青山在";
   const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
-  const contactEmail = data.contact?.email;
 
   return (
-    <div className="landing landing-page-open">
+    <div className="mk-home ink-site landing-page-open">
       <LandingTopbar
         activeTab="open"
         headerSolid
@@ -53,11 +58,14 @@ export function OpenCoursesPage() {
 
       <main className="landing-open-page">
         <div className="landing-section-inner">
-          <OpenCoursesPanel data={data.open_courses} />
+          <OpenCoursesPanel
+            data={data.open_courses}
+            categories={data.open_course_categories}
+          />
         </div>
       </main>
 
-      <LandingFooter brandName={brandName} appHref={appHref} contactEmail={contactEmail} />
+      <LandingFooter brandName={brandName} appHref={appHref} />
     </div>
   );
 }

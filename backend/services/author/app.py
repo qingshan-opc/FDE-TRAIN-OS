@@ -32,11 +32,17 @@ from services.shared import (  # noqa: E402
     write_audit,
 )
 from services.shared.config import (  # noqa: E402
+    DEFAULT_CAMP_ID,
     DEFAULT_UPLOAD_MAX_BYTES,
     MEDIA_MAX_BYTES_BY_KIND,
     S3_PRESIGN_GET_EXPIRES,
 )
-from services.shared.middleware import require_author, session_camp_id  # noqa: E402
+from services.shared.middleware import (  # noqa: E402
+    require_author,
+    require_author_portal,
+    require_finance_staff,
+    session_camp_id,
+)
 from services.storage import (  # noqa: E402
     course_media_key,
     document_key,
@@ -1992,11 +1998,19 @@ def author_list_contact_leads(
 
 # --- Site open courses (Landing「免费公开课」) ---------------------------------
 
+class OpenCourseCategoryIn(BaseModel):
+    id: str | None = None
+    name: str
+    sort_order: int | None = 0
+    published: bool = True
+
+
 class OpenCourseIn(BaseModel):
     id: str | None = None
     title: str
     minutes: int | None = None
     level: str | None = None
+    category_id: str | None = None
     summary: str | None = None
     object_key: str | None = None
     poster_key: str | None = None
@@ -2004,11 +2018,93 @@ class OpenCourseIn(BaseModel):
     published: bool = True
 
 
+@router.get("/api/v1/author/site/open-course-categories")
+def author_list_open_course_categories(request: Request) -> dict[str, Any]:
+    require_author(request)
+    from services.learner.app import list_open_course_categories
+
+    return {"items": list_open_course_categories(include_unpublished=True)}
+
+
+@router.put("/api/v1/author/site/open-course-categories")
+def author_replace_open_course_categories(
+    body: list[OpenCourseCategoryIn], request: Request
+) -> dict[str, Any]:
+    user = require_author(request)
+    from services.learner.app import save_open_course_categories
+
+    items = save_open_course_categories([c.model_dump() for c in body])
+    write_audit(
+        "author.open_course_categories.replace",
+        actor_id=user.id,
+        resource_type="site",
+        resource_id="landing",
+    )
+    return {"items": items}
+
+
+@router.post("/api/v1/author/site/open-course-categories")
+def author_upsert_open_course_category(
+    body: OpenCourseCategoryIn, request: Request
+) -> dict[str, Any]:
+    user = require_author(request)
+    from services.learner.app import list_open_course_categories, save_open_course_categories
+
+    items = list_open_course_categories(include_unpublished=True)
+    by_id = {c["id"]: c for c in items}
+    cid = (body.id or "").strip() or f"cat-{uuid4().hex[:10]}"
+    cat = {
+        "id": cid,
+        "name": body.name.strip(),
+        "sort_order": int(body.sort_order or 0),
+        "published": bool(body.published),
+    }
+    if not cat["name"]:
+        raise HTTPException(400, "分类名称不能为空")
+    by_id[cid] = cat
+    saved = save_open_course_categories(list(by_id.values()))
+    write_audit(
+        "author.open_course_categories.upsert",
+        actor_id=user.id,
+        resource_type="open_course_category",
+        resource_id=cid,
+    )
+    item = next((c for c in saved if c["id"] == cid), cat)
+    return {"item": item, "items": saved}
+
+
+@router.delete("/api/v1/author/site/open-course-categories/{category_id}")
+def author_delete_open_course_category(category_id: str, request: Request) -> dict[str, Any]:
+    user = require_author(request)
+    from services.learner.app import list_open_course_categories, list_open_courses, save_open_course_categories
+
+    cid = (category_id or "").strip()
+    if not cid:
+        raise HTTPException(400, "缺少分类 id")
+    linked = [
+        c
+        for c in list_open_courses(include_unpublished=True)
+        if str(c.get("category_id") or "") == cid
+    ]
+    if linked:
+        raise HTTPException(400, f"该分类下还有 {len(linked)} 门公开课，请先挪课后再删除")
+    remaining = [c for c in list_open_course_categories(include_unpublished=True) if c["id"] != cid]
+    items = save_open_course_categories(remaining)
+    write_audit(
+        "author.open_course_categories.delete",
+        actor_id=user.id,
+        resource_type="open_course_category",
+        resource_id=cid,
+    )
+    return {"items": items}
+
+
 @router.get("/api/v1/author/site/open-courses")
 def author_list_open_courses(
     request: Request,
     q: str | None = None,
     published: str | None = None,
+    category_id: str | None = None,
     page: int | None = None,
     page_size: int | None = None,
 ) -> dict[str, Any]:
@@ -2025,10 +2121,14 @@ def author_list_open_courses(
             or needle in str(c.get("summary") or "").lower()
             or needle in str(c.get("level") or "").lower()
             or needle in str(c.get("id") or "").lower()
+            or needle in str(c.get("category_id") or "").lower()
         ]
     if published is not None and str(published).strip() != "":
         flag = str(published).strip().lower() in {"1", "true", "yes", "published"}
         items = [c for c in items if bool(c.get("published")) is flag]
+    if category_id is not None and str(category_id).strip() != "":
+        cid = str(category_id).strip()
+        items = [c for c in items if str(c.get("category_id") or "") == cid]
     page_i, size_i = parse_page(page, page_size)
     total = len(items)
     off, lim = offset_limit(page_i, size_i)
@@ -2053,6 +2153,7 @@ async def author_upsert_open_course(
     course_id: str | None = Form(None),
     minutes: int | None = Form(None),
     level: str | None = Form(None),
+    category_id: str | None = Form(None),
     summary: str | None = Form(None),
     published: bool = Form(True),
     video: UploadFile | None = File(None),
@@ -2071,6 +2172,7 @@ async def author_upsert_open_course(
             "title": title.strip(),
             "minutes": minutes,
             "level": (level or "").strip() or None,
+            "category_id": (category_id or "").strip() or None,
             "summary": (summary or "").strip() or None,
             "published": bool(published),
         }
@@ -2248,10 +2350,134 @@ def _series_fill(dates: list[str], rows: dict[str, dict[str, int]], keys: list[s
     return out
 
 
+def _resolve_overview_camp(request: Request, camp_id: str | None) -> str:
+    """Prefer session/query camp; fall back to default so overview never 400s empty."""
+    try:
+        return session_camp_id(request, camp_id)
+    except HTTPException:
+        pass
+    preferred = (camp_id or "").strip() or DEFAULT_CAMP_ID
+    with db_cursor() as cur:
+        cur.execute("SELECT id FROM camps WHERE id=? LIMIT 1", (preferred,))
+        if cur.fetchone():
+            return preferred
+        cur.execute("SELECT id FROM camps ORDER BY created_at NULLS LAST LIMIT 1")
+        row = cur.fetchone()
+        if row:
+            return str(row["id"])
+    return preferred
+
+
+def _platform_finance_snapshot() -> dict[str, Any]:
+    """Platform-wide 出账 / 分账 KPI (paid only; refunded excluded)."""
+    try:
+        from services.billing import profit_sharing
+
+        profit_sharing.sync_profit_share_statuses(limit=30)
+    except Exception:
+        pass
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT COUNT(*) AS orders,
+                   COUNT(DISTINCT user_id) AS paid_users,
+                   COALESCE(SUM(amount_fen),0) AS gross_fen
+            FROM payment_orders
+            WHERE status='paid'
+            """
+        )
+        pay = dict(cur.fetchone() or {})
+        cur.execute(
+            """
+            SELECT
+              COALESCE(SUM(CASE WHEN wx_state='finished' THEN share_fen ELSE 0 END),0) AS shared_fen,
+              COALESCE(SUM(CASE WHEN wx_state IN ('pending','processing') THEN share_fen ELSE 0 END),0) AS pending_share_fen,
+              COALESCE(SUM(CASE WHEN wx_state='failed' THEN share_fen ELSE 0 END),0) AS failed_share_fen,
+              COUNT(*) FILTER (WHERE wx_state='finished') AS finished_count,
+              COUNT(*) FILTER (WHERE wx_state IN ('pending','processing')) AS pending_count,
+              COUNT(*) FILTER (WHERE wx_state='failed') AS failed_count
+            FROM profit_share_orders
+            """
+        )
+        share = dict(cur.fetchone() or {})
+        cur.execute(
+            """
+            SELECT date_trunc('day', paid_at)::date AS d,
+                   COALESCE(SUM(amount_fen),0) AS gross_fen,
+                   COUNT(*) AS orders
+            FROM payment_orders
+            WHERE status='paid' AND paid_at >= (CURRENT_DATE - INTERVAL '6 days')
+            GROUP BY 1 ORDER BY 1
+            """
+        )
+        gross_rows = [dict(r) for r in cur.fetchall()]
+        cur.execute(
+            """
+            SELECT date_trunc('day', COALESCE(updated_at, created_at))::date AS d,
+                   COALESCE(SUM(share_fen),0) AS shared_fen,
+                   COUNT(*) AS shares
+            FROM profit_share_orders
+            WHERE wx_state='finished'
+              AND COALESCE(updated_at, created_at) >= (CURRENT_DATE - INTERVAL '6 days')
+            GROUP BY 1 ORDER BY 1
+            """
+        )
+        share_rows = [dict(r) for r in cur.fetchall()]
+        cur.execute(
+            """
+            SELECT o.id, o.name,
+                   COUNT(DISTINCT po.id) AS paid_orders,
+                   COALESCE(SUM(po.amount_fen),0) AS gross_fen,
+                   COALESCE(SUM(CASE WHEN ps.wx_state='finished' THEN ps.share_fen ELSE 0 END),0) AS shared_fen,
+                   COALESCE(SUM(CASE WHEN ps.wx_state IN ('pending','processing') THEN ps.share_fen ELSE 0 END),0) AS pending_share_fen
+            FROM organizations o
+            LEFT JOIN payment_orders po ON po.org_id=o.id AND po.status='paid'
+            LEFT JOIN profit_share_orders ps ON ps.payment_order_id=po.id
+            WHERE o.status='active'
+            GROUP BY o.id, o.name
+            ORDER BY gross_fen DESC, o.name
+            """
+        )
+        orgs = [dict(r) for r in cur.fetchall()]
+        cur.execute(
+            """
+            SELECT po.id, po.out_trade_no, po.amount_fen, po.paid_at, po.org_id,
+                   o.name AS org_name, u.email AS user_email,
+                   ps.share_fen, ps.rate_bps, ps.wx_state, ps.error_message
+            FROM payment_orders po
+            LEFT JOIN organizations o ON o.id = po.org_id
+            LEFT JOIN users u ON u.id = po.user_id
+            LEFT JOIN profit_share_orders ps ON ps.payment_order_id = po.id
+            WHERE po.status='paid'
+            ORDER BY po.paid_at DESC NULLS LAST
+            LIMIT 50
+            """
+        )
+        recent = [dict(r) for r in cur.fetchall()]
+    dates = _last_n_date_strings(7)
+    gross_map = {str(r["d"]): {"gross_fen": int(r["gross_fen"] or 0), "orders": int(r["orders"] or 0)} for r in gross_rows}
+    share_map = {str(r["d"]): {"shared_fen": int(r["shared_fen"] or 0), "shares": int(r["shares"] or 0)} for r in share_rows}
+    return {
+        "paid_orders": int(pay.get("orders") or 0),
+        "paid_users": int(pay.get("paid_users") or 0),
+        "gross_fen": int(pay.get("gross_fen") or 0),
+        "shared_fen": int(share.get("shared_fen") or 0),
+        "pending_share_fen": int(share.get("pending_share_fen") or 0),
+        "failed_share_fen": int(share.get("failed_share_fen") or 0),
+        "finished_share_count": int(share.get("finished_count") or 0),
+        "pending_share_count": int(share.get("pending_count") or 0),
+        "failed_share_count": int(share.get("failed_count") or 0),
+        "gross_trend_7d": _series_fill(dates, gross_map, ["gross_fen", "orders"]),
+        "shared_trend_7d": _series_fill(dates, share_map, ["shared_fen", "shares"]),
+        "orgs": orgs,
+        "recent_orders": recent,
+    }
+
+
 @router.get("/api/v1/author/overview")
 def author_overview(request: Request, camp_id: str | None = None) -> dict[str, Any]:
-    require_author(request)
-    camp = session_camp_id(request, camp_id)
+    require_author_portal(request)
+    camp = _resolve_overview_camp(request, camp_id)
     dates = _last_n_date_strings(7)
     stats: dict[str, Any] = {
         "camp_id": camp,
@@ -2267,6 +2493,10 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
         "contact_leads": 0,
         "open_courses": 0,
         "pending_reviews": 0,
+        "paid_orders": 0,
+        "gross_fen": 0,
+        "shared_fen": 0,
+        "pending_share_fen": 0,
         "submission_trend_7d": [],
         "learn_active_users_7d": [],
         "learn_duration_minutes_7d": [],
@@ -2277,6 +2507,7 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
             "learn_duration": f"按课节打开次数×{_MINUTES_PER_CAPSULE_OPEN} 分钟估算",
             "open_course_clicks": "公开课视频播放次数（含历史 media.presign 中匹配公开课 object_key）",
             "videos": "视频库未删除条目 + 已配置视频的公开课 + 站点 Hero 视频",
+            "finance": "全平台已支付订单营收 / 已完成分账（退款单不计入）",
         },
     }
     open_course_keys: set[str] = set()
@@ -2325,13 +2556,40 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
             stats["videos_library"] = int(cur.fetchone()["c"] or 0)
         cur.execute("SELECT to_regclass(?) AS reg", ("site_media",))
         if cur.fetchone().get("reg"):
+            # Dual schema: 005 has src_url/poster_url; 004 has object_key (+ optional meta_json).
             cur.execute(
                 """
-                SELECT COUNT(*) AS c FROM site_media
-                WHERE kind IN ('hero_video', 'video')
-                  AND (src_url IS NOT NULL OR poster_url IS NOT NULL)
+                SELECT column_name FROM information_schema.columns
+                WHERE table_schema='public' AND table_name='site_media'
                 """
             )
+            site_cols = {str(r["column_name"]) for r in cur.fetchall()}
+            if "src_url" in site_cols or "poster_url" in site_cols:
+                cur.execute(
+                    """
+                    SELECT COUNT(*) AS c FROM site_media
+                    WHERE kind IN ('hero_video', 'video')
+                      AND (
+                        COALESCE(src_url, '') <> ''
+                        OR COALESCE(poster_url, '') <> ''
+                      )
+                    """
+                )
+            elif "object_key" in site_cols:
+                cur.execute(
+                    """
+                    SELECT COUNT(*) AS c FROM site_media
+                    WHERE kind IN ('hero_video', 'video')
+                      AND COALESCE(object_key, '') <> ''
+                    """
+                )
+            else:
+                cur.execute(
+                    """
+                    SELECT COUNT(*) AS c FROM site_media
+                    WHERE kind IN ('hero_video', 'video')
+                    """
+                )
             stats["videos_site"] = int(cur.fetchone()["c"] or 0)
         stats["videos"] = (
             int(stats["videos_library"]) + int(stats["videos_open_courses"]) + int(stats["videos_site"])
@@ -2465,7 +2723,27 @@ def author_overview(request: Request, camp_id: str | None = None) -> dict[str, A
         # 最近操作：暂不展示原始 audit（字段与前端 title/at 不匹配）；保持空列表
         stats["recent_actions"] = []
 
+        # 财务快照（平台级，挂在概览方便一眼看到「出多少/分多少」）
+        try:
+            fin = _platform_finance_snapshot()
+            stats["paid_orders"] = fin["paid_orders"]
+            stats["gross_fen"] = fin["gross_fen"]
+            stats["shared_fen"] = fin["shared_fen"]
+            stats["pending_share_fen"] = fin["pending_share_fen"]
+            stats["paid_users_finance"] = fin["paid_users"]
+        except Exception:
+            pass
+
     return stats
+
+
+@router.get("/api/v1/author/finance/dashboard")
+def author_finance_dashboard(request: Request) -> dict[str, Any]:
+    """财务大屏：实时营收 / 分账汇总 + 渠道明细 + 近单。"""
+    user = require_finance_staff(request)
+    snap = _platform_finance_snapshot()
+    write_audit("author.finance.dashboard", actor_id=user.id)
+    return {"ok": True, **snap}
 
 
 app.include_router(router)

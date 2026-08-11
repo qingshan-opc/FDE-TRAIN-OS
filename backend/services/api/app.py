@@ -40,6 +40,7 @@ from services.learner.app import router as learner_router  # noqa: E402
 from services.sql_lab.app import router as sql_lab_router  # noqa: E402
 from services.billing.app import router as billing_router  # noqa: E402
 from services.partner.app import router as partner_router  # noqa: E402
+from services.referral.app import router as referral_router  # noqa: E402
 from services.chain.app import router as chain_router  # noqa: E402
 from services.wechat_mp.app import router as wechat_mp_router  # noqa: E402
 
@@ -66,6 +67,7 @@ _ROUTERS = [
     (learner_router, "FDE Learner"),
     (sql_lab_router, "FDE SQL Lab"),
     (billing_router, "FDE Billing"),
+    (referral_router, "FDE Referral"),
     (partner_router, "FDE Partner"),
     (chain_router, "FDE Chain"),
     (wechat_mp_router, "FDE WeChat MP"),

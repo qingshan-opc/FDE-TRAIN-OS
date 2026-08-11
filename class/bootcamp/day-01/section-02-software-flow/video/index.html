@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>软件公司的六岗位接力</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Regular.woff2") format("woff2");font-weight:400;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url("assets/fonts/NotoSansSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Serif SC";src:url("assets/fonts/NotoSerifSC-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url("assets/fonts/JetBrainsMono-Bold.woff2") format("woff2");font-weight:700;font-display:block}
+:root{--bg:#f2f5f0;--ink:#231f20;--ink-60:rgba(35,31,32,.72);--ink-40:rgba(35,31,32,.55);--ink-08:rgba(35,31,32,.08);--ink-05:rgba(35,31,32,.05);--accent:#1400ff;--serif:"Noto Serif SC",serif;--sans:"Noto Sans SC",sans-serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{margin:0;background:#111}
+html.browser-preview{overflow:hidden;height:100%}
+body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#root{position:relative;width:1920px;height:1080px;overflow:hidden}
+.stage-bg{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide{position:absolute;inset:0;z-index:2;padding:72px 420px 72px 96px}
+.stage-fill{position:absolute;inset:0;background:var(--bg);z-index:0}
+.slide-body{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+.sec-label{font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sec-label::after{content:"";flex:1;height:6px;background:var(--ink);max-width:520px}
+.sec-label .num{color:var(--accent);font-weight:700}
+.display{font-family:var(--serif);font-weight:700;font-size:52px;line-height:1.12;margin-bottom:10px;max-width:16ch}
+.lede{font-size:18px;line-height:1.5;color:var(--ink-60);max-width:34em;margin-bottom:12px}
+.card{border:1px solid var(--ink);padding:16px 18px 18px;background:rgba(255,255,255,.55)}
+.card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0;font-weight:700}
+.card h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.card p{font-size:15px;line-height:1.45;color:var(--ink-60)}
+.card.hot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.hot .lab{color:rgba(255,255,255,.7)}
+.card.hot p{color:rgba(255,255,255,.85)}
+.card.dim{background:var(--ink-05)}
+.open-split{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch;margin-top:4px;max-width:1320px;flex:1;min-height:0}
+.open-split .stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ico{width:40px;height:40px;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.ico svg{width:24px;height:24px;display:block}
+.card.hot .ico{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.diagram-box{border:1px solid var(--ink);padding:12px;background:#fff;display:flex;flex-direction:column;min-height:0;height:100%}
+.diagram-box .dg-cap{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:flex;align-items:center;gap:12px;flex:none}
+.diagram-box .dg-cap::before{content:"";width:26px;height:6px;background:var(--accent)}
+.diagram-box img{width:100%;flex:1;object-fit:contain;display:block;min-height:0;max-height:420px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.tag{font-family:var(--mono);font-size:12px;padding:8px 12px;border:1px solid var(--ink);background:#fff}
+.tag.solid,.tag.hl{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.hot{border-color:var(--accent);color:var(--accent)}
+.brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
+.brand-bar em{font-style:normal;color:var(--accent)}
+#avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
+.avatar-frame{flex:1;overflow:hidden;border:2px solid var(--ink);border-bottom:none;box-shadow:8px 8px 0 var(--accent);background:#0b1220}
+.avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
+.avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
+.speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:12px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border-radius:4px;display:none;pointer-events:none}
+html.browser-preview #preview-hint{display:block}
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="398.617" data-width="1920" data-height="1080">
+<div id="preview-hint">浏览器预览 · ← → 或空格翻页</div>
+<div class="stage-bg"></div>
+
+<section id="slide-01-open" class="clip slide" data-track-index="1" data-start="0.000" data-duration="29.483">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">01</span>01 OPEN</div>
+    <h1 class="display" data-anim="t">先在脑中建立工程地图</h1>
+    <p class="lede" data-anim="s">工具会变，接力链不会消失</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>问题 → 需求 → 设计 → 开发 → 测试</h4><p>问题 → 需求 → 设计 → 开发 → 测试 → 上线 → 验收</p></div>
+        <div class="tag-row"><span class="tag solid">先在脑中建立工程地图</span><span class="tag hot">工具会变，接力链不会消失</span><span class="tag ">问题 → 需求 → 设计 → 开发 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · open</div>
+        <img src="assets/diagrams/01-open.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-02-full-chain" class="clip slide" data-track-index="1" data-start="29.733" data-duration="34.987">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">02</span>02 FULL-CHAIN</div>
+    <h1 class="display" data-anim="t">六岗位开发闭环</h1>
+    <p class="lede" data-anim="s">产品经理 → UI → 前端 → 后端 → 测试 → 运维</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>上线后 → 回到产品经理做业务验收</h4><p>上线后 → 回到产品经理做业务验收</p></div>
+        <div class="tag-row"><span class="tag solid">六岗位开发闭环</span><span class="tag hot">产品经理 → UI → 前端 → 后</span><span class="tag ">上线后 → 回到产品经理做业务验收</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · full-chain</div>
+        <img src="assets/diagrams/02-full-chain.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-03-product-manager" class="clip slide" data-track-index="1" data-start="64.969" data-duration="34.432">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">03</span>03 PRODUCT-MANAGER</div>
+    <h1 class="display" data-anim="t">产品经理 · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：访谈纪要 · 长文档 · 排需求</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>定问题 · 控范围 · 定验收</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>交付</h4><p>PRD.md → UI</p></div>
+        <div class="tag-row"><span class="tag solid">产品经理 · 传统 vs AI 时代</span><span class="tag hot">传统：访谈纪要 · 长文档 · 排需</span><span class="tag ">现在：定问题 · 控范围 · 定验收</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · product-manager</div>
+        <img src="assets/diagrams/03-product-manager.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-04-ui" class="clip slide" data-track-index="1" data-start="99.651" data-duration="38.997">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">04</span>04 UI</div>
+    <h1 class="display" data-anim="t">UI · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：线框 · 视觉稿 · 调色与组件</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>信息层级 · 操作路径 · 异常状态</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>交付</h4><p>设计规范 · 流程 · 原型 → 前端</p></div>
+        <div class="tag-row"><span class="tag solid">UI · 传统 vs AI 时代</span><span class="tag hot">传统：线框 · 视觉稿 · 调色与组</span><span class="tag ">现在：信息层级 · 操作路径 · 异</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · ui</div>
+        <img src="assets/diagrams/04-ui.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-05-frontend" class="clip slide" data-track-index="1" data-start="138.899" data-duration="37.547">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">05</span>05 FRONTEND</div>
+    <h1 class="display" data-anim="t">前端 · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：手写结构 · 样式 · 重复交互</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>实现选择 · 还原度 · 状态 · 可维护</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>交付</h4><p>页面 + 数据需求 → 后端</p></div>
+        <div class="tag-row"><span class="tag solid">前端 · 传统 vs AI 时代</span><span class="tag hot">传统：手写结构 · 样式 · 重复交</span><span class="tag ">现在：实现选择 · 还原度 · 状态</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · frontend</div>
+        <img src="assets/diagrams/05-frontend.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-06-backend" class="clip slide" data-track-index="1" data-start="176.695" data-duration="38.016">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">06</span>06 BACKEND</div>
+    <h1 class="display" data-anim="t">后端 · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：接口 · 查询 · 业务代码</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>系统边界 · 契约 · 数据 · 安全稳定</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>交付</h4><p>服务 · 接口 · 数据库 · 运行手册 → 测试</p></div>
+        <div class="tag-row"><span class="tag solid">后端 · 传统 vs AI 时代</span><span class="tag hot">传统：接口 · 查询 · 业务代码</span><span class="tag ">现在：系统边界 · 契约 · 数据 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · backend</div>
+        <img src="assets/diagrams/06-backend.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-07-testing" class="clip slide" data-track-index="1" data-start="214.961" data-duration="41.131">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">07</span>07 TESTING</div>
+    <h1 class="display" data-anim="t">测试 · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：重复点击 · 手工回归</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>风险覆盖 · 边界 · 证据 · 防复发</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>失败 → 责任岗位修复 → 复测</h4><p>失败 → 责任岗位修复 → 复测</p></div>
+        <div class="tag-row"><span class="tag solid">测试 · 传统 vs AI 时代</span><span class="tag hot">传统：重复点击 · 手工回归</span><span class="tag ">现在：风险覆盖 · 边界 · 证据 </span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · testing</div>
+        <img src="assets/diagrams/07-testing.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-08-operations" class="clip slide" data-track-index="1" data-start="256.342" data-duration="33.877">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">08</span>08 OPERATIONS</div>
+    <h1 class="display" data-anim="t">运维 · 传统 vs AI 时代</h1>
+    <p class="lede" data-anim="s">传统：装环境 · 手工发布 · 临时救火</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>现在</h4><p>自动化 · 监控 · 备份 · 回退 · 审批</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>交付</h4><p>上线地址 + 部署说明 → 产品经理</p></div>
+        <div class="tag-row"><span class="tag solid">运维 · 传统 vs AI 时代</span><span class="tag hot">传统：装环境 · 手工发布 · 临时</span><span class="tag ">现在：自动化 · 监控 · 备份 ·</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · operations</div>
+        <img src="assets/diagrams/08-operations.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-09-handoff-files" class="clip slide" data-track-index="1" data-start="290.469" data-duration="33.451">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">09</span>09 HANDOFF-FILES</div>
+    <h1 class="display" data-anim="t">文件就是接力棒</h1>
+    <p class="lede" data-anim="s">PRD → 设计与原型 → 页面与字段 → 服务与说明</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>测试报告 → 上线地址 → 业务验收</h4><p>测试报告 → 上线地址 → 业务验收</p></div>
+        <div class="tag-row"><span class="tag solid">文件就是接力棒</span><span class="tag hot">PRD → 设计与原型 → 页面与字</span><span class="tag ">测试报告 → 上线地址 → 业务验收</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · handoff-files</div>
+        <img src="assets/diagrams/09-handoff-files.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-10-project-lead" class="clip slide" data-track-index="1" data-start="324.170" data-duration="34.091">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">10</span>10 PROJECT-LEAD</div>
+    <h1 class="display" data-anim="t">项目经理要不要单独建？</h1>
+    <p class="lede" data-anim="s">大型团队：排期 · 风险 · 跨团队协调</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>第一周</h4><p>由学员亲自承担项目推进</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>架构职能</h4><p>暂由后端承担</p></div>
+        <div class="tag-row"><span class="tag solid">项目经理要不要单独建？</span><span class="tag hot">大型团队：排期 · 风险 · 跨团队</span><span class="tag ">第一周：由学员亲自承担项目推进</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · project-lead</div>
+        <img src="assets/diagrams/10-project-lead.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="slide-11-close" class="clip slide" data-track-index="1" data-start="358.511" data-duration="40.107">
+  <div class="stage-fill"></div>
+  <div class="slide-body">
+    <div class="sec-label" data-anim="k"><span class="num">11</span>11 CLOSE</div>
+    <h1 class="display" data-anim="t">AI 没有让岗位消失</h1>
+    <p class="lede" data-anim="s">制作劳动 ↓  判断与闭环 ↑</p>
+    <div class="open-split" data-anim="diagram">
+      <div class="stack">
+        <div class="card"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#1400ff" stroke-width="1.8"><path d="M8 4H4v16h4"/><path d="M16 4h4v16h-4"/><path d="M10 12h4"/></svg></div><div class="lab">01</div></div><h4>工具只是工作台</h4><p>工具只是工作台</p></div><div class="card hot"><div class="card-head"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><div class="lab">02</div></div><h4>下一节</h4><p>在 TRAE 建立六岗位智能体</p></div>
+        <div class="tag-row"><span class="tag solid">AI 没有让岗位消失</span><span class="tag hot">制作劳动 ↓  判断与闭环 ↑</span><span class="tag ">工具只是工作台</span></div>
+      </div>
+      <div class="diagram-box">
+        <div class="dg-cap">Visual · close</div>
+        <img src="assets/diagrams/11-close.svg" alt="" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="398.617" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> 第一天 · 第 2 节</div>
+<div id="avatar-pip" class="clip" data-start="0" data-duration="398.617" data-track-index="5">
+  <div class="speak-ring"></div>
+  <div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="398.617" data-track-index="6"></video></div>
+  <div class="avatar-caption">Lecturer · 口播</div>
+</div>
+<audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="398.617" data-track-index="10" data-volume="1"></audio>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const slides = [
+  { id: "#slide-01-open", start: 0.000, dur: 29.483 },
+  { id: "#slide-02-full-chain", start: 29.733, dur: 34.987 },
+  { id: "#slide-03-product-manager", start: 64.969, dur: 34.432 },
+  { id: "#slide-04-ui", start: 99.651, dur: 38.997 },
+  { id: "#slide-05-frontend", start: 138.899, dur: 37.547 },
+  { id: "#slide-06-backend", start: 176.695, dur: 38.016 },
+  { id: "#slide-07-testing", start: 214.961, dur: 41.131 },
+  { id: "#slide-08-operations", start: 256.342, dur: 33.877 },
+  { id: "#slide-09-handoff-files", start: 290.469, dur: 33.451 },
+  { id: "#slide-10-project-lead", start: 324.170, dur: 34.091 },
+  { id: "#slide-11-close", start: 358.511, dur: 40.107 }
+];
+function enter(id, t0) {
+  tl.from(`${id} .slide-body`, { opacity: 0, y: 28, duration: 0.55, ease: "power3.out" }, t0);
+  tl.from(`${id} [data-anim='k']`, { y: 18, opacity: 0, duration: 0.4, ease: "power2.out" }, t0 + 0.12);
+  tl.from(`${id} [data-anim='t']`, { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, t0 + 0.22);
+  tl.from(`${id} [data-anim='s']`, { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, t0 + 0.32);
+  tl.from(`${id} [data-anim='diagram']`, { y: 16, opacity: 0, duration: 0.45, ease: "power2.out", stagger: 0.06 }, t0 + 0.42);
+}
+function exit(id, tEnd, tHard) {
+  tl.to(`${id} .slide-body`, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, tEnd);
+  tl.set(`${id} .slide-body`, { opacity: 0 }, tHard);
+}
+  enter("#slide-01-open", 0.000);
+  enter("#slide-02-full-chain", 29.733);
+  enter("#slide-03-product-manager", 64.969);
+  enter("#slide-04-ui", 99.651);
+  enter("#slide-05-frontend", 138.899);
+  enter("#slide-06-backend", 176.695);
+  enter("#slide-07-testing", 214.961);
+  enter("#slide-08-operations", 256.342);
+  enter("#slide-09-handoff-files", 290.469);
+  enter("#slide-10-project-lead", 324.170);
+  enter("#slide-11-close", 358.511);
+  exit("#slide-01-open", 29.033, 29.483);
+  exit("#slide-02-full-chain", 64.269, 64.719);
+  exit("#slide-03-product-manager", 98.951, 99.401);
+  exit("#slide-04-ui", 138.199, 138.649);
+  exit("#slide-05-frontend", 175.995, 176.445);
+  exit("#slide-06-backend", 214.261, 214.711);
+  exit("#slide-07-testing", 255.642, 256.092);
+  exit("#slide-08-operations", 289.769, 290.219);
+  exit("#slide-09-handoff-files", 323.470, 323.920);
+  exit("#slide-10-project-lead", 357.811, 358.261);
+  exit("#slide-11-close", 398.167, 398.617);
+tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
+window.__timelines["main"] = tl;
+(function bootBrowserPreview() {
+  const params = new URLSearchParams(location.search);
+  const renderMode = params.get("render") === "1";
+  const isDirect = !renderMode && (location.protocol === "file:" || params.has("preview"));
+  if (!isDirect) { tl.seek(1); return; }
+  document.documentElement.classList.add("browser-preview");
+  const slidesEls = [...document.querySelectorAll(".slide")];
+  let idx = 0;
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    document.body.style.transform = "scale(" + s + ")";
+    document.body.style.transformOrigin = "top left";
+  }
+  function reveal(el) {
+    gsap.set(el.querySelectorAll(".slide-body, [data-anim]"), { opacity: 1, y: 0, clearProps: "transform" });
+  }
+  function show(i) {
+    slidesEls.forEach((el, j) => { el.style.visibility = j === i ? "visible" : "hidden"; });
+    reveal(slidesEls[i]);
+  }
+  gsap.set("#avatar-pip", { opacity: 1, y: 0 });
+  fit(); show(0);
+  window.addEventListener("resize", fit);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); }
+  });
+})();
+</script>
+
+</body>
+</html>

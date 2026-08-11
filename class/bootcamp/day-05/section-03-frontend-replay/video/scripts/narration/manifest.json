@@ -1,0 +1,38 @@
+[
+  {
+    "id": "01-open",
+    "file": "01-open.txt"
+  },
+  {
+    "id": "02-inspect",
+    "file": "02-inspect.txt"
+  },
+  {
+    "id": "03-plan",
+    "file": "03-plan.txt"
+  },
+  {
+    "id": "04-implement",
+    "file": "04-implement.txt"
+  },
+  {
+    "id": "05-boundary",
+    "file": "05-boundary.txt"
+  },
+  {
+    "id": "06-ai-era",
+    "file": "06-ai-era.txt"
+  },
+  {
+    "id": "07-selfcheck",
+    "file": "07-selfcheck.txt"
+  },
+  {
+    "id": "08-handoff",
+    "file": "08-handoff.txt"
+  },
+  {
+    "id": "09-close",
+    "file": "09-close.txt"
+  }
+]

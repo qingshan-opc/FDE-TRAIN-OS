@@ -1,0 +1,59 @@
+{
+  "total": 185.322667,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 22.144
+    },
+    {
+      "id": "02-impact",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\02-impact.wav",
+      "start": 22.264,
+      "duration": 21.802666666666667
+    },
+    {
+      "id": "03-plan",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\03-plan.wav",
+      "start": 44.18666666666666,
+      "duration": 21.930666666666667
+    },
+    {
+      "id": "04-gate",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\04-gate.wav",
+      "start": 66.23733333333334,
+      "duration": 19.669333333333334
+    },
+    {
+      "id": "05-execute",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\05-execute.wav",
+      "start": 86.02666666666667,
+      "duration": 20.010666666666665
+    },
+    {
+      "id": "06-defect",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\06-defect.wav",
+      "start": 106.15733333333334,
+      "duration": 23.04
+    },
+    {
+      "id": "07-retest",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\07-retest.wav",
+      "start": 129.31733333333335,
+      "duration": 18.901333333333334
+    },
+    {
+      "id": "08-report",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\08-report.wav",
+      "start": 148.33866666666668,
+      "duration": 19.328
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-05\\section-05-testing-replay\\video\\audio\\segments\\09-close.wav",
+      "start": 167.7866666666667,
+      "duration": 17.536
+    }
+  ]
+}

@@ -14,6 +14,9 @@ data:
   FDE_DEFAULT_CAMP_ID: camp-v03
   FDE_CURRICULUM_VERSION_TAG: v0.7
   FDE_SEED_VERSION_TAGS: v0.7,fde-v07
+  # Keep bootstrap from overwriting author/bootcamp-synced day_packages.
+  # Use FDE_SEED_OVERWRITE_PACKAGES=1 only for intentional curriculum cutovers.
+  FDE_SEED_OVERWRITE_PACKAGES: "0"
   AGENT_MODE: stub
   FDE_INTERNAL_BASE: http://127.0.0.1:8760
   S3_ENDPOINT: http://minio.base-service.svc.cluster.local:9000

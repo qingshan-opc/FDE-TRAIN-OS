@@ -23,6 +23,7 @@ from services.shared import (  # noqa: E402
     init_schema,
     now_iso,
 )
+from services.shared.config import DEFAULT_CAMP_ID  # noqa: E402
 from services.shared.middleware import (  # noqa: E402
     require_camp_access,
     resolve_camp_id,
@@ -390,9 +391,18 @@ def _pack_rank(name: str) -> int:
     return 3
 
 
+def _normalize_camp_id(camp_id: str) -> str:
+    """Map legacy aliases like ``default`` onto the configured camp."""
+    cid = (camp_id or "").strip()
+    if not cid or cid in {"default", "demo"}:
+        return DEFAULT_CAMP_ID
+    return cid
+
+
 @router.get("/api/v1/camps/{camp_id}/days")
 def list_days(camp_id: str, request: Request) -> dict[str, Any]:
-    """List available day packages for a camp (discovered from YAML contracts)."""
+    """List day packages — YAML discovery, then prefer DB (MinIO-backed persistence)."""
+    camp_id = _normalize_camp_id(camp_id)
     user = getattr(request.state, "user", None)
     if user:
         require_camp_access(request, camp_id)
@@ -436,9 +446,11 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             except Exception:
                 continue
 
-    if user and found:
-        lid = user.id
-        progress_map = _fetch_progress_map(lid, camp_id)
+    # Always overlay DB packages (even anonymous) so bootstrap-stale YAML cannot
+    # hide the persisted curriculum learners actually take.
+    lid = user.id if user else None
+    progress_map = _fetch_progress_map(lid, camp_id) if user else {}
+    if found:
         for day, summary in found.items():
             kinds: list[str] = []
             titles: list[str] = []
@@ -459,7 +471,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             total = len(ids) or summary.total or 6
             passed = 0
             node_summaries: list[DayNodeSummary] | None = None
-            if ids:
+            if user and ids:
                 statuses = _compute_statuses_from_map(day, ids, progress_map)
                 if staff_preview:
                     # Authors/admins preview every node as available.
@@ -470,7 +482,7 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
                     for i, nid in enumerate(ids)
                     if kinds[i] != "unlock"
                 ]
-            else:
+            elif user:
                 passed = sum(
                     1
                     for (d, _nid), status in progress_map.items()
@@ -479,19 +491,23 @@ def list_days(camp_id: str, request: Request) -> dict[str, Any]:
             summary.passed = passed
             summary.total = total
             summary.nodes = node_summaries
-            summary.locked = False if staff_preview else (not _day_unlocked_from_meta(day, day_meta, progress_map))
+            if user:
+                summary.locked = False if staff_preview else (not _day_unlocked_from_meta(day, day_meta, progress_map))
+            else:
+                summary.locked = False
 
     items = [found[k] for k in sorted(found)]
-    # Day 6 = Saturday intercalary between Week1 Day5 and former Day6 (now Day7).
-    weeks: dict[str, list[int]] = {"1": [1, 2, 3, 4, 5, 6], "2": [7, 8, 9, 10, 11, 12]}
-    extra = [d for d in sorted(found) if d > 12]
-    if extra:
-        weeks["3"] = extra
+    # Week1: Day1–6；Week2: Day7–11；Week3 企业沟通特训：Day12–17（视频+答题）。
+    weeks: dict[str, list[int]] = {"1": [1, 2, 3, 4, 5, 6], "2": [7, 8, 9, 10, 11]}
+    week3 = [d for d in sorted(found) if d >= 12]
+    if week3:
+        weeks["3"] = week3
     return {"camp_id": camp_id, "days": items, "count": len(items), "weeks": weeks}
 
 
 @router.get("/api/v1/camps/{camp_id}/days/{day}", response_model=DayPackageView)
 def get_day(camp_id: str, day: int, request: Request) -> DayPackageView:
+    camp_id = _normalize_camp_id(camp_id)
     user = require_camp_access(request, camp_id)
     lid = session_learner_id(request)
     staff_preview = user.role in ("author", "admin")

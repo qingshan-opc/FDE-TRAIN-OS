@@ -44,6 +44,10 @@ type Overview = {
   videos_site?: number;
   learners: number;
   open_courses?: number;
+  paid_orders?: number;
+  gross_fen?: number;
+  shared_fen?: number;
+  pending_share_fen?: number;
   learn_active_users_7d?: DayPoint[];
   learn_duration_minutes_7d?: DayPoint[];
   open_course_clicks_7d?: DayPoint[];
@@ -52,13 +56,34 @@ type Overview = {
   metrics_note?: Record<string, string>;
 };
 
+function yuanFromFen(fen: number | undefined) {
+  return Number(fen || 0) / 100;
+}
+
 const KPIS: Array<{
   key: keyof Overview;
   title: string;
   icon: ReactNode;
   href?: string;
   tip?: string;
+  format?: "money";
 }> = [
+  {
+    key: "gross_fen",
+    title: "已收款",
+    icon: <InboxOutlined />,
+    href: "/author/finance",
+    tip: "全平台已支付订单金额（退款不计）",
+    format: "money",
+  },
+  {
+    key: "shared_fen",
+    title: "已分账",
+    icon: <TeamOutlined />,
+    href: "/author/finance",
+    tip: "微信分账状态为 finished 的金额",
+    format: "money",
+  },
   { key: "courses", title: "课程", icon: <BookOutlined /> },
   { key: "draft_versions", title: "草稿版本", icon: <BranchesOutlined />, href: "/author/curriculum/versions" },
   { key: "pending_submissions", title: "待处理提交", icon: <InboxOutlined />, href: "/author/learners/submissions" },
@@ -192,7 +217,8 @@ export function AuthorOverview() {
               <Row gutter={[12, 12]}>
                 {KPIS.map((k, i) => {
                   const raw = data[k.key];
-                  const value = typeof raw === "number" ? raw : 0;
+                  const num = typeof raw === "number" ? raw : 0;
+                  const value = k.format === "money" ? yuanFromFen(num) : num;
                   const tip = k.key === "videos" ? videoTip || k.tip : k.tip;
                   const inner = (
                     <Card size="small" className="author-kpi anim-rise" style={{ "--i": i } as CSSProperties}>
@@ -211,6 +237,8 @@ export function AuthorOverview() {
                             k.title
                           )
                         }
+                        prefix={k.format === "money" ? "¥" : undefined}
+                        precision={k.format === "money" ? 2 : 0}
                         value={value}
                       />
                     </Card>

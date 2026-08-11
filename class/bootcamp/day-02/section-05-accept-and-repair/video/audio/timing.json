@@ -1,0 +1,59 @@
+{
+  "total": 199.973333,
+  "segments": [
+    {
+      "id": "01-open",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\01-open.wav",
+      "start": 0.0,
+      "duration": 20.736
+    },
+    {
+      "id": "02-open-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\02-open-check.wav",
+      "start": 20.986,
+      "duration": 20.394666666666666
+    },
+    {
+      "id": "03-interaction-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\03-interaction-check.wav",
+      "start": 41.63066666666667,
+      "duration": 22.741333333333333
+    },
+    {
+      "id": "04-state-check",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\04-state-check.wav",
+      "start": 64.622,
+      "duration": 20.522666666666666
+    },
+    {
+      "id": "05-console",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\05-console.wav",
+      "start": 85.39466666666667,
+      "duration": 22.016
+    },
+    {
+      "id": "06-four-sentence",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\06-four-sentence.wav",
+      "start": 107.66066666666666,
+      "duration": 23.68
+    },
+    {
+      "id": "07-owner-fix",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\07-owner-fix.wav",
+      "start": 131.59066666666666,
+      "duration": 21.205333333333332
+    },
+    {
+      "id": "08-retest",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\08-retest.wav",
+      "start": 153.046,
+      "duration": 22.869333333333334
+    },
+    {
+      "id": "09-close",
+      "path": "D:\\FDE-TRAIN-OS\\class\\bootcamp\\day-02\\section-05-accept-and-repair\\video\\audio\\segments\\09-close.wav",
+      "start": 176.16533333333334,
+      "duration": 23.808
+    }
+  ]
+}

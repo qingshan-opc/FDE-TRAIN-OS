@@ -18,32 +18,75 @@ function parseTranscript(transcript: string): { t: number | null; text: string; 
     });
 }
 
+/** Tear down a media element so the previous Range stream is fully released. */
+function disposeMediaElement(el: HTMLMediaElement | null) {
+  if (!el) return;
+  try {
+    el.pause();
+    // Clear sources without el.load() — load() after empty src fires a noisy
+    // MEDIA_ERR_SRC_NOT_SUPPORTED that races with the next lesson's player.
+    el.removeAttribute("src");
+    while (el.firstChild) el.removeChild(el.firstChild);
+    el.removeAttribute("srcObject");
+  } catch {
+    /* ignore dispose races during unmount */
+  }
+}
+
 function usePresignedUrl(objectKey: string | undefined, campId: string | null | undefined) {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const load = async () => {
-    if (!objectKey) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await mediaApi.presign(objectKey, campId || undefined);
-      setUrl(res.url);
-    } catch (err) {
-      setUrl(null);
-      setError(err instanceof ApiError ? err.message : "媒资加载失败");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    void load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [objectKey, campId]);
+    let cancelled = false;
+    // objectKey 变化时立即释放上一个视频的 URL，避免切换课程后
+    // <video> 仍挂载旧地址（点播放播的还是上一课内容）。
+    setUrl(null);
+    setError(null);
+    if (!objectKey) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    (async () => {
+      try {
+        const res = await mediaApi.presign(objectKey, campId || undefined);
+        if (cancelled) return; // 已切到别的课程，丢弃过期响应
+        // Bust browser media cache when reusing the same stream endpoint shape.
+        const sep = res.url.includes("?") ? "&" : "?";
+        setUrl(`${res.url}${sep}_=${tick}-${encodeURIComponent(objectKey)}`);
+      } catch (err) {
+        if (cancelled) return;
+        setError(err instanceof ApiError ? err.message : "媒资加载失败");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [objectKey, campId, tick]);
 
-  return { url, error, loading, retry: () => void load() };
+  return { url, error, loading, retry: () => setTick((t) => t + 1) };
+}
+
+function isAbortMediaError(el: HTMLMediaElement): boolean {
+  const err = el.error;
+  // MEDIA_ERR_ABORTED = 1：切换 src / 卸载时常见，不是真实播放失败
+  return !err || err.code === err.MEDIA_ERR_ABORTED || err.code === 1;
+}
+
+function PendingVideoPlaceholder({ title }: { title?: string }) {
+  return (
+    <section className="media-block media-block--pending" aria-label={title || "视频待上传"}>
+      <div className="media-pending">
+        <strong>{title || "口播课件"}</strong>
+        <p>视频待上传。可先完成下方知识卡片与概念验收答题，视频上线后回看即可。</p>
+      </div>
+    </section>
+  );
 }
 
 export function CapsuleVideo({
@@ -55,15 +98,89 @@ export function CapsuleVideo({
   campId?: string | null;
   onEnded?: () => void;
 }) {
-  const { url, error, loading, retry } = usePresignedUrl(media.object_key, campId);
-  const poster = usePresignedUrl(media.poster_key, campId);
-  const captions = usePresignedUrl(media.captions_vtt_key, campId);
+  const pending = !media.object_key || Boolean(media.pending);
+  const { url, error, loading, retry } = usePresignedUrl(pending ? undefined : media.object_key, campId);
+  const poster = usePresignedUrl(pending ? undefined : media.poster_key, campId);
+  const captions = usePresignedUrl(pending ? undefined : media.captions_vtt_key, campId);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const errorTimerRef = useRef<number | null>(null);
+  const playGenerationRef = useRef(0);
+  const autoRetryRef = useRef(0);
+  const disposingRef = useRef(false);
+
+  // 换课时清空错误态，避免上一课的失败横幅残留到下一课
+  useEffect(() => {
+    setPlaybackError(null);
+    autoRetryRef.current = 0;
+    disposingRef.current = false;
+    if (errorTimerRef.current != null) {
+      window.clearTimeout(errorTimerRef.current);
+      errorTimerRef.current = null;
+    }
+    playGenerationRef.current += 1;
+  }, [media.object_key, url]);
+
+  // 卸载或换源时彻底释放旧流，避免 Range 请求交叉导致下一课 MEDIA_ERR_NETWORK
+  useEffect(() => {
+    const el = videoRef.current;
+    return () => {
+      disposingRef.current = true;
+      disposeMediaElement(el);
+      if (errorTimerRef.current != null) {
+        window.clearTimeout(errorTimerRef.current);
+        errorTimerRef.current = null;
+      }
+    };
+  }, [url]);
 
   const retryPlayback = () => {
     setPlaybackError(null);
+    disposingRef.current = true;
+    disposeMediaElement(videoRef.current);
+    disposingRef.current = false;
+    autoRetryRef.current = 0;
     retry();
   };
+
+  const onVideoError = () => {
+    if (disposingRef.current) return;
+    const el = videoRef.current;
+    if (!el || isAbortMediaError(el)) return;
+    const gen = playGenerationRef.current;
+    if (errorTimerRef.current != null) window.clearTimeout(errorTimerRef.current);
+    // 短暂延迟：切换课时时偶发的瞬时 network error 会在 loadeddata 时被取消
+    errorTimerRef.current = window.setTimeout(() => {
+      if (playGenerationRef.current !== gen) return;
+      if (disposingRef.current) return;
+      if (!videoRef.current || isAbortMediaError(videoRef.current)) return;
+      // 已能播放则忽略（有的浏览器先 error 再恢复）
+      if (videoRef.current.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      // 切换后第一次网络错误：静默重签 URL，避免学员必须整页刷新
+      if (autoRetryRef.current < 1) {
+        autoRetryRef.current += 1;
+        disposingRef.current = true;
+        disposeMediaElement(videoRef.current);
+        disposingRef.current = false;
+        retry();
+        return;
+      }
+      setPlaybackError("视频加载或播放出错，请重试");
+    }, 280);
+  };
+
+  const clearTransientError = () => {
+    if (errorTimerRef.current != null) {
+      window.clearTimeout(errorTimerRef.current);
+      errorTimerRef.current = null;
+    }
+    setPlaybackError(null);
+    autoRetryRef.current = 0;
+  };
+
+  if (pending) {
+    return <PendingVideoPlaceholder title={media.title} />;
+  }
 
   return (
     <section className="media-block media-video" aria-label={media.title || "视频"}>
@@ -74,19 +191,23 @@ export function CapsuleVideo({
         <ErrorState title="视频播放失败" message={playbackError} onRetry={retryPlayback} />
       )}
       {/* Keep the <video> mounted even after a probe error — some MinIO
-          presigned URLs reject HEAD while GET still works, and hiding the
+          stream URLs reject HEAD while GET still works, and hiding the
           element on the first error makes the learner-facing player vanish. */}
       {url && (
         <div className="media-video-frame">
           <video
             key={url}
+            ref={videoRef}
             controls
             playsInline
-            preload="none"
+            preload="metadata"
             src={url}
             poster={poster.url || undefined}
             onEnded={onEnded}
-            onError={() => setPlaybackError("视频加载或播放出错，请重试")}
+            onError={onVideoError}
+            onLoadedData={clearTransientError}
+            onCanPlay={clearTransientError}
+            onPlaying={clearTransientError}
           >
             {captions.url && (
               <track kind="captions" src={captions.url} srcLang="zh" label="中文字幕" default />
@@ -112,6 +233,11 @@ export function CapsuleAudioScreen({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const lines = useMemo(() => parseTranscript(media.transcript || ""), [media.transcript]);
+
+  useEffect(() => {
+    const el = audioRef.current;
+    return () => disposeMediaElement(el);
+  }, [url]);
 
   useEffect(() => {
     const el = audioRef.current;
@@ -143,7 +269,16 @@ export function CapsuleAudioScreen({
         </div>
         {loading && <p className="muted">音频加载中…</p>}
         {error && <ErrorState title="语音不可用" message={error} onRetry={retry} />}
-        {url && <audio ref={audioRef} controls preload="metadata" src={url} onEnded={onEnded} />}
+        {url && (
+          <audio
+            key={url}
+            ref={audioRef}
+            controls
+            preload="metadata"
+            src={url}
+            onEnded={onEnded}
+          />
+        )}
       </div>
       {lines.length > 0 && (
         <div className="media-transcript" role="list">
@@ -190,14 +325,14 @@ export function CapsuleMediaStack({
       {items.map((m, i) =>
         m.kind === "video" ? (
           <CapsuleVideo
-            key={`${m.kind}-${m.object_key}-${i}`}
+            key={`${m.kind}-${m.object_key || m.title || "video"}-${i}`}
             media={m}
             campId={campId}
             onEnded={onMediaEnded ? () => onMediaEnded(m) : undefined}
           />
         ) : (
           <CapsuleAudioScreen
-            key={`${m.kind}-${m.object_key}-${i}`}
+            key={`${m.kind}-${m.object_key || m.title || "audio"}-${i}`}
             media={m}
             campId={campId}
             onEnded={onMediaEnded ? () => onMediaEnded(m) : undefined}

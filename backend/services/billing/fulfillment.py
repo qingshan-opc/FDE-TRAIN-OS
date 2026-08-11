@@ -42,13 +42,19 @@ def fulfill_paid_order(payment_order_id: str) -> None:
                 _pg_upsert_enrollment(cur, order["user_id"], row["camp_id"])
             cur.execute(
                 """
-                UPDATE enrollment_records SET source='wechat_pay'
+                UPDATE enrollment_records SET source=?
                 WHERE user_id=? AND offering_id=?
                 """,
-                (order["user_id"], order["offering_id"]),
+                (
+                    "alipay" if (order.get("pay_channel") or "wechat") == "alipay" else "wechat_pay",
+                    order["user_id"],
+                    order["offering_id"],
+                ),
             )
     try:
-        profit_sharing.request_profit_share_for_order(payment_order_id)
-        profit_sharing.sync_profit_share_statuses(limit=10)
+        # Profit sharing is WeChat-only for now.
+        if (order.get("pay_channel") or "wechat") == "wechat":
+            profit_sharing.request_profit_share_for_order(payment_order_id)
+            profit_sharing.sync_profit_share_statuses(limit=10)
     except Exception:
         log.warning("profit share failed for %s", payment_order_id, exc_info=True)

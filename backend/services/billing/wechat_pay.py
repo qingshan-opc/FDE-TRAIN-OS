@@ -228,8 +228,8 @@ def create_payment_order(
             """
             INSERT INTO payment_orders
               (id, out_trade_no, user_id, offering_id, org_id, referrer_user_id,
-               amount_fen, status, code_url, created_at, updated_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?)
+               amount_fen, status, code_url, pay_channel, created_at, updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?,'wechat',?,?)
             """,
             (
                 oid,

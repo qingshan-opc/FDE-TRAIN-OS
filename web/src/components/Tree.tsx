@@ -257,12 +257,13 @@ export function Tree({
                   const rawNodes: DayNodeSummary[] = d?.nodes ?? st?.nodes ?? [];
                   const nodes = learnerDayNodes(rawNodes);
                   const learnId = learnNodeId(rawNodes, n);
-                  // Flatten capsules under the open day (no「今日课节」folder).
-                  const showCapsules =
-                    activeDay === n &&
-                    Boolean(learnId) &&
-                    capsules.length > 0 &&
-                    Boolean(onSelectCapsule);
+                  // Prefer live capsules for the active day; otherwise use day-summary menu.
+                  // Never show a second-level「进入课件」gate.
+                  const dayCapsules =
+                    activeDay === n && capsules.length > 0
+                      ? capsules.map((c) => ({ id: c.id, title: c.title, minutes: c.minutes }))
+                      : d?.capsules || [];
+                  const labNodes = nodes.filter((node) => node.kind === "lab");
                   const isOpen = expandedDays.has(n) && !locked;
                   const progress =
                     st && st.total > 0
@@ -306,74 +307,73 @@ export function Tree({
 
                       {isOpen ? (
                         <ul className="syllabus-node-list syllabus-capsule-list" aria-label="本日课件">
-                          {showCapsules ? (
-                            capsules.map((c, i) => {
-                              const capSelected = (openCapsuleId || capsules[0]?.id) === c.id;
-                              const capDone = readCapsuleIds?.has(c.id) ?? false;
-                              return (
-                                <li key={c.id}>
-                                  <button
-                                    type="button"
-                                    className={`syllabus-item syllabus-capsule-item${capSelected ? " is-active" : ""}${capDone ? " is-read" : ""}`}
-                                    onClick={() => {
-                                      if (learnId) onSelectNode?.(n, learnId);
-                                      onSelectCapsule?.(c.id);
-                                    }}
-                                    aria-current={capSelected ? "page" : undefined}
-                                  >
-                                    <LeafIcon
-                                      locked={false}
-                                      done={capDone && !capSelected}
-                                      active={capSelected}
-                                    />
-                                    <span className="syllabus-item-body">
-                                      <span className="syllabus-item-title">
-                                        {i + 1}. {c.title}
-                                      </span>
-                                      <span className="syllabus-item-meta">
-                                        {capSelected ? "正在学习" : capDone ? "已读" : "课件"}
-                                      </span>
+                          {dayCapsules.map((c, i) => {
+                            const capSelected =
+                              selected && (openCapsuleId || dayCapsules[0]?.id) === c.id;
+                            const capDone = readCapsuleIds?.has(c.id) ?? false;
+                            return (
+                              <li key={c.id}>
+                                <button
+                                  type="button"
+                                  className={`syllabus-item syllabus-capsule-item${capSelected ? " is-active" : ""}${capDone ? " is-read" : ""}`}
+                                  onClick={() => {
+                                    if (learnId) onSelectNode?.(n, learnId);
+                                    else onSelectDay(n);
+                                    onSelectCapsule?.(c.id);
+                                  }}
+                                  aria-current={capSelected ? "page" : undefined}
+                                >
+                                  <LeafIcon
+                                    locked={false}
+                                    done={capDone && !capSelected}
+                                    active={capSelected}
+                                  />
+                                  <span className="syllabus-item-body">
+                                    <span className="syllabus-item-title">
+                                      {i + 1}. {c.title}
                                     </span>
-                                  </button>
-                                </li>
-                              );
-                            })
-                          ) : (
-                            nodes
-                              .filter((node) => node.kind === "learn" || node.kind === "lab")
-                              .map((node) => {
-                                const nodeLocked = node.status === "locked";
-                                const nodeSelected =
-                                  selected && activeNodeId === node.id && !showCapsules;
-                                const nodeDone = node.status === "passed";
-                                return (
-                                  <li key={node.id}>
-                                    <button
-                                      type="button"
-                                      className={`syllabus-item${nodeSelected ? " is-active" : ""}${nodeDone ? " is-read" : ""}`}
-                                      onClick={() => onSelectNode?.(n, node.id)}
-                                      disabled={nodeLocked}
-                                      aria-current={nodeSelected ? "step" : undefined}
-                                    >
-                                      <LeafIcon
-                                        locked={nodeLocked}
-                                        done={nodeDone}
-                                        active={nodeSelected}
-                                      />
-                                      <span className="syllabus-item-body">
-                                        <span className="syllabus-item-title">
-                                          {node.kind === "learn" ? "进入课件" : node.title || "Lab"}
-                                        </span>
-                                        <span className="syllabus-item-meta">
-                                          {node.kind === "lab" ? "Lab" : "课件"}
-                                          {nodeDone ? " · 已完成" : ""}
-                                        </span>
-                                      </span>
-                                    </button>
-                                  </li>
-                                );
-                              })
-                          )}
+                                    <span className="syllabus-item-meta">
+                                      {capSelected ? "正在学习" : capDone ? "已读" : "课件"}
+                                    </span>
+                                  </span>
+                                </button>
+                              </li>
+                            );
+                          })}
+                          {labNodes.map((node) => {
+                            const nodeLocked = node.status === "locked";
+                            const nodeSelected = selected && activeNodeId === node.id;
+                            const nodeDone = node.status === "passed";
+                            return (
+                              <li key={node.id}>
+                                <button
+                                  type="button"
+                                  className={`syllabus-item${nodeSelected ? " is-active" : ""}${nodeDone ? " is-read" : ""}`}
+                                  onClick={() => onSelectNode?.(n, node.id)}
+                                  disabled={nodeLocked}
+                                  aria-current={nodeSelected ? "step" : undefined}
+                                >
+                                  <LeafIcon
+                                    locked={nodeLocked}
+                                    done={nodeDone}
+                                    active={nodeSelected}
+                                  />
+                                  <span className="syllabus-item-body">
+                                    <span className="syllabus-item-title">{node.title || "Lab"}</span>
+                                    <span className="syllabus-item-meta">
+                                      Lab
+                                      {nodeDone ? " · 已完成" : ""}
+                                    </span>
+                                  </span>
+                                </button>
+                              </li>
+                            );
+                          })}
+                          {!dayCapsules.length && !labNodes.length ? (
+                            <li className="muted" style={{ padding: "6px 10px", fontSize: 12 }}>
+                              加载课节中…
+                            </li>
+                          ) : null}
                         </ul>
                       ) : null}
                     </li>

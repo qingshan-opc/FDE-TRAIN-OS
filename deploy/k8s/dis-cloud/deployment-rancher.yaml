@@ -119,11 +119,24 @@ spec:
               value: /secrets/wechat/apiclient_key.pem
             - name: WECHAT_PAY_PLATFORM_CERT_PATH
               value: /secrets/wechat/wechatpay_platform.pem
+            - name: ALIPAY_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dis-cloud-secrets
+                  key: ALIPAY_APP_ID
+                  optional: true
+            - name: ALIPAY_PRIVATE_KEY_PATH
+              value: /secrets/alipay/app_private_key.pem
+            - name: ALIPAY_PUBLIC_KEY_PATH
+              value: /secrets/alipay/alipay_public_key.pem
           volumeMounts:
             - name: data
               mountPath: /data
             - name: wechat-certs
               mountPath: /secrets/wechat
+              readOnly: true
+            - name: alipay-certs
+              mountPath: /secrets/alipay
               readOnly: true
           livenessProbe:
             httpGet:
@@ -152,11 +165,21 @@ spec:
         - name: wechat-certs
           secret:
             secretName: dis-cloud-secrets
+            optional: true
             items:
               - key: WECHAT_PAY_PRIVATE_KEY
                 path: apiclient_key.pem
               - key: WECHAT_PAY_PLATFORM_CERT
                 path: wechatpay_platform.pem
+        - name: alipay-certs
+          secret:
+            secretName: dis-cloud-secrets
+            optional: true
+            items:
+              - key: ALIPAY_PRIVATE_KEY
+                path: app_private_key.pem
+              - key: ALIPAY_PUBLIC_KEY
+                path: alipay_public_key.pem
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

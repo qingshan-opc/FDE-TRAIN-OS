@@ -1404,15 +1404,16 @@ export const partnerAdminApi = {
 /** Billing */
 export const billingApi = {
   listOfferings: () => api<{ items: Record<string, unknown>[] }>("/api/v1/billing/offerings"),
-  checkout: (offering_id: string) =>
+  checkout: (offering_id: string, channel: "wechat" | "alipay" = "wechat") =>
     api<{
       order_id: string;
       out_trade_no: string;
       amount_fen: number;
       code_url?: string;
+      pay_channel?: string;
       dev_mode?: boolean;
       status: string;
-    }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id } }),
+    }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id, channel } }),
   getOrder: (orderId: string) => api<{ order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}`),
   syncOrder: (orderId: string) =>
     api<{ status: string; order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}/sync`, {

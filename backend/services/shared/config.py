@@ -135,6 +135,18 @@ WECHAT_MP_AES_KEY = os.getenv("WECHAT_MP_AES_KEY", "")
 # Learners must bind 服务号 before entering /app. Default on in prod; off in local/dev
 # so email/password demos work without WECHAT_* credentials.
 REQUIRE_WX_BIND = os.getenv("FDE_REQUIRE_WX_BIND", "1" if FDE_ENV == "prod" else "0") == "1"
+
+# Alipay OpenAPI (RSA2) — Native precreate QR
+ALIPAY_APP_ID = os.getenv("ALIPAY_APP_ID", "")
+ALIPAY_GATEWAY = os.getenv(
+    "ALIPAY_GATEWAY",
+    "https://openapi.alipay.com/gateway.do",
+)
+# Prefer inline PEM/base64; optional file paths for K8s mounts
+ALIPAY_PRIVATE_KEY = os.getenv("ALIPAY_PRIVATE_KEY", "")
+ALIPAY_PUBLIC_KEY = os.getenv("ALIPAY_PUBLIC_KEY", "")
+ALIPAY_PRIVATE_KEY_PATH = os.getenv("ALIPAY_PRIVATE_KEY_PATH", "")
+ALIPAY_PUBLIC_KEY_PATH = os.getenv("ALIPAY_PUBLIC_KEY_PATH", "")
 PARTNER_DEMO_EMAIL = os.getenv("FDE_PARTNER_DEMO_EMAIL", "partner@fde.local")
 PARTNER_DEMO_PASSWORD = os.getenv("FDE_PARTNER_DEMO_PASSWORD", "partner1234")
 

@@ -53,12 +53,22 @@ args=(
 [[ -n "${WECHAT_MP_TOKEN:-}" ]] && args+=(--from-literal=WECHAT_MP_TOKEN="$WECHAT_MP_TOKEN")
 [[ -n "${WECHAT_MP_AES_KEY:-}" ]] && args+=(--from-literal=WECHAT_MP_AES_KEY="$WECHAT_MP_AES_KEY")
 [[ -n "${DEEPSEEK_API_KEY:-}" ]] && args+=(--from-literal=DEEPSEEK_API_KEY="$DEEPSEEK_API_KEY")
+[[ -n "${ALIPAY_APP_ID:-}" ]] && args+=(--from-literal=ALIPAY_APP_ID="$ALIPAY_APP_ID")
 
 if [[ -f "$PRIVATE_KEY" ]]; then
   args+=(--from-file=WECHAT_PAY_PRIVATE_KEY="$PRIVATE_KEY")
 fi
 if [[ -f "$PLATFORM_CERT" ]]; then
   args+=(--from-file=WECHAT_PAY_PLATFORM_CERT="$PLATFORM_CERT")
+fi
+
+ALIPAY_PRIV_FILE="${ALIPAY_PRIVATE_KEY_FILE:-$ROOT/deploy/k8s/dis-cloud/secrets/alipay/app_private_key.pem}"
+ALIPAY_PUB_FILE="${ALIPAY_PUBLIC_KEY_FILE:-$ROOT/deploy/k8s/dis-cloud/secrets/alipay/alipay_public_key.pem}"
+if [[ -f "$ALIPAY_PRIV_FILE" ]]; then
+  args+=(--from-file=ALIPAY_PRIVATE_KEY="$ALIPAY_PRIV_FILE")
+fi
+if [[ -f "$ALIPAY_PUB_FILE" ]]; then
+  args+=(--from-file=ALIPAY_PUBLIC_KEY="$ALIPAY_PUB_FILE")
 fi
 
 kubectl "${args[@]}" --dry-run=client -o yaml | kubectl apply -f -

@@ -37,7 +37,6 @@ export function SyllabusRail({
   capsules: Capsule[];
   openCapsuleId: string | null;
   readCapsuleIds: Set<string>;
-  acceptedCapsuleIds: Set<string>;
   locked?: boolean;
   onSelectDay: (day: number) => void;
   onSelectNode?: (day: number, nodeId: string) => void;

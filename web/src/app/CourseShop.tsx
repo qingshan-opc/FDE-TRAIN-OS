@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, QRCode, Tag, Typography } from "antd";
+import { Button, Tag, Typography } from "antd";
 import { CheckCircleOutlined, RocketOutlined, SafetyCertificateOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { billingApi, ApiError } from "../lib/api";
 import { Nav } from "../components/Nav";
@@ -26,15 +26,6 @@ type Offering = {
   gallery?: string[];
 };
 
-type PaySlot = {
-  orderId: string;
-  codeUrl: string | null;
-  amountFen: number;
-  devMode: boolean;
-  loading: boolean;
-  error: string | null;
-};
-
 const HIGHLIGHTS = [
   { icon: <RocketOutlined />, title: "任务驱动", desc: "每天一个可验收交付，不是听课刷课" },
   { icon: <ThunderboltOutlined />, title: "Agent 实训", desc: "真实隔离工作区，全程留痕可复盘" },
@@ -57,13 +48,9 @@ export function CourseShop() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [payOpen, setPayOpen] = useState(false);
-  const [orderId, setOrderId] = useState<string | null>(null);
-  const [codeUrl, setCodeUrl] = useState<string | null>(null);
+  const [payOfferingId, setPayOfferingId] = useState<string | null>(null);
   const [amountFen, setAmountFen] = useState(0);
-  const [devMode, setDevMode] = useState(false);
   const [buyingId, setBuyingId] = useState<string | null>(null);
-  const [paySlots, setPaySlots] = useState<Record<string, PaySlot>>({});
-  const pollRef = useRef<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -82,116 +69,12 @@ export function CourseShop() {
     void load();
   }, [load]);
 
-  const ensurePayQr = useCallback(async (offeringId: string) => {
-    setPaySlots((prev) => ({
-      ...prev,
-      [offeringId]: {
-        orderId: prev[offeringId]?.orderId || "",
-        codeUrl: prev[offeringId]?.codeUrl || null,
-        amountFen: prev[offeringId]?.amountFen || 0,
-        devMode: prev[offeringId]?.devMode || false,
-        loading: true,
-        error: null,
-      },
-    }));
-    try {
-      const res = await billingApi.checkout(offeringId);
-      setPaySlots((prev) => ({
-        ...prev,
-        [offeringId]: {
-          orderId: res.order_id,
-          codeUrl: res.code_url || null,
-          amountFen: res.amount_fen,
-          devMode: !!res.dev_mode,
-          loading: false,
-          error: null,
-        },
-      }));
-    } catch (err) {
-      setPaySlots((prev) => ({
-        ...prev,
-        [offeringId]: {
-          orderId: "",
-          codeUrl: null,
-          amountFen: 0,
-          devMode: false,
-          loading: false,
-          error: err instanceof ApiError ? err.message : "无法生成支付码",
-        },
-      }));
-    }
-  }, []);
-
-  // Auto-create pay QR for unowned offerings
-  useEffect(() => {
-    for (const it of items) {
-      if (it.purchased || it.enrolled) continue;
-      if (paySlots[it.id]?.orderId || paySlots[it.id]?.loading) continue;
-      void ensurePayQr(it.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when items change
-  }, [items, ensurePayQr]);
-
-  // Poll pending inline orders
-  useEffect(() => {
-    const pending = Object.values(paySlots).filter((s) => s.orderId && !s.devMode);
-    if (pending.length === 0) return;
-    const tick = async () => {
-      for (const s of pending) {
-        try {
-          const res = await billingApi.syncOrder(s.orderId);
-          if (res.status === "paid") {
-            toast.push("支付成功，已开通课程", "success");
-            void load();
-            nav("/app/courses");
-            return;
-          }
-        } catch {
-          /* ignore */
-        }
-      }
-    };
-    void tick();
-    pollRef.current = window.setInterval(() => void tick(), 2500);
-    return () => {
-      if (pollRef.current) window.clearInterval(pollRef.current);
-    };
-  }, [paySlots, load, nav, toast]);
-
-  const onBuy = async (offeringId: string) => {
-    setBuyingId(offeringId);
-    try {
-      const existing = paySlots[offeringId];
-      if (existing?.orderId && existing.codeUrl) {
-        setOrderId(existing.orderId);
-        setCodeUrl(existing.codeUrl);
-        setAmountFen(existing.amountFen);
-        setDevMode(existing.devMode);
-        setPayOpen(true);
-        return;
-      }
-      const res = await billingApi.checkout(offeringId);
-      setOrderId(res.order_id);
-      setCodeUrl(res.code_url || null);
-      setAmountFen(res.amount_fen);
-      setDevMode(!!res.dev_mode);
-      setPayOpen(true);
-      setPaySlots((prev) => ({
-        ...prev,
-        [offeringId]: {
-          orderId: res.order_id,
-          codeUrl: res.code_url || null,
-          amountFen: res.amount_fen,
-          devMode: !!res.dev_mode,
-          loading: false,
-          error: null,
-        },
-      }));
-    } catch (err) {
-      toast.push(err instanceof ApiError ? err.message : "下单失败", "error");
-    } finally {
-      setBuyingId(null);
-    }
+  const onBuy = (offering: Offering) => {
+    setBuyingId(offering.id);
+    setPayOfferingId(offering.id);
+    setAmountFen(offering.price_fen);
+    setPayOpen(true);
+    setBuyingId(null);
   };
 
   const onPaid = () => {
@@ -211,7 +94,7 @@ export function CourseShop() {
             选购课程
           </Typography.Title>
           <Typography.Paragraph className="course-shop-hero__lead">
-            支付成功后自动开通报名。用真实任务练出交付力——不只是「会用 AI」，而是能把业务做成可验收结果。
+            支付成功后自动开通报名。支持微信 / 支付宝扫码——用真实任务练出交付力。
           </Typography.Paragraph>
           <div className="course-shop-trust">
             {HIGHLIGHTS.map((h) => (
@@ -242,7 +125,6 @@ export function CourseShop() {
               const gallery = it.gallery?.length
                 ? it.gallery
                 : ["/landing/story-task.png", "/landing/story-agent.png", "/landing/story-cert.png"];
-              const slot = paySlots[it.id];
               return (
                 <article className="course-shop-card" key={it.id}>
                   <div className="course-shop-card__media">
@@ -309,34 +191,6 @@ export function CourseShop() {
                     </div>
 
                     <aside className="course-shop-card__cta">
-                      {!owned && (
-                        <div className="course-shop-payqr">
-                          {slot?.loading && (
-                            <Typography.Text type="secondary">正在生成支付码…</Typography.Text>
-                          )}
-                          {slot?.error && (
-                            <Alert
-                              type="warning"
-                              showIcon
-                              message={slot.error}
-                              action={
-                                <Button size="small" onClick={() => void ensurePayQr(it.id)}>
-                                  重试
-                                </Button>
-                              }
-                            />
-                          )}
-                          {slot?.devMode && (
-                            <Alert type="info" showIcon message="开发模式：可点下方按钮模拟支付" />
-                          )}
-                          {slot?.codeUrl && !slot.codeUrl.startsWith("dev://") && (
-                            <>
-                              <QRCode value={slot.codeUrl} size={168} />
-                              <p className="course-shop-payqr__tip">微信扫一扫 · 支付后自动开通</p>
-                            </>
-                          )}
-                        </div>
-                      )}
                       <div className="course-shop-price">
                         <span className="course-shop-price__label">优惠价</span>
                         <div className="course-shop-price__row">
@@ -344,7 +198,7 @@ export function CourseShop() {
                           <span className="course-shop-price__num">{price}</span>
                         </div>
                         <p className="course-shop-price__note">
-                          {owned ? "已开通本课程" : "支付成功立即开通 · 微信扫码"}
+                          {owned ? "已开通本课程" : "支付成功立即开通 · 微信 / 支付宝"}
                         </p>
                       </div>
                       {owned ? (
@@ -357,9 +211,9 @@ export function CourseShop() {
                           size="large"
                           block
                           loading={buyingId === it.id}
-                          onClick={() => void onBuy(it.id)}
+                          onClick={() => onBuy(it)}
                         >
-                          {slot?.devMode ? "模拟支付 / 放大支付码" : "放大支付码"}
+                          立即购买
                         </Button>
                       )}
                       <Button type="link" block onClick={() => nav("/app/courses")}>
@@ -375,10 +229,8 @@ export function CourseShop() {
       </div>
       <PaymentModal
         open={payOpen}
-        orderId={orderId}
-        codeUrl={codeUrl}
+        offeringId={payOfferingId}
         amountFen={amountFen}
-        devMode={devMode}
         onClose={() => setPayOpen(false)}
         onPaid={onPaid}
       />

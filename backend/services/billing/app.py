@@ -1,20 +1,21 @@
-"""Billing API — checkout, notify, sync."""
+"""Billing API — checkout, notify, sync (WeChat + Alipay)."""
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel
+from fastapi.responses import PlainTextResponse
+from pydantic import BaseModel, Field
 
 _PKG_ROOT = Path(__file__).resolve().parents[2]
 if str(_PKG_ROOT) not in sys.path:
     sys.path.insert(0, str(_PKG_ROOT))
 from services.shared.config import ROOT as _ROOT  # noqa: E402
 
-from services.billing import profit_sharing, wechat_pay  # noqa: E402
+from services.billing import alipay_pay, profit_sharing, wechat_pay  # noqa: E402
 from services.partners.service import get_user_attribution  # noqa: E402
 from services.referral.service import get_user_referral  # noqa: E402
 from services.shared import db_cursor, init_schema  # noqa: E402
@@ -24,14 +25,31 @@ from services.shared.middleware import require_user  # noqa: E402
 router = APIRouter(tags=["billing"])
 init_schema()
 
+PayChannel = Literal["wechat", "alipay"]
+
 
 class CheckoutBody(BaseModel):
     offering_id: str
+    channel: PayChannel = Field(default="wechat")
+
+
+def _channel_configured(channel: PayChannel) -> bool:
+    if channel == "alipay":
+        return alipay_pay.configured()
+    return wechat_pay.configured()
+
+
+def _sync_by_channel(order: dict[str, Any]) -> str:
+    channel = order.get("pay_channel") or "wechat"
+    if channel == "alipay":
+        return alipay_pay.sync_order_status(order["id"])
+    return wechat_pay.sync_order_status(order["id"])
 
 
 @router.post("/api/v1/billing/checkout")
 def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
     user = require_user(request)
+    channel: PayChannel = body.channel or "wechat"
     with db_cursor() as cur:
         cur.execute(
             """
@@ -67,18 +85,19 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         )
         if cur.fetchone():
             raise HTTPException(409, "您已拥有该课程")
-        # Reuse recent pending order (avoid spawning QR/orders on every shop refresh)
+        # Reuse recent pending order for the same pay channel
         cur.execute(
             """
-            SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id
+            SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel
             FROM payment_orders
             WHERE user_id=? AND offering_id=? AND status='pending'
+              AND COALESCE(pay_channel, 'wechat')=?
               AND created_at > NOW() - INTERVAL '2 hours'
               AND code_url IS NOT NULL AND code_url <> ''
             ORDER BY created_at DESC
             LIMIT 1
             """,
-            (user.id, body.offering_id),
+            (user.id, body.offering_id, channel),
         )
         pending = cur.fetchone()
 
@@ -92,7 +111,6 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
 
     if pending:
         pending = dict(pending)
-        # 归因可能在生成二维码之后才绑定：复用订单时回写最新 org/referrer
         stored_org = pending.get("org_id")
         stored_ref = pending.get("referrer_user_id")
         if stored_org != org_id or stored_ref != referrer_user_id:
@@ -110,21 +128,33 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
             "out_trade_no": pending["out_trade_no"],
             "amount_fen": int(pending["amount_fen"]),
             "code_url": pending.get("code_url"),
-            "dev_mode": not wechat_pay.configured(),
+            "pay_channel": channel,
+            "dev_mode": not _channel_configured(channel),
             "status": pending.get("status") or "pending",
             "reused": True,
         }
 
     title = offering.get("title") or offering.get("course_title") or "FDE 课程"
+    description = f"购买 {title}"
     try:
-        order = wechat_pay.create_payment_order(
-            user.id,
-            body.offering_id,
-            price,
-            org_id,
-            f"购买 {title}",
-            referrer_user_id=referrer_user_id,
-        )
+        if channel == "alipay":
+            order = alipay_pay.create_payment_order(
+                user.id,
+                body.offering_id,
+                price,
+                org_id,
+                description,
+                referrer_user_id=referrer_user_id,
+            )
+        else:
+            order = wechat_pay.create_payment_order(
+                user.id,
+                body.offering_id,
+                price,
+                org_id,
+                description,
+                referrer_user_id=referrer_user_id,
+            )
     except RuntimeError as exc:
         raise HTTPException(503, str(exc)) from exc
     return {
@@ -132,7 +162,8 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         "out_trade_no": order["out_trade_no"],
         "amount_fen": order["amount_fen"],
         "code_url": order.get("code_url"),
-        "dev_mode": not wechat_pay.configured(),
+        "pay_channel": channel,
+        "dev_mode": not _channel_configured(channel),
         "status": order.get("status"),
         "reused": False,
     }
@@ -146,7 +177,7 @@ def get_order(order_id: str, request: Request) -> dict[str, Any]:
         raise HTTPException(404, "订单不存在")
     status = order.get("status")
     if status == "pending":
-        status = wechat_pay.sync_order_status(order_id)
+        status = _sync_by_channel(order)
         order = wechat_pay.get_payment_order(order_id) or order
         order["status"] = status
     return {"order": order}
@@ -158,9 +189,10 @@ def sync_order(order_id: str, request: Request) -> dict[str, Any]:
     order = wechat_pay.get_payment_order(order_id)
     if not order or order.get("user_id") != user.id:
         raise HTTPException(404, "订单不存在")
-    status = wechat_pay.sync_order_status(order_id)
-    profit_sharing.retry_pending_shares()
-    profit_sharing.sync_profit_share_statuses()
+    status = _sync_by_channel(order)
+    if (order.get("pay_channel") or "wechat") == "wechat":
+        profit_sharing.retry_pending_shares()
+        profit_sharing.sync_profit_share_statuses()
     order = wechat_pay.get_payment_order(order_id)
     return {"status": status, "order": order}
 
@@ -173,6 +205,17 @@ async def wechat_notify(request: Request) -> dict[str, str]:
     if not result.ok and result.error and result.error != "duplicate":
         raise HTTPException(400, result.error or "notify failed")
     return {"code": "SUCCESS", "message": "成功"}
+
+
+@router.post("/api/v1/billing/alipay/notify")
+async def alipay_notify(request: Request) -> PlainTextResponse:
+    """Alipay async notify — must reply plain text `success` / `failure`."""
+    form = await request.form()
+    params = {str(k): str(v) for k, v in form.items()}
+    result = alipay_pay.handle_notify(params)
+    if not result.ok and result.error and result.error != "duplicate":
+        return PlainTextResponse("failure", status_code=200)
+    return PlainTextResponse("success")
 
 
 @router.post("/api/v1/billing/dev/mark-paid/{order_id}")

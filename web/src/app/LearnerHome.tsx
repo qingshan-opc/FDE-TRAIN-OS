@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { dayApi, learningApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
@@ -47,7 +47,7 @@ export function LearnerHome() {
   const [showPassport, setShowPassport] = useState(false);
   const [openCapsuleId, setOpenCapsuleId] = useState<string | null>(null);
   const [readCapsuleIds, setReadCapsuleIds] = useState<Set<string>>(() => new Set());
-  const [acceptedCapsuleIds, setAcceptedCapsuleIds] = useState<Set<string>>(() => new Set());
+  const pendingCapsuleRef = useRef<string | null>(null);
   const [coachOpen, setCoachOpen] = useState(false);
   const [studySeconds, setStudySeconds] = useState(0);
 
@@ -85,24 +85,17 @@ export function LearnerHome() {
     [setSearchParams],
   );
 
-  // Reset capsule TOC selection when the focused Day/node changes — not on
-  // every focusNode call (same-node re-clicks / locked toasts must not wipe
-  // the in-progress read set that CapsuleReader already reported up).
+  // Reset capsule TOC selection when the focused Day/node changes — keep a
+  // pending id when the learner clicked a capsule that triggered navigation.
   useEffect(() => {
-    setOpenCapsuleId(null);
+    if (pendingCapsuleRef.current) {
+      setOpenCapsuleId(pendingCapsuleRef.current);
+      pendingCapsuleRef.current = null;
+    } else {
+      setOpenCapsuleId(null);
+    }
     setReadCapsuleIds(new Set());
-    setAcceptedCapsuleIds(new Set());
   }, [activeDay, activeNodeId]);
-
-  useEffect(() => {
-    const onAccepted = (event: Event) => {
-      const capsuleId = (event as CustomEvent<{ capsuleId?: string }>).detail?.capsuleId;
-      if (!capsuleId) return;
-      setAcceptedCapsuleIds((prev) => new Set(prev).add(capsuleId));
-    };
-    window.addEventListener("fde:lesson-accepted", onAccepted);
-    return () => window.removeEventListener("fde:lesson-accepted", onAccepted);
-  }, []);
 
   const loadDay = useCallback(
     async (day: number, preferNodeId?: string | null) => {
@@ -493,14 +486,12 @@ export function LearnerHome() {
               capsules={learnCapsules}
               openCapsuleId={openCapsuleId}
               readCapsuleIds={readCapsuleIds}
-              acceptedCapsuleIds={acceptedCapsuleIds}
               locked={activeNode?.status === "locked"}
               onSelectDay={handleSelectDay}
               onSelectNode={handleSelectNode}
               onSelectWeekQuiz={handleSelectWeekQuiz}
               onSelectCapsule={(id) => {
-                const learn = dayPkg?.nodes.find((n) => n.kind === "learn");
-                if (learn && activeDay) handleSelectNode(activeDay, learn.id);
+                pendingCapsuleRef.current = id;
                 setOpenCapsuleId(id);
                 setMobileTab("content");
               }}

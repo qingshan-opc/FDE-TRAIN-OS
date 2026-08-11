@@ -4,6 +4,8 @@ __pycache__/
 *.pyc
 .env
 deploy/k8s/818cloud/.env
+deploy/k8s/dis-cloud/.env
+deploy/k8s/dis-cloud/secrets/
 .venv/
 .DS_Store
 node_modules/

@@ -11,6 +11,7 @@ interface DayStatusEntry {
 /**
  * Left-rail syllabus:
  * Week → Day → capsules (no「今日课节」folder) + weekly 概念验收
+ * + week-1 作业 · 驾驶舱（under 概念验收）
  */
 export function SyllabusRail({
   days,
@@ -18,13 +19,14 @@ export function SyllabusRail({
   activeDay,
   activeNodeId,
   dayStatuses,
-  dayPkg,
   capsules,
   openCapsuleId,
   readCapsuleIds,
+  week1CockpitHomeworkDone,
   onSelectDay,
   onSelectNode,
   onSelectWeekQuiz,
+  onSelectWeekCockpitHomework,
   onSelectCapsule,
 }: {
   days: DaySummary[];
@@ -37,23 +39,19 @@ export function SyllabusRail({
   capsules: Capsule[];
   openCapsuleId: string | null;
   readCapsuleIds: Set<string>;
+  week1CockpitHomeworkDone?: boolean;
   locked?: boolean;
   onSelectDay: (day: number) => void;
   onSelectNode?: (day: number, nodeId: string) => void;
   onSelectWeekQuiz?: (week: number, anchorDay: number) => void;
+  onSelectWeekCockpitHomework?: (week: number, anchorDay: number) => void;
   onSelectCapsule: (id: string) => void;
 }) {
-  const inDay = Boolean(activeDay && dayPkg);
-
   return (
     <nav className="syllabus-rail syllabus-rail--daily" aria-label="课程大纲">
       <header className="syllabus-head">
-        <h2 className="syllabus-title">用 AI 做出完整应用</h2>
-        <p className="syllabus-subtitle">
-          {inDay && dayPkg && activeDay
-            ? `Day ${activeDay} · ${dayPkg.title}`
-            : "选择一天开始今日训练"}
-        </p>
+        <h2 className="syllabus-title">从0到1入门FDE</h2>
+        <p className="syllabus-subtitle">几百个学习节点，助你在AI时代翱翔！</p>
       </header>
 
       <Tree
@@ -65,9 +63,11 @@ export function SyllabusRail({
         capsules={capsules}
         openCapsuleId={openCapsuleId}
         readCapsuleIds={readCapsuleIds}
+        week1CockpitHomeworkDone={week1CockpitHomeworkDone}
         onSelectDay={onSelectDay}
         onSelectNode={onSelectNode}
         onSelectWeekQuiz={onSelectWeekQuiz}
+        onSelectWeekCockpitHomework={onSelectWeekCockpitHomework}
         onSelectCapsule={onSelectCapsule}
       />
     </nav>

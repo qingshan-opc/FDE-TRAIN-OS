@@ -1,56 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="多 Skill 编排：发送动作前必须过人工确认闸，每一步写入执行日志">
-  <rect width="1040" height="480" fill="#f2f5f0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" role="img" aria-label="多 Skill 编排：发送动作前必须过人工确认闸，每一步写入执行日志">
   <defs>
-    <marker id="oc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
-    </marker>
-    <marker id="oc-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#f24e54"/>
-    </marker>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
   </defs>
-
-  <text x="520" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#231f20">多 Skill 编排：确认点 + 日志 = 信任的工程设计</text>
-
-  <!-- pipeline: Skill A -->
-  <rect x="60" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="150" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill A</text>
-  <text x="150" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">拉取数据</text>
-  <text x="150" y="240" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">只读 · 幂等 · 可自动跑</text>
-
-  <!-- Skill B -->
-  <rect x="300" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="390" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill B</text>
-  <text x="390" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">生成周报</text>
-  <text x="390" y="240" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">产出文档 · 可自动跑</text>
-
-  <!-- confirm gate diamond -->
-  <polygon points="580,205 660,150 740,205 660,260" fill="#f24e54" opacity="0.14"/>
-  <polygon points="580,205 660,150 740,205 660,260" fill="none" stroke="#f24e54" stroke-width="2.5"/>
-  <text x="660" y="198" text-anchor="middle" font-size="15" font-weight="800" fill="#f24e54">人工确认</text>
-  <text x="660" y="222" text-anchor="middle" font-size="11" fill="#f24e54">看一眼再放行</text>
-
-  <!-- Skill C -->
-  <rect x="800" y="150" width="180" height="110" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="890" y="182" text-anchor="middle" font-size="12" fill="#231f20" opacity="0.6">Skill C</text>
-  <text x="890" y="212" text-anchor="middle" font-size="18" font-weight="700" fill="#231f20">发送出去</text>
-  <text x="890" y="240" text-anchor="middle" font-size="12" fill="#f24e54">对外动作 · 不可逆</text>
-
-  <!-- arrows -->
-  <line x1="240" y1="205" x2="296" y2="205" stroke="#231f20" stroke-width="2" marker-end="url(#oc-arrow)"/>
-  <line x1="480" y1="205" x2="576" y2="205" stroke="#231f20" stroke-width="2" marker-end="url(#oc-arrow)"/>
-  <line x1="744" y1="205" x2="796" y2="205" stroke="#f24e54" stroke-width="2.5" marker-end="url(#oc-arrow-red)"/>
-
-  <!-- execution log panel -->
-  <rect x="60" y="310" width="560" height="140" rx="12" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="84" y="342" font-size="14" font-weight="800" fill="#231f20">执行日志（每步一条，可追溯）</text>
-  <text x="84" y="374" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">✓ A: 拉取 42 条记录 · 用时 3.2s</text>
-  <text x="84" y="402" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">✓ B: 生成 weekly-report-0524.md</text>
-  <text x="84" y="430" font-size="13" fill="#231f20" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">⏸ C: 等待人工确认（草稿已备好）</text>
-
-  <!-- rule card -->
-  <rect x="660" y="310" width="320" height="140" rx="12" fill="#fff" stroke="#f24e54" stroke-width="2"/>
-  <text x="684" y="342" font-size="14" font-weight="800" fill="#f24e54">编排铁律</text>
-  <text x="684" y="372" font-size="13" fill="#231f20">只读步骤自动连跑；</text>
-  <text x="684" y="398" font-size="13" fill="#231f20">任何「对外 / 写入 / 花钱」步骤前，</text>
-  <text x="684" y="424" font-size="13" font-weight="700" fill="#231f20">必须插人工确认点并留日志。</text>
+  <rect width="1040" height="480" fill="#ffffff"/>
+  <rect width="1040" height="480" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="432" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">多 Skill 编排：确认点 + 日志 = 信任的工程设计</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">ORCHESTRATION</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="110" width="180" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="150" y="142" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">Skill A</text>
+<text x="150" y="172" font-size="18" font-weight="700" fill="#231f20" text-anchor="middle">拉取数据</text>
+<text x="150" y="200" font-size="12" fill="rgba(35,31,32,.55)" text-anchor="middle">只读 · 幂等 · 可自动跑</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="300" y="110" width="180" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="390" y="142" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">Skill B</text>
+<text x="390" y="172" font-size="18" font-weight="700" fill="#231f20" text-anchor="middle">生成周报</text>
+<text x="390" y="200" font-size="12" fill="rgba(35,31,32,.55)" text-anchor="middle">产出文档 · 可自动跑</text>
+</g>
+<path d="M246 165 L294 165" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<path d="M486 165 L566 165" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><polygon points="580,165 660,110 740,165 660,220" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></polygon><polygon points="592,165 660,120 728,165 660,210" fill="url(#tlg)" filter="url(#glow)"/><text x="660" y="158" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">人工确认</text><text x="660" y="182" font-size="11" fill="rgba(255,255,255,.9)" text-anchor="middle">看一眼再放行</text></g>
+<path d="M744 165 L794 165" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="800" y="110" width="180" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="890" y="142" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">Skill C</text>
+<text x="890" y="172" font-size="18" font-weight="700" fill="#231f20" text-anchor="middle">发送出去</text>
+<text x="890" y="200" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">对外动作 · 不可逆</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="290" width="560" height="150" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="322" font-size="14" font-weight="800" fill="#231f20">执行日志（每步一条，可追溯）</text>
+<text x="84" y="354" font-size="13" fill="#0f766e" font-family="'SF Mono',Menlo,monospace">✓ A: 拉取 42 条记录 · 用时 3.2s</text>
+<text x="84" y="382" font-size="13" fill="#0f766e" font-family="'SF Mono',Menlo,monospace">✓ B: 生成 weekly-report-0524.md</text>
+<text x="84" y="410" font-size="13" fill="rgba(35,31,32,.6)" font-family="'SF Mono',Menlo,monospace">⏸ C: 等待人工确认（草稿已备好）</text>
+<rect x="84" y="422" width="240" height="6" rx="3" fill="url(#bar)"><animate attributeName="width" values="60;240" dur="3.5s" repeatCount="indefinite"/></rect>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="660" y="290" width="320" height="150" rx="18" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="1.5" filter="url(#tglow)"/>
+<text x="684" y="322" font-size="14" font-weight="800" fill="#0f766e">编排铁律</text>
+<text x="684" y="352" font-size="13" fill="rgba(35,31,32,.7)">只读步骤自动连跑；</text>
+<text x="684" y="378" font-size="13" fill="rgba(35,31,32,.7)">任何「对外 / 写入 / 花钱」步骤前，</text>
+<text x="684" y="404" font-size="13" font-weight="700" fill="#231f20">必须插人工确认点并留日志。</text>
+</g>
 </svg>

@@ -1,40 +1,36 @@
-# Day 6 · LLM 理论日：18 词过线
+# Day 6 · LLM → 应用内对话（展示 D6）
 
-> 结构依据：`class/schedule/index.html` 第 02 节 LLM 生态 + 第 03 节新概念词典 18 词
-> 今日目标：**把前五天「用过 AI」的体感，升级为能讲清边界、能查词典、能连到自己项目的 LLM 理论框架；第 1 节补上 DeepSeek + SSE 最小接电**
-> 总时长 115′ · 5 节 · 第 1 节含 SSE 实战，其余以概念为主；抽测走概念验收节点，收束靠企业任务认知卡（带提示词）
+> 今日目标：把 DeepSeek（或兼容协议）接到 **你的业务系统助手位（或任意页面对话面板）**，完成 **真实多轮对话**；其余节用最短时间巩固 18 词与 Agent/Harness 地图，为本周 Skill/Loop 铺路。
+> 总时长约 105′ · 五节概念/实战
 
 ## 这一天在解决什么
 
-Day 1 快测和公开课 O4 已经甩给你 18 个行业日常词——Harness、RAG、Eval、Vibe Coding……
-前五天你在 PRD、架构、原型、接口、全栈理论里**碰过**其中大半，但可能还处在「听过、用过大模型、说不清机制」的状态。
+载体仍是 **Week1 同一应用**，不是换新产品。  
+有看板更好看；没有就直接挂对话面板。
 
-理论课为什么放在第六天？**先有全栈地图，再补 LLM 词典。**
-现在讲 Token 窗口，你能对着 API_Spec 里的请求体说「这段 context 快满了」；讲 RAG，你能指着驾驶舱的摘要接口说「这就是检索增强的一种」。
+今天硬交付：
 
-今天的节奏：第 1 节讲完四层与接入后，立刻用提示词完成 **DeepSeek-flash + SSE** 最小集成；其余节 18–25 分钟讲授，跟着讲解图把词装进脑子。
-**不再单开一节「验收课」**——抽测走「Day6 概念验收」节点；收束靠企业任务：提交 LLM 认知卡（可用提示词先梳理，实例必须自己填）。
+1. 助手位（或对话面板）**真实 LLM 多轮对话**（system prompt 可改），证据进 `runs/chat-smoke/`；
+2. 理论词典过线：18 词与 Agent 循环图——重心是「应用内可聊」。
 
-> 部署上线 V1.0（旧版 Day 6）材料已归档至 [`_archive/day-06-deploy/`](../_archive/day-06-deploy/)，Week 2 或公开课 O3 按需自学。
+教学包：[`class/teaching/week2-cockpit-agent/`](../../teaching/week2-cockpit-agent/README.md)
 
 ## 章节地图
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-ecosystem-four-layers/` | 生态四层地图 + API/SSE 接入 | 30′ | 概念+实战 | 四层定位 + DeepSeek SSE 流式跑通 |
-| 2 | `section-02-token-window-hallucination/` | Token / 窗口 / 幻觉：能力与边界 | 20′ | 概念 | 快测题依据 |
-| 3 | `section-03-prompt-context-rag/` | Prompt / Context / RAG / Fine-tune vs Prompt | 20′ | 概念 | 快测题依据 |
-| 4 | `section-04-eval-guardrails-vibe/` | Eval / Guardrails / Vibe Coding | 20′ | 概念 | 快测题依据 |
-| 5 | `section-05-agent-harness-mcp/` | Agent / Harness / Tool / MCP / Workflow vs Agent | 25′ | 概念 | 快测题依据 |
+| 1 | `section-01-ecosystem-four-layers/` | 生态四层 + 助手位接 LLM | 30′ | 概念+实战 | 应用内多轮对话 |
+| 2 | `section-02-token-window-hallucination/` | Token / 窗口 / 幻觉 | 15′ | 概念 | 快测依据 |
+| 3 | `section-03-prompt-context-rag/` | Prompt / Context / RAG | 15′ | 概念 | 快测依据 |
+| 4 | `section-04-eval-guardrails-vibe/` | Eval / Guardrails / Vibe | 15′ | 概念 | 快测依据 |
+| 5 | `section-05-agent-harness-mcp/` | Agent / Harness / Tool / MCP | 20′ | 概念 | 预告 Loop |
 
-## 每节文件（tabs）
+## 今日验收（GATE）
 
-每节目录固定：`lesson.md` · `practice.md` · `resources.md` · `homework.md` · `ai-tutor.yaml`（若有）。
+- 助手位/对话面板可多轮对话；system prompt 在仓库文件中可改；
+- 日级概念快测过线；
+- 企业任务：`llm-cognition-card.md`（可写上「接电」体会）。
 
-口播课件：`video/scripts/narration/`；成片在 MinIO（`day06-c1` … `day06-c5`）。第 6 节验收口播已撤出大纲（素材可留在旧目录，不进课表）。
+## 每节文件
 
-## 今日验收（GATE · LLM 认知过线）
-
-- 第 1 节：能口述「一次性响应 vs SSE」；**DeepSeek + SSE** 最小接电跑通（或书面 blocker + 降级，经助教确认）；
-- 日级快测过线（解析必须看懂）；目标对齐「18 词认知」——题库与词典对照复习；
-- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；每主题 2–3 条要点，每条配前五天真实实例或自己的类比；可用「认知卡 · 搭档提示词」先梳骨架）。
+`lesson.md` · `practice.md` · `resources.md` · `homework.md` · `ai-tutor.yaml`

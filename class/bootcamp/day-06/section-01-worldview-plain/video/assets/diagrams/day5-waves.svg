@@ -1,54 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="技术浪潮白话版：六次浪潮，每次重排谁值钱">
-  <rect width="1200" height="400" fill="#f2f5f0"/>
-  <text x="48" y="52" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','STSong','Noto Serif SC',serif">六次浪潮 · 一张「谁变贵 / 谁变便宜」的价目表</text>
-  <text x="48" y="78" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,monospace">SIX WAVES · PRICE LIST OF SKILLS</text>
-  <line x1="48" y1="210" x2="1090" y2="210" stroke="#231f20" stroke-width="2"/>
-  <path d="M1108 210 L1090 203.5 L1090 216.5 Z" fill="#231f20"/>
-  <!-- wave template: x positions -->
-  <g>
-    <text x="100" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">电脑进办公室</text>
-    <text x="100" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">1990s · 算盘</text>
-    <circle cx="100" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
-    <text x="100" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会把账搬进电脑的人</text>
-    <text x="100" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 算盘打得快的老手</text>
-  </g>
-  <g>
-    <text x="280" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">店面搬上网</text>
-    <text x="280" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2000s · 网页</text>
-    <circle cx="280" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
-    <text x="280" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会做网站的人</text>
-    <text x="280" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只守实体店的人</text>
-  </g>
-  <g>
-    <text x="460" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">云</text>
-    <text x="460" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2010s · 电网</text>
-    <circle cx="460" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
-    <text x="460" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 让服务不挂的人</text>
-    <text x="460" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只伺候一台电脑的人</text>
-  </g>
-  <g>
-    <text x="640" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">移动</text>
-    <text x="640" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2010s · 口袋电脑</text>
-    <circle cx="640" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
-    <text x="640" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 会做 App 的人</text>
-    <text x="640" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 只做电脑网页的人</text>
-  </g>
-  <g>
-    <text x="820" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#231f20">AI 帮你写</text>
-    <text x="820" y="150" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2021+ · 自己填的表格</text>
-    <circle cx="820" cy="210" r="7" fill="#f2f5f0" stroke="#231f20" stroke-width="2.5"/>
-    <text x="820" y="248" text-anchor="middle" font-size="12" fill="#2f9e44" font-weight="700">↑ 一天压成一小时的人</text>
-    <text x="820" y="270" text-anchor="middle" font-size="12" fill="#f24e54">↓ 纯手工敲代码的人</text>
-  </g>
-  <g>
-    <rect x="940" y="92" width="230" height="150" rx="10" fill="none" stroke="#1400ff" stroke-width="2.5"/>
-    <text x="1055" y="122" text-anchor="middle" font-size="17" font-weight="900" fill="#1400ff">AI 原生</text>
-    <text x="1055" y="144" text-anchor="middle" font-size="10" letter-spacing="2" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">2024+ · 认字的实习生</text>
-    <circle cx="1000" cy="210" r="7" fill="#1400ff"/>
-    <text x="1055" y="180" text-anchor="middle" font-size="12.5" fill="#2f9e44" font-weight="700">↑ 会派活、会验收的人</text>
-    <text x="1055" y="200" text-anchor="middle" font-size="12.5" fill="#f24e54">↓ 只会自己闷头写的人</text>
-    <text x="1055" y="226" text-anchor="middle" font-size="13" font-weight="900" fill="#1400ff">你在这里 →</text>
-  </g>
-  <text x="48" y="330" font-size="15" font-weight="700" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">规律只有一条：机器把「动手做」压低一层，人就往「知道该做什么、做得对不对」上移一层。</text>
-  <text x="48" y="360" font-size="13" fill="rgba(35,31,32,.6)">浪潮从不淘汰人——它只淘汰「只会动手」的人。</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" role="img" aria-label="技术浪潮白话版：六次浪潮，每次重排谁值钱">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="400" fill="#ffffff"/>
+  <rect width="1200" height="400" fill="url(#dots)"/>
+  <circle cx="1120" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="352" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">六次浪潮 · 一张「谁变贵 / 谁变便宜」的价目表</text>
+<text x="1164" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">SIX WAVES · PRICE LIST OF SKILLS</text>
+</g>
+<path d="M70 200 H1150" stroke="rgba(13,148,136,.3)" stroke-width="3" stroke-linecap="round"/>
+<circle cy="200" r="5" fill="#0d9488"><animate attributeName="cx" values="70;1150" dur="8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.06;.92;1" dur="8s" repeatCount="indefinite"/></circle>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="110" y="136" font-size="15" font-weight="800" fill="#231f20" text-anchor="middle">电脑进办公室</text>
+<text x="110" y="158" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">1990s · 算盘</text>
+<circle cx="110" cy="200" r="8" fill="#fff" stroke="#0d9488" stroke-width="2.5"/>
+<text x="110" y="238" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 会把账搬进电脑的人</text>
+<text x="110" y="262" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 算盘打得快的老手</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="290" y="136" font-size="15" font-weight="800" fill="#231f20" text-anchor="middle">店面搬上网</text>
+<text x="290" y="158" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">2000s · 网页</text>
+<circle cx="290" cy="200" r="8" fill="#fff" stroke="#0d9488" stroke-width="2.5"/>
+<text x="290" y="238" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 会做网站的人</text>
+<text x="290" y="262" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 只守实体店的人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="470" y="136" font-size="15" font-weight="800" fill="#231f20" text-anchor="middle">云</text>
+<text x="470" y="158" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">2010s · 电网</text>
+<circle cx="470" cy="200" r="8" fill="#fff" stroke="#0d9488" stroke-width="2.5"/>
+<text x="470" y="238" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 让服务不挂的人</text>
+<text x="470" y="262" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 只伺候一台电脑的人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="650" y="136" font-size="15" font-weight="800" fill="#231f20" text-anchor="middle">移动</text>
+<text x="650" y="158" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">2010s · 口袋电脑</text>
+<circle cx="650" cy="200" r="8" fill="#fff" stroke="#0d9488" stroke-width="2.5"/>
+<text x="650" y="238" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 会做 App 的人</text>
+<text x="650" y="262" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 只做电脑网页的人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="830" y="136" font-size="15" font-weight="800" fill="#231f20" text-anchor="middle">AI 帮你写</text>
+<text x="830" y="158" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">2021+ · 自己填的表格</text>
+<circle cx="830" cy="200" r="8" fill="#fff" stroke="#0d9488" stroke-width="2.5"/>
+<text x="830" y="238" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 一天压成一小时的人</text>
+<text x="830" y="262" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 纯手工敲代码的人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="940" y="96" width="226" height="186" rx="18" fill="rgba(13,148,136,.07)" stroke="rgba(13,148,136,.45)" stroke-width="1.5"/><text x="1053" y="128" font-size="17" font-weight="800" fill="#0f766e" text-anchor="middle">AI 原生</text><text x="1053" y="150" font-size="10" fill="rgba(35,31,32,.45)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">2024+ · 认字的实习生</text><rect x="1037" y="184" width="32" height="32" rx="16" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect><circle cx="1053" cy="200" r="10" fill="url(#tlg)" filter="url(#glow)"/><text x="1053" y="232" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">↑ 会派活、会验收的人</text><text x="1053" y="254" font-size="12" fill="rgba(35,31,32,.5)" text-anchor="middle">↓ 只会自己闷头写的人</text><text x="1053" y="276" font-size="12" font-weight="800" fill="#0d9488" text-anchor="middle">你在这里 →</text></g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="48" y="314" width="1104" height="58" rx="29.0" fill="rgba(13,148,136,.10)"/>
+<text x="600.0" y="339.0" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">规律只有一条：机器把「动手做」压低一层，人就往「知道该做什么、做得对不对」上移一层</text>
+<text x="600.0" y="359.0" font-size="12" fill="rgba(35,31,32,.55)" text-anchor="middle">浪潮从不淘汰人——它只淘汰「只会动手」的人</text></g>
 </svg>

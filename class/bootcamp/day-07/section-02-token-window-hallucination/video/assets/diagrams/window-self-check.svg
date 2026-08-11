@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="Token、窗口、幻觉自检三问">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">学生自检三问</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">SELF CHECK · 3 QUESTIONS</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="80" width="290" height="160" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="116" font-size="14" font-weight="800" fill="#231f20">① Token 怎么算钱？</text>
+<rect x="84" y="132" width="60" height="4" rx="2" fill="#0d9488"/>
+<text x="84" y="164" font-size="12" font-weight="700" fill="#0f766e">输入 + 输出一起算</text>
+<text x="84" y="190" font-size="11.5" fill="rgba(35,31,32,.55)">贴整仓 = 烧 Token ·</text>
+<text x="84" y="212" font-size="11.5" fill="rgba(35,31,32,.55)"> 省：清废话、写清格式</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="370" y="80" width="290" height="160" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="394" y="116" font-size="14" font-weight="800" fill="#231f20">② 窗口塞爆怎么办？</text>
+<rect x="394" y="132" width="60" height="4" rx="2" fill="#0d9488"/>
+<text x="394" y="164" font-size="12" font-weight="700" fill="#0f766e">截断最早对话 · 摘要压缩再喂</text>
+<text x="394" y="190" font-size="11.5" fill="rgba(35,31,32,.55)">RAG 只取相关——窗口是硬顶</text>
+<text x="394" y="212" font-size="11.5" fill="rgba(35,31,32,.55)">，不是目标</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="680" y="80" width="290" height="160" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="704" y="116" font-size="14" font-weight="800" fill="#231f20">③ 幻觉怎么防？</text>
+<rect x="704" y="132" width="60" height="4" rx="2" fill="#0d9488"/>
+<text x="704" y="164" font-size="12" font-weight="700" fill="#0f766e">可溯源 + 验收（Rubric）</text>
+<text x="704" y="190" font-size="11.5" fill="rgba(35,31,32,.55)">最像真的 ≠ 核实过</text>
+<text x="704" y="212" font-size="11.5" fill="rgba(35,31,32,.55)"></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="266" width="600" height="38" rx="19.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="289.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">三个词绑在一起：Token · 窗口 · 幻觉 —— 预告：Prompt / Context / RAG</text></g>
+</svg>

@@ -1,53 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Skill 异常分类与处置">
-<rect width="1040" height="450" fill="#f2f5f0"/>
-<!-- 根 -->
-<rect x="420" y="36" width="200" height="54" fill="#231f20"/>
-<text x="520" y="69" text-anchor="middle" font-size="13.5" font-weight="800" fill="#f2f5f0">Skill 出错了</text>
-<g stroke="rgba(35,31,32,.4)" stroke-width="1.5">
-<line x1="470" y1="90" x2="180" y2="130"/><line x1="495" y1="90" x2="455" y2="130"/><line x1="545" y1="90" x2="645" y2="130"/><line x1="570" y1="90" x2="870" y2="130"/>
-</g>
-<!-- 四类 -->
-<g>
-<rect x="60" y="130" width="220" height="230" fill="#ffffff" stroke="#f5a947" stroke-width="2"/>
-<text x="170" y="162" text-anchor="middle" font-size="13" font-weight="800" fill="#d18a1f">输入类</text>
-<text x="170" y="182" text-anchor="middle" font-size="9.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">BAD INPUT</text>
-<text x="80" y="212" font-size="11" fill="rgba(35,31,32,.6)">月份写成「七月」</text>
-<text x="80" y="234" font-size="11" fill="rgba(35,31,32,.6)">缺必填参数</text>
-<text x="80" y="268" font-size="11" font-weight="700" fill="#231f20">处置：拒收 + 说人话</text>
-<text x="80" y="292" font-size="10.5" fill="rgba(35,31,32,.55)">「month 需要 2026-07</text>
-<text x="80" y="310" font-size="10.5" fill="rgba(35,31,32,.55)">这样的格式」</text>
-</g>
-<g>
-<rect x="310" y="130" width="220" height="230" fill="#ffffff" stroke="#5f52a0" stroke-width="2"/>
-<text x="420" y="162" text-anchor="middle" font-size="13" font-weight="800" fill="#5f52a0">依赖类</text>
-<text x="420" y="182" text-anchor="middle" font-size="9.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">DEPENDENCY DOWN</text>
-<text x="330" y="212" font-size="11" fill="rgba(35,31,32,.6)">数据库连不上</text>
-<text x="330" y="234" font-size="11" fill="rgba(35,31,32,.6)">上游接口 500</text>
-<text x="330" y="268" font-size="11" font-weight="700" fill="#231f20">处置：重试 → 降级 → 报错</text>
-<text x="330" y="292" font-size="10.5" fill="rgba(35,31,32,.55)">最多重试 N 次，仍挂</text>
-<text x="330" y="310" font-size="10.5" fill="rgba(35,31,32,.55)">用缓存/上次的产物顶上</text>
-</g>
-<g>
-<rect x="560" y="130" width="220" height="230" fill="#ffffff" stroke="#e0479e" stroke-width="2"/>
-<text x="670" y="162" text-anchor="middle" font-size="13" font-weight="800" fill="#e0479e">模型类</text>
-<text x="670" y="182" text-anchor="middle" font-size="9.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">MODEL MISFIRE</text>
-<text x="580" y="212" font-size="11" fill="rgba(35,31,32,.6)">超时没返回</text>
-<text x="580" y="234" font-size="11" fill="rgba(35,31,32,.6)">输出胡说 / 格式崩</text>
-<text x="580" y="268" font-size="11" font-weight="700" fill="#231f20">处置：切断 + 校验 + 人工</text>
-<text x="580" y="292" font-size="10.5" fill="rgba(35,31,32,.55)">超时切断；输出过格式</text>
-<text x="580" y="310" font-size="10.5" fill="rgba(35,31,32,.55)">校验，不过转人工</text>
-</g>
-<g>
-<rect x="810" y="130" width="220" height="230" fill="#ffffff" stroke="#f24e54" stroke-width="2"/>
-<text x="920" y="162" text-anchor="middle" font-size="13" font-weight="800" fill="#c92f3d">业务类</text>
-<text x="920" y="182" text-anchor="middle" font-size="9.5" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">POLICY</text>
-<text x="830" y="212" font-size="11" fill="rgba(35,31,32,.6)">要求超出授权范围</text>
-<text x="830" y="234" font-size="11" fill="rgba(35,31,32,.6)">触碰敏感数据</text>
-<text x="830" y="268" font-size="11" font-weight="700" fill="#231f20">处置：拒绝 + 转人工</text>
-<text x="830" y="292" font-size="10.5" fill="rgba(35,31,32,.55)">边界声明里写死，</text>
-<text x="830" y="310" font-size="10.5" fill="rgba(35,31,32,.55)">没有「酌情处理」</text>
-</g>
-<!-- 底注 -->
-<text x="520" y="402" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">「按声明的方式失败」也是合格 —— 乱失败才是不合格</text>
-<text x="520" y="428" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">第八天异常注入测试：故意喂坏输入，看它是不是按表处置</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 450" role="img" aria-label="Skill 异常分类与处置">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".45"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="450" fill="#ffffff"/>
+  <rect width="1040" height="450" fill="url(#dots)"/>
+  <circle cx="970" cy="56" r="100" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="420" r="70" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="70;82;70" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="14" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="31" font-size="15" font-weight="800" fill="#231f20">Skill 异常分类与处置</text>
+    <text x="1004" y="31" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">FAIL BY DESIGN</text>
+  </g>
+
+  <!-- root -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="420" y="44" width="200" height="50" rx="14" fill="url(#teal)" filter="url(#glow)"/>
+    <text x="520" y="75" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">Skill 出错了</text>
+    <g stroke="rgba(13,148,136,.4)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-dasharray="5 6">
+      <line x1="470" y1="94" x2="180" y2="130"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.1s" repeatCount="indefinite"/></line>
+      <line x1="495" y1="94" x2="455" y2="130"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.3s" repeatCount="indefinite"/></line>
+      <line x1="545" y1="94" x2="645" y2="130"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.5s" repeatCount="indefinite"/></line>
+      <line x1="570" y1="94" x2="870" y2="130"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.7s" repeatCount="indefinite"/></line>
+    </g>
+  </g>
+
+  <!-- four classes -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <g>
+      <rect x="60" y="134" width="220" height="224" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <rect x="60" y="134" width="220" height="6" rx="3" fill="rgba(35,31,32,.2)"/>
+      <text x="170" y="168" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">输入类</text>
+      <text x="170" y="188" text-anchor="middle" font-size="9.5" letter-spacing="1" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">BAD INPUT</text>
+      <text x="80" y="216" font-size="11" fill="rgba(35,31,32,.6)">月份写成「七月」</text>
+      <text x="80" y="238" font-size="11" fill="rgba(35,31,32,.6)">缺必填参数</text>
+      <text x="80" y="270" font-size="11" font-weight="800" fill="#0f766e">处置：拒收 + 说人话</text>
+      <text x="80" y="294" font-size="10.5" fill="rgba(35,31,32,.55)">「month 需要 2026-07</text>
+      <text x="80" y="312" font-size="10.5" fill="rgba(35,31,32,.55)">这样的格式」</text>
+    </g>
+    <g>
+      <rect x="310" y="134" width="220" height="224" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <rect x="310" y="134" width="220" height="6" rx="3" fill="rgba(35,31,32,.2)"/>
+      <text x="420" y="168" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">依赖类</text>
+      <text x="420" y="188" text-anchor="middle" font-size="9.5" letter-spacing="1" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">DEPENDENCY DOWN</text>
+      <text x="330" y="216" font-size="11" fill="rgba(35,31,32,.6)">数据库连不上</text>
+      <text x="330" y="238" font-size="11" fill="rgba(35,31,32,.6)">上游接口 500</text>
+      <text x="330" y="270" font-size="11" font-weight="800" fill="#0f766e">处置：重试 → 降级 → 报错</text>
+      <text x="330" y="294" font-size="10.5" fill="rgba(35,31,32,.55)">最多重试 N 次，仍挂</text>
+      <text x="330" y="312" font-size="10.5" fill="rgba(35,31,32,.55)">用缓存/上次的产物顶上</text>
+    </g>
+    <g>
+      <rect x="560" y="134" width="220" height="224" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <rect x="560" y="134" width="220" height="6" rx="3" fill="rgba(35,31,32,.2)"/>
+      <text x="670" y="168" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">模型类</text>
+      <text x="670" y="188" text-anchor="middle" font-size="9.5" letter-spacing="1" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">MODEL MISFIRE</text>
+      <text x="580" y="216" font-size="11" fill="rgba(35,31,32,.6)">超时没返回</text>
+      <text x="580" y="238" font-size="11" fill="rgba(35,31,32,.6)">输出胡说 / 格式崩</text>
+      <text x="580" y="270" font-size="11" font-weight="800" fill="#0f766e">处置：切断 + 校验 + 人工</text>
+      <text x="580" y="294" font-size="10.5" fill="rgba(35,31,32,.55)">超时切断；输出过格式</text>
+      <text x="580" y="312" font-size="10.5" fill="rgba(35,31,32,.55)">校验，不过转人工</text>
+    </g>
+    <g>
+      <rect x="810" y="134" width="220" height="224" rx="16" fill="#fff" stroke="rgba(13,148,136,.45)" stroke-width="1.5" filter="url(#sh)"/>
+      <rect x="810" y="134" width="220" height="6" rx="3" fill="url(#teal)"/>
+      <text x="920" y="168" text-anchor="middle" font-size="13" font-weight="800" fill="#0d9488">业务类</text>
+      <text x="920" y="188" text-anchor="middle" font-size="9.5" letter-spacing="1" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">POLICY</text>
+      <text x="830" y="216" font-size="11" fill="rgba(35,31,32,.6)">要求超出授权范围</text>
+      <text x="830" y="238" font-size="11" fill="rgba(35,31,32,.6)">触碰敏感数据</text>
+      <text x="830" y="270" font-size="11" font-weight="800" fill="#0f766e">处置：拒绝 + 转人工</text>
+      <text x="830" y="294" font-size="10.5" fill="rgba(35,31,32,.55)">边界声明里写死，</text>
+      <text x="830" y="312" font-size="10.5" fill="rgba(35,31,32,.55)">没有「酌情处理」</text>
+    </g>
+
+    <!-- footer pill -->
+    <rect x="170" y="378" width="700" height="58" rx="29" fill="rgba(13,148,136,.10)"/>
+    <text x="520" y="402" text-anchor="middle" font-size="13" font-weight="800" fill="#0f766e">「按声明的方式失败」也是合格 —— 乱失败才是不合格</text>
+    <text x="520" y="424" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">第八天异常注入测试：故意喂坏输入，看它是不是按表处置</text>
+  </g>
 </svg>

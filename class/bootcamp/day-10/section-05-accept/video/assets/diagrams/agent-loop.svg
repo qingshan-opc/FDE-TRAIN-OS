@@ -1,50 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Agent 决策环"><rect width="1040" height="500" fill="#f2f5f0"/>
-        <defs>
-          <marker id="dgarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
-          </marker>
-        </defs>
-        <!-- 循环箭头 -->
-        <g stroke="#231f20" stroke-width="1.8" fill="none">
-          <line x1="544" y1="98" x2="653" y2="176" marker-end="url(#dgarrow)"/>
-          <line x1="673" y1="226" x2="631" y2="354" marker-end="url(#dgarrow)"/>
-          <line x1="590" y1="388" x2="456" y2="388" marker-end="url(#dgarrow)"/>
-          <line x1="411" y1="359" x2="367" y2="231" marker-end="url(#dgarrow)"/>
-          <line x1="382" y1="179" x2="491" y2="101" marker-end="url(#dgarrow)"/>
-        </g>
-        <!-- 中心：模型 + Harness -->
-        <rect x="370" y="208" width="300" height="84" fill="#231f20"/>
-        <text x="520" y="244" text-anchor="middle" font-size="15" font-weight="800" fill="#f2f5f0">模型 + Harness（骨架）</text>
-        <text x="520" y="268" text-anchor="middle" font-size="10.5" fill="rgba(242,245,240,.6)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">工具表 · 记忆 · 规划 · 重试 · 日志</text>
-        <!-- 五节点 -->
-        <g>
-          <circle cx="520" cy="80" r="30" fill="#f2f5f0" stroke="#231f20" stroke-width="2"/>
-          <text x="520" y="86" text-anchor="middle" font-size="16" font-weight="700" fill="#1400ff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">1</text>
-          <text x="520" y="26" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">理解任务</text>
-          <text x="520" y="44" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">读懂目标</text>
-        </g>
-        <g>
-          <circle cx="682" cy="197" r="30" fill="#f2f5f0" stroke="#231f20" stroke-width="2"/>
-          <text x="682" y="203" text-anchor="middle" font-size="16" font-weight="700" fill="#1400ff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">2</text>
-          <text x="726" y="193" font-size="13.5" font-weight="800" fill="#231f20">规划</text>
-          <text x="726" y="211" font-size="10.5" fill="rgba(35,31,32,.5)">拆步骤</text>
-        </g>
-        <g>
-          <circle cx="620" cy="388" r="30" fill="#f2f5f0" stroke="#231f20" stroke-width="2"/>
-          <text x="620" y="394" text-anchor="middle" font-size="16" font-weight="700" fill="#1400ff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">3</text>
-          <text x="620" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">调用工具</text>
-          <text x="620" y="466" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">调 Skill · Tool Calling</text>
-        </g>
-        <g>
-          <circle cx="420" cy="388" r="30" fill="#f2f5f0" stroke="#231f20" stroke-width="2"/>
-          <text x="420" y="394" text-anchor="middle" font-size="16" font-weight="700" fill="#1400ff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">4</text>
-          <text x="420" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">观察结果</text>
-          <text x="420" y="466" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">看结果对不对</text>
-        </g>
-        <g>
-          <circle cx="358" cy="197" r="30" fill="#f2f5f0" stroke="#231f20" stroke-width="2"/>
-          <text x="358" y="203" text-anchor="middle" font-size="16" font-weight="700" fill="#1400ff" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">5</text>
-          <text x="314" y="193" text-anchor="end" font-size="13.5" font-weight="800" fill="#231f20">继续 · 求助</text>
-          <text x="314" y="211" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">循环或交还人类</text>
-        </g>
-      </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" role="img" aria-label="Agent 决策环">
+  <defs>
+    <linearGradient id="al-teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="al-dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="al-sh" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#231f20" flood-opacity=".12"/>
+    </filter>
+    <filter id="al-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".45"/>
+    </filter>
+    <marker id="al-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+    <path id="al-loop" d="M520 80 L682 197 L620 388 L420 388 L358 197 Z" fill="none" stroke="none"/>
+  </defs>
+
+  <rect width="1040" height="500" fill="#ffffff"/>
+  <rect width="1040" height="500" fill="url(#al-dots)"/>
+  <circle cx="950" cy="420" r="100" fill="rgba(13,148,136,.06)">
+    <animate attributeName="r" values="100;118;100" dur="10s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="100" cy="430" r="70" fill="rgba(35,31,32,.03)">
+    <animate attributeName="r" values="70;82;70" dur="12s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- header -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="36" y="14" width="6" height="20" rx="3" fill="#0d9488"/>
+    <text x="52" y="30" font-size="15" font-weight="800" fill="#231f20">Agent 决策环 · 五步一圈</text>
+    <text x="1004" y="30" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">AGENT LOOP</text>
+  </g>
+
+  <!-- loop arrows -->
+  <g stroke="#0d9488" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="7 7">
+    <line x1="544" y1="98" x2="653" y2="176" marker-end="url(#al-arr)">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="673" y1="226" x2="631" y2="354" marker-end="url(#al-arr)">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="590" y1="388" x2="456" y2="388" marker-end="url(#al-arr)">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="411" y1="359" x2="367" y2="231" marker-end="url(#al-arr)">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="382" y1="179" x2="491" y2="101" marker-end="url(#al-arr)">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- traveling light dot -->
+  <circle r="5" fill="#0d9488">
+    <animateMotion dur="7s" repeatCount="indefinite">
+      <mpath href="#al-loop"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;.08;.9;1" dur="7s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- center: model + harness -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" transform="translate(370,208)">
+    <rect width="300" height="84" rx="18" fill="url(#al-teal)" filter="url(#al-glow)"/>
+    <text x="150" y="36" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">模型 + Harness（骨架）</text>
+    <text x="150" y="60" text-anchor="middle" font-size="10.5" font-family="'SF Mono',Menlo,monospace" fill="rgba(255,255,255,.85)">工具表 · 记忆 · 规划 · 重试 · 日志</text>
+  </g>
+
+  <!-- five nodes -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <g>
+      <circle cx="520" cy="80" r="38" fill="none" stroke="#0d9488" stroke-width="1.6" opacity=".4">
+        <animate attributeName="r" values="34;44;34" dur="2.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".45;.1;.45" dur="2.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="520" cy="80" r="30" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#al-sh)"/>
+      <text x="520" y="86" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">1</text>
+      <text x="520" y="26" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">理解任务</text>
+      <text x="520" y="44" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">读懂目标</text>
+    </g>
+    <g>
+      <circle cx="682" cy="197" r="30" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#al-sh)"/>
+      <text x="682" y="203" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">2</text>
+      <text x="726" y="193" font-size="13.5" font-weight="800" fill="#231f20">规划</text>
+      <text x="726" y="211" font-size="10.5" fill="rgba(35,31,32,.5)">拆步骤</text>
+    </g>
+    <g>
+      <circle cx="620" cy="388" r="30" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#al-sh)"/>
+      <text x="620" y="394" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">3</text>
+      <text x="620" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">调用工具</text>
+      <text x="620" y="466" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">调 Skill · Tool Calling</text>
+    </g>
+    <g>
+      <circle cx="420" cy="388" r="30" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#al-sh)"/>
+      <text x="420" y="394" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">4</text>
+      <text x="420" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">观察结果</text>
+      <text x="420" y="466" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.5)">看结果对不对</text>
+    </g>
+    <g>
+      <circle cx="358" cy="197" r="30" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#al-sh)"/>
+      <text x="358" y="203" text-anchor="middle" font-size="16" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">5</text>
+      <text x="314" y="193" text-anchor="end" font-size="13.5" font-weight="800" fill="#231f20">继续 · 求助</text>
+      <text x="314" y="211" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">循环或交还人类</text>
+    </g>
+  </g>
+</svg>

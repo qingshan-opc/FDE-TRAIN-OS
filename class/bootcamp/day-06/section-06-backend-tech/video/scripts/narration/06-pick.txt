@@ -1,1 +1,1 @@
-作业里写你自己的选型：语言 + 框架 + 主库，各用一句话说明为什么。必须引用 PRD 或 API 契约里的约束——不许抄课件里的建议选 X。课上只认地图：Python 有 Django、Flask、FastAPI；Java 有 Spring Boot；Go 有 Gin、Echo；Rust 有 Actix、Axum。数据库按分类认：关系型、文档、缓存、搜索、分析——具体哪一家，你自己交理由，对吧。
+有同学会问：到底哪个最好？没有最好，只有合不合你的约束。作业里写你自己的选型：语言、框架、主库，各用一句话说明为什么。必须引用 PRD 或 API 契约里的约束——不许抄课件里的建议选 X。课上只认地图：Python 有 Django、Flask、FastAPI；Java 有 Spring Boot；Go 有 Gin、Echo；Rust 有 Actix、Axum。数据库按分类认：关系型、文档、缓存、搜索、分析。具体选哪一家，你自己交理由，对吧。

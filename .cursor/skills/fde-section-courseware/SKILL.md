@@ -31,7 +31,7 @@ description: >-
 
 | 维度 | 路径 |
 |------|------|
-| 视觉皮肤 | `class/bootcamp/day-05/section-01-worldview-plain/video/index.html` |
+| 视觉皮肤 | `class/bootcamp/day-05/section-01-pm-replay/video/index.html` |
 | 信息密度 | `class/bootcamp/day-05/section-03-how-software-built/video/` |
 | 口播+评审稿 | `class/bootcamp/day-05/section-03-how-software-built/PPT_AND_NARRATION.md` |
 | 第七天口播范例 | `class/bootcamp/day-07/section-01-system-to-skill/` |

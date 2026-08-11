@@ -1,6 +1,6 @@
 # 视觉 / HTML 格式（对齐 S01）
 
-权威源码：`class/bootcamp/day-05/section-01-worldview-plain/video/index.html`  
+权威源码：`class/bootcamp/day-05/section-01-pm-replay/video/index.html`  
 结构参考：`section-03-how-software-built/video/index.html`
 
 ## 设计令牌

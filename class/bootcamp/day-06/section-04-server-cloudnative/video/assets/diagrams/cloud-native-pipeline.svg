@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="部署管线五步">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">部署最小必要：管线五步</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">DEPLOY PIPELINE</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="100" width="160" height="84" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="140" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STEP 1</text>
+<text x="140" y="152" font-size="13.5" font-weight="800" fill="#231f20" text-anchor="middle">代码进 Git</text>
+<text x="140" y="172" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">版本有家</text>
+</g>
+<path d="M226 142 L250 142" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="256" y="100" width="160" height="84" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="336" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STEP 2</text>
+<text x="336" y="152" font-size="13.5" font-weight="800" fill="#231f20" text-anchor="middle">构建打包</text>
+<text x="336" y="172" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">依赖收齐</text>
+</g>
+<path d="M422 142 L446 142" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="452" y="100" width="160" height="84" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="532" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STEP 3</text>
+<text x="532" y="152" font-size="13.5" font-weight="800" fill="#231f20" text-anchor="middle">镜像冻环境</text>
+<text x="532" y="172" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">到哪都一样</text>
+</g>
+<path d="M618 142 L642 142" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="648" y="100" width="160" height="84" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="728" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STEP 4</text>
+<text x="728" y="152" font-size="13.5" font-weight="800" fill="#231f20" text-anchor="middle">运行 7×24</text>
+<text x="728" y="172" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">一直开着</text>
+</g>
+<path d="M814 142 L838 142" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="836" y="92" width="176" height="100" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="844" y="100" width="160" height="84" rx="16" fill="url(#tlg)" filter="url(#glow)"/>
+<text x="924" y="134" font-size="13.5" font-weight="800" fill="#fff" text-anchor="middle">公网 URL</text>
+<text x="924" y="158" font-size="10.5" fill="rgba(255,255,255,.85)" text-anchor="middle">大家能访问</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="120" y="224" width="800" height="56" rx="28.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="248.0" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">云 = 租别人的服务器用（像用电网）· 云原生 = 生下来就住在云上的应用</text>
+<text x="520.0" y="268.0" font-size="12" fill="rgba(35,31,32,.55)" text-anchor="middle">密钥不进 Git，从环境变量读</text></g>
+</svg>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="idiom-chain">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="950" cy="54" r="110" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="110;128;110" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="276" r="80" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="80;94;80" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="36" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+    <text x="52" y="42" font-size="16" font-weight="800" fill="#231f20">机制一图：不是查库，是接龙</text>
+    <text x="1004" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">NEXT-TOKEN</text>
+  </g>
+
+  <!-- flow -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <g transform="translate(48,88)" filter="url(#sh)">
+      <rect width="150" height="88" rx="16" fill="#fff"/>
+      <text x="75" y="38" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.5)">你说</text>
+      <text x="75" y="64" text-anchor="middle" font-size="19" font-weight="700" fill="#231f20">「画蛇」</text>
+    </g>
+    <path d="M206 132 H246" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <g transform="translate(254,88)" filter="url(#sh)">
+      <rect width="180" height="88" rx="16" fill="#fff"/>
+      <text x="90" y="38" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.5)">向量里找方向</text>
+      <text x="90" y="64" text-anchor="middle" font-size="19" font-weight="700" fill="#231f20">最像的邻域</text>
+    </g>
+    <path d="M442 132 H482" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- hot node -->
+    <g transform="translate(490,76)">
+      <rect x="-9" y="-9" width="218" height="130" rx="26" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4">
+        <animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/>
+      </rect>
+      <rect width="200" height="112" rx="18" fill="url(#g)" filter="url(#glow)"/>
+      <text x="100" y="40" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.85)">下一步最顺</text>
+      <text x="100" y="70" text-anchor="middle" font-size="24" font-weight="800" fill="#fff">「添足」</text>
+      <text x="100" y="92" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1" fill="rgba(255,255,255,.8)">next token</text>
+    </g>
+    <path d="M706 132 H746" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7">
+      <animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- result node -->
+    <g transform="translate(754,88)" filter="url(#sh)">
+      <rect width="238" height="88" rx="16" fill="#fff" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="6 5">
+        <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="119" y="38" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.5)">听起来真 · 未必核实</text>
+      <text x="119" y="64" text-anchor="middle" font-size="19" font-weight="700" fill="#0d9488">流畅 ≠ 事实</text>
+    </g>
+  </g>
+
+  <!-- candidate pool -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" transform="translate(396,222)">
+    <text x="0" y="0" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(35,31,32,.45)">候选池 · 取概率最高</text>
+    <g transform="translate(0,14)">
+      <text x="0" y="14" font-size="12" font-weight="700" fill="#231f20">添足</text>
+      <rect x="46" y="3" width="220" height="14" rx="7" fill="url(#bar)">
+        <animate attributeName="opacity" values="1;.72;1" dur="2.4s" repeatCount="indefinite"/>
+      </rect>
+      <text x="274" y="15" font-family="'SF Mono',Menlo,monospace" font-size="11" fill="#0d9488">0.72</text>
+    </g>
+    <g transform="translate(0,40)">
+      <text x="0" y="14" font-size="12" fill="rgba(35,31,32,.55)">点睛</text>
+      <rect x="46" y="3" width="70" height="14" rx="7" fill="rgba(35,31,32,.15)"/>
+      <text x="124" y="15" font-family="'SF Mono',Menlo,monospace" font-size="11" fill="rgba(35,31,32,.4)">0.15</text>
+    </g>
+    <g transform="translate(0,66)">
+      <text x="0" y="14" font-size="12" fill="rgba(35,31,32,.55)">收尾</text>
+      <rect x="46" y="3" width="36" height="14" rx="7" fill="rgba(35,31,32,.15)"/>
+      <text x="90" y="15" font-family="'SF Mono',Menlo,monospace" font-size="11" fill="rgba(35,31,32,.4)">0.06</text>
+    </g>
+  </g>
+
+  <!-- footer pill -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="736" y="228" width="256" height="62" rx="31" fill="rgba(13,148,136,.10)"/>
+    <text x="864" y="253" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">幻觉与机制同源</text>
+    <text x="864" y="275" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">用它的快与写 · 关键数字交给人验收</text>
+  </g>
+</svg>

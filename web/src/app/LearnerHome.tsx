@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { dayApi, learningApi, ApiError } from "../lib/api";
+import { dayApi, learningApi, practiceApi, ApiError } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { Nav } from "../components/Nav";
 import { CoachFloatingDock } from "../components/coach/CoachFloatingDock";
@@ -12,12 +12,13 @@ import { ErrorState } from "../components/ErrorState";
 import { useToast } from "../components/Toast";
 import { DayView } from "./DayView";
 import { WeekQuiz } from "./WeekQuiz";
+import { WeekCockpitHomework } from "./WeekCockpitHomework";
 import { PassportView } from "./Passport";
 import type { Capsule, DayNodeSummary, DayPackage, DaySummary, NodeCompleteResult } from "../lib/types";
 import { dayLabel } from "../lib/dayLabel";
 import { dayTaskPath, primaryCtaLabel, resolveNextTarget, resolveTargetForDay } from "../lib/taskTargets";
 import { CourseIntro } from "./CourseIntro";
-import { parseWeekQuizNodeId, weekQuizNodeId } from "../components/Tree";
+import { parseWeekQuizNodeId, weekQuizNodeId, parseWeekCockpitHomeworkNodeId, weekCockpitHomeworkNodeId } from "../components/Tree";
 
 type MobileTab = "course" | "content" | "task";
 
@@ -50,6 +51,7 @@ export function LearnerHome() {
   const pendingCapsuleRef = useRef<string | null>(null);
   const [coachOpen, setCoachOpen] = useState(false);
   const [studySeconds, setStudySeconds] = useState(0);
+  const [week1CockpitHomeworkDone, setWeek1CockpitHomeworkDone] = useState(false);
 
   const activeDay = dayParam ? Number(dayParam) : null;
   const nodeParam = searchParams.get("node");
@@ -106,8 +108,11 @@ export function LearnerHome() {
       try {
         const pkg = await dayApi.get(campId, day);
         setDayPkg(pkg);
-        // Keep week-quiz deep links; otherwise prefer learn over hidden quiz/project.
-        if (preferNodeId && parseWeekQuizNodeId(preferNodeId) != null) {
+        // Keep week-quiz / week-homework deep links; otherwise prefer learn over hidden quiz/project.
+        if (
+          preferNodeId &&
+          (parseWeekQuizNodeId(preferNodeId) != null || parseWeekCockpitHomeworkNodeId(preferNodeId) != null)
+        ) {
           focusNode(preferNodeId);
         } else {
           const prefer =
@@ -175,8 +180,11 @@ export function LearnerHome() {
   }, [days, dayPkg]);
 
   const weekQuizWeek = parseWeekQuizNodeId(activeNodeId);
+  const weekCockpitHwWeek = parseWeekCockpitHomeworkNodeId(activeNodeId);
   const activeNode =
-    weekQuizWeek != null ? null : dayPkg?.nodes.find((n) => n.id === activeNodeId) || null;
+    weekQuizWeek != null || weekCockpitHwWeek != null
+      ? null
+      : dayPkg?.nodes.find((n) => n.id === activeNodeId) || null;
   const labNode = dayPkg?.nodes.find((n) => n.kind === "lab") || null;
 
   const learnCapsules: Capsule[] = useMemo(() => {
@@ -376,6 +384,42 @@ export function LearnerHome() {
     [activeDay, focusNode, nav],
   );
 
+  const week1AnchorDay = useMemo(() => {
+    const nums = weeks["1"] || DEFAULT_WEEKS["1"];
+    return nums[nums.length - 1] || 6;
+  }, [weeks]);
+
+  const refreshWeek1CockpitHomework = useCallback(async () => {
+    if (!campId) return;
+    try {
+      const res = await practiceApi.list({ camp_id: campId, day: week1AnchorDay });
+      const row = res.items.find((it) => it.capsule_id === "week1-cockpit-hw");
+      setWeek1CockpitHomeworkDone(row?.status === "submitted");
+    } catch {
+      /* optional */
+    }
+  }, [campId, week1AnchorDay]);
+
+  useEffect(() => {
+    void refreshWeek1CockpitHomework();
+  }, [refreshWeek1CockpitHomework]);
+
+  const handleSelectWeekCockpitHomework = useCallback(
+    (week: number, anchorDay: number) => {
+      const id = weekCockpitHomeworkNodeId(week);
+      // Prefer anchoring on the last day of week 1 so practice persists with Saturday.
+      const day = week === 1 ? week1AnchorDay : anchorDay;
+      if (activeDay === day) {
+        focusNode(id);
+      } else {
+        nav(dayTaskPath(day, id));
+      }
+      setShowPassport(false);
+      setMobileTab("content");
+    },
+    [activeDay, focusNode, nav, week1AnchorDay],
+  );
+
   // Learn mode: right-rail CTA points to homework / next task (complete stays in center).
   const primary = useMemo(() => {
     if (!activeNode) {
@@ -490,6 +534,8 @@ export function LearnerHome() {
               onSelectDay={handleSelectDay}
               onSelectNode={handleSelectNode}
               onSelectWeekQuiz={handleSelectWeekQuiz}
+              onSelectWeekCockpitHomework={handleSelectWeekCockpitHomework}
+              week1CockpitHomeworkDone={week1CockpitHomeworkDone}
               onSelectCapsule={(id) => {
                 pendingCapsuleRef.current = id;
                 setOpenCapsuleId(id);
@@ -519,6 +565,14 @@ export function LearnerHome() {
               onCompleted={() => {
                 void loadDays();
                 if (activeDay) void loadDay(activeDay, weekQuizNodeId(weekQuizWeek));
+              }}
+            />
+          ) : weekCockpitHwWeek != null ? (
+            <WeekCockpitHomework
+              anchorDay={week1AnchorDay}
+              onCompleted={() => {
+                setWeek1CockpitHomeworkDone(true);
+                void refreshWeek1CockpitHomework();
               }}
             />
           ) : (

@@ -1,7 +1,6 @@
 day: 10
-project: 多 Skill 编排与人工确认
-project_brief: 工具表从 1 件变 3 件，串成带人工确认闸的 workflow 流水线。掌握编排观（业务流程即 Skill 串联）、确认闸三问与执行日志三要素，再封装两个 Skill，跑通「拦得住、回得来、查得了」的 GATE
-  9。
+project: 长任务 Loop + 人工确认
+project_brief: '实现 task_runner（goal≥3 turn）+ 写操作 HITL；≥2 Skill；approve/reject 双路径 runs/ 证据。粘贴 teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md。GATE 9。'
 resources:
 - id: dg-orchestration
   title: 讲解图 · 编排确认闸与执行日志
@@ -337,27 +336,4 @@ quiz:
     - 只要 orchestration.md 写了就行
   - 1
   - 文档是施工图，日志是案底——两者都要。
-lab:
-  primary_files:
-  - docs/orchestration.md
-  - runs/
-  prompt: '你是流程工程师。背景：FDE 训练营 Day 9，学员已有 3 件 Skill（skills/ 目录）。
-
-    任务：1. 生成 docs/orchestration.md——编排文档：步骤定死的串联图（A→B→C）、数据流（谁的输出是谁的输入）、确认闸位置（必须在不可撤回步骤之前）、闸设计卡（三问）、日志格式；2. 按文档把流水线真实跑一遍：A
-    跑 → B 产出确认界面（草稿+关键数字+风险标红）→ 停 → 人批准 → C 执行；再跑一次驳回路径（打回 B 重做、版本+1、留痕）；3. 每步执行后向 runs/ 追加日志行（时间|步骤|结果）。
-
-    要求：不批准绝不执行 C；驳回必须能退回重做且留记录；日志可独立回放当天经过。'
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/orchestration.md
-  - check: text_contains
-    args:
-      path: docs/orchestration.md
-      needle: 确认闸
-  - check: text_contains
-    args:
-      path: docs/orchestration.md
-      needle: 日志
-nodes_lab: 流水线施工：拦得住、回得来、查得了
 nodes_project: 企业任务：三 Skill 编排 + 确认闸 + 执行日志

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="容器：应用打成集装箱">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="252" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">容器：应用打成「集装箱」</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">CONTAINER · DOCKER</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="76" width="440" height="150" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="108" font-size="14" font-weight="800" fill="#231f20">标准箱 = 应用 + 它要的全部依赖</text>
+<rect x="84" y="128" width="122" height="56" rx="10" fill="url(#tlg)" filter="url(#tglow)"/>
+<line x1="96" y1="128" x2="96" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<line x1="114" y1="128" x2="114" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<text x="150" y="162" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">应用 A</text>
+<rect x="222" y="128" width="122" height="56" rx="10" fill="url(#tlg)" filter="url(#tglow)"/>
+<line x1="234" y1="128" x2="234" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<line x1="252" y1="128" x2="252" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<text x="288" y="162" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">应用 B</text>
+<rect x="360" y="128" width="122" height="56" rx="10" fill="url(#tlg)" filter="url(#tglow)"/>
+<line x1="372" y1="128" x2="372" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<line x1="390" y1="128" x2="390" y2="184" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+<text x="426" y="162" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">应用 C</text>
+<text x="84" y="212" font-size="11.5" fill="rgba(35,31,32,.55)">Docker 最出名 · 箱子到哪，应用就在哪跑</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="540" y="76" width="440" height="150" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="564" y="116" font-size="13" fill="rgba(35,31,32,.45)" text-decoration="line-through">「在我电脑上能跑，到你那就不行」</text>
+<text x="564" y="148" font-size="13" font-weight="700" fill="#0f766e">✓ 这句话，从此大幅减少</text>
+<text x="564" y="180" font-size="13" font-weight="700" fill="rgba(35,31,32,.65)">✗ 箱子从 3 个变 3000 个 —— 谁来管？</text>
+<text x="564" y="210" font-size="11.5" fill="rgba(35,31,32,.5)">下一棒：Kubernetes 码头调度</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="170" y="250" width="700" height="36" rx="18.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="272.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">虚拟机的轻量进化版 —— 不再为每个应用背一整套系统</text></g>
+</svg>

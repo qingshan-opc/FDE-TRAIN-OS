@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="装填术四件套回顾">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">装填术：四件套串起来</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">RECAP · PROMPT → RAG</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="100" width="210" height="90" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="165" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">01</text>
+<text x="165" y="152" font-size="14" font-weight="800" fill="#231f20" text-anchor="middle">Prompt 四要素</text>
+<text x="165" y="174" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">角色 · 任务 · 约束 · 格式</text>
+</g>
+<path d="M276 145 L300 145" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="306" y="100" width="210" height="90" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="411" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">02</text>
+<text x="411" y="152" font-size="14" font-weight="800" fill="#231f20" text-anchor="middle">Context 装配</text>
+<text x="411" y="174" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">选什么 + 放多少</text>
+</g>
+<path d="M522 145 L546 145" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="552" y="100" width="210" height="90" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="657" y="128" font-size="9.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">03</text>
+<text x="657" y="152" font-size="14" font-weight="800" fill="#231f20" text-anchor="middle">RAG 取料</text>
+<text x="657" y="174" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">只取相关那一包</text>
+</g>
+<path d="M768 145 L792 145" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="790" y="92" width="226" height="106" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="798" y="100" width="210" height="90" rx="16" fill="url(#tlg)" filter="url(#glow)"/>
+<text x="903" y="136" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">输出可验收</text>
+<text x="903" y="162" font-size="10.5" fill="rgba(255,255,255,.88)" text-anchor="middle">条条能回答怎么算做到</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="236" width="600" height="44" rx="22.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="262.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">空泛形容词不产生像素 · 预告：Eval · Guardrails · Vibe 编码</text></g>
+</svg>

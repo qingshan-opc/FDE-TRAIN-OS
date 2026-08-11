@@ -4,24 +4,24 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-tool-description",
-    "file": "02-tool-description.txt"
+    "id": "02-loop-anatomy",
+    "file": "02-loop-anatomy.txt"
   },
   {
-    "id": "03-three-tasks",
-    "file": "03-three-tasks.txt"
+    "id": "03-tools-min",
+    "file": "03-tools-min.txt"
   },
   {
-    "id": "04-wrong-pick-map",
-    "file": "04-wrong-pick-map.txt"
+    "id": "04-max-turns",
+    "file": "04-max-turns.txt"
   },
   {
-    "id": "05-desc-length",
-    "file": "05-desc-length.txt"
+    "id": "05-runs-log",
+    "file": "05-runs-log.txt"
   },
   {
-    "id": "06-platform-fallback",
-    "file": "06-platform-fallback.txt"
+    "id": "06-three-tasks",
+    "file": "06-three-tasks.txt"
   },
   {
     "id": "07-close",

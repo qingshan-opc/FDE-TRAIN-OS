@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="后端三件事">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="252" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">后端 = 看不见的后厨，三件事</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">BACKEND DUTIES</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="86" width="290" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="120" font-size="15" font-weight="800" fill="#231f20">01 · 业务逻辑</text>
+<text x="84" y="142" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">LOGIC</text>
+<text x="84" y="174" font-size="12.5" font-weight="700" fill="rgba(35,31,32,.7)">规则怎么算、能不能过</text>
+<text x="84" y="200" font-size="11.5" fill="rgba(35,31,32,.55)">后厨的菜单与工序</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="370" y="86" width="290" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="394" y="120" font-size="15" font-weight="800" fill="#231f20">02 · 数据</text>
+<text x="394" y="142" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">DATA</text>
+<text x="394" y="174" font-size="12.5" font-weight="700" fill="rgba(35,31,32,.7)">存进去、取出来</text>
+<text x="394" y="200" font-size="11.5" fill="rgba(35,31,32,.55)">没有住所，业务跑不起来</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="680" y="86" width="290" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="704" y="120" font-size="15" font-weight="800" fill="#231f20">03 · 接口</text>
+<text x="704" y="142" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">API</text>
+<text x="704" y="174" font-size="12.5" font-weight="700" fill="rgba(35,31,32,.7)">和前端对话</text>
+<text x="704" y="200" font-size="11.5" fill="rgba(35,31,32,.55)">路径 · 参数 · 返回 · 错误码</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="252" width="600" height="34" rx="17.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="273.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">前端是界面；后端是业务、数据、接口</text></g>
+</svg>

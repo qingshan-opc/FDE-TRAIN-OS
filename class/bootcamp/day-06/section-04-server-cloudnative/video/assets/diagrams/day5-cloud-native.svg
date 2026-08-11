@@ -1,60 +1,81 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="云原生演进五站">
-  <rect width="1200" height="470" fill="#f2f5f0"/>
-  <text x="48" y="52" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">服务器的二十五年搬家史（五站）</text>
-  <text x="48" y="78" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">FROM A PC UNDER THE DESK TO PAY-PER-USE</text>
-  <!-- server intro -->
-  <rect x="48" y="96" width="1104" height="52" rx="8" fill="#231f20"/>
-  <text x="72" y="128" font-size="15" fill="#f2f5f0">服务器 = 一台<tspan font-weight="900" fill="#f5a947">一直开着</tspan>、专门给别人提供服务的电脑 —— 不关机 · 没屏幕 · 住机房，你只通过网络跟它打交道。</text>
-  <!-- 5 stops -->
-  <g>
-    <rect x="48" y="176" width="206" height="216" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="151" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="#f5a947" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STOP 1 · 2000s</text>
-    <text x="151" y="232" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">物理机</text>
-    <text x="151" y="258" text-anchor="middle" font-size="12.5" fill="rgba(35,31,32,.6)">桌底一台电脑</text>
-    <text x="151" y="288" text-anchor="middle" font-size="12" fill="#2f9e44">✓ 全公司能访问了</text>
-    <text x="151" y="316" text-anchor="middle" font-size="12" fill="#f24e54">✗ 买多浪费 · 买少挨骂</text>
-    <text x="151" y="336" text-anchor="middle" font-size="12" fill="#f24e54">（95% 时间在睡觉）</text>
-  </g>
-  <path d="M254 284 L276 284 M276 284 L268 278 M276 284 L268 290" stroke="#231f20" stroke-width="2" fill="none"/>
-  <g>
-    <rect x="278" y="176" width="206" height="216" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="381" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="#f5a947" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STOP 2 · 2000s末</text>
-    <text x="381" y="232" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">虚拟机</text>
-    <text x="381" y="258" text-anchor="middle" font-size="12.5" fill="rgba(35,31,32,.6)">一台切成好几台</text>
-    <text x="381" y="288" text-anchor="middle" font-size="12" fill="#2f9e44">✓ 力气榨干不浪费</text>
-    <text x="381" y="316" text-anchor="middle" font-size="12" fill="#f24e54">✗ 每台都背一整套系统</text>
-    <text x="381" y="336" text-anchor="middle" font-size="12" fill="#f24e54">（又慢又胖）</text>
-  </g>
-  <path d="M484 284 L506 284 M506 284 L498 278 M506 284 L498 290" stroke="#231f20" stroke-width="2" fill="none"/>
-  <g>
-    <rect x="508" y="176" width="206" height="216" rx="10" fill="#fff" stroke="#f5a947" stroke-width="2"/>
-    <text x="611" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="#f5a947" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STOP 3 · 2013+</text>
-    <text x="611" y="232" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">容器 Docker</text>
-    <text x="611" y="258" text-anchor="middle" font-size="12.5" fill="rgba(35,31,32,.6)">应用打成「集装箱」</text>
-    <text x="611" y="288" text-anchor="middle" font-size="12" fill="#2f9e44">✓ 箱子在哪哪就能跑</text>
-    <text x="611" y="316" text-anchor="middle" font-size="12" fill="#f24e54">✗ 箱子从 3 个变 3000 个</text>
-    <text x="611" y="336" text-anchor="middle" font-size="12" fill="#f24e54">（谁来管？）</text>
-  </g>
-  <path d="M714 284 L736 284 M736 284 L728 278 M736 284 L728 290" stroke="#231f20" stroke-width="2" fill="none"/>
-  <g>
-    <rect x="738" y="176" width="206" height="216" rx="10" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="841" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="#f5a947" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STOP 4 · 2014+</text>
-    <text x="841" y="232" text-anchor="middle" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">Kubernetes</text>
-    <text x="841" y="258" text-anchor="middle" font-size="12.5" fill="rgba(35,31,32,.6)">集装箱码头调度系统</text>
-    <text x="841" y="288" text-anchor="middle" font-size="12" fill="#2f9e44">✓ 挂了自动补 · 自动扩缩</text>
-    <text x="841" y="316" text-anchor="middle" font-size="12" fill="#f24e54">✗ 系统本身就很贵</text>
-    <text x="841" y="336" text-anchor="middle" font-size="12" fill="#f24e54">（小团队玩不起）</text>
-  </g>
-  <path d="M944 284 L966 284 M966 284 L958 278 M966 284 L958 290" stroke="#231f20" stroke-width="2" fill="none"/>
-  <g>
-    <rect x="968" y="176" width="184" height="216" rx="10" fill="#231f20"/>
-    <text x="1060" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="#f5a947" font-weight="700" style="font-family:'SF Mono',Menlo,monospace">STOP 5 · 2015+</text>
-    <text x="1060" y="232" text-anchor="middle" font-size="18" font-weight="900" fill="#f2f5f0" style="font-family:'Songti SC',serif">Serverless</text>
-    <text x="1060" y="258" text-anchor="middle" font-size="12.5" fill="rgba(242,245,240,.65)">从买车到打车</text>
-    <text x="1060" y="288" text-anchor="middle" font-size="12" fill="#1cd5b0">✓ 没人用就不花钱</text>
-    <text x="1060" y="316" text-anchor="middle" font-size="12" fill="#f5a947">✗ 冷启动 · 被一家绑定</text>
-  </g>
-  <!-- bottom line -->
-  <rect x="48" y="416" width="1104" height="40" rx="8" fill="none" stroke="#1400ff" stroke-width="1.5"/>
-  <text x="66" y="441" font-size="13.5" font-weight="700" fill="#1400ff">云 = 租别人的服务器用（像用电网）；云原生 = 生下来就住在云上的应用。方向只有一个：你操心的机器越来越少。</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-label="云原生演进五站">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="470" fill="#ffffff"/>
+  <rect width="1200" height="470" fill="url(#dots)"/>
+  <circle cx="1120" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="422" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">服务器的二十五年搬家史（五站）</text>
+<text x="1164" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">FROM A PC UNDER THE DESK TO PAY-PER-USE</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="48" y="62" width="1104" height="48" rx="14" fill="url(#tlg)"/><text x="72" y="92" font-size="14" font-weight="700" fill="#fff">服务器 = 一台一直开着、专门给别人提供服务的电脑 —— 不关机 · 没屏幕 · 住机房，你只通过网络跟它打交道</text></g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="48" y="134" width="206" height="214" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="151.0" y="162" font-size="10.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STOP 1 · 2000s</text>
+<text x="151.0" y="190" font-size="18" font-weight="800" fill="#231f20" text-anchor="middle">物理机</text>
+<text x="151.0" y="216" font-size="12" fill="rgba(35,31,32,.6)" text-anchor="middle">桌底一台电脑</text>
+<text x="151.0" y="248" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">✓ 全公司能访问了</text>
+<text x="151.0" y="276" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">✗ 买多浪费 · 买少挨骂</text>
+<text x="151.0" y="298" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">（95% 时间在睡觉）</text>
+</g>
+<path d="M260 240 L272 240" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="278" y="134" width="206" height="214" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="381.0" y="162" font-size="10.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STOP 2 · 2000s末</text>
+<text x="381.0" y="190" font-size="18" font-weight="800" fill="#231f20" text-anchor="middle">虚拟机</text>
+<text x="381.0" y="216" font-size="12" fill="rgba(35,31,32,.6)" text-anchor="middle">一台切成好几台</text>
+<text x="381.0" y="248" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">✓ 力气榨干不浪费</text>
+<text x="381.0" y="276" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">✗ 每台都背一整套系统</text>
+<text x="381.0" y="298" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">（又慢又胖）</text>
+</g>
+<path d="M490 240 L502 240" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="508" y="134" width="206" height="214" rx="16" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="2" filter="url(#tglow)"/>
+<text x="611.0" y="162" font-size="10.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STOP 3 · 2013+</text>
+<text x="611.0" y="190" font-size="18" font-weight="800" fill="#231f20" text-anchor="middle">容器 Docker</text>
+<text x="611.0" y="216" font-size="12" fill="rgba(35,31,32,.6)" text-anchor="middle">应用打成「集装箱」</text>
+<text x="611.0" y="248" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">✓ 箱子在哪哪就能跑</text>
+<text x="611.0" y="276" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">✗ 箱子从 3 个变 3000 个</text>
+<text x="611.0" y="298" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">（谁来管？）</text>
+</g>
+<path d="M720 240 L732 240" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="738" y="134" width="206" height="214" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="841.0" y="162" font-size="10.5" font-weight="700" fill="#0d9488" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STOP 4 · 2014+</text>
+<text x="841.0" y="190" font-size="18" font-weight="800" fill="#231f20" text-anchor="middle">Kubernetes</text>
+<text x="841.0" y="216" font-size="12" fill="rgba(35,31,32,.6)" text-anchor="middle">集装箱码头调度系统</text>
+<text x="841.0" y="248" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">✓ 挂了自动补 · 自动扩缩</text>
+<text x="841.0" y="276" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">✗ 系统本身就很贵</text>
+<text x="841.0" y="298" font-size="11.5" fill="rgba(35,31,32,.5)" text-anchor="middle">（小团队玩不起）</text>
+</g>
+<path d="M950 240 L962 240" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.8s" repeatCount="indefinite"/></path>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="960" y="126" width="200" height="230" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="968" y="134" width="184" height="214" rx="16" fill="url(#tlg)" filter="url(#glow)"/>
+<text x="1060.0" y="162" font-size="10.5" font-weight="700" fill="rgba(255,255,255,.85)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">STOP 5 · 2015+</text>
+<text x="1060.0" y="190" font-size="18" font-weight="800" fill="#fff" text-anchor="middle">Serverless</text>
+<text x="1060.0" y="216" font-size="12" fill="rgba(255,255,255,.8)" text-anchor="middle">从买车到打车</text>
+<text x="1060.0" y="248" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✓ 没人用就不花钱</text>
+<text x="1060.0" y="276" font-size="11.5" fill="rgba(255,255,255,.85)" text-anchor="middle">✗ 冷启动 · 被一家绑定</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="48" y="396" width="1104" height="52" rx="26.0" fill="rgba(13,148,136,.10)"/>
+<text x="600.0" y="426.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">云 = 租别人的服务器用（像用电网）；云原生 = 生下来就住在云上的应用。方向只有一个：你操心的机器越来越少</text></g>
 </svg>

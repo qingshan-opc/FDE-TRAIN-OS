@@ -1,1 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img"><rect width="560" height="460" fill="#f2f5f0"/><text x="28" y="34" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · FLOW</text><text x="28" y="64" font-family="serif" font-size="22" font-weight="700" fill="#231f20">P1 · defect-log.</text><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#231f20"/></marker></defs><rect x="40.0" y="120" width="153.3" height="220" fill="#fff" stroke="#231f20" stroke-width="1.8"/><circle cx="116.7" cy="168" r="22" fill="#1400ff"/><text x="116.7" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#fff">01</text><text x="116.7" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#231f20">编号与级别</text><text x="116.7" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(35,31,32,.55)">编号与级别</text><line x1="195.3" y1="230" x2="201.3" y2="230" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="203.3" y="120" width="153.3" height="220" fill="#1400ff" stroke="#231f20" stroke-width="1.8"/><circle cx="280.0" cy="168" r="22" fill="#fff"/><text x="280.0" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#1400ff">02</text><text x="280.0" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#fff">步骤与证据</text><text x="280.0" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,.8)">步骤与证据</text><line x1="358.7" y1="230" x2="364.7" y2="230" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="366.7" y="120" width="153.3" height="220" fill="#fff" stroke="#231f20" stroke-width="1.8"/><circle cx="443.3" cy="168" r="22" fill="#1400ff"/><text x="443.3" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#fff">03</text><text x="443.3" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#231f20">一个主要责任岗位</text><text x="443.3" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(35,31,32,.55)">一个主要责任岗位</text><rect x="40" y="372" width="480" height="48" fill="#1400ff"/><text x="280" y="402" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">编号与级别 → 步骤与证据 → 一个主要责任岗位</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="P1 · defect-log.md">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".45"/></filter>
+</defs>
+<rect width="560" height="460" fill="#ffffff"/>
+<rect width="560" height="460" fill="url(#dots)"/>
+<circle cx="470" cy="54" r="100" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="408" r="72" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="72;84;72" dur="11s" repeatCount="indefinite"/></circle>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="36" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="52" y="42" font-size="20" font-weight="800" fill="#231f20">P1 · defect-log.md</text>
+<text x="524" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">DIAGRAM · FLOW</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.15s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="100" width="150" height="200" rx="16" fill="#fff" filter="url(#sh)"/>
+<circle cx="115.0" cy="150" r="22" fill="url(#g)"/>
+<text x="115.0" y="156" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="14" font-weight="700" fill="#fff">01</text>
+<text x="115.0" y="222" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="700" fill="#231f20">编号与级别</text>
+<text x="115.0" y="248" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)">STEP 01</text>
+</g>
+<path d="M196 200 H199" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.9s" repeatCount="indefinite"/></path>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.47s" dur="0.5s" fill="freeze"/>
+<rect x="197" y="92" width="166" height="216" rx="22" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.14;.5" dur="2.3s" repeatCount="indefinite"/></rect>
+<rect x="205" y="100" width="150" height="200" rx="16" fill="url(#g)" filter="url(#glow)"/>
+<circle cx="280.0" cy="150" r="22" fill="#fff"/>
+<text x="280.0" y="156" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="14" font-weight="700" fill="#0d9488">02</text>
+<text x="280.0" y="222" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="800" fill="#fff">步骤与证据</text>
+<text x="280.0" y="248" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="rgba(255,255,255,.8)">STEP 02</text>
+</g>
+<path d="M361 200 H364" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="0.9s" repeatCount="indefinite"/></path>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.79s" dur="0.5s" fill="freeze"/>
+<rect x="370" y="100" width="150" height="200" rx="16" fill="#fff" filter="url(#sh)"/>
+<circle cx="445.0" cy="150" r="22" fill="url(#g)"/>
+<text x="445.0" y="156" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="14" font-weight="700" fill="#fff">03</text>
+<text x="445.0" y="222" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="14" font-weight="700" fill="#231f20">一个主要责任岗位</text>
+<text x="445.0" y="248" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)">STEP 03</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="1.11s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="352" width="480" height="56" rx="28" fill="rgba(13,148,136,.10)"/>
+<text x="280" y="386" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#0f766e">编号与级别 → 步骤与证据 → 一个主要责任岗位</text>
+</g>
+</svg>

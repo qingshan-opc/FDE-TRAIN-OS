@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="驾驶舱项目踩在 L2 到 L4">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">驾驶舱项目踩在台阶的哪几级</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">COCKPIT ON THE LADDER</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="110" width="170" height="110" rx="16" fill="rgba(35,31,32,.04)"/>
+<text x="76" y="140" font-size="10" font-weight="700" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">L1</text>
+<text x="76" y="166" font-size="16" font-weight="800" fill="rgba(35,31,32,.45)">信息化</text>
+<text x="76" y="194" font-size="10.5" fill="rgba(35,31,32,.4)">已被覆盖</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="250" y="110" width="170" height="110" rx="16" fill="rgba(13,148,136,.10)" stroke="rgba(13,148,136,.4)" stroke-width="1.5"/>
+<text x="266" y="140" font-size="10" font-weight="700" fill="#0f766e" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">L2</text>
+<text x="266" y="166" font-size="16" font-weight="800" fill="#0f766e">数字化</text>
+<text x="266" y="194" font-size="10.5" fill="rgba(35,31,32,.6)">真 KPI 进库</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="440" y="110" width="170" height="110" rx="16" fill="rgba(13,148,136,.10)" stroke="rgba(13,148,136,.4)" stroke-width="1.5"/>
+<text x="456" y="140" font-size="10" font-weight="700" fill="#0f766e" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">L3</text>
+<text x="456" y="166" font-size="16" font-weight="800" fill="#0f766e">网络化</text>
+<text x="456" y="194" font-size="10.5" fill="rgba(35,31,32,.6)">API_Spec 契约接电</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="630" y="110" width="170" height="110" rx="16" fill="rgba(13,148,136,.10)" stroke="rgba(13,148,136,.4)" stroke-width="1.5"/>
+<text x="646" y="140" font-size="10" font-weight="700" fill="#0f766e" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">L4</text>
+<text x="646" y="166" font-size="16" font-weight="800" fill="#0f766e">智能化</text>
+<text x="646" y="194" font-size="10.5" fill="rgba(35,31,32,.6)">摘要区块过 Rubric</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="812" y="102" width="186" height="126" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="820" y="110" width="170" height="110" rx="16" fill="url(#tlg)" filter="url(#glow)"/>
+<text x="836" y="140" font-size="10" font-weight="700" fill="rgba(255,255,255,.85)" font-family="'SF Mono',Menlo,monospace" letter-spacing="1">L5</text>
+<text x="836" y="166" font-size="16" font-weight="800" fill="#fff">Agent 化</text>
+<text x="836" y="194" font-size="10.5" fill="rgba(255,255,255,.85)">Week 2 目标</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="256" width="600" height="44" rx="22.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="282.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">前四天交付物对齐 L2–L4 · Week 2 往 L5：从能看到，到能干活</text></g>
+</svg>

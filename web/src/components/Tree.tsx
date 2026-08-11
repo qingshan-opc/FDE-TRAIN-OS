@@ -4,6 +4,7 @@ import { dayLabel, dayUnlockHint } from "../lib/dayLabel";
 
 export const WEEK_QUIZ_PREFIX = "week-";
 export const WEEK_QUIZ_SUFFIX = "-quiz";
+export const WEEK_HW_COCKPIT_SUFFIX = "-hw-cockpit";
 
 export function weekQuizNodeId(week: number): string {
   return `${WEEK_QUIZ_PREFIX}${week}${WEEK_QUIZ_SUFFIX}`;
@@ -15,6 +16,17 @@ export function parseWeekQuizNodeId(nodeId: string | null | undefined): number |
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
+/** Week-1 syllabus item under 概念验收: 第一周作业 · 驾驶舱 */
+export function weekCockpitHomeworkNodeId(week = 1): string {
+  return `${WEEK_QUIZ_PREFIX}${week}${WEEK_HW_COCKPIT_SUFFIX}`;
+}
+
+export function parseWeekCockpitHomeworkNodeId(nodeId: string | null | undefined): number | null {
+  if (!nodeId?.startsWith(WEEK_QUIZ_PREFIX) || !nodeId.endsWith(WEEK_HW_COCKPIT_SUFFIX)) return null;
+  const n = Number(nodeId.slice(WEEK_QUIZ_PREFIX.length, -WEEK_HW_COCKPIT_SUFFIX.length));
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
 const WEEK_CN: Record<number, string> = {
   1: "第一周",
   2: "第二周",
@@ -22,8 +34,18 @@ const WEEK_CN: Record<number, string> = {
   4: "第四周",
 };
 
+const WEEK_TAGLINE: Record<number, string> = {
+  1: "用ai做完整应用",
+  2: "给应用装上大脑",
+  3: "自媒体时代的生存法则",
+};
+
 function weekLabel(week: number): string {
   return WEEK_CN[week] || `第${week}周`;
+}
+
+function weekTagline(week: number): string | null {
+  return WEEK_TAGLINE[week] || null;
 }
 
 /** Day-level nodes hidden from the simplified syllabus. */
@@ -44,11 +66,14 @@ interface TreeProps {
   onSelectDay: (day: number) => void;
   onSelectNode?: (day: number, nodeId: string) => void;
   onSelectWeekQuiz?: (week: number, anchorDay: number) => void;
+  onSelectWeekCockpitHomework?: (week: number, anchorDay: number) => void;
   dayStatuses?: Record<number, DayStatusEntry>;
   /** Capsules under the active day's learn node. */
   capsules?: Capsule[];
   openCapsuleId?: string | null;
   readCapsuleIds?: Set<string>;
+  /** When true, week-1 cockpit homework shows as completed in the rail. */
+  week1CockpitHomeworkDone?: boolean;
   onSelectCapsule?: (id: string) => void;
 }
 
@@ -144,10 +169,12 @@ export function Tree({
   onSelectDay,
   onSelectNode,
   onSelectWeekQuiz,
+  onSelectWeekCockpitHomework,
   dayStatuses = {},
   capsules = [],
   openCapsuleId = null,
   readCapsuleIds,
+  week1CockpitHomeworkDone = false,
   onSelectCapsule,
 }: TreeProps) {
   const byDay = useMemo(() => new Map(days.map((d) => [d.day, d])), [days]);
@@ -170,6 +197,8 @@ export function Tree({
   }, [activeDay, weekEntries]);
 
   const weekQuizWeek = parseWeekQuizNodeId(activeNodeId);
+  const weekHwWeek = parseWeekCockpitHomeworkNodeId(activeNodeId);
+  const specialWeekActive = weekQuizWeek != null || weekHwWeek != null;
 
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(
     () => new Set([activeWeek]),
@@ -221,11 +250,13 @@ export function Tree({
       {weekEntries.map(({ week, days: dayNums }) => {
         const weekOpen = expandedWeeks.has(week);
         const weekQuizActive = weekQuizWeek === week;
+        const weekHwActive = weekHwWeek === week;
         const weekQuizDone = dayNums.every((n) => {
           const nodes = byDay.get(n)?.nodes ?? dayStatuses[n]?.nodes ?? [];
           const q = nodes.find((x) => x.kind === "quiz");
           return q?.status === "passed";
         });
+        const weekHwDone = week === 1 && week1CockpitHomeworkDone;
         const weekLocked = dayNums.every((n) => {
           const d = byDay.get(n);
           return !d || d.locked;
@@ -244,7 +275,12 @@ export function Tree({
               onClick={(e) => onWeekToggle(week, e)}
             >
               <Chevron open={weekOpen} />
-              <span className="syllabus-week-label">{weekLabel(week)}</span>
+              <span className="syllabus-week-heading">
+                <span className="syllabus-week-label">{weekLabel(week)}</span>
+                {weekTagline(week) ? (
+                  <span className="syllabus-week-tagline">{weekTagline(week)}</span>
+                ) : null}
+              </span>
             </button>
 
             {weekOpen ? (
@@ -253,7 +289,7 @@ export function Tree({
                   const d = byDay.get(n);
                   const st = dayStatuses[n];
                   const locked = !d || Boolean(d.locked);
-                  const selected = activeDay === n && !weekQuizActive;
+                  const selected = activeDay === n && !specialWeekActive;
                   const rawNodes: DayNodeSummary[] = d?.nodes ?? st?.nodes ?? [];
                   const nodes = learnerDayNodes(rawNodes);
                   const learnId = learnNodeId(rawNodes, n);
@@ -400,6 +436,29 @@ export function Tree({
                     </span>
                   </button>
                 </li>
+
+                {week === 1 ? (
+                  <li className="syllabus-week-quiz">
+                    <button
+                      type="button"
+                      className={`syllabus-item syllabus-week-quiz-item${weekHwActive ? " is-active" : ""}${weekHwDone ? " is-read" : ""}`}
+                      disabled={weekLocked || !anchorDay}
+                      onClick={() => {
+                        if (anchorDay != null) onSelectWeekCockpitHomework?.(week, anchorDay);
+                      }}
+                      aria-current={weekHwActive ? "step" : undefined}
+                    >
+                      <LeafIcon locked={weekLocked} done={weekHwDone} active={weekHwActive} />
+                      <span className="syllabus-item-body">
+                        <span className="syllabus-item-title">第一周作业 · 驾驶舱</span>
+                        <span className="syllabus-item-meta">
+                          选做
+                          {weekHwActive ? " · 进行中" : weekHwDone ? " · 已完成" : ""}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                ) : null}
               </ul>
             ) : null}
           </section>

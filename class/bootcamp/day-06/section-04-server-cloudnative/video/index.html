@@ -25,7 +25,10 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
 .lede{font-size:24px;line-height:1.55;color:var(--ink-60);max-width:34em}
 .diagram-box{border:1px solid var(--ink);padding:14px;background:#fff;margin-top:16px;max-width:980px}
 .diagram-box .dg-cap{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:10px}
-.diagram-box img{width:100%;max-height:320px;object-fit:contain;display:block}
+.diagram-box img{width:100%;max-height:320px;object-fit:contain;display:block}.diagram-wide{border:1px solid var(--ink);padding:14px;background:#fff;margin-top:16px;max-width:980px}
+.diagram-wide .dg-cap{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-bottom:10px}
+.diagram-wide img{width:100%;max-height:220px;object-fit:contain;display:block}
+
 .brand-bar{position:absolute;left:96px;bottom:36px;z-index:20;font-family:var(--mono);font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:rgba(35,31,32,.55)}
 .brand-bar em{font-style:normal;color:var(--accent)}
 #avatar-pip{position:absolute;right:40px;bottom:36px;z-index:30;width:248px;height:380px;display:flex;flex-direction:column}
@@ -33,6 +36,62 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
 .avatar-frame video{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
 .avatar-caption{height:30px;line-height:30px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-align:center;background:var(--ink);color:#f2f5f0;border:2px solid var(--ink);border-top:none}
 .speak-ring{position:absolute;inset:-8px;border:2px solid var(--accent);opacity:.35;pointer-events:none}
+</style>
+
+<style id="v2-visual">
+/* ===== v2 visual system (auto-injected by scripts/upgrade_video_style.py) ===== */
+:root{--accent-2:#14b8a6;--radius-lg:26px;--radius-md:20px;--shadow-1:0 2px 6px rgba(35,31,32,.05),0 16px 38px rgba(35,31,32,.10);--shadow-2:0 3px 8px rgba(35,31,32,.06),0 24px 54px rgba(35,31,32,.13);--shadow-teal:0 14px 38px rgba(13,148,136,.32)}
+html.browser-preview body{border-radius:20px}
+html.browser-preview #root{border-radius:20px}
+.stage-bg{background:radial-gradient(1200px 700px at 18% 12%,rgba(13,148,136,.10),transparent 55%),radial-gradient(900px 600px at 88% 78%,rgba(35,31,32,.06),transparent 50%),var(--bg)}
+.stage-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(35,31,32,.05) 1.5px,transparent 1.6px);background-size:40px 40px;pointer-events:none}
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px);will-change:transform,opacity}
+.orb-a{width:520px;height:520px;left:-80px;top:-60px;background:radial-gradient(circle,rgba(13,148,136,.18),transparent 68%)}
+.orb-b{width:420px;height:420px;right:-40px;bottom:40px;background:radial-gradient(circle,rgba(20,184,166,.14),transparent 68%)}
+.sec-label::after{background:linear-gradient(90deg,var(--ink),rgba(13,148,136,.35),transparent);border-radius:999px}
+.sec-label .bar{border-radius:999px;background:linear-gradient(90deg,var(--ink),rgba(13,148,136,.35),transparent)}
+.sec-label .num{color:#fff;background:linear-gradient(135deg,var(--accent),#14b8a6);border-radius:10px;padding:5px 11px;box-shadow:0 6px 16px rgba(13,148,136,.35)}
+.statement strong{border-bottom:none;background:linear-gradient(transparent 58%,rgba(13,148,136,.26) 58%,rgba(13,148,136,.26) 96%,transparent 96%);border-radius:6px;padding:0 6px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.card{border:1px solid rgba(35,31,32,.09);border-radius:var(--radius-md);background:rgba(255,255,255,.95);box-shadow:var(--shadow-1)}
+.card.hot{background:linear-gradient(135deg,var(--accent),#14b8a6);border-color:transparent;box-shadow:var(--shadow-teal);color:#fff}
+.card.hot h4,.card.hot strong,.card.hot p,.card.hot span{color:#fff}
+.card.hot .lab,.card.hot .k{color:rgba(255,255,255,.85)}
+.tag{border-radius:999px;border:1px solid rgba(35,31,32,.09);background:rgba(255,255,255,.94);box-shadow:var(--shadow-1)}
+.tag.hl,.tag.solid{background:linear-gradient(135deg,var(--accent),#14b8a6);color:#fff;border-color:transparent;box-shadow:var(--shadow-teal)}
+.diagram-box,.diagram-wide{border:1px solid rgba(35,31,32,.09);border-radius:var(--radius-lg);box-shadow:var(--shadow-2)}
+.dg-cap{align-self:flex-start;background:rgba(35,31,32,.05);border-radius:999px;padding:5px 13px}
+.flow{border:none;box-shadow:none;gap:14px;background:transparent}
+.flow-step{border:1px solid rgba(35,31,32,.09);border-right:1px solid rgba(35,31,32,.09);border-radius:var(--radius-md);box-shadow:var(--shadow-1);background:rgba(255,255,255,.95)}
+.flow-step:last-child{border-right:1px solid rgba(35,31,32,.09)}
+.flow-step.hot{background:linear-gradient(135deg,var(--accent),#14b8a6);border-color:transparent;box-shadow:var(--shadow-teal)}
+.flow-step.hot b,.flow-step.hot strong{color:#fff}
+.compare{border:none;box-shadow:none;gap:18px;background:transparent;overflow:visible}
+.compare-col{border:1px solid rgba(35,31,32,.09);border-radius:var(--radius-md);box-shadow:var(--shadow-1);background:rgba(255,255,255,.95)}
+.compare-col:first-child{border-right:1px solid rgba(35,31,32,.09)}
+.compare-col h3{background:rgba(13,148,136,.10);border-radius:9px;padding:5px 12px;display:inline-block}
+.checklist{border:1px solid rgba(35,31,32,.09);border-radius:var(--radius-md);box-shadow:var(--shadow-1);background:rgba(255,255,255,.95);overflow:hidden}
+.layer{border:1px solid rgba(35,31,32,.09);border-radius:var(--radius-md);box-shadow:var(--shadow-1);background:rgba(255,255,255,.95)}
+.layer .lv{background:rgba(13,148,136,.10);border-radius:10px;padding:8px 0;text-align:center}
+.layer.hot{background:linear-gradient(135deg,var(--accent),#14b8a6);border-color:transparent;box-shadow:var(--shadow-teal)}
+.layer.hot .lv{background:rgba(255,255,255,.2);color:#fff}
+.rung{border:1px solid rgba(35,31,32,.09);border-radius:16px;box-shadow:var(--shadow-1)}
+.step{border-radius:16px}
+.avatar-frame{border:none;border-radius:24px;box-shadow:0 18px 44px rgba(13,148,136,.35),0 4px 10px rgba(35,31,32,.18),0 0 0 1px rgba(35,31,32,.10)}
+.avatar-caption{border:none;border-radius:999px;margin-top:12px;align-self:center;padding:8px 18px;height:auto;line-height:1.2;box-shadow:0 8px 20px rgba(35,31,32,.25)}
+.speak-ring{border-radius:32px}
+.side-photo{border-left:none;border-radius:36px 0 0 36px;box-shadow:-20px 0 48px rgba(35,31,32,.18)}
+.side-photo .veil{background:linear-gradient(90deg,rgba(242,245,240,.62),transparent 48%),linear-gradient(180deg,rgba(13,148,136,.12),transparent 34%,transparent 62%,rgba(35,31,32,.24))}
+.photo-panel{border-radius:var(--radius-lg);box-shadow:var(--shadow-2)}
+.here-pulse{border:none;border-radius:999px;background:linear-gradient(135deg,var(--accent),#14b8a6);box-shadow:var(--shadow-teal)}
+</style>
+
+<style id="v2-preview">
+/* ===== v2 preview boot (auto-injected) ===== */
+html.browser-preview{overflow:auto;height:100%;background:#1a1a1a}
+html.browser-preview body{margin:24px auto;box-shadow:0 20px 80px rgba(0,0,0,.55)}
+#preview-hint{position:fixed;left:12px;top:12px;z-index:9999;font:13px/1.4 var(--mono);color:#fff;background:rgba(0,0,0,.75);padding:10px 14px;border-radius:10px;display:none}
+#preview-pager{position:fixed;right:12px;top:12px;z-index:9999;font:15px/1.4 var(--mono);color:#fff;background:rgba(13,148,136,.92);padding:10px 16px;border-radius:10px;display:none}
+html.browser-preview #preview-hint,html.browser-preview #preview-pager{display:block}
 </style>
 </head>
 <body>
@@ -45,7 +104,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">01</span>OPEN</div>
           <h1 class="display" data-anim="t">同学们，上节课呢，咱们讲了软件是怎么开发出来的——流程啊…</h1>
           <p class="lede" data-anim="s">同学们，上节课呢，咱们讲了软件是怎么开发出来的——流程啊，还有需求调研。这节课呢，浅讲一下服务器与云原生。你写的程序要让大家用，就得搬到一台一直开着呢的电脑上，对吧。这台电脑，二十五年搬了五次家。咱们先把这趟搬家史走一遍。</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 五次搬家</div>
+            <img src="assets/diagrams/server-moving-history.svg" alt="讲解图 · 五次搬家" />
+          </div>
+</div>
       </section>
       <section id="slide-02-physical" class="clip slide" data-track-index="1" data-start="21.050" data-duration="40.887">
         <div class="stage-fill"></div>
@@ -53,7 +116,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">02</span>PHYSICAL</div>
           <h1 class="display" data-anim="t">先说第一站，物理机</h1>
           <p class="lede" data-anim="s">先说第一站，物理机。最早呢，公司自己买一台电脑，塞桌底或者小机房，插电二十四小时开着。解决了什么？总算有个东西能让全公司访问了嘛。可它又带来麻烦：顶配机器平时可能只用百分之五的力气，百分之九十五白花钱；活动一来又不够——买多了浪费，买少了挨骂，对吧。所以啊，服务器严格意义上跟你的个人电脑差不多，都是操作系统加程序；不严格意义上，差在系统不一样、一直开着不关机…</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 物理机</div>
+            <img src="assets/diagrams/physical-server.svg" alt="讲解图 · 物理机" />
+          </div>
+</div>
       </section>
       <section id="slide-03-vm" class="clip slide" data-track-index="1" data-start="62.187" data-duration="38.095">
         <div class="stage-fill"></div>
@@ -61,7 +128,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">03</span>VM</div>
           <h1 class="display" data-anim="t">第二站呢，是虚拟机</h1>
           <p class="lede" data-anim="s">第二站呢，是虚拟机。很多同学听过双系统：一台电脑装 Windows 又装 Linux，开机选一个。更省事的做法呢，是装个 VMware，在 Windows 里面再跑一个 Linux，甚至跑 Kali 这类安全实验系统——不必重启切换，对吧。一台物理机里跑多种系统，这就叫虚拟机。早期常见是软件虚拟化；现在更多是底层拆分出来的虚拟机，性能已经能接近物理机，但仍略…</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 虚拟机</div>
+            <img src="assets/diagrams/vm-split.svg" alt="讲解图 · 虚拟机" />
+          </div>
+</div>
       </section>
       <section id="slide-04-container" class="clip slide" data-track-index="1" data-start="100.532" data-duration="38.960">
         <div class="stage-fill"></div>
@@ -69,7 +140,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">04</span>CONTAINER</div>
           <h1 class="display" data-anim="t">第三站，容器</h1>
           <p class="lede" data-anim="s">第三站，容器。去过宁波港的同学可能见过，码头上一排排大型集装箱。早期没箱子的时候呢，货直接堆上船，到岸拆不清、分不清——乱套。后来变成一个企业一个集装箱，物流就顺了。软件里也一样：把应用装进标准箱子，箱子到哪，应用就在哪跑。Docker 最出名。「在我电脑上能跑，到你那就不行」这句话，从此大幅减少，对吧。可以看成虚拟机的轻量进化版——不再为每个应用背一整套系…</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 容器</div>
+            <img src="assets/diagrams/container-docker.svg" alt="讲解图 · 容器" />
+          </div>
+</div>
       </section>
       <section id="slide-05-k8s" class="clip slide" data-track-index="1" data-start="139.742" data-duration="36.968">
         <div class="stage-fill"></div>
@@ -89,7 +164,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">06</span>SERVERLESS</div>
           <h1 class="display" data-anim="t">第五站呢，是 Serverless，无服务器</h1>
           <p class="lede" data-anim="s">第五站呢，是 Serverless，无服务器。名字有点唬人——不是真没服务器，是云厂商全包了；你关心的是一段服务被调用，不是哪台机器。你可能见过微信小程序的云函数——就是一种形态，常见用 Node.js。它是以服务为粒度，不是以整台机为粒度。好处呢，零运维起步、按调用付费，没人用就不花钱。坏处呢，有冷启动、厂商绑定；传统企业内部系统未必先碰它——先听懂概念就…</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · Serverless</div>
+            <img src="assets/diagrams/serverless-taxi.svg" alt="讲解图 · Serverless" />
+          </div>
+</div>
       </section>
       <section id="slide-07-cloud-native" class="clip slide" data-track-index="1" data-start="208.579" data-duration="39.607">
         <div class="stage-fill"></div>
@@ -97,7 +176,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">07</span>CLOUD NATIVE</div>
           <h1 class="display" data-anim="t">好，把五站连起来，一句话记住：云，就是租别人的服务器用，…</h1>
           <p class="lede" data-anim="s">好，把五站连起来，一句话记住：云，就是租别人的服务器用，像用电网，不自己发电；云原生呢，就是打娘胎里就按云的方式设计的应用——一出生就装成集装箱、就接受调度、就能按量扩展，而不是半路从桌底搬上来的老系统。再补部署最小必要：管线五步——代码进 Git、构建打包、镜像冻环境、运行七乘二十四、访问拿公网 URL。密钥不进 Git，从环境变量读。V1.0 验收口径是…</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 管线五步</div>
+            <img src="assets/diagrams/cloud-native-pipeline.svg" alt="讲解图 · 管线五步" />
+          </div>
+</div>
       </section>
       <section id="slide-08-cli" class="clip slide" data-track-index="1" data-start="248.436" data-duration="30.080">
         <div class="stage-fill"></div>
@@ -105,7 +188,11 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">08</span>CLI</div>
           <h1 class="display" data-anim="t">服务器没屏幕、住机房——你摸不到鼠标，只能通过网络发文字…</h1>
           <p class="lede" data-anim="s">服务器没屏幕、住机房——你摸不到鼠标，只能通过网络发文字过去，这行文字就是命令，对吧。别被黑窗口唬住：命令行只是用文字和电脑对话。今天 Lab 要真敲八句：pwd、ls、mkdir、cd、curl、tail -f、chmod +x、还有 docker ps。规矩一条：不许复制粘贴——命令行是肌肉记忆。卡住了查资源区的命令手册就行。</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 八句命令</div>
+            <img src="assets/diagrams/cli-eight-commands.svg" alt="讲解图 · 八句命令" />
+          </div>
+</div>
       </section>
       <section id="slide-09-close" class="clip slide" data-track-index="1" data-start="278.766" data-duration="13.920">
         <div class="stage-fill"></div>
@@ -113,12 +200,16 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#000;fo
           <div class="sec-label" data-anim="k"><span class="num">09</span>CLOSE</div>
           <h1 class="display" data-anim="t">好，本节小课就到这里了，收个尾</h1>
           <p class="lede" data-anim="s">好，本节小课就到这里了，收个尾。从桌底一台电脑，到集装箱，再到自动码头和打车式的 Serverless——方向只有一个：让你操心的机器越来越少。下一节咱们动手，去实验台把这八句真敲一遍。</p>
-        </div>
+                  <div class="diagram-wide" data-anim="diagram">
+            <div class="dg-cap">讲解图 · 操心越来越少</div>
+            <img src="assets/diagrams/server-less-worry.svg" alt="讲解图 · 操心越来越少" />
+          </div>
+</div>
       </section>
 <div id="brand-bar" class="brand-bar clip" data-start="0" data-duration="292.686" data-track-index="2">FDE<em>·</em>训练营 <em>/</em> Day 05 · 04</div>
 <div id="avatar-pip" class="clip" data-start="0" data-duration="292.686" data-track-index="5">
 <div class="speak-ring"></div>
-<div class="avatar-frame"><video id="avatar-lipsync" class="clip" src="assets/avatar-lipsync.mp4" muted playsinline preload="auto" data-start="0" data-duration="292.686" data-track-index="6"></video></div>
+<div class="avatar-frame"><img class="portrait" src="assets/lecturer-portrait.jpg" alt="讲师" style="width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block" /></div>
 <div class="avatar-caption">Lecturer · 口播</div>
 </div>
 <audio id="narration" class="clip" src="audio/narration-full.wav" data-start="0" data-duration="292.686" data-track-index="10" data-volume="1"></audio>
@@ -156,6 +247,112 @@ function exit(id, tEnd, tHard) {
       enter("#slide-09-close", 278.766);
 tl.from("#avatar-pip", { opacity: 0, y: 28, duration: 0.7, ease: "power3.out" }, 0.25);
 window.__timelines["main"] = tl;
+</script>
+
+<script>
+/* ===== v2 breath (auto-injected by scripts/upgrade_video_style.py) ===== */
+(function () {
+  var tl = window.__timelines && window.__timelines["main"];
+  if (!tl || !window.gsap) return;
+  function breath(sel, fv, tv, t0, tEnd, cycle, dx) {
+    var nodes = gsap.utils.toArray(sel);
+    if (!nodes.length) return;
+    var start = t0 + 0.75 + (dx || 0);
+    var avail = Math.max(cycle, tEnd - start - 0.55);
+    var n = Math.max(1, Math.floor(avail / cycle));
+    var vars = Object.assign({}, tv, {
+      duration: cycle / 2, ease: "sine.inOut", repeat: n * 2 - 1, yoyo: true,
+      immediateRender: false, stagger: nodes.length > 1 ? 0.1 : 0,
+    });
+    tl.fromTo(sel, Object.assign({}, fv), vars, start);
+  }
+  document.querySelectorAll("section.clip.slide").forEach(function (sec) {
+    var t0 = parseFloat(sec.getAttribute("data-start") || "0");
+    var tEnd = t0 + parseFloat(sec.getAttribute("data-duration") || "0");
+    if (!(tEnd > t0)) return;
+    var id = "#" + sec.id;
+    breath(id + " .card", { y: 0 }, { y: -9 }, t0, tEnd, 4.6, 0);
+    breath(id + " .card.hot", { scale: 1 }, { scale: 1.035 }, t0, tEnd, 2.6, 0.15);
+    breath(id + " .compare-col", { y: 0 }, { y: -6 }, t0, tEnd, 4.8, 0.05);
+    breath(id + " .flow-step", { y: 0 }, { y: -7 }, t0, tEnd, 4.2, 0);
+    breath(id + " .flow-step.hot", { scale: 1 }, { scale: 1.03 }, t0, tEnd, 2.6, 0.1);
+    breath(id + " .layer", { x: 0 }, { x: 7 }, t0, tEnd, 4.4, 0);
+    breath(id + " .layer.hot", { scale: 1 }, { scale: 1.03 }, t0, tEnd, 2.6, 0.1);
+    breath(id + " .rung", { y: 0 }, { y: -6 }, t0, tEnd, 4.6, 0);
+    breath(id + " .checklist li", { x: 0 }, { x: 7 }, t0, tEnd, 5.0, 0);
+    breath(id + " .tag", { y: 0, opacity: 0.9 }, { y: -4, opacity: 1 }, t0, tEnd, 3.6, 0);
+    breath(id + " .tag.hl, " + id + " .tag.solid", { scale: 1 }, { scale: 1.05 }, t0, tEnd, 2.5, 0.12);
+    breath(id + " .sec-label .bar", { scaleX: 0.82, opacity: 0.5 }, { scaleX: 1, opacity: 1 }, t0, tEnd, 3.8, 0);
+    breath(id + " .side-photo img", { scale: 1, x: 0, y: 0 }, { scale: 1.12, x: -22, y: -14 }, t0, tEnd, 12, 0);
+    breath(id + " .photo-panel img", { scale: 1 }, { scale: 1.08 }, t0, tEnd, 12, 0);
+    breath(id + " .diagram-box img, " + id + " .diagram-wide img", { scale: 1 }, { scale: 1.035 }, t0, tEnd, 8.5, 0.3);
+    breath(id + " .statement strong", { opacity: 0.8 }, { opacity: 1 }, t0, tEnd, 2.8, 0.2);
+    breath(id + " .here-pulse", { scale: 1, opacity: 0.8 }, { scale: 1.1, opacity: 1 }, t0, tEnd, 2.2, 0);
+  });
+  var bg = document.querySelector(".stage-bg");
+  if (bg && !bg.querySelector(".orb")) {
+    var a = document.createElement("div"); a.className = "orb orb-a"; a.id = "orb-a";
+    var b = document.createElement("div"); b.className = "orb orb-b"; b.id = "orb-b";
+    bg.appendChild(a); bg.appendChild(b);
+    var total = tl.duration() || 600;
+    var oc = 11, on = Math.max(1, Math.floor(total / oc));
+    tl.fromTo("#orb-a", { x: 0, y: 0, scale: 1, opacity: 0.8 },
+      { x: 60, y: -36, scale: 1.16, opacity: 1, duration: oc / 2, ease: "sine.inOut", repeat: on * 2 - 1, yoyo: true, immediateRender: false }, 0);
+    tl.fromTo("#orb-b", { x: 0, y: 0, scale: 1, opacity: 0.7 },
+      { x: -48, y: 30, scale: 1.2, opacity: 1, duration: oc / 2, ease: "sine.inOut", repeat: on * 2 - 1, yoyo: true, immediateRender: false }, 0.8);
+  }
+})();
+</script>
+
+<script>
+/* ===== v2 preview boot (auto-injected by scripts/add_preview_boot.py) ===== */
+(function () {
+  var tl = window.__timelines && window.__timelines["main"];
+  if (!tl) return;
+  var params = new URLSearchParams(location.search);
+  var renderMode = params.get("render") === "1";
+  var isDirect = !renderMode && (location.protocol === "file:" || params.has("preview")
+    || ["127.0.0.1", "localhost", ""].indexOf(location.hostname) >= 0);
+  var slidesEls = Array.prototype.slice.call(document.querySelectorAll("section.clip.slide"));
+  if (!slidesEls.length) return;
+  var SLIDES = slidesEls.map(function (el) {
+    var t0 = parseFloat(el.getAttribute("data-start") || "0");
+    return ["#" + el.id, t0, t0 + parseFloat(el.getAttribute("data-duration") || "0")];
+  });
+  window.__slideTimes = window.__slideTimes || SLIDES;
+  if (!isDirect) { tl.seek(1.2); return; }
+  document.documentElement.classList.add("browser-preview");
+  var idx = 0;
+  var pager = document.createElement("div");
+  pager.id = "preview-pager";
+  document.body.appendChild(pager);
+  var hint = document.createElement("div");
+  hint.id = "preview-hint";
+  hint.textContent = "预览 · ← → 翻页 · ↑↓ 页内扫呼吸";
+  document.body.appendChild(hint);
+  function show(i) {
+    var s = SLIDES[i], t0 = s[1], tEnd = s[2];
+    tl.seek(Math.min(t0 + 2.2, (t0 + tEnd) / 2), false);
+    slidesEls.forEach(function (el, j) { el.style.visibility = j === i ? "visible" : "hidden"; });
+    pager.textContent = (i + 1) + " / " + slidesEls.length;
+  }
+  show(0);
+  var video = document.querySelector("#avatar-pip video");
+  if (video) { video.muted = true; video.playsInline = true; video.play().catch(function () {}); }
+  window.addEventListener("keydown", function (e) {
+    var s = SLIDES[idx];
+    if (e.key === "ArrowRight" || e.key === " ") { idx = Math.min(idx + 1, slidesEls.length - 1); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { idx = Math.max(idx - 1, 0); show(idx); e.preventDefault(); }
+    if (e.key === "ArrowDown") {
+      var cur = Math.min(Math.max(tl.time(), s[1]), s[2]);
+      tl.seek(Math.min(cur + 2.5, s[2] - 0.6), false); e.preventDefault();
+    }
+    if (e.key === "ArrowUp") {
+      var cur2 = Math.min(Math.max(tl.time(), s[1]), s[2]);
+      tl.seek(Math.max(cur2 - 2.5, s[1] + 0.8), false); e.preventDefault();
+    }
+  });
+})();
 </script>
 </body>
 </html>

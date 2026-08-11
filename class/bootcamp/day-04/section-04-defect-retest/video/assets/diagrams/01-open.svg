@@ -1,1 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img"><rect width="560" height="460" fill="#f2f5f0"/><text x="28" y="34" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · CALLOUT</text><text x="28" y="64" font-family="serif" font-size="22" font-weight="700" fill="#231f20">失败项不是一句吐槽</text><rect x="40" y="96" width="480" height="120" fill="#1400ff" stroke="#231f20" stroke-width="2"/><text x="280" y="168" text-anchor="middle" font-family="serif" font-size="28" font-weight="700" fill="#fff">失败项不是一句吐槽</text><rect x="40" y="244" width="148" height="140" fill="#fff" stroke="#231f20" stroke-width="1.6"/><text x="56" y="280" font-family="Menlo,monospace" font-size="12" fill="#1400ff">01</text><text x="56" y="324" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">整理成缺陷</text><rect x="200" y="244" width="148" height="140" fill="#e8e6ff" stroke="#231f20" stroke-width="1.6"/><text x="216" y="280" font-family="Menlo,monospace" font-size="12" fill="#1400ff">02</text><text x="216" y="324" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">交责任岗位</text><rect x="360" y="244" width="148" height="140" fill="#fff" stroke="#231f20" stroke-width="1.6"/><text x="376" y="280" font-family="Menlo,monospace" font-size="12" fill="#1400ff">03</text><text x="376" y="324" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">复测后才能关闭</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="失败项不是一句吐槽">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".45"/></filter>
+</defs>
+<rect width="560" height="460" fill="#ffffff"/>
+<rect width="560" height="460" fill="url(#dots)"/>
+<circle cx="470" cy="54" r="100" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="408" r="72" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="72;84;72" dur="11s" repeatCount="indefinite"/></circle>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="36" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="52" y="42" font-size="20" font-weight="800" fill="#231f20">失败项不是一句吐槽</text>
+<text x="524" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">DIAGRAM · CALLOUT</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.15s" dur="0.5s" fill="freeze"/>
+<rect x="30" y="78" width="500" height="148" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.14;.5" dur="2.3s" repeatCount="indefinite"/></rect>
+<rect x="40" y="88" width="480" height="128" rx="18" fill="url(#g)" filter="url(#glow)"/>
+<text x="280" y="146" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="28" font-weight="800" fill="#fff">失败项不是一句吐槽</text>
+<text x="280" y="180" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.85)">整理成缺陷 · 交责任岗位 · 复测后才能关闭</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.47s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="248" width="148" height="152" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="60" y="288" font-family="'SF Mono',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="#0d9488">01</text>
+<text x="60" y="332" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">整理成缺陷</text>
+<rect x="60" y="356" width="40" height="6" rx="3" fill="rgba(35,31,32,.12)"/>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.79s" dur="0.5s" fill="freeze"/>
+<rect x="206" y="248" width="148" height="152" rx="16" fill="rgba(13,148,136,.08)" stroke="rgba(13,148,136,.35)" stroke-width="1.5" filter="url(#sh)"/>
+<text x="226" y="288" font-family="'SF Mono',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="#0d9488">02</text>
+<text x="226" y="332" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#0f766e">交责任岗位</text>
+<rect x="226" y="356" width="40" height="6" rx="3" fill="url(#g)"/>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="1.11s" dur="0.5s" fill="freeze"/>
+<rect x="372" y="248" width="148" height="152" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="392" y="288" font-family="'SF Mono',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="#0d9488">03</text>
+<text x="392" y="332" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">复测后才能关闭</text>
+<rect x="392" y="356" width="40" height="6" rx="3" fill="rgba(35,31,32,.12)"/>
+</g>
+</svg>

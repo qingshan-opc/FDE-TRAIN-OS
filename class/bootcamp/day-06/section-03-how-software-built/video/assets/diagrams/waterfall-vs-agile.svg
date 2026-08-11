@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 340" role="img" aria-label="瀑布与敏捷两种走法">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="340" fill="#ffffff"/>
+  <rect width="1040" height="340" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="292" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">瀑布 vs 敏捷：全楼装修 vs 一周一间</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">WATERFALL VS AGILE</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="76" width="440" height="190" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="108" font-size="15" font-weight="800" fill="#231f20">Waterfall · 瀑布</text>
+<text x="84" y="130" font-size="11.5" fill="rgba(35,31,32,.55)">先把六站规划死，再按顺序走一遍</text>
+<rect x="84" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<rect x="150" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<rect x="216" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<rect x="282" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<rect x="348" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<rect x="414" y="148" width="56" height="34" rx="8" fill="rgba(35,31,32,.08)"/>
+<text x="84" y="208" font-size="11.5" fill="rgba(35,31,32,.6)">适合需求铁定不变（如航天）</text>
+<text x="84" y="234" font-size="12" font-weight="700" fill="rgba(35,31,32,.6)">坏处：半年后才住进去</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="540" y="76" width="440" height="190" rx="18" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="2" filter="url(#tglow)"/>
+<rect x="564" y="56" width="110" height="26" rx="13.0" fill="url(#tlg)"/><text x="619.0" y="73.32" font-size="12" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">你们在用</text>
+<text x="564" y="108" font-size="15" font-weight="800" fill="#0f766e">Agile · 敏捷</text>
+<text x="564" y="130" font-size="11.5" fill="rgba(35,31,32,.55)">大事切小块，每块快速走完六站</text>
+<rect x="564" y="148" width="56" height="34" rx="8" fill="url(#tlg)"/>
+<text x="592" y="170" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">一周</text>
+<path d="M626 165 L690 165" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5"><animate attributeName="stroke-dashoffset" from="9" to="0" dur="1s" repeatCount="indefinite"/></path>
+<rect x="696" y="148" width="56" height="34" rx="8" fill="url(#tlg)"/>
+<text x="724" y="170" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">一周</text>
+<path d="M758 165 L822 165" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5"><animate attributeName="stroke-dashoffset" from="9" to="0" dur="1s" repeatCount="indefinite"/></path>
+<rect x="828" y="148" width="56" height="34" rx="8" fill="url(#tlg)"/>
+<text x="856" y="170" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">一周</text>
+<text x="564" y="208" font-size="11.5" fill="rgba(35,31,32,.6)">前四天：每天一个小交付</text>
+<text x="564" y="234" font-size="12" font-weight="700" fill="#0f766e">每天一次验收过闸</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="288" width="600" height="38" rx="19.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="311.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">节奏不同，目标相同：交付能用的软件</text></g>
+</svg>

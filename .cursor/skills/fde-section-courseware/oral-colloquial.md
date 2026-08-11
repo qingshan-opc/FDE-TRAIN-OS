@@ -48,7 +48,7 @@
 
 ## 金标准
 
-- 语气：[`day-05/section-01-worldview-plain/video/scripts/narration/01-open.txt`](../../../class/bootcamp/day-05/section-01-worldview-plain/video/scripts/narration/01-open.txt)
+- 语气：[`day-05/section-01-pm-replay/video/scripts/narration/01-open.txt`](../../../class/bootcamp/day-05/section-01-pm-replay/video/scripts/narration/01-open.txt)
 - 对照稿：[`day-05/section-03-how-software-built/PPT_AND_NARRATION.md`](../../../class/bootcamp/day-05/section-03-how-software-built/PPT_AND_NARRATION.md)
 
 ## PPT_AND_NARRATION.md 模板

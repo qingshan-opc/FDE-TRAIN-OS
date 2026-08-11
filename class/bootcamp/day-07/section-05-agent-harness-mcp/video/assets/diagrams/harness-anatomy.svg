@@ -1,46 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Harness 解剖：模型之外的骨架">
-<rect width="1040" height="480" fill="#f2f5f0"/>
-<!-- 中央模型 -->
-<rect x="420" y="180" width="200" height="110" fill="#231f20"/>
-<text x="520" y="226" text-anchor="middle" font-size="16" font-weight="800" fill="#f2f5f0">LLM</text>
-<text x="520" y="250" text-anchor="middle" font-size="10" fill="rgba(242,245,240,.6)" style="font-family:'SF Mono',Menlo,monospace">只会「预测下一个词」</text>
-<!-- 骨架六件 -->
-<g>
-<rect x="80" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="210" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">工具表 · TOOLS</text>
-<text x="210" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">能调什么 Skill，各怎么描述</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" role="img" aria-label="Harness 解剖：模型之外的骨架">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="480" fill="#ffffff"/>
+  <rect width="1040" height="480" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="432" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">Harness 解剖：模型之外的骨架</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">HARNESS ANATOMY</text>
 </g>
-<g>
-<rect x="390" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="520" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">记忆 · MEMORY</text>
-<text x="520" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">前几轮发生了什么</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="412" y="182" width="216" height="116" rx="26" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="420" y="190" width="200" height="100" rx="18" fill="url(#tlg)" filter="url(#glow)"/><text x="520" y="230" font-size="18" font-weight="800" fill="#fff" text-anchor="middle">LLM</text><text x="520" y="256" font-size="10" fill="rgba(255,255,255,.85)" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">只会「预测下一个词」</text></g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="80" y="76" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="210" y="106" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">工具表 · TOOLS</text>
+<text x="210" y="128" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">能调什么 Skill，各怎么描述</text>
 </g>
-<g>
-<rect x="700" y="60" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="830" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">规划 · PLANNER</text>
-<text x="830" y="114" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">下一步做什么的决策</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="390" y="76" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="520" y="106" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">记忆 · MEMORY</text>
+<text x="520" y="128" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">前几轮发生了什么</text>
 </g>
-<g>
-<rect x="80" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="210" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">循环 · LOOP</text>
-<text x="210" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">理解→规划→调工具→观察→继续</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="700" y="76" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="830" y="106" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">规划 · PLANNER</text>
+<text x="830" y="128" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">下一步做什么的决策</text>
 </g>
-<g>
-<rect x="390" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="520" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">重试 · RETRY</text>
-<text x="520" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">失败了怎么办：重来 / 降级 / 求助</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="80" y="336" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="210" y="366" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">循环 · LOOP</text>
+<text x="210" y="388" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">理解→规划→调工具→观察→继续</text>
 </g>
-<g>
-<rect x="700" y="330" width="260" height="76" fill="#ffffff" stroke="#1400ff" stroke-width="2"/>
-<text x="830" y="360" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">日志 · LOG</text>
-<text x="830" y="384" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">每步留痕：追责与复盘的地基</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="390" y="336" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="520" y="366" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">重试 · RETRY</text>
+<text x="520" y="388" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">失败了怎么办：重来 / 降级 / 求助</text>
 </g>
-<!-- 连线 -->
-<g stroke="rgba(35,31,32,.35)" stroke-width="1.5">
-<line x1="340" y1="110" x2="430" y2="180"/><line x1="520" y1="136" x2="520" y2="176"/><line x1="700" y1="110" x2="610" y2="180"/>
-<line x1="340" y1="368" x2="430" y2="290"/><line x1="520" y1="330" x2="520" y2="294"/><line x1="700" y1="368" x2="610" y2="290"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="700" y="336" width="260" height="72" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="830" y="366" font-size="13" font-weight="800" fill="#231f20" text-anchor="middle">日志 · LOG</text>
+<text x="830" y="388" font-size="10.5" fill="rgba(35,31,32,.55)" text-anchor="middle">每步留痕：追责与复盘的地基</text>
 </g>
-<!-- 底注 -->
-<text x="520" y="448" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1400ff">同一个模型，换一副骨架，能力天差地别 —— Harness 才是智能体的身体</text>
-<text x="520" y="472" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">本课的 Agent 平台就是一副 harness；你在 第二周 给它添工具（Skill）</text>
+<path d="M340 112 L434 190" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M520 148 L520 186" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M700 112 L606 190" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M340 372 L434 290" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M520 336 L520 294" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M700 372 L606 290" stroke="rgba(13,148,136,.4)" stroke-width="2" stroke-dasharray="4 5"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="120" y="424" width="800" height="44" rx="22.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="450.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">同一个模型，换一副骨架，能力天差地别 —— Harness 才是智能体的身体 · 第二周你给它添 Skill</text></g>
 </svg>

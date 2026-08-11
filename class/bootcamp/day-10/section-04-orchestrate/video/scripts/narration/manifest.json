@@ -4,24 +4,24 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-wire-skills",
-    "file": "02-wire-skills.txt"
+    "id": "02-task-runner",
+    "file": "02-task-runner.txt"
   },
   {
-    "id": "03-install-gate",
-    "file": "03-install-gate.txt"
+    "id": "03-hitl-gate",
+    "file": "03-hitl-gate.txt"
   },
   {
-    "id": "04-exec-log",
-    "file": "04-exec-log.txt"
+    "id": "04-approve-path",
+    "file": "04-approve-path.txt"
   },
   {
-    "id": "05-approve-path",
-    "file": "05-approve-path.txt"
+    "id": "05-reject-path",
+    "file": "05-reject-path.txt"
   },
   {
-    "id": "06-reject-loop",
-    "file": "06-reject-loop.txt"
+    "id": "06-dual-evidence",
+    "file": "06-dual-evidence.txt"
   },
   {
     "id": "07-log-replay",

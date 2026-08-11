@@ -1,39 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="接口契约图">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" role="img" aria-label="契约先于实现">
 <defs>
-<marker id="api-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
-</marker>
+<linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<linearGradient id="tealH" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#231f20" flood-opacity=".08"/></filter>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".38"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/></marker>
 </defs>
-<rect width="1040" height="440" fill="#f2f5f0"/>
-<!-- 前端 -->
-<rect x="60" y="130" width="220" height="140" fill="#ffffff" stroke="#f24e54" stroke-width="2.5"/>
-<text x="170" y="185" text-anchor="middle" font-size="17" font-weight="800" fill="#231f20">前端</text>
-<text x="170" y="210" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">FRONTEND</text>
-<text x="170" y="238" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.6)">我按契约发请求</text>
-<!-- 后端 -->
-<rect x="760" y="130" width="220" height="140" fill="#ffffff" stroke="#5f52a0" stroke-width="2.5"/>
-<text x="870" y="185" text-anchor="middle" font-size="17" font-weight="800" fill="#231f20">后端</text>
-<text x="870" y="210" text-anchor="middle" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">BACKEND</text>
-<text x="870" y="238" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.6)">我按契约回数据</text>
-<!-- 契约文档 -->
-<rect x="390" y="60" width="260" height="280" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
-<text x="520" y="92" text-anchor="middle" font-size="12" font-weight="800" fill="#1400ff" letter-spacing="2" style="font-family:'SF Mono',Menlo,monospace">契约 · CONTRACT</text>
-<line x1="410" y1="106" x2="630" y2="106" stroke="rgba(35,31,32,.15)"/>
-<g font-size="11.5" style="font-family:'SF Mono',Menlo,monospace" fill="#231f20">
-<text x="410" y="136" font-weight="700">POST /api/kpi/summary</text>
-<text x="410" y="172" fill="rgba(35,31,32,.55)">请求 →</text>
-<text x="410" y="192">{ "month": "2026-07" }</text>
-<text x="410" y="228" fill="rgba(35,31,32,.55)">返回 ←</text>
-<text x="410" y="248">{ "value", "delta", "unit" }</text>
-<text x="410" y="284" fill="rgba(35,31,32,.55)">出错 ✗</text>
-<text x="410" y="304">{ "code", "message" }</text>
+<rect width="1040" height="440" fill="#ffffff"/>
+<rect width="1040" height="440" fill="url(#dots)"/>
+<circle cx="960" cy="56" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;112;96" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="384" r="68" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="68;80;68" dur="11s" repeatCount="indefinite"/></circle>
+<rect x="28" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="46" y="42" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="20" font-weight="800" fill="#231f20">契约先于实现 · 先定 JSON</text>
+<text x="1012" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="rgba(35,31,32,.4)">API CONTRACT</text>
+<rect x="40" y="92" width="230" height="192" rx="18" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/><text x="64" y="128" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="#0d9488">FRONTEND</text>
+<text x="64" y="162" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="22" font-weight="800" fill="#231f20">前端</text>
+<text x="64" y="196" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13" fill="rgba(35,31,32,.6)">我按契约发请求</text>
+<rect x="64" y="224" width="118" height="26" rx="13" fill="rgba(35,31,32,.06)"/>
+<text x="123" y="241" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10.5" fill="rgba(35,31,32,.55)">page → fetch</text>
 </g>
-<!-- 箭头 -->
-<line x1="282" y1="170" x2="384" y2="170" stroke="#231f20" stroke-width="1.8" marker-end="url(#api-arrow)"/>
-<line x1="652" y1="170" x2="754" y2="170" stroke="#231f20" stroke-width="1.8" marker-end="url(#api-arrow)"/>
-<line x1="754" y1="230" x2="656" y2="230" stroke="rgba(35,31,32,.5)" stroke-width="1.8" marker-end="url(#api-arrow)"/>
-<line x1="384" y1="230" x2="286" y2="230" stroke="rgba(35,31,32,.5)" stroke-width="1.8" marker-end="url(#api-arrow)"/>
-<!-- 底注 -->
-<text x="520" y="392" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">契约先于实现：先定 JSON，前后端再各干各的</text>
-<text x="520" y="418" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">改契约的代价 = 前后端一起改 + 一起重新验收 —— 所以 Day 3 第一件事是定契约</text>
+<rect x="770" y="92" width="230" height="192" rx="18" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/><text x="794" y="128" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="#0d9488">BACKEND</text>
+<text x="794" y="162" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="22" font-weight="800" fill="#231f20">后端</text>
+<text x="794" y="196" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13" fill="rgba(35,31,32,.6)">我按契约回数据</text>
+<rect x="794" y="224" width="118" height="26" rx="13" fill="rgba(35,31,32,.06)"/>
+<text x="853" y="241" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="10.5" fill="rgba(35,31,32,.55)">route → json</text>
+</g>
+<path d="M276 188 L336 188" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="1.0s" repeatCount="indefinite"/></path>
+<circle r="4" cx="276" cy="188" fill="#0d9488"><animate attributeName="cx" values="276;336" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="1.5s" repeatCount="indefinite"/></circle>
+<path d="M704 188 L764 188" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="1.0s" repeatCount="indefinite"/></path>
+<circle r="4" cx="764" cy="188" fill="#0d9488"><animate attributeName="cx" values="764;704" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="1.5s" repeatCount="indefinite"/></circle>
+<rect x="329" y="77" width="382" height="222" rx="26" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.14;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="336" y="84" width="368" height="208" rx="20" fill="#fff" stroke="rgba(13,148,136,.45)" stroke-width="1.2" filter="url(#glow)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/><rect x="440" y="102" width="160" height="28" rx="14" fill="url(#tealH)"/>
+<text x="520" y="121" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="11.5" letter-spacing="1.5" fill="#fff">契约 · CONTRACT</text>
+<text x="520" y="160" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="15" font-weight="700" fill="#0f766e">POST /api/kpi/summary</text>
+<rect x="360" y="177" width="64" height="22" rx="11" fill="rgba(13,148,136,.09)"/>
+<text x="392" y="192" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="11" font-weight="700" fill="#0f766e">请求 →</text>
+<text x="440" y="192" font-family="'SF Mono',Menlo,monospace" font-size="12.5" fill="#0f766e">{ "month": "2026-07" }</text>
+<rect x="360" y="209" width="64" height="22" rx="11" fill="rgba(13,148,136,.09)"/>
+<text x="392" y="224" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="11" font-weight="700" fill="#0f766e">返回 ←</text>
+<text x="440" y="224" font-family="'SF Mono',Menlo,monospace" font-size="12.5" fill="#231f20">{ "value", "delta", "unit" }</text>
+<rect x="360" y="241" width="64" height="22" rx="11" fill="rgba(13,148,136,.09)"/>
+<text x="392" y="256" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="11" font-weight="700" fill="#0f766e">出错 ✗</text>
+<text x="440" y="256" font-family="'SF Mono',Menlo,monospace" font-size="12.5" fill="#231f20">{ "code", "message" }</text>
+</g>
+<rect x="40" y="326" width="960" height="38" rx="19.0" fill="rgba(13,148,136,.09)"/>
+<text x="520.0" y="349.86" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13.5" font-weight="700" fill="#0f766e">契约先于实现：先定 JSON，前后端再各干各的</text>
+<text x="520" y="396" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.55)">改契约的代价 = 前后端一起改 + 一起重新验收 —— 所以 Day 3 第一件事是定契约</text>
 </svg>

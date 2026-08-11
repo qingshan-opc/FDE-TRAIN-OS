@@ -1,51 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Skill 解剖：输入、步骤、输出、证据">
-<defs>
-<marker id="sk-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
-</marker>
-</defs>
-<rect width="1040" height="470" fill="#f2f5f0"/>
-<!-- 描述横幅 -->
-<rect x="50" y="40" width="940" height="64" fill="#231f20"/>
-<text x="80" y="68" font-size="13" font-weight="800" fill="#f2f5f0">描述 · DESCRIPTION</text>
-<text x="80" y="90" font-size="11.5" fill="rgba(242,245,240,.7)">「给销售部生成周报初稿：读本周线索与商机表，产出三段式 markdown」——Agent 靠这段话决定选不选你</text>
-<!-- 三段 -->
-<g>
-<rect x="50" y="140" width="280" height="220" fill="#ffffff" stroke="#5f52a0" stroke-width="2"/>
-<text x="190" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">输入 · INPUT</text>
-<g font-size="11" fill="rgba(35,31,32,.65)">
-<text x="76" y="208">参数表：</text>
-<text x="76" y="232" style="font-family:'SF Mono',Menlo,monospace">month: 2026-07</text>
-<text x="76" y="254" style="font-family:'SF Mono',Menlo,monospace">region?: 华东</text>
-<text x="76" y="286">类型 + 必填/可选 + 示例</text>
-<text x="76" y="310">坏输入怎么拒（见边界声明）</text>
-</g>
-</g>
-<g>
-<rect x="380" y="140" width="280" height="220" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
-<text x="520" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">步骤 · STEPS</text>
-<g font-size="11" fill="rgba(35,31,32,.65)">
-<text x="406" y="208">1. 查库取本周数据</text>
-<text x="406" y="232">2. 算环比与异常</text>
-<text x="406" y="256">3. 调模型写初稿</text>
-<text x="406" y="280">4. 按模板整形</text>
-<text x="406" y="314" fill="rgba(35,31,32,.45)">每步可观测：日志留痕</text>
-</g>
-</g>
-<g>
-<rect x="710" y="140" width="280" height="220" fill="#ffffff" stroke="#2f9e44" stroke-width="2"/>
-<text x="850" y="174" text-anchor="middle" font-size="14" font-weight="800" fill="#2f9e44">输出 · OUTPUT</text>
-<g font-size="11" fill="rgba(35,31,32,.65)">
-<text x="736" y="208">产物：weekly-2026-07.md</text>
-<text x="736" y="240" font-weight="700" fill="#231f20">+ 证据 · EVIDENCE</text>
-<text x="736" y="264">数据快照 / 用时 / 模型版本</text>
-<text x="736" y="296" fill="rgba(35,31,32,.45)">没证据的输出 ≈ 没发生过</text>
-</g>
-</g>
-<!-- 箭头 -->
-<line x1="332" y1="250" x2="374" y2="250" stroke="#231f20" stroke-width="1.8" marker-end="url(#sk-arrow)"/>
-<line x1="662" y1="250" x2="704" y2="250" stroke="#231f20" stroke-width="1.8" marker-end="url(#sk-arrow)"/>
-<!-- 底注 -->
-<text x="520" y="412" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">Skill = 会写字的岗位说明书：写得越清楚，Agent 越选得对、跑得越稳</text>
-<text x="520" y="438" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">它就是 MCP 的朴素版 —— 先学会封装，标准以后随换随接</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-label="Skill 解剖：输入、步骤、输出、证据">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+    <marker id="sk-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="470" fill="#ffffff"/>
+  <rect width="1040" height="470" fill="url(#dots)"/>
+  <circle cx="970" cy="50" r="100" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="60" cy="430" r="70" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="70;82;70" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="16" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="33" font-size="15" font-weight="800" fill="#231f20">Skill 解剖：四部件一张图</text>
+    <text x="1004" y="33" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">SKILL ANATOMY</text>
+  </g>
+
+  <!-- description banner -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="50" y="48" width="940" height="66" rx="16" fill="url(#teal)" filter="url(#glow)"/>
+    <text x="80" y="76" font-size="13" font-weight="800" fill="#fff">描述 · DESCRIPTION</text>
+    <text x="80" y="98" font-size="11.5" fill="rgba(255,255,255,.85)">「给销售部生成周报初稿：读本周线索与商机表，产出三段式 markdown」——Agent 靠这段话决定选不选你</text>
+  </g>
+
+  <!-- three parts -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <g>
+      <rect x="50" y="138" width="280" height="216" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <rect x="50" y="138" width="280" height="6" rx="3" fill="rgba(35,31,32,.25)"/>
+      <text x="190" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">输入 · INPUT</text>
+      <g font-size="11" fill="rgba(35,31,32,.65)">
+        <text x="76" y="210">参数表：</text>
+        <text x="76" y="234" font-family="'SF Mono',Menlo,monospace">month: 2026-07</text>
+        <text x="76" y="256" font-family="'SF Mono',Menlo,monospace">region?: 华东</text>
+        <text x="76" y="288">类型 + 必填/可选 + 示例</text>
+        <text x="76" y="312">坏输入怎么拒（见边界声明）</text>
+      </g>
+    </g>
+    <g>
+      <rect x="380" y="138" width="280" height="216" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <rect x="380" y="138" width="280" height="6" rx="3" fill="rgba(35,31,32,.25)"/>
+      <text x="520" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">步骤 · STEPS</text>
+      <g font-size="11" fill="rgba(35,31,32,.65)">
+        <text x="406" y="210">1. 查库取本周数据</text>
+        <text x="406" y="234">2. 算环比与异常</text>
+        <text x="406" y="258">3. 调模型写初稿</text>
+        <text x="406" y="282">4. 按模板整形</text>
+        <text x="406" y="316" fill="rgba(35,31,32,.45)">每步可观测：日志留痕</text>
+      </g>
+    </g>
+    <g>
+      <rect x="710" y="138" width="280" height="216" rx="16" fill="#fff" stroke="rgba(13,148,136,.45)" stroke-width="1.5" filter="url(#sh)"/>
+      <rect x="710" y="138" width="280" height="6" rx="3" fill="url(#teal)"/>
+      <text x="850" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="#0d9488">输出 · OUTPUT</text>
+      <g font-size="11" fill="rgba(35,31,32,.65)">
+        <text x="736" y="210">产物：weekly-2026-07.md</text>
+        <text x="736" y="242" font-weight="700" fill="#231f20">+ 证据 · EVIDENCE</text>
+        <text x="736" y="266">数据快照 / 用时 / 模型版本</text>
+        <text x="736" y="298" fill="rgba(35,31,32,.45)">没证据的输出 ≈ 没发生过</text>
+      </g>
+    </g>
+    <!-- arrows -->
+    <line x1="334" y1="246" x2="372" y2="246" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5" marker-end="url(#sk-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+    </line>
+    <line x1="664" y1="246" x2="702" y2="246" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5" marker-end="url(#sk-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- footer pill -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="150" y="386" width="740" height="64" rx="32" fill="rgba(13,148,136,.10)"/>
+    <text x="520" y="412" text-anchor="middle" font-size="13" font-weight="800" fill="#0f766e">Skill = 会写字的岗位说明书：写得越清楚，Agent 越选得对、跑得越稳</text>
+    <text x="520" y="436" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">它就是 MCP 的朴素版 —— 先学会封装，标准以后随换随接</text>
+  </g>
 </svg>

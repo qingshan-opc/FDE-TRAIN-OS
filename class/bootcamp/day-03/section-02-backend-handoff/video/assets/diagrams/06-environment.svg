@@ -1,30 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 430" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="环境与配置分离：密钥不进代码">
-<rect width="1040" height="430" fill="#f2f5f0"/>
-<!-- 左：代码仓库（可公开） -->
-<rect x="50" y="60" width="440" height="270" fill="#ffffff" stroke="#2f9e44" stroke-width="2.5"/>
-<text x="270" y="94" text-anchor="middle" font-size="14" font-weight="800" fill="#2f9e44">代码仓库 · 可以进 git</text>
-<g font-size="11.5" style="font-family:'SF Mono',Menlo,monospace" fill="rgba(35,31,32,.7)">
-<text x="80" y="134">app/            应用代码</text>
-<text x="80" y="164">requirements.txt 依赖清单</text>
-<text x="80" y="194">.env.example    配置模板（占位符）</text>
-<text x="80" y="224">.gitignore      里必须有 .env</text>
-<text x="80" y="254" fill="#2f9e44">README.md       怎么配，看文档</text>
-</g>
-<text x="270" y="300" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">模板写结构，不写真值：</text>
-<text x="270" y="320" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)" style="font-family:'SF Mono',Menlo,monospace">MODEL_API_KEY=填你的</text>
-<!-- 右：环境（机密） -->
-<rect x="550" y="60" width="440" height="270" fill="#ffffff" stroke="#f24e54" stroke-width="2.5"/>
-<text x="770" y="94" text-anchor="middle" font-size="14" font-weight="800" fill="#c92f3d">环境 · 绝不进 git</text>
-<g font-size="11.5" style="font-family:'SF Mono',Menlo,monospace" fill="rgba(35,31,32,.7)">
-<text x="580" y="134">.env            真实密钥（本机）</text>
-<text x="580" y="164">服务器环境变量    生产密钥</text>
-<text x="580" y="194">密钥管理服务      团队级方案</text>
-</g>
-<text x="770" y="244" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">同一份代码，换一套环境变量，</text>
-<text x="770" y="264" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">就从「开发」切到「生产」</text>
-<!-- 中间隔离线 -->
-<line x1="520" y1="80" x2="520" y2="310" stroke="#231f20" stroke-width="2" stroke-dasharray="8 5"/>
-<text x="520" y="350" text-anchor="middle" font-size="11" font-weight="700" fill="#231f20">分界线</text>
-<!-- 底注 -->
-<text x="520" y="392" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">铁律：密钥一旦进过 git 历史，就当它已泄露——立刻换新的</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 430" role="img" aria-label="环境与配置分离：密钥不进代码">
+<defs>
+<linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<linearGradient id="tealH" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#231f20" flood-opacity=".08"/></filter>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".38"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/></marker>
+</defs>
+<rect width="1040" height="430" fill="#ffffff"/>
+<rect width="1040" height="430" fill="url(#dots)"/>
+<circle cx="960" cy="56" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;112;96" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="374" r="68" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="68;80;68" dur="11s" repeatCount="indefinite"/></circle>
+<rect x="28" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="46" y="42" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="20" font-weight="800" fill="#231f20">环境与配置分离 · 密钥不进代码</text>
+<text x="1012" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="rgba(35,31,32,.4)">CONFIG · SECRETS</text>
+<rect x="50" y="72" width="440" height="258" rx="18" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="1.2" filter="url(#sh)"></rect>
+<rect x="74" y="94" width="172" height="30" rx="15" fill="url(#tealH)"/>
+<text x="160" y="113" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13.5" font-weight="700" fill="#fff">代码仓库 · 可以进 git</text>
+<text x="80" y="152" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0f766e">app/</text>
+<text x="238" y="152" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">应用代码</text>
+<text x="80" y="179" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0f766e">requirements.txt</text>
+<text x="238" y="179" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">依赖清单</text>
+<text x="80" y="206" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0f766e">.env.example</text>
+<text x="238" y="206" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">配置模板（占位符）</text>
+<text x="80" y="233" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0f766e">.gitignore</text>
+<text x="238" y="233" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">里必须有 .env</text>
+<text x="80" y="260" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0f766e">README.md</text>
+<text x="238" y="260" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">怎么配，看文档</text>
+<rect x="74" y="282" width="392" height="34" rx="10" fill="rgba(35,31,32,.05)"/>
+<text x="88" y="303" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="11" fill="rgba(35,31,32,.5)">模板写结构，不写真值：</text>
+<text x="226" y="303" font-family="'SF Mono',Menlo,monospace" font-size="11" font-weight="700" fill="#0f766e">MODEL_API_KEY=填你的</text>
+<path d="M520 88 L520 314" stroke="rgba(35,31,32,.35)" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 7"><animate attributeName="stroke-dashoffset" from="14" to="0" dur="1.2s" repeatCount="indefinite"/></path>
+<rect x="494" y="336" width="52" height="22" rx="11" fill="rgba(35,31,32,.06)"/>
+<text x="520" y="351" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="11" font-weight="700" fill="rgba(35,31,32,.6)">分界线</text>
+<rect x="550" y="72" width="440" height="258" rx="18" fill="#fff" filter="url(#sh)"></rect>
+<rect x="574" y="94" width="164" height="30" rx="15" fill="#231f20"/>
+<text x="656" y="113" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13.5" font-weight="700" fill="#fff">环境 · 绝不进 git</text>
+<circle cx="586" cy="158" r="3.5" fill="#0d9488"/>
+<text x="600" y="162" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#231f20">.env</text>
+<text x="738" y="162" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">真实密钥（本机）</text>
+<circle cx="586" cy="188" r="3.5" fill="#0d9488"/>
+<text x="600" y="192" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#231f20">服务器环境变量</text>
+<text x="738" y="192" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">生产密钥</text>
+<circle cx="586" cy="218" r="3.5" fill="#0d9488"/>
+<text x="600" y="222" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#231f20">密钥管理服务</text>
+<text x="738" y="222" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">团队级方案</text>
+<rect x="574" y="248" width="392" height="56" rx="12" fill="rgba(13,148,136,.07)"/>
+<text x="770" y="272" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" fill="rgba(35,31,32,.6)">同一份代码，换一套环境变量，</text>
+<text x="770" y="292" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12" font-weight="700" fill="#0f766e">就从「开发」切到「生产」</text>
+<rect x="230" y="376" width="580" height="40" rx="20.0" fill="rgba(13,148,136,.09)"/>
+<text x="520.0" y="400.68" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13" font-weight="700" fill="#0f766e">铁律：密钥一旦进过 git 历史，就当它已泄露——立刻换新的</text>
 </svg>

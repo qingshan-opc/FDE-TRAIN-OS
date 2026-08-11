@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="主库三选一">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">主库怎么点单：两个老牌 + 一个文件库</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">PRIMARY DB</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="86" width="290" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="84" y="122" font-size="16" font-weight="800" fill="#231f20">MySQL</text>
+<text x="84" y="152" font-size="11" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">Legacy · 团队惯性</text>
+<text x="84" y="182" font-size="12" fill="rgba(35,31,32,.6)">用得最广的老牌 · 接老系统</text>
+<text x="84" y="204" font-size="12" fill="rgba(35,31,32,.6)">、全是老手时稳</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="362" y="78" width="306" height="156" rx="26" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4"><animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/></rect>
+<rect x="370" y="86" width="290" height="140" rx="18" fill="url(#tlg)" filter="url(#glow)"/>
+<text x="394" y="122" font-size="16" font-weight="800" fill="#fff">PostgreSQL</text>
+<rect x="546" y="100" width="90" height="24" rx="12.0" fill="rgba(35,31,32,.05)"/><text x="591.0" y="116.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">默认推荐</text>
+<text x="394" y="152" font-size="11" font-weight="700" fill="rgba(255,255,255,.85)" font-family="'SF Mono',Menlo,monospace">2026 默认</text>
+<text x="394" y="182" font-size="12" fill="#fff">功能全、扩展强</text>
+<text x="394" y="204" font-size="12" fill="rgba(255,255,255,.9)">向量插件做 AI 相似推荐顺手</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="680" y="86" width="290" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="704" y="122" font-size="16" font-weight="800" fill="#231f20">SQLite</text>
+<text x="704" y="152" font-size="11" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">Prototype</text>
+<text x="704" y="182" font-size="12" fill="rgba(35,31,32,.6)">一个文件就是库 · 小工具起</text>
+<text x="704" y="204" font-size="12" fill="rgba(35,31,32,.6)">步，人多再迁 PG</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="170" y="256" width="700" height="42" rx="21.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="281.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">新项目 → PostgreSQL · 老系统 → MySQL · 两周原型 → SQLite</text></g>
+</svg>

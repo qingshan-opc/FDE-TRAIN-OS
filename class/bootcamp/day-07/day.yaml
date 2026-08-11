@@ -1,20 +1,18 @@
 day: 7
-project: LLM 理论日
-project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
+project: LLM → 应用内对话
+project_brief: '今日两件硬交付：① 助手位（或任意页面对话面板）真实多轮 LLM 对话（见 teaching/week2-cockpit-agent/prompts/02）；② LLM 认知卡 llm-cognition-card.md。
 
 
-  认知卡怎么做：
+  对话怎么做：
 
-  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+  1）整份粘贴 prompts/02-llm-chat-panel.md 到编码 AI；
 
-  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
+  2）system prompt 放仓库文件；API Key 仅环境变量；
 
-  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
-
-  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
+  3）runs/chat-smoke/ 留一次脱敏证据。
 
 
-  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
+  过闸：可聊助手位/对话面板（或助教确认降级）+ 认知卡六大主题。概念快测单独过。'
 resources:
 - id: dg-llm-ecosystem
   title: 讲解图 · LLM 生态分层

@@ -1,38 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="LLM 能力边界图">
-<rect width="1040" height="500" fill="#f2f5f0"/>
-<rect x="320" y="28" width="400" height="46" fill="#231f20"/>
-<text x="520" y="57" text-anchor="middle" font-size="15" font-weight="800" fill="#f2f5f0">LLM = 预测下一个词的机器</text>
-<!-- 左：会什么 -->
-<rect x="50" y="100" width="450" height="290" fill="none" stroke="#2f9e44" stroke-width="2.5"/>
-<text x="75" y="134" font-size="16" font-weight="800" fill="#2f9e44">✓ 会 · 可依赖</text>
-<text x="75" y="172" font-size="15" font-weight="700" fill="#231f20">生成</text>
-<text x="140" y="172" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">GENERATE</text>
-<text x="75" y="194" font-size="12" fill="rgba(35,31,32,.6)">成文 · 成码 · 成表，风格可调</text>
-<text x="75" y="240" font-size="15" font-weight="700" fill="#231f20">理解</text>
-<text x="140" y="240" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">UNDERSTAND</text>
-<text x="75" y="262" font-size="12" fill="rgba(35,31,32,.6)">总结 · 抽取 · 改写 · 翻译</text>
-<text x="75" y="308" font-size="15" font-weight="700" fill="#231f20">推理</text>
-<text x="140" y="308" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">REASON</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" role="img" aria-label="LLM 能力边界图">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="500" fill="#ffffff"/>
+  <rect width="1040" height="500" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="452" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="300" y="26" width="440" height="46" rx="23" fill="url(#tlg)" filter="url(#tglow)"/><text x="520" y="55" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">LLM = 预测下一个词的机器</text></g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="50" y="96" width="450" height="290" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="50" y="116" width="5" height="34" rx="2.5" fill="#0d9488"/>
+<text x="75" y="134" font-size="16" font-weight="800" fill="#0f766e">✓ 会 · 可依赖</text>
+<text x="75" y="178" font-size="15" font-weight="700" fill="#231f20">生成</text>
+<text x="140" y="178" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">GENERATE</text>
+<text x="75" y="202" font-size="12" fill="rgba(35,31,32,.6)">成文 · 成码 · 成表，风格可调</text>
+<text x="75" y="242" font-size="15" font-weight="700" fill="#231f20">理解</text>
+<text x="140" y="242" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">UNDERSTAND</text>
+<text x="75" y="266" font-size="12" fill="rgba(35,31,32,.6)">总结 · 抽取 · 改写 · 翻译</text>
+<text x="75" y="306" font-size="15" font-weight="700" fill="#231f20">推理</text>
+<text x="140" y="306" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">REASON</text>
 <text x="75" y="330" font-size="12" fill="rgba(35,31,32,.6)">按步骤推导 · 对比 · 分类</text>
 <text x="75" y="368" font-size="11.5" fill="rgba(35,31,32,.5)">第五天的摘要接口，就只用这三样。</text>
-<!-- 右：不会什么 -->
-<rect x="540" y="100" width="450" height="290" fill="none" stroke="#f24e54" stroke-width="2.5"/>
-<text x="565" y="134" font-size="16" font-weight="800" fill="#c92f3d">✗ 不会 · 要设防</text>
-<text x="565" y="168" font-size="14" font-weight="700" fill="#231f20">不记事</text>
-<text x="565" y="188" font-size="11.5" fill="rgba(35,31,32,.6)">每次对话从零开始——记忆是 harness 给的</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="540" y="96" width="450" height="290" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="540" y="116" width="5" height="34" rx="2.5" fill="rgba(35,31,32,.3)"/>
+<text x="565" y="134" font-size="16" font-weight="800" fill="#231f20">✗ 不会 · 要设防</text>
+<text x="565" y="172" font-size="14" font-weight="700" fill="#231f20">不记事</text>
+<text x="565" y="194" font-size="11.5" fill="rgba(35,31,32,.6)">每次对话从零开始——记忆是 harness 给的</text>
 <text x="565" y="224" font-size="14" font-weight="700" fill="#231f20">不知真假</text>
-<text x="565" y="244" font-size="11.5" fill="rgba(35,31,32,.6)">说错和说对一样自信</text>
-<text x="565" y="280" font-size="14" font-weight="700" fill="#231f20">不主动</text>
-<text x="565" y="300" font-size="11.5" fill="rgba(35,31,32,.6)">你不叫它它不动——循环也是 harness 给的</text>
-<text x="565" y="336" font-size="14" font-weight="700" fill="#231f20">不自知</text>
-<text x="565" y="356" font-size="11.5" fill="rgba(35,31,32,.6)">没有「我不确定」这个状态</text>
-<!-- 底部：幻觉防线 -->
-<rect x="50" y="420" width="940" height="60" fill="none" stroke="#1400ff" stroke-width="2"/>
-<text x="75" y="456" font-size="13.5" font-weight="700" fill="#1400ff">幻觉是机制不是 bug：它给「最像真的」，不是「经过核实」的</text>
-<g font-size="11" style="font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'Courier New',monospace">
-<rect x="640" y="434" width="58" height="32" fill="#231f20"/><text x="669" y="454" text-anchor="middle" fill="#f2f5f0">RAG</text>
-<rect x="710" y="434" width="80" height="32" fill="#231f20"/><text x="750" y="454" text-anchor="middle" fill="#f2f5f0">引用核对</text>
-<rect x="802" y="434" width="58" height="32" fill="#231f20"/><text x="831" y="454" text-anchor="middle" fill="#f2f5f0">Eval</text>
-<rect x="872" y="434" width="94" height="32" fill="#231f20"/><text x="919" y="454" text-anchor="middle" fill="#f2f5f0">人工验收</text>
+<text x="565" y="246" font-size="11.5" fill="rgba(35,31,32,.6)">说错和说对一样自信</text>
+<text x="565" y="276" font-size="14" font-weight="700" fill="#231f20">不主动</text>
+<text x="565" y="298" font-size="11.5" fill="rgba(35,31,32,.6)">你不叫它它不动——循环也是 harness 给的</text>
+<text x="565" y="328" font-size="14" font-weight="700" fill="#231f20">不自知</text>
+<text x="565" y="350" font-size="11.5" fill="rgba(35,31,32,.6)">没有「我不确定」这个状态</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="50" y="410" width="940" height="64" rx="18" fill="rgba(13,148,136,.09)"/>
+<text x="80" y="448" font-size="13.5" font-weight="700" fill="#0f766e">幻觉是机制不是 bug：它给「最像真的」，不是「经过核实」的</text>
+<rect x="640" y="426" width="58" height="32" rx="16" fill="url(#tlg)"/>
+<text x="669.0" y="447" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">RAG</text>
+<rect x="710" y="426" width="80" height="32" rx="16" fill="url(#tlg)"/>
+<text x="750.0" y="447" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">引用核对</text>
+<rect x="802" y="426" width="58" height="32" rx="16" fill="url(#tlg)"/>
+<text x="831.0" y="447" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">Eval</text>
+<rect x="872" y="426" width="94" height="32" rx="16" fill="url(#tlg)"/>
+<text x="919.0" y="447" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">人工验收</text>
 </g>
 </svg>

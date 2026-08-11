@@ -1,7 +1,6 @@
 day: 8
-project: 第一个 Skill
-project_brief: Week 2 换档日：从「做系统」到「造能力」。把一项每周重复、规则清晰、可验收的工作封装成第一个 Skill 说明书（输入/步骤/输出/验收），现场运行一次并留下可检查证据。Skill 进 Git，GATE 7
-  三问过关。
+project: 第一个可执行 Skill
+project_brief: '换档：今天装 Skill。第4节只定稿 skills/<id>/SKILL.md（粘贴 prompts/03a）；第5节做加载·运行·runs/ 证据（粘贴 prompts/03b）。GATE 7：可加载、可调用、有业务数据、有证据。'
 resources:
 - id: dg-skill-anatomy
   title: 讲解图 · Skill 解剖四部件
@@ -369,31 +368,4 @@ quiz:
     - 能力比系统高级
   - 1
   - 你从操作者变成派活的人——Week 2 的核心位移。
-lab:
-  primary_files:
-  - skills/skill-01.md
-  - runs/
-  prompt: '你是 Skill 架构师。背景：FDE 训练营 Day 7，学员选定了一项高频、规则清晰、可验收的部门工作。
-
-    任务：在工作区生成 skills/skill-01.md——第一个 Skill 说明书，含四部件（输入：字段与来源 / 步骤：可执行的操作序列 / 输出：产物格式与存放路径 / 验收：如何判对错）+ 工具描述（一句话干什么、何时用、何时不用）；然后用该
-    Skill 真实执行一次，产物与运行记录写入 runs/ 目录。
-
-    要求：步骤必须具体到可照做；输出路径写死；证据必须第三方可查（文件/日志，不是口头）。'
-  rubric:
-  - check: file_exists
-    args:
-      path: skills/skill-01.md
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输入
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输出
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 何时用
-nodes_lab: 第一个 Skill：跑出可检查的证据
 nodes_project: 企业任务：Skill 说明书 + 运行证据

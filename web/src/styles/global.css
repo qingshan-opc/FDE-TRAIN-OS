@@ -1655,6 +1655,23 @@ label {
   color: inherit;
   font-family: var(--font-cn);
 }
+.syllabus-week-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+.syllabus-week-tagline {
+  margin: 0;
+  color: var(--demo-muted, #6b7c85);
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.35;
+  letter-spacing: 0;
+  font-family: var(--font-cn);
+}
 .syllabus-week > .syllabus-day-list {
   padding-left: 8px;
   margin-left: 2px;

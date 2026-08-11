@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="自检一问：四部件齐全才转得动">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".45"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="50" r="90" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="90;106;90" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="260" r="64" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="64;76;64" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="16" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="33" font-size="15" font-weight="800" fill="#231f20">自检一问：四部件齐全才转得动</text>
+    <text x="1004" y="33" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">SELF-CHECK</text>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <!-- four part chips -->
+    <g>
+      <rect x="60" y="66" width="200" height="120" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <circle cx="96" cy="102" r="13" fill="url(#teal)"/><text x="96" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">✓</text>
+      <text x="120" y="107" font-size="15" font-weight="800" fill="#231f20">描述</text>
+      <text x="80" y="140" font-size="11" fill="rgba(35,31,32,.55)">Agent 靠它选你</text>
+      <text x="80" y="162" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace">DESCRIPTION</text>
+    </g>
+    <g>
+      <rect x="286" y="66" width="200" height="120" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <circle cx="322" cy="102" r="13" fill="url(#teal)"/><text x="322" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">✓</text>
+      <text x="346" y="107" font-size="15" font-weight="800" fill="#231f20">输入</text>
+      <text x="306" y="140" font-size="11" fill="rgba(35,31,32,.55)">类型必填示例</text>
+      <text x="306" y="162" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace">INPUT</text>
+    </g>
+    <g>
+      <rect x="512" y="66" width="200" height="120" rx="16" fill="rgba(13,148,136,.10)" stroke="rgba(13,148,136,.45)" stroke-width="1.4" filter="url(#sh)"/>
+      <rect x="504" y="58" width="216" height="136" rx="22" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4">
+        <animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/>
+      </rect>
+      <circle cx="548" cy="102" r="13" fill="url(#teal)" filter="url(#glow)"/><text x="548" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">✓</text>
+      <text x="572" y="107" font-size="15" font-weight="800" fill="#0f766e">步骤</text>
+      <text x="532" y="140" font-size="11" fill="rgba(35,31,32,.6)">可执行 · 留痕</text>
+      <text x="532" y="162" font-size="10" fill="#0d9488" font-family="'SF Mono',Menlo,monospace">STEPS</text>
+    </g>
+    <g>
+      <rect x="738" y="66" width="200" height="120" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <circle cx="774" cy="102" r="13" fill="url(#teal)"/><text x="774" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">✓</text>
+      <text x="798" y="107" font-size="15" font-weight="800" fill="#231f20">输出</text>
+      <text x="758" y="140" font-size="11" fill="rgba(35,31,32,.55)">产物 + 证据</text>
+      <text x="758" y="162" font-size="10" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace">OUTPUT</text>
+    </g>
+
+    <!-- connector dashes -->
+    <g stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5" opacity=".7">
+      <line x1="264" y1="126" x2="282" y2="126"><animate attributeName="stroke-dashoffset" from="10" to="0" dur="0.9s" repeatCount="indefinite"/></line>
+      <line x1="490" y1="126" x2="508" y2="126"><animate attributeName="stroke-dashoffset" from="10" to="0" dur="0.9s" repeatCount="indefinite"/></line>
+      <line x1="716" y1="126" x2="734" y2="126"><animate attributeName="stroke-dashoffset" from="10" to="0" dur="0.9s" repeatCount="indefinite"/></line>
+    </g>
+
+    <!-- footer pill -->
+    <rect x="200" y="216" width="640" height="52" rx="26" fill="rgba(13,148,136,.10)"/>
+    <text x="520" y="248" text-anchor="middle" font-size="14" font-weight="800" fill="#0f766e">你的 Skill 写得清吗？—— 预告 · 选第一个 Skill</text>
+  </g>
+</svg>

@@ -1,13 +1,13 @@
 # 第 6 节 · 提交与验证
 
-## 提交文件
+## 提交文件（当日微迭代）
 
 - `day5-replay/iteration-deployment-plan.md`
 - `day5-replay/iteration-release-log.md`
 - `day5-replay/iteration-final-acceptance.md`
 - `day5-replay/process-retrospective.md`
 
-## 最终通过条件
+## 最终通过条件（当日）
 
 - 测试报告明确建议发布；
 - 发布版本与测试通过版本一致；

@@ -1,9 +1,23 @@
 # FDE 训练营 v0.7 · 第一周课程蓝本：AI 时代的角色与全栈理论
 
 > 2026-07-25 起生效，取代 `curriculum-v0.6.md` 对第一周（Day 1–5）的定义。
-> Day 6–10 仍按 v0.6（部门 AI 驾驶舱 V1.0→V2.0）执行，待 Week 2  redesign 时对齐。
+> **Week2 redesign（2026-08）已对齐**：见 [`class/teaching/week2-cockpit-agent/`](../../teaching/week2-cockpit-agent/README.md)。
+> 叙事：Week1 业务系统 →（选做看板）→ D6 对话 → D7 Skill → D8 Loop → D9 长任务/HITL → D10 UI 收官。
 > 落地管线：本蓝本 → `class/bootcamp/day-0N/`（README + lesson/practice + day.yaml）
-> → `scripts/build_v07_week1_contracts.py` → `contracts/examples/day-0N-curriculum.yaml` → seed → 学员端。
+> → contracts / seed → 学员端。
+
+## Week2 摘要（v0.7.2）
+
+| 展示课次 | 文件夹 | 硬交付 |
+|----------|--------|--------|
+| 周六 | day-06 | 理论地图 + 手绘架构图（驾驶舱桥接仅选做） |
+| D6 | day-07 | 提示词 02：助手位/面板 LLM 对话 |
+| D7 | day-08 | 提示词 03：可执行 Skill |
+| D8 | day-09 | 提示词 04：`loop.py` |
+| D9 | day-10 | 提示词 05：task_runner + HITL |
+| D10 | day-11 | 提示词 06：UI 接线 + 答辩 |
+
+旧句「Day 6–10 仍按 v0.6 驾驶舱线」「D5 周末必做桥接」作废。
 
 ## 1. 为什么要改
 

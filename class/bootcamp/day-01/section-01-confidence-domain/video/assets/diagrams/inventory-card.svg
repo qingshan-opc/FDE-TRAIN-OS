@@ -1,22 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img">
-  <rect width="560" height="460" fill="#f2f5f0"/>
-  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · DOMAIN INVENTORY</text>
-  <rect x="40" y="56" width="480" height="300" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <g font-family="sans-serif">
-    <rect x="40" y="56" width="480" height="60" fill="rgba(20,0,255,.05)"/>
-    <text x="70" y="93" font-size="18" font-weight="700" fill="#231f20">① 熟悉领域</text>
-    <text x="280" y="93" font-size="15" fill="rgba(35,31,32,.6)">财务 / HR / 运营 / 销售 / 教育</text>
-    <line x1="40" y1="116" x2="520" y2="116" stroke="rgba(35,31,32,.12)"/>
-    <text x="70" y="153" font-size="18" font-weight="700" fill="#231f20">② 三类用户</text>
-    <text x="280" y="153" font-size="15" fill="rgba(35,31,32,.6)">每天用 · 看结果 · 拍板</text>
-    <line x1="40" y1="176" x2="520" y2="176" stroke="rgba(35,31,32,.12)"/>
-    <text x="70" y="213" font-size="18" font-weight="700" fill="#231f20">③ 三种数据</text>
-    <text x="280" y="213" font-size="15" fill="rgba(35,31,32,.6)">每天最常看的指标 / 表格</text>
-    <line x1="40" y1="236" x2="520" y2="236" stroke="rgba(35,31,32,.12)"/>
-    <rect x="40" y="236" width="480" height="120" fill="rgba(20,0,255,.08)"/>
-    <text x="70" y="280" font-size="18" font-weight="700" fill="#1400ff">→ 示例规则</text>
-    <text x="70" y="320" font-size="20" font-weight="700" fill="#231f20">岗位 7 天无面试 → 标红</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="inventory card">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="tealSoft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(13,148,136,.14)"/>
+      <stop offset="100%" stop-color="rgba(13,148,136,.05)"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+  <rect width="560" height="460" fill="#ffffff"/>
+  <rect width="560" height="460" fill="url(#dots)"/>
+  <circle cx="504" cy="56" r="86" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="86;100;86" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="52" cy="416" r="62" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="62;74;62" dur="11s" repeatCount="indefinite"/>
+  </circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="30" y="24" width="6" height="26" rx="3" fill="#0d9488"/>
+    <text x="46" y="43" font-size="19" font-weight="800" fill="#231f20">专业知识盘点</text>
+    <text x="532" y="41" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.8" fill="rgba(35,31,32,.42)">DOMAIN INVENTORY</text>
   </g>
-  <rect x="40" y="380" width="480" height="50" fill="#1400ff"/>
-  <text x="280" y="412" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">可交给 AI 的专业规则</text>
+<g transform="translate(36,84)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="488" height="272" rx="18" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <text x="28" y="44" font-size="15" font-weight="800" fill="#231f20">① 熟悉领域</text>
+<text x="196" y="44" font-size="13" fill="rgba(35,31,32,.6)">财务 / HR / 运营 / 销售 / 教育</text>
+<line x1="28" y1="64" x2="460" y2="64" stroke="rgba(35,31,32,.08)" stroke-width="1"/>
+<text x="28" y="100" font-size="15" font-weight="800" fill="#231f20">② 三类用户</text>
+<text x="196" y="100" font-size="13" fill="rgba(35,31,32,.6)">每天用 · 看结果 · 拍板</text>
+<line x1="28" y1="120" x2="460" y2="120" stroke="rgba(35,31,32,.08)" stroke-width="1"/>
+<text x="28" y="156" font-size="15" font-weight="800" fill="#231f20">③ 三种数据</text>
+<text x="196" y="156" font-size="13" fill="rgba(35,31,32,.6)">每天最常看的指标 / 表格</text>
+      <rect x="16" y="180" width="456" height="76" rx="14" fill="url(#tealSoft)"/>
+      <text x="40" y="210" font-size="14" font-weight="800" fill="#0f766e">→ 示例规则</text>
+      <text x="40" y="238" font-size="16" font-weight="700" fill="#231f20">岗位 7 天无面试 → 标红</text>
+      <animate attributeName="opacity" values=".55;1;1" keyTimes="0;.06;1" begin="0.3s" dur="7.0s" repeatCount="indefinite"/>
+    </g>
+<g transform="translate(36,384)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="488" height="56" rx="28.0" fill="url(#teal)" filter="url(#glow)"/>
+      <text x="244.0" y="33.4" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">可交给 AI 的专业规则</text>
+      </g>
 </svg>

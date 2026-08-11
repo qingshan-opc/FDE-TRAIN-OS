@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="两个库带走：动作动词库与判据句式库">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="50" r="90" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="90;106;90" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="260" r="64" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="64;76;64" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="16" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="33" font-size="15" font-weight="800" fill="#231f20">两个库带走 · 预告 · AI 上岗运行</text>
+    <text x="1004" y="33" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">TWO LIBRARIES</text>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <!-- verbs library -->
+    <rect x="60" y="60" width="450" height="200" rx="16" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+    <rect x="84" y="80" width="150" height="28" rx="14" fill="url(#teal)" filter="url(#glow)"/>
+    <text x="159" y="99" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">动作动词库</text>
+    <text x="474" y="99" text-anchor="end" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace">VERBS</text>
+    <g font-size="13" fill="#231f20">
+      <rect x="84" y="126" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="129" y="149" text-anchor="middle">读取</text>
+      <rect x="186" y="126" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="231" y="149" text-anchor="middle">计算</text>
+      <rect x="288" y="126" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="333" y="149" text-anchor="middle">生成</text>
+      <rect x="390" y="126" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="435" y="149" text-anchor="middle">比对</text>
+      <rect x="84" y="172" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="129" y="195" text-anchor="middle">汇总</text>
+      <rect x="186" y="172" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="231" y="195" text-anchor="middle">改写</text>
+      <rect x="288" y="172" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="333" y="195" text-anchor="middle">抽取</text>
+      <rect x="390" y="172" width="90" height="36" rx="10" fill="rgba(35,31,32,.05)"/><text x="435" y="195" text-anchor="middle">校验</text>
+    </g>
+    <text x="84" y="238" font-size="11" fill="rgba(35,31,32,.5)">步骤用动词开头，谁看都知道在干什么</text>
+
+    <!-- verdict library -->
+    <rect x="560" y="60" width="420" height="200" rx="16" fill="rgba(13,148,136,.07)" stroke="rgba(13,148,136,.4)" stroke-width="1.4"/>
+    <rect x="584" y="80" width="150" height="28" rx="14" fill="url(#teal)"/>
+    <text x="659" y="99" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">判据句式库</text>
+    <text x="944" y="99" text-anchor="end" font-size="10" letter-spacing="1.5" fill="rgba(35,31,32,.4)" font-family="'SF Mono',Menlo,monospace">VERDICTS</text>
+    <g font-size="12.5">
+      <rect x="584" y="126" width="372" height="32" rx="10" fill="#fff" stroke="rgba(13,148,136,.25)"/>
+      <text x="600" y="147" fill="#231f20">必须包含 ___，缺了判不过</text>
+      <rect x="584" y="168" width="372" height="32" rx="10" fill="#fff" stroke="rgba(13,148,136,.25)"/>
+      <text x="600" y="189" fill="#231f20">不得超过 ___，超了判不过</text>
+      <rect x="584" y="210" width="372" height="32" rx="10" fill="#fff" stroke="rgba(13,148,136,.25)"/>
+      <text x="600" y="231" fill="#231f20">当 ___ 时，拒收并提示 ___</text>
+    </g>
+  </g>
+</svg>

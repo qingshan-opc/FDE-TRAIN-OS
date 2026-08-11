@@ -1,1 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img"><rect width="560" height="460" fill="#f2f5f0"/><text x="28" y="34" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · MAP</text><text x="28" y="64" font-family="serif" font-size="22" font-weight="700" fill="#231f20">安全底线</text><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#231f20"/></marker></defs><rect x="40" y="110" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="56" y="138" font-family="Menlo,monospace" font-size="11" fill="#1400ff">角色 / ROLE</text><text x="56" y="178" font-family="serif" font-size="18" font-weight="700" fill="#231f20">安全底线</text><rect x="300" y="110" width="220" height="110" fill="#1400ff" stroke="#231f20" stroke-width="1.8"/><text x="316" y="138" font-family="Menlo,monospace" font-size="11" fill="rgba(255,255,255,.75)">接口 / API</text><text x="316" y="178" font-family="serif" font-size="18" font-weight="700" fill="#fff">真实密钥不进代码</text><rect x="40" y="270" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="56" y="298" font-family="Menlo,monospace" font-size="11" fill="#1400ff">处理 / LOGIC</text><text x="56" y="338" font-family="serif" font-size="18" font-weight="700" fill="#231f20">不进截图</text><rect x="300" y="270" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="316" y="298" font-family="Menlo,monospace" font-size="11" fill="#1400ff">存储 / DATA</text><text x="316" y="338" font-family="serif" font-size="18" font-weight="700" fill="#231f20">不进公开日志</text><line x1="260" y1="165" x2="300" y2="165" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><line x1="150" y1="220" x2="150" y2="270" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><line x1="410" y1="220" x2="410" y2="270" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="40" y="400" width="480" height="36" fill="#231f20"/><text x="280" y="423" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">安全底线</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="安全底线">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".45"/></filter>
+</defs>
+<rect width="560" height="460" fill="#ffffff"/>
+<rect width="560" height="460" fill="url(#dots)"/>
+<circle cx="470" cy="54" r="100" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="408" r="72" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="72;84;72" dur="11s" repeatCount="indefinite"/></circle>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="36" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="52" y="42" font-size="20" font-weight="800" fill="#231f20">安全底线</text>
+<text x="524" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">DIAGRAM · MAP</text>
+</g>
+<path d="M262 155 H296" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1s" repeatCount="indefinite"/></path>
+<path d="M150 212 V256" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1s" repeatCount="indefinite"/></path>
+<path d="M410 212 V256" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6"><animate attributeName="stroke-dashoffset" from="11" to="0" dur="1s" repeatCount="indefinite"/></path>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.15s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="100" width="220" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="58" y="130" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0d9488">角色 / ROLE</text>
+<text x="58" y="174" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="700" fill="#231f20">安全底线</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.47s" dur="0.5s" fill="freeze"/>
+<rect x="300" y="100" width="220" height="110" rx="16" fill="url(#g)" filter="url(#glow)"/>
+<text x="318" y="130" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.85)">接口 / API</text>
+<text x="318" y="174" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="800" fill="#fff">真实密钥不进代码</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.79s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="260" width="220" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="58" y="290" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0d9488">处理 / LOGIC</text>
+<text x="58" y="334" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="700" fill="#231f20">不进截图</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="1.11s" dur="0.5s" fill="freeze"/>
+<rect x="300" y="260" width="220" height="110" rx="16" fill="#fff" filter="url(#sh)"/>
+<text x="318" y="290" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0d9488">存储 / DATA</text>
+<text x="318" y="334" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="17" font-weight="700" fill="#231f20">不进公开日志</text>
+</g>
+<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="1.43s" dur="0.5s" fill="freeze"/>
+<rect x="40" y="396" width="480" height="44" rx="22" fill="rgba(13,148,136,.10)"/>
+<text x="280" y="424" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="14" font-weight="700" fill="#0f766e">安全底线</text>
+</g>
+</svg>

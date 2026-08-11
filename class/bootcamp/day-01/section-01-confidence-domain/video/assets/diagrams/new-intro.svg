@@ -1,17 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" role="img">
-  <rect width="560" height="420" fill="#f2f5f0"/>
-  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · NEW SELF-INTRO</text>
-  <rect x="40" y="70" width="200" height="180" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="140" y="110" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.5)" font-weight="700">OLD</text>
-  <text x="140" y="160" text-anchor="middle" font-family="serif" font-size="24" font-weight="700" fill="#231f20">我不懂开发</text>
-  <text x="140" y="200" text-anchor="middle" font-family="sans-serif" font-size="14" fill="rgba(35,31,32,.55)">畏难 · 观望</text>
-  <polygon points="270,145 310,160 270,175" fill="#1400ff"/>
-  <rect x="320" y="70" width="200" height="180" fill="#1400ff"/>
-  <text x="420" y="110" text-anchor="middle" font-family="Menlo,monospace" font-size="12" fill="rgba(255,255,255,.7)" font-weight="700">NEW</text>
-  <text x="420" y="155" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">我懂这个领域</text>
-  <text x="420" y="195" text-anchor="middle" font-family="sans-serif" font-size="14" fill="rgba(255,255,255,.85)">带 AI 做出来</text>
-  <rect x="40" y="290" width="480" height="80" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <rect x="40" y="290" width="8" height="80" fill="#1400ff"/>
-  <text x="64" y="325" font-family="serif" font-size="20" font-weight="700" fill="#231f20">下一节：软件公司的完整开发流程</text>
-  <text x="64" y="352" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.55)">PM → UI → FE → BE → QA → OPS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" role="img" aria-label="new intro">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="tealSoft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(13,148,136,.14)"/>
+      <stop offset="100%" stop-color="rgba(13,148,136,.05)"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+  <rect width="560" height="420" fill="#ffffff"/>
+  <rect width="560" height="420" fill="url(#dots)"/>
+  <circle cx="504" cy="56" r="86" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="86;100;86" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="52" cy="376" r="62" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="62;74;62" dur="11s" repeatCount="indefinite"/>
+  </circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="30" y="24" width="6" height="26" rx="3" fill="#0d9488"/>
+    <text x="46" y="43" font-size="19" font-weight="800" fill="#231f20">换一种自我介绍</text>
+    <text x="532" y="41" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.8" fill="rgba(35,31,32,.42)">NEW SELF-INTRO</text>
+  </g>
+<g transform="translate(36,88)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="210" height="160" rx="18" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <text x="24" y="34" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(35,31,32,.45)">OLD</text>
+      <text x="105" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#231f20">我不懂开发</text>
+      <text x="105" y="122" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.55)">畏难 · 观望</text>
+    </g>
+  <path d="M252 168 H308" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" marker-end="url(#arr)">
+    <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+  </path>
+<g transform="translate(314,88)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="210" height="160" rx="18" fill="url(#teal)" filter="url(#glow)"/>
+      <rect x="-6" y="-6" width="222" height="172" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4">
+      <animate attributeName="opacity" values=".5;.14;.5" dur="2.2s" repeatCount="indefinite"/>
+    </rect>
+      <text x="24" y="34" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.8)">NEW</text>
+      <text x="105" y="86" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">我懂这个领域</text>
+      <text x="105" y="120" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.88)">带 AI 做出来</text>
+    </g>
+<g transform="translate(36,288)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="488" height="84" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <rect x="18" y="18" width="6" height="48" rx="3" fill="#0d9488"/>
+      <text x="42" y="38" font-size="16" font-weight="700" fill="#231f20">下一节：软件公司的完整开发流程</text>
+      <text x="42" y="64" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0d9488">PM → UI → FE → BE → QA → OPS</text>
+    </g>
 </svg>

@@ -1,7 +1,6 @@
 day: 9
-project: Skill 工程化 + 遇见 Agent
-project_brief: Skill 从「能跑」到「可依赖」：边界声明 + 异常四分类 + 异常注入测试（≥3 种坏输入按声明失败）。掀开引擎盖理解 Harness 四要素与决策环，让 Agent 在自然语言任务下正确调用你的 Skill。GATE
-  8 闭环演示 + 口答「什么时候会选错」。
+project: Skill 工程化 + Agent Loop
+project_brief: 'Skill v1 边界+注入测试；必须落地 agent/loop.py（tool_calls 闭环，max_turns=20）。粘贴 teaching/week2-cockpit-agent/prompts/04-agent-loop.md。GATE 8：loop 日志 + 选错口答。'
 resources:
 - id: dg-exception
   title: 讲解图 · 异常四分类
@@ -368,31 +367,4 @@ quiz:
     - 替代工具表
   - 1
   - 四要素缺一不可——没记忆的循环只会原地打转。
-lab:
-  primary_files:
-  - skills/skill-01.md
-  - agent-run-log.md
-  prompt: '你是可靠性工程师。背景：FDE 训练营 Day 8，第一个 Skill（skills/skill-01.md）已能跑。
-
-    任务：1. 升级 Skill 到 v1——补边界声明（不做什么/异常分类与处置/何时求助人类）；2. 设计 ≥3 条异常注入用例（空数据/错格式/越界请求），逐条执行并把结果记入 agent-run-log.md；3. 用自然语言给 Agent
-    派一个匹配任务和一个故意不匹配的任务，记录它的工具选择，分析「它什么时候会选错」写进日志。
-
-    要求：坏输入必须按声明的方式失败——任何「硬扛乱做」都要回炉改边界。'
-  rubric:
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 边界
-  - check: file_exists
-    args:
-      path: agent-run-log.md
-  - check: text_contains
-    args:
-      path: agent-run-log.md
-      needle: 注入
-  - check: text_contains
-    args:
-      path: agent-run-log.md
-      needle: 选错
-nodes_lab: 异常注入 + Agent 选得对不对
 nodes_project: 企业任务：Skill v1 + Agent v0.1 闭环

@@ -1,71 +1,103 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="后端语言框架与数据库选型图">
-  <rect width="1200" height="640" fill="#f2f5f0"/>
-  <text x="48" y="50" font-size="26" font-weight="900" fill="#231f20" style="font-family:'Songti SC','Noto Serif SC',serif">后端技术图：语言 × 框架 × 数据库</text>
-  <text x="48" y="76" font-size="11" letter-spacing="3" fill="rgba(35,31,32,.45)" style="font-family:'SF Mono',Menlo,monospace">CONTRACT FIRST —— 契约是合同，语言只是施工队</text>
-
-  <!-- languages -->
-  <g>
-    <rect x="48" y="100" width="268" height="168" rx="10" fill="#fff" stroke="#5f52a0" stroke-width="2"/>
-    <text x="68" y="128" font-size="15.5" font-weight="900" fill="#231f20">Java · Spring Boot</text>
-    <text x="68" y="148" font-size="10" letter-spacing="2" fill="#5f52a0" style="font-family:'SF Mono',Menlo,monospace">大厂标配</text>
-    <text x="68" y="174" font-size="12" fill="rgba(35,31,32,.65)">银行电信核心系统十之七八</text>
-    <text x="68" y="196" font-size="12" fill="rgba(35,31,32,.65)">规矩全 · 岗位多 · AI 写规矩代码最稳</text>
-    <text x="68" y="222" font-size="11.5" fill="rgba(35,31,32,.5)">框架：Spring Boot / Spring Cloud / MyBatis</text>
-    <text x="68" y="248" font-size="12" font-weight="700" fill="#231f20">企业内部系统 · 十年维护</text>
-  </g>
-  <g>
-    <rect x="332" y="100" width="268" height="168" rx="10" fill="#fff" stroke="#2f9e44" stroke-width="2"/>
-    <text x="352" y="128" font-size="15.5" font-weight="900" fill="#231f20">Python</text>
-    <text x="352" y="148" font-size="10" letter-spacing="2" fill="#2f9e44" style="font-family:'SF Mono',Menlo,monospace">AI 的母语</text>
-    <text x="352" y="174" font-size="12" fill="rgba(35,31,32,.65)">模型生态、数据处理全在这</text>
-    <text x="352" y="196" font-size="12" fill="rgba(35,31,32,.65)">FastAPI 自带 OpenAPI · 起手最快</text>
-    <text x="352" y="222" font-size="11.5" fill="rgba(35,31,32,.5)">框架：FastAPI / Django / Flask</text>
-    <text x="352" y="248" font-size="12" font-weight="700" fill="#231f20">AI 项目首选 · 快速验证</text>
-  </g>
-  <g>
-    <rect x="616" y="100" width="268" height="168" rx="10" fill="#fff" stroke="#f5a947" stroke-width="2"/>
-    <text x="636" y="128" font-size="15.5" font-weight="900" fill="#231f20">Node.js</text>
-    <text x="636" y="148" font-size="10" letter-spacing="2" fill="#f5a947" style="font-family:'SF Mono',Menlo,monospace">前后端同语言</text>
-    <text x="636" y="174" font-size="12" fill="rgba(35,31,32,.65)">一个人包圆前后端，小团队最爱</text>
-    <text x="636" y="196" font-size="12" fill="rgba(35,31,32,.65)">npm 生态大 · BFF 层首选</text>
-    <text x="636" y="222" font-size="11.5" fill="rgba(35,31,32,.5)">框架：Express / NestJS</text>
-    <text x="636" y="248" font-size="12" font-weight="700" fill="#231f20">小团队全栈 · 前后端一拨人</text>
-  </g>
-  <g>
-    <rect x="900" y="100" width="252" height="168" rx="10" fill="#fff" stroke="#1400ff" stroke-width="2"/>
-    <text x="920" y="128" font-size="15.5" font-weight="900" fill="#231f20">Go</text>
-    <text x="920" y="148" font-size="10" letter-spacing="2" fill="#1400ff" style="font-family:'SF Mono',Menlo,monospace">快和省</text>
-    <text x="920" y="174" font-size="12" fill="rgba(35,31,32,.65)">高并发基础设施最强</text>
-    <text x="920" y="196" font-size="12" fill="rgba(35,31,32,.65)">编译单文件 · 部署极简</text>
-    <text x="920" y="222" font-size="11.5" fill="rgba(35,31,32,.5)">框架：Gin / Echo</text>
-    <text x="920" y="248" font-size="12" font-weight="700" fill="#231f20">网关 · 队列 · 云原生组件</text>
-  </g>
-
-  <!-- db scenario table -->
-  <text x="48" y="312" font-size="18" font-weight="900" fill="#231f20" style="font-family:'Songti SC',serif">数据库：没有最好的，只有「这个场景该用它」</text>
-  <g font-size="12.5">
-    <rect x="48" y="330" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="64" y="358" fill="#231f20"><tspan font-weight="900">两周原型 / 小工具</tspan> → SQLite（一个文件零运维）</text>
-    <rect x="424" y="330" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="440" y="358" fill="#231f20"><tspan font-weight="900">新项目默认主库</tspan> → PostgreSQL（功能最全）</text>
-    <rect x="800" y="330" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="816" y="358" fill="#231f20"><tspan font-weight="900">接老系统 / 团队惯性</tspan> → MySQL（资料最多）</text>
-
-    <rect x="48" y="388" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="64" y="416" fill="#231f20"><tspan font-weight="900">缓存 / 会话 / 排行榜</tspan> → Redis（内存微秒级）</text>
-    <rect x="424" y="388" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="440" y="416" fill="#231f20"><tspan font-weight="900">站内搜索 / 日志检索</tspan> → Elasticsearch</text>
-    <rect x="800" y="388" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="816" y="416" fill="#231f20"><tspan font-weight="900">经营分析 / 驾驶舱报表</tspan> → ClickHouse</text>
-
-    <rect x="48" y="446" width="352" height="46" rx="8" fill="#fff" stroke="#1cd5b0" stroke-width="1.5"/>
-    <text x="64" y="474" fill="#231f20"><tspan font-weight="900">结构多变的文档数据</tspan> → MongoDB</text>
-    <rect x="424" y="446" width="352" height="46" rx="8" fill="#231f20"/>
-    <text x="440" y="474" fill="#f2f5f0"><tspan font-weight="900" fill="#1cd5b0">AI 相似推荐（向量）</tspan> → PostgreSQL + pgvector</text>
-  </g>
-
-  <!-- decision -->
-  <rect x="48" y="524" width="1104" height="52" rx="8" fill="none" stroke="#1400ff" stroke-width="1.5"/>
-  <text x="66" y="548" font-size="13.5" font-weight="700" fill="#1400ff">三句话决策：AI 项目首选 Python（FastAPI）· 企业内部系统首选 Java · 小工具快速验证选 FastAPI 或 Node</text>
-  <text x="66" y="568" font-size="12" fill="rgba(35,31,32,.6)">每条路线的优势对比与官方链接 → 见资源区「交互讲义 · 技术选型全图」</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-label="后端语言框架与数据库选型图">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="640" fill="#ffffff"/>
+  <rect width="1200" height="640" fill="url(#dots)"/>
+  <circle cx="1120" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="592" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">后端技术图：语言 × 框架 × 数据库</text>
+<text x="1164" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">CONTRACT FIRST —— 契约是合同，语言只是施工队</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="48" y="84" width="268" height="178" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="68" y="116" font-size="15.5" font-weight="800" fill="#231f20">Java · Spring Boot</text>
+<text x="68" y="136" font-size="10" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">大厂标配</text>
+<text x="68" y="162" font-size="12" fill="rgba(35,31,32,.65)">银行电信核心系统十之七八</text>
+<text x="68" y="184" font-size="12" fill="rgba(35,31,32,.65)">规矩全 · 岗位多 · AI 写规矩代码最稳</text>
+<text x="68" y="212" font-size="11" fill="rgba(35,31,32,.5)">框架：Spring Boot / Spring Cloud / MyBatis</text>
+<text x="68" y="240" font-size="12" font-weight="700" fill="#231f20">企业内部系统 · 十年维护</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="332" y="84" width="268" height="178" rx="18" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="2" filter="url(#tglow)"/>
+<rect x="514" y="72" width="76" height="22" rx="11" fill="url(#tlg)"/>
+<text x="552" y="87" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">本课首选</text>
+<text x="352" y="116" font-size="15.5" font-weight="800" fill="#231f20">Python</text>
+<text x="352" y="136" font-size="10" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">AI 的母语</text>
+<text x="352" y="162" font-size="12" fill="rgba(35,31,32,.65)">模型生态、数据处理全在这</text>
+<text x="352" y="184" font-size="12" fill="rgba(35,31,32,.65)">FastAPI 自带 OpenAPI · 起手最快</text>
+<text x="352" y="212" font-size="11" fill="rgba(35,31,32,.5)">框架：FastAPI / Django / Flask</text>
+<text x="352" y="240" font-size="12" font-weight="700" fill="#0f766e">AI 项目首选 · 快速验证</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="616" y="84" width="268" height="178" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="636" y="116" font-size="15.5" font-weight="800" fill="#231f20">Node.js</text>
+<text x="636" y="136" font-size="10" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">前后端同语言</text>
+<text x="636" y="162" font-size="12" fill="rgba(35,31,32,.65)">一个人包圆前后端，小团队最爱</text>
+<text x="636" y="184" font-size="12" fill="rgba(35,31,32,.65)">npm 生态大 · BFF 层首选</text>
+<text x="636" y="212" font-size="11" fill="rgba(35,31,32,.5)">框架：Express / NestJS</text>
+<text x="636" y="240" font-size="12" font-weight="700" fill="#231f20">小团队全栈 · 前后端一拨人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="900" y="84" width="252" height="178" rx="18" fill="#fff" filter="url(#sh)"/>
+<text x="920" y="116" font-size="15.5" font-weight="800" fill="#231f20">Go</text>
+<text x="920" y="136" font-size="10" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">快和省</text>
+<text x="920" y="162" font-size="12" fill="rgba(35,31,32,.65)">高并发基础设施最强</text>
+<text x="920" y="184" font-size="12" fill="rgba(35,31,32,.65)">编译单文件 · 部署极简</text>
+<text x="920" y="212" font-size="11" fill="rgba(35,31,32,.5)">框架：Gin / Echo</text>
+<text x="920" y="240" font-size="12" font-weight="700" fill="#231f20">网关 · 队列 · 云原生组件</text>
+</g>
+<text x="48" y="300" font-size="18" font-weight="800" fill="#231f20">数据库：没有最好的，只有「这个场景该用它」</text>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="48" y="320" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="64" y="349" font-size="12.5" fill="#231f20"><tspan font-weight="800">两周原型 / 小工具</tspan><tspan fill="rgba(35,31,32,.6)"> → SQLite（一个文件零运维）</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="424" y="320" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="440" y="349" font-size="12.5" fill="#231f20"><tspan font-weight="800">新项目默认主库</tspan><tspan fill="rgba(35,31,32,.6)"> → PostgreSQL（功能最全）</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="800" y="320" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="816" y="349" font-size="12.5" fill="#231f20"><tspan font-weight="800">接老系统 / 团队惯性</tspan><tspan fill="rgba(35,31,32,.6)"> → MySQL（资料最多）</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="48" y="378" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="64" y="407" font-size="12.5" fill="#231f20"><tspan font-weight="800">缓存 / 会话 / 排行榜</tspan><tspan fill="rgba(35,31,32,.6)"> → Redis（内存微秒级）</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="424" y="378" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="440" y="407" font-size="12.5" fill="#231f20"><tspan font-weight="800">站内搜索 / 日志检索</tspan><tspan fill="rgba(35,31,32,.6)"> → Elasticsearch</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="800" y="378" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="816" y="407" font-size="12.5" fill="#231f20"><tspan font-weight="800">经营分析 / 驾驶舱报表</tspan><tspan fill="rgba(35,31,32,.6)"> → ClickHouse</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="48" y="436" width="352" height="46" rx="14" fill="#fff" filter="url(#sh)"/>
+<text x="64" y="465" font-size="12.5" fill="#231f20"><tspan font-weight="800">结构多变的文档数据</tspan><tspan fill="rgba(35,31,32,.6)"> → MongoDB</tspan></text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="424" y="436" width="352" height="46" rx="14" fill="url(#tlg)" filter="url(#tglow)"/>
+<text x="440" y="465" font-size="12.5" fill="#fff"><tspan font-weight="800">AI 相似推荐（向量）</tspan> → PostgreSQL + pgvector</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="48" y="514" width="1104" height="58" rx="29.0" fill="rgba(13,148,136,.10)"/>
+<text x="600.0" y="539.0" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">三句话决策：AI 项目首选 Python（FastAPI）· 企业内部系统首选 Java · 小工具快速验证选 FastAPI 或 Node</text>
+<text x="600.0" y="559.0" font-size="12" fill="rgba(35,31,32,.55)" text-anchor="middle">每条路线的优势对比与官方链接 → 见资源区「交互讲义 · 技术选型全图」</text></g>
 </svg>

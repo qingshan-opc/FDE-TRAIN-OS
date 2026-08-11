@@ -1,49 +1,103 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="驾驶舱五区块骨架">
-<rect width="1040" height="640" fill="#f2f5f0"/>
-<!-- 浏览器框 -->
-<rect x="60" y="40" width="920" height="560" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
-<line x1="60" y1="80" x2="980" y2="80" stroke="#231f20" stroke-width="1.5"/>
-<circle cx="84" cy="60" r="4" fill="rgba(35,31,32,.3)"/><circle cx="100" cy="60" r="4" fill="rgba(35,31,32,.3)"/><circle cx="116" cy="60" r="4" fill="rgba(35,31,32,.3)"/>
-<rect x="140" y="50" width="400" height="20" fill="none" stroke="rgba(35,31,32,.25)"/>
-<text x="150" y="64" font-size="10" fill="rgba(35,31,32,.35)" style="font-family:'SF Mono',Menlo,monospace">cockpit.你的部门.example</text>
-<!-- ① KPI 带 -->
-<rect x="90" y="110" width="860" height="90" fill="none" stroke="#f24e54" stroke-width="2"/>
-<text x="104" y="132" font-size="12.5" font-weight="800" fill="#231f20">① 顶部 KPI 带</text>
-<text x="936" y="132" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「整体怎么样？」· 指标 ≤5 个</text>
-<g fill="none" stroke="rgba(35,31,32,.3)">
-<rect x="104" y="144" width="190" height="44"/><rect x="314" y="144" width="190" height="44"/><rect x="524" y="144" width="190" height="44"/><rect x="734" y="144" width="190" height="44"/>
-</g>
-<g font-size="10" fill="rgba(35,31,32,.4)" style="font-family:'SF Mono',Menlo,monospace">
-<text x="199" y="170" text-anchor="middle">指标 1</text><text x="409" y="170" text-anchor="middle">指标 2</text><text x="619" y="170" text-anchor="middle">指标 3</text><text x="829" y="170" text-anchor="middle">指标 4</text>
-</g>
-<!-- ② 趋势区 -->
-<rect x="90" y="220" width="520" height="140" fill="none" stroke="#f24e54" stroke-width="2"/>
-<text x="104" y="242" font-size="12.5" font-weight="800" fill="#231f20">② 趋势区</text>
-<text x="596" y="242" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「最近在变好吗？」</text>
-<polyline points="120,330 190,310 260,318 330,285 400,295 470,268 540,275 580,255" fill="none" stroke="rgba(35,31,32,.45)" stroke-width="2"/>
-<!-- ③ 对比区 -->
-<rect x="630" y="220" width="320" height="140" fill="none" stroke="#f24e54" stroke-width="2"/>
-<text x="644" y="242" font-size="12.5" font-weight="800" fill="#231f20">③ 对比区</text>
-<text x="936" y="242" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「谁好谁差？」</text>
-<rect x="680" y="290" width="40" height="50" fill="rgba(35,31,32,.25)"/><rect x="760" y="270" width="40" height="70" fill="rgba(35,31,32,.45)"/><rect x="840" y="305" width="40" height="35" fill="rgba(35,31,32,.2)"/>
-<line x1="660" y1="340" x2="920" y2="340" stroke="rgba(35,31,32,.3)"/>
-<!-- ④ 异常/预警区 -->
-<rect x="90" y="380" width="420" height="120" fill="none" stroke="#f5a947" stroke-width="2"/>
-<text x="104" y="402" font-size="12.5" font-weight="800" fill="#231f20">④ 异常 / 预警区</text>
-<text x="496" y="402" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「哪里要人看？」</text>
-<g>
-<circle cx="112" cy="428" r="4" fill="#f5a947"/><rect x="128" y="422" width="340" height="9" fill="rgba(35,31,32,.15)"/>
-<circle cx="112" cy="452" r="4" fill="#f5a947"/><rect x="128" y="446" width="280" height="9" fill="rgba(35,31,32,.15)"/>
-<circle cx="112" cy="476" r="4" fill="#f24e54"/><rect x="128" y="470" width="310" height="9" fill="rgba(35,31,32,.15)"/>
-</g>
-<!-- ⑤ 明细区 -->
-<rect x="530" y="380" width="420" height="120" fill="none" stroke="#5f52a0" stroke-width="2"/>
-<text x="544" y="402" font-size="12.5" font-weight="800" fill="#231f20">⑤ 明细区</text>
-<text x="936" y="402" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「具体是哪几笔？」</text>
-<g stroke="rgba(35,31,32,.2)">
-<line x1="544" y1="424" x2="936" y2="424"/><line x1="544" y1="446" x2="936" y2="446"/><line x1="544" y1="468" x2="936" y2="468"/><line x1="544" y1="490" x2="936" y2="490"/>
-</g>
-<!-- ⑥ 幽灵块 -->
-<rect x="90" y="520" width="860" height="60" fill="none" stroke="#1400ff" stroke-width="2" stroke-dasharray="6 4"/>
-<text x="520" y="555" text-anchor="middle" font-size="13" font-weight="800" fill="#1400ff">⑥ AI 摘要与建议 —— 第五天 模型接电后长出</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" role="img" aria-label="驾驶舱五区块骨架">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="640" fill="#ffffff"/>
+  <rect width="1040" height="640" fill="url(#dots)"/>
+  <circle cx="960" cy="60" r="110" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="110;128;110" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="60" cy="590" r="80" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="80;94;80" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="20" width="6" height="24" rx="3" fill="#0d9488"/>
+    <text x="52" y="38" font-size="16" font-weight="800" fill="#231f20">驾驶舱五区块 · 一屏骨架</text>
+    <text x="1004" y="38" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">COCKPIT SKELETON</text>
+  </g>
+
+  <!-- browser frame -->
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="60" y="58" width="920" height="552" rx="18" fill="#fff" filter="url(#sh)"/>
+    <circle cx="88" cy="82" r="4.5" fill="rgba(35,31,32,.18)"/><circle cx="106" cy="82" r="4.5" fill="rgba(35,31,32,.18)"/><circle cx="124" cy="82" r="4.5" fill="rgba(13,148,136,.5)"/>
+    <rect x="146" y="72" width="380" height="20" rx="10" fill="rgba(35,31,32,.05)"/>
+    <text x="158" y="86" font-size="10" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">cockpit.你的部门.example</text>
+    <line x1="60" y1="104" x2="980" y2="104" stroke="rgba(35,31,32,.08)" stroke-width="1"/>
+
+    <!-- ① KPI band -->
+    <rect x="88" y="122" width="864" height="92" rx="14" fill="rgba(13,148,136,.06)" stroke="rgba(13,148,136,.3)" stroke-width="1.2"/>
+    <text x="104" y="146" font-size="12.5" font-weight="800" fill="#0f766e">① 顶部 KPI 带</text>
+    <text x="938" y="146" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「整体怎么样？」· 指标 ≤5 个</text>
+    <g>
+      <rect x="104" y="158" width="190" height="42" rx="10" fill="#fff" stroke="rgba(35,31,32,.09)"/>
+      <rect x="314" y="158" width="190" height="42" rx="10" fill="#fff" stroke="rgba(35,31,32,.09)"/>
+      <rect x="524" y="158" width="190" height="42" rx="10" fill="#fff" stroke="rgba(35,31,32,.09)"/>
+      <rect x="734" y="158" width="190" height="42" rx="10" fill="#fff" stroke="rgba(35,31,32,.09)"/>
+    </g>
+    <g font-size="10" fill="rgba(35,31,32,.45)" font-family="'SF Mono',Menlo,monospace">
+      <text x="199" y="184" text-anchor="middle">指标 1</text><text x="409" y="184" text-anchor="middle">指标 2</text><text x="619" y="184" text-anchor="middle">指标 3</text><text x="829" y="184" text-anchor="middle">指标 4</text>
+    </g>
+
+    <!-- ② trend -->
+    <rect x="88" y="230" width="522" height="136" rx="14" fill="#fff" stroke="rgba(35,31,32,.12)" filter="url(#sh)"/>
+    <text x="104" y="254" font-size="12.5" font-weight="800" fill="#231f20">② 趋势区</text>
+    <text x="594" y="254" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「最近在变好吗？」</text>
+    <polyline points="120,332 190,312 260,320 330,288 400,298 470,272 540,280 580,260" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="620" stroke-dashoffset="620">
+      <animate attributeName="stroke-dashoffset" values="620;0;0" keyTimes="0;.7;1" dur="5s" repeatCount="indefinite"/>
+    </polyline>
+    <circle cx="580" cy="260" r="5" fill="#0d9488">
+      <animate attributeName="opacity" values="0;0;1;.4;1" keyTimes="0;.68;.75;.88;1" dur="5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- ③ compare -->
+    <rect x="630" y="230" width="322" height="136" rx="14" fill="#fff" stroke="rgba(35,31,32,.12)" filter="url(#sh)"/>
+    <text x="646" y="254" font-size="12.5" font-weight="800" fill="#231f20">③ 对比区</text>
+    <text x="938" y="254" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「谁好谁差？」</text>
+    <rect x="680" y="296" width="42" height="50" rx="6" fill="rgba(35,31,32,.14)"/>
+    <rect x="760" y="274" width="42" height="72" rx="6" fill="url(#teal)" filter="url(#glow)">
+      <animate attributeName="y" values="274;280;274" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="height" values="72;66;72" dur="3.2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="840" y="308" width="42" height="38" rx="6" fill="rgba(35,31,32,.14)"/>
+    <line x1="660" y1="346" x2="920" y2="346" stroke="rgba(35,31,32,.18)"/>
+
+    <!-- ④ alerts -->
+    <rect x="88" y="382" width="422" height="116" rx="14" fill="#fff" stroke="rgba(35,31,32,.12)" filter="url(#sh)"/>
+    <text x="104" y="406" font-size="12.5" font-weight="800" fill="#231f20">④ 异常 / 预警区</text>
+    <text x="496" y="406" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「哪里要人看？」</text>
+    <circle cx="114" cy="432" r="4" fill="rgba(35,31,32,.3)"/><rect x="128" y="427" width="340" height="9" rx="4.5" fill="rgba(35,31,32,.1)"/>
+    <circle cx="114" cy="456" r="4" fill="rgba(35,31,32,.3)"/><rect x="128" y="451" width="280" height="9" rx="4.5" fill="rgba(35,31,32,.1)"/>
+    <circle cx="114" cy="480" r="5" fill="#0d9488">
+      <animate attributeName="r" values="5;8;5" dur="1.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;.35;1" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+    <rect x="128" y="475" width="310" height="9" rx="4.5" fill="rgba(13,148,136,.18)"/>
+
+    <!-- ⑤ detail -->
+    <rect x="530" y="382" width="422" height="116" rx="14" fill="#fff" stroke="rgba(35,31,32,.12)" filter="url(#sh)"/>
+    <text x="546" y="406" font-size="12.5" font-weight="800" fill="#231f20">⑤ 明细区</text>
+    <text x="938" y="406" text-anchor="end" font-size="10.5" fill="rgba(35,31,32,.5)">回答「具体是哪几笔？」</text>
+    <g stroke="rgba(35,31,32,.14)">
+      <line x1="546" y1="428" x2="938" y2="428"/><line x1="546" y1="450" x2="938" y2="450"/><line x1="546" y1="472" x2="938" y2="472"/><line x1="546" y1="492" x2="938" y2="492"/>
+    </g>
+
+    <!-- ⑥ ghost block -->
+    <rect x="88" y="514" width="864" height="66" rx="14" fill="rgba(13,148,136,.08)" stroke="#0d9488" stroke-width="1.6" stroke-dasharray="7 6">
+      <animate attributeName="stroke-dashoffset" from="13" to="0" dur="1.1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="520" y="553" text-anchor="middle" font-size="13.5" font-weight="800" fill="#0f766e">⑥ AI 摘要与建议 —— 第五天 模型接电后长出</text>
+  </g>
 </svg>

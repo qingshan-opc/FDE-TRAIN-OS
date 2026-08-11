@@ -1,34 +1,90 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480" role="img">
-  <rect width="560" height="480" fill="#f2f5f0"/>
-  <text x="24" y="32" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · AI GENERATES · YOU JUDGE</text>
-  <rect x="40" y="60" width="200" height="160" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <text x="140" y="95" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="#1400ff" font-weight="700">AI OUTPUT</text>
-  <text x="140" y="130" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#231f20">会生成</text>
-  <g font-family="sans-serif" font-size="14" fill="rgba(35,31,32,.7)">
-    <text x="140" y="165" text-anchor="middle">代码 · 页面</text>
-    <text x="140" y="190" text-anchor="middle">文档 · 图表</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480" role="img" aria-label="judge loop">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="tealSoft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(13,148,136,.14)"/>
+      <stop offset="100%" stop-color="rgba(13,148,136,.05)"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+  <rect width="560" height="480" fill="#ffffff"/>
+  <rect width="560" height="480" fill="url(#dots)"/>
+  <circle cx="504" cy="56" r="86" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="86;100;86" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="52" cy="436" r="62" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="62;74;62" dur="11s" repeatCount="indefinite"/>
+  </circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="30" y="24" width="6" height="26" rx="3" fill="#0d9488"/>
+    <text x="46" y="43" font-size="19" font-weight="800" fill="#231f20">AI 会生成，你来判断</text>
+    <text x="532" y="41" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.8" fill="rgba(35,31,32,.42)">AI GENERATES · YOU JUDGE</text>
   </g>
-  <polygon points="270,130 310,145 270,160" fill="#1400ff"/>
-  <rect x="320" y="60" width="200" height="160" fill="#1400ff"/>
-  <text x="420" y="95" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="rgba(255,255,255,.7)" font-weight="700">YOU JUDGE</text>
-  <text x="420" y="130" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">你判断</text>
-  <g font-family="sans-serif" font-size="14" fill="rgba(255,255,255,.9)">
-    <text x="420" y="165" text-anchor="middle">值不值得做</text>
-    <text x="420" y="190" text-anchor="middle">结果合不合格</text>
-  </g>
-  <rect x="40" y="260" width="480" height="72" fill="#fff" stroke="#231f20" stroke-width="2"/>
-  <rect x="40" y="260" width="8" height="72" fill="#1400ff"/>
-  <text x="64" y="290" font-family="serif" font-size="20" font-weight="700" fill="#231f20">专业判断 → AI 可执行指令</text>
-  <text x="64" y="318" font-family="Menlo,monospace" font-size="12" fill="rgba(35,31,32,.55)">NOT RACE CODE SPEED · COMMAND AI</text>
-  <g transform="translate(40,360)">
-    <rect x="0" y="0" width="148" height="70" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="74" y="30" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="#1400ff" font-weight="700">01</text>
-    <text x="74" y="52" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">真实问题</text>
-    <rect x="166" y="0" width="148" height="70" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="240" y="30" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="#1400ff" font-weight="700">02</text>
-    <text x="240" y="52" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">业务取舍</text>
-    <rect x="332" y="0" width="148" height="70" fill="#fff" stroke="#231f20" stroke-width="1.5"/>
-    <text x="406" y="30" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="#1400ff" font-weight="700">03</text>
-    <text x="406" y="52" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">合格标准</text>
-  </g>
+  <path d="M420 246 C 420 276, 140 276, 140 250" fill="none" stroke="#0d9488" stroke-width="2" stroke-dasharray="5 6" opacity=".55" marker-end="url(#arr)">
+    <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.3s" repeatCount="indefinite"/>
+  </path>
+<g transform="translate(36,88)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="208" height="152" rx="18" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <text x="22" y="32" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="#0d9488">AI OUTPUT</text>
+      <text x="104" y="72" text-anchor="middle" font-size="19" font-weight="800" fill="#231f20">会生成</text>
+      <text x="104" y="104" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.6)">代码 · 页面</text>
+      <text x="104" y="126" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.6)">文档 · 图表</text>
+    </g>
+  <path d="M250 164 H310" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" marker-end="url(#arr)">
+    <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+  </path>
+<g transform="translate(316,88)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="208" height="152" rx="18" fill="url(#teal)" filter="url(#glow)"/>
+      <rect x="-6" y="-6" width="220" height="164" rx="24" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4">
+      <animate attributeName="opacity" values=".5;.14;.5" dur="2.2s" repeatCount="indefinite"/>
+    </rect>
+      <text x="22" y="32" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.8)">YOU JUDGE</text>
+      <text x="104" y="72" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">你判断</text>
+      <text x="104" y="104" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.9)">值不值得做</text>
+      <text x="104" y="126" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.9)">结果合不合格</text>
+    </g>
+<g transform="translate(36,296)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="488" height="68" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <rect x="18" y="14" width="6" height="40" rx="3" fill="#0d9488"/>
+      <text x="42" y="34" font-size="16" font-weight="800" fill="#231f20">专业判断 → AI 可执行指令</text>
+      <text x="42" y="56" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(35,31,32,.45)">NOT RACE CODE SPEED · COMMAND AI</text>
+    </g>
+<g transform="translate(36,396)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="152" height="56" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <circle cx="36" cy="28.0" r="15" fill="rgba(13,148,136,.12)"/>
+      <text x="36" y="32.0" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0d9488">01</text>
+      <text x="62" y="32.55" font-size="13" font-weight="700" fill="#231f20">真实问题</text>
+      
+      <animate attributeName="opacity" values=".55;1;1" keyTimes="0;.06;1" begin="0.0s" dur="7.0s" repeatCount="indefinite"/>
+    </g>
+<g transform="translate(204,396)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="152" height="56" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <circle cx="36" cy="28.0" r="15" fill="rgba(13,148,136,.12)"/>
+      <text x="36" y="32.0" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0d9488">02</text>
+      <text x="62" y="32.55" font-size="13" font-weight="700" fill="#231f20">业务取舍</text>
+      
+      <animate attributeName="opacity" values=".55;1;1" keyTimes="0;.06;1" begin="0.3s" dur="7.0s" repeatCount="indefinite"/>
+    </g>
+<g transform="translate(372,396)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="152" height="56" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <circle cx="36" cy="28.0" r="15" fill="rgba(13,148,136,.12)"/>
+      <text x="36" y="32.0" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="12" font-weight="700" fill="#0d9488">03</text>
+      <text x="62" y="32.55" font-size="13" font-weight="700" fill="#231f20">合格标准</text>
+      
+      <animate attributeName="opacity" values=".55;1;1" keyTimes="0;.06;1" begin="0.6s" dur="7.0s" repeatCount="indefinite"/>
+    </g>
 </svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="前端四大平台">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">先定平台，再谈框架</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">FOUR PLATFORMS</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="86" width="220" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="80" y="106" width="5" height="16" rx="2.5" fill="#0d9488"/>
+<text x="94" y="121" font-size="15" font-weight="800" fill="#231f20">Web 网页</text>
+<text x="80" y="148" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">WEB</text>
+<text x="80" y="178" font-size="12" font-weight="700" fill="rgba(35,31,32,.65)">浏览器地址栏</text>
+<text x="80" y="202" font-size="11.5" fill="rgba(35,31,32,.55)">官网 / 后台 / 周报助手</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="300" y="86" width="220" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="320" y="106" width="5" height="16" rx="2.5" fill="#0d9488"/>
+<text x="334" y="121" font-size="15" font-weight="800" fill="#231f20">App 手机应用</text>
+<text x="320" y="148" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">APP</text>
+<text x="320" y="178" font-size="12" font-weight="700" fill="rgba(35,31,32,.65)">应用商店下载</text>
+<text x="320" y="202" font-size="11.5" fill="rgba(35,31,32,.55)">微信 / 滴滴 / Keep</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="540" y="86" width="220" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="560" y="106" width="5" height="16" rx="2.5" fill="#0d9488"/>
+<text x="574" y="121" font-size="15" font-weight="800" fill="#231f20">小程序</text>
+<text x="560" y="148" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">MINI</text>
+<text x="560" y="178" font-size="12" font-weight="700" fill="rgba(35,31,32,.65)">扫码即用</text>
+<text x="560" y="202" font-size="11.5" fill="rgba(35,31,32,.55)">点单 / 健康码</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="780" y="86" width="220" height="140" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="800" y="106" width="5" height="16" rx="2.5" fill="#0d9488"/>
+<text x="814" y="121" font-size="15" font-weight="800" fill="#231f20">桌面软件</text>
+<text x="800" y="148" font-size="9.5" font-weight="700" fill="#0d9488" font-family="'SF Mono',Menlo,monospace" letter-spacing="1.5">DESKTOP</text>
+<text x="800" y="178" font-size="12" font-weight="700" fill="rgba(35,31,32,.65)">双击图标</text>
+<text x="800" y="202" font-size="11.5" fill="rgba(35,31,32,.55)">VS Code / 飞书</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="220" y="256" width="600" height="42" rx="21.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="281.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">选型第一步永远先问：用户在哪儿用你？</text></g>
+</svg>

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="证据是本金：三件套攒出连续两次全过">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#0d9488" flood-opacity=".45"/>
+    </filter>
+    <marker id="ev-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="50" r="90" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="90;106;90" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="260" r="64" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="64;76;64" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="16" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="33" font-size="15" font-weight="800" fill="#231f20">证据是本金 · 连续 2 次全过才收货</text>
+    <text x="1004" y="33" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">EVIDENCE COMPOUNDS</text>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <!-- evidence trio -->
+    <g>
+      <rect x="60" y="80" width="150" height="110" rx="14" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <text x="135" y="120" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">输入快照</text>
+      <text x="135" y="146" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" font-family="'SF Mono',Menlo,monospace">input</text>
+    </g>
+    <g>
+      <rect x="222" y="80" width="150" height="110" rx="14" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <text x="297" y="120" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">输出产物</text>
+      <text x="297" y="146" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" font-family="'SF Mono',Menlo,monospace">output</text>
+    </g>
+    <g>
+      <rect x="384" y="80" width="150" height="110" rx="14" fill="#fff" stroke="rgba(35,31,32,.11)" filter="url(#sh)"/>
+      <text x="459" y="120" text-anchor="middle" font-size="14" font-weight="800" fill="#231f20">运行日志</text>
+      <text x="459" y="146" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" font-family="'SF Mono',Menlo,monospace">log</text>
+    </g>
+    <g stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4" opacity=".7">
+      <line x1="212" y1="135" x2="220" y2="135"/><line x1="374" y1="135" x2="382" y2="135"/>
+    </g>
+    <text x="297" y="212" text-anchor="middle" font-size="11" fill="rgba(35,31,32,.5)">证据三件套 · 每一次运行都留一份</text>
+
+    <line x1="548" y1="150" x2="606" y2="150" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5" marker-end="url(#ev-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- two consecutive passes -->
+    <g>
+      <rect x="614" y="80" width="180" height="110" rx="14" fill="#fff" stroke="rgba(13,148,136,.45)" stroke-width="1.5" filter="url(#sh)"/>
+      <text x="704" y="108" text-anchor="middle" font-size="12" fill="rgba(35,31,32,.55)">连续全过</text>
+      <rect x="638" y="122" width="60" height="24" rx="12" fill="url(#teal)"/>
+      <text x="668" y="139" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">第 1 次</text>
+      <rect x="710" y="122" width="60" height="24" rx="12" fill="url(#teal)"/>
+      <text x="740" y="139" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">第 2 次</text>
+      <rect x="638" y="156" width="132" height="8" rx="4" fill="rgba(35,31,32,.08)"/>
+      <rect x="638" y="156" width="132" height="8" rx="4" fill="url(#teal)">
+        <animate attributeName="width" values="0;132" dur="3s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+
+    <line x1="806" y1="150" x2="858" y2="150" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5" marker-end="url(#ev-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- receive -->
+    <g>
+      <rect x="858" y="72" width="132" height="126" rx="18" fill="url(#teal)" filter="url(#glow)"/>
+      <text x="924" y="128" text-anchor="middle" font-size="18" font-weight="800" fill="#fff">收货</text>
+      <text x="924" y="154" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.88)">预告 · 第七天验收口试</text>
+    </g>
+
+    <!-- footer pill -->
+    <rect x="240" y="240" width="560" height="42" rx="21" fill="rgba(13,148,136,.10)"/>
+    <text x="520" y="267" text-anchor="middle" font-size="13" font-weight="800" fill="#0f766e">信任不是说的，是一次次证据攒出来的</text>
+  </g>
+</svg>

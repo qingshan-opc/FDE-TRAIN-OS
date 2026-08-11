@@ -1,60 +1,92 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 520" role="img" aria-label="wall to start">
-  <rect width="560" height="520" fill="#f2f5f0"/>
-  <text x="28" y="36" font-family="Menlo,monospace" font-size="12" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · WALL → START</text>
-
-  <g transform="translate(28,64)">
-    <rect x="0" y="0" width="200" height="300" fill="#fff" stroke="#231f20" stroke-width="2"/>
-    <g stroke="#231f20" stroke-width="1.2" opacity=".35">
-      <line x1="0" y1="50" x2="200" y2="50"/>
-      <line x1="0" y1="100" x2="200" y2="100"/>
-      <line x1="0" y1="150" x2="200" y2="150"/>
-      <line x1="0" y1="200" x2="200" y2="200"/>
-      <line x1="0" y1="250" x2="200" y2="250"/>
-      <line x1="100" y1="0" x2="100" y2="50"/>
-      <line x1="50" y1="50" x2="50" y2="100"/>
-      <line x1="150" y1="50" x2="150" y2="100"/>
-      <line x1="100" y1="100" x2="100" y2="150"/>
-      <line x1="50" y1="150" x2="50" y2="200"/>
-      <line x1="150" y1="150" x2="150" y2="200"/>
-      <line x1="100" y1="200" x2="100" y2="250"/>
-      <line x1="50" y1="250" x2="50" y2="300"/>
-      <line x1="150" y1="250" x2="150" y2="300"/>
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="tealSoft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(13,148,136,.14)"/>
+      <stop offset="100%" stop-color="rgba(13,148,136,.05)"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".4"/>
+    </filter>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+  </defs>
+  <rect width="560" height="520" fill="#ffffff"/>
+  <rect width="560" height="520" fill="url(#dots)"/>
+  <circle cx="504" cy="56" r="86" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="86;100;86" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="52" cy="476" r="62" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="62;74;62" dur="11s" repeatCount="indefinite"/>
+  </circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect x="30" y="24" width="6" height="26" rx="3" fill="#0d9488"/>
+    <text x="46" y="43" font-size="19" font-weight="800" fill="#231f20">拆墙：从误区到起点</text>
+    <text x="532" y="41" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.8" fill="rgba(35,31,32,.42)">WALL → START</text>
+  </g>
+<g transform="translate(36,92)">
+      <rect width="180" height="268" rx="14" fill="#fff" stroke="rgba(35,31,32,.14)" stroke-width="1" filter="url(#sh)"/>
+<line x1="0" y1="45" x2="180" y2="45" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="0" y1="90" x2="180" y2="90" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="0" y1="135" x2="180" y2="135" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="0" y1="180" x2="180" y2="180" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="0" y1="225" x2="180" y2="225" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="90" y1="0" x2="90" y2="45" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="45" y1="45" x2="45" y2="90" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="135" y1="45" x2="135" y2="90" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="90" y1="90" x2="90" y2="135" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="45" y1="135" x2="45" y2="180" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="135" y1="135" x2="135" y2="180" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="90" y1="180" x2="90" y2="225" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="45" y1="225" x2="45" y2="270" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+<line x1="135" y1="225" x2="135" y2="270" stroke="rgba(35,31,32,.09)" stroke-width="1.2"/>
+      <path d="M102 16 L88 58 L108 96 L84 142 L112 188 L92 228 L106 262" fill="none" stroke="url(#teal)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="12 9">
+      <animate attributeName="stroke-dashoffset" from="21" to="0" dur="1s" repeatCount="indefinite"/>
+    </path>
     </g>
-    <path d="M110 20 L95 70 L120 110 L90 160 L125 210 L100 260 L118 300" fill="none" stroke="#1400ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="100" y="332" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">误区之墙</text>
-    <text x="100" y="354" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="rgba(35,31,32,.55)">MUST CODE</text>
-  </g>
-
-  <g transform="translate(248,180)">
-    <rect x="0" y="18" width="64" height="36" fill="#1400ff"/>
-    <polygon points="64,8 96,36 64,64" fill="#1400ff"/>
-    <text x="32" y="42" text-anchor="middle" font-family="Menlo,monospace" font-size="12" font-weight="700" fill="#fff">拆</text>
-  </g>
-
-  <g transform="translate(360,64)">
-    <rect x="0" y="0" width="172" height="300" fill="#1400ff"/>
-    <text x="86" y="36" text-anchor="middle" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,.7)">DOMAIN</text>
-    <text x="86" y="68" text-anchor="middle" font-family="serif" font-size="22" font-weight="700" fill="#fff">专业起点</text>
-    <g font-family="sans-serif" font-size="14" font-weight="700" fill="#231f20">
-      <rect x="18" y="96" width="136" height="36" fill="#fff"/>
-      <text x="86" y="119" text-anchor="middle">财务 · 报表</text>
-      <rect x="18" y="142" width="136" height="36" fill="#fff"/>
-      <text x="86" y="165" text-anchor="middle">HR · 招聘</text>
-      <rect x="18" y="188" width="136" height="36" fill="#fff"/>
-      <text x="86" y="211" text-anchor="middle">运营 · 转化</text>
-      <rect x="18" y="234" width="136" height="36" fill="#fff"/>
-      <text x="86" y="257" text-anchor="middle">销售 · 教育</text>
+  <text x="126" y="396" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="800" fill="#231f20">误区之墙</text>
+  <text x="126" y="416" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(35,31,32,.45)">MUST CODE</text>
+  <path d="M222 224 H240" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" marker-end="url(#arr)">
+    <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+  </path>
+<g transform="translate(244,204)">
+      <rect width="40" height="40" rx="12" fill="url(#teal)" filter="url(#glow)"/>
+      <text x="20" y="27" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" font-weight="800" fill="#fff">拆</text>
     </g>
-    <text x="86" y="332" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#231f20">不是从零开始</text>
-    <text x="86" y="354" text-anchor="middle" font-family="Menlo,monospace" font-size="11" fill="rgba(35,31,32,.55)">YOU ALREADY KNOW</text>
-  </g>
-
-  <g transform="translate(28,440)">
-    <rect x="0" y="0" width="504" height="56" fill="#fff" stroke="#231f20" stroke-width="2"/>
-    <rect x="0" y="0" width="8" height="56" fill="#1400ff"/>
-    <text x="28" y="35" font-family="serif" font-size="20" font-weight="700" fill="#231f20">不会写代码</text>
-    <text x="148" y="35" font-family="Menlo,monospace" font-size="22" font-weight="700" fill="#1400ff">≠</text>
-    <text x="188" y="35" font-family="serif" font-size="20" font-weight="700" fill="#231f20">不会做软件</text>
-    <text x="360" y="35" font-family="Menlo,monospace" font-size="13" font-weight="700" fill="#1400ff">→ 指挥 AI</text>
-  </g>
+  <path d="M288 224 H342" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" marker-end="url(#arr)">
+    <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+  </path>
+<g transform="translate(348,92)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="176" height="268" rx="18" fill="url(#teal)" filter="url(#glow)"/>
+      <text x="88" y="32" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(255,255,255,.8)">DOMAIN</text>
+      <text x="88" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">专业起点</text>
+      <rect x="22" y="92" width="132" height="34" rx="10" fill="#fff"/>
+      <text x="88" y="114" text-anchor="middle" font-size="12.5" font-weight="700" fill="#231f20">财务 · 报表</text>
+<rect x="22" y="136" width="132" height="34" rx="10" fill="#fff"/>
+      <text x="88" y="158" text-anchor="middle" font-size="12.5" font-weight="700" fill="#231f20">HR · 招聘</text>
+<rect x="22" y="180" width="132" height="34" rx="10" fill="#fff"/>
+      <text x="88" y="202" text-anchor="middle" font-size="12.5" font-weight="700" fill="#231f20">运营 · 转化</text>
+<rect x="22" y="224" width="132" height="34" rx="10" fill="#fff"/>
+      <text x="88" y="246" text-anchor="middle" font-size="12.5" font-weight="700" fill="#231f20">销售 · 教育</text>
+    </g>
+  <text x="436" y="396" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="800" fill="#231f20">不是从零开始</text>
+  <text x="436" y="416" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="1.5" fill="rgba(35,31,32,.45)">YOU ALREADY KNOW</text>
+<g transform="translate(36,440)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+      <rect width="488" height="60" rx="16" fill="#fff" stroke="rgba(35,31,32,.1)" stroke-width="1" filter="url(#sh)"/>
+      <rect x="16" y="12" width="6" height="36" rx="3" fill="#0d9488"/>
+      <text x="40" y="38" font-size="17" font-weight="800" fill="#231f20">不会写代码</text>
+      <text x="186" y="39" font-family="'SF Mono',Menlo,monospace" font-size="22" font-weight="700" fill="#0d9488">≠</text>
+      <text x="224" y="38" font-size="17" font-weight="800" fill="#231f20">不会做软件</text>
+      <text x="402" y="37" text-anchor="start" font-family="'SF Mono',Menlo,monospace" font-size="13" letter-spacing="1.5" fill="#0d9488">→ 指挥 AI</text>
+    </g>
 </svg>

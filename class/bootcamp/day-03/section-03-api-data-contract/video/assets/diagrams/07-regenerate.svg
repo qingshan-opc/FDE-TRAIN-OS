@@ -1,1 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img"><rect width="560" height="460" fill="#f2f5f0"/><text x="28" y="34" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · MAP</text><text x="28" y="64" font-family="serif" font-size="22" font-weight="700" fill="#231f20">P5 · 完整重生成</text><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#231f20"/></marker></defs><rect x="40" y="110" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="56" y="138" font-family="Menlo,monospace" font-size="11" fill="#1400ff">角色 / ROLE</text><text x="56" y="178" font-family="serif" font-size="18" font-weight="700" fill="#231f20">P5 · 完整重生成</text><rect x="300" y="110" width="220" height="110" fill="#1400ff" stroke="#231f20" stroke-width="1.8"/><text x="316" y="138" font-family="Menlo,monospace" font-size="11" fill="rgba(255,255,255,.75)">接口 / API</text><text x="316" y="178" font-family="serif" font-size="18" font-weight="700" fill="#fff">不留半份旧合同</text><rect x="40" y="270" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="56" y="298" font-family="Menlo,monospace" font-size="11" fill="#1400ff">处理 / LOGIC</text><text x="56" y="338" font-family="serif" font-size="18" font-weight="700" fill="#231f20">页面 → API → 数</text><rect x="300" y="270" width="220" height="110" fill="#fff" stroke="#231f20" stroke-width="1.8"/><text x="316" y="298" font-family="Menlo,monospace" font-size="11" fill="#1400ff">存储 / DATA</text><text x="316" y="338" font-family="serif" font-size="18" font-weight="700" fill="#231f20">一个最新版</text><line x1="260" y1="165" x2="300" y2="165" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><line x1="150" y1="220" x2="150" y2="270" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><line x1="410" y1="220" x2="410" y2="270" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="40" y="400" width="480" height="36" fill="#231f20"/><text x="280" y="423" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">P5 · 完整重生成</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="P5 · 完整重生成">
+<defs>
+<linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<linearGradient id="tealH" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#231f20" flood-opacity=".08"/></filter>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".38"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/></marker>
+</defs>
+<rect width="560" height="460" fill="#ffffff"/>
+<rect width="560" height="460" fill="url(#dots)"/>
+<circle cx="480" cy="56" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;112;96" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="404" r="68" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="68;80;68" dur="11s" repeatCount="indefinite"/></circle>
+<rect x="28" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="46" y="42" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="20" font-weight="800" fill="#231f20">P5 · 完整重生成</text>
+<text x="532" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="rgba(35,31,32,.4)">DIAGRAM · MAP</text>
+<rect x="40" y="104" width="220" height="116" rx="16" fill="url(#teal)" filter="url(#glow)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/><text x="60" y="138" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="rgba(255,255,255,.8)">角色 / ROLE</text>
+<text x="60" y="172" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" font-weight="700" fill="#fff">完整重生成</text>
+</g>
+<rect x="300" y="104" width="220" height="116" rx="16" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/><text x="320" y="138" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="#0d9488">接口 / API</text>
+<text x="320" y="172" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" font-weight="700" fill="#231f20">不留半份旧合同</text>
+</g>
+<rect x="40" y="256" width="220" height="116" rx="16" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/><text x="60" y="290" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="#0d9488">处理 / LOGIC</text>
+<text x="60" y="324" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" font-weight="700" fill="#231f20">页面 → API → 数据库</text>
+</g>
+<rect x="300" y="256" width="220" height="116" rx="16" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.90s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.90s" dur="0.5s" fill="freeze"/><text x="320" y="290" font-family="'SF Mono',Menlo,monospace" font-size="10" letter-spacing="1.5" fill="#0d9488">存储 / DATA</text>
+<text x="320" y="324" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="16" font-weight="700" fill="#231f20">一个最新版</text>
+</g>
+<path d="M262 162 L296 162" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="0.9s" repeatCount="indefinite"/></path>
+<path d="M150 222 L150 252" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="1.1s" repeatCount="indefinite"/></path>
+<path d="M410 222 L410 252" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="1.3s" repeatCount="indefinite"/></path>
+<rect x="40" y="396" width="480" height="40" rx="20.0" fill="rgba(13,148,136,.09)"/>
+<text x="280.0" y="420.68" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="13" font-weight="700" fill="#0f766e">页面 → API → 数据库 · 只留一个最新版</text>
+</svg>

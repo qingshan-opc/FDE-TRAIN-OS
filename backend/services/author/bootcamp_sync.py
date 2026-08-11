@@ -102,20 +102,90 @@ def _koubo(day: int, sdir: str) -> str:
     return "（见本节 lesson.md）"
 
 
+_CHECKLIST_HEADERS = (
+    "学员验收清单",
+    "手工检查清单",
+    "完成标志",
+    "过关标准",
+    "周末交付清单",
+)
+
+_INCLUDE_RE = re.compile(r"\{\{include:([^}]+)\}\}")
+_MD_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+
+
+def _checklist_items(txt: str) -> list[str]:
+    items: list[str] = []
+    seen: set[str] = set()
+    for header in _CHECKLIST_HEADERS:
+        m = re.search(rf"## {re.escape(header)}\n(.*?)(?=\n## |\Z)", txt, re.S)
+        if not m:
+            continue
+        for raw in m.group(1).splitlines():
+            line = raw.strip()
+            mm = re.match(r"^[-*]\s*(?:\[[ xX]\]\s*)?(.+)$", line)
+            if not mm:
+                continue
+            item = mm.group(1).strip().rstrip("；。")
+            if item and item not in seen:
+                seen.add(item)
+                items.append(item)
+    return items
+
+
+def _expand_includes(text: str, *, base: Path | None = None) -> str:
+    """Expand ``{{include:relative/or/repo/path.md}}`` from repo root or ``base``."""
+
+    def repl(match: re.Match[str]) -> str:
+        rel = match.group(1).strip()
+        candidates = [_ROOT / rel]
+        if base is not None:
+            candidates.insert(0, (base / rel).resolve())
+        for cand in candidates:
+            if cand.is_file():
+                return _read(cand).strip()
+        return match.group(0)
+
+    return _INCLUDE_RE.sub(repl, text)
+
+
+def _prompt_from_teaching_links(practice_path: Path, txt: str) -> str:
+    """Resolve markdown links to teaching pack prompt files into copyable text."""
+    chunks: list[str] = []
+    seen: set[Path] = set()
+    for match in _MD_LINK_RE.finditer(txt):
+        rel = match.group(1).strip()
+        if "://" in rel or not rel.endswith(".md"):
+            continue
+        if "/prompts/" not in rel.replace("\\", "/") and not rel.startswith("prompts/"):
+            continue
+        target = (practice_path.parent / rel).resolve()
+        if not target.is_file():
+            target = (_ROOT / rel.lstrip("./")).resolve()
+        if not target.is_file() or target in seen:
+            continue
+        seen.add(target)
+        chunks.append(_read(target).strip())
+    return "\n\n---\n\n".join(chunks)
+
+
 def _practice(day: int, sdir: str) -> str:
     p = BC / f"day-{day:02d}" / sdir / "practice.md"
     if not p.exists():
         return "见本节 practice.md"
     txt = _read(p)
-    m = re.search(r"## 完成标志\n(.*?)(?=\n## |\Z)", txt, re.S)
-    if m:
-        pts = [
-            re.sub(r"^[-*]\s*", "", l).strip().rstrip("；。")
-            for l in m.group(1).splitlines()
-            if l.strip().startswith(("-", "*"))
-        ]
-        if pts:
-            return "完成标志：\n" + "\n".join(f"[ ] {point}" for point in pts)
+    parts: list[str] = []
+    task_m = re.search(r"## 实操任务[^\n]*\n(.*?)(?=\n## |\Z)", txt, re.S)
+    if task_m:
+        # Keep a short plain-text brief (drop nested headings / links noise lightly).
+        brief = re.sub(r"\n{3,}", "\n\n", task_m.group(1).strip())
+        if brief:
+            parts.append(brief[:600])
+    pts = _checklist_items(txt)
+    if pts:
+        parts.append("完成标志：\n" + "\n".join(f"[ ] {point}" for point in pts))
+    if parts:
+        return "\n\n".join(parts)
     return "按本节 practice.md 完成任务并达到完成标志。"
 
 
@@ -126,6 +196,10 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     TRAE prompt and acceptance checklist together.  Turning that source into a
     local_prep payload makes the course follow the same four-step flow on every
     lesson: explain → confirm → practise in TRAE → submit evidence.
+
+    Week 2+ may point at teaching-pack prompt files via markdown links under
+    「一键粘贴提示词」; those files are inlined so the learner UI still gets a
+    one-click copyable ``codex_prompt``.
     """
 
     p = BC / f"day-{day:02d}" / sdir / "practice.md"
@@ -134,11 +208,10 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     txt = _read(p)
 
     prompt_m = re.search(
-        r"## 一键粘贴提示词\n.*?```(?:text)?\s*\n(.*?)\n```",
+        r"## 一键粘贴提示词[^\n]*\n.*?```(?:text)?\s*\n(.*?)\n```",
         txt,
         re.S,
     )
-    checklist_m = re.search(r"## 学员验收清单\n(.*?)(?=\n## |\Z)", txt, re.S)
     correction_m = re.search(
         r"## 纠偏句式\n.*?```(?:text)?\s*\n(.*?)\n```",
         txt,
@@ -146,13 +219,19 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     )
 
     prompt = prompt_m.group(1).strip() if prompt_m else ""
-    checklist: list[str] = []
-    if checklist_m:
-        for raw in checklist_m.group(1).splitlines():
-            line = raw.strip()
-            m = re.match(r"^-\s*(?:\[[ xX]\]\s*)?(.+)$", line)
-            if m:
-                checklist.append(m.group(1).strip().rstrip("；。"))
+    if not prompt:
+        # Also accept ### 一键粘贴… / 「教学包全文」 subsections with bare links.
+        link_region = txt
+        region_m = re.search(
+            r"##[^\n]*一键粘贴提示词[^\n]*\n(.*?)(?=\n## |\Z)",
+            txt,
+            re.S,
+        )
+        if region_m:
+            link_region = region_m.group(0)
+        prompt = _prompt_from_teaching_links(p, link_region)
+
+    checklist = _checklist_items(txt)
 
     if not prompt and not checklist:
         return None
@@ -164,6 +243,13 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     if correction_m:
         out["suggested_questions"] = [correction_m.group(1).strip()]
     return out
+
+
+def _expand_local_prep_includes(local_prep: dict[str, Any]) -> dict[str, Any]:
+    prompt = local_prep.get("codex_prompt")
+    if isinstance(prompt, str) and "{{include:" in prompt:
+        local_prep = {**local_prep, "codex_prompt": _expand_includes(prompt)}
+    return local_prep
 
 
 def _quiz(raw_questions: list) -> dict[str, Any]:
@@ -210,6 +296,8 @@ def build_day_package(day: int) -> dict[str, Any]:
             local_prep = _local_prep(day, cap["dir"])
             if local_prep:
                 capsule["local_prep"] = local_prep
+        if isinstance(capsule.get("local_prep"), dict):
+            capsule["local_prep"] = _expand_local_prep_includes(capsule["local_prep"])
         capsules.append(capsule)
 
     week = 1 if day <= 6 else 2 if day <= 11 else 3

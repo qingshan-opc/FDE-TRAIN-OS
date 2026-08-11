@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" role="img" aria-label="后端选型三句话">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="300" fill="#ffffff"/>
+  <rect width="1040" height="300" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="252" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">怎么选：三句话</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">THREE RULES</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="76" width="920" height="46" rx="14" fill="rgba(255,255,255,.9)"/>
+<rect x="76" y="85" width="34" height="28" rx="8" fill="url(#tlg)"/>
+<text x="93" y="105" font-size="12" font-weight="800" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">01</text>
+<text x="128" y="105" font-size="14" font-weight="800" fill="#231f20">AI 项目 → Python + FastAPI</text>
+<text x="964" y="105" font-size="11.5" fill="rgba(35,31,32,.55)" text-anchor="end">模型生态在这，起手快</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="132" width="920" height="46" rx="14" fill="rgba(255,255,255,.9)"/>
+<rect x="76" y="141" width="34" height="28" rx="8" fill="url(#tlg)"/>
+<text x="93" y="161" font-size="12" font-weight="800" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">02</text>
+<text x="128" y="161" font-size="14" font-weight="800" fill="#231f20">企业长期系统 → Java + Spring Boot</text>
+<text x="964" y="161" font-size="11.5" fill="rgba(35,31,32,.55)" text-anchor="end">要打通既有系统、要招长期维护的人</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="188" width="920" height="46" rx="14" fill="rgba(255,255,255,.9)"/>
+<rect x="76" y="197" width="34" height="28" rx="8" fill="url(#tlg)"/>
+<text x="93" y="217" font-size="12" font-weight="800" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">03</text>
+<text x="128" y="217" font-size="14" font-weight="800" fill="#231f20">小工具验证 → FastAPI 或 Node</text>
+<text x="964" y="217" font-size="11.5" fill="rgba(35,31,32,.55)" text-anchor="end">三天能跑起来比什么都重要</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="270" y="252" width="500" height="34" rx="17.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="273.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">库的路线：SQLite → PostgreSQL → Redis</text></g>
+</svg>

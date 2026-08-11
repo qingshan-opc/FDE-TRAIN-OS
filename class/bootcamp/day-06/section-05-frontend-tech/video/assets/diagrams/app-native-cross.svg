@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="App 原生与跨端路线">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">App：性能要极致走原生，小团队默认跨端</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">NATIVE VS CROSS-PLATFORM</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="86" width="450" height="150" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="84" y="66" width="100" height="26" rx="13.0" fill="rgba(35,31,32,.05)"/><text x="134.0" y="83.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">NATIVE</text>
+<text x="84" y="122" font-size="14" font-weight="800" fill="#231f20">Swift（苹果官方）/ Kotlin（谷歌官方）</text>
+<text x="84" y="152" font-size="12" fill="rgba(35,31,32,.6)">系统能力最全</text>
+<text x="84" y="180" font-size="12" fill="rgba(35,31,32,.6)">代价：两套代码、两拨人</text>
+<text x="84" y="212" font-size="12" fill="rgba(35,31,32,.5)">大厂重体验时走这条</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="550" y="86" width="430" height="150" rx="18" fill="#fff" stroke="rgba(13,148,136,.5)" stroke-width="2" filter="url(#tglow)"/>
+<rect x="574" y="66" width="150" height="26" rx="13.0" fill="url(#tlg)"/><text x="649.0" y="83.32" font-size="12" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">CROSS · 小团队默认</text>
+<text x="574" y="122" font-size="14" font-weight="800" fill="#0f766e">Flutter / React Native</text>
+<text x="574" y="152" font-size="12" fill="rgba(35,31,32,.6)">Flutter 双端长得齐 · RN 会 React 就转得顺</text>
+<text x="574" y="180" font-size="12" fill="rgba(35,31,32,.6)">一套代码出两端</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="170" y="262" width="700" height="40" rx="20.0" fill="rgba(13,148,136,.10)"/>
+<text x="520.0" y="286.5" font-size="13" font-weight="700" fill="#0f766e" text-anchor="middle">还要顺带出小程序 + App + H5？常看 uni-app 一条龙编排</text></g>
+</svg>

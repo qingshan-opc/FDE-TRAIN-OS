@@ -1,0 +1,1 @@
+运行中要展示事件：`turn_start`、`tool_call` 带工具名和摘要、`tool_result` 截断、`confirm_required` 弹出批准拒绝、`turn_done` 或 `task_done`。轮询或 SSE 都行，答辩能看状态即可。有同学可能会问：必须上 WebSocket 吗？不必——稳比炫重要。听见了吗？黑盒 Agent 不算驾驶：用户得知道它在第几轮、调了啥、卡在哪。历史至少显示本会话消息，能链到 `runs/` 说明更好。来，对照屏幕事件列表，先让一条 tool_call 在页上闪出来，再谈别的，呢。

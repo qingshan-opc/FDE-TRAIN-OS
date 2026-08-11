@@ -1,35 +1,27 @@
-# 第 4 节 · 练习：Agent v0.1 闭环实测（随堂 25′）
+# 第 4 节 · 练习：实现 Agent Loop（随堂 30′）
 
-## 任务一：写描述挂上（7′）
+## 任务
 
-- 按三要素写工具描述（何时用/不用于/输入要求）；
-- 在 Agent Lab 把 Skill 挂到 Agent 工具表；
-- 同桌互审描述：遮住 Skill 名，只看描述，能说出「什么时候该选它」吗？
+落地 `agent/loop.py`（或等价）：LLM → tool_calls → 执行 → 回灌 → 下一轮；`max_turns` 默认 20。
 
-## 任务二：三任务实测（12′）
-
-填选错图谱（lesson 表格），任务 A/B 各跑 1 次，任务 C 跑 2 次（换措辞）。
-
-## 任务三：修正与复测（6′）
-
-- 选错的任务：改工具描述（通常是加/改「不用于」），复测到选对；
-- 记录「描述哪句话起了作用」。
+最小工具：`file_read` + `skill`。日志写入 `runs/.../log.jsonl`。
 
 ## 一键粘贴提示词
 
-> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+[`class/teaching/week2-cockpit-agent/prompts/04-agent-loop.md`](../../../teaching/week2-cockpit-agent/prompts/04-agent-loop.md)
 
-```text
-你是 Agent 工具接入教练。请根据我的 skills/〈名称〉.md 写出工具描述三要素：何时用 / 不用于 / 输入要求。
-然后设计三任务实测脚本：
-A 应调用该 Skill；B 不应调用；C 模糊指令易选错。
-要求我把结果记入 docs/agent-tool-map.md（选错原因与描述修改句）。
-若在 Cursor/Agent Lab：指导我如何挂工具表并逐条跑，不要跳过复测。
-```
+地图：[`agent-minimap.md`](../../../teaching/week2-cockpit-agent/agent-minimap.md)
+
+## 实测三任务
+
+| 任务 | 期望 |
+|------|------|
+| A「根据最新列表生成周报」 | 应调 skill / file_read |
+| B「现在几点了」 | 不应乱调业务 Skill |
+| C 模糊指令 | 记录选错并改 system/工具描述 |
 
 ## 过关标准
 
-- 任务 A 调用成功且产出过 Skill 验收段；
-- 任务 B 未误调；
-- 任务 C 的选错（如有）已定位原因并修复描述；
-- 选错图谱完整进 Git（`docs/agent-tool-map.md`）。
+- loop 可演示 ≥2 turn 工具调用；
+- 超限可停止；
+- 选错图谱记入 `docs/agent-tool-map.md`。

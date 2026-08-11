@@ -1,1 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img"><rect width="560" height="460" fill="#f2f5f0"/><text x="28" y="34" font-family="Menlo,monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#1400ff">DIAGRAM · FLOW</text><text x="28" y="64" font-family="serif" font-size="22" font-weight="700" fill="#231f20">P4 · 提交与刷新</text><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#231f20"/></marker></defs><rect x="40.0" y="120" width="153.3" height="220" fill="#fff" stroke="#231f20" stroke-width="1.8"/><circle cx="116.7" cy="168" r="22" fill="#1400ff"/><text x="116.7" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#fff">01</text><text x="116.7" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#231f20">新建可识别记录</text><text x="116.7" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(35,31,32,.55)">新建可识别记录</text><line x1="195.3" y1="230" x2="201.3" y2="230" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="203.3" y="120" width="153.3" height="220" fill="#1400ff" stroke="#231f20" stroke-width="1.8"/><circle cx="280.0" cy="168" r="22" fill="#fff"/><text x="280.0" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#1400ff">02</text><text x="280.0" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#fff">页面成功反馈</text><text x="280.0" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(255,255,255,.8)">页面成功反馈</text><line x1="358.7" y1="230" x2="364.7" y2="230" stroke="#231f20" stroke-width="2" marker-end="url(#arr)"/><rect x="366.7" y="120" width="153.3" height="220" fill="#fff" stroke="#231f20" stroke-width="1.8"/><circle cx="443.3" cy="168" r="22" fill="#1400ff"/><text x="443.3" y="174" text-anchor="middle" font-family="Menlo,monospace" font-size="14" font-weight="700" fill="#fff">03</text><text x="443.3" y="230" text-anchor="middle" font-family="serif" font-size="17" font-weight="700" fill="#231f20">刷新后仍存在</text><text x="443.3" y="258" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(35,31,32,.55)">刷新后仍存在</text><rect x="40" y="372" width="480" height="48" fill="#1400ff"/><text x="280" y="402" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">新建可识别记录 → 页面成功反馈 → 刷新后仍存在</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 460" role="img" aria-label="P4 · 提交与刷新">
+<defs>
+<linearGradient id="teal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<linearGradient id="tealH" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient>
+<pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/></pattern>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/></filter>
+<filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#231f20" flood-opacity=".08"/></filter>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="5" stdDeviation="12" flood-color="#0d9488" flood-opacity=".38"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/></marker>
+</defs>
+<rect width="560" height="460" fill="#ffffff"/>
+<rect width="560" height="460" fill="url(#dots)"/>
+<circle cx="480" cy="56" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;112;96" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="64" cy="404" r="68" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="68;80;68" dur="11s" repeatCount="indefinite"/></circle>
+<rect x="28" y="24" width="6" height="24" rx="3" fill="#0d9488"/>
+<text x="46" y="42" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="20" font-weight="800" fill="#231f20">P4 · 提交与刷新</text>
+<text x="532" y="42" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="10.5" letter-spacing="2" fill="rgba(35,31,32,.4)">DIAGRAM · FLOW</text>
+<rect x="40" y="118" width="148" height="204" rx="16" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.00s" dur="0.5s" fill="freeze"/><circle cx="114.0" cy="164" r="19" fill="url(#teal)"/>
+<text x="114.0" y="169.5" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="13" font-weight="700" fill="#fff">01</text>
+<text x="114.0" y="234" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">新建可识别</text>
+<text x="114.0" y="255" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">记录</text>
+<text x="114.0" y="300" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="9" letter-spacing="1" fill="rgba(35,31,32,.42)">NEW RECORD</text>
+</g>
+<path d="M190 218 L202 218" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="0.9s" repeatCount="indefinite"/></path>
+<rect x="206" y="118" width="148" height="204" rx="16" fill="rgba(13,148,136,.07)" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.30s" dur="0.5s" fill="freeze"/><circle cx="280.0" cy="164" r="19" fill="url(#teal)"/>
+<text x="280.0" y="169.5" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="13" font-weight="700" fill="#fff">02</text>
+<text x="280.0" y="234" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">页面成功</text>
+<text x="280.0" y="255" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">反馈</text>
+<text x="280.0" y="300" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="9" letter-spacing="1" fill="rgba(35,31,32,.42)">SUCCESS</text>
+</g>
+<path d="M356 218 L368 218" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" from="12" to="0" dur="0.9s" repeatCount="indefinite"/></path>
+<rect x="372" y="118" width="148" height="204" rx="16" fill="#fff" filter="url(#sh)" opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/></rect>
+<g opacity="0"><animate attributeName="opacity" values="0;1" begin="0.60s" dur="0.5s" fill="freeze"/><circle cx="446.0" cy="164" r="19" fill="url(#teal)"/>
+<text x="446.0" y="169.5" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="13" font-weight="700" fill="#fff">03</text>
+<text x="446.0" y="234" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">刷新后</text>
+<text x="446.0" y="255" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="15" font-weight="700" fill="#231f20">仍存在</text>
+<text x="446.0" y="300" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="9" letter-spacing="1" fill="rgba(35,31,32,.42)">PERSISTED</text>
+</g>
+<rect x="40" y="378" width="480" height="44" rx="22.0" fill="rgba(13,148,136,.09)"/>
+<text x="280.0" y="404.5" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif" font-size="12.5" font-weight="700" fill="#0f766e">新建可识别记录 → 页面成功反馈 → 刷新后仍存在</text>
+</svg>

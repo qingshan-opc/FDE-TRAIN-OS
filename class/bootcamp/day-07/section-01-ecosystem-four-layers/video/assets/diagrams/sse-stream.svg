@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="sse-stream">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="tealGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+
+  <!-- BATCH panel -->
+  <g transform="translate(40,40)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect width="440" height="244" rx="22" fill="#fff" filter="url(#sh)"/>
+    <g transform="translate(24,22)">
+      <rect width="118" height="26" rx="13" fill="rgba(35,31,32,.06)"/>
+      <text x="59" y="17" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="rgba(35,31,32,.55)">BATCH · 寄信</text>
+    </g>
+    <text x="24" y="80" font-size="22" font-weight="800" fill="#231f20">一次性整包</text>
+
+    <g transform="translate(24,104)">
+      <rect width="72" height="42" rx="12" fill="rgba(35,31,32,.05)"/>
+      <text x="36" y="26" text-anchor="middle" font-size="13" fill="#231f20">请求</text>
+      <path d="M82 21 H128" stroke="rgba(35,31,32,.4)" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6">
+        <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.4s" repeatCount="indefinite"/>
+      </path>
+      <rect x="136" width="96" height="42" rx="12" fill="rgba(35,31,32,.05)"/>
+      <text x="184" y="26" text-anchor="middle" font-size="13" fill="rgba(35,31,32,.5)">干等…</text>
+      <path d="M242 21 H288" stroke="rgba(35,31,32,.4)" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6">
+        <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.4s" repeatCount="indefinite"/>
+      </path>
+      <rect x="296" width="116" height="42" rx="12" fill="#231f20"/>
+      <text x="354" y="26" text-anchor="middle" font-size="13" fill="#f2f5f0">整包 JSON</text>
+    </g>
+
+    <!-- waiting progress -->
+    <g transform="translate(24,176)">
+      <rect width="392" height="10" rx="5" fill="rgba(35,31,32,.08)"/>
+      <rect width="392" height="10" rx="5" fill="url(#teal)" opacity=".85">
+        <animate attributeName="width" values="0;392" dur="4.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".85;.85;0" keyTimes="0;.92;1" dur="4.5s" repeatCount="indefinite"/>
+      </rect>
+      <text x="0" y="30" font-family="'SF Mono',Menlo,monospace" font-size="11" fill="rgba(35,31,32,.45)">等待整包返回…</text>
+    </g>
+
+    <text x="24" y="230" font-size="13" fill="rgba(35,31,32,.5)">像寄信：全文回来才打开 · 失败只能整段重来</text>
+  </g>
+
+  <!-- SSE panel -->
+  <g transform="translate(560,40)" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+    <rect width="440" height="244" rx="22" fill="#fff" stroke="rgba(13,148,136,.45)" stroke-width="1.5" filter="url(#tealGlow)"/>
+    <g transform="translate(24,22)">
+      <rect width="118" height="26" rx="13" fill="url(#teal)"/>
+      <text x="59" y="17" text-anchor="middle" font-family="'SF Mono',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="#fff">SSE · 打电话</text>
+    </g>
+    <text x="24" y="80" font-size="22" font-weight="800" fill="#231f20">边收边显示</text>
+
+    <!-- stream lane -->
+    <g transform="translate(24,104)">
+      <line x1="10" y1="20" x2="402" y2="20" stroke="rgba(13,148,136,.25)" stroke-width="2" stroke-linecap="round"/>
+      <circle cy="20" r="5" fill="#0d9488">
+        <animate attributeName="cx" values="10;402" dur="2.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.08;.88;1" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <g transform="translate(0,44)">
+        <g>
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">字</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="0s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(56,0)">
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">一</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="0.35s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(112,0)">
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">个</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="0.7s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(168,0)">
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">个</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="1.05s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(224,0)">
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">出</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="1.4s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(280,0)">
+          <rect width="48" height="36" rx="10" fill="url(#teal)"/>
+          <text x="24" y="23" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">来</text>
+          <animate attributeName="opacity" values=".12;1;1" keyTimes="0;.12;1" begin="1.75s" dur="2.4s" repeatCount="indefinite"/>
+        </g>
+        <text x="344" y="24" font-family="'SF Mono',Menlo,monospace" font-size="12" fill="#0d9488">chunk+</text>
+      </g>
+    </g>
+
+    <text x="24" y="216" font-size="13" fill="rgba(35,31,32,.5)">text/event-stream · 体感快</text>
+    <text x="24" y="238" font-size="13" font-weight="700" fill="#0d9488">本课助手位 / 对话面板建议走 SSE</text>
+  </g>
+</svg>

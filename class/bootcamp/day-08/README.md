@@ -1,43 +1,37 @@
-# Day 7 · 第一个 Skill：把你的工作方式教给 AI
+# Day 7 · 第一个可执行 Skill（展示 D7）
 
-> 结构依据：`docs/spec/0.4/curriculum-v0.6.md`（实战主课 + 公开课拆分）
-> 今日目标：**把一件你每周重复做的事，封装成一个带验收标准的 Skill——AI 按它干活，你按它验收**
-> 总时长 100′ · 5 节 · 概念/方法 45′，实战 55′；GATE 走 Lab / 企业任务，不单开验收课
+> 今日目标：在 **已接通 LLM 的应用** 上，落地可加载、可调用的第一个 Skill。
+> 总时长 100′ · 概念 45′ · 实战 55′
 
 ## 这一天在解决什么
 
-Week 2 换档：Week 1 你做了一个**产品**（驾驶舱），Week 2 你要做一个**同事**。
+叙事（请背下来）：
 
-Week 1 你每天都在「教 AI 做事」——但那些 Prompt 散落在各次对话里，用完即弃。今天把它固化：**Skill = 教 AI 做一件具体事的说明书**，可复用、可验收、可交接。
+```
+Week1 业务系统 → 昨天应用内可聊 → 今天给它装「可执行能力」= Skill
+```
 
-1. **换档认知**：从系统到能力——驾驶舱是系统，「生成周报」是能力，能力才能被 AI 执行（第 1 节，15′）；
-2. **解剖 Skill**：输入/步骤/输出 + 验收标准四部件（第 2 节，15′）；
-3. **选品**：不是什么事都值得封装——三筛法选出你的第一个（第 3 节，15′）；
-4. **动手**：定义 Skill → 运行 → 留证据（第 4–5 节，55′）。
+系统是壳，Skill 是被 Agent 调用的说明书+工具。
 
-**不再单开一节「验收课」**——Skill 三问与 GATE 7 在 Lab / 企业任务节点完成。
+1. 换档：系统被使用，能力被执行；
+2. 解剖四部件；三筛法选题；
+3. 用教学包提示词实现 `skills/*/SKILL.md` 扫描 + 可 run，证据进 `runs/`。
 
-> 概念只讲最小必要版；Skill 市场、MCP 协议、多平台差异 → 公开课 O2。
+教学包：第4节 [`03a-define-skill-md.md`](../../teaching/week2-cockpit-agent/prompts/03a-define-skill-md.md) · 第5节 [`03b-skill-run-evidence.md`](../../teaching/week2-cockpit-agent/prompts/03b-skill-run-evidence.md)
 
 ## 章节地图
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-system-to-skill/` | 概念：从系统到能力 | 15′ | 概念 | 口答：Skill 和 Prompt 的区别 |
-| 2 | `section-02-skill-anatomy/` | 概念：Skill 解剖四部件 | 15′ | 概念 | 四部件快答 |
-| 3 | `section-03-pick-first/` | 方法：选哪项工作先封装 | 15′ | 方法 | 三筛法选出第一 Skill |
-| 4 | `section-04-define-skill/` | 实战：定义 Skill | 30′ | 实战 | `skills/<name>.md` 定稿 |
-| 5 | `section-05-run-evidence/` | 实战：运行与证据 | 25′ | 实战 | 运行记录 + 产出物 + 验收结果 |
-
-## 每节文件（tabs）
-
-每节目录固定五个文件：`lesson.md`（课件，含 🎬 口播稿位）· `practice.md`（练习）· `resources.md`（资源）· `homework.md`（作业）· `ai-tutor.yaml`（AI 导师配置：规则 / 快捷问题 / 验收规则）。
-
-口播课件：`video/scripts/narration/`（若有）；第 6 节验收口播已撤出大纲（素材可留在旧目录，不进课表）。
+| 1 | `section-01-system-to-skill/` | 从系统到能力 | 15′ | 概念 | 口答 Prompt vs Skill |
+| 2 | `section-02-skill-anatomy/` | Skill 四部件 | 15′ | 概念 | 四部件快答 |
+| 3 | `section-03-pick-first/` | 三筛法选题 | 15′ | 方法 | 选定第一 Skill |
+| 4 | `section-04-define-skill/` | 定义 SKILL.md | 30′ | 实战 | `skills/<id>/SKILL.md` |
+| 5 | `section-05-run-evidence/` | 加载·运行·证据 | 25′ | 实战 | 扫描器 + runs/ |
 
 ## 今日验收（GATE 7）
 
-- Skill 三问：它做什么（输入→输出）？步骤谁定？好坏谁判？
-- 现场运行一次 Skill，产出物过验收标准；
-- Skill 说明书含验收标准（可判对错），进 Git；
-- commit：`feat: 第一个 Skill——<你的 Skill 名>`。
+- ≥1 个合格 `SKILL.md`（name/description + 四部件）；
+- 能从 API/CLI/对话触发一次真实业务数据上的运行；
+- `runs/<date>-<skill>/` 含 input/output/verdict；
+- commit：`feat: first executable skill`.

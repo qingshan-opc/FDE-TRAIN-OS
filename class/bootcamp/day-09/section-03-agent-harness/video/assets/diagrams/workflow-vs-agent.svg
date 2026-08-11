@@ -1,49 +1,102 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 460" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" role="img" aria-label="Workflow 还是 Agent：决策树">
-<defs>
-<marker id="wa-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="#231f20"/>
-</marker>
-</defs>
-<rect width="1040" height="460" fill="#f2f5f0"/>
-<!-- 起点 -->
-<rect x="420" y="36" width="200" height="56" fill="#231f20"/>
-<text x="520" y="70" text-anchor="middle" font-size="13.5" font-weight="800" fill="#f2f5f0">来了一项工作</text>
-<!-- 判断 1 -->
-<path d="M520 150 L660 190 L520 230 L380 190 Z" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
-<text x="520" y="186" text-anchor="middle" font-size="12.5" font-weight="800" fill="#231f20">步骤能写死吗？</text>
-<text x="520" y="206" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)">A 完了必走 B？</text>
-<line x1="520" y1="92" x2="520" y2="144" stroke="#231f20" stroke-width="1.8" marker-end="url(#wa-arrow)"/>
-<!-- 能 → workflow -->
-<line x1="382" y1="190" x2="240" y2="190" stroke="#231f20" stroke-width="1.8" marker-end="url(#wa-arrow)"/>
-<text x="310" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#2f9e44">能</text>
-<rect x="60" y="150" width="180" height="84" fill="#ffffff" stroke="#2f9e44" stroke-width="2.5"/>
-<text x="150" y="184" text-anchor="middle" font-size="13.5" font-weight="800" fill="#2f9e44">Workflow</text>
-<text x="150" y="208" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">写死的流程图：便宜、稳定、好验收</text>
-<!-- 不能 → 判断 2 -->
-<line x1="658" y1="190" x2="800" y2="190" stroke="#231f20" stroke-width="1.8" marker-end="url(#wa-arrow)"/>
-<text x="730" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#c92f3d">不能</text>
-<path d="M860 150 L980 190 L860 230 L740 190 Z" fill="#ffffff" stroke="#231f20" stroke-width="2"/>
-<text x="860" y="186" text-anchor="middle" font-size="12" font-weight="800" fill="#231f20">需要现场决策？</text>
-<text x="860" y="206" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)">下一步要看情况？</text>
-<!-- 需要 → agent -->
-<line x1="860" y1="230" x2="860" y2="296" stroke="#231f20" stroke-width="1.8" marker-end="url(#wa-arrow)"/>
-<text x="880" y="270" font-size="11" font-weight="700" fill="#1400ff">需要</text>
-<rect x="770" y="302" width="180" height="90" fill="#ffffff" stroke="#1400ff" stroke-width="2.5"/>
-<text x="860" y="336" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1400ff">Agent</text>
-<text x="860" y="358" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">决策环现场判断：贵、要护栏、要验收</text>
-<!-- 不需要 → 人工/再拆 -->
-<line x1="742" y1="190" x2="660" y2="190" stroke="rgba(35,31,32,.4)" stroke-width="0" />
-<line x1="800" y1="190" x2="700" y2="300" stroke="#231f20" stroke-width="1.8" marker-end="url(#wa-arrow)"/>
-<text x="730" y="260" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">不需要</text>
-<rect x="540" y="302" width="160" height="90" fill="#ffffff" stroke="rgba(35,31,32,.4)" stroke-width="2"/>
-<text x="620" y="336" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">人工 / 再拆</text>
-<text x="620" y="358" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">也许这一步就不该自动化</text>
-<!-- workflow 内部小流程 -->
-<g stroke="#2f9e44" stroke-width="1.5" fill="none">
-<rect x="80" y="260" width="40" height="26"/><rect x="140" y="260" width="40" height="26"/><rect x="200" y="260" width="40" height="26"/>
-<line x1="120" y1="273" x2="138" y2="273"/><line x1="180" y1="273" x2="198" y2="273"/>
-</g>
-<text x="160" y="308" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" style="font-family:'SF Mono',Menlo,monospace">A → B → C 永远这么走</text>
-<!-- 底注 -->
-<text x="520" y="428" text-anchor="middle" font-size="13.5" font-weight="800" fill="#231f20">能写死就写死，写不死才上 Agent</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 460" role="img" aria-label="Workflow 还是 Agent：决策树">
+  <defs>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <marker id="wa-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="#0d9488"/>
+    </marker>
+    <marker id="wa-arrow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 1.2 L8 5 L0 8.8 Z" fill="rgba(35,31,32,.4)"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="460" fill="#ffffff"/>
+  <rect width="1040" height="460" fill="url(#dots)"/>
+  <circle cx="970" cy="56" r="100" fill="rgba(13,148,136,.07)">
+    <animate attributeName="r" values="100;116;100" dur="9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="70" cy="420" r="70" fill="rgba(35,31,32,.035)">
+    <animate attributeName="r" values="70;82;70" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <rect x="36" y="14" width="6" height="22" rx="3" fill="#0d9488"/>
+    <text x="52" y="31" font-size="15" font-weight="800" fill="#231f20">Workflow 还是 Agent：分水岭</text>
+    <text x="1004" y="31" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">DECISION TREE</text>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+    <!-- start -->
+    <rect x="420" y="46" width="200" height="52" rx="14" fill="url(#teal)" filter="url(#glow)"/>
+    <text x="520" y="78" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">来了一项工作</text>
+    <line x1="520" y1="98" x2="520" y2="144" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#wa-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="0.9s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- diamond 1 -->
+    <path d="M520 148 L664 192 L520 236 L376 192 Z" fill="#fff" stroke="rgba(35,31,32,.14)" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="520" y="188" text-anchor="middle" font-size="12.5" font-weight="800" fill="#231f20">步骤能写死吗？</text>
+    <text x="520" y="208" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)">A 完了必走 B？</text>
+
+    <!-- yes → workflow -->
+    <line x1="378" y1="192" x2="252" y2="192" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#wa-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.1s" repeatCount="indefinite"/>
+    </line>
+    <text x="315" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="#0f766e">能</text>
+    <rect x="60" y="150" width="190" height="86" rx="14" fill="#fff" stroke="#0d9488" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="155" y="184" text-anchor="middle" font-size="13.5" font-weight="800" fill="#0d9488">Workflow</text>
+    <text x="155" y="208" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">写死的流程图：便宜、稳定、好验收</text>
+
+    <!-- workflow mini flow -->
+    <g stroke="rgba(35,31,32,.25)" stroke-width="1.5" fill="#fff">
+      <rect x="80" y="262" width="42" height="28" rx="7"/>
+      <rect x="142" y="262" width="42" height="28" rx="7"/>
+      <rect x="204" y="262" width="42" height="28" rx="7"/>
+    </g>
+    <g stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="4 4">
+      <line x1="124" y1="276" x2="140" y2="276"><animate attributeName="stroke-dashoffset" from="8" to="0" dur="0.8s" repeatCount="indefinite"/></line>
+      <line x1="186" y1="276" x2="202" y2="276"><animate attributeName="stroke-dashoffset" from="8" to="0" dur="0.8s" repeatCount="indefinite"/></line>
+    </g>
+    <text x="163" y="312" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)" font-family="'SF Mono',Menlo,monospace">A → B → C 永远这么走</text>
+
+    <!-- no → diamond 2 -->
+    <line x1="662" y1="192" x2="736" y2="192" stroke="rgba(35,31,32,.4)" stroke-width="1.8" marker-end="url(#wa-arrow-g)"/>
+    <text x="700" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">不能</text>
+    <path d="M862 148 L986 192 L862 236 L738 192 Z" fill="#fff" stroke="rgba(35,31,32,.14)" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="862" y="188" text-anchor="middle" font-size="12" font-weight="800" fill="#231f20">需要现场决策？</text>
+    <text x="862" y="208" text-anchor="middle" font-size="10" fill="rgba(35,31,32,.5)">下一步要看情况？</text>
+
+    <!-- need → agent -->
+    <line x1="862" y1="236" x2="862" y2="296" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#wa-arrow)">
+      <animate attributeName="stroke-dashoffset" from="11" to="0" dur="1.1s" repeatCount="indefinite"/>
+    </line>
+    <text x="884" y="272" font-size="11" font-weight="700" fill="#0f766e">需要</text>
+    <rect x="764" y="294" width="196" height="106" rx="22" fill="none" stroke="#0d9488" stroke-width="2" opacity=".4">
+      <animate attributeName="opacity" values=".5;.12;.5" dur="2.4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="772" y="302" width="180" height="90" rx="14" fill="url(#teal)" filter="url(#glow)"/>
+    <text x="862" y="338" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">Agent</text>
+    <text x="862" y="360" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.88)">决策环现场判断：贵、要护栏、要验收</text>
+
+    <!-- not need → human -->
+    <line x1="740" y1="196" x2="666" y2="296" stroke="rgba(35,31,32,.4)" stroke-width="1.8" marker-end="url(#wa-arrow-g)"/>
+    <text x="716" y="258" font-size="11" font-weight="700" fill="rgba(35,31,32,.55)">不需要</text>
+    <rect x="536" y="302" width="160" height="90" rx="14" fill="rgba(35,31,32,.04)" stroke="rgba(35,31,32,.16)" stroke-width="1.2"/>
+    <text x="616" y="338" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">人工 / 再拆</text>
+    <text x="616" y="360" text-anchor="middle" font-size="10.5" fill="rgba(35,31,32,.55)">也许这一步就不该自动化</text>
+
+    <!-- footer pill -->
+    <rect x="290" y="418" width="460" height="34" rx="17" fill="rgba(13,148,136,.10)"/>
+    <text x="520" y="440" text-anchor="middle" font-size="13.5" font-weight="800" fill="#0f766e">能写死就写死，写不死才上 Agent</text>
+  </g>
 </svg>

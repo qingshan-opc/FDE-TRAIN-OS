@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 320" role="img" aria-label="需求调研：观察比嘴诚实">
+  <defs>
+    <linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/><stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="1.2" fill="rgba(35,31,32,.06)"/>
+    </pattern>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#231f20" flood-opacity=".10"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#0d9488" flood-opacity=".5"/>
+    </filter>
+    <filter id="tglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0d9488" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="320" fill="#ffffff"/>
+  <rect width="1040" height="320" fill="url(#dots)"/>
+  <circle cx="960" cy="52" r="96" fill="rgba(13,148,136,.07)"><animate attributeName="r" values="96;114;96" dur="9s" repeatCount="indefinite"/></circle>
+  <circle cx="64" cy="272" r="66" fill="rgba(35,31,32,.035)"><animate attributeName="r" values="66;80;66" dur="11s" repeatCount="indefinite"/></circle>
+  <g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif"><rect x="36" y="22" width="6" height="24" rx="3" fill="#0d9488"/><text x="52" y="40" font-size="17" font-weight="800" fill="#231f20">需求调研：别只问，要看</text>
+<text x="1004" y="40" text-anchor="end" font-family="'SF Mono',Menlo,monospace" font-size="11" letter-spacing="2" fill="rgba(35,31,32,.4)">RESEARCH</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="60" y="76" width="460" height="160" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="84" y="96" width="120" height="26" rx="13.0" fill="url(#tlg)"/><text x="144.0" y="113.32" font-size="12" font-weight="700" fill="#fff" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">观察 · 食堂</text>
+<text x="84" y="156" font-size="14" font-weight="700" fill="#231f20">想知道什么菜难吃——看倒掉什么</text>
+<text x="84" y="184" font-size="12" fill="rgba(35,31,32,.6)">剩得多的，就是难吃的</text>
+<text x="84" y="214" font-size="13" font-weight="800" fill="#0f766e">行为比嘴诚实</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<rect x="560" y="76" width="420" height="160" rx="18" fill="#fff" filter="url(#sh)"/>
+<rect x="584" y="96" width="150" height="26" rx="13.0" fill="rgba(35,31,32,.05)"/><text x="659.0" y="113.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">问题形态 · Excel</text>
+<text x="584" y="156" font-size="14" font-weight="700" fill="#231f20">一年 120 张表，本地管表很痛苦</text>
+<text x="584" y="184" font-size="12" fill="rgba(35,31,32,.6)">抽成数据、做成系统：跨库查 · 多人协作</text>
+<text x="584" y="214" font-size="13" font-weight="800" fill="#0f766e">给用户省时间，就是方案</text>
+</g>
+<g font-family="-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif">
+<text x="60" y="276" font-size="12.5" font-weight="700" fill="rgba(35,31,32,.55)">调研四件套：</text>
+<rect x="160" y="256" width="104" height="30" rx="15.0" fill="rgba(35,31,32,.05)"/><text x="212.0" y="275.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">访谈</text>
+<rect x="280" y="256" width="104" height="30" rx="15.0" fill="rgba(35,31,32,.05)"/><text x="332.0" y="275.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">观察</text>
+<rect x="400" y="256" width="104" height="30" rx="15.0" fill="rgba(35,31,32,.05)"/><text x="452.0" y="275.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">问卷</text>
+<rect x="520" y="256" width="104" height="30" rx="15.0" fill="rgba(35,31,32,.05)"/><text x="572.0" y="275.32" font-size="12" fill="#231f20" text-anchor="middle" font-family="'SF Mono',Menlo,monospace">竞品体验</text>
+</g>
+</svg>

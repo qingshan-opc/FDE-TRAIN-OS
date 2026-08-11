@@ -1,40 +1,33 @@
-# Day 10 · V2.0 收官：答辩与成为 FDE
+# Day 10 · V2.0 收官：驾驶舱 Agent 全接线（展示 D10）
 
-> 结构依据：`docs/spec/0.4/curriculum-v0.6.md`（实战主课 + 公开课拆分）
-> 今日目标：**Agent 接入驾驶舱，十条能力证据逐条自证，站上答辩台——讲完你就是 FDE**
-> 总时长 110′ · 5 节 · 实战 50′，答辩 45′，复盘 15′；无空转「验收课」，答辩节为现场仪式
+> 今日目标：把已跑通的 chat / loop / task_runner **挂进驾驶舱 UI**；答辩讲清四层关系。
+> 总时长 110′
 
 ## 这一天在解决什么
 
-九天攒下的东西今天收口成一个人：
+助手位不是「空了九天的装饰」——你本周每天都在给它通电。今天收口：
 
-1. **接入**：Agent 挂上驾驶舱 AI 助手位——V2.0 全景图最后一块拼上（第 1 节，30′）；
-2. **自证**：十条能力证据，逐条拿得出东西（第 2 节，20′）；
-3. **表达**：答辩 8 分钟 = 作品 3′ + 架构 3′ + 迭代故事 2′（第 3–4 节，45′）；
-4. **上路**：两周复盘 + 行业地图自评 + 你的自学路线（第 5 节，15′）。
+1. UI 事件流：turn / tool / confirm / done；
+2. 十条证据自证；
+3. 8′ 答辩 + 两周复盘。
 
-第 4 节是**现场答辩与互评**（真实仪式），不是「去过 GATE」的空验收口播；GATE 10 清单仍按本节与企业任务收束。
-
-> 「FDE」不是第一天发的帽子，是今天答辩通过后自然获得的称号——课程介绍页早就写好了它的定义，今天你只是走到了那里。
+教学包：[`prompts/06-wire-cockpit-ui.md`](../../teaching/week2-cockpit-agent/prompts/06-wire-cockpit-ui.md)  
+总验收：[`acceptance/checklist.md`](../../teaching/week2-cockpit-agent/acceptance/checklist.md)
 
 ## 章节地图
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-agent-in-cockpit/` | 实战：Agent 接入驾驶舱 | 30′ | 实战 | V2.0 全景：助手位活着 |
-| 2 | `section-02-ten-evidences/` | 端到端十条能力证据 | 20′ | 实战 | 自证表 10/10 |
-| 3 | `section-03-defense-prep/` | 答辩准备 | 15′ | 实战 | 答辩提纲一页纸 |
-| 4 | `section-04-defense/` | 答辩与互评（现场） | 30′ | 答辩 | 互评表 + GATE 10 |
-| 5 | `section-05-two-week-review/` | 两周复盘 + 自学路线 | 15′ | 概念 | final-review.md + 路线图 |
+| 1 | `section-01-agent-in-cockpit/` | UI 接线 Agent | 30′ | 实战 | 页内可聊可确认 |
+| 2 | `section-02-ten-evidences/` | 十条能力证据 | 20′ | 实战 | 自证 10/10 |
+| 3 | `section-03-defense-prep/` | 答辩提纲 | 15′ | 实战 | defense 一页纸 |
+| 4 | `section-04-defense/` | 答辩与互评 | 30′ | 答辩 | GATE 10 |
+| 5 | `section-05-two-week-review/` | 复盘与路线 | 15′ | 概念 | final-review.md |
 
-## 每节文件（tabs）
+## 今日验收（GATE 10）
 
-每节目录固定五个文件：`lesson.md`（课件，含 🎬 口播稿位）· `practice.md`（练习）· `resources.md`（资源）· `homework.md`（作业）· `ai-tutor.yaml`（AI 导师配置：规则 / 快捷问题 / 验收规则）。
-
-## 今日验收（GATE 10 · 毕业验收）
-
-- V2.0 全景：驾驶舱六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作；
-- 十条能力证据：自证表 10/10，每条有文件或现场演示支撑；
-- 答辩完成：8 分钟结构讲完，互评表收回至少 2 份；
-- `docs/final-review.md`：两周复盘 + 行业地图自评 + 自学路线；
-- commit：`feat: V2.0 收官——Agent 接入驾驶舱，答辩完成`。
+- 助手位多轮 + Skill 调用 + 确认闸在页内可操作；
+- loop 有上限与日志；长任务 ≥3 turn 可演示；
+- 答辩讲清：业务系统 / 驾驶舱 / Skill / Loop；
+- `docs/final-review.md` + `docs/defense-demo.md`；
+- commit：`feat: cockpit agent v2.0`.

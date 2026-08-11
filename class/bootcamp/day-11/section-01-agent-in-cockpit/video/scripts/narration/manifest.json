@@ -4,35 +4,31 @@
     "file": "01-open.txt"
   },
   {
-    "id": "02-cockpit-not-chat",
-    "file": "02-cockpit-not-chat.txt"
+    "id": "02-page-not-lab",
+    "file": "02-page-not-lab.txt"
   },
   {
-    "id": "03-three-requirements",
-    "file": "03-three-requirements.txt"
+    "id": "03-three-wires",
+    "file": "03-three-wires.txt"
   },
   {
-    "id": "04-awaken",
-    "file": "04-awaken.txt"
+    "id": "04-events",
+    "file": "04-events.txt"
   },
   {
-    "id": "05-status",
-    "file": "05-status.txt"
+    "id": "05-awaken",
+    "file": "05-awaken.txt"
   },
   {
     "id": "06-gate-in-page",
     "file": "06-gate-in-page.txt"
   },
   {
-    "id": "07-one-at-a-time",
-    "file": "07-one-at-a-time.txt"
+    "id": "07-defense-demo",
+    "file": "07-defense-demo.txt"
   },
   {
-    "id": "08-priority-fallback",
-    "file": "08-priority-fallback.txt"
-  },
-  {
-    "id": "09-close",
-    "file": "09-close.txt"
+    "id": "08-close",
+    "file": "08-close.txt"
   }
 ]

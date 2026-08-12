@@ -179,39 +179,6 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
-function drawQr(
-  ctx: CanvasRenderingContext2D,
-  qr: HTMLCanvasElement | null,
-  x: number,
-  y: number,
-  size: number,
-  label: string,
-  labelColor: string,
-  border = "#e5e7eb",
-) {
-  const boxH = size + 70;
-  ctx.save();
-  ctx.textBaseline = "alphabetic";
-  roundRect(ctx, x, y, size + 40, boxH, 16);
-  ctx.fillStyle = "#fff";
-  ctx.fill();
-  ctx.strokeStyle = border;
-  ctx.lineWidth = 2;
-  roundRect(ctx, x, y, size + 40, boxH, 16);
-  ctx.stroke();
-  if (qr) ctx.drawImage(qr, x + 20, y + 18, size, size);
-  else {
-    ctx.fillStyle = "#e5e7eb";
-    ctx.fillRect(x + 20, y + 18, size, size);
-  }
-  ctx.fillStyle = labelColor;
-  ctx.font = `800 20px ${FONT}`;
-  ctx.textAlign = "center";
-  ctx.fillText(label, x + (size + 40) / 2, y + boxH - 22);
-  ctx.restore();
-  return boxH;
-}
-
 function channelLabel(audience: PosterAudience) {
   return audience === "org" ? "机构渠道推荐" : "学员邀请通道";
 }

@@ -42,7 +42,7 @@
 
 ### Vibe Coding · 氛围编程
 
-- 自然语言描述意图，AI 写代码（Cursor、Copilot、Claude Code）；
+- 自然语言描述意图，AI 写代码（TRAE）；
 - Day 3 大头 HTML = vibe 产物；
 - **爽点**：快；**风险**：逻辑错、安全洞、不可维护；
 - **带验收的 vibe**：diff 可以 vibe，合并进 main 必须 Eval + 人工看关键路径。

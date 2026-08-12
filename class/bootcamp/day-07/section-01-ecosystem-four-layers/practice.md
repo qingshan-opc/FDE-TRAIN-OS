@@ -16,7 +16,7 @@
 
 [`class/teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md`](../../../teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md)
 
-粘贴到 Cursor / anyCode / Claude Code，按提示先出计划，你回复「确认」后再改代码。
+粘贴到 TRAE，按提示先出计划，你回复「确认」后再改代码。
 
 ### 手工检查清单
 

@@ -184,7 +184,7 @@ capsule_extra:
         - 模型 + 工具表 + 记忆 + 循环
         - CPU/内存/磁盘/网络
       - 1
-      - 同一模型换副骨架，能力天差地别——聊天窗 vs Cursor 的差别。
+      - 同一模型换副骨架，能力天差地别——聊天窗 vs TRAE 的差别。
     - - 决策环的正确顺序？
       - - 调工具 → 理解 → 规划 → 观察
         - 理解 → 规划 → 调工具 → 观察 → 继续
@@ -227,8 +227,8 @@ capsule_extra:
       tag: 关键
     glossary_terms:
     - id: gt-copilot-agent
-      term: Copilot vs Agent
-      plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
+      term: 副驾模式 vs 智能体
+      plain: 副驾模式 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
     quiz:
     - - Agent 选错 Skill 最常见原因是？
       - - 模型版本太旧
@@ -254,9 +254,9 @@ capsule_extra:
         - 日志文件过大
       - 1
       - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
-    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
+    - - 副驾模式 vs 智能体 在「谁拿方向盘」上的区别？
       - - 没区别，都是聊天
-        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
+        - 副驾模式 递扳手你开；Agent 你定目的地它开——验收方式不同
         - Agent 更便宜所以优先
       - 1
       - 信任对象变了：从「建议」变成「代执行」，必须可回放。
@@ -343,10 +343,10 @@ quiz:
     - 换模型
   - 1
   - 胡编产出比拒绝执行危险十倍。
-- - Copilot 和 Agent 的区别？
+- - 副驾模式 和 Agent 的区别？
   - - 没区别
-    - Copilot 递扳手；Agent 定目的地它开
-    - Copilot 更贵
+    - 副驾模式 递扳手；Agent 定目的地它开
+    - 副驾模式 更贵
   - 1
   - 信任要求与验收方式完全不同。
 - - ai-tutor.yaml 对应 Agent 的什么？

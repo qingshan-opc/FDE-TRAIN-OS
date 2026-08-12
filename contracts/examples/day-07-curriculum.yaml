@@ -99,7 +99,7 @@ learn:
       [`class/teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md`](../../../teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md)
 
 
-      粘贴到 Cursor / anyCode / Claude Code，按提示先出计划，你回复「确认」后再改代码。
+      粘贴到 TRAE，按提示先出计划，你回复「确认」后再改代码。
 
 
       完成标志：
@@ -269,7 +269,7 @@ learn:
     form: 概念
     content_ref: class/bootcamp/day-07/section-02-token-window-hallucination/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '**「Token 估算」**：把你 Day 4 的 `API_Spec.md` 前 500 字贴进 tokenizer（或 Cursor 看 usage），粗算多少 Token。再假设窗口 32K，还能塞几份同样长的文档？
+    practice: '**「Token 估算」**：把你 Day 4 的 `API_Spec.md` 前 500 字贴进 tokenizer（或 TRAE 看用量），粗算多少 Token。再假设窗口 32K，还能塞几份同样长的文档？
 
 
       完成标志：
@@ -503,14 +503,14 @@ learn:
     form: 概念
     content_ref: class/bootcamp/day-07/section-05-agent-harness-mcp/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '**「拆 Cursor」**：开一次 Cursor Agent 任务，事后填表：哪步是规划 / Tool Call / 观察？如果 Harness 没有日志，你会漏看什么？
+    practice: '**「拆 TRAE」**：开一次 TRAE 智能体任务，事后填表：哪步是规划 / Tool Call / 观察？如果 Harness 没有日志，你会漏看什么？
 
 
       完成标志：
 
       [ ] 能画 Agent 循环简图
 
-      [ ] 说清 Copilot vs Agent 信任差异
+      [ ] 说清 副驾模式 vs 智能体 信任差异
 
       [ ] 指驾驶舱哪块未来适合 Skill/MCP 封装'
     resource_ids:
@@ -525,7 +525,7 @@ learn:
         - 生成→生成→生成
       - 1
       - Harness 负责执行 Tool 并喂回结果。
-    - - 同一 GPT-4，Cursor Agent 和简陋脚本能力差异主要来自？
+    - - 同一 GPT-4，TRAE 智能体 和简陋脚本能力差异主要来自？
       - - 模型版本不同
         - Harness（工具表、记忆、重试、日志）不同
         - 网络速度
@@ -536,16 +536,16 @@ learn:
         - AI 接工具/数据源的 USB-C 标准
         - 只能 OpenAI 用的私有协议
       - 1
-      - 按标准写 Server，Cursor/Claude Desktop 都能用。
+      - 按标准写 Server，TRAE 都能用。
     - - 「能写死就写死，写不死才 Agent」说明？
       - - Agent 永远优于 Workflow
         - Workflow 稳定可审计；Agent 灵活但需 Eval——按任务选
         - 不应该用 Agent
       - 1
       - 报销审批写 Workflow；开放式整理任务才 Agent。
-    - - Copilot 和 Agent 的核心区别？
-      - - Copilot 更贵
-        - Copilot 是你开车它递扳手；Agent 是你定目的地它开
+    - - 副驾模式 和 Agent 的核心区别？
+      - - 副驾模式 更贵
+        - 副驾模式 是你开车它递扳手；Agent 是你定目的地它开
         - 没有区别
       - 1
       - Agent 多步跨文件，错了破坏力大——日志和 Eval 更关键。
@@ -583,7 +583,7 @@ learn:
       plain: 写死流程 vs 现场决策——能写死就写死，写不死才 Agent。
       tag: 原则
     - id: copilot-agent
-      term: Copilot vs Agent
+      term: 副驾模式 vs 智能体
       plain: 副驾递扳手 vs 自主开车——信任与验收要求完全不同。
       tag: 对比
     glossary_terms:
@@ -592,7 +592,7 @@ learn:
       plain: 多步自主决策+调工具；Week 2 封装 Skill 的前置概念。
     - id: gt-harness
       term: Harness
-      plain: Cursor vs 简陋脚本——同一 GPT-4 不同骨架。
+      plain: TRAE vs 简陋脚本——同一 GPT-4 不同骨架。
     - id: gt-mcp
       term: MCP
       plain: Model Context Protocol；写一个 Server 多客户端能插。
@@ -600,15 +600,15 @@ learn:
       term: Workflow vs Agent
       plain: 报销审批适合 Workflow；整理乱文件成 PRD 适合 Agent。
     - id: gt-copilot
-      term: Copilot vs Agent
-      plain: Copilot 错一行改一行；Agent 错可能改坏十文件。
+      term: 副驾模式 vs 智能体
+      plain: 副驾模式 错一行改一行；Agent 错可能改坏十文件。
     local_prep:
-      codex_prompt: '用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / Copilot vs Agent。
+      codex_prompt: '用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / 副驾模式 vs 智能体。
 
         每词强制配「前五天或 SSE 接电」的一个实例。不要只有定义。'
       checklist:
       - 能画 Agent 循环简图
-      - 说清 Copilot vs Agent 信任差异
+      - 说清 副驾模式 vs 智能体 信任差异
       - 指驾驶舱哪块未来适合 Skill/MCP 封装
 quiz:
   pass_rate: 0.67
@@ -676,10 +676,10 @@ quiz:
     - 只有 OpenAI 支持
     answer: 1
     explain: 标准接口让工具可复用。
-  - q: Copilot vs Agent？
+  - q: 副驾模式 vs 智能体？
     options:
-    - Copilot 能自动跑完业务流程
-    - Copilot 递扳手；Agent 你定目的地它开——验收方式完全不同
+    - 副驾模式 能自动跑完业务流程
+    - 副驾模式 递扳手；Agent 你定目的地它开——验收方式完全不同
     - 没有区别
     answer: 1
     explain: Week 2 主要在 Agent 侧加深。

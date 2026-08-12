@@ -19,7 +19,7 @@ API 网关与云托管：一个 key 调一片模型，鉴权/限流/计费都在
 MCP（Model Context Protocol）：给 AI 接工具/数据源的「USB-C 标准」——按标准写一个服务，所有支持 MCP 的 Agent 都能用；我们 Week2 的 Skill 就是它的朴素版。Function Calling：模型输出「调用 X、参数 Y」的结构化请求。Agent 框架与 Harness：让模型跑起循环的那副骨架。
 
 **L4 应用层 · 直接为人服务的产品。**
-聊天助手、AI 编程工具（Cursor 等）、各行各业的垂直应用——**以及你要建的部门驾驶舱**。越往上越贴近业务，越贴近你的日常工作；越往下越是通用底座，谁都绕不开。
+聊天助手、AI 编程工具（TRAE 等）、各行各业的垂直应用——**以及你要建的部门驾驶舱**。越往上越贴近业务，越贴近你的日常工作；越往下越是通用底座，谁都绕不开。
 
 ### 怎么使用这张图
 
@@ -29,7 +29,7 @@ MCP（Model Context Protocol）：给 AI 接工具/数据源的「USB-C 标准�
 
 ## 🎬 口播稿（约 3 分钟）
 
-> 「GPT、Claude、DeepSeek、Ollama、MCP、LangChain、Cursor……每天冒出来的 AI 名词，其实只住在四层楼上。
+> 「GPT、Claude、DeepSeek、Ollama、MCP、LangChain、TRAE……每天冒出来的 AI 名词，其实只住在四层楼上。
 > 最底下一层是模型层：能力的源头。闭源的 GPT、Claude，开源的 Qwen、DeepSeek，国内的 Kimi、智谱——选谁，是能力、成本、隐私的三角题。
 > 往上一层是平台层：模型怎么被跑起来。云上的 API 网关，一个 key 调一片模型；本地的 Ollama，你自己的电脑也能跑。
 > 再往上是协议与工具层：模型和真实世界之间的接口。MCP 你可以理解成 AI 界的 USB-C——按标准写一个服务，所有 Agent 都能插。
@@ -38,6 +38,6 @@ MCP（Model Context Protocol）：给 AI 接工具/数据源的「USB-C 标准�
 
 ## 自测
 
-1. 把 GPT / Ollama / MCP / Cursor / DeepSeek / 你的驾驶舱各归一层。
+1. 把 GPT / Ollama / MCP / TRAE / DeepSeek / 你的驾驶舱各归一层。
 2. 为什么「换模型」应该被设计成「换网关后面的牌子」？
 3. 你们部门的数据如果绝不能出内网，四层各会有什么变化？

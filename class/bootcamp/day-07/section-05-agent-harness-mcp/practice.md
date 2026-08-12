@@ -9,19 +9,19 @@
 
 ## 实操任务（10′）
 
-**「拆 Cursor」**：开一次 Cursor Agent 任务，事后填表：哪步是规划 / Tool Call / 观察？如果 Harness 没有日志，你会漏看什么？
+**「拆 TRAE」**：开一次 TRAE 智能体任务，事后填表：哪步是规划 / Tool Call / 观察？如果 Harness 没有日志，你会漏看什么？
 
 ## 一键粘贴提示词
 
-> 整段复制给 Cursor / Claude Code / 平台 Agent / 任意 AI 搭档。尖括号 `〈〉` 换成你的路径或名称。
+> 整段复制给 TRAE。尖括号 `〈〉` 换成你的路径或名称。
 
 ```text
-用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / Copilot vs Agent。
+用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / 副驾模式 vs 智能体。
 每词强制配「前五天或 SSE 接电」的一个实例。不要只有定义。
 ```
 
 ## 完成标志
 
 - [ ] 能画 Agent 循环简图；
-- [ ] 说清 Copilot vs Agent 信任差异；
+- [ ] 说清 副驾模式 vs 智能体 信任差异；
 - [ ] 指驾驶舱哪块未来适合 Skill/MCP 封装。

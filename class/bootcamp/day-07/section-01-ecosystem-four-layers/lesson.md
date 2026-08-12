@@ -29,7 +29,7 @@
 ### 四层生态地图（讲解图主线）
 
 ```
-L4 应用层    驾驶舱 · Cursor · 企业 SaaS · 聊天产品
+L4 应用层    驾驶舱 · TRAE · 企业 SaaS · 聊天产品
 L3 编排层    RAG · Agent · Workflow · Prompt 管线
 L2 模型层    GPT-4o · Claude 3.5 · Qwen · DeepSeek
 L1 基建层    GPU 集群 · 向量库 · 模型网关 · 托管平台

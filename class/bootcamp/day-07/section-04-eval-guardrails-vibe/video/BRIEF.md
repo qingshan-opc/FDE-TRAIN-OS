@@ -28,7 +28,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 | slide-01-open | 第四节三个词，都是你们已经在做、但今天给名字：Eval、Gu… |
 | slide-02-eval | Eval 评测：给 AI 产物出考卷。固定题库、明确判分、可… |
 | slide-03-guardrails | Guardrails 护栏：拦在输入输出上的规则。什么不许问… |
-| slide-04-vibe | Vibe Coding 氛围编程：Cursor、Copilo… |
+| slide-04-vibe | Vibe Coding 氛围编程：TRAE、Copilo… |
 | slide-05-triangle | 三角关系：Eval 告诉你好不好；Guardrails 告诉… |
 | slide-06-close | 带走一句：「我觉得还行」不是验收标准，Eval 才是。下一节… |
 

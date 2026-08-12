@@ -262,7 +262,7 @@ learn:
         - 模型 + 工具表 + 记忆 + 循环
         - CPU/内存/磁盘/网络
       - 1
-      - 同一模型换副骨架，能力天差地别——聊天窗 vs Cursor 的差别。
+      - 同一模型换副骨架，能力天差地别——聊天窗 vs TRAE 的差别。
     - - 决策环的正确顺序？
       - - 调工具 → 理解 → 规划 → 观察
         - 理解 → 规划 → 调工具 → 观察 → 继续
@@ -372,9 +372,9 @@ learn:
         - 日志文件过大
       - 1
       - 负例边界写进描述 = 选型护栏，比加长正面介绍更管用。
-    - - Copilot 与 Agent 在「谁拿方向盘」上的区别？
+    - - 副驾模式 vs 智能体 在「谁拿方向盘」上的区别？
       - - 没区别，都是聊天
-        - Copilot 递扳手你开；Agent 你定目的地它开——验收方式不同
+        - 副驾模式 递扳手你开；Agent 你定目的地它开——验收方式不同
         - Agent 更便宜所以优先
       - 1
       - 信任对象变了：从「建议」变成「代执行」，必须可回放。
@@ -395,8 +395,8 @@ learn:
       tag: 关键
     glossary_terms:
     - id: gt-copilot-agent
-      term: Copilot vs Agent
-      plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
+      term: 副驾模式 vs 智能体
+      plain: 副驾模式 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
     local_prep:
       codex_prompt: "# 提示词 04 · Agent Loop（D8）\n\n> 整份粘贴。前置：Skill 可加载；今日实现 **tool_calls 闭环**。\n\n---\n\n在本仓库实现 `agent/loop.py`（语言可与项目一致）。这就是你自己的\
         \ Agent 循环，不依赖外部产品源码。\n\n## Loop 伪代码（必须等价实现）\n\n```\nmessages = [system, ...history, user]\nfor turn in 1..max_turns:\
@@ -498,11 +498,11 @@ quiz:
     - 换模型
     answer: 1
     explain: 胡编产出比拒绝执行危险十倍。
-  - q: Copilot 和 Agent 的区别？
+  - q: 副驾模式 和 Agent 的区别？
     options:
     - 没区别
-    - Copilot 递扳手；Agent 定目的地它开
-    - Copilot 更贵
+    - 副驾模式 递扳手；Agent 定目的地它开
+    - 副驾模式 更贵
     answer: 1
     explain: 信任要求与验收方式完全不同。
   - q: ai-tutor.yaml 对应 Agent 的什么？

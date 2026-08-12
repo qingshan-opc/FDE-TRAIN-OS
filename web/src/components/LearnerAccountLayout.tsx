@@ -45,9 +45,11 @@ export function LearnerAccountLayout({
   children: ReactNode;
 }) {
   const { pathname } = useLocation();
+  const frameRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   const onNav = () => {
     scrollPageToTop();
+    frameRef.current?.scrollTo({ top: 0, behavior: "instant" });
     mainRef.current?.scrollTo({ top: 0, behavior: "instant" });
   };
   const PageIcon = PAGE_ICONS[pathname] || IconAccountProfile;
@@ -55,7 +57,7 @@ export function LearnerAccountLayout({
   return (
     <div className="app-shell app-page-shell learner-account-shell">
       <Nav />
-      <div className="learner-account-frame">
+      <div ref={frameRef} className="learner-account-frame">
         <div className="learner-account-layout">
           <aside className="learner-account-sidebar learner-account-card" aria-label="个人中心菜单">
           <p className="learner-account-sidebar__label">

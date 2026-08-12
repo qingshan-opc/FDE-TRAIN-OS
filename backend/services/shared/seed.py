@@ -107,7 +107,7 @@ def _seed_partner_demo(cur) -> None:
             VALUES (?,?,?,?,?)
             ON CONFLICT DO NOTHING
             """,
-            ("ct-demo-0", "org-demo", 0, 1000, now_iso()),
+            ("ct-demo-0", "org-demo", 0, 3000, now_iso()),
         )
         cur.execute(
             """
@@ -115,7 +115,7 @@ def _seed_partner_demo(cur) -> None:
             VALUES (?,?,?,?,?)
             ON CONFLICT DO NOTHING
             """,
-            ("ct-demo-10", "org-demo", 10, 2000, now_iso()),
+            ("ct-demo-10", "org-demo", 10, 3000, now_iso()),
         )
     cur.execute("SELECT id FROM invite_codes WHERE code=?", ("PARTNER-DEMO",))
     if not cur.fetchone():

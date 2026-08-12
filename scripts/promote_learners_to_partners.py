@@ -148,7 +148,7 @@ def promote_one(cur, user: dict, *, apply: bool) -> dict:
         INSERT INTO commission_tiers (id, org_id, min_paid_users, rate_bps, created_at)
         VALUES (?,?,?,?,?)
         """,
-        (f"ct-{uuid.uuid4().hex[:12]}", oid, 0, 1000, ts),
+        (f"ct-{uuid.uuid4().hex[:12]}", oid, 0, 3000, ts),
     )
     cur.execute(
         """

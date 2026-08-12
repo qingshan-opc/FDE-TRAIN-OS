@@ -83,6 +83,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
   const showAlipay = ALIPAY_VISIBLE_EMAILS.has((user?.email || "").trim().toLowerCase());
   const [channel, setChannel] = useState<PayChannel>("wechat");
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [orderAmountFen, setOrderAmountFen] = useState(amountFen);
   const [codeUrl, setCodeUrl] = useState<string | null>(null);
   const [payMode, setPayMode] = useState<"native" | "jsapi">("native");
   const [jsapiParams, setJsapiParams] = useState<JsapiParams | null>(null);
@@ -136,6 +137,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     setStatus("pending");
     setError(null);
     setOrderId(null);
+    setOrderAmountFen(amountFen);
     setCodeUrl(null);
     setJsapiParams(null);
     setOauthUrl(null);
@@ -148,6 +150,9 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
         const res = await billingApi.checkout(offeringId, activeChannel, mode);
         if (cancelled) return;
         setOrderId(res.order_id);
+        if (typeof res.amount_fen === "number" && res.amount_fen > 0) {
+          setOrderAmountFen(res.amount_fen);
+        }
         setCodeUrl(res.code_url || null);
         setPayMode((res.pay_mode as "native" | "jsapi") || mode);
         setJsapiParams(res.jsapi_params || null);
@@ -175,7 +180,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     return () => {
       cancelled = true;
     };
-  }, [open, offeringId, channel, inWeChat, showAlipay]);
+  }, [open, offeringId, channel, inWeChat, showAlipay, amountFen]);
 
   useEffect(() => {
     if (!open || !orderId) return;
@@ -243,7 +248,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     }
   };
 
-  const yuan = (amountFen / 100).toFixed(2);
+  const yuan = (orderAmountFen / 100).toFixed(2);
   const tip =
     channel === "alipay"
       ? inWeChat

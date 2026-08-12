@@ -122,7 +122,8 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         )
         if cur.fetchone():
             raise HTTPException(409, "您已拥有该课程")
-        # Reuse recent pending order for the same pay channel + same trade shape
+        # Reuse recent pending order only when amount still matches current offering price.
+        # Otherwise a price change (e.g. ¥1 → ¥1980) would keep charging the old QR/JSAPI amount.
         if want_jsapi:
             cur.execute(
                 """
@@ -130,12 +131,13 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 FROM payment_orders
                 WHERE user_id=? AND offering_id=? AND status='pending'
                   AND COALESCE(pay_channel, 'wechat')=?
+                  AND amount_fen=?
                   AND created_at > NOW() - INTERVAL '2 hours'
                   AND code_url LIKE ?
                 ORDER BY created_at DESC
                 LIMIT 1
                 """,
-                (user.id, body.offering_id, channel, "jsapi:%"),
+                (user.id, body.offering_id, channel, price, "jsapi:%"),
             )
         else:
             cur.execute(
@@ -144,15 +146,25 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 FROM payment_orders
                 WHERE user_id=? AND offering_id=? AND status='pending'
                   AND COALESCE(pay_channel, 'wechat')=?
+                  AND amount_fen=?
                   AND created_at > NOW() - INTERVAL '2 hours'
                   AND code_url IS NOT NULL AND code_url <> ''
                   AND code_url NOT LIKE ?
                 ORDER BY created_at DESC
                 LIMIT 1
                 """,
-                (user.id, body.offering_id, channel, "jsapi:%"),
+                (user.id, body.offering_id, channel, price, "jsapi:%"),
             )
         pending = cur.fetchone()
+        # Invalidate stale pending rows for this offering whose amount no longer matches.
+        cur.execute(
+            """
+            UPDATE payment_orders
+            SET status='expired', updated_at=NOW()
+            WHERE user_id=? AND offering_id=? AND status='pending' AND amount_fen<>?
+            """,
+            (user.id, body.offering_id, price),
+        )
 
     attr = get_user_attribution(user.id)
     org_id = attr.get("org_id") if attr else None

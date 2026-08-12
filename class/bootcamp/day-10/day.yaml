@@ -1,5 +1,5 @@
 day: 10
-project: 长任务 Loop + 人工确认
+project: 长任务自动跑 + 关键步骤人工确认
 project_brief: '实现 task_runner（goal≥3 turn）+ 写操作 HITL；≥2 Skill；approve/reject 双路径 runs/ 证据。粘贴 teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md。GATE 9。'
 resources:
 - id: dg-orchestration

@@ -1,5 +1,5 @@
 day: 7
-project: LLM → 应用内对话
+project: 把大模型接到你的业务对话里
 project_brief: '今日两件硬交付：① 助手位（或任意页面对话面板）真实多轮 LLM 对话（见 teaching/week2-cockpit-agent/prompts/02）；② LLM 认知卡 llm-cognition-card.md。
 
 
@@ -72,7 +72,7 @@ capsule_extra:
     - glossary
     media:
     - kind: video
-      title: 口播课件 · 生态四层地图
+      title: 口播课件 · 四层地图：在哪儿接上大模型
       object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
       poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
       duration_sec: 496
@@ -151,7 +151,7 @@ capsule_extra:
     - glossary
     media:
     - kind: video
-      title: 口播课件 · Token / 窗口 / 幻觉
+      title: 口播课件 · 字数账单、记忆上限、一本正经胡说
       object_key: documents/shared/course-media/day06-c2-token.mp4
       poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
       duration_sec: 373
@@ -200,7 +200,7 @@ capsule_extra:
     - glossary
     media:
     - kind: video
-      title: 口播课件 · Prompt / Context / RAG
+      title: 口播课件 · 怎么下指令、塞材料、查资料再答
       object_key: documents/shared/course-media/day06-c3-rag.mp4
       poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
       duration_sec: 327
@@ -262,7 +262,7 @@ capsule_extra:
     - glossary
     media:
     - kind: video
-      title: 口播课件 · Eval / Guardrails / Vibe Coding
+      title: 口播课件 · 出考卷、加护栏、边聊边写代码
       object_key: documents/shared/course-media/day06-c4-eval.mp4
       poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
       duration_sec: 272
@@ -316,7 +316,7 @@ capsule_extra:
     - glossary
     media:
     - kind: video
-      title: 口播课件 · Agent / Harness / MCP
+      title: 口播课件 · 智能体、骨架、工具手、统一插座
       object_key: documents/shared/course-media/day06-c5-agent.mp4
       poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
       duration_sec: 322

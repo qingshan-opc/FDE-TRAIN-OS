@@ -1,5 +1,5 @@
 day: 9
-project: Skill 工程化 + Agent Loop
+project: 让技能包更稳，并跑通智能体循环
 project_brief: 'Skill v1 边界+注入测试；必须落地 agent/loop.py（tool_calls 闭环，max_turns=20）。粘贴 teaching/week2-cockpit-agent/prompts/04-agent-loop.md。GATE 8：loop 日志 + 选错口答。'
 resources:
 - id: dg-exception
@@ -145,7 +145,7 @@ capsule_extra:
       note: 坏输入 | 预期行为 | 实际行为 | 过/不过
     media:
     - kind: video
-      title: 口播课件 · Skill v1
+      title: 口播课件 · 技能包加固
       object_key: documents/shared/course-media/day08-c2-exception-test.mp4
       poster_key: documents/shared/course-media/day08-c2-exception-test-poster.jpg
       duration_sec: 112
@@ -208,7 +208,7 @@ capsule_extra:
       note: 各要素 ↔ 你 Week 1 已做过的东西
     media:
     - kind: video
-      title: 口播课件 · Harness 四要素
+      title: 口播课件 · 编排骨架四要素
       object_key: documents/shared/course-media/day08-c3-harness.mp4
       poster_key: documents/shared/course-media/day08-c3-harness-poster.jpg
       duration_sec: 126
@@ -265,7 +265,7 @@ capsule_extra:
       note: 描述重叠 / 缺边界 / 任务歧义
     media:
     - kind: video
-      title: 口播课件 · Agent 调用 Skill
+      title: 口播课件 · 智能体调用技能包
       object_key: documents/shared/course-media/day08-c4-agent-loop.mp4
       poster_key: documents/shared/course-media/day08-c4-agent-loop-poster.jpg
       duration_sec: 118

@@ -1,5 +1,5 @@
 day: 11
-project: V2.0 收官：驾驶舱 Agent 全接线
+project: 收官：把智能体接到驾驶舱
 project_brief: 'UI 接线 chat/loop/task（粘贴 prompts/06-wire-cockpit-ui.md）；十条证据；8′答辩讲清业务系统/驾驶舱/Skill/Loop；final-review + defense-demo。GATE 10 对照 teaching/week2-cockpit-agent/acceptance/checklist.md。'
 resources:
 - id: dg-v2-panorama
@@ -218,7 +218,7 @@ capsule_extra:
       note: 证据 / 架构 / 表达 / 诚实度
     media:
     - kind: video
-      title: 口播课件 · GATE 10
+      title: 口播课件 · 过闸验收
       object_key: documents/shared/course-media/day10-c4-defense.mp4
       poster_key: documents/shared/course-media/day10-c4-defense-poster.jpg
       duration_sec: 65
@@ -268,7 +268,7 @@ capsule_extra:
       note: 目标 / 30d / 60d / 90d / 本周动作
     media:
     - kind: video
-      title: 口播课件 · final-review.md
+      title: 口播课件 · 两周复盘
       object_key: documents/shared/course-media/day10-c5-gate10.mp4
       poster_key: documents/shared/course-media/day10-c5-gate10-poster.jpg
       duration_sec: 87

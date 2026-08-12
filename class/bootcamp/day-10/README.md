@@ -1,4 +1,4 @@
-# Day 9 · 长任务 Loop + 人工确认（展示 D9）
+# Day 9 · 长任务自动跑 + 关键步骤人工确认
 
 > 今日目标：自建 `task_runner` 长跑 + 写操作 **HITL 确认闸** + ≥2 Skill 编排；approve/reject 双路径留证。
 > 总时长 95′
@@ -17,8 +17,8 @@
 |---|------|------|-----|------|-----------|
 | 1 | `section-01-process-as-orchestration/` | 业务流程即编排 | 15′ | 概念 | 串联图 |
 | 2 | `section-02-human-confirm/` | 人工确认与日志 | 15′ | 概念 | 确认闸三问 |
-| 3 | `section-03-two-more-skills/` | 再封装 Skill | 25′ | 实战 | 工具表 ≥2 |
-| 4 | `section-04-orchestrate/` | task_runner + HITL | 40′ | 实战 | 双路径证据 |
+| 3 | `section-03-two-more-skills/` | 再封装两个技能包 | 25′ | 实战 | 工具表 ≥2 |
+| 4 | `section-04-orchestrate/` | 长跑任务机 + 人在回路确认闸 | 40′ | 实战 | 双路径证据 |
 
 ## 今日验收（GATE 9）
 

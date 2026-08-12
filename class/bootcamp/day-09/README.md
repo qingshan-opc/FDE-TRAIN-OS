@@ -1,4 +1,4 @@
-# Day 8 · Skill 工程化 + Agent Loop（展示 D8）
+# Day 8 · 让技能包更稳，并跑通智能体循环
 
 > 今日目标：Skill 可依赖（边界+注入测试）+ 落地 **`agent/loop.py` tool_calls 闭环**。
 > 总时长 105′
@@ -17,9 +17,9 @@
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
 | 1 | `section-01-boundary-exceptions/` | 边界与异常 | 15′ | 概念 | 异常四分类 |
-| 2 | `section-02-harden-skill/` | Skill v1 + 注入测试 | 35′ | 实战 | 边界声明 + 测试 |
-| 3 | `section-03-agent-harness/` | Harness 与决策环 | 20′ | 概念 | 四要素 + 环 |
-| 4 | `section-04-agent-calls-skill/` | 实现 Agent Loop | 35′ | 实战 | `loop.py` + log.jsonl |
+| 2 | `section-02-harden-skill/` | 技能包加固 + 故意搞破坏测试 | 35′ | 实战 | 边界声明 + 测试 |
+| 3 | `section-03-agent-harness/` | 编排骨架与决策环 | 20′ | 概念 | 四要素 + 环 |
+| 4 | `section-04-agent-calls-skill/` | 实现「想→做→看→再想」循环 | 35′ | 实战 | `loop.py` + log.jsonl |
 
 ## 今日验收（GATE 8）
 

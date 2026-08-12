@@ -1,4 +1,4 @@
-# Day 7 · 第一个可执行 Skill（展示 D7）
+# Day 7 · 做出第一个可调用的技能包
 
 > 今日目标：在 **已接通 LLM 的应用** 上，落地可加载、可调用的第一个 Skill。
 > 总时长 100′ · 概念 45′ · 实战 55′
@@ -24,9 +24,9 @@ Week1 业务系统 → 昨天应用内可聊 → 今天给它装「可执行能�
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
 | 1 | `section-01-system-to-skill/` | 从系统到能力 | 15′ | 概念 | 口答 Prompt vs Skill |
-| 2 | `section-02-skill-anatomy/` | Skill 四部件 | 15′ | 概念 | 四部件快答 |
-| 3 | `section-03-pick-first/` | 三筛法选题 | 15′ | 方法 | 选定第一 Skill |
-| 4 | `section-04-define-skill/` | 定义 SKILL.md | 30′ | 实战 | `skills/<id>/SKILL.md` |
+| 2 | `section-02-skill-anatomy/` | 技能包四件套 | 15′ | 概念 | 四部件快答 |
+| 3 | `section-03-pick-first/` | 三筛法选题 | 15′ | 方法 | 选定第一技能包 |
+| 4 | `section-04-define-skill/` | 写好技能说明书 | 30′ | 实战 | `skills/<id>/SKILL.md` |
 | 5 | `section-05-run-evidence/` | 加载·运行·证据 | 25′ | 实战 | 扫描器 + runs/ |
 
 ## 今日验收（GATE 7）

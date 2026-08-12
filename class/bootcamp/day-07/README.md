@@ -1,4 +1,4 @@
-# Day 6 · LLM → 应用内对话（展示 D6）
+# Day 6 · 把大模型接到你的业务对话里
 
 > 今日目标：把 DeepSeek（或兼容协议）接到 **你的业务系统助手位（或任意页面对话面板）**，完成 **真实多轮对话**；其余节用最短时间巩固 18 词与 Agent/Harness 地图，为本周 Skill/Loop 铺路。
 > 总时长约 105′ · 五节概念/实战
@@ -19,11 +19,11 @@
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-ecosystem-four-layers/` | 生态四层 + 助手位接 LLM | 30′ | 概念+实战 | 应用内多轮对话 |
-| 2 | `section-02-token-window-hallucination/` | Token / 窗口 / 幻觉 | 15′ | 概念 | 快测依据 |
-| 3 | `section-03-prompt-context-rag/` | Prompt / Context / RAG | 15′ | 概念 | 快测依据 |
-| 4 | `section-04-eval-guardrails-vibe/` | Eval / Guardrails / Vibe | 15′ | 概念 | 快测依据 |
-| 5 | `section-05-agent-harness-mcp/` | Agent / Harness / Tool / MCP | 20′ | 概念 | 预告 Loop |
+| 1 | `section-01-ecosystem-four-layers/` | 四层地图：在哪儿接上大模型 | 30′ | 概念+实战 | 应用内多轮对话 |
+| 2 | `section-02-token-window-hallucination/` | 字数账单、记忆上限、一本正经胡说 | 15′ | 概念 | 快测依据 |
+| 3 | `section-03-prompt-context-rag/` | 怎么下指令、塞材料、查资料再答 | 15′ | 概念 | 快测依据 |
+| 4 | `section-04-eval-guardrails-vibe/` | 出考卷、加护栏、边聊边写代码 | 15′ | 概念 | 快测依据 |
+| 5 | `section-05-agent-harness-mcp/` | 智能体、骨架、工具手、统一插座 | 20′ | 概念 | 预告 Loop |
 
 ## 今日验收（GATE）
 

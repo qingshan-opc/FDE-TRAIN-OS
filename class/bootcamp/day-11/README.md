@@ -1,4 +1,4 @@
-# Day 10 · V2.0 收官：驾驶舱 Agent 全接线（展示 D10）
+# Day 10 · 收官：把智能体接到驾驶舱
 
 > 今日目标：把已跑通的 chat / loop / task_runner **挂进驾驶舱 UI**；答辩讲清四层关系。
 > 总时长 110′
@@ -18,7 +18,7 @@
 
 | 节 | 目录 | 标题 | 分钟 | 形式 | 可验收产出 |
 |---|------|------|-----|------|-----------|
-| 1 | `section-01-agent-in-cockpit/` | UI 接线 Agent | 30′ | 实战 | 页内可聊可确认 |
+| 1 | `section-01-agent-in-cockpit/` | 把智能体挂进驾驶舱界面 | 30′ | 实战 | 页内可聊可确认 |
 | 2 | `section-02-ten-evidences/` | 十条能力证据 | 20′ | 实战 | 自证 10/10 |
 | 3 | `section-03-defense-prep/` | 答辩提纲 | 15′ | 实战 | defense 一页纸 |
 | 4 | `section-04-defense/` | 答辩与互评 | 30′ | 答辩 | GATE 10 |

@@ -11035,9 +11035,14 @@ a.passport-recent-item__title:hover {
   align-items: center;
   justify-content: center;
 }
-.partner-poster-preview__canvas img {
+.partner-poster-preview__canvas img,
+.partner-poster-preview__img {
   width: 100%;
   display: block;
+  -webkit-touch-callout: default;
+  -webkit-user-select: auto;
+  user-select: auto;
+  pointer-events: auto;
 }
 .partner-poster-preview__actions {
   display: flex;

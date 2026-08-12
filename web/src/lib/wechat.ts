@@ -5,6 +5,13 @@ export function isWeChatBrowser(): boolean {
   return /MicroMessenger/i.test(navigator.userAgent || "");
 }
 
+/** Prefer long-press save UX on WeChat / narrow mobile viewports. */
+export function prefersLongPressSavePoster(): boolean {
+  if (typeof window === "undefined") return false;
+  if (isWeChatBrowser()) return true;
+  return window.matchMedia("(max-width: 720px)").matches;
+}
+
 /** Only allow same-origin relative app paths as OAuth/login next. */
 export function sanitizeAppNext(raw: string | null | undefined, fallback = "/app/courses"): string {
   const path = (raw || "").trim() || fallback;

@@ -21,8 +21,10 @@ import { PosterStylePicker } from "../components/PosterStylePicker";
 import {
   composeSharePoster,
   downloadDataUrl,
+  publishPosterDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
+import { prefersLongPressSavePoster } from "../lib/wechat";
 import { POSTER_DEFAULT_SLOGAN, SHOP_HERO } from "./shopPitch";
 
 const TIER_HINTS = [
@@ -89,7 +91,7 @@ export function LearnerReferral() {
     try {
       await new Promise((r) => setTimeout(r, 80));
       const qrCanvas = posterQrRef.current?.querySelector("canvas") || null;
-      const url = await composeSharePoster({
+      const dataUrl = await composeSharePoster({
         style,
         audience: "personal",
         coverSrc: "/landing/hero.png",
@@ -100,7 +102,15 @@ export function LearnerReferral() {
         qrCanvas,
         scanHint: "好友扫码注册后计入你的邀请人数",
       });
-      setPosterUrl(url);
+      if (prefersLongPressSavePoster()) {
+        try {
+          setPosterUrl(await publishPosterDataUrl(dataUrl));
+        } catch {
+          setPosterUrl(dataUrl);
+        }
+      } else {
+        setPosterUrl(dataUrl);
+      }
     } catch (err) {
       message.error(err instanceof Error ? err.message : "海报生成失败");
     } finally {
@@ -276,17 +286,19 @@ export function LearnerReferral() {
                 <button type="button" className="app-btn app-btn--ghost app-btn--sm" onClick={() => setPosterOpen(false)}>
                   关闭
                 </button>
-                <button
-                  type="button"
-                  className="app-btn app-btn--primary app-btn--sm"
-                  disabled={!posterUrl || composing}
-                  onClick={() => {
-                    if (!posterUrl || !data) return;
-                    downloadDataUrl(posterUrl, `poster-${posterStyle}-personal-${data.code}.png`);
-                  }}
-                >
-                  {composing ? "合成中…" : "下载海报 PNG"}
-                </button>
+                {!prefersLongPressSavePoster() ? (
+                  <button
+                    type="button"
+                    className="app-btn app-btn--primary app-btn--sm"
+                    disabled={!posterUrl || composing}
+                    onClick={() => {
+                      if (!posterUrl || !data) return;
+                      downloadDataUrl(posterUrl, `poster-${posterStyle}-personal-${data.code}.png`);
+                    }}
+                  >
+                    {composing ? "合成中…" : "下载海报 PNG"}
+                  </button>
+                ) : null}
               </Space>
             }
           >
@@ -295,10 +307,25 @@ export function LearnerReferral() {
             </Typography.Paragraph>
             <PosterStylePicker value={posterStyle} onChange={setPosterStyle} disabled={composing} />
             {posterUrl ? (
-              <img src={posterUrl} alt="personal poster" style={{ width: "100%", borderRadius: 12 }} />
+              <img
+                src={posterUrl}
+                alt="个人邀请海报，长按可保存"
+                className="partner-poster-preview__img"
+                style={{ width: "100%", borderRadius: 12, marginTop: 8 }}
+                draggable={false}
+              />
             ) : (
               <Typography.Text type="secondary">{composing ? "正在合成海报…" : "暂无预览"}</Typography.Text>
             )}
+            {prefersLongPressSavePoster() && posterUrl ? (
+              <Alert
+                type="success"
+                showIcon
+                style={{ marginTop: 12 }}
+                message="长按上方海报，选择「保存图片」到相册"
+                description="微信内无需再点下载；保存后可转发朋友圈或发给好友。"
+              />
+            ) : null}
             <div ref={posterQrRef} style={{ position: "absolute", left: -9999, top: 0, opacity: 0 }}>
               {data.register_url ? <QRCode value={data.register_url} size={180} type="canvas" /> : null}
             </div>

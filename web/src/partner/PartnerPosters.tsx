@@ -19,8 +19,10 @@ import { PosterStylePicker } from "../components/PosterStylePicker";
 import {
   composeSharePoster,
   downloadDataUrl,
+  publishPosterDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
+import { prefersLongPressSavePoster } from "../lib/wechat";
 import { POSTER_DEFAULT_SLOGAN, SHOP_HERO } from "../app/shopPitch";
 
 type Offering = {
@@ -102,7 +104,7 @@ export function PartnerPosters() {
       setComposing(true);
       try {
         await new Promise((r) => setTimeout(r, 80));
-        const url = await composeSharePoster({
+        const dataUrl = await composeSharePoster({
           style,
           audience: "org",
           coverSrc: item.cover_image || "/landing/hero.png",
@@ -113,7 +115,16 @@ export function PartnerPosters() {
           qrCanvas: getQrCanvas(),
           scanHint: "微信扫码登录并选购",
         });
-        setPosterUrl(url);
+        if (prefersLongPressSavePoster()) {
+          try {
+            setPosterUrl(await publishPosterDataUrl(dataUrl));
+          } catch {
+            // Fall back to data URL if upload fails (desktop download still works).
+            setPosterUrl(dataUrl);
+          }
+        } else {
+          setPosterUrl(dataUrl);
+        }
       } catch (err) {
         message.error(err instanceof Error ? err.message : "海报生成失败");
       } finally {
@@ -276,11 +287,26 @@ export function PartnerPosters() {
 
           <div className="partner-poster-preview__canvas">
             {posterUrl ? (
-              <img src={posterUrl} alt="poster" />
+              <img
+                src={posterUrl}
+                alt="课程海报，长按可保存"
+                className="partner-poster-preview__img"
+                draggable={false}
+              />
             ) : (
               <Typography.Text type="secondary">{composing ? "正在合成海报…" : "暂无预览"}</Typography.Text>
             )}
           </div>
+
+          {mobileUi && posterUrl ? (
+            <Alert
+              type="success"
+              showIcon
+              style={{ marginTop: 12 }}
+              message="长按上方海报，选择「保存图片」到相册"
+              description="微信内无需再点下载按钮；保存后可转发朋友圈或发给好友。"
+            />
+          ) : null}
 
           <div className="partner-poster-preview__actions">
             {mobileUi ? (
@@ -291,15 +317,17 @@ export function PartnerPosters() {
             <Button block disabled={!enrollUrl} onClick={() => void copyEnrollLink()}>
               复制链接
             </Button>
-            <Button
-              block
-              type="primary"
-              loading={composing}
-              disabled={!posterUrl}
-              onClick={savePoster}
-            >
-              {mobileUi ? "保存图片" : "下载海报 PNG"}
-            </Button>
+            {!mobileUi ? (
+              <Button
+                block
+                type="primary"
+                loading={composing}
+                disabled={!posterUrl}
+                onClick={savePoster}
+              >
+                下载海报 PNG
+              </Button>
+            ) : null}
           </div>
         </div>
 

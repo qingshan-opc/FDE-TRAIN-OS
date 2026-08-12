@@ -1556,3 +1556,15 @@ export const referralApi = {
   profitShares: () => api<{ items: Record<string, unknown>[] }>("/api/v1/me/referral/profit-shares"),
   invites: () => api<{ code: string; register_url: string }>("/api/v1/me/referral/invites"),
 };
+
+/** Public share poster upload — returns URL WeChat can long-press save. */
+export const shareApi = {
+  uploadPoster: (file: Blob, filename = "poster.png") => {
+    const fd = new FormData();
+    fd.append("file", file, filename);
+    return api<{ id: string; url: string; absolute_url: string }>("/api/v1/share/posters", {
+      method: "POST",
+      formData: fd,
+    });
+  },
+};

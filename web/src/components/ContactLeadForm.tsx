@@ -119,7 +119,7 @@ export function ContactLeadForm({
           </p>
         ) : null}
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
+        <div className="landing-contact-form__actions">
           <button type="submit" className="ink-btn ink-btn--ochre" disabled={busy}>
             {busy ? "提交中…" : "提交咨询"}
           </button>

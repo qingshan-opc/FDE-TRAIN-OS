@@ -40,27 +40,29 @@ kubectl -n "${NS}" rollout status deployment/dis-cloud --timeout=10m
 # MinIO. Bootstrap itself is insert-only (FDE_SEED_OVERWRITE_PACKAGES=0).
 if [[ "${SKIP_CURRICULUM_PERSIST:-0}" != "1" ]]; then
   echo "==> persist curriculum to MinIO + refresh DB from bootcamp"
-  POD="$(kubectl -n "${NS}" get pods \
-    -l 'app=dis-cloud,component!=bootstrap,component!=migrate' \
-    --field-selector=status.phase=Running \
-    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
-  if [[ -z "${POD}" ]]; then
+  POD=""
+  for _try in 1 2 3 4 5 6; do
     POD="$(kubectl -n "${NS}" get pods \
       -l 'workload.user.cattle.io/workloadselector=deployment-dis-cloud-dis-cloud' \
       --field-selector=status.phase=Running \
       -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
-  fi
+    if [[ -n "${POD}" ]] && kubectl -n "${NS}" get pod "${POD}" -o jsonpath='{.status.containerStatuses[?(@.name=="dis-cloud")].ready}' 2>/dev/null | grep -q true; then
+      break
+    fi
+    POD=""
+    sleep 5
+  done
   if [[ -n "${POD}" ]]; then
     echo "    pod: ${POD}"
-    kubectl -n "${NS}" exec "${POD}" -- \
+    kubectl -n "${NS}" exec "${POD}" -c dis-cloud -- \
       python /app/scripts/persist_bootcamp_curriculum.py \
       || echo "WARN: curriculum persist skipped (non-fatal)"
     echo "==> seed/merge landing CMS defaults"
-    kubectl -n "${NS}" exec "${POD}" -- \
+    kubectl -n "${NS}" exec "${POD}" -c dis-cloud -- \
       python /app/scripts/seed_landing_cms_defaults.py \
       || echo "WARN: landing CMS seed skipped (non-fatal)"
   else
-    echo "WARN: no running dis-cloud pod for curriculum persist"
+    echo "WARN: no ready dis-cloud pod for curriculum persist / CMS seed"
   fi
 fi
 

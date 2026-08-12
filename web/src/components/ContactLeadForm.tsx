@@ -107,26 +107,14 @@ export function ContactLeadForm({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={compact ? 3 : 4}
+            className="landing-contact-form__textarea"
             placeholder="组织规模、培训目标、期望开课时间等"
-            style={{
-              width: "100%",
-              padding: "13px 16px",
-              borderRadius: 6,
-              border: "1px solid var(--ink-line, #e5e0d4)",
-              background: "#fbf8f1",
-              fontFamily: "var(--ink-serif, inherit)",
-              fontSize: 16,
-              color: "var(--ink-ink, inherit)",
-              outline: "none",
-              boxSizing: "border-box",
-              resize: "vertical",
-            }}
           />
         </div>
 
         {error ? <p className="ink-err-msg" role="alert">{error}</p> : null}
         {ok ? (
-          <p className="muted" role="status" style={{ marginBottom: 12, color: "var(--ink-pine, #0f766e)" }}>
+          <p className="muted landing-contact-form__ok" role="status">
             已收到，顾问将尽快与您联系。
           </p>
         ) : null}

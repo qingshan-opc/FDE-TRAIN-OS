@@ -9123,9 +9123,38 @@ a.passport-recent-item__title:hover {
   overflow: auto;
   z-index: var(--z-dialog, 1100);
 }
-.fde-dialog::backdrop {
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(2px);
+html:not([data-mk-theme="light"]) .fde-dialog {
+  background: #18181b;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f4f4f5;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+html:not([data-mk-theme="light"]) .fde-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.62);
+}
+html:not([data-mk-theme="light"]) .fde-dialog .muted,
+html:not([data-mk-theme="light"]) .fde-dialog .identity-field span {
+  color: #a1a1aa;
+}
+html:not([data-mk-theme="light"]) .fde-dialog .chain-hash-full,
+html:not([data-mk-theme="light"]) .fde-dialog .chain-verify-modal-hash,
+html:not([data-mk-theme="light"]) .fde-dialog .panel {
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f4f4f5;
+}
+html:not([data-mk-theme="light"]) .fde-dialog input {
+  background: #0a0a0b;
+  color: #f4f4f5;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+html:not([data-mk-theme="light"]) .fde-dialog__title,
+html:not([data-mk-theme="light"]) .fde-dialog .btn-ghost {
+  color: #f4f4f5;
+}
+html:not([data-mk-theme="light"]) .fde-dialog .btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 .fde-dialog__body {
   padding: 20px 22px;

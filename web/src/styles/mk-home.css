@@ -1663,6 +1663,119 @@
   color: var(--mk-text-2);
 }
 
+/* 关灯：覆盖 global.css 浅色 OS 卡片，避免浅字叠浅底（如 FDE-Cert-Chain-v1） */
+.mk-home.ink-site .chain-explorer-body,
+.mk-home.ink-site .chain-stat-card,
+.mk-home.ink-site .chain-hash-full,
+.mk-home.ink-site .chain-cert-tx,
+.mk-home.ink-site .chain-code,
+.mk-home.ink-site .chain-table th,
+.mk-home.ink-site .chain-search__input,
+.mk-home.ink-site .chain-verify-modal-hash {
+  background: var(--mk-card-hover) !important;
+  border-color: var(--mk-border) !important;
+  color: var(--mk-text) !important;
+  box-shadow: none !important;
+}
+.mk-home.ink-site .chain-stat-card strong,
+.mk-home.ink-site .chain-detail__title,
+.mk-home.ink-site .chain-section-title,
+.mk-home.ink-site .chain-dl dd,
+.mk-home.ink-site .chain-table td,
+.mk-home.ink-site .chain-verify-field dd,
+.mk-home.ink-site .chain-verify-field dd strong,
+.mk-home.ink-site .chain-explorer-body h2,
+.mk-home.ink-site .chain-explorer-body h3,
+.mk-home.ink-site .chain-explorer-body p,
+.mk-home.ink-site .chain-explorer-body li,
+.mk-home.ink-site .chain-explorer-body ol {
+  color: var(--mk-text) !important;
+}
+.mk-home.ink-site .chain-stat-card .muted,
+.mk-home.ink-site .chain-table th,
+.mk-home.ink-site .chain-dl dt,
+.mk-home.ink-site .chain-time-cell,
+.mk-home.ink-site .chain-verify-field dt,
+.mk-home.ink-site .chain-algo-note,
+.mk-home.ink-site .chain-detail__lead,
+.mk-home.ink-site .identity-field span {
+  color: var(--mk-text-2) !important;
+}
+.mk-home.ink-site .chain-ok,
+.mk-home.ink-site .chain-field-check--ok {
+  color: var(--mk-green) !important;
+}
+.mk-home.ink-site .chain-warn {
+  color: #fbbf24 !important;
+}
+.mk-home.ink-site .chain-field-check--fail {
+  color: #fca5a5 !important;
+}
+.mk-home.ink-site .chain-hash-cell a,
+.mk-home.ink-site .chain-link-strong,
+.mk-home.ink-site .chain-dl a,
+.mk-home.ink-site .chain-cert-tx a,
+.mk-home.ink-site .chain-public-verify__links a,
+.mk-home.ink-site .chain-algo-note a {
+  color: var(--mk-accent) !important;
+}
+.mk-home.ink-site .chain-table tbody tr:hover {
+  background: rgba(124, 140, 248, 0.08) !important;
+}
+.mk-home.ink-site .chain-nav a {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: var(--mk-border-strong) !important;
+  color: var(--mk-text-2) !important;
+}
+.mk-home.ink-site .chain-nav a.is-active,
+.mk-home.ink-site .chain-nav a:hover {
+  background: var(--mk-accent-soft) !important;
+  border-color: rgba(124, 140, 248, 0.4) !important;
+  color: var(--mk-accent) !important;
+}
+.mk-home.ink-site .app-btn--ghost {
+  color: var(--mk-text) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: var(--mk-border-strong) !important;
+}
+.mk-home.ink-site .verify-result--ok {
+  background: var(--mk-green-soft) !important;
+  border-color: rgba(74, 222, 128, 0.28) !important;
+  color: var(--mk-text) !important;
+}
+.mk-home.ink-site .verify-result--fail,
+.mk-home.ink-site .verify-result--error {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #fca5a5 !important;
+}
+.mk-home.ink-site .ink-field input,
+.mk-home.ink-site .ink-field textarea,
+.mk-home.ink-site .landing-contact-form textarea,
+.mk-home.ink-site .landing-contact-form input {
+  background: #0a0a0b !important;
+  color: var(--mk-text) !important;
+  border-color: var(--mk-border) !important;
+  font-family: inherit !important;
+}
+.mk-home.ink-site .ink-field input:focus,
+.mk-home.ink-site .ink-field textarea:focus,
+.mk-home.ink-site .landing-contact-form textarea:focus {
+  border-color: var(--mk-accent) !important;
+  box-shadow: 0 0 0 3px rgba(124, 140, 248, 0.22) !important;
+}
+.mk-home.ink-site .ink-field label {
+  color: var(--mk-text-2) !important;
+  letter-spacing: 0.04em !important;
+}
+.mk-home.ink-site .landing-contact-form__ok {
+  color: var(--mk-green) !important;
+}
+.mk-home.ink-site .skeleton {
+  background: linear-gradient(90deg, #27272a 0px, #3f3f46 40px, #27272a 80px) !important;
+  background-size: 200px 100% !important;
+}
+
 /* ── Theme toggle ── */
 .mk-theme-toggle {
   display: inline-flex;
@@ -1902,10 +2015,82 @@ html[data-mk-theme="light"] .mk-home,
   color: var(--mk-text);
 }
 .mk-home.is-light.ink-site .verify-card input,
-.mk-home.is-light.ink-site input.mono {
+.mk-home.is-light.ink-site input.mono,
+.mk-home.is-light.ink-site .ink-field input,
+.mk-home.is-light.ink-site .ink-field textarea,
+.mk-home.is-light.ink-site .landing-contact-form textarea,
+.mk-home.is-light.ink-site .landing-contact-form input,
+.mk-home.is-light.ink-site .identity-field input {
   background: #fff !important;
   color: var(--mk-text) !important;
   border-color: var(--mk-border-strong) !important;
+}
+.mk-home.is-light.ink-site .chain-explorer-body,
+.mk-home.is-light.ink-site .chain-stat-card,
+.mk-home.is-light.ink-site .chain-hash-full,
+.mk-home.is-light.ink-site .chain-cert-tx,
+.mk-home.is-light.ink-site .chain-code,
+.mk-home.is-light.ink-site .chain-table th,
+.mk-home.is-light.ink-site .chain-search__input {
+  background: #f4f4f5 !important;
+  border-color: var(--mk-border) !important;
+  color: var(--mk-text) !important;
+}
+.mk-home.is-light.ink-site .chain-stat-card strong,
+.mk-home.is-light.ink-site .chain-detail__title,
+.mk-home.is-light.ink-site .chain-section-title,
+.mk-home.is-light.ink-site .chain-dl dd,
+.mk-home.is-light.ink-site .chain-table td,
+.mk-home.is-light.ink-site .chain-verify-field dd,
+.mk-home.is-light.ink-site .chain-explorer-body h2,
+.mk-home.is-light.ink-site .chain-explorer-body h3,
+.mk-home.is-light.ink-site .chain-explorer-body p {
+  color: var(--mk-text) !important;
+}
+.mk-home.is-light.ink-site .chain-stat-card .muted,
+.mk-home.is-light.ink-site .chain-table th,
+.mk-home.is-light.ink-site .chain-dl dt,
+.mk-home.is-light.ink-site .chain-verify-field dt,
+.mk-home.is-light.ink-site .identity-field span,
+.mk-home.is-light.ink-site .ink-field label {
+  color: var(--mk-text-2) !important;
+}
+.mk-home.is-light.ink-site .chain-ok,
+.mk-home.is-light.ink-site .chain-field-check--ok {
+  color: #15803d !important;
+}
+.mk-home.is-light.ink-site .chain-warn {
+  color: #b45309 !important;
+}
+.mk-home.is-light.ink-site .chain-field-check--fail,
+.mk-home.is-light.ink-site .ink-err-msg,
+.mk-home.is-light.ink-site .verify-result--fail,
+.mk-home.is-light.ink-site .verify-result--error {
+  color: #b91c1c !important;
+}
+.mk-home.is-light.ink-site .verify-result--fail,
+.mk-home.is-light.ink-site .verify-result--error {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+}
+.mk-home.is-light.ink-site .chain-nav a {
+  background: #fff !important;
+  border-color: var(--mk-border) !important;
+  color: var(--mk-text-2) !important;
+}
+.mk-home.is-light.ink-site .chain-nav a.is-active,
+.mk-home.is-light.ink-site .chain-nav a:hover {
+  background: var(--mk-accent-soft) !important;
+  color: var(--mk-accent) !important;
+}
+.mk-home.is-light.ink-site .app-btn--ghost {
+  color: var(--mk-text) !important;
+  background: #fff !important;
+  border-color: var(--mk-border-strong) !important;
+}
+.mk-home.is-light.ink-site .skeleton {
+  background: linear-gradient(90deg, #eceff3 0px, #f7f8fa 40px, #eceff3 80px) !important;
+  background-size: 200px 100% !important;
 }
 
 .mk-home.is-light::before {

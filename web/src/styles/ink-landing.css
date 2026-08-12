@@ -1643,6 +1643,24 @@
   border-color: var(--ink-ochre);
   box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
+.ink-field textarea,
+.landing-contact-form__textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--ink-line);
+  background: #fbf8f1;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--ink-ink);
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.landing-contact-form__ok {
+  margin: 0 0 12px;
+  color: var(--ink-pine);
+}
 .ink-err-msg {
   font-size: 12px;
   color: var(--ink-ochre);

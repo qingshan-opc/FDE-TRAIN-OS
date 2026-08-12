@@ -128,11 +128,11 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 WHERE user_id=? AND offering_id=? AND status='pending'
                   AND COALESCE(pay_channel, 'wechat')=?
                   AND created_at > NOW() - INTERVAL '2 hours'
-                  AND code_url LIKE 'jsapi:%'
+                  AND code_url LIKE ?
                 ORDER BY created_at DESC
                 LIMIT 1
                 """,
-                (user.id, body.offering_id, channel),
+                (user.id, body.offering_id, channel, "jsapi:%"),
             )
         else:
             cur.execute(
@@ -143,11 +143,11 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                   AND COALESCE(pay_channel, 'wechat')=?
                   AND created_at > NOW() - INTERVAL '2 hours'
                   AND code_url IS NOT NULL AND code_url <> ''
-                  AND code_url NOT LIKE 'jsapi:%'
+                  AND code_url NOT LIKE ?
                 ORDER BY created_at DESC
                 LIMIT 1
                 """,
-                (user.id, body.offering_id, channel),
+                (user.id, body.offering_id, channel, "jsapi:%"),
             )
         pending = cur.fetchone()
 

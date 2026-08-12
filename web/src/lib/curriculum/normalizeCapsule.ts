@@ -84,16 +84,28 @@ export function normalizePractice(practice: Capsule["practice"]): CapsulePractic
 
 /** Split checklist prompts that use `[ ] item；[ ] item` on one line. */
 export function checklistItemsFromPrompt(prompt: string): string[] {
-  const body = prompt.replace(/^完成标志[：:]\s*/m, "").trim();
-  const byMarker = body
-    .split(/\[\s*[xX ]\s*\]/)
-    .map((s) => s.replace(/^[;；、.\s]+|[;；、.\s]+$/g, "").trim())
-    .filter(Boolean);
-  if (byMarker.length > 1) return byMarker;
+  const seen = new Set<string>();
+  const out: string[] = [];
+  const push = (raw: string) => {
+    const item = raw.replace(/^[;；、.\s]+|[;；、.\s]+$/g, "").trim();
+    if (!item || seen.has(item)) return;
+    // Headings / section labels are not checklist rows.
+    if (/^(#{1,6}\s|完成标志|手工检查清单|学员验收清单|过关标准)/.test(item)) return;
+    seen.add(item);
+    out.push(item);
+  };
 
-  const lines = prompt
-    .split("\n")
-    .map((l) => l.replace(/^\s*[-*]\s*/, "").replace(/\[\s*[xX ]\s*\]\s*/, "").trim())
-    .filter(Boolean);
-  return lines.length ? lines : body ? [body] : [];
+  // Prefer real checkbox lines — avoids treating the task brief as item #1
+  // and avoids duplicating the same rows when generators append 完成标志 twice.
+  for (const raw of prompt.split("\n")) {
+    const m = raw.match(/^\s*[-*]?\s*\[\s*[xX ]\s*\]\s*(.+)$/);
+    if (m) push(m[1]);
+  }
+  if (out.length) return out;
+
+  const body = prompt.replace(/^完成标志[：:]\s*/m, "").trim();
+  const byMarker = body.split(/\[\s*[xX ]\s*\]/).slice(1);
+  for (const s of byMarker) push(s);
+  if (out.length) return out;
+  return body ? [body] : [];
 }

@@ -33,4 +33,23 @@ describe("normalizePractice + checklist", () => {
     expect(spec?.required).toBe(true);
     expect(checklistItemsFromPrompt(spec!.prompt)).toEqual(["一项", "二项", "三项。"]);
   });
+
+  it("dedupes checklist rows and ignores task-brief preamble", () => {
+    const prompt = `目标：在应用里跑通多轮对话。
+
+### 手工检查清单
+
+- [ ] Key 不在前端；环境变量或教务网关
+- [ ] 助手位可 ≥3 轮连续对话
+
+完成标志：
+[ ] Key 不在前端；环境变量或教务网关
+[ ] 助手位可 ≥3 轮连续对话
+[ ] 四层名称顺序正确`;
+    expect(checklistItemsFromPrompt(prompt)).toEqual([
+      "Key 不在前端；环境变量或教务网关",
+      "助手位可 ≥3 轮连续对话",
+      "四层名称顺序正确",
+    ]);
+  });
 });

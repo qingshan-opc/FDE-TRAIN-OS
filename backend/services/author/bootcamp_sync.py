@@ -118,7 +118,9 @@ def _checklist_items(txt: str) -> list[str]:
     items: list[str] = []
     seen: set[str] = set()
     for header in _CHECKLIST_HEADERS:
-        m = re.search(rf"## {re.escape(header)}\n(.*?)(?=\n## |\Z)", txt, re.S)
+        # Match ## or ### headings; require start-of-line so "##" does not
+        # accidentally match inside unrelated text mid-line.
+        m = re.search(rf"(?m)^#{{2,3}}\s+{re.escape(header)}\s*\n(.*?)(?=\n#{{2,3}}\s|\Z)", txt, re.S)
         if not m:
             continue
         for raw in m.group(1).splitlines():
@@ -177,8 +179,17 @@ def _practice(day: int, sdir: str) -> str:
     parts: list[str] = []
     task_m = re.search(r"## 实操任务[^\n]*\n(.*?)(?=\n## |\Z)", txt, re.S)
     if task_m:
-        # Keep a short plain-text brief (drop nested headings / links noise lightly).
-        brief = re.sub(r"\n{3,}", "\n\n", task_m.group(1).strip())
+        # Keep a short plain-text brief. Nested checklist blocks are rendered
+        # separately via local_prep / 完成标志 — do not leave them in the brief
+        # or the learner UI will show every [ ] row twice.
+        brief = task_m.group(1).strip()
+        brief = re.split(
+            r"\n###\s*(?:手工检查清单|学员验收清单|完成标志|过关标准)\b",
+            brief,
+            maxsplit=1,
+        )[0].strip()
+        brief = re.sub(r"\n[-*]\s*\[[ xX]?\]\s*.+", "", brief)
+        brief = re.sub(r"\n{3,}", "\n\n", brief)
         if brief:
             parts.append(brief[:600])
     pts = _checklist_items(txt)

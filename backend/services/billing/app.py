@@ -81,6 +81,9 @@ def _checkout_payload(
 def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
     user = require_user(request)
     channel: PayChannel = body.channel or "wechat"
+    # Soft-hide Alipay for everyone except the allowlisted demo/partner account.
+    if channel == "alipay" and (user.email or "").strip().lower() != "partner@fde.local":
+        raise HTTPException(403, "支付宝暂未开放")
     # Frontend sends pay_mode=jsapi inside WeChat; desktop keeps native QR.
     want_jsapi = channel == "wechat" and body.pay_mode == "jsapi"
 

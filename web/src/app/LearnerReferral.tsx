@@ -23,6 +23,7 @@ import {
   downloadDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
+import { POSTER_DEFAULT_SLOGAN, SHOP_HERO } from "./shopPitch";
 
 const TIER_HINTS = [
   { min: 0, pct: 20, label: "默认" },
@@ -42,7 +43,7 @@ export function LearnerReferral() {
   const [bindQr, setBindQr] = useState<string | null>(null);
   const [bindTicket, setBindTicket] = useState<string | null>(null);
   const [posterOpen, setPosterOpen] = useState(false);
-  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("brutal");
+  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("ink");
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const pollRef = useRef<number | null>(null);
@@ -92,10 +93,10 @@ export function LearnerReferral() {
         style,
         audience: "personal",
         coverSrc: "/landing/hero.png",
-        title: "青山在 · FDE 训练营",
+        title: SHOP_HERO.title,
         priceLabel: "¥1,980",
         issuerLabel: "个人邀请 · 扫码注册即记为好友邀请",
-        slogan: "成为前沿部署工程师，打通AI与业务的最后一公里",
+        slogan: POSTER_DEFAULT_SLOGAN,
         qrCanvas,
         scanHint: "好友扫码注册后计入你的邀请人数",
       });

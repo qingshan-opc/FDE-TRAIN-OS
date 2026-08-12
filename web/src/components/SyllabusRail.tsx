@@ -50,8 +50,8 @@ export function SyllabusRail({
   return (
     <nav className="syllabus-rail syllabus-rail--daily" aria-label="课程大纲">
       <header className="syllabus-head">
-        <h2 className="syllabus-title">从0到1入门FDE</h2>
-        <p className="syllabus-subtitle">几百个学习节点，助你在AI时代翱翔！</p>
+        <h2 className="syllabus-title">企业AI项目实战训练营</h2>
+        <p className="syllabus-subtitle">从系统构建到组织落地。</p>
       </header>
 
       <Tree

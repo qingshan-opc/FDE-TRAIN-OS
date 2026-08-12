@@ -1,10 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Alert, Button, Modal, QRCode, Segmented, Space, Typography } from "antd";
 import { AlipayCircleOutlined, WechatOutlined } from "@ant-design/icons";
 import { billingApi, ApiError } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import { isWeChatBrowser } from "../lib/wechat";
 
 export type PayChannel = "wechat" | "alipay";
+
+/** Temporary allowlist while Alipay is soft-hidden for everyone else. */
+const ALIPAY_VISIBLE_EMAILS = new Set(["partner@fde.local"]);
 
 type JsapiParams = {
   appId: string;
@@ -74,7 +78,9 @@ function invokeWxJsapiPay(params: JsapiParams): Promise<"ok" | "cancel" | "fail"
 }
 
 export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: Props) {
+  const { user } = useAuth();
   const inWeChat = isWeChatBrowser();
+  const showAlipay = ALIPAY_VISIBLE_EMAILS.has((user?.email || "").trim().toLowerCase());
   const [channel, setChannel] = useState<PayChannel>("wechat");
   const [orderId, setOrderId] = useState<string | null>(null);
   const [codeUrl, setCodeUrl] = useState<string | null>(null);
@@ -90,9 +96,41 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
   const timer = useRef<number | null>(null);
   const autoInvoked = useRef(false);
 
+  const channelOptions = useMemo(() => {
+    const opts: Array<{ label: ReactNode; value: PayChannel; disabled?: boolean }> = [
+      {
+        label: (
+          <span>
+            <WechatOutlined style={{ color: "#07c160", marginRight: 6 }} />
+            微信
+          </span>
+        ),
+        value: "wechat",
+      },
+    ];
+    if (showAlipay) {
+      opts.push({
+        label: (
+          <span>
+            <AlipayCircleOutlined style={{ color: "#1677ff", marginRight: 6 }} />
+            支付宝
+          </span>
+        ),
+        value: "alipay",
+        disabled: inWeChat,
+      });
+    }
+    return opts;
+  }, [showAlipay, inWeChat]);
+
+  useEffect(() => {
+    if (!showAlipay && channel === "alipay") setChannel("wechat");
+  }, [showAlipay, channel]);
+
   // Reset + create order when modal opens or channel changes
   useEffect(() => {
     if (!open || !offeringId) return;
+    const activeChannel: PayChannel = showAlipay ? channel : "wechat";
     let cancelled = false;
     autoInvoked.current = false;
     setStatus("pending");
@@ -101,13 +139,13 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     setCodeUrl(null);
     setJsapiParams(null);
     setOauthUrl(null);
-    setPayMode(inWeChat && channel === "wechat" ? "jsapi" : "native");
+    setPayMode(inWeChat && activeChannel === "wechat" ? "jsapi" : "native");
     setDevMode(false);
     setLoading(true);
     void (async () => {
       try {
-        const mode = inWeChat && channel === "wechat" ? "jsapi" : "native";
-        const res = await billingApi.checkout(offeringId, channel, mode);
+        const mode = inWeChat && activeChannel === "wechat" ? "jsapi" : "native";
+        const res = await billingApi.checkout(offeringId, activeChannel, mode);
         if (cancelled) return;
         setOrderId(res.order_id);
         setCodeUrl(res.code_url || null);
@@ -137,7 +175,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     return () => {
       cancelled = true;
     };
-  }, [open, offeringId, channel, inWeChat]);
+  }, [open, offeringId, channel, inWeChat, showAlipay]);
 
   useEffect(() => {
     if (!open || !orderId) return;
@@ -227,33 +265,15 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
       <Typography.Paragraph>
         应付金额：<strong>¥{yuan}</strong>
       </Typography.Paragraph>
-      <Segmented
-        block
-        value={channel}
-        onChange={(v) => setChannel(v as PayChannel)}
-        options={[
-          {
-            label: (
-              <span>
-                <WechatOutlined style={{ color: "#07c160", marginRight: 6 }} />
-                微信
-              </span>
-            ),
-            value: "wechat",
-          },
-          {
-            label: (
-              <span>
-                <AlipayCircleOutlined style={{ color: "#1677ff", marginRight: 6 }} />
-                支付宝
-              </span>
-            ),
-            value: "alipay",
-            disabled: inWeChat,
-          },
-        ]}
-        style={{ marginBottom: 16 }}
-      />
+      {showAlipay ? (
+        <Segmented
+          block
+          value={channel}
+          onChange={(v) => setChannel(v as PayChannel)}
+          options={channelOptions}
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
       {inWeChat && (
         <Alert
           type="info"

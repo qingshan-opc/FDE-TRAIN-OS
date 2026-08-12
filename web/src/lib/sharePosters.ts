@@ -1,6 +1,6 @@
-/** 分享海报：三套风格（新粗野 / Y2K / 高转化）Canvas 合成 —— 卖课文案版，无封面图 */
+/** 分享海报：ink / 新粗野 / Y2K / 高转化 Canvas 合成 —— 卖课文案版，无封面图 */
 
-export type PosterStyleId = "brutal" | "y2k" | "conversion";
+export type PosterStyleId = "ink" | "brutal" | "y2k" | "conversion";
 
 export type PosterAudience = "org" | "personal";
 
@@ -26,6 +26,12 @@ export const POSTER_STYLES: Array<{
   swatch: [string, string, string];
 }> = [
   {
+    id: "ink",
+    name: "青绿编辑",
+    blurb: "墨绿纸白 · 细金线 · 与官网同母题",
+    swatch: ["#0f2e2a", "#0d9488", "#f5f0e8"],
+  },
+  {
     id: "brutal",
     name: "新粗野",
     blurb: "奶油底 · 大黑边 · 硬阴影贴纸感",
@@ -49,7 +55,9 @@ const FONT =
   '"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,sans-serif';
 const FONT_MONO = '"Courier New",ui-monospace,Menlo,monospace';
 
-const SELL_POINTS = ["21 天结构化训练", "可核验结业证书", "产品 · Agent · 沟通三周递进"] as const;
+/** Keep in sync with web/src/app/shopPitch.ts POSTER_* */
+const SELL_POINTS = ["21 天结构化训练", "产品 · Agent · 沟通递进", "结业可核验"] as const;
+const DEFAULT_SLOGAN = "从系统构建到组织落地。";
 
 export function downloadDataUrl(dataUrl: string, filename: string) {
   const a = document.createElement("a");
@@ -147,6 +155,138 @@ function drawQrPanel(
   ctx.textAlign = "start";
 }
 
+function composeInk(opts: SharePosterInput): string {
+  const W = 750;
+  const H = 1200;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas 不可用");
+
+  // paper + ink wash
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, "#f7f4ee");
+  bg.addColorStop(0.55, "#eef7f5");
+  bg.addColorStop(1, "#e7f0ee");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // soft teal wash
+  const wash = ctx.createRadialGradient(W * 0.15, 80, 20, W * 0.2, 120, 420);
+  wash.addColorStop(0, "rgba(13,148,136,0.22)");
+  wash.addColorStop(1, "rgba(13,148,136,0)");
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, W, H);
+
+  // top brand bar
+  ctx.fillStyle = "#0f2e2a";
+  ctx.fillRect(0, 0, W, 88);
+  ctx.fillStyle = "#c9a227";
+  ctx.fillRect(0, 88, W, 3);
+
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = `700 22px ${FONT}`;
+  ctx.fillText("青山在 · 学习平台", 40, 54);
+  ctx.font = `600 16px ${FONT}`;
+  ctx.fillStyle = "rgba(248,250,252,0.78)";
+  ctx.fillText(opts.audience === "org" ? "机构渠道" : "学员邀请", W - 160, 54);
+
+  // channel chip
+  roundRect(ctx, 40, 118, opts.audience === "org" ? 148 : 148, 36, 18);
+  ctx.fillStyle = "rgba(13,148,136,0.12)";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(13,148,136,0.35)";
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, 40, 118, 148, 36, 18);
+  ctx.stroke();
+  ctx.fillStyle = "#0f766e";
+  ctx.font = `700 16px ${FONT}`;
+  ctx.fillText(opts.audience === "org" ? "机构推荐" : "好友邀请", 62, 142);
+
+  // title
+  ctx.fillStyle = "#0f2e2a";
+  ctx.font = `900 52px ${FONT}`;
+  const titleEnd = wrapText(ctx, opts.title, 40, 220, W - 80, 62, 3);
+
+  // gold accent line
+  ctx.fillStyle = "#c9a227";
+  ctx.fillRect(40, titleEnd + 28, 64, 3);
+
+  ctx.fillStyle = "#134e4a";
+  ctx.font = `600 26px ${FONT}`;
+  wrapText(ctx, opts.slogan || DEFAULT_SLOGAN, 40, titleEnd + 68, W - 80, 36, 2);
+
+  // three week tags
+  const tags = ["系统构建", "Agent 大脑", "组织落地"];
+  const tagW = 200;
+  const tagGap = 16;
+  const tagStart = (W - (tagW * 3 + tagGap * 2)) / 2;
+  tags.forEach((t, i) => {
+    const x = tagStart + i * (tagW + tagGap);
+    const y = 470;
+    roundRect(ctx, x, y, tagW, 72, 14);
+    ctx.fillStyle = i === 1 ? "#0d9488" : "#fff";
+    ctx.fill();
+    ctx.strokeStyle = i === 1 ? "#0d9488" : "rgba(15,46,42,0.14)";
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, x, y, tagW, 72, 14);
+    ctx.stroke();
+    ctx.fillStyle = i === 1 ? "#fff" : "#0f2e2a";
+    ctx.font = `800 22px ${FONT}`;
+    ctx.textAlign = "center";
+    ctx.fillText(t, x + tagW / 2, y + 44);
+    ctx.textAlign = "start";
+  });
+
+  // price block
+  roundRect(ctx, 40, 580, W - 80, 130, 18);
+  ctx.fillStyle = "#0f2e2a";
+  ctx.fill();
+  ctx.fillStyle = "#c9a227";
+  ctx.fillRect(40, 580, 6, 130);
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = `900 56px ${FONT}`;
+  ctx.fillText(opts.priceLabel, 64, 655);
+  ctx.fillStyle = "rgba(248,250,252,0.75)";
+  ctx.font = `600 20px ${FONT}`;
+  ctx.fillText("21 天 · 可核验证书 · 支付后立即开通", 64, 690);
+
+  // sell points
+  let py = 750;
+  for (const p of SELL_POINTS) {
+    ctx.fillStyle = "#0d9488";
+    ctx.beginPath();
+    ctx.arc(56, py - 6, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#134e4a";
+    ctx.font = `700 24px ${FONT}`;
+    ctx.fillText(p, 80, py);
+    py += 44;
+  }
+
+  ctx.fillStyle = "#0f2e2a";
+  ctx.font = `700 22px ${FONT}`;
+  ctx.fillText(opts.issuerLabel, 40, 920);
+
+  drawQrPanel(
+    ctx,
+    opts.qrCanvas,
+    { x: W - 286, y: H - 340, w: 250, h: 290, r: 16 },
+    "#fff",
+    "微信扫码选购",
+    "#0f766e",
+    { color: "rgba(15,46,42,0.12)", width: 2 },
+    { dx: 0, dy: 10, color: "rgba(15,46,42,0.1)" },
+  );
+
+  ctx.fillStyle = "#64748b";
+  ctx.font = `600 18px ${FONT}`;
+  ctx.fillText(opts.scanHint || "微信扫码登录并选购", 40, H - 40);
+
+  return canvas.toDataURL("image/png");
+}
+
 function composeBrutal(opts: SharePosterInput): string {
   const W = 750;
   const H = 1200;
@@ -200,7 +340,7 @@ function composeBrutal(opts: SharePosterInput): string {
   ctx.strokeRect(36, 490, W - 72, 78);
   ctx.fillStyle = "#000";
   ctx.font = `800 24px ${FONT}`;
-  wrapText(ctx, opts.slogan || "打通AI与业务的最后一公里", 52, 540, W - 110, 32, 2);
+  wrapText(ctx, opts.slogan || DEFAULT_SLOGAN, 52, 540, W - 110, 32, 2);
 
   // sell points
   let py = 610;
@@ -317,7 +457,7 @@ function composeY2k(opts: SharePosterInput): string {
 
   ctx.fillStyle = "#05ffa1";
   ctx.font = `800 26px ${FONT}`;
-  wrapText(ctx, opts.slogan || "打通AI与业务的最后一公里", 48, titleEnd + 56, W - 96, 34, 2);
+  wrapText(ctx, opts.slogan || DEFAULT_SLOGAN, 48, titleEnd + 56, W - 96, 34, 2);
 
   ctx.fillStyle = "#ff71ce";
   ctx.font = `900 56px ${FONT}`;
@@ -413,7 +553,7 @@ function composeConversion(opts: SharePosterInput): string {
   ctx.font = `900 48px ${FONT}`;
   const titleEnd = wrapText(ctx, opts.title, 64, 255, W - 120, 58, 2);
 
-  const slogan = opts.slogan || "打通AI与业务的最后一公里";
+  const slogan = opts.slogan || DEFAULT_SLOGAN;
   ctx.font = `800 26px ${FONT}`;
   const sw = Math.min(ctx.measureText(slogan).width + 28, W - 100);
   const sy = titleEnd + 40;
@@ -470,6 +610,7 @@ function composeConversion(opts: SharePosterInput): string {
 }
 
 export async function composeSharePoster(opts: SharePosterInput): Promise<string> {
+  if (opts.style === "ink") return composeInk(opts);
   if (opts.style === "brutal") return composeBrutal(opts);
   if (opts.style === "y2k") return composeY2k(opts);
   return composeConversion(opts);

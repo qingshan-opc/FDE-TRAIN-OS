@@ -37,7 +37,7 @@ const WEEK_CN: Record<number, string> = {
 const WEEK_TAGLINE: Record<number, string> = {
   1: "用ai做完整应用",
   2: "给应用装上大脑",
-  3: "自媒体时代的生存法则",
+  3: "组织推动与AI落地。",
 };
 
 function weekLabel(week: number): string {

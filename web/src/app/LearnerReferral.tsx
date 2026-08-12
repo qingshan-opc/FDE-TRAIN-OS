@@ -43,7 +43,7 @@ export function LearnerReferral() {
   const [bindQr, setBindQr] = useState<string | null>(null);
   const [bindTicket, setBindTicket] = useState<string | null>(null);
   const [posterOpen, setPosterOpen] = useState(false);
-  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("hero");
+  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("academy");
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const pollRef = useRef<number | null>(null);

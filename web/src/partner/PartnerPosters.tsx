@@ -51,7 +51,7 @@ export function PartnerPosters() {
   const [enrollUrl, setEnrollUrl] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
   const [preview, setPreview] = useState<Offering | null>(null);
-  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("hero");
+  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("academy");
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const [mobileUi, setMobileUi] = useState(false);
@@ -164,7 +164,7 @@ export function PartnerPosters() {
         课程海报
       </Typography.Title>
       <Typography.Paragraph type="secondary">
-        学员微信扫码自动登录并进入选购；支付计入本机构。四套均为深蓝金完整长图，差异在路径/成果/报价强调。
+        学员微信扫码自动登录并进入选购；支付计入本机构。默认「学院长图」对齐营销页；另有青绿 / 粗野 / 极简三套风格可选。
       </Typography.Paragraph>
 
       {!hasInvite ? (
@@ -202,7 +202,7 @@ export function PartnerPosters() {
                     type="link"
                     disabled={!hasInvite}
                     onClick={() => {
-                      setPosterStyle("hero");
+                      setPosterStyle("academy");
                       setPreview(item);
                     }}
                   >

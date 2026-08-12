@@ -9739,6 +9739,19 @@ a.passport-recent-item__title:hover {
   overscroll-behavior: contain;
 }
 
+/* Detail pages: table grows with rows; page itself scrolls */
+.author-page-detail {
+  width: 100%;
+  padding-bottom: 24px;
+}
+.author-table-fluid {
+  width: 100%;
+  overflow-x: auto;
+}
+.author-table-fluid .ant-table-pagination {
+  margin: 12px 0 0 !important;
+}
+
 /* 搜索 / 输入 / 选择：灵知式玻璃控件 */
 .author-content .author-search-toolbar .ant-input,
 .author-content .author-search-toolbar .ant-input-affix-wrapper,

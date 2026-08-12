@@ -56,7 +56,7 @@ export function LearnerEnrollmentDetail() {
   );
 
   return (
-    <div>
+    <div className="author-page author-page-detail">
       <Breadcrumb
         style={{ marginBottom: 12 }}
         items={[
@@ -79,6 +79,9 @@ export function LearnerEnrollmentDetail() {
               <strong>状态</strong>：{data?.status ? <StatusTag status={data.status} domain="enrollment" /> : "—"}
             </Typography.Paragraph>
             <Typography.Paragraph>
+              <strong>邮箱</strong>：{data?.email || "—"}
+            </Typography.Paragraph>
+            <Typography.Paragraph>
               <strong>提交物</strong>：{data?.submission_count ?? "—"}
             </Typography.Paragraph>
             <Typography.Paragraph>
@@ -87,12 +90,16 @@ export function LearnerEnrollmentDetail() {
             <Typography.Paragraph>
               <strong>导师复核</strong>：{(data?.mentor_reviews || []).filter((r) => r.status === "pending").length} 待处理
             </Typography.Paragraph>
+            <Typography.Paragraph type="secondary" style={{ marginBottom: 8 }}>
+              节点 {nodeRows.length} · 课节打开 {capsuleRows.length}
+            </Typography.Paragraph>
             <Link to="/author/learners/reviews">前往导师复核 →</Link>
           </Card>
         </Col>
         <Col xs={24} md={16}>
           <Card size="small" title="课次节点进度（learn / quiz / lab …）" loading={loading}>
             <ServerTable
+              fitViewport={false}
               rowKey="key"
               loading={loading}
               data={{ items: nodeRows, total: nodeRows.length, page: 1, page_size: nodeRows.length || 20 }}
@@ -104,9 +111,7 @@ export function LearnerEnrollmentDetail() {
                 {
                   title: "状态",
                   dataIndex: "status",
-                  render: (s: string) => (
-                    <StatusTag status={s} />
-                  ),
+                  render: (s: string) => <StatusTag status={s} />,
                 },
                 { title: "更新时间", dataIndex: "updated_at", responsive: ["md"] },
               ]}
@@ -116,6 +121,7 @@ export function LearnerEnrollmentDetail() {
         <Col span={24}>
           <Card size="small" title="课节打开记录（capsule_progress）" loading={loading}>
             <ServerTable
+              fitViewport={false}
               rowKey="key"
               loading={loading}
               data={{ items: capsuleRows, total: capsuleRows.length, page: 1, page_size: capsuleRows.length || 20 }}

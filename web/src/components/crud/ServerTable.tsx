@@ -18,6 +18,8 @@ export function ServerTable<T extends object>({
   emptyDescription = "暂无数据",
   scrollX = true,
   expandable,
+  /** One-viewport list pages only. Detail pages should pass false so the table grows with content. */
+  fitViewport = true,
 }: {
   rowKey: keyof T | ((r: T) => string);
   columns: ColumnsType<T>;
@@ -29,34 +31,48 @@ export function ServerTable<T extends object>({
   emptyDescription?: string;
   scrollX?: number | true;
   expandable?: TableProps<T>["expandable"];
+  fitViewport?: boolean;
 }) {
   const { getContentPopupContainer } = useAuthorLayout();
   const selectPopup = authorSelectPopup(getContentPopupContainer);
-  const { containerRef, scrollY } = useListTableScroll([data?.items, loading, data?.page, data?.page_size]);
+  const { containerRef, scrollY } = useListTableScroll(
+    fitViewport ? [data?.items, loading, data?.page, data?.page_size] : [],
+  );
 
   useErrorModal(error, { title: "加载失败", onRetry });
 
+  const scroll = fitViewport
+    ? { x: scrollX === true ? "max-content" : scrollX, y: scrollY }
+    : { x: scrollX === true ? "max-content" : scrollX };
+
   return (
-    <div className="author-list-table-card" ref={containerRef}>
+    <div
+      className={fitViewport ? "author-list-table-card" : "author-table-fluid"}
+      ref={fitViewport ? containerRef : undefined}
+    >
       <Table<T>
         rowKey={rowKey as string | ((r: T) => string)}
         loading={loading}
         columns={columns}
         dataSource={data?.items || []}
         expandable={expandable}
-        scroll={{ x: scrollX === true ? "max-content" : scrollX, y: scrollY }}
+        scroll={scroll}
         locale={{ emptyText: <Empty description={emptyDescription} /> }}
         getPopupContainer={selectPopup}
-        pagination={{
-          current: data?.page || 1,
-          pageSize: data?.page_size || 20,
-          total: data?.total || 0,
-          showSizeChanger: true,
-          pageSizeOptions: PAGE_SIZE_OPTIONS.map(String),
-          showTotal: (t) => `共 ${t} 条`,
-          position: ["bottomCenter"],
-          onChange: onPageChange,
-        }}
+        pagination={
+          fitViewport
+            ? {
+                current: data?.page || 1,
+                pageSize: data?.page_size || 20,
+                total: data?.total || 0,
+                showSizeChanger: true,
+                pageSizeOptions: PAGE_SIZE_OPTIONS.map(String),
+                showTotal: (t) => `共 ${t} 条`,
+                position: ["bottomCenter"],
+                onChange: onPageChange,
+              }
+            : false
+        }
       />
     </div>
   );

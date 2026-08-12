@@ -5,21 +5,11 @@ import { LandingTopbar, LOGIN_PATH, PURCHASE_PATH } from "../components/LandingT
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { applyPageSeo, SITE_DEFAULT_TITLE } from "../lib/seo";
+import { sanitizeRichText } from "../lib/sanitizeRichText";
 import type { LandingPayload } from "../lib/types";
 import { FALLBACK_LANDING_TABS } from "./landingShared";
-import {
-  INK_FAQ,
-  INK_FEATURES,
-  INK_HERO,
-  INK_PAIN_TURN,
-  INK_PAINS,
-  INK_PRICE_PERKS,
-  INK_TRAE_ROLES,
-  INK_SEO,
-  INK_SYLLABUS_WEEKS,
-  INK_VOICES,
-  INK_WORKS,
-} from "./inkCampContent";
+import { INK_SEO } from "./inkCampContent";
+import { resolveHome, resolveRouteSeo } from "./resolveLandingContent";
 
 const FALLBACK: LandingPayload = {
   title: "青山在",
@@ -34,22 +24,6 @@ const FALLBACK: LandingPayload = {
     keywords: INK_SEO.keywords,
   },
 };
-
-const FEAT_META = [
-  "ROLES: pm · ui · fe · be · qa · ops",
-  "LOOP: plan → act → reflect",
-  "SKILL: align · report · push",
-  "EVIDENCE: gated milestones",
-  "DELIVERABLE: running product",
-  "ACCESS: lifetime replay",
-] as const;
-
-const TRUST = [
-  { num: "21", unit: "天", label: "结构化训练" },
-  { num: "3", unit: "周", label: "能力递进" },
-  { num: "6", unit: "岗", label: "AI 岗位协作" },
-  { num: "永久", unit: "", label: "课程回放" },
-] as const;
 
 function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return false;
@@ -85,10 +59,23 @@ export function Landing() {
   const purchaseHref = user ? PURCHASE_PATH : LOGIN_PATH;
   const brandName = data.brand?.name || "青山在";
   const appHref = user ? defaultHome || "/app/courses" : data.cta?.app || "/app/courses";
+  const home = resolveHome(data.home);
+  const hero = home.hero || {};
+  const pain = home.pain || {};
+  const features = home.features || {};
+  const outline = home.outline || {};
+  const method = home.method || {};
+  const works = home.works || {};
+  const voices = home.voices || {};
+  const pricing = home.pricing || {};
+  const faq = home.faq || {};
+  const finalCta = home.final_cta || {};
+  const trust = hero.trust || [];
+  const featMeta = features.meta || [];
 
   const outlineDays = useMemo(
     () =>
-      INK_SYLLABUS_WEEKS.flatMap((week, wi) =>
+      (home.outline?.weeks || []).flatMap((week, wi) =>
         (week.days || []).map((day, di) => ({
           id: `W${wi + 1}-${day.d}`,
           week: week.week,
@@ -97,7 +84,7 @@ export function Landing() {
           defaultOpen: wi === 0 && di === 0,
         })),
       ),
-    [],
+    [home.outline?.weeks],
   );
 
   useEffect(() => {
@@ -112,12 +99,8 @@ export function Landing() {
           brand: { ...FALLBACK.brand, ...(res.brand || {}) },
           cta: { ...FALLBACK.cta, ...(res.cta || {}) },
           tabs: FALLBACK_LANDING_TABS,
-          seo: {
-            ...FALLBACK.seo,
-            ...(res.seo || {}),
-            title: INK_SEO.title,
-            description: res.seo?.description || INK_SEO.description,
-          },
+          // Keep CMS seo as-is (do not force INK_SEO.title)
+          seo: res.seo ?? FALLBACK.seo,
         });
       } catch {
         if (!cancelled) setData(FALLBACK);
@@ -129,22 +112,27 @@ export function Landing() {
   }, []);
 
   useEffect(() => {
-    applyPageSeo({
-      title: data.seo?.title || SITE_DEFAULT_TITLE,
-      description: data.seo?.description,
-      keywords: data.seo?.keywords,
-    });
-  }, [data.seo]);
+    const seo = resolveRouteSeo("home", data) || data.seo;
+    return applyPageSeo(
+      {
+        title: seo?.title || SITE_DEFAULT_TITLE,
+        description: seo?.description,
+        keywords: seo?.keywords,
+        og_image: seo?.og_image,
+      },
+      SITE_DEFAULT_TITLE,
+    );
+  }, [data]);
 
   useEffect(() => {
     const onScroll = () => {
       setHeaderSolid(window.scrollY > 24);
-      const hero = document.getElementById("top");
-      if (!hero || prefersReducedMotion()) {
+      const heroEl = document.getElementById("top");
+      if (!heroEl || prefersReducedMotion()) {
         setHeroExit(0);
         return;
       }
-      const rect = hero.getBoundingClientRect();
+      const rect = heroEl.getBoundingClientRect();
       const span = Math.max(rect.height * 0.42, 1);
       const raw = (-rect.top) / span;
       setHeroExit(Math.min(1, Math.max(0, raw)));
@@ -182,6 +170,9 @@ export function Landing() {
     window.scrollTo({ top, behavior: "smooth" });
   };
 
+  const painTitleHtml = sanitizeRichText(pain.title_html?.trim() || "");
+  const painTitleLines = pain.title_lines || [];
+
   return (
     <div className="mk-home">
       <LandingTopbar
@@ -207,23 +198,21 @@ export function Landing() {
           <div className="mk-wrap mk-hero-inner">
             <span className="mk-badge">
               <span className="mk-badge__dot" aria-hidden="true" />
-              {INK_HERO.eyebrow}
+              {hero.eyebrow}
             </span>
             <h1>
-              {INK_HERO.titleLead}
-              <span className="mk-grad">{INK_HERO.titleEm}</span>
+              {hero.title_lead}
+              <span className="mk-grad">{hero.title_em}</span>
               <br />
-              {INK_HERO.titleLine2}
+              {hero.title_line2}
             </h1>
-            <p className="mk-hero-sub">
-              {INK_HERO.sub}
-            </p>
+            <p className="mk-hero-sub">{hero.sub}</p>
             <div className="mk-hero-ctas">
               <Link to={purchaseHref} className="mk-btn mk-btn--primary">
-                {INK_HERO.ctaPrimary}
+                {hero.cta_primary}
               </Link>
               <button type="button" className="mk-btn mk-btn--ghost" onClick={() => scrollTo("outline")}>
-                {INK_HERO.ctaSecondary} ↓
+                {hero.cta_secondary} ↓
               </button>
             </div>
 
@@ -249,7 +238,7 @@ export function Landing() {
             </div>
 
             <div className="mk-trust">
-              {TRUST.map((t) => (
+              {trust.map((t) => (
                 <div className="mk-trust-item" key={t.label}>
                   <div className="mk-trust-num">
                     {t.num}
@@ -273,15 +262,25 @@ export function Landing() {
           ref={painRef}
         >
           <div className="mk-wrap">
-            <span className="mk-section-tag mk-reveal-item">// 你现在的处境</span>
-            <h2 className="mk-section-title mk-reveal-item">
-              AI 写代码的时代，
-              <br />
-              你却卡在「会聊不会交」
-            </h2>
-            <p className="mk-section-sub mk-reveal-item">问题不是再买一门课，而是缺一套能交付、能落地、能沟通的 FDE 训练。</p>
+            <span className="mk-section-tag mk-reveal-item">{pain.tag || "// 你现在的处境"}</span>
+            {painTitleHtml ? (
+              <h2
+                className="mk-section-title mk-reveal-item"
+                dangerouslySetInnerHTML={{ __html: painTitleHtml }}
+              />
+            ) : (
+              <h2 className="mk-section-title mk-reveal-item">
+                {painTitleLines.map((line, i) => (
+                  <span key={`${i}-${line}`}>
+                    {i > 0 ? <br /> : null}
+                    {line}
+                  </span>
+                ))}
+              </h2>
+            )}
+            <p className="mk-section-sub mk-reveal-item">{pain.subtitle}</p>
             <div className="mk-pain-grid">
-              {INK_PAINS.map((p, i) => (
+              {(pain.items || []).map((p, i) => (
                 <div className={`mk-pain-card mk-reveal-item mk-reveal-d${i + 1}`} key={p.title}>
                   <span className="mk-pain-id">PAIN_0{i + 1}</span>
                   <h3>{p.title}</h3>
@@ -290,7 +289,7 @@ export function Landing() {
               ))}
             </div>
             <div className="mk-pain-quote mk-reveal-item mk-reveal-d4">
-              <span dangerouslySetInnerHTML={{ __html: INK_PAIN_TURN }} />
+              <span dangerouslySetInnerHTML={{ __html: sanitizeRichText(pain.turn || "") }} />
             </div>
           </div>
         </section>
@@ -298,21 +297,20 @@ export function Landing() {
         {/* Features */}
         <section className="mk-section mk-section--band" id="features">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// 为什么不一样</span>
+            <span className="mk-section-tag">{features.tag || "// 为什么不一样"}</span>
             <h2 className="mk-section-title">
-              不是教你写代码，
-              <br />
-              是教你<span className="mk-accent">指挥交付</span>
+              {features.title_before}
+              <span className="mk-accent">{features.title_accent}</span>
             </h2>
             <div className="mk-feat-grid">
-              {INK_FEATURES.map((f, i) => (
+              {(features.items || []).map((f, i) => (
                 <div className="mk-feat-card" key={f.title}>
                   <div className={`mk-feat-icon${i % 2 === 1 ? " mk-feat-icon--green" : ""}`}>
                     <span className="mono">{String(i + 1).padStart(2, "0")}</span>
                   </div>
                   <h3>{f.title}</h3>
                   <p>{f.body}</p>
-                  <span className="mk-feat-meta">{FEAT_META[i] || f.no}</span>
+                  <span className="mk-feat-meta">{featMeta[i] || f.no}</span>
                 </div>
               ))}
             </div>
@@ -322,11 +320,9 @@ export function Landing() {
         {/* Outline accordion */}
         <section className="mk-section" id="outline">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// 三周路线图</span>
-            <h2 className="mk-section-title">21 天，从交付到沟通</h2>
-            <p className="mk-section-sub">
-              点开每一天，查看主题、产出与 GATE。前三周课纲均已开放预览。
-            </p>
+            <span className="mk-section-tag">{outline.tag || "// 三周路线图"}</span>
+            <h2 className="mk-section-title">{outline.title}</h2>
+            <p className="mk-section-sub">{outline.subtitle}</p>
             <div className="mk-outline">
               {outlineDays.map((day) => {
                 const open = openDay === day.id;
@@ -356,7 +352,7 @@ export function Landing() {
                         <div className="mk-day-output">
                           <h4>OUTPUT / GATE</h4>
                           <ul>
-                            {day.out.map((item) => (
+                            {(day.out || []).map((item) => (
                               <li key={item} className={item.includes("GATE") ? "is-gate" : undefined}>
                                 {item}
                               </li>
@@ -375,15 +371,15 @@ export function Landing() {
         {/* Method / roles */}
         <section className="mk-section mk-section--band" id="method">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// 学习方式</span>
+            <span className="mk-section-tag">{method.tag || "// 学习方式"}</span>
             <h2 className="mk-section-title">
-              你是指挥官，
+              {method.title_line1}
               <br />
-              六岗位 AI 是施工队
+              {method.title_line2}
             </h2>
-            <p className="mk-section-sub">用 @岗位 交接任务，像真实软件团队一样协作；你负责判断、验收与推进。</p>
+            <p className="mk-section-sub">{method.subtitle}</p>
             <div className="mk-roles">
-              {INK_TRAE_ROLES.map((r) => (
+              {(method.roles || []).map((r) => (
                 <div className="mk-role" key={r.title}>
                   <div className="mk-role-token mono">{r.token}</div>
                   <h3>{r.title}</h3>
@@ -397,13 +393,16 @@ export function Landing() {
         {/* Works */}
         <section className="mk-section" id="works">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// 学员成果</span>
-            <h2 className="mk-section-title">毕业带走可运行作品</h2>
-            <p className="mk-section-sub">不是练习题，是能写进述职与协作现场的真实交付。</p>
+            <span className="mk-section-tag">{works.tag || "// 学员成果"}</span>
+            <h2 className="mk-section-title">{works.title}</h2>
+            <p className="mk-section-sub">{works.subtitle}</p>
             <div className="mk-works">
-              {INK_WORKS.map((w) => (
+              {(works.items || []).map((w) => (
                 <article className="mk-work" key={w.title}>
-                  <div className="mk-work-shot" style={{ background: `linear-gradient(145deg, ${w.path}, ${w.fill})` }}>
+                  <div
+                    className="mk-work-shot"
+                    style={{ background: `linear-gradient(145deg, ${w.path}, ${w.fill})` }}
+                  >
                     <div className="mk-work-mock">
                       <b>{w.title}</b>
                       {"\n"}status: <span className="ok">accepted</span>
@@ -431,17 +430,20 @@ export function Landing() {
         {/* Reviews */}
         <section className="mk-section mk-section--band" id="reviews">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// 学员评价</span>
-            <h2 className="mk-section-title">他们怎么说</h2>
+            <span className="mk-section-tag">{voices.tag || "// 学员评价"}</span>
+            <h2 className="mk-section-title">{voices.title}</h2>
             <div className="mk-reviews">
-              {INK_VOICES.map((v) => (
+              {(voices.items || []).map((v) => (
                 <blockquote className="mk-review" key={v.name}>
                   <span className="mk-qmark mono" aria-hidden="true">
                     “
                   </span>
                   <p>{v.quote}</p>
                   <footer className="mk-review-who">
-                    <span className="mk-work-av" style={{ background: "var(--mk-accent-soft)", color: "var(--mk-accent)" }}>
+                    <span
+                      className="mk-work-av"
+                      style={{ background: "var(--mk-accent-soft)", color: "var(--mk-accent)" }}
+                    >
                       {v.name.slice(0, 1)}
                     </span>
                     <div>
@@ -459,23 +461,24 @@ export function Landing() {
         <section className="mk-section" id="pricing">
           <div className="mk-wrap mk-price-layout">
             <div>
-              <span className="mk-section-tag">// 定价</span>
-              <h2 className="mk-section-title">一次报名，三周能力递进</h2>
-              <p className="mk-section-sub">登录后即可选购开通。含课纲、实训资源、答疑支持与永久回放。</p>
+              <span className="mk-section-tag">{pricing.tag || "// 定价"}</span>
+              <h2 className="mk-section-title">{pricing.title}</h2>
+              <p className="mk-section-sub">{pricing.subtitle}</p>
               <ul className="mk-perk-list">
-                {INK_PRICE_PERKS.map((p) => (
+                {(pricing.perks || []).map((p) => (
                   <li key={p}>{p}</li>
                 ))}
               </ul>
             </div>
             <div className="mk-price-card">
-              <div className="mk-price-label mono">FDE CAMP · EARLY</div>
+              <div className="mk-price-label mono">{pricing.price_label}</div>
               <div className="mk-price-num">
-                ¥1,980<em>/人</em>
+                {pricing.price_amount}
+                <em>{pricing.price_unit}</em>
               </div>
-              <p className="mk-price-note">FDE 训练营 · 开营名额有限</p>
+              <p className="mk-price-note">{pricing.price_note}</p>
               <Link to={purchaseHref} className="mk-btn mk-btn--primary mk-btn--block">
-                {INK_HERO.ctaPrimary}
+                {hero.cta_primary}
               </Link>
               <Link to={user ? appHref : LOGIN_PATH} className="mk-btn mk-btn--ghost mk-btn--block">
                 {user ? "进入学习平台" : "先登录账号"}
@@ -487,10 +490,10 @@ export function Landing() {
         {/* FAQ */}
         <section className="mk-section mk-section--band" id="faq">
           <div className="mk-wrap">
-            <span className="mk-section-tag">// FAQ</span>
-            <h2 className="mk-section-title">常见问题</h2>
+            <span className="mk-section-tag">{faq.tag || "// FAQ"}</span>
+            <h2 className="mk-section-title">{faq.title}</h2>
             <div className="mk-faq">
-              {INK_FAQ.map((item, i) => {
+              {(faq.items || []).map((item, i) => {
                 const open = openFaq === i;
                 return (
                   <div className={`mk-faq-item${open ? " is-open" : ""}`} key={item.q}>
@@ -504,7 +507,7 @@ export function Landing() {
                       <Chevron open={open} />
                     </button>
                     <div className="mk-faq-a" hidden={!open}>
-                      <p dangerouslySetInnerHTML={{ __html: item.a }} />
+                      <p dangerouslySetInnerHTML={{ __html: sanitizeRichText(item.a) }} />
                     </div>
                   </div>
                 );
@@ -516,21 +519,26 @@ export function Landing() {
         {/* Final CTA */}
         <section className="mk-final-cta">
           <div className="mk-wrap">
-            <h2>准备好当指挥官了吗？</h2>
-            <p>21 天完成产品交付、Agent 与企业沟通特训——把 AI 真正变成你的施工队。</p>
+            <h2>{finalCta.title}</h2>
+            <p>{finalCta.body}</p>
             <div className="mk-hero-ctas">
               <Link to={purchaseHref} className="mk-btn mk-btn--primary mk-btn--lg">
-                {INK_HERO.ctaPrimary}
+                {hero.cta_primary}
               </Link>
               <button type="button" className="mk-btn mk-btn--ghost mk-btn--lg" onClick={() => scrollTo("outline")}>
-                先看三周大纲
+                {finalCta.secondary_cta || "先看三周大纲"}
               </button>
             </div>
           </div>
         </section>
       </main>
 
-      <LandingFooter brandName={brandName} appHref={appHref} footerText={data.brand?.footer} />
+      <LandingFooter
+        brandName={brandName}
+        appHref={appHref}
+        footerText={data.brand?.footer}
+        footer={data.footer}
+      />
     </div>
   );
 }

@@ -21,6 +21,8 @@ import {
   InboxOutlined,
   KeyOutlined,
   PayCircleOutlined,
+  InfoCircleOutlined,
+  ContactsOutlined,
 } from "@ant-design/icons";
 import { App as AntApp } from "antd";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -49,11 +51,13 @@ const MENU_GROUPS: MenuGroup[] = [
   {
     label: "网站维护",
     items: [
-      { key: "/author/site/settings", icon: leafIcon(<ProfileOutlined />), label: "站点信息" },
-      { key: "/author/site/home", icon: leafIcon(<HomeOutlined />), label: "首页内容" },
-      { key: "/author/site/open-courses", icon: leafIcon(<PlaySquareOutlined />), label: "站点公开课" },
-      { key: "/author/site/enterprise", icon: leafIcon(<TeamOutlined />), label: "导师与企业" },
-      { key: "/author/site/leads", icon: leafIcon(<MailOutlined />), label: "联系线索" },
+      { key: "/author/site/settings", icon: leafIcon(<ProfileOutlined />), label: "站点设置" },
+      { key: "/author/site/home", icon: leafIcon(<HomeOutlined />), label: "首页营期文案" },
+      { key: "/author/site/enterprise", icon: leafIcon(<TeamOutlined />), label: "企业培训" },
+      { key: "/author/site/open-courses", icon: leafIcon(<PlaySquareOutlined />), label: "公开课" },
+      { key: "/author/site/about", icon: leafIcon(<InfoCircleOutlined />), label: "关于我们" },
+      { key: "/author/site/footer", icon: leafIcon(<ContactsOutlined />), label: "页脚与联系" },
+      { key: "/author/site/leads", icon: leafIcon(<MailOutlined />), label: "线索" },
     ],
   },
   {

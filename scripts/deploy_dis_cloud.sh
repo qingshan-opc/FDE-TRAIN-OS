@@ -55,6 +55,10 @@ if [[ "${SKIP_CURRICULUM_PERSIST:-0}" != "1" ]]; then
     kubectl -n "${NS}" exec "${POD}" -- \
       python /app/scripts/persist_bootcamp_curriculum.py \
       || echo "WARN: curriculum persist skipped (non-fatal)"
+    echo "==> seed/merge landing CMS defaults"
+    kubectl -n "${NS}" exec "${POD}" -- \
+      python /app/scripts/seed_landing_cms_defaults.py \
+      || echo "WARN: landing CMS seed skipped (non-fatal)"
   else
     echo "WARN: no running dis-cloud pod for curriculum persist"
   fi

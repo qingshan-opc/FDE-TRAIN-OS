@@ -484,6 +484,10 @@ export interface LandingOpenCourse {
 export interface LandingAbout {
   title: string;
   body: string;
+  story?: string[];
+  pillars?: { n: string; title: string; desc: string }[];
+  partners_title?: string;
+  partners_lead?: string;
 }
 
 export interface LandingContact {
@@ -491,6 +495,169 @@ export interface LandingContact {
   subtitle?: string;
   email?: string;
   note?: string;
+}
+
+export interface LandingHomeHeroTrust {
+  num: string;
+  unit: string;
+  label: string;
+}
+
+export interface LandingHomeHero {
+  eyebrow?: string;
+  title_lead?: string;
+  title_em?: string;
+  title_line2?: string;
+  pillars?: string[];
+  sub?: string;
+  cta_primary?: string;
+  cta_secondary?: string;
+  note?: string;
+  trust?: LandingHomeHeroTrust[];
+}
+
+export interface LandingHomePainItem {
+  idx: string;
+  title: string;
+  body: string;
+}
+
+export interface LandingHomeFeatureItem {
+  no: string;
+  title: string;
+  body: string;
+}
+
+export interface LandingHomeSyllabusDay {
+  d: string;
+  t: string;
+  s: string;
+  out: string[];
+}
+
+export interface LandingHomeSyllabusWeek {
+  week: string;
+  title: string;
+  summary: string;
+  status: string;
+  days?: LandingHomeSyllabusDay[];
+  comingNotes?: string[];
+}
+
+export interface LandingHomeRole {
+  token: string;
+  title: string;
+  desc: string;
+}
+
+export interface LandingHomeWork {
+  tag: string;
+  title: string;
+  body: string;
+  who: string;
+  badge: string;
+  fill?: string;
+  path?: string;
+  sun?: string;
+}
+
+export interface LandingHomeVoice {
+  quote: string;
+  name: string;
+  meta: string;
+  avatarBg?: string;
+}
+
+export interface LandingHomeFaqItem {
+  q: string;
+  a: string;
+}
+
+export interface LandingHomeContent {
+  hero?: LandingHomeHero;
+  pain?: {
+    tag?: string;
+    title_html?: string;
+    title_lines?: string[];
+    subtitle?: string;
+    items?: LandingHomePainItem[];
+    turn?: string;
+  };
+  features?: {
+    tag?: string;
+    title_before?: string;
+    title_accent?: string;
+    items?: LandingHomeFeatureItem[];
+    meta?: string[];
+  };
+  outline?: {
+    tag?: string;
+    title?: string;
+    subtitle?: string;
+    weeks?: LandingHomeSyllabusWeek[];
+  };
+  method?: {
+    tag?: string;
+    title_line1?: string;
+    title_line2?: string;
+    subtitle?: string;
+    roles?: LandingHomeRole[];
+  };
+  works?: {
+    tag?: string;
+    title?: string;
+    subtitle?: string;
+    items?: LandingHomeWork[];
+  };
+  voices?: {
+    tag?: string;
+    title?: string;
+    items?: LandingHomeVoice[];
+  };
+  pricing?: {
+    tag?: string;
+    title?: string;
+    subtitle?: string;
+    perks?: string[];
+    price_label?: string;
+    price_amount?: string;
+    price_unit?: string;
+    price_note?: string;
+  };
+  faq?: {
+    tag?: string;
+    title?: string;
+    items?: LandingHomeFaqItem[];
+  };
+  final_cta?: {
+    title?: string;
+    body?: string;
+    secondary_cta?: string;
+  };
+}
+
+export interface LandingFooterContent {
+  blurb?: string;
+  company?: string;
+  email?: string;
+  office?: string;
+  tagline?: string;
+}
+
+export interface LandingPartner {
+  id: string;
+  name: string;
+  tag: string;
+  logo: string;
+  logoAlt: string;
+}
+
+export interface LandingSeoByRoute {
+  home?: LandingSeo;
+  enterprise?: LandingSeo;
+  about?: LandingSeo;
+  open?: LandingSeo;
+  [route: string]: LandingSeo | undefined;
 }
 
 export interface LandingPayload {
@@ -501,6 +668,10 @@ export interface LandingPayload {
   brand?: LandingBrand;
   hero?: LandingHeroCopy;
   seo?: LandingSeo;
+  home?: LandingHomeContent;
+  footer?: LandingFooterContent;
+  partners?: LandingPartner[];
+  seo_by_route?: LandingSeoByRoute;
   tabs?: LandingTab[];
   enterprise?: LandingEnterprise;
   open_course_categories?: LandingOpenCourseCategory[];

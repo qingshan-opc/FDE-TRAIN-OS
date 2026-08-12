@@ -45,6 +45,16 @@ from services.shared.config import (  # noqa: E402
     S3_BUCKET_ARTIFACTS,
 )
 from services.storage import course_media_key, legacy_camp_media_prefix, open_course_key  # noqa: E402
+from services.shared.landing_cms_defaults import (  # noqa: E402
+    about_defaults,
+    contact_defaults,
+    enterprise_facts_defaults,
+    footer_defaults,
+    home_defaults,
+    partners_defaults,
+    seo_by_route_defaults,
+    seo_defaults,
+)
 from services.shared.middleware import (  # noqa: E402
     require_camp_access,
     require_user,
@@ -61,9 +71,10 @@ init_schema()
 
 DEFAULT_LANDING: dict[str, Any] = {
     "title": "青山在",
-    "tagline": "为政府、高校与企业交付可验收的数字化人才训练",
+    "tagline": "成为前沿部署工程师，打通AI与业务的最后一公里",
     "hero_video": None,
     "brand": {"name": "青山在", "footer": "© 青山在 · FDE Learning OS"},
+    # Legacy hero (pre-inkCamp); ink camp homepage hero lives under home.hero
     "hero": {
         "eyebrow": "FDE LEARNING OS",
         "title_lines": ["让每一次学习", "都留下可验证的证据"],
@@ -78,13 +89,11 @@ DEFAULT_LANDING: dict[str, Any] = {
             {"value": "3", "label": "类机构同行验证"},
         ],
     },
-    "seo": {
-        # 与 web/index.html、<title> 保持一致，前端不会再改成短标题以免页签闪烁
-        "title": "青山在 · FDE Learning OS",
-        "description": "为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。",
-        "keywords": "青山在,FDE,数字化人才,企业培训,训练营,Agent实训,结业证书,可验收交付",
-        "og_image": "/landing/hero.png",
-    },
+    "seo": seo_defaults(),
+    "home": home_defaults(),
+    "footer": footer_defaults(),
+    "partners": partners_defaults(),
+    "seo_by_route": seo_by_route_defaults(),
     "cta": {"login": "/login", "app": "/app/courses"},
     "tabs": [
         {"id": "home", "label": "首页"},
@@ -96,7 +105,7 @@ DEFAULT_LANDING: dict[str, Any] = {
     "enterprise": {
         "title": "企业与机构培训",
         "subtitle": "从课纲设计到结业验收，每一天都是可交付的真实工作任务",
-        "facts": [],
+        "facts": enterprise_facts_defaults(),
         "mentors": [],  # empty -> Landing.tsx renders "导师讲课素材筹备中，可通过后台配置" placeholders
     },
     "open_course_categories": [
@@ -142,20 +151,12 @@ DEFAULT_LANDING: dict[str, Any] = {
             "published": True,
         },
     ],
-    "about": {
-        "title": "关于我们",
-        "body": "青山在是新一代数字化人才训练品牌，由青山OPC & 灵栖智能运营。我们面向政府、高校与企业，交付可验收、可留痕、可核验的 FDE 训练营与机构培训项目。",
-    },
-    "contact": {
-        "title": "联系我们",
-        "subtitle": "企业、高校与政府组织培训咨询",
-        "email": "admin@lingqicloud.com",
-        "note": "请留下组织名称、培训规模与期望开课时间，我们会安排顾问对接。",
-    },
+    "about": about_defaults(),
+    "contact": contact_defaults(),
 }
 
 # Static M2 site sections without dedicated DB tables yet (tabs/enterprise/
-# about/contact) — served from DEFAULT_LANDING unless body_json overrides.
+# about/contact/home/footer/…) — served from DEFAULT_LANDING unless body_json overrides.
 # open_courses / open_course_categories are DB-overridable via body_json.
 _STATIC_LANDING_KEYS = (
     "tabs",
@@ -167,6 +168,10 @@ _STATIC_LANDING_KEYS = (
     "brand",
     "hero",
     "seo",
+    "home",
+    "footer",
+    "partners",
+    "seo_by_route",
 )
 
 _PUBLIC_OPEN_PREFIXES = (
@@ -201,6 +206,11 @@ def _merge_section(key: str, body: dict[str, Any]) -> Any:
             facts = base.get("facts") or []
         mentors = ent.get("mentors") if isinstance(ent.get("mentors"), list) else []
         return {**base, **ent, "title": title, "subtitle": subtitle, "facts": facts, "mentors": mentors}
+    # List-valued top-level keys (e.g. partners): body list wins, else default
+    if isinstance(default, list):
+        if isinstance(raw, list) and raw:
+            return raw
+        return default
     if not isinstance(raw, dict) or not raw:
         return default
     if isinstance(default, dict):

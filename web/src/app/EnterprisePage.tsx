@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { LandingTopbar } from "../components/LandingTopbar";
+import { ContactLeadForm } from "../components/ContactLeadForm";
 import { LandingFooter } from "../components/LandingFooter";
+import { LandingTopbar } from "../components/LandingTopbar";
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { applyPageSeo, SITE_DEFAULT_TITLE } from "../lib/seo";
 import type { LandingPayload } from "../lib/types";
-import {
-  FALLBACK_LANDING_TABS,
-  LANDING_FOOTER_BUSINESS_EMAIL,
-  LANDING_PARTNERS,
-} from "./landingShared";
+import { FALLBACK_LANDING_TABS } from "./landingShared";
+import { resolveFooter, resolvePartners, resolveRouteSeo } from "./resolveLandingContent";
 
 const FALLBACK_FACTS = [
   { n: "01", t: "任务驱动课纲", d: "每一天都是一个可交付的真实工作任务，而不是知识点堆砌。" },
@@ -63,17 +61,8 @@ export function EnterprisePage() {
   }, []);
 
   useEffect(() => {
-    return applyPageSeo(
-      {
-        title: "企业与机构培训 · 青山在",
-        description:
-          data.enterprise?.subtitle ||
-          "为政府、高校与企业交付可验收的数字化人才训练。任务驱动课纲、Agent 实训环境、可核验结业证书。",
-        keywords: "青山在,企业培训,机构培训,数字化人才,Agent实训,结业证书",
-      },
-      SITE_DEFAULT_TITLE,
-    );
-  }, [data.enterprise?.subtitle]);
+    return applyPageSeo(resolveRouteSeo("enterprise", data), SITE_DEFAULT_TITLE);
+  }, [data]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -107,7 +96,10 @@ export function EnterprisePage() {
   const facts =
     enterprise.facts && enterprise.facts.length > 0 ? enterprise.facts : FALLBACK_FACTS;
   const mentors = enterprise.mentors?.filter((m) => m.name) || [];
-  const mailto = `mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("培训咨询")}`;
+  const partners = resolvePartners(data.partners);
+  const footer = resolveFooter(data.footer);
+  const contactEmail = data.contact?.email || footer.email;
+  const mailto = `mailto:${contactEmail}?subject=${encodeURIComponent("培训咨询")}`;
 
   return (
     <div className="mk-home ink-site" ref={rootRef}>
@@ -213,7 +205,7 @@ export function EnterprisePage() {
             <p className="ink-sec-sub">已为多家机构交付可验收的数字化人才训练项目</p>
           </div>
           <div className="ink-partner-grid">
-            {LANDING_PARTNERS.map((p, i) => (
+            {partners.map((p, i) => (
               <article
                 key={p.id}
                 className={`ink-partner-card ink-reveal${i ? ` ink-reveal-d${Math.min(i, 3)}` : ""}`}
@@ -231,13 +223,22 @@ export function EnterprisePage() {
         <div className="ink-wrap ink-reveal">
           <h2>从课纲到结业，一次谈妥可验收交付</h2>
           <p>告诉我们组织规模与培训目标，课程顾问将在 1 个工作日内与您对接方案。</p>
-          <a className="ink-btn ink-btn--ochre ink-btn--lg" href={mailto}>
-            预约培训咨询
-          </a>
+          <ContactLeadForm
+            compact
+            emailFallback={contactEmail}
+            title={data.contact?.title || "预约培训咨询"}
+            subtitle={data.contact?.subtitle || data.contact?.note}
+          />
         </div>
       </section>
 
-      <LandingFooter brandName={brandName} appHref={appHref} footerText={data.brand?.footer} />
+      <LandingFooter
+        brandName={brandName}
+        appHref={appHref}
+        footerText={data.brand?.footer}
+        footer={data.footer}
+        contactEmail={contactEmail}
+      />
     </div>
   );
 }

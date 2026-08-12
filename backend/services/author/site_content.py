@@ -146,6 +146,11 @@ def get_landing_raw() -> dict[str, Any]:
     def _section(key: str) -> Any:
         raw = body.get(key)
         default = DEFAULT_LANDING.get(key)
+        # List-valued top-level keys (e.g. partners): body list wins, else default
+        if isinstance(default, list):
+            if isinstance(raw, list) and raw:
+                return raw
+            return default if default is not None else []
         if not isinstance(raw, dict) or not raw:
             return default if default is not None else {}
         if isinstance(default, dict):
@@ -161,6 +166,10 @@ def get_landing_raw() -> dict[str, Any]:
         "brand": {**brand_default, **(DEFAULT_LANDING.get("brand") or {}), **brand_raw},
         "hero": _section("hero"),
         "seo": _section("seo"),
+        "home": _section("home"),
+        "footer": _section("footer"),
+        "partners": _section("partners"),
+        "seo_by_route": _section("seo_by_route"),
         "tabs": body.get("tabs") or DEFAULT_LANDING["tabs"],
         "enterprise": _normalize_enterprise(body.get("enterprise")),
         "about": _section("about"),

@@ -28,6 +28,8 @@ import { SiteSettings } from "./author/site/SiteSettings";
 import { SiteHome } from "./author/site/SiteHome";
 import { SiteOpenCourses } from "./author/site/SiteOpenCourses";
 import { SiteEnterprise } from "./author/site/SiteEnterprise";
+import { SiteAbout } from "./author/site/SiteAbout";
+import { SiteFooterContact } from "./author/site/SiteFooterContact";
 import { SiteLeads } from "./author/site/SiteLeads";
 import { VideoLibrary } from "./author/resources/VideoLibrary";
 import { MaterialPacks } from "./author/resources/MaterialPacks";
@@ -210,6 +212,8 @@ export default function App() {
         <Route path="site/home" element={<SiteHome />} />
         <Route path="site/open-courses" element={<SiteOpenCourses />} />
         <Route path="site/enterprise" element={<SiteEnterprise />} />
+        <Route path="site/about" element={<SiteAbout />} />
+        <Route path="site/footer" element={<SiteFooterContact />} />
         <Route path="site/leads" element={<SiteLeads />} />
         <Route path="resources/documents" element={<DocumentLibrary />} />
         <Route path="resources/videos" element={<VideoLibrary />} />

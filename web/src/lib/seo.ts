@@ -5,8 +5,8 @@ export type PageSeo = {
   og_image?: string | null;
 };
 
-/** 全站默认页签标题：与 index.html 保持一致，避免首屏闪烁 */
-export const SITE_DEFAULT_TITLE = "青山在 · FDE Learning OS";
+/** 全站默认页签标题：与 index.html / INK_SEO 保持一致，避免首屏闪烁 */
+export const SITE_DEFAULT_TITLE = "青山在 · FDE 训练营 —— 成为前沿部署工程师";
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
   const selector = `meta[${attr}="${key}"]`;

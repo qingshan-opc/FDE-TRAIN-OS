@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { LandingTopbar } from "../components/LandingTopbar";
 import { LandingFooter } from "../components/LandingFooter";
+import { LandingTopbar } from "../components/LandingTopbar";
 import { siteApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
+import { applyPageSeo, SITE_DEFAULT_TITLE } from "../lib/seo";
 import type { LandingPayload } from "../lib/types";
 import {
   FALLBACK_LANDING_TABS,
   LANDING_FALLBACK_OPEN_CATEGORIES,
   LANDING_FALLBACK_OPEN_COURSES,
 } from "./landingShared";
+import { resolveRouteSeo } from "./resolveLandingContent";
 import { OpenCoursesPanel } from "./OpenCoursesPanel";
 
 const FALLBACK: LandingPayload = {
@@ -41,6 +43,10 @@ export function OpenCoursesPage() {
     };
   }, []);
 
+  useEffect(() => {
+    return applyPageSeo(resolveRouteSeo("open", data), SITE_DEFAULT_TITLE);
+  }, [data]);
+
   const brandName = data.brand?.name || "青山在";
   const appHref = user ? defaultHome || "/app/courses" : data.cta?.app || "/app/courses";
 
@@ -65,7 +71,7 @@ export function OpenCoursesPage() {
         </div>
       </main>
 
-      <LandingFooter brandName={brandName} appHref={appHref} />
+      <LandingFooter brandName={brandName} appHref={appHref} footer={data.footer} />
     </div>
   );
 }

@@ -1855,6 +1855,10 @@ class LandingPatch(BaseModel):
     brand: dict[str, Any] | None = None
     hero: dict[str, Any] | None = None
     seo: dict[str, Any] | None = None
+    home: dict[str, Any] | None = None
+    footer: dict[str, Any] | None = None
+    partners: list[dict[str, Any]] | None = None
+    seo_by_route: dict[str, Any] | None = None
     tabs: list[dict[str, Any]] | None = None
     enterprise: dict[str, Any] | None = None
     about: dict[str, Any] | None = None

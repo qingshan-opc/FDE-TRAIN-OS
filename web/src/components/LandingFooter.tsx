@@ -2,25 +2,33 @@ import { Link } from "react-router-dom";
 import {
   ABOUT_PATH,
   ENTERPRISE_PATH,
-  LANDING_FOOTER_BUSINESS_EMAIL,
-  LANDING_FOOTER_COMPANY,
-  LANDING_FOOTER_OFFICE,
-  LANDING_FOOTER_TAGLINE,
   OPEN_COURSES_PATH,
   VERIFY_PATH,
 } from "../app/landingShared";
+import { resolveFooter } from "../app/resolveLandingContent";
+import type { LandingFooterContent } from "../lib/types";
 
 export function LandingFooter({
   brandName = "青山在",
   appHref = "/app/courses",
   footerText,
+  footer,
+  contactEmail,
 }: {
   brandName?: string;
   appHref?: string;
   /** 站点信息里配置的页脚文案；缺省则用品牌名 + 年份 */
   footerText?: string | null;
+  footer?: LandingFooterContent | null;
+  contactEmail?: string;
 }) {
   const year = new Date().getFullYear();
+  const resolved = resolveFooter(footer);
+  const email = contactEmail || resolved.email || "";
+  const office = resolved.office || "";
+  const company = resolved.company || "";
+  const tagline = resolved.tagline || "";
+  const blurb = resolved.blurb || "";
 
   return (
     <footer className="ink-footer" aria-label="页脚">
@@ -28,9 +36,7 @@ export function LandingFooter({
         <div className="ink-foot-grid">
           <div className="ink-foot-brand">
             <div className="ink-logo-name">{brandName}</div>
-            <p>
-              专注于培养前沿部署工程师人才，打通AI与业务的最后一公里。
-            </p>
+            <p>{blurb}</p>
           </div>
 
           <div>
@@ -64,7 +70,7 @@ export function LandingFooter({
                 <Link to={ENTERPRISE_PATH}>企业与机构培训</Link>
               </li>
               <li>
-                <a href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("商务合作")}`}>
+                <a href={`mailto:${email}?subject=${encodeURIComponent("商务合作")}`}>
                   商务合作
                 </a>
               </li>
@@ -75,14 +81,14 @@ export function LandingFooter({
             <h4>联系</h4>
             <ul>
               <li>
-                <a href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}`}>{LANDING_FOOTER_BUSINESS_EMAIL}</a>
+                <a href={`mailto:${email}`}>{email}</a>
               </li>
               <li>
-                <a href={`mailto:${LANDING_FOOTER_BUSINESS_EMAIL}?subject=${encodeURIComponent("培训咨询")}`}>
+                <a href={`mailto:${email}?subject=${encodeURIComponent("培训咨询")}`}>
                   培训咨询
                 </a>
               </li>
-              <li>{LANDING_FOOTER_OFFICE}</li>
+              <li>{office}</li>
             </ul>
           </div>
         </div>
@@ -91,9 +97,9 @@ export function LandingFooter({
           <span>
             {footerText?.trim()
               ? footerText
-              : `© 2024-${year} ${LANDING_FOOTER_COMPANY} 版权所有`}
+              : `© 2024-${year} ${company} 版权所有`}
           </span>
-          <span className="ink-tagline">{LANDING_FOOTER_TAGLINE}</span>
+          <span className="ink-tagline">{tagline}</span>
         </div>
       </div>
     </footer>

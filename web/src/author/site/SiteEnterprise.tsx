@@ -12,6 +12,9 @@ import {
 } from "../../components/crud";
 import { useListQuery } from "../../lib/useListQuery";
 
+import type { LandingSeo, LandingSeoByRoute } from "../../lib/types";
+import { defaultSeoByRoute } from "../../app/resolveLandingContent";
+
 type Mentor = {
   id: string;
   name: string;
@@ -41,12 +44,15 @@ export function SiteEnterprise() {
   const { q, setFilter, reset, hasFilters } = useListQuery();
   const [activeTab, setActiveTab] = useState<"enterprise" | "mentors">("enterprise");
   const [enterprise, setEnterprise] = useState<Enterprise>({});
+  const [seoByRoute, setSeoByRoute] = useState<LandingSeoByRoute>({});
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<EntityModalMode>({ kind: "closed" });
   const [factsMode, setFactsMode] = useState<EntityModalMode>({ kind: "closed" });
+  const [seoMode, setSeoMode] = useState<EntityModalMode>({ kind: "closed" });
   const [editing, setEditing] = useState<Mentor | null>(null);
   const [form] = Form.useForm();
   const [factsForm] = Form.useForm();
+  const [seoForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -57,6 +63,7 @@ export function SiteEnterprise() {
     try {
       const res = await authorApi.getSiteLanding();
       setEnterprise((res.enterprise as Enterprise) || {});
+      setSeoByRoute((res.seo_by_route as LandingSeoByRoute) || {});
     } catch (err) {
       message.error(err instanceof ApiError ? err.message : "加载失败");
     } finally {
@@ -110,6 +117,21 @@ export function SiteEnterprise() {
     };
   }, [factsMode.kind, enterprise]);
 
+  const enterpriseSeo = useMemo((): LandingSeo => {
+    const def = defaultSeoByRoute().enterprise || {};
+    return { ...def, ...(seoByRoute.enterprise || {}) };
+  }, [seoByRoute.enterprise]);
+
+  const seoInitialValues = useMemo(() => {
+    if (seoMode.kind !== "edit") return null;
+    return {
+      seo_title: enterpriseSeo.title,
+      seo_description: enterpriseSeo.description,
+      seo_keywords: enterpriseSeo.keywords,
+      seo_og_image: enterpriseSeo.og_image,
+    };
+  }, [seoMode.kind, enterpriseSeo]);
+
   const openCreateMentor = () => {
     setEditing(null);
     setAvatarFile(null);
@@ -137,7 +159,7 @@ export function SiteEnterprise() {
       <AuthorListPageLayout
         header={
           <>
-            <PageHeader title="导师与企业" description="官网「企业培训」区块：合作企业与授课导师分别维护" />
+            <PageHeader title="企业培训" description="官网「企业培训」区块：合作企业与授课导师分别维护" />
             <Tabs
               activeKey={activeTab}
               onChange={(key) => setActiveTab(key as "enterprise" | "mentors")}
@@ -187,9 +209,12 @@ export function SiteEnterprise() {
                   </div>
                 ))}
               </Space>
-              <Button type="primary" icon={<EditOutlined />} onClick={openEnterpriseEdit}>
-                编辑企业培训区
-              </Button>
+              <Space wrap>
+                <Button type="primary" icon={<EditOutlined />} onClick={openEnterpriseEdit}>
+                  编辑企业培训区
+                </Button>
+                <Button onClick={() => setSeoMode({ kind: "edit", id: "seo" })}>编辑 SEO</Button>
+              </Space>
             </Space>
           </Card>
         ) : (
@@ -413,6 +438,52 @@ export function SiteEnterprise() {
             </Space>
           </Card>
         ))}
+      </EntityModal>
+
+      <EntityModal
+        mode={seoMode}
+        title={{ create: "SEO", edit: "编辑企业培训 SEO", view: "查看" }}
+        form={seoForm}
+        submitting={submitting}
+        width={560}
+        initialValues={seoInitialValues}
+        onClose={() => setSeoMode({ kind: "closed" })}
+        onSubmit={async (values: Record<string, string>) => {
+          setSubmitting(true);
+          try {
+            await authorApi.patchSiteLanding({
+              seo_by_route: {
+                enterprise: {
+                  title: values.seo_title,
+                  description: values.seo_description,
+                  keywords: values.seo_keywords,
+                  og_image: values.seo_og_image,
+                },
+              },
+            });
+            message.success("SEO 已保存");
+            setSeoMode({ kind: "closed" });
+            await load();
+          } catch (err) {
+            message.error(err instanceof ApiError ? err.message : "保存失败");
+            throw err;
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        <Form.Item name="seo_title" label="页面标题" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="seo_description" label="描述" rules={[{ required: true }]}>
+          <Input.TextArea rows={3} maxLength={180} showCount />
+        </Form.Item>
+        <Form.Item name="seo_keywords" label="关键词">
+          <Input />
+        </Form.Item>
+        <Form.Item name="seo_og_image" label="分享图 URL">
+          <Input />
+        </Form.Item>
       </EntityModal>
     </>
   );

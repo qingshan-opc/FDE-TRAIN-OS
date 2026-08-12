@@ -19,10 +19,8 @@ import { PosterStylePicker } from "../components/PosterStylePicker";
 import {
   composeSharePoster,
   downloadDataUrl,
-  publishPosterDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
-import { prefersLongPressSavePoster } from "../lib/wechat";
 import { POSTER_DEFAULT_SLOGAN, SHOP_HERO } from "../app/shopPitch";
 
 type Offering = {
@@ -104,7 +102,7 @@ export function PartnerPosters() {
       setComposing(true);
       try {
         await new Promise((r) => setTimeout(r, 80));
-        const dataUrl = await composeSharePoster({
+        const url = await composeSharePoster({
           style,
           audience: "org",
           coverSrc: item.cover_image || "/landing/hero.png",
@@ -115,16 +113,7 @@ export function PartnerPosters() {
           qrCanvas: getQrCanvas(),
           scanHint: "微信扫码登录并选购",
         });
-        if (prefersLongPressSavePoster()) {
-          try {
-            setPosterUrl(await publishPosterDataUrl(dataUrl));
-          } catch {
-            // Fall back to data URL if upload fails (desktop download still works).
-            setPosterUrl(dataUrl);
-          }
-        } else {
-          setPosterUrl(dataUrl);
-        }
+        setPosterUrl(url);
       } catch (err) {
         message.error(err instanceof Error ? err.message : "海报生成失败");
       } finally {

@@ -97,21 +97,6 @@ export function downloadDataUrl(dataUrl: string, filename: string) {
   a.click();
 }
 
-/** Upload composed PNG so WeChat can long-press save (data: URLs cannot). */
-export async function publishPosterDataUrl(dataUrl: string): Promise<string> {
-  const res = await fetch(dataUrl);
-  const blob = await res.blob();
-  const { shareApi } = await import("./api");
-  const published = await shareApi.uploadPoster(blob, "poster.png");
-  if (published.absolute_url && /^https?:\/\//i.test(published.absolute_url)) {
-    return published.absolute_url;
-  }
-  if (typeof window !== "undefined" && published.url.startsWith("/")) {
-    return `${window.location.origin}${published.url}`;
-  }
-  return published.url;
-}
-
 function wrapText(
   ctx: CanvasRenderingContext2D,
   text: string,

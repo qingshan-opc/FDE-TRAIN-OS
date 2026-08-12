@@ -21,7 +21,6 @@ import { PosterStylePicker } from "../components/PosterStylePicker";
 import {
   composeSharePoster,
   downloadDataUrl,
-  publishPosterDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
 import { prefersLongPressSavePoster } from "../lib/wechat";
@@ -91,7 +90,7 @@ export function LearnerReferral() {
     try {
       await new Promise((r) => setTimeout(r, 80));
       const qrCanvas = posterQrRef.current?.querySelector("canvas") || null;
-      const dataUrl = await composeSharePoster({
+      const url = await composeSharePoster({
         style,
         audience: "personal",
         coverSrc: "/landing/hero.png",
@@ -102,15 +101,7 @@ export function LearnerReferral() {
         qrCanvas,
         scanHint: "好友扫码注册后计入你的邀请人数",
       });
-      if (prefersLongPressSavePoster()) {
-        try {
-          setPosterUrl(await publishPosterDataUrl(dataUrl));
-        } catch {
-          setPosterUrl(dataUrl);
-        }
-      } else {
-        setPosterUrl(dataUrl);
-      }
+      setPosterUrl(url);
     } catch (err) {
       message.error(err instanceof Error ? err.message : "海报生成失败");
     } finally {

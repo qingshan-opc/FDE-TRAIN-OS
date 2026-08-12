@@ -1,4 +1,4 @@
-# 第七天 · 第 4 节 · 实战：定义 SKILL.md
+# 第七天 · 第 4 节 · 写好技能说明书
 
 路径：`class/bootcamp/day-08/section-04-define-skill/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

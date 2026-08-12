@@ -1,4 +1,4 @@
-# 第十天 · 第 3 节 · 答辩准备
+# 第十天 · 第 3 节 · 答辩提纲
 
 路径：`class/bootcamp/day-10/section-03-defense-prep/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

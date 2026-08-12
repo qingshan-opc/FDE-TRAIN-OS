@@ -1,4 +1,4 @@
-# 第 4 节 · Eval / Guardrails / Vibe Coding（20′ · 概念）
+# 第 4 节 · 出考卷、加护栏、边聊边写代码（15′ · 概念）
 
 > 一句话节引言：Eval 代替「我觉得还行」；Guardrails 拦越界；Vibe Coding 爽但验收责任在你——训练营练的就是「带验收的 vibe」。
 

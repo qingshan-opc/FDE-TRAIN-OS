@@ -1,16 +1,16 @@
 camp_version: v0.7
 day: 10
-title: 多 Skill 编排与人工确认
+title: 长任务自动跑 + 关键步骤人工确认
 week: 2
-project: 多 Skill 编排与人工确认
-project_brief: 工具表从 1 件变 3 件，串成带人工确认闸的 workflow 流水线。掌握编排观（业务流程即 Skill 串联）、确认闸三问与执行日志三要素，再封装两个 Skill，跑通「拦得住、回得来、查得了」的 GATE
+project: 长任务自动跑 + 关键步骤人工确认
+project_brief: 实现 task_runner（goal≥3 turn）+ 写操作 HITL；≥2 Skill；approve/reject 双路径 runs/ 证据。粘贴 teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md。GATE
   9。
 review_checklist:
-- 工具表 3 件：每件有说明书 + 边界声明 + 工具描述
-- 编排文档：步骤定死、数据流清楚、确认闸位置正确（在「不可撤回」步骤之前）
-- 闸口实测：流水线跑到确认闸自动停下等人；批准后继续；驳回有记录
-- 执行日志：每步一条（时间/动作/结果），可回放
-- 'commit：`feat: 三 Skill 编排——确认闸 + 执行日志`'
+- ≥2 个 Skill
+- 一个 goal ≥3 turn
+- approve 与 reject 各有一次 `runs/` 证据
+- 执行日志可回放
+- 'commit：`feat: long-task runner with HITL`.'
 resources:
 - id: dg-orchestration
   title: 讲解图 · 编排确认闸与执行日志
@@ -18,7 +18,7 @@ resources:
   summary: 步骤定死 + 确认闸 + 每步留痕
   url: /course-assets/assets/diagrams/orchestration-confirm.svg
 - id: dg-workflow-agent
-  title: 讲解图 · workflow vs agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 编排是 workflow——步骤你定死，AI 当流水线工人
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg
@@ -36,7 +36,7 @@ learn:
   require_capsules: true
   capsules:
   - id: c1
-    title: 概念：业务流程即编排
+    title: 业务流程即编排
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-10/section-01-process-as-orchestration/lesson.md
@@ -49,7 +49,13 @@ learn:
       看这条周报流水线：Skill A 拉 KPI 和异常，Skill B 生成草稿，这两步可以全自动连跑。发送之前呢，一个确认闸——你看一眼草稿，批准才发。为什么？消息发出去了就收不回，这个例子咱们后面还会用到。
 
       同学们，注意这是 workflow，步骤你定死，不依赖 Agent 现场瞎想。还记得第八天的铁律吗，能 workflow 别 agent。编排的意思就是：你当流程设计师，AI 当流水线工人。本节带走一句——把流程画成 Skill 串联图，第四节能直接施工，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 串联图 3–5 步，每步三标注齐
+
+      [ ] 确认闸位置经得起同桌追问
+
+      [ ] 数据流无断点'
     resource_ids:
     - dg-workflow-agent
     tools:
@@ -112,9 +118,12 @@ learn:
         每步标注：执行还是判断、输入从哪来、错了能否撤回。不可撤回步前必须留闸位。
 
         输出可写入 docs/orchestration.md 的 Markdown。'
-      checklist: []
+      checklist:
+      - 串联图 3–5 步，每步三标注齐
+      - 确认闸位置经得起同桌追问
+      - 数据流无断点
   - id: c2
-    title: 概念：人工确认与执行记录
+    title: 人工确认与日志
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-10/section-02-human-confirm/lesson.md
@@ -127,7 +136,11 @@ learn:
       再说执行日志，每步一条：时间、动作、结果。出事故时它能回答三个问题——什么时候、谁干的、干成了什么。没有日志的团队，出事只能靠回忆和甩锅，咱们可不走那条路，对吧。
 
       反模式也记一下：信息不足逼人盲批、一天弹二十次麻木、批了没记录互相甩锅。避开这三条，你的闸才拦得住。同学们带走一句——确认点加日志，等于信任的工程设计，这个得记牢，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 设计卡五格填完，「看什么」含具体信息项
+
+      [ ] 找茬三题各说出「死法 + 修法」（对应三个反模式）'
     resource_ids:
     - dg-orchestration
     tools:
@@ -190,10 +203,12 @@ learn:
         为我的「发送/改数」步骤写确认界面最低信息：草稿 + 关键数字 + 风险标红。
 
         再写信任分级：什么条件下可以从每次看降到抽看。'
-      checklist: []
+      checklist:
+      - 设计卡五格填完，「看什么」含具体信息项
+      - 找茬三题各说出「死法 + 修法」（对应三个反模式）
   - id: c3
-    title: 实战：再封装两个 Skill
-    minutes: 30
+    title: 再封装两个技能包
+    minutes: 25
     form: 实战
     content_ref: class/bootcamp/day-10/section-03-two-more-skills/lesson.md
     content: '同学们，扩编开始。工具表从一件变三件，每件大概十三分钟。流程你们熟：倒序写、四部件、边界声明、工具描述——快在你已经会了，不是快在跳过部件，方法沉淀的红利就在这儿，对吧。
@@ -205,7 +220,13 @@ learn:
       最后四分钟做数据流对齐三查。A 的输出字段能不能喂饱 B？B 的草稿里有没有确认界面要的关键数字和风险标红？C 的输入从哪来——确认后的草稿加批准记录。查不到咬合点，第四节编排必卡，咱们别留坑，对吧。
 
       写不完两件也别硬撑：优先保证发送类那件，闸的训练价值最高。想封装的和串联图不一样？现在二选一，改图或改 Skill，图纸和施工必须一致。带走一句——三件齐了，咱们下一节真正串联，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 两件均过自查五勾
+
+      [ ] 对齐三查有书面结论
+
+      [ ] 全部进 Git'
     resource_ids:
     - dg-orchestration
     tools:
@@ -261,10 +282,13 @@ learn:
         要求：三件职责不重叠、输入输出契约能互相接上；发送类必须含「等待人工确认」。
 
         先问我两件 Skill 的名字与职责再写。'
-      checklist: []
+      checklist:
+      - 两件均过自查五勾
+      - 对齐三查有书面结论
+      - 全部进 Git
   - id: c4
-    title: 实战：编排 + 确认点 + 执行日志
-    minutes: 35
+    title: 长跑任务机 + 人在回路确认闸
+    minutes: 40
     form: 实战
     content_ref: class/bootcamp/day-10/section-04-orchestrate/lesson.md
     content: '同学们，施工开始。图纸在 orchestration.md，三件工具已经齐。现在三步：串联、装闸、记日志。顺序定死告诉 Agent，别让它现场改流程——咱们今天做的是 workflow，不是即兴表演，对吧。
@@ -276,13 +300,7 @@ learn:
       跑通之后别急着走，两条路径都要实测。批准走一遍，驳回也走一遍——比如驳回：第二段数字不对，流水线得打回 B 重做，日志记下这次驳回。闸拦住一次不算本事，驳回了能退回重做还留下记录，咱们这条线才算有回路，对吧。
 
       最后两分钟，关掉屏幕别的窗口，只看 runs/ 日志，复述今天发生了什么。到闸停不停、批了动不动、驳回了回不回得来——三个验收点全绿，第五节闸口实测才有底气。带走一句，对吧。'
-    practice: '完成标志：
-
-      [ ] 两路径实测表全 ✓
-
-      [ ] runs/ 日志可回放（三问答全）
-
-      [ ] 迭代日志记下今天修过的每一处'
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
     - dg-orchestration
     tools:
@@ -339,19 +357,14 @@ learn:
       term: orchestration.md
       plain: 编排文档：串联图 + 数据流 + 确认闸位置 + 日志格式。
     local_prep:
-      codex_prompt: '你现在严格按下列 workflow 执行，顺序不许变（把尖括号换成我的 Skill 名）：
-
-
-        1. 调用 Skill A〈名〉，输出存为 step-a
-
-        2. 调用 Skill B〈名〉，输入用 step-a；产出草稿后生成确认界面（草稿全文 + 关键数字 + 风险标红）
-
-        3. 停。不要执行后续。我回复「发」→ 调用 Skill C〈名〉；我回复「驳回：理由」→ 回第 2 步且版本 +1，再次确认
-
-        4. 每步向 runs/〈今天日期〉.md 追加：HH:MM | 步骤 | 结果
-
-
-        先确认三件 Skill 文件存在并复述计划，再开始执行。'
+      codex_prompt: "# 提示词 05 · 长任务 Loop + 人工确认闸（D9）\n\n> 整份粘贴。前置：`loop.py` 已能 tool_calls。\n\n---\n\n在本仓库实现 `agent/task_runner.py`：把「一个\
+        \ goal」拆成多 turn，并在写操作前停下来等人确认。\n\n## 长任务\n\n```\nrun_goal(goal: str):\n  messages = [system_task, user(goal)]\n  while\
+        \ turns < max_turns:\n    result = run_one_turn(messages)  # 复用 loop\n    if result.done: break\n    if result.needs_human_confirm:\n\
+        \      pause → 等待 approve/reject API 或 CLI\n      if reject: 记录并停止或改计划\n  写 runs/<date>-goal/ 全量日志\n```\n\n## HITL（人工确认闸）硬性要求\n\
+        \n- 任何 **写操作**（写文件、改数据库、调用变更类 API）前必须 `needs_human_confirm=true`  \n- 提供：\n  - `POST /api/agent/tasks` 启动  \n  - `POST\
+        \ /api/agent/tasks/{id}/approve`  \n  - `POST /api/agent/tasks/{id}/reject`  \n- 证据：`runs/` 中同时保留 **approve 成功路径**\
+        \ 与 **reject 中止路径** 各一次\n\n## Skill 编排\n\n仓库内 ≥2 个 Skill；长任务 goal 应能依次用到至少两个（例如：拉数 → 生成报告 →（确认后）写入 `runs/` 或草稿文件）。\n\
+        \n## 验收\n\n- 单个 goal ≥3 个 turn  \n- 确认闸可演示通过与拒绝  \n- 日志可回放  \n\n先计划后编码。"
       checklist: []
 quiz:
   pass_rate: 0.67
@@ -473,87 +486,7 @@ nodes:
   title: 今日课节（4 节 · 95′）
 - type: quiz
   title: Day10 概念验收
-- type: lab
-  title: 流水线施工：拦得住、回得来、查得了
 - type: project
   title: 企业任务：三 Skill 编排 + 确认闸 + 执行日志
 - type: review
   title: 交付自检与 GATE 9
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - docs/orchestration.md
-  - runs/
-  inherited_files:
-  - PROJECT_BRIEF.md
-  - PRD.md
-  - design-spec.md
-  - ui-flow.md
-  - ui-prototype.html
-  - day1-handoff-log.md
-  - frontend/index.html
-  - frontend/styles.css
-  - frontend/app.js
-  - frontend-acceptance.md
-  - frontend-api-needs.md
-  - day2-handoff-log.md
-  - API_Spec.md
-  - DB_Schema.md
-  - backend/server.py
-  - RUNBOOK.md
-  - backend-acceptance.md
-  - backend-handoff.md
-  - day3-handoff-log.md
-  - test-plan.md
-  - test-run.md
-  - defect-log.md
-  - test-report.md
-  - release-candidate.md
-  - deployment-plan.md
-  - DEPLOYMENT.md
-  - day4-release-log.md
-  - final-acceptance.md
-  - day5-replay/iteration-prd.md
-  - day5-replay/pm-handoff.md
-  - day5-replay/iteration-ui-spec.md
-  - day5-replay/ui-handoff.md
-  - day5-replay/frontend-acceptance.md
-  - day5-replay/frontend-handoff.md
-  - day5-replay/iteration-api-spec.md
-  - day5-replay/iteration-db-change.md
-  - day5-replay/backend-acceptance.md
-  - day5-replay/backend-handoff.md
-  - day5-replay/iteration-test-plan.md
-  - day5-replay/iteration-test-report.md
-  - day5-replay/iteration-deployment-plan.md
-  - day5-replay/iteration-release-log.md
-  - day5-replay/iteration-final-acceptance.md
-  - day5-replay/process-retrospective.md
-  - skills/skill-01.md
-  - runs/
-  - agent-run-log.md
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: '你是流程工程师。背景：FDE 训练营 Day 9，学员已有 3 件 Skill（skills/ 目录）。
-
-      任务：1. 生成 docs/orchestration.md——编排文档：步骤定死的串联图（A→B→C）、数据流（谁的输出是谁的输入）、确认闸位置（必须在不可撤回步骤之前）、闸设计卡（三问）、日志格式；2. 按文档把流水线真实跑一遍：A
-      跑 → B 产出确认界面（草稿+关键数字+风险标红）→ 停 → 人批准 → C 执行；再跑一次驳回路径（打回 B 重做、版本+1、留痕）；3. 每步执行后向 runs/ 追加日志行（时间|步骤|结果）。
-
-      要求：不批准绝不执行 C；驳回必须能退回重做且留记录；日志可独立回放当天经过。'
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/orchestration.md
-  - check: text_contains
-    args:
-      path: docs/orchestration.md
-      needle: 确认闸
-  - check: text_contains
-    args:
-      path: docs/orchestration.md
-      needle: 日志

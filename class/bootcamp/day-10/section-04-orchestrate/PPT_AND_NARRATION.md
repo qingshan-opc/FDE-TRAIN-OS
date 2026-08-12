@@ -1,4 +1,4 @@
-# 第九天 · 第 4 节 · 实战：task_runner + HITL
+# 第九天 · 第 4 节 · 长跑任务机 + 人在回路确认闸
 
 路径：`class/bootcamp/day-10/section-04-orchestrate/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

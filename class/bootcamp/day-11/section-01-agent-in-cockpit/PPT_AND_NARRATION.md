@@ -1,4 +1,4 @@
-# 第十天 · 第 1 节 · 实战：把 Agent 挂进 UI
+# 第十天 · 第 1 节 · 把智能体挂进驾驶舱界面
 
 路径：`class/bootcamp/day-11/section-01-agent-in-cockpit/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

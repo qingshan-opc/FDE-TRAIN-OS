@@ -3,7 +3,7 @@ project: 收官：把智能体接到驾驶舱
 project_brief: 'UI 接线 chat/loop/task（粘贴 prompts/06-wire-cockpit-ui.md）；十条证据；8′答辩讲清业务系统/驾驶舱/Skill/Loop；final-review + defense-demo。GATE 10 对照 teaching/week2-cockpit-agent/acceptance/checklist.md。'
 resources:
 - id: dg-v2-panorama
-  title: 讲解图 · V2.0 全景
+  title: 讲解图 · 收官全景
   kind: diagram
   summary: 六区块 + Agent + 三 Skill + 十条能力证据
   url: /course-assets/assets/diagrams/v2-panorama.svg

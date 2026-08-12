@@ -13,7 +13,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 
 ## Intent
 
-第 6 课第 3 节 · Prompt / Context / RAG / Fine-tune vs Prompt。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
+第 6 课第 3 节 · 怎么下指令、塞材料、查资料再答。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
 
 ## Assets
 

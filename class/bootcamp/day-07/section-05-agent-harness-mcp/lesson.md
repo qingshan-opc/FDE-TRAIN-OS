@@ -1,4 +1,4 @@
-# 第 5 节 · Agent / Harness / Tool / MCP / Workflow vs Agent（25′ · 概念）
+# 第 5 节 · 智能体、骨架、工具手、统一插座（20′ · 概念）
 
 > 一句话节引言：Agent 决策，Harness 骨架，Tool 是手，MCP 是插座——Workflow 写死，Copilot 只递扳手。
 

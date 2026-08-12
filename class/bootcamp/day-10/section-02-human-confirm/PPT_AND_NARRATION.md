@@ -1,4 +1,4 @@
-# 第九天 · 第 2 节 · 人工确认与执行记录
+# 第九天 · 第 2 节 · 人工确认与日志
 
 路径：`class/bootcamp/day-09/section-02-human-confirm/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

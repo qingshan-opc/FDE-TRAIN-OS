@@ -1,31 +1,28 @@
 camp_version: v0.7
 day: 7
-title: LLM 理论日：18 词过线
+title: 把大模型接到你的业务对话里
 week: 2
-project: LLM 理论日
-project_brief: '今天两件交付：① 第 1 节 DeepSeek + SSE 最小接电（流式能跑或书面降级）；② LLM 认知卡 llm-cognition-card.md。
+project: 把大模型接到你的业务对话里
+project_brief: '今日两件硬交付：① 助手位（或任意页面对话面板）真实多轮 LLM 对话（见 teaching/week2-cockpit-agent/prompts/02）；② LLM 认知卡 llm-cognition-card.md。
 
 
-  认知卡怎么做：
+  对话怎么做：
 
-  1）打开资源「LLM 认知卡 · 搭档提示词」，整份粘进 AI，先回答它的 3 个问题，拿到六大主题骨架；
+  1）整份粘贴 prompts/02-llm-chat-panel.md 到编码 AI；
 
-  2）每个主题写 2–3 条白话要点，每条必须配前五天真实交付物或自己的类比——不许只剩词典定义；
+  2）system prompt 放仓库文件；API Key 仅环境变量；
 
-  3）主题固定：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent（可加一句你的 SSE 接电体会）；
-
-  4）上传 md 附件，复盘里写清「哪三条你现在能 30 秒讲给别人听」。
+  3）runs/chat-smoke/ 留一次脱敏证据。
 
 
-  过闸标准：SSE 接电过闸（或助教确认的降级说明）；六大主题齐全、每条有你的实例。日级快测在「概念验收」节点单独过。'
+  过闸：可聊助手位/对话面板（或助教确认降级）+ 认知卡六大主题。概念快测单独过。'
 review_checklist:
-- 第 1 节：能口述「一次性响应 vs SSE」；**DeepSeek + SSE** 最小接电跑通（或书面 blocker + 降级，经助教确认）
-- 日级快测过线（解析必须看懂）；目标对齐「18 词认知」——题库与词典对照复习
-- 企业任务：提交 LLM 认知卡 `llm-cognition-card.md`（**六大主题**：生态四层 / Token与幻觉 / Prompt与RAG / Eval与护栏 / Agent与Harness / Copilot vs Agent；每主题
-  2–3 条要点，每条配前五天真实实例或自己的类比；可用「认知卡 · 搭档提示词」先梳骨架）
+- 助手位/对话面板可多轮对话；system prompt 在仓库文件中可改
+- 日级概念快测过线
+- 企业任务：`llm-cognition-card.md`（可写上「接电」体会）
 resources:
 - id: dg-llm-ecosystem
-  title: 讲解图 · LLM 生态分层
+  title: 讲解图 · 大模型生态分层
   kind: diagram
   summary: 基建→模型→编排→应用，标出 FDE 工作层
   url: /course-assets/assets/diagrams/llm-ecosystem.svg
@@ -35,27 +32,27 @@ resources:
   summary: 与驾驶舱模块对齐的生态四层
   url: /course-assets/assets/diagrams/four-layer.svg
 - id: dg-agent-loop
-  title: 讲解图 · Agent 循环
+  title: 讲解图 · 智能体循环
   kind: diagram
-  summary: 理解→规划→Tool Call→观察→继续
+  summary: 理解→规划→调工具→观察→继续
   url: /course-assets/assets/diagrams/agent-loop.svg
 - id: dg-llm-capability
-  title: 讲解图 · LLM 能力与边界
+  title: 讲解图 · 大模型能力与边界
   kind: diagram
-  summary: Token、窗口、幻觉、擅长与不擅长
+  summary: 字数账单、记忆上限、一本正经胡说、擅长与不擅长
   url: /course-assets/assets/diagrams/llm-capability.svg
 - id: dg-context-assembly
-  title: 讲解图 · Context 组装与 RAG
+  title: 讲解图 · 怎么塞材料与查资料再答
   kind: diagram
-  summary: Prompt 装填 + 检索增强管线
+  summary: 下指令装填 + 检索增强管线
   url: /course-assets/assets/diagrams/context-assembly.svg
 - id: dg-harness
-  title: 讲解图 · Harness 解剖
+  title: 讲解图 · 编排骨架解剖
   kind: diagram
   summary: 工具表、记忆、规划、重试、日志
   url: /course-assets/assets/diagrams/harness-anatomy.svg
 - id: dg-workflow-agent
-  title: 讲解图 · Workflow vs Agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 写死流程 vs 现场决策
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg
@@ -70,7 +67,7 @@ resources:
   summary: 18 词 + 自测 6 题 + 课程落点
   url: /course-assets/resources/glossary.md
 - id: tk-cognition-card
-  title: LLM 认知卡 · 搭档提示词
+  title: 大模型认知卡 · 搭档提示词
   kind: download
   summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
   url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md
@@ -79,24 +76,47 @@ learn:
   - camp:v0.7
   - day:7
   - project:role-week
-  estimated_minutes: 115
+  estimated_minutes: 0
   require_capsules: true
   capsules:
   - id: c1
-    title: 生态四层地图 + API/SSE 接入
+    title: 四层地图：在哪儿接上大模型
     minutes: 30
     form: 概念+实战
     content_ref: class/bootcamp/day-07/section-01-ecosystem-four-layers/lesson.md
     content: '过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。
 
       真相源：`scripts/section_narrations/day06_s01.yaml`。'
-    practice: '完成标志：
+    practice: '目标：在 **你的应用**（助手位或任意对话面板）跑通真实多轮对话（优先 SSE）。
 
-      [ ] [ ] 四层名称顺序正确，且各举一个具体产品/动作
 
-      [ ] [ ] 能向同桌说清：API 是调用方式，SSE 是流式通道，助手位建议 SSE
+      ### 一键粘贴提示词（教学包全文）
 
-      [ ] [ ] SSE 最小接电跑通（或书面记录 blocker + 降级方案，经助教确认）'
+
+      整份打开并复制：
+
+
+      [`class/teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md`](../../../teaching/week2-cockpit-agent/prompts/02-llm-chat-panel.md)
+
+
+      粘贴到 Cursor / anyCode / Claude Code，按提示先出计划，你回复「确认」后再改代码。
+
+
+      完成标志：
+
+      [ ] Key 不在前端；环境变量或教务网关
+
+      [ ] 助手位可 ≥3 轮连续对话
+
+      [ ] system prompt 在仓库文件中，改完重启生效
+
+      [ ] `runs/chat-smoke/` 有一次脱敏记录或截图说明
+
+      [ ] 四层名称顺序正确
+
+      [ ] 驾驶舱内可聊（或书面 blocker + 助教确认的降级）
+
+      [ ] 能向同桌演示改 system prompt 前后差异'
     resource_ids:
     - dg-llm-ecosystem
     - dg-four-layer
@@ -134,7 +154,7 @@ learn:
       - 体感与可中断靠 SSE；密钥与降级是工程底线。
     media:
     - kind: video
-      title: 口播课件 · 生态四层地图
+      title: 口播课件 · 四层地图：在哪儿接上大模型
       object_key: documents/shared/course-media/day06-c1-ecosystem.mp4
       poster_key: documents/shared/course-media/day06-c1-ecosystem-poster.jpg
       duration_sec: 496
@@ -177,37 +197,88 @@ learn:
       term: 多模态
       plain: 跨文本/图像/音频；本课聚焦文本摘要与 Tool Call。
     local_prep:
-      codex_prompt: '我需要接入 DeepSeek-flash（若文档型号名不同，以教务/官方当前 flash 型号为准），采用 SSE 的方式接入。
+      codex_prompt: '# 提示词 02 · 驾驶舱助手位接 LLM 多轮对话（D6）
 
 
-        约束：
-
-        1. 调用云端 Chat Completions（或兼容 OpenAI 协议的）接口，开启 stream / SSE（text/event-stream）。
-
-        2. 前端（或驾驶舱助手位）边收边显示 token/文本片段；支持「生成中」状态与错误态；断流可重试。
-
-        3. API Key 只放在后端或本地 .env（已 gitignore），前端不得硬编码密钥。
-
-        4. 最小验收：发送一句「用三句话介绍你自己」，界面能流式打出回复；失败时显示可读错误，不白屏、不假装成功。
-
-        5. 交付：可运行的最小代码 + 我怎么启动的 3 行说明（README 小节即可）。
+        > 整份粘贴到编码 AI。前置：周末驾驶舱首页与助手位空槽已存在。
 
 
-        先问我：工作区语言栈（纯 HTML / Node / Python）和密钥从哪读；再改代码，不要一次糊一堆无关重构。'
-      checklist: []
+        ---
+
+
+        你是资深工程师。请把学员驾驶舱右侧 **AI 助手位** 接到真实 LLM（优先 DeepSeek，兼容 OpenAI Chat Completions）。
+
+
+        ## 目标
+
+
+        1. 浏览器里可多轮对话（流式 SSE 优先，不行则一次性响应并注明）。
+
+        2. system prompt 放在仓库文件中（例如 `agent/prompts/cockpit_assistant.md`），修改文件后重启即生效。
+
+        3. 后端提供最小 API：`POST /api/agent/chat`（或等价），body 含 `messages[]`。
+
+        4. API Key 只放环境变量（`DEEPSEEK_API_KEY` / `OPENAI_API_KEY`），禁止写进前端。
+
+
+        ## 目录约定
+
+
+        按 `class/teaching/week2-cockpit-agent/scaffold/README.md`：
+
+
+        - `agent/llm_client.py`
+
+        - `agent/prompts/cockpit_assistant.md`
+
+        - 驾驶舱前端助手位绑定到该 API
+
+
+        ## 验收
+
+
+        - 改 system prompt 后，助手口吻/职责明显变化。
+
+        - 连续 ≥3 轮对话上下文不断。
+
+        - 在 `runs/chat-smoke/` 保存一次请求摘要（可脱敏）与截图说明。
+
+
+        ## 先做
+
+
+        1. 检查现有后端语言与启动方式，选择最小侵入接入点。
+
+        2. 列出改动计划，等我「确认」后再写代码。
+
+        3. 给一份本地 `.env.example` 与启动步骤。
+
+
+        原则：今天只做「能聊」；工具 / Skill 下周再挂，别一次做完。'
+      checklist:
+      - Key 不在前端；环境变量或教务网关
+      - 助手位可 ≥3 轮连续对话
+      - system prompt 在仓库文件中，改完重启生效
+      - '`runs/chat-smoke/` 有一次脱敏记录或截图说明'
+      - 四层名称顺序正确
+      - 驾驶舱内可聊（或书面 blocker + 助教确认的降级）
+      - 能向同桌演示改 system prompt 前后差异
   - id: c2
-    title: Token / 窗口 / 幻觉：能力与边界
-    minutes: 20
+    title: 字数账单、记忆上限、一本正经胡说
+    minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-07/section-02-token-window-hallucination/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '完成标志：
+    practice: '**「Token 估算」**：把你 Day 4 的 `API_Spec.md` 前 500 字贴进 tokenizer（或 Cursor 看 usage），粗算多少 Token。再假设窗口 32K，还能塞几份同样长的文档？
 
-      [ ] [ ] 能解释 input/output Token 与账单的关系
 
-      [ ] [ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策
+      完成标志：
 
-      [ ] [ ] 说清「验收」比「再 prompt 一次」优先'
+      [ ] 能解释 input/output Token 与账单的关系
+
+      [ ] 举一个驾驶舱里可能出现幻觉的场景 + 对策
+
+      [ ] 说清「验收」比「再 prompt 一次」优先'
     resource_ids:
     - dg-llm-capability
     - glossary
@@ -232,7 +303,7 @@ learn:
       - 对策是 RAG+Eval+Guardrails，不是「再 prompt 一次就会好」。
     media:
     - kind: video
-      title: 口播课件 · Token / 窗口 / 幻觉
+      title: 口播课件 · 字数账单、记忆上限、一本正经胡说
       object_key: documents/shared/course-media/day06-c2-token.mp4
       poster_key: documents/shared/course-media/day06-c2-token-poster.jpg
       duration_sec: 373
@@ -260,20 +331,26 @@ learn:
       codex_prompt: '你是 LLM 能力边界教练。用我的驾驶舱摘要场景，解释 Token 计费、上下文窗口满了的三条出路、幻觉为什么是机制不是偶发 bug。
 
         每点配一个「我项目里的坏例子」。最后出 3 道口答题考我。'
-      checklist: []
+      checklist:
+      - 能解释 input/output Token 与账单的关系
+      - 举一个驾驶舱里可能出现幻觉的场景 + 对策
+      - 说清「验收」比「再 prompt 一次」优先
   - id: c3
-    title: Prompt / Context / RAG / Fine-tune vs Prompt
-    minutes: 20
+    title: 怎么下指令、塞材料、查资料再答
+    minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-07/section-03-prompt-context-rag/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '完成标志：
+    practice: '**「Context 设计」**：为驾驶舱摘要接口画一个 Context 框图：哪几块进窗口？每块大约多少字？哪块不该进？
 
-      [ ] [ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）
 
-      [ ] [ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别
+      完成标志：
 
-      [ ] [ ] Fine-tune 何时才考虑（一句）'
+      [ ] 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）
+
+      [ ] 说清 RAG 和「直接把整库塞进 Prompt」的区别
+
+      [ ] Fine-tune 何时才考虑（一句）'
     resource_ids:
     - dg-context-assembly
     - glossary
@@ -304,7 +381,7 @@ learn:
       - Fine-tune 贵慢——Prompt 方案没过闸不升级。
     media:
     - kind: video
-      title: 口播课件 · Prompt / Context / RAG
+      title: 口播课件 · 怎么下指令、塞材料、查资料再答
       object_key: documents/shared/course-media/day06-c3-rag.mp4
       poster_key: documents/shared/course-media/day06-c3-rag-poster.jpg
       duration_sec: 327
@@ -341,20 +418,26 @@ learn:
         再写一个最小 RAG 故事：驾驶舱「先查数再摘要」对应哪五步里的哪几步。
 
         指出 Fine-tune 为什么还轮不到我。'
-      checklist: []
+      checklist:
+      - 能改一条「坏 Prompt」成「好 Prompt」（加格式+约束）
+      - 说清 RAG 和「直接把整库塞进 Prompt」的区别
+      - Fine-tune 何时才考虑（一句）
   - id: c4
-    title: Eval / Guardrails / Vibe Coding
-    minutes: 20
+    title: 出考卷、加护栏、边聊边写代码
+    minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-07/section-04-eval-guardrails-vibe/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '完成标志：
+    practice: '**「迷你 Eval 集」**：为驾驶舱摘要写 5 条测试 case（输入 JSON + 期望：必须包含/不得包含）。
 
-      [ ] [ ] 5 条 case 可被第三方客观判过/不过
 
-      [ ] [ ] 说清一条 Guardrails 降级策略（空结果）
+      完成标志：
 
-      [ ] [ ] 举自己 vibe 写代码的一次经历 + 怎么验收的'
+      [ ] 5 条 case 可被第三方客观判过/不过
+
+      [ ] 说清一条 Guardrails 降级策略（空结果）
+
+      [ ] 举自己 vibe 写代码的一次经历 + 怎么验收的'
     resource_ids:
     - dg-llm-ecosystem
     - glossary
@@ -379,7 +462,7 @@ learn:
       - 会 vibe 的人变贵，只会 vibe 不验收的人变便宜。
     media:
     - kind: video
-      title: 口播课件 · Eval / Guardrails / Vibe Coding
+      title: 口播课件 · 出考卷、加护栏、边聊边写代码
       object_key: documents/shared/course-media/day06-c4-eval.mp4
       poster_key: documents/shared/course-media/day06-c4-eval-poster.jpg
       duration_sec: 272
@@ -410,20 +493,26 @@ learn:
       codex_prompt: '为我的摘要功能写：3 条 Eval 题（输入+期望要点）、1 条 Guardrails（空结果/超时怎么降级）、用白话区分 Vibe Coding 与可验收交付。
 
         输出可直接贴进 llm-cognition-card 的要点。'
-      checklist: []
+      checklist:
+      - 5 条 case 可被第三方客观判过/不过
+      - 说清一条 Guardrails 降级策略（空结果）
+      - 举自己 vibe 写代码的一次经历 + 怎么验收的
   - id: c5
-    title: Agent / Harness / Tool / MCP / Workflow vs Agent
-    minutes: 25
+    title: 智能体、骨架、工具手、统一插座
+    minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-07/section-05-agent-harness-mcp/lesson.md
     content: 过稿主文件：`PPT_AND_NARRATION.md`；分词稿：`video/scripts/narration/`。**未过稿前不跑 TTS/渲染。**
-    practice: '完成标志：
+    practice: '**「拆 Cursor」**：开一次 Cursor Agent 任务，事后填表：哪步是规划 / Tool Call / 观察？如果 Harness 没有日志，你会漏看什么？
 
-      [ ] [ ] 能画 Agent 循环简图
 
-      [ ] [ ] 说清 Copilot vs Agent 信任差异
+      完成标志：
 
-      [ ] [ ] 指驾驶舱哪块未来适合 Skill/MCP 封装'
+      [ ] 能画 Agent 循环简图
+
+      [ ] 说清 Copilot vs Agent 信任差异
+
+      [ ] 指驾驶舱哪块未来适合 Skill/MCP 封装'
     resource_ids:
     - dg-agent-loop
     - dg-harness
@@ -468,7 +557,7 @@ learn:
       - 模型只「说我要调什么」；执行在 Harness。
     media:
     - kind: video
-      title: 口播课件 · Agent / Harness / MCP
+      title: 口播课件 · 智能体、骨架、工具手、统一插座
       object_key: documents/shared/course-media/day06-c5-agent.mp4
       poster_key: documents/shared/course-media/day06-c5-agent-poster.jpg
       duration_sec: 322
@@ -517,7 +606,10 @@ learn:
       codex_prompt: '用我做过的事填空：Agent / Harness 四要素 / Tool Calling / MCP（比喻即可）/ Workflow vs Agent / Copilot vs Agent。
 
         每词强制配「前五天或 SSE 接电」的一个实例。不要只有定义。'
-      checklist: []
+      checklist:
+      - 能画 Agent 循环简图
+      - 说清 Copilot vs Agent 信任差异
+      - 指驾驶舱哪块未来适合 Skill/MCP 封装
 quiz:
   pass_rate: 0.67
   questions:
@@ -600,10 +692,10 @@ quiz:
     explain: 同一模型换 Harness，能力天差地别。
 nodes:
 - type: learn
-  title: 今日课节（5 节 · 115′）
+  title: 今日课节（5 节 · 0′）
 - type: quiz
   title: Day7 概念验收
 - type: project
   title: 企业任务：提交 LLM 认知卡 llm-cognition-card.md
 - type: review
-  title: 交付自检与 GATE · LLM 认知过线
+  title: 交付自检与 GATE

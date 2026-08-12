@@ -1,19 +1,19 @@
 camp_version: v0.7
 day: 11
-title: V2.0 收官：答辩与成为 FDE
+title: 收官：把智能体接到驾驶舱
 week: 2
-project: V2.0 收官：答辩与成为 FDE
-project_brief: 九天收口成一个人：Agent 接入驾驶舱助手位（唤起/状态/闸在页内），十条能力证据 10/10 自证，8 分钟答辩（作品 3′+架构 3′+迭代 2′），提交 final-review.md（两周复盘 + 行业地图自评
-  + 90 天自学路线）。答辩通过即 FDE。
+project: 收官：把智能体接到驾驶舱
+project_brief: UI 接线 chat/loop/task（粘贴 prompts/06-wire-cockpit-ui.md）；十条证据；8′答辩讲清业务系统/驾驶舱/Skill/Loop；final-review + defense-demo。GATE
+  10 对照 teaching/week2-cockpit-agent/acceptance/checklist.md。
 review_checklist:
-- V2.0 全景：驾驶舱六区块 + Agent + 三 Skill，助手位可唤起、可看状态、闸可操作
-- 十条能力证据：自证表 10/10，每条有文件或现场演示支撑
-- 答辩完成：8 分钟结构讲完，互评表收回至少 2 份
-- '`docs/final-review.md`：两周复盘 + 行业地图自评 + 自学路线'
-- 'commit：`feat: V2.0 收官——Agent 接入驾驶舱，答辩完成`'
+- 助手位多轮 + Skill 调用 + 确认闸在页内可操作
+- loop 有上限与日志；长任务 ≥3 turn 可演示
+- 答辩讲清：业务系统 / 驾驶舱 / Skill / Loop
+- '`docs/final-review.md` + `docs/defense-demo.md`'
+- 'commit：`feat: cockpit agent v2.0`.'
 resources:
 - id: dg-v2-panorama
-  title: 讲解图 · V2.0 全景
+  title: 讲解图 · 收官全景
   kind: diagram
   summary: 六区块 + Agent + 三 Skill + 十条能力证据
   url: /course-assets/assets/diagrams/v2-panorama.svg
@@ -41,26 +41,12 @@ learn:
   require_capsules: true
   capsules:
   - id: c1
-    title: 实战：Agent 接入驾驶舱
+    title: 把智能体挂进驾驶舱界面
     minutes: 30
     form: 实战
     content_ref: class/bootcamp/day-11/section-01-agent-in-cockpit/lesson.md
-    content: '同学们，驾驶舱右边那个 AI 助手位空了九天了，今天让它活起来——这是 V2.0 最后一块拼图。助手位不是装饰用的聊天框，是驾驶位：状态看得见、刹车踩得到，才叫接入，对吧。
-
-      接入三要件。第一唤起：助手位能发消息给 Agent，Agent 能回话。第二状态：流水线跑到哪一步，助手位实时可见，最小实现读 runs/ 最新日志行就行。第三闸在页内：确认界面出现在驾驶舱里，批准和驳回按钮直接点，对吧。
-
-      最小实现别贪大：对话区接 Agent，状态读 runs/ 日志最新行，闸就是草稿渲染加两个按钮。一件通了再做下一件——别三个半成品堆在一起，咱们宁可做一个能点批准的真闸，对吧。
-
-      时间不够怎么办？优先级记死：闸大于状态大于唤起。对话区接不通真实 Agent 环境？降级方案也行——助手位展示当前步骤加确认按钮，指令复制到 Agent Lab 执行，结果回填。思想不变，咱们打通的是人、Agent、驾驶舱的信息回路，对吧。
-
-      做完对照 V2.0 全景图打勾：六个区块、Agent、三件 Skill——全亮，你的 V2.0 就成了。样式复用驾驶舱既有卡片，助手位别长得像外来的。带走一句：助手位是驾驶位，不是摆设，对吧。'
-    practice: '完成标志：
-
-      [ ] 三要件至少「闸」全通，另两件有最小实现
-
-      [ ] 全景自查无「死区块」
-
-      [ ] 迭代日志记录接入中修过的问题'
+    content: 助手位：多轮聊天 + 任务执行 + 确认闸在页内；；事件可见：`turn_start` / `tool_call` / `confirm_required` / `done`；；对照 teaching 包 V2.0 清单自查。
+    practice: 按本节 practice.md 完成任务并达到完成标志。
     resource_ids:
     - dg-v2-panorama
     tools:
@@ -118,14 +104,16 @@ learn:
       term: 驾驶舱助手位
       plain: 人-Agent 对话口 + 流水线状态 + 页内确认闸——驾驶位不是摆设。
     local_prep:
-      codex_prompt: '驾驶舱接入教练。按优先级施工：闸在页内 > 状态可见 > 唤起。
-
-        对照我的仓库，列出要改的文件与最小补丁方案；接不通真实 Agent 时给出「指令面板降级」方案并写书面权衡。
-
-        不要大重构，只求三要件可演示。'
+      codex_prompt: "# 提示词 06 · 驾驶舱 UI 接线 Agent 事件流（D10）\n\n> 整份粘贴。前置：chat / loop / task_runner 后端已通。\n\n---\n\n把 Agent 运行时接到驾驶舱助手位，完成\
+        \ **V2.0 可答辩演示**。\n\n## UI 要求\n\n1. 助手位支持：普通多轮聊天 + 「执行任务」入口（或把长句自动当 goal）。  \n2. 运行中展示事件（轮询或 SSE 均可）：\n   - `turn_start`\n\
+        \   - `tool_call`（工具名 + 摘要）\n   - `tool_result`（截断）\n   - `confirm_required`（弹出批准/拒绝）\n   - `turn_done` / `task_done`\n\
+        3. 确认闸在 UI 上可点；拒绝后界面有明确状态。  \n4. 历史：至少显示本会话消息；可链到 `runs/` 目录说明。\n\n## 不要做\n\n- 不要重写业务 CRUD  \n- 不要引入重型前端框架（若现有是原生\
+        \ HTML，保持原生 + 少量 JS）\n\n## 答辩演示脚本（写入 `docs/defense-demo.md`）\n\n1. 打开驾驶舱，指三个指标  \n2. 聊天问一个只读问题  \n3. 发起一个会调 Skill\
+        \ 的任务  \n4. 演示一次确认闸  \n5. 打开 `runs/` 指给评委看  \n\n## 验收\n\n对照 `class/teaching/week2-cockpit-agent/acceptance/checklist.md`\
+        \ 的 D10 / V2.0 段全部勾上。\n\n先计划后编码。"
       checklist: []
   - id: c2
-    title: 端到端十条能力证据
+    title: 十条能力证据
     minutes: 20
     form: 实战
     content_ref: class/bootcamp/day-11/section-02-ten-evidences/lesson.md
@@ -197,9 +185,12 @@ learn:
       codex_prompt: '十条证据考官。对照清单逐条问我「文件/演示在哪」；缺的标红并给最小补齐动作。
 
         尤其核对第 7 条：Day6 DeepSeek+SSE 接电与降级记录。'
-      checklist: []
+      checklist:
+      - 自证表每条都有结论 + 一句话说明
+      - 三强两弱圈定，补救/诚实声明写好
+      - 自证表进 Git（答辩材料之一）
   - id: c3
-    title: 答辩准备
+    title: 答辩提纲
     minutes: 15
     form: 实战
     content_ref: class/bootcamp/day-11/section-03-defense-prep/lesson.md
@@ -266,9 +257,12 @@ learn:
       codex_prompt: '帮我生成 docs/defense-outline.md：作品演示路径 3′ / 架构三点 3′ / 迭代故事五要素 2′ / 诚实声明（哪块降级/未完成）。
 
         用我仓库里的真实路径，不要空话。'
-      checklist: []
+      checklist:
+      - 提纲一页纸填满，关键词式
+      - 作品段掐表 ≤3′，且练过兜底
+      - 提纲进 Git
   - id: c4
-    title: 答辩与互评（现场）
+    title: 答辩与互评
     minutes: 30
     form: 答辩
     content_ref: class/bootcamp/day-11/section-04-defense/lesson.md
@@ -313,7 +307,7 @@ learn:
       - 选错图谱 + 你自己的注入测试记录——最有说服力的答案。
     media:
     - kind: video
-      title: 口播课件 · GATE 10
+      title: 口播课件 · 过闸验收
       object_key: documents/shared/course-media/day10-c4-defense.mp4
       poster_key: documents/shared/course-media/day10-c4-defense-poster.jpg
       duration_sec: 65
@@ -338,9 +332,12 @@ learn:
       codex_prompt: '你是模拟评委。按答辩提纲对我进行 8 分钟压力提问（每次 1 问）；我答后打分并指出证据是否在仓库。
 
         覆盖：闸是否真拦、SSE/Agent 是否真通、三条迭代故事。'
-      checklist: []
+      checklist:
+      - 完成自己的 8 分钟答辩
+      - 交出 ≥2 份带细节的互评表
+      - 迭代日志记下被问住的问题
   - id: c5
-    title: 两周复盘 + 自学路线
+    title: 复盘与路线
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-11/section-05-two-week-review/lesson.md
@@ -388,7 +385,7 @@ learn:
       - 拒绝空话——第一个动作本周就要做。
     media:
     - kind: video
-      title: 口播课件 · final-review.md
+      title: 口播课件 · 两周复盘
       object_key: documents/shared/course-media/day10-c5-gate10.mp4
       poster_key: documents/shared/course-media/day10-c5-gate10-poster.jpg
       duration_sec: 87
@@ -413,7 +410,10 @@ learn:
       codex_prompt: '协助写 docs/final-review.md：两周复盘（做成/做错/下次）、行业地图自评、90 天自学路线（含更自主 Agent 要补的：幂等/注入/少闸信任分级）。
 
         要求具体到主题，不要鸡汤。'
-      checklist: []
+      checklist:
+      - final-review.md 四部分填满，每条具体（不写「继续努力」这种话）
+      - 90 天路线有「本周内的第一个动作」
+      - commit 进 Git——这是课程的最后一个 commit
 quiz:
   pass_rate: 0.67
   questions:
@@ -527,88 +527,7 @@ nodes:
   title: 今日课节（5 节 · 110′）
 - type: quiz
   title: Day11 概念验收
-- type: lab
-  title: V2.0 接入 + 答辩提纲与毕业复盘
 - type: project
   title: 毕业交付：final-review.md + 答辩完成
 - type: review
-  title: 交付自检与 GATE 10 · 毕业验收
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - docs/final-review.md
-  - docs/defense-outline.md
-  inherited_files:
-  - PROJECT_BRIEF.md
-  - PRD.md
-  - design-spec.md
-  - ui-flow.md
-  - ui-prototype.html
-  - day1-handoff-log.md
-  - frontend/index.html
-  - frontend/styles.css
-  - frontend/app.js
-  - frontend-acceptance.md
-  - frontend-api-needs.md
-  - day2-handoff-log.md
-  - API_Spec.md
-  - DB_Schema.md
-  - backend/server.py
-  - RUNBOOK.md
-  - backend-acceptance.md
-  - backend-handoff.md
-  - day3-handoff-log.md
-  - test-plan.md
-  - test-run.md
-  - defect-log.md
-  - test-report.md
-  - release-candidate.md
-  - deployment-plan.md
-  - DEPLOYMENT.md
-  - day4-release-log.md
-  - final-acceptance.md
-  - day5-replay/iteration-prd.md
-  - day5-replay/pm-handoff.md
-  - day5-replay/iteration-ui-spec.md
-  - day5-replay/ui-handoff.md
-  - day5-replay/frontend-acceptance.md
-  - day5-replay/frontend-handoff.md
-  - day5-replay/iteration-api-spec.md
-  - day5-replay/iteration-db-change.md
-  - day5-replay/backend-acceptance.md
-  - day5-replay/backend-handoff.md
-  - day5-replay/iteration-test-plan.md
-  - day5-replay/iteration-test-report.md
-  - day5-replay/iteration-deployment-plan.md
-  - day5-replay/iteration-release-log.md
-  - day5-replay/iteration-final-acceptance.md
-  - day5-replay/process-retrospective.md
-  - skills/skill-01.md
-  - runs/
-  - agent-run-log.md
-  - docs/orchestration.md
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: '你是收官日教练。背景：FDE 训练营 Day 10，学员要完成 V2.0 接入与毕业复盘。
-
-      任务：1. 协助把 Agent 接入驾驶舱助手位——三要件按优先级施工（闸在页内 > 状态可见 > 唤起），接不通真实环境时采用指令面板降级并写书面权衡；2. 生成 docs/defense-outline.md——答辩提纲一页纸（作品演示路径/架构讲解三点/迭代故事五要素/诚实声明）；3.
-      生成 docs/final-review.md——两周复盘：三对「我以为→我知道」、行业地图自评（五档 ✓/△/✗ 带证据链接）、90 天路线（可衡量目标 + 30/60/90 里程碑 + 本周第一个动作）。
-
-      要求：拒绝空话；每条自评都要挂得上证据路径。'
-  rubric:
-  - check: file_exists
-    args:
-      path: docs/final-review.md
-  - check: text_contains
-    args:
-      path: docs/final-review.md
-      needle: 90 天
-  - check: text_contains
-    args:
-      path: docs/final-review.md
-      needle: 我以为
+  title: 交付自检与 GATE 10

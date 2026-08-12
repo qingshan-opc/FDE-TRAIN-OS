@@ -1,4 +1,4 @@
-# 第九天 · 第 3 节 · 再封装两个 Skill
+# 第九天 · 第 3 节 · 再封装两个技能包
 
 路径：`class/bootcamp/day-09/section-03-two-more-skills/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

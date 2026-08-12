@@ -1,4 +1,4 @@
-# 第十天 · 第 5 节 · 两周复盘：行业地图自评 + 自学路线
+# 第十天 · 第 5 节 · 复盘与路线
 
 路径：`class/bootcamp/day-10/section-05-two-week-review/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

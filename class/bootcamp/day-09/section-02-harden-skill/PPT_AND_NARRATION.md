@@ -1,4 +1,4 @@
-# 第八天 · 第 2 节 · 实战：Skill v1 + 异常注入测试
+# 第八天 · 第 2 节 · 技能包加固 + 故意搞破坏测试
 
 路径：`class/bootcamp/day-08/section-02-harden-skill/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

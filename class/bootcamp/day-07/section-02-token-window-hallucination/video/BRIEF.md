@@ -13,7 +13,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 
 ## Intent
 
-第 6 课第 2 节 · Token / 窗口 / 幻觉：能力与边界。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
+第 6 课第 2 节 · 字数账单、记忆上限、一本正经胡说。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
 
 ## Assets
 

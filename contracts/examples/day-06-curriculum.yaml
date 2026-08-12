@@ -132,7 +132,12 @@ learn:
       原生系统，后面咱们所有的课都是在这个地基上盖的。
 
       好，本节小课就到这里了，收个尾。从算盘到电脑，从自建机房到云，从复制粘贴到 Agent 原生系统——每一波浪过来，都淘汰了一批旧的工种，也成就了一批新的人，对吧。'
-    practice: '完成标志：
+    practice: '**「讲给家人听」**：找一个不懂技术的人（家人、朋友、同事），用 2 分钟把六次浪潮讲一遍，只用「什么人变贵了、什么人变便宜了」这一个句式。讲的时候不许说任何技术名词（不许说「云」「原生」「框架」）。
+
+      讲完后自问：他听懂了吗？哪一句他眼睛亮了？哪一句他开始走神？
+
+
+      完成标志：
 
       [ ] 能用「谁变贵、谁变便宜」句式讲完至少四次浪潮，且全程无技术名词
 
@@ -239,6 +244,12 @@ learn:
     - id: gt-dispatch
       term: 派活 / 验收
       plain: 派活=把任务说清楚；验收=对照标准判断对不对。这两件正在变贵。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 能用「谁变贵、谁变便宜」句式讲完至少四次浪潮，且全程无技术名词
+      - 能说出「会写变便宜、定方向与做验收变贵」并各举自己前四天的一个例子
+      - 对方能复述出你听懂的版本（哪怕只有一句）
   - id: c2
     title: 企业数字化五阶段详解
     minutes: 25
@@ -257,11 +268,11 @@ learn:
       带走一句话：先认出你部门在哪一级，再决定下一级缺什么。五阶段是诊断地图，不是选型清单。下一节我们讲软件是怎么开发出来的——流程和需求调研，对吧。'
     practice: '完成标志：
 
-      [ ] [ ] 五阶段名称顺序正确
+      [ ] 五阶段名称顺序正确
 
-      [ ] [ ] 每级至少一个部门实例或「缺口」说明
+      [ ] 每级至少一个部门实例或「缺口」说明
 
-      [ ] [ ] 能 30 秒向同桌解释「Agent 化不是更贵的聊天框，而是能跑流程」'
+      [ ] 能 30 秒向同桌解释「Agent 化不是更贵的聊天框，而是能跑流程」'
     resource_ids:
     - dg-stages
     tools:
@@ -301,9 +312,9 @@ learn:
     media:
     - kind: video
       title: 口播课件 · 企业数字化五阶段
-      object_key: documents/shared/course-media/day05-c2-enterprise-digital-stages.mp4
-      poster_key: documents/shared/course-media/day05-c2-enterprise-digital-stages-poster.jpg
-      duration_sec: 69
+      object_key: documents/shared/course-media/day05-c2-digital-stages.mp4
+      poster_key: documents/shared/course-media/day05-c2-digital-stages-poster.jpg
+      duration_sec: 314
     knowledge_cards:
     - id: five-stages
       term: 企业数字化五阶段
@@ -340,6 +351,12 @@ learn:
     - id: gt-ladder-not-pick
       term: 梯子不是选型
       plain: 诊断「缺哪一级能力」，不是背推荐清单。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 五阶段名称顺序正确
+      - 每级至少一个部门实例或「缺口」说明
+      - 能 30 秒向同桌解释「Agent 化不是更贵的聊天框，而是能跑流程」
   - id: c3
     title: 软件是怎么开发出来的：流程与需求调研
     minutes: 25
@@ -367,7 +384,16 @@ learn:
       六站怎么走，还有两种节奏。瀑布呢，像装修前先画好整栋楼的图纸，再一口气装完——适合需求铁定不变的事，比如航天软件；坏处是半年后才住进去，厨房不顺手也木已成舟。敏捷呢，像一周装修一间房，住进卧室再决定厨房怎么装——把大事切成小块，每块都快速走完六站、交付一个能用的东西。你们前四天就是敏捷：每天一个小交付，每天一次验收。敏捷不是不写文档随便来，恰恰是验收做得更频繁。
 
       好，本节小课就到这里了，收个尾。带走三句话：软件开发，先搞清问题、对齐样子，再让 AI 写、你来验；上线之后，修问题和做新功能是两笔账；六站可以瀑布一次走完，也可以敏捷小步快跑——你们已经在用敏捷了。流程不是背出来的名词，你们已经用身体走过一遍了。下一节，咱们继续往下挖。'
-    practice: '完成标志：
+    practice: '**「一次迷你需求调研」**：找一位同事或家人，访谈 5 分钟，主题是「你每天工作中最烦的一件重复性小事」。要求：
+
+      - 只问「上一次……是什么时候、你怎么处理的」，不问「你想不想要某个功能」；
+
+      - 记下三行：他的角色、最近一次的具体场景、他现在的凑合办法；
+
+      - 最后用一句话写出你发现的问题（格式：「谁在什么场景下被什么问题折磨，现在靠什么凑合」）。
+
+
+      完成标志：
 
       [ ] 六站顺序能不看笔记背出
 
@@ -420,9 +446,9 @@ learn:
     media:
     - kind: video
       title: 口播课件 · 软件是怎么开发出来的
-      object_key: documents/shared/course-media/day05-c3-how-software-built.mp4
-      poster_key: documents/shared/course-media/day05-c3-how-software-built-poster.jpg
-      duration_sec: 57
+      object_key: documents/shared/course-media/day05-c2-sdlc.mp4
+      poster_key: documents/shared/course-media/day05-c2-sdlc-poster.jpg
+      duration_sec: 314
     knowledge_cards:
     - id: six-stops
       term: 软件旅程六站
@@ -466,6 +492,12 @@ learn:
     - id: gt-iterate
       term: 迭代
       plain: 上线不是终点；收集使用问题，再走一小圈六站。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 六站顺序能不看笔记背出
+      - 访谈记录有三行（角色 / 具体场景 / 凑合办法），且包含一个「上一次」式回答
+      - 问题一句话里不出现解决方案，只有「谁 + 场景 + 痛 + 现状」
   - id: c4
     title: 服务器与云原生 + 部署上线最小必要 + 命令行八句
     minutes: 30
@@ -492,7 +524,16 @@ learn:
       docker ps。规矩一条：不许复制粘贴——命令行是肌肉记忆。卡住了查资源区的命令手册就行。
 
       好，本节小课就到这里了，收个尾。从桌底一台电脑，到集装箱，再到自动码头和打车式的 Serverless——方向只有一个：让你操心的机器越来越少。下一节咱们动手，去实验台把这八句真敲一遍。'
-    practice: '完成标志：
+    practice: '**预习命令手册**：打开资源区「命令手册 · 服务器日常八句」，把八句各读一遍——等下本节「实验」步骤要全部真敲：
+
+      `pwd` / `ls -l` / `mkdir -p app/logs` / `cd app` / `curl localhost:8000/healthz` / `tail -f logs/server.log` / `chmod
+      +x deploy.sh` / `docker ps`
+
+
+      边读边猜：每个命令敲下去，屏幕上会出现什么？
+
+
+      完成标志：
 
       [ ] 五站演进按顺序背出，且每站能说一句「解决了什么麻烦」
 
@@ -596,9 +637,9 @@ learn:
     media:
     - kind: video
       title: 口播课件 · 服务器与云原生
-      object_key: documents/shared/course-media/day05-c4-server-cloudnative.mp4
-      poster_key: documents/shared/course-media/day05-c4-server-cloudnative-poster.jpg
-      duration_sec: 70
+      object_key: documents/shared/course-media/day05-c3-server.mp4
+      poster_key: documents/shared/course-media/day05-c3-server-poster.jpg
+      duration_sec: 316
     knowledge_cards:
     - id: server-vs-laptop
       term: 服务器 vs 个人电脑
@@ -640,6 +681,12 @@ learn:
     - id: gt-port
       term: 端口
       plain: 同一台机器上区分不同服务的「门牌号」，如 8000。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 五站演进按顺序背出，且每站能说一句「解决了什么麻烦」
+      - 八句命令能看着手册说出各自用途，其中 6 句能默写
+      - 能解释 `curl` 返回 200 意味着什么、返回「拒绝连接」意味着什么
   - id: c5
     title: 前端技术图：四大平台与框架地图
     minutes: 25
@@ -668,7 +715,16 @@ learn:
       Taro。今天把那一格，填进整张前端地图里。
 
       好，本节小课就到这里了，收个尾。带走一句话：前端不只是网页——先想清楚用户在哪儿用你，再谈选什么武器。下一节，咱们讲后端那一侧。'
-    practice: '完成标志：
+    practice: '**「给三个场景选武器」**：为下面三个场景各选一个前端方案（可以是「不用框架」），并用四问中的一到两问说明理由：
+
+      1. 市场部下周要一个活动报名页，就用一次；
+
+      2. 公司要做一个三十个页面的内部管理系统，前端只有一位会 Vue 的实习生；
+
+      3. 你要做一个长期打磨、准备对外发布的 AI 写作工具，团队还没招人。
+
+
+      完成标志：
 
       [ ] 三件套比喻能完整复述
 
@@ -727,10 +783,9 @@ learn:
     media:
     - kind: video
       title: 口播课件 · 前端技术地图
-      object_key: ''
-      poster_key: ''
-      duration_sec: 0
-      pending: true
+      object_key: documents/shared/course-media/day05-c4-frontend.mp4
+      poster_key: documents/shared/course-media/day05-c4-frontend-poster.jpg
+      duration_sec: 249
     knowledge_cards:
     - id: fe-four
       term: 前端四大平台
@@ -772,6 +827,12 @@ learn:
     - id: gt-electron
       term: Electron
       plain: 用网页技术包一层壳，做成桌面软件的常见方案。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 三件套比喻能完整复述
+      - 五个选项（含「不用框架」）各能说一句画像
+      - 三个场景的选择都有「四问」依据，不是拍脑袋
   - id: c6
     title: 后端技术图：数据库分类、权限与语言框架地图
     minutes: 25
@@ -796,7 +857,16 @@ learn:
       最后接上 第四天：先把接口契约 API_Spec.md 写清楚——路径、参数、返回、错误码。这份契约用 Java 实现也行，用 Python 实现也行，前端不在乎。契约是合同，语言只是施工队——先签合同，施工队可以后挑，对吧。
 
       好，带走两句话：数据按场景选住所；代码按场景选语言——先把合同签清楚，施工队可以后挑。本节小课就到这儿，对吧。'
-    practice: '完成标志：
+    practice: '**「给三个场景选后端」**：为下面三个场景各选一条后端路线（语言 + 框架 + 数据库），并用一两句话说清理由：
+
+      1. 你要给部门做一个「周报自动汇总 + AI 摘要」的内部小工具，两周内要跑起来；
+
+      2. 一家银行要重做核心交易系统，团队 200 人，系统要维护十年；
+
+      3. 三个人创业做内容社区，要先出个能发帖能注册的版本验证市场。
+
+
+      完成标志：
 
       [ ] 四大路线各能说一句画像（谁在用、为什么）
 
@@ -855,10 +925,9 @@ learn:
     media:
     - kind: video
       title: 口播课件 · 后端技术地图
-      object_key: ''
-      poster_key: ''
-      duration_sec: 0
-      pending: true
+      object_key: documents/shared/course-media/day05-c5-backend.mp4
+      poster_key: documents/shared/course-media/day05-c5-backend-poster.jpg
+      duration_sec: 223
     knowledge_cards:
     - id: be-three
       term: 后端三件事
@@ -900,6 +969,12 @@ learn:
     - id: gt-orm
       term: ORM
       plain: 用对象代码映射表结构，少手写部分 SQL——要懂底层，别只会魔法。
+    local_prep:
+      codex_prompt: ''
+      checklist:
+      - 四大路线各能说一句画像（谁在用、为什么）
+      - 三个场景的选择都含语言 + 框架 + 数据库三件套，且理由说得出口
+      - 能解释为什么 API_Spec.md 可以在没定语言之前就写好
 quiz:
   pass_rate: 0.67
   questions:

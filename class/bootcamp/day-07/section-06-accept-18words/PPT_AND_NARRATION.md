@@ -1,4 +1,4 @@
-# 第六天 · 第 6 节 · 验收：18 词抽测 + 认知卡过闸
+# 第六天 · 第 6 节 · 验收：18词抽测与认知卡过闸
 
 路径：`class/bootcamp/day-06/section-06-accept-18words/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

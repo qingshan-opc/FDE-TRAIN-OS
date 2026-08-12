@@ -1,4 +1,4 @@
-# 第七天 · 第 6 节 · 验收：Skill 三问 + GATE 7
+# 第七天 · 第 6 节 · 验收：技能包三问与过闸
 
 路径：`class/bootcamp/day-08/section-06-accept/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

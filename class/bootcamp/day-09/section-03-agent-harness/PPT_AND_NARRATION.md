@@ -1,4 +1,4 @@
-# 第八天 · 第 3 节 · 概念：Agent 与 Harness 解剖
+# 第八天 · 第 3 节 · 编排骨架与决策环
 
 路径：`class/bootcamp/day-09/section-03-agent-harness/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

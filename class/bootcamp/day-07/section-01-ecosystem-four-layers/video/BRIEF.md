@@ -13,7 +13,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 
 ## Intent
 
-第 6 课第 1 节 · 生态四层地图：你在哪一层。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts（v2 口语化版，7 段）。
+第 6 课第 1 节 · 四层地图：在哪儿接上大模型。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts（v2 口语化版，7 段）。
 
 ## Assets
 

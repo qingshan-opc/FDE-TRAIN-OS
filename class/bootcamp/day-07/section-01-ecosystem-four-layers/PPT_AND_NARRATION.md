@@ -1,4 +1,4 @@
-# 第六天 · 第 1 节 · 生态四层地图：你在哪一层
+# 第六天 · 第 1 节 · 四层地图：在哪儿接上大模型
 
 路径：`class/bootcamp/day-07/section-01-ecosystem-four-layers/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

@@ -1,4 +1,4 @@
-# 第七天 · 第 5 节 · 实战：加载 · 运行 · 证据
+# 第七天 · 第 5 节 · 加载·运行·证据
 
 路径：`class/bootcamp/day-08/section-05-run-evidence/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

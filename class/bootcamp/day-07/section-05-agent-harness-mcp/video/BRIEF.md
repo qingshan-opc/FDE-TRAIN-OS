@@ -13,7 +13,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 
 ## Intent
 
-第 6 课第 5 节 · Agent / Harness / Tool / MCP / Workflow vs Agent / Copilot vs Agent。最长一节，六词一次讲清——第二周封装 Skill 前先把骨架名词对齐。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
+第 6 课第 5 节 · 智能体、骨架、工具手、统一插座。最长一节，六词一次讲清——第二周封装 Skill 前先把骨架名词对齐。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
 
 ## Assets
 

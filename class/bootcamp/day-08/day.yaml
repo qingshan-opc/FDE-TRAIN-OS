@@ -3,7 +3,7 @@ project: 做出第一个可调用的技能包
 project_brief: '换档：今天装 Skill。第4节只定稿 skills/<id>/SKILL.md（粘贴 prompts/03a）；第5节做加载·运行·runs/ 证据（粘贴 prompts/03b）。GATE 7：可加载、可调用、有业务数据、有证据。'
 resources:
 - id: dg-skill-anatomy
-  title: 讲解图 · Skill 解剖四部件
+  title: 讲解图 · 技能包解剖四件套
   kind: diagram
   summary: 输入 / 步骤 / 输出 / 验收——缺一个都转不动
   url: /course-assets/assets/diagrams/skill-anatomy.svg
@@ -13,7 +13,7 @@ resources:
   summary: 18 词随身查：Skill / MCP / Agent 等
   url: /course-assets/resources/h5/glossary.html
 - id: open-o2
-  title: 公开课 O2 · LLM 与编排深化
+  title: 公开课 O2 · 大模型与编排深化
   kind: doc
   summary: Skill 生态、MCP、各平台格式（选读）
   url: /docs/open-course/o2-llm.md

@@ -1,4 +1,4 @@
-# 第六天 · 第 3 节 · Prompt / Context / RAG / Fine-tune vs Prompt
+# 第六天 · 第 3 节 · 怎么下指令、塞材料、查资料再答
 
 路径：`class/bootcamp/day-06/section-03-prompt-context-rag/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

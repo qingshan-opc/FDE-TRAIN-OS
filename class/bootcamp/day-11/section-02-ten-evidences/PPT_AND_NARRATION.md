@@ -1,4 +1,4 @@
-# 第十天 · 第 2 节 · 端到端十条能力证据
+# 第十天 · 第 2 节 · 十条能力证据
 
 路径：`class/bootcamp/day-10/section-02-ten-evidences/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

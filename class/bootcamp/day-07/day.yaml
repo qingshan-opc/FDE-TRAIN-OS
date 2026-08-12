@@ -15,7 +15,7 @@ project_brief: '今日两件硬交付：① 助手位（或任意页面对话面
   过闸：可聊助手位/对话面板（或助教确认降级）+ 认知卡六大主题。概念快测单独过。'
 resources:
 - id: dg-llm-ecosystem
-  title: 讲解图 · LLM 生态分层
+  title: 讲解图 · 大模型生态分层
   kind: diagram
   summary: 基建→模型→编排→应用，标出 FDE 工作层
   url: /course-assets/assets/diagrams/llm-ecosystem.svg
@@ -25,27 +25,27 @@ resources:
   summary: 与驾驶舱模块对齐的生态四层
   url: /course-assets/assets/diagrams/four-layer.svg
 - id: dg-agent-loop
-  title: 讲解图 · Agent 循环
+  title: 讲解图 · 智能体循环
   kind: diagram
-  summary: 理解→规划→Tool Call→观察→继续
+  summary: 理解→规划→调工具→观察→继续
   url: /course-assets/assets/diagrams/agent-loop.svg
 - id: dg-llm-capability
-  title: 讲解图 · LLM 能力与边界
+  title: 讲解图 · 大模型能力与边界
   kind: diagram
-  summary: Token、窗口、幻觉、擅长与不擅长
+  summary: 字数账单、记忆上限、一本正经胡说、擅长与不擅长
   url: /course-assets/assets/diagrams/llm-capability.svg
 - id: dg-context-assembly
-  title: 讲解图 · Context 组装与 RAG
+  title: 讲解图 · 怎么塞材料与查资料再答
   kind: diagram
-  summary: Prompt 装填 + 检索增强管线
+  summary: 下指令装填 + 检索增强管线
   url: /course-assets/assets/diagrams/context-assembly.svg
 - id: dg-harness
-  title: 讲解图 · Harness 解剖
+  title: 讲解图 · 编排骨架解剖
   kind: diagram
   summary: 工具表、记忆、规划、重试、日志
   url: /course-assets/assets/diagrams/harness-anatomy.svg
 - id: dg-workflow-agent
-  title: 讲解图 · Workflow vs Agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 写死流程 vs 现场决策
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg
@@ -60,7 +60,7 @@ resources:
   summary: 18 词 + 自测 6 题 + 课程落点
   url: /course-assets/resources/glossary.md
 - id: tk-cognition-card
-  title: LLM 认知卡 · 搭档提示词
+  title: 大模型认知卡 · 搭档提示词
   kind: download
   summary: 先问清你的交付物，再给六大主题骨架——实例必须自己填
   url: /course-assets/resources/prompt-toolkit/Day6_Cognition_Card_Prompt.md

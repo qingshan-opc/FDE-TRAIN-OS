@@ -1,4 +1,4 @@
-# 第七天 · 第 2 节 · 概念：Skill 解剖四部件
+# 第七天 · 第 2 节 · 技能包四件套
 
 路径：`class/bootcamp/day-07/section-02-skill-anatomy/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

@@ -1,4 +1,4 @@
-# 第七天 · 第 1 节 · 概念：从系统到能力
+# 第七天 · 第 1 节 · 从系统到能力
 
 路径：`class/bootcamp/day-08/section-01-system-to-skill/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

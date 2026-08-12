@@ -8,7 +8,7 @@ resources:
   summary: 步骤定死 + 确认闸 + 每步留痕
   url: /course-assets/assets/diagrams/orchestration-confirm.svg
 - id: dg-workflow-agent
-  title: 讲解图 · workflow vs agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 编排是 workflow——步骤你定死，AI 当流水线工人
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg

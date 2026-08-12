@@ -1,4 +1,4 @@
-# 第九天 · 第 5 节 · 闸口实测 + GATE 9
+# 第九天 · 第 5 节 · 验收：确认闸实测与过闸
 
 路径：`class/bootcamp/day-09/section-05-accept/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

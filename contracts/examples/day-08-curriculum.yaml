@@ -1,18 +1,17 @@
 camp_version: v0.7
 day: 8
-title: 第一个 Skill：把你的工作方式教给 AI
+title: 做出第一个可调用的技能包
 week: 2
-project: 第一个 Skill
-project_brief: Week 2 换档日：从「做系统」到「造能力」。把一项每周重复、规则清晰、可验收的工作封装成第一个 Skill 说明书（输入/步骤/输出/验收），现场运行一次并留下可检查证据。Skill 进 Git，GATE 7
-  三问过关。
+project: 做出第一个可调用的技能包
+project_brief: 换档：今天装 Skill。第4节只定稿 skills/<id>/SKILL.md（粘贴 prompts/03a）；第5节做加载·运行·runs/ 证据（粘贴 prompts/03b）。GATE 7：可加载、可调用、有业务数据、有证据。
 review_checklist:
-- Skill 三问：它做什么（输入→输出）？步骤谁定？好坏谁判？
-- 现场运行一次 Skill，产出物过验收标准
-- Skill 说明书含验收标准（可判对错），进 Git
-- 'commit：`feat: 第一个 Skill——<你的 Skill 名>`'
+- ≥1 个合格 `SKILL.md`（name/description + 四部件）
+- 能从 API/CLI/对话触发一次真实业务数据上的运行
+- '`runs/<date>-<skill>/` 含 input/output/verdict'
+- 'commit：`feat: first executable skill`.'
 resources:
 - id: dg-skill-anatomy
-  title: 讲解图 · Skill 解剖四部件
+  title: 讲解图 · 技能包解剖四件套
   kind: diagram
   summary: 输入 / 步骤 / 输出 / 验收——缺一个都转不动
   url: /course-assets/assets/diagrams/skill-anatomy.svg
@@ -22,7 +21,7 @@ resources:
   summary: 18 词随身查：Skill / MCP / Agent 等
   url: /course-assets/resources/h5/glossary.html
 - id: open-o2
-  title: 公开课 O2 · LLM 与编排深化
+  title: 公开课 O2 · 大模型与编排深化
   kind: doc
   summary: Skill 生态、MCP、各平台格式（选读）
   url: /docs/open-course/o2-llm.md
@@ -35,13 +34,16 @@ learn:
   require_capsules: true
   capsules:
   - id: c1
-    title: 概念：从系统到能力
+    title: 从系统到能力
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-08/section-01-system-to-skill/lesson.md
-    content: 同学们好，我是你们的老师404。第七天换档——第一周做系统，第二周造能力。关键句：**系统被使用，能力被执行**。Prompt 管这次对话，Skill 管长期复用（输入/步骤/输出/验收）。三重价值：可复用、可验收、可交接。反例：低频、不稳定、高风险别碰。详见
-      `PPT_AND_NARRATION.md`。
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    content: 说清 Week1→周末→本周的链条：业务系统 → 驾驶舱 → 可聊助手位 → Skill；；一句话区分 Prompt 与 Skill；；理解 Skill 三重价值：可复用、可验收、可交接。
+    practice: '完成标志：
+
+      [ ] 三件事都有明确结论，「拆」能说出拆出哪部分
+
+      [ ] 快答三题流畅'
     resource_ids:
     - glossary
     tools:
@@ -112,9 +114,11 @@ learn:
       codex_prompt: '你是 Skill 教练。帮我把「上周重复做过的一件事」改写成：输入→步骤→输出→怎么判好坏。
 
         判断它是否值得做成 Skill（重复、可说明书化、能验收）。'
-      checklist: []
+      checklist:
+      - 三件事都有明确结论，「拆」能说出拆出哪部分
+      - 快答三题流畅
   - id: c2
-    title: 概念：Skill 解剖四部件
+    title: 技能包四件套
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-08/section-02-skill-anatomy/lesson.md
@@ -129,7 +133,11 @@ learn:
       常见缺陷记四个词：相关数据分析一下写个周报写得好——看到这些词，说明书就还没写完。步骤要多细？细到换一个人或 AI 照着做，不会做出第二种理解。写不到这个程度，先拆步骤，对吧。
 
       眼熟吗？输出加验收，就是你们第五天学的结构化输出加三条军规。第一周的每个概念，在第二周的说明书里都有自己的格子。下一节咱们用三筛法选第一个 Skill——高频、稳定、低险，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 找出 ≥4 处
+
+      [ ] 改写后的每条都过得了「换个人照做不会做出第二种理解」'
     resource_ids:
     - dg-skill-anatomy
     tools:
@@ -162,7 +170,7 @@ learn:
       - 验收的铁律是可衡量、可判对错——和 PRD 验收标准同一套逻辑。
     media:
     - kind: video
-      title: 口播课件 · 四部件
+      title: 口播课件 · 技能包四件套
       object_key: documents/shared/course-media/day07-c2-skill-anatomy.mp4
       poster_key: documents/shared/course-media/day07-c2-skill-anatomy-poster.jpg
       duration_sec: 367
@@ -198,9 +206,11 @@ learn:
       codex_prompt: '对照 Skill 四部件（输入/步骤/输出/验收）审我下面的草稿（我会粘贴）。
 
         标出模糊词（如「适当」「差不多」），改成可执行句子；缺哪部件补哪部件。'
-      checklist: []
+      checklist:
+      - 找出 ≥4 处
+      - 改写后的每条都过得了「换个人照做不会做出第二种理解」
   - id: c3
-    title: 方法：选哪项工作先封装
+    title: 三筛法选题
     minutes: 15
     form: 方法
     content_ref: class/bootcamp/day-08/section-03-pick-first/lesson.md
@@ -215,7 +225,13 @@ learn:
       动手打分：每项一到五分，加一列数据可得——输入能直接从驾驶舱或现有文件拿到的，今天就能跑通。拿不定就选周报：高频、稳定、低险，数据就在你驾驶舱里。日报也行，结构一样，对吧。
 
       收个尾：今天只做一个 Skill，做透。可以选两个候选打分，但定品只定一个。下一节开写——四部件齐全，验收可判。咱们把第一个 Skill 写进 skills/ 目录，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 打分表无空格
+
+      [ ] 胜出理由与落选原因都引用三筛
+
+      [ ] 「低险」一栏经得住同桌追问（「做错了会怎样？」）'
     resource_ids:
     - dg-skill-anatomy
     tools:
@@ -274,9 +290,12 @@ learn:
       plain: 「看情况」太多的工作，AI 执行就是开盲盒。
     local_prep:
       codex_prompt: 候选 3 个可 Skill 化任务（来自我的周报助手）。用「重复频率 / 说明书化难度 / 验收清晰度」打分，选出今天要做的第 1 个，并写一句为什么不选另外两个。
-      checklist: []
+      checklist:
+      - 打分表无空格
+      - 胜出理由与落选原因都引用三筛
+      - 「低险」一栏经得住同桌追问（「做错了会怎样？」）
   - id: c4
-    title: 实战：定义 Skill
+    title: 写好技能说明书
     minutes: 30
     form: 实战
     content_ref: class/bootcamp/day-08/section-04-define-skill/lesson.md
@@ -291,7 +310,13 @@ learn:
       写完做换人测试：同桌只看你的说明书，说出要做什么、怎么判好坏。他说错了，就是你写岔了——改说明书，不怪他。步骤里能写分支吗？能，但每个分支都要落到动作动词；分支超过三层，说明该拆成两个 Skill，嘛。
 
       定稿进 Git，预演下一节运行。带走两个库：动作动词写步骤，判据句式写验收，换人测试消歧义。下一节 AI 拿着你的说明书上岗——派活、收货、按标准验收、留证据，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] frontmatter + 四部件齐全
+
+      [ ] 输入绑定真实业务数据源
+
+      [ ] 换人三问能答对'
     resource_ids:
     - dg-skill-anatomy
     tools:
@@ -318,7 +343,7 @@ learn:
       - 可复用、可交接——必须版本化进仓库。
     media:
     - kind: video
-      title: 口播课件 · skills/<name>.md
+      title: 口播课件 · 写好技能说明书
       object_key: documents/shared/course-media/day07-c4-define-skill.mp4
       poster_key: documents/shared/course-media/day07-c4-define-skill-poster.jpg
       duration_sec: 115
@@ -336,16 +361,18 @@ learn:
       term: 工具表
       plain: Agent 能调用的 Skill 清单——描述写得越清，选型越准。
     local_prep:
-      codex_prompt: '你现在是 Skill 说明书写作搭档。目标文件：skills/〈名称〉.md。
-
-        倒序协助我写：输出 → 验收(≥3 可判) → 输入(来源具体) → 步骤(动词、换人无歧义)。
-
-        每写完一段先自检，再写下一段。禁止出现「适当/合理/等等」类模糊词。
-
-        写完后生成「换人三问」答案键，方便同桌测验。'
-      checklist: []
+      codex_prompt: "# 提示词 03a · 定义 SKILL.md（D7 · 第 4 节）\n\n> 整份粘贴。本节 **只定稿说明书**，先不要写扫描器 / 运行器。\n\n---\n\n请在本仓库 **只创建 1 个真实业务\
+        \ Skill 的说明书**（用你现有业务数据，禁止空洞 demo）。\n\n## 交付\n\n创建目录与文件：\n\n```text\nskills/<id>/SKILL.md\n```\n\n`SKILL.md` 必须包含：\n\
+        \n1. YAML frontmatter：`name`、`description`（description 要写清「何时用 / 何时不用」）\n2. 正文四部件：\n   - **输入**：字段、来源（具体 API 路径或文件）、范围\n\
+        \   - **步骤**：可照做的动词序列（禁止「适当分析」等模糊词）\n   - **输出**：产物格式与存放路径\n   - **验收**：≥3 条可判对错的标准\n\n## 硬约束\n\n- 输入必须绑到学员自己的业务数据（本机\
+        \ API 或导出 JSON），不要假数据故事。\n- 本节 **不要** 实现扫描器、tool、HTTP API；下一节再做加载与 run。\n- 定稿后列出：Skill 名称、输入从哪来、验收三条原文。\n\n## 验收\n\
+        \n- `skills/<id>/SKILL.md` 存在且四部件齐全\n- 换一个人只看说明书，能说出输入从哪拿、怎么判对错\n\n先列计划（文件级），等我回复「确认」后再写文件。"
+      checklist:
+      - frontmatter + 四部件齐全
+      - 输入绑定真实业务数据源
+      - 换人三问能答对
   - id: c5
-    title: 实战：运行与证据
+    title: 加载·运行·证据
     minutes: 25
     form: 实战
     content_ref: class/bootcamp/day-08/section-05-run-evidence/lesson.md
@@ -360,7 +387,13 @@ learn:
       AI 没按步骤做、直接跳到生成？在说明书开头加严格按步骤顺序执行，每步完成后简述结果。每次跑结果不一样？正常，模型有概率性；验收标准管的是底线——结构、数字、意图，波动在标准内即可。今天目标：连续两次验收全过，对吧。
 
       证据归档，迭代日志写清楚改了什么、重跑了几次。下一节是第七天验收——Skill 三问口试，导师看证据链。带走一句：Skill 的信任是攒出来的，证据三件套就是你的本金，嘛。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] Skill 可被列出（Available skills）
+
+      [ ] 至少成功 run 1 次且 verdict 通过或诚实记录失败原因
+
+      [ ] 证据进 Git'
     resource_ids:
     - dg-skill-anatomy
     tools:
@@ -405,12 +438,18 @@ learn:
       term: runs/
       plain: 存放 Skill 运行记录与产物的目录——可复查、可回放。
     local_prep:
-      codex_prompt: '你是评测员。按 skills/〈名称〉.md 的验收段，对我粘贴的 output.md 逐条判 ✓/✗ 并指出证据句。
-
-        不通过则只允许改说明书或重跑，不要手改产出凑数。
-
-        输出 verdict.md 表格，并建议下一轮说明书应改的那一句。'
-      checklist: []
+      codex_prompt: "# 提示词 03b · Skill 加载 · 运行 · 证据（D7 · 第 5 节）\n\n> 整份粘贴。前置：上一节已定稿 `skills/<id>/SKILL.md`。  \n> 本节 **不要重写说明书**；专注扫描器、调用与\
+        \ runs/ 证据。\n\n---\n\n请在本仓库实现 **Skill 加载与运行最小内核**（Python / Node 与现有后端一致即可）。\n\n## 前置检查\n\n先确认已有 ≥1 个合格 `skills/<id>/SKILL.md`。若缺失，先停下来告诉我，不要擅自重写一整份说明书。\n\
+        \n## 要求\n\n1. **扫描器**：启动时或首次调用时加载全部 `skills/*/SKILL.md`，产出「Available skills」列表（可注入 system，或提供列表 API）。\n2. **调用入口**（二选一或都做）：\n\
+        \   - 工具 / 函数 `skill(name, input)`\n   - HTTP：`POST /api/agent/skill/run`（body：`name` + `input`）\n3. **执行**：读取对应 `SKILL.md`，按说明书对真实业务输入跑通一次（可让\
+        \ LLM 按说明书产出，或跑可选脚本）。\n4. **证据目录**（必须真实写入）：\n\n```text\nruns/<YYYYMMDD>-<skill>/\n  input.md\n  output.md\n  verdict.md\n\
+        ```\n\n`verdict.md` 对照验收标准逐条 ✓/✗；失败也要诚实记录原因。\n\n5. `docs/` 或 README 加一小节：如何新增第二个 Skill（复制目录 → 改 frontmatter → 重启扫描）。\n\
+        \n## 验收\n\n- 能列出 Available skills（含上一节那个）\n- 至少成功 run 1 次，`runs/` 三件套齐全\n- 对话或 CLI 能触发「请运行某某 Skill」（可先做显式命令，不必完整 Agent\
+        \ Loop）\n\n先列计划，等「确认」再改代码。若上一节提示词会话还在，也可回复「继续完成加载与 run」，但改动范围仍以本节为准。"
+      checklist:
+      - Skill 可被列出（Available skills）
+      - 至少成功 run 1 次且 verdict 通过或诚实记录失败原因
+      - 证据进 Git
 quiz:
   pass_rate: 0.67
   questions:
@@ -503,88 +542,7 @@ nodes:
   title: 今日课节（5 节 · 100′）
 - type: quiz
   title: Day8 概念验收
-- type: lab
-  title: 第一个 Skill：跑出可检查的证据
 - type: project
   title: 企业任务：Skill 说明书 + 运行证据
 - type: review
   title: 交付自检与 GATE 7
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - skills/skill-01.md
-  - runs/
-  inherited_files:
-  - PROJECT_BRIEF.md
-  - PRD.md
-  - design-spec.md
-  - ui-flow.md
-  - ui-prototype.html
-  - day1-handoff-log.md
-  - frontend/index.html
-  - frontend/styles.css
-  - frontend/app.js
-  - frontend-acceptance.md
-  - frontend-api-needs.md
-  - day2-handoff-log.md
-  - API_Spec.md
-  - DB_Schema.md
-  - backend/server.py
-  - RUNBOOK.md
-  - backend-acceptance.md
-  - backend-handoff.md
-  - day3-handoff-log.md
-  - test-plan.md
-  - test-run.md
-  - defect-log.md
-  - test-report.md
-  - release-candidate.md
-  - deployment-plan.md
-  - DEPLOYMENT.md
-  - day4-release-log.md
-  - final-acceptance.md
-  - day5-replay/iteration-prd.md
-  - day5-replay/pm-handoff.md
-  - day5-replay/iteration-ui-spec.md
-  - day5-replay/ui-handoff.md
-  - day5-replay/frontend-acceptance.md
-  - day5-replay/frontend-handoff.md
-  - day5-replay/iteration-api-spec.md
-  - day5-replay/iteration-db-change.md
-  - day5-replay/backend-acceptance.md
-  - day5-replay/backend-handoff.md
-  - day5-replay/iteration-test-plan.md
-  - day5-replay/iteration-test-report.md
-  - day5-replay/iteration-deployment-plan.md
-  - day5-replay/iteration-release-log.md
-  - day5-replay/iteration-final-acceptance.md
-  - day5-replay/process-retrospective.md
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: '你是 Skill 架构师。背景：FDE 训练营 Day 7，学员选定了一项高频、规则清晰、可验收的部门工作。
-
-      任务：在工作区生成 skills/skill-01.md——第一个 Skill 说明书，含四部件（输入：字段与来源 / 步骤：可执行的操作序列 / 输出：产物格式与存放路径 / 验收：如何判对错）+ 工具描述（一句话干什么、何时用、何时不用）；然后用该
-      Skill 真实执行一次，产物与运行记录写入 runs/ 目录。
-
-      要求：步骤必须具体到可照做；输出路径写死；证据必须第三方可查（文件/日志，不是口头）。'
-  rubric:
-  - check: file_exists
-    args:
-      path: skills/skill-01.md
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输入
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 输出
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 何时用

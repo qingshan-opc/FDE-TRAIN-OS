@@ -1,4 +1,4 @@
-# 第六天 · 第 5 节 · Agent / Harness / Tool / MCP / Workflow vs Agent
+# 第六天 · 第 5 节 · 智能体、骨架、工具手、统一插座
 
 路径：`class/bootcamp/day-06/section-05-agent-harness-mcp/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

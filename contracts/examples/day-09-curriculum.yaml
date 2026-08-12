@@ -1,16 +1,16 @@
 camp_version: v0.7
 day: 9
-title: Skill 工程化 + 遇见 Agent
+title: 让技能包更稳，并跑通智能体循环
 week: 2
-project: Skill 工程化 + 遇见 Agent
-project_brief: Skill 从「能跑」到「可依赖」：边界声明 + 异常四分类 + 异常注入测试（≥3 种坏输入按声明失败）。掀开引擎盖理解 Harness 四要素与决策环，让 Agent 在自然语言任务下正确调用你的 Skill。GATE
-  8 闭环演示 + 口答「什么时候会选错」。
+project: 让技能包更稳，并跑通智能体循环
+project_brief: Skill v1 边界+注入测试；必须落地 agent/loop.py（tool_calls 闭环，max_turns=20）。粘贴 teaching/week2-cockpit-agent/prompts/04-agent-loop.md。GATE
+  8：loop 日志 + 选错口答。
 review_checklist:
-- Skill v1 含边界声明（不接受的输入 + 失败时的行为）
-- 异常注入 ≥3 种坏输入，Skill 均「按声明的方式失败」（不胡编、不硬撑）
-- Agent 闭环演示：自然语言下任务 → Agent 选对并调用你的 Skill → 产出过验收
-- 口答：Harness 四要素、决策环、workflow vs agent 的区别、你的 Agent「什么时候会选错」
-- 'commit：`feat: Skill v1 工程化 + Agent v0.1`'
+- Skill v1 边界 + ≥3 注入失败符合声明
+- '`agent/loop.py`（或等价）可演示 tool_calls 闭环'
+- '`runs/` 有多 turn 工具日志'
+- 口答：什么时候会选错 Skill
+- 'commit：`feat: agent loop + skill v1`.'
 resources:
 - id: dg-exception
   title: 讲解图 · 异常四分类
@@ -18,17 +18,17 @@ resources:
   summary: 输入错 / 环境错 / 能力限 / 目标歧——处置各不相同
   url: /course-assets/assets/diagrams/exception-taxonomy.svg
 - id: dg-harness
-  title: 讲解图 · Harness 解剖
+  title: 讲解图 · 编排骨架解剖
   kind: diagram
   summary: 模型 + 工具表 + 记忆 + 循环
   url: /course-assets/assets/diagrams/harness-anatomy.svg
 - id: dg-agent-loop
-  title: 讲解图 · Agent 决策环
+  title: 讲解图 · 智能体决策环
   kind: diagram
   summary: 理解 → 规划 → 调工具 → 观察 → 继续
   url: /course-assets/assets/diagrams/agent-loop.svg
 - id: dg-workflow-agent
-  title: 讲解图 · workflow vs agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 步骤定死 vs 模型现场决策——能写死就写死
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg
@@ -46,7 +46,7 @@ learn:
   require_capsules: true
   capsules:
   - id: c1
-    title: 概念：边界与异常——从能跑到可依赖
+    title: 边界与异常
     minutes: 15
     form: 概念
     content_ref: class/bootcamp/day-09/section-01-boundary-exceptions/lesson.md
@@ -61,7 +61,11 @@ learn:
       边界声明加在说明书里：不接受什么输入；输入不足时停止执行、列出所缺字段；超范围请求声明边界、询问后再继续；指令歧义时列出不超过三种理解、请求确认。让 Skill 拒绝执行，不是显得弱——会拒绝的才可依赖，瞎编的周报比没有周报危害大十倍，嘛。
 
       收个尾：边界声明是 Skill 从能跑到可依赖的门票。下一节上刑场——故意喂坏输入，看你的 Skill 怎么死。死法符合声明，才算过关，咱们下午再挂 Agent，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 六题对 ≥5
+
+      [ ] 每题的「怎么表现」都落在「停下来、说清楚、等人来」框架内'
     resource_ids:
     - dg-exception
     tools:
@@ -126,10 +130,12 @@ learn:
       codex_prompt: '异常四分类教练。场景：〈我描述坏输入〉。
 
         判断属于输入错/环境错/能力限/目标歧，并写出 Skill 应如何「按声明失败」（拒绝/重试/列选项），禁止硬撑编造。'
-      checklist: []
+      checklist:
+      - 六题对 ≥5
+      - 每题的「怎么表现」都落在「停下来、说清楚、等人来」框架内
   - id: c2
-    title: 实战：Skill v1 + 异常注入测试
-    minutes: 40
+    title: 技能包加固 + 故意搞破坏测试
+    minutes: 35
     form: 实战
     content_ref: class/bootcamp/day-09/section-02-harden-skill/lesson.md
     content: '同学们，这节上刑场。注入测试是软件工程的老手艺：故意喂坏的，看它怎么死。你的 Skill 昨天在乖数据上过关，今天要在坏数据上证明——死法符合声明，才算可依赖，对吧。
@@ -143,7 +149,13 @@ learn:
       最后一步别省：乖数据回归。边界加完，好输入也得照常过——别把 Skill 修成什么都拒的废人。今天标准：注入测试至少三条、覆盖至少两类，全部 ✓，再加乖数据回归仍过，才算 Skill v1 达标，嘛。
 
       证据归档，commit 准备。带走一句：注入测试比十次正确运行都值钱——它告诉你 Skill 在坏输入下会不会失控。下午咱们掀引擎盖，看 Agent 和 Harness 怎么调用你的 Skill，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] ≥3 条注入全 ✓（修复后 ✓ 也算，记录修复内容）
+
+      [ ] 乖数据回归全过
+
+      [ ] 证据进 Git'
     resource_ids:
     - dg-exception
     tools:
@@ -182,7 +194,7 @@ learn:
       - 四分类要对上用例——测的是设计，不是碰运气。
     media:
     - kind: video
-      title: 口播课件 · Skill v1
+      title: 口播课件 · 技能包加固
       object_key: documents/shared/course-media/day08-c2-exception-test.mp4
       poster_key: documents/shared/course-media/day08-c2-exception-test-poster.jpg
       duration_sec: 112
@@ -209,9 +221,12 @@ learn:
         再设计 ≥3 条异常注入用例表：坏输入 | 预期行为 | 我怎么测。
 
         改完后自检：乖数据回归仍应通过。'
-      checklist: []
+      checklist:
+      - ≥3 条注入全 ✓（修复后 ✓ 也算，记录修复内容）
+      - 乖数据回归全过
+      - 证据进 Git
   - id: c3
-    title: 概念：Agent 与 Harness 解剖
+    title: 编排骨架与决策环
     minutes: 20
     form: 概念
     content_ref: class/bootcamp/day-09/section-03-agent-harness/lesson.md
@@ -229,7 +244,11 @@ learn:
       PRD适合 agent，嘛。
 
       收个尾：Agent 决策，Harness 骨架，Skill 是工具。下一节把你的 Skill 挂上 Agent 的工具表——从今天起，你派活用自然语言，挑工具的活 Agent 自己干，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] 追踪表填完，能指出哪一环昨天是你人肉做的
+
+      [ ] 四题选择合理（1/3 是 workflow，2/4 是 agent），理由落在「可预测 vs 路径多样」'
     resource_ids:
     - dg-harness
     - dg-agent-loop
@@ -264,7 +283,7 @@ learn:
       - Day 7 的 Skill 从今天起成为 Agent 工具表上的工具。
     media:
     - kind: video
-      title: 口播课件 · Harness 四要素
+      title: 口播课件 · 编排骨架四要素
       object_key: documents/shared/course-media/day08-c3-harness.mp4
       poster_key: documents/shared/course-media/day08-c3-harness-poster.jpg
       duration_sec: 126
@@ -296,10 +315,12 @@ learn:
       codex_prompt: '用 Harness 四要素（模型/工具表/记忆/循环）和决策环（理解→规划→调工具→观察→继续）重述我昨天跑 Skill 的过程。
 
         标出哪一步是人肉、哪一步交给 Agent 后风险最大。'
-      checklist: []
+      checklist:
+      - 追踪表填完，能指出哪一环昨天是你人肉做的
+      - 四题选择合理（1/3 是 workflow，2/4 是 agent），理由落在「可预测 vs 路径多样」
   - id: c4
-    title: 实战：让 Agent 调用你的 Skill
-    minutes: 30
+    title: 实现「想→做→看→再想」循环
+    minutes: 35
     form: 实战
     content_ref: class/bootcamp/day-09/section-04-agent-calls-skill/lesson.md
     content: '同学们，这节把你的 Skill 挂上 Agent 的工具表。Agent 选工具的时候读什么？不是说明书全文——是货架标签，叫工具描述。名称、何时用、输入要求，三要素写清楚，对吧。
@@ -313,7 +334,13 @@ learn:
       描述写多长？两到四句；长了稀释关键信息，短了护栏不够。平台没有工具表功能？降级玩法：Prompt 里手动提供工具清单加描述，让模型先输出选择再执行。Agent 调用时输入谁准备？今天你在任务里给数据，第九天编排会把拉数据串起来，嘛。
 
       收个尾：从今天起你派活用自然语言，挑工具的活 Agent 自己干。选错图谱和 agent-tool-map.md 一起进 Git。下一节第八天验收——Agent v0.1 闭环演示，对吧。'
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: '完成标志：
+
+      [ ] loop 可演示 ≥2 turn 工具调用
+
+      [ ] 超限可停止
+
+      [ ] 选错图谱记入 `docs/agent-tool-map.md`'
     resource_ids:
     - dg-agent-loop
     - dg-harness
@@ -353,7 +380,7 @@ learn:
       - 信任对象变了：从「建议」变成「代执行」，必须可回放。
     media:
     - kind: video
-      title: 口播课件 · Agent 调用 Skill
+      title: 口播课件 · 智能体调用技能包
       object_key: documents/shared/course-media/day08-c4-agent-loop.mp4
       poster_key: documents/shared/course-media/day08-c4-agent-loop-poster.jpg
       duration_sec: 118
@@ -371,16 +398,19 @@ learn:
       term: Copilot vs Agent
       plain: Copilot 递扳手；Agent 定目的地它开——信任与验收方式完全不同。
     local_prep:
-      codex_prompt: '你是 Agent 工具接入教练。请根据我的 skills/〈名称〉.md 写出工具描述三要素：何时用 / 不用于 / 输入要求。
-
-        然后设计三任务实测脚本：
-
-        A 应调用该 Skill；B 不应调用；C 模糊指令易选错。
-
-        要求我把结果记入 docs/agent-tool-map.md（选错原因与描述修改句）。
-
-        若在 Cursor/Agent Lab：指导我如何挂工具表并逐条跑，不要跳过复测。'
-      checklist: []
+      codex_prompt: "# 提示词 04 · Agent Loop（D8）\n\n> 整份粘贴。前置：Skill 可加载；今日实现 **tool_calls 闭环**。\n\n---\n\n在本仓库实现 `agent/loop.py`（语言可与项目一致）。这就是你自己的\
+        \ Agent 循环，不依赖外部产品源码。\n\n## Loop 伪代码（必须等价实现）\n\n```\nmessages = [system, ...history, user]\nfor turn in 1..max_turns:\
+        \   # 默认 20\n  resp = llm(messages, tools=[file_read, skill, ...])\n  append assistant message\n  if no tool_calls:\
+        \ return final text\n  for each tool_call:\n    result = dispatch(tool_call)\n    append tool result message\n   \
+        \ append line to runs/.../log.jsonl\nreturn \"max_turns exceeded\" if loop ends\n```\n\n## 工具最小集\n\n1. `file_read`\
+        \ — 仅允许项目目录内路径  \n2. `skill` — 调用已有 Skill  \n3.（可选）`http_get` — 只读访问本机业务 API\n\n禁止无限制 `bash` 删库级命令；若提供 bash，必须 cwd\
+        \ 沙箱 + 超时。\n\n## System prompt\n\n写入 `agent/prompts/agent_loop.md`：说明何时调用工具、如何结束、不要编造工具结果。\n\n## API\n\n`POST /api/agent/turn`\
+        \ 或扩展现有 chat：支持 tools。驾驶舱可仍用旧聊天；CLI/`curl` 能演示 loop 即可（UI 接线在 D10）。\n\n## 验收\n\n- 用户说「根据最新列表生成周报」时，模型会调 `skill` 或\
+        \ `file_read`，而不是空口编数据  \n- `log.jsonl` 可见多 turn  \n- `max_turns` 可配置并在超限时停止  \n\n先计划后编码。"
+      checklist:
+      - loop 可演示 ≥2 turn 工具调用
+      - 超限可停止
+      - 选错图谱记入 `docs/agent-tool-map.md`
 quiz:
   pass_rate: 0.67
   questions:
@@ -501,90 +531,7 @@ nodes:
   title: 今日课节（4 节 · 105′）
 - type: quiz
   title: Day9 概念验收
-- type: lab
-  title: 异常注入 + Agent 选得对不对
 - type: project
   title: 企业任务：Skill v1 + Agent v0.1 闭环
 - type: review
   title: 交付自检与 GATE 8
-lab:
-  runner: agent
-  workspace_mode: cumulative
-  primary_files:
-  - skills/skill-01.md
-  - agent-run-log.md
-  inherited_files:
-  - PROJECT_BRIEF.md
-  - PRD.md
-  - design-spec.md
-  - ui-flow.md
-  - ui-prototype.html
-  - day1-handoff-log.md
-  - frontend/index.html
-  - frontend/styles.css
-  - frontend/app.js
-  - frontend-acceptance.md
-  - frontend-api-needs.md
-  - day2-handoff-log.md
-  - API_Spec.md
-  - DB_Schema.md
-  - backend/server.py
-  - RUNBOOK.md
-  - backend-acceptance.md
-  - backend-handoff.md
-  - day3-handoff-log.md
-  - test-plan.md
-  - test-run.md
-  - defect-log.md
-  - test-report.md
-  - release-candidate.md
-  - deployment-plan.md
-  - DEPLOYMENT.md
-  - day4-release-log.md
-  - final-acceptance.md
-  - day5-replay/iteration-prd.md
-  - day5-replay/pm-handoff.md
-  - day5-replay/iteration-ui-spec.md
-  - day5-replay/ui-handoff.md
-  - day5-replay/frontend-acceptance.md
-  - day5-replay/frontend-handoff.md
-  - day5-replay/iteration-api-spec.md
-  - day5-replay/iteration-db-change.md
-  - day5-replay/backend-acceptance.md
-  - day5-replay/backend-handoff.md
-  - day5-replay/iteration-test-plan.md
-  - day5-replay/iteration-test-report.md
-  - day5-replay/iteration-deployment-plan.md
-  - day5-replay/iteration-release-log.md
-  - day5-replay/iteration-final-acceptance.md
-  - day5-replay/process-retrospective.md
-  - skills/skill-01.md
-  - runs/
-  coach:
-    help_mode: debug
-    skill_id: fde-coach
-    max_help_level: 3
-  adapter_version: '1.0'
-  agent:
-    prompt_template: '你是可靠性工程师。背景：FDE 训练营 Day 8，第一个 Skill（skills/skill-01.md）已能跑。
-
-      任务：1. 升级 Skill 到 v1——补边界声明（不做什么/异常分类与处置/何时求助人类）；2. 设计 ≥3 条异常注入用例（空数据/错格式/越界请求），逐条执行并把结果记入 agent-run-log.md；3. 用自然语言给
-      Agent 派一个匹配任务和一个故意不匹配的任务，记录它的工具选择，分析「它什么时候会选错」写进日志。
-
-      要求：坏输入必须按声明的方式失败——任何「硬扛乱做」都要回炉改边界。'
-  rubric:
-  - check: text_contains
-    args:
-      path: skills/skill-01.md
-      needle: 边界
-  - check: file_exists
-    args:
-      path: agent-run-log.md
-  - check: text_contains
-    args:
-      path: agent-run-log.md
-      needle: 注入
-  - check: text_contains
-    args:
-      path: agent-run-log.md
-      needle: 选错

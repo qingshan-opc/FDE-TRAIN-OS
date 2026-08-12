@@ -1,4 +1,4 @@
-# 第八天 · 第 1 节 · 概念：边界与异常——从能跑到可依赖
+# 第八天 · 第 1 节 · 边界与异常
 
 路径：`class/bootcamp/day-09/section-01-boundary-exceptions/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

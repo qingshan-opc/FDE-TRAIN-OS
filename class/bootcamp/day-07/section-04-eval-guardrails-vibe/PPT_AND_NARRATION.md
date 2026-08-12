@@ -1,4 +1,4 @@
-# 第六天 · 第 4 节 · Eval / Guardrails / Vibe Coding
+# 第六天 · 第 4 节 · 出考卷、加护栏、边聊边写代码
 
 路径：`class/bootcamp/day-06/section-04-eval-guardrails-vibe/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

@@ -13,7 +13,7 @@ angle: "课表同款编辑风 · 全屏动态 PPT + 右下角数字人口播"
 
 ## Intent
 
-第 6 课第 4 节 · Eval / Guardrails / Vibe Coding。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
+第 6 课第 4 节 · 出考卷、加护栏、边聊边写代码。视觉语言对齐 `class/schedule/`（浅底 `#f2f5f0`、电蓝 `#1400ff`）。口播跟 narration scripts。
 
 ## Assets
 

@@ -8,17 +8,17 @@ resources:
   summary: 输入错 / 环境错 / 能力限 / 目标歧——处置各不相同
   url: /course-assets/assets/diagrams/exception-taxonomy.svg
 - id: dg-harness
-  title: 讲解图 · Harness 解剖
+  title: 讲解图 · 编排骨架解剖
   kind: diagram
   summary: 模型 + 工具表 + 记忆 + 循环
   url: /course-assets/assets/diagrams/harness-anatomy.svg
 - id: dg-agent-loop
-  title: 讲解图 · Agent 决策环
+  title: 讲解图 · 智能体决策环
   kind: diagram
   summary: 理解 → 规划 → 调工具 → 观察 → 继续
   url: /course-assets/assets/diagrams/agent-loop.svg
 - id: dg-workflow-agent
-  title: 讲解图 · workflow vs agent
+  title: 讲解图 · 写死流程 vs 智能体
   kind: diagram
   summary: 步骤定死 vs 模型现场决策——能写死就写死
   url: /course-assets/assets/diagrams/workflow-vs-agent.svg

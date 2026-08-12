@@ -1,4 +1,4 @@
-# 第六天 · 第 2 节 · Token / 窗口 / 幻觉：能力与边界
+# 第六天 · 第 2 节 · 字数账单、记忆上限、一本正经胡说
 
 路径：`class/bootcamp/day-06/section-02-token-window-hallucination/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

@@ -1,4 +1,4 @@
-# 第八天 · 第 4 节 · 实战：实现 Agent Loop
+# 第八天 · 第 4 节 · 实现「想→做→看→再想」循环
 
 路径：`class/bootcamp/day-09/section-04-agent-calls-skill/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

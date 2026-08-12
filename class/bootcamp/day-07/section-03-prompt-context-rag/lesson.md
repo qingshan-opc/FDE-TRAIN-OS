@@ -1,4 +1,4 @@
-# 第 3 节 · Prompt / Context / RAG / Fine-tune vs Prompt（20′ · 概念）
+# 第 3 节 · 怎么下指令、塞材料、查资料再答（15′ · 概念）
 
 > 一句话节引言：Prompt 是说明书，Context 是装填术，RAG 是外挂记忆——Fine-tune 是最后才动的那把刀。
 

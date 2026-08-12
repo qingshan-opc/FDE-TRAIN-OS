@@ -1,4 +1,4 @@
-# 第七天 · 第 3 节 · 方法：选哪项工作先封装
+# 第七天 · 第 3 节 · 三筛法选题
 
 路径：`class/bootcamp/day-07/section-03-pick-first/video/`  
 PPT：`video/index.html`（**仅讲解图 + 概念要点，无口播正文**）  

@@ -51,7 +51,7 @@ export function PartnerPosters() {
   const [enrollUrl, setEnrollUrl] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
   const [preview, setPreview] = useState<Offering | null>(null);
-  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("ink");
+  const [posterStyle, setPosterStyle] = useState<PosterStyleId>("hero");
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [composing, setComposing] = useState(false);
   const [mobileUi, setMobileUi] = useState(false);
@@ -109,7 +109,7 @@ export function PartnerPosters() {
           title: item.course_title || item.title || SHOP_HERO.title,
           priceLabel: `¥${yuan(item.price_fen)}`,
           issuerLabel: orgName ? `推荐机构 · ${orgName}` : "青山在 · 机构渠道",
-          slogan: POSTER_DEFAULT_SLOGAN,
+          slogan: "工程能力让系统跑起来，组织推动让项目真正落地",
           qrCanvas: getQrCanvas(),
           scanHint: "微信扫码登录并选购",
         });
@@ -164,7 +164,7 @@ export function PartnerPosters() {
         课程海报
       </Typography.Title>
       <Typography.Paragraph type="secondary">
-        学员微信扫码自动登录并进入选购；支付计入本机构。默认青绿编辑风，与官网同母题。
+        学员微信扫码自动登录并进入选购；支付计入本机构。默认深蓝金主视觉，对齐 FDE Academy 营销页。
       </Typography.Paragraph>
 
       {!hasInvite ? (
@@ -202,7 +202,7 @@ export function PartnerPosters() {
                     type="link"
                     disabled={!hasInvite}
                     onClick={() => {
-                      setPosterStyle("ink");
+                      setPosterStyle("hero");
                       setPreview(item);
                     }}
                   >

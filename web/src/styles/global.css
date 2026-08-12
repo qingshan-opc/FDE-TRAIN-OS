@@ -7470,13 +7470,21 @@ label {
 }
 
 /* ---- Course shop landing (手机优先卖课页) ---- */
-.shop-landing-shell {
-  padding-bottom: 0;
+.shop-landing-shell.course-picker-shell {
+  /* keep fixed viewport shell; scroll lives in .shop-landing */
 }
 .shop-landing {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
   max-width: 720px;
   margin: 0 auto;
   padding: 0 16px 24px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 .shop-offering-tabs {
   display: flex;

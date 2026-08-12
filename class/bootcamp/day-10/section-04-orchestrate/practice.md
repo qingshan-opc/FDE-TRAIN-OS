@@ -9,7 +9,9 @@
 3. **approve** 与 **reject** 各留一次 `runs/` 证据；
 4. 工具表 ≥2 个 Skill。
 
-## 一键粘贴提示词
+## 一键粘贴提示词（编码任务）
+> 整份粘贴给 **编码 AI / TRAE** 改仓库。尖括号 `〈〉` 换成你的路径或名称。
+
 
 [`class/teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md`](../../../teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md)
 

@@ -75,10 +75,12 @@ export interface CapsulePracticeSpec {
   required?: boolean;
 }
 
-/** Local Codex prep block — copy prompt + checklist before Agent Lab work. */
+/** Local Codex prep block — copy prompt + checklist before hands-on work. */
 export interface CapsuleLocalPrep {
   skill_id?: string;
   codex_prompt?: string;
+  /** coding = TRAE/仓库任务；coach = 学习教练（出题/审稿），勿当编码任务 */
+  prompt_kind?: "coding" | "coach";
   checklist?: string[];
   template_resource_id?: string;
   suggested_questions?: string[];

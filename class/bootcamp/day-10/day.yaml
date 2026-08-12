@@ -129,8 +129,9 @@ capsule_extra:
     media:
     - kind: video
       title: 口播课件 · 确认闸三问
-      object_key: documents/shared/course-media/day09-c2-multi-skill.mp4
-      poster_key: documents/shared/course-media/day09-c2-multi-skill-poster.jpg
+      # 现章节顺序命名：c2=确认闸（勿沿用旧 multi-skill 错绑）
+      object_key: documents/shared/course-media/day09-c2-human-confirm.mp4
+      poster_key: documents/shared/course-media/day09-c2-human-confirm-poster.jpg
       duration_sec: 91
   c3:
     resource_ids:
@@ -179,8 +180,9 @@ capsule_extra:
     media:
     - kind: video
       title: 口播课件 · 工具表 3 件
-      object_key: documents/shared/course-media/day09-c3-human-confirm.mp4
-      poster_key: documents/shared/course-media/day09-c3-human-confirm-poster.jpg
+      # 现章节顺序命名：c3=再封装技能（勿沿用旧 human-confirm 错绑）
+      object_key: documents/shared/course-media/day09-c3-multi-skill.mp4
+      poster_key: documents/shared/course-media/day09-c3-multi-skill-poster.jpg
       duration_sec: 79
   c4:
     resource_ids:

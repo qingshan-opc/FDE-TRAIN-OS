@@ -47,5 +47,5 @@
 <line x1="662" y1="250" x2="704" y2="250" stroke="#231f20" stroke-width="1.8" marker-end="url(#sk-arrow)"/>
 <!-- 底注 -->
 <text x="520" y="412" text-anchor="middle" font-size="13" font-weight="800" fill="#231f20">Skill = 会写字的岗位说明书：写得越清楚，Agent 越选得对、跑得越稳</text>
-<text x="520" y="438" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">它就是 MCP 的朴素版 —— 先学会封装，标准以后随换随接</text>
+<text x="520" y="438" text-anchor="middle" font-size="11.5" fill="rgba(35,31,32,.55)">Skill = 说明书+工具 · MCP = 统一插座 —— 互补，不是简化版</text>
 </svg>

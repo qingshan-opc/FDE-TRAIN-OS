@@ -37,7 +37,7 @@
 模型之外的循环：**工具表 · 记忆 · 规划器 · 重试 · 日志 · 权限**
 
 - 同一 GPT-4，TRAE vs 简陋脚本 = 不同 Harness；
-- Week 2 封装 Skill = 给 Agent 加可靠 Harness。
+- Week 2 封装 Skill = 给 Agent 工具表上加一件可调用的说明书+工具；Harness 是骨架（模型+工具表+记忆+循环），不是 Skill 本身。
 
 ### Tool Calling · 工具调用
 
@@ -53,7 +53,7 @@
 
 - AI 接工具/数据源的 **USB-C 标准**；
 - 写一个 MCP Server，TRAE 都能用；
-- **Skill ≈ 朴素版 MCP**：SKILL.md + 工具描述 + 执行约定。
+- **Skill 与 MCP 互补，不是简化版**：Skill = 说明书+工具；MCP = 统一插座协议。
 
 ### Workflow vs Agent
 

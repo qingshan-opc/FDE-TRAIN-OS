@@ -16,7 +16,7 @@
 API 网关与云托管：一个 key 调一片模型，鉴权/限流/计费都在这层。本地推理：Ollama（个人电脑跑开源模型）、vLLM（生产级推理服务）。**Day 5 你的驾驶舱就是从这一层「接电」的。**
 
 **L3 协议与工具层 · 模型与世界的接口。**
-MCP（Model Context Protocol）：给 AI 接工具/数据源的「USB-C 标准」——按标准写一个服务，所有支持 MCP 的 Agent 都能用；我们 Week2 的 Skill 就是它的朴素版。Function Calling：模型输出「调用 X、参数 Y」的结构化请求。Agent 框架与 Harness：让模型跑起循环的那副骨架。
+MCP（Model Context Protocol）：给 AI 接工具/数据源的「USB-C 标准」——按标准写一个服务，所有支持 MCP 的 Agent 都能用；Skill=说明书+工具，与 MCP 互补，不是简化版。Function Calling：模型输出「调用 X、参数 Y」的结构化请求。Agent 框架与 Harness：让模型跑起循环的那副骨架。
 
 **L4 应用层 · 直接为人服务的产品。**
 聊天助手、AI 编程工具（TRAE 等）、各行各业的垂直应用——**以及你要建的部门驾驶舱**。越往上越贴近业务，越贴近你的日常工作；越往下越是通用底座，谁都绕不开。

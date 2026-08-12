@@ -559,7 +559,24 @@ export function CapsuleEditorTabs({
                     }
                   />
                 </Form.Item>
-                <Form.Item label="Codex 任务上下文">
+                <Form.Item label="提示词类型">
+                  <select
+                    value={capsule.local_prep?.prompt_kind || "coding"}
+                    onChange={(e) =>
+                      patch({
+                        local_prep: {
+                          ...(capsule.local_prep || {}),
+                          prompt_kind: e.target.value === "coach" ? "coach" : "coding",
+                        },
+                      })
+                    }
+                    style={{ width: "100%", padding: "6px 8px" }}
+                  >
+                    <option value="coding">编码任务（粘贴给 TRAE / AI 员工改仓库）</option>
+                    <option value="coach">学习教练（出题/审稿，勿当编码任务）</option>
+                  </select>
+                </Form.Item>
+                <Form.Item label={capsule.local_prep?.prompt_kind === "coach" ? "学习教练提示词" : "编码任务提示词"}>
                   <Input.TextArea
                     rows={8}
                     value={capsule.local_prep?.codex_prompt || ""}

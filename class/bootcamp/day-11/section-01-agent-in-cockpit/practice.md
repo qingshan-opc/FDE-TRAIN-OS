@@ -1,6 +1,8 @@
 # 第 1 节 · 练习：把智能体挂进驾驶舱界面
 
-## 一键粘贴提示词
+## 一键粘贴提示词（编码任务）
+> 整份粘贴给 **编码 AI / TRAE** 改仓库。尖括号 `〈〉` 换成你的路径或名称。
+
 
 [`class/teaching/week2-cockpit-agent/prompts/06-wire-cockpit-ui.md`](../../../teaching/week2-cockpit-agent/prompts/06-wire-cockpit-ui.md)
 

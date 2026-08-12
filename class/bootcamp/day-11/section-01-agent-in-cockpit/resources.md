@@ -13,7 +13,7 @@
 ```
 指令面板模式：
   驾驶舱助手位展示「当前步骤 + 待执行指令」
-  → 学员复制指令到 Agent Lab 执行
+  → 学员复制指令到本机 Agent / TRAE 执行
   → 执行结果（日志行/确认结果）回填助手位
 信息回路：人 ⇄ 驾驶舱 ⇄ Agent，一样闭环
 ```
@@ -32,5 +32,5 @@
 ## 4. 相关链接
 
 - 全景图：`../../assets/diagrams/v2-panorama.svg`
-- Day 9 闸与日志：`../../day-09/section-04-orchestrate/resources.md`
+- 第九天闸与日志（编排实操在 day-10）：`../../day-10/section-04-orchestrate/resources.md`
 - 公开课：O3（实时推送 / 嵌入运行时）

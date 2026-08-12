@@ -1022,16 +1022,20 @@ export function CapsuleReader({
                     <h4>
                       {active.lab && (active.lab as { sim_kind?: string }).sim_kind
                         ? "仿真实验台"
-                        : active.local_prep?.codex_prompt?.trim()
-                          ? "在开发工具中完成本节任务"
-                          : "完成本节工具准备"}
+                        : active.local_prep?.prompt_kind === "coach"
+                          ? "用学习教练提示词巩固概念"
+                          : active.local_prep?.codex_prompt?.trim()
+                            ? "在开发工具中完成本节任务"
+                            : "完成本节工具准备"}
                     </h4>
                     <p>
                       {active.lab && (active.lab as { sim_kind?: string }).sim_kind
                         ? "进入服务器后，在黑色终端窗口内直接输入命令，按 Enter 执行。"
-                        : active.local_prep?.codex_prompt?.trim()
-                          ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
-                          : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
+                        : active.local_prep?.prompt_kind === "coach"
+                          ? "本节提示词用于出题考你、审草稿或模拟评委——不要整段丢给编码 AI 当写代码任务。"
+                          : active.local_prep?.codex_prompt?.trim()
+                            ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
+                            : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
                     </p>
                   </div>
                   {active.lab && (active.lab as { sim_kind?: string }).sim_kind ? (

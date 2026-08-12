@@ -21,6 +21,7 @@ export function LocalPrepPanel({
   const toast = useToast();
   const checklist = prep.checklist || [];
   const hasPrompt = Boolean(prep.codex_prompt?.trim());
+  const isCoach = prep.prompt_kind === "coach";
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const [saving, setSaving] = useState(false);
 
@@ -83,7 +84,10 @@ export function LocalPrepPanel({
     }
     try {
       await navigator.clipboard.writeText(text);
-      toast.push("任务提示词已复制，请粘贴给对应 AI 员工", "success");
+      toast.push(
+        isCoach ? "学习教练提示词已复制（用于出题/审稿，勿当编码任务）" : "任务提示词已复制，请粘贴给对应 AI 员工",
+        "success",
+      );
     } catch {
       toast.push("复制失败，请手动选择文本复制", "error");
     }
@@ -93,7 +97,9 @@ export function LocalPrepPanel({
     <div className="local-prep-panel">
       {hasPrompt && (
         <p className="local-prep-lead muted">
-          平台提供任务边界和验收标准；请在开发工具中 @ 对应 AI 员工完成任务，最终批准或返工必须由你确认。
+          {isCoach
+            ? "本节是学习教练提示词：用来出题考你、审草稿、模拟评委。不要整段丢给编码 AI 当写代码任务。"
+            : "平台提供任务边界和验收标准；请在开发工具中 @ 对应 AI 员工完成任务，最终批准或返工必须由你确认。"}
         </p>
       )}
       <div className={`local-prep-grid${hasPrompt ? "" : " local-prep-grid--single"}`}>
@@ -115,13 +121,13 @@ export function LocalPrepPanel({
           )}
         </section>
         {hasPrompt && (
-          <section className="local-prep-card local-prep-card--codex">
-            <h4>复制给对应 AI 员工的任务提示词</h4>
+          <section className={`local-prep-card${isCoach ? " local-prep-card--coach" : " local-prep-card--codex"}`}>
+            <h4>{isCoach ? "学习教练提示词（勿当编码任务）" : "复制给对应 AI 员工的任务提示词"}</h4>
             {prep.skill_id && <p className="local-prep-skill mono">Skill · {prep.skill_id}</p>}
             <pre className="local-prep-prompt">{prep.codex_prompt?.trim()}</pre>
             <div className="local-prep-actions">
               <button type="button" className="btn-primary" disabled={disabled} onClick={() => void copyPrompt()}>
-                复制任务提示词
+                {isCoach ? "复制学习教练提示词" : "复制任务提示词"}
               </button>
               {template?.url && (
                 <a className="btn-ghost" href={template.url} target="_blank" rel="noreferrer">

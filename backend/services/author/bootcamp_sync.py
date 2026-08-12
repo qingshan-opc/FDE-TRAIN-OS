@@ -211,6 +211,10 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     Week 2+ may point at teaching-pack prompt files via markdown links under
     「一键粘贴提示词」; those files are inlined so the learner UI still gets a
     one-click copyable ``codex_prompt``.
+
+    Headings may mark kind:
+    - ``## 一键粘贴提示词（编码任务）`` → prompt_kind=coding（改仓库）
+    - ``## 一键粘贴提示词（学习教练）`` → prompt_kind=coach（出题/审稿，勿当编码任务）
     """
 
     p = BC / f"day-{day:02d}" / sdir / "practice.md"
@@ -218,8 +222,11 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
         return None
     txt = _read(p)
 
+    kind_m = re.search(r"##+\s*一键粘贴提示词（(学习教练|编码任务)）", txt)
+    prompt_kind = "coach" if kind_m and kind_m.group(1) == "学习教练" else "coding"
+
     prompt_m = re.search(
-        r"## 一键粘贴提示词[^\n]*\n.*?```(?:text)?\s*\n(.*?)\n```",
+        r"##+\s*一键粘贴提示词[^\n]*\n.*?```(?:text)?\s*\n(.*?)\n```",
         txt,
         re.S,
     )
@@ -250,6 +257,7 @@ def _local_prep(day: int, sdir: str) -> dict[str, Any] | None:
     out: dict[str, Any] = {
         "codex_prompt": prompt,
         "checklist": checklist,
+        "prompt_kind": prompt_kind,
     }
     if correction_m:
         out["suggested_questions"] = [correction_m.group(1).strip()]

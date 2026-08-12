@@ -50,7 +50,7 @@ capsule_extra:
       plain: 一件具体可执行的事（生成周报/整理线索），载体是 Skill + 执行者（AI）。
     - id: gt-mcp-preview
       term: MCP（预告）
-      plain: 给 AI 接工具的 USB-C 标准——你的 Skill 是它的朴素版（Day 8 深讲）。
+      plain: 给 AI 接工具的 USB-C 标准——Skill 是说明书+工具，与 MCP 互补（第八天深练 Skill）。
     quiz:
     - - Week 2 换档后，主工作对象从什么变成什么？
       - - 从 Prompt 变成代码
@@ -212,8 +212,8 @@ capsule_extra:
     - dg-skill-anatomy
     knowledge_cards:
     - id: skill-md
-      term: skills/<name>.md
-      plain: 今日交付物：四部件 + 工具描述（何时用/何时不用）写进 Git。
+      term: skills/<id>/SKILL.md
+      plain: 今日交付物：目录版说明书——四部件 + 工具描述（何时用/何时不用）写进 Git。
       tag: 交付
     - id: tool-desc
       term: 工具描述
@@ -238,7 +238,7 @@ capsule_extra:
       - 可执行性比篇幅重要——「分析一下」永远不合格。
     - - 今日定稿文件应放在哪里？
       - - prompts/ 目录
-        - skills/<name>.md 并 commit 进 Git
+        - skills/<id>/SKILL.md 并 commit 进 Git
         - 只存在聊天记录里
       - 1
       - 可复用、可交接——必须版本化进仓库。

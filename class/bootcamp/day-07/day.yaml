@@ -19,11 +19,11 @@ resources:
   kind: diagram
   summary: 基建→模型→编排→应用，标出 FDE 工作层
   url: /course-assets/assets/diagrams/llm-ecosystem.svg
-- id: dg-four-layer
-  title: 讲解图 · 四层架构地图
+- id: dg-llm-ops-triangle
+  title: 讲解图 · 出考卷 · 加护栏 · 边聊边写
   kind: diagram
-  summary: 与驾驶舱模块对齐的生态四层
-  url: /course-assets/assets/diagrams/four-layer.svg
+  summary: Eval / Guardrails / Vibe Coding 三角
+  url: /course-assets/assets/diagrams/llm-ops-triangle.svg
 - id: dg-agent-loop
   title: 讲解图 · 智能体循环
   kind: diagram
@@ -68,7 +68,6 @@ capsule_extra:
   c1:
     resource_ids:
     - dg-llm-ecosystem
-    - dg-four-layer
     - glossary
     media:
     - kind: video
@@ -171,7 +170,7 @@ capsule_extra:
     glossary_terms:
     - id: gt-token
       term: Token / 窗口
-      plain: Token 是计费单位；窗口是一次能看多少——对话越长越贵越慢。
+      plain: Token 是读写最小单位；窗口是一次能看多少 Token——对话越长越贵越慢；账单按 Token 计价。
     - id: gt-hallucination
       term: 幻觉
       plain: 流畅 plausible 优先于 fact-check；关键事实必须可溯源+验收。
@@ -258,7 +257,7 @@ capsule_extra:
       - Fine-tune 贵慢——Prompt 方案没过闸不升级。
   c4:
     resource_ids:
-    - dg-llm-ecosystem
+    - dg-llm-ops-triangle
     - glossary
     media:
     - kind: video
@@ -327,7 +326,7 @@ capsule_extra:
       tag: 核心
     - id: harness
       term: Harness · 骨架
-      plain: 模型外循环：工具表、记忆、重试、日志——同模型不同骨架能力天差地别。
+      plain: 四要素：模型 + 工具表 + 记忆 + 循环；日志/重试挂骨架上。Skill 是工具表上的一件，不是 Harness。
       tag: 核心
     - id: tool-call
       term: Tool Calling
@@ -335,7 +334,7 @@ capsule_extra:
       tag: 核心
     - id: mcp
       term: MCP
-      plain: AI 接工具/数据源的 USB-C 标准；Skill 是它的朴素版。
+      plain: AI 接工具/数据源的 USB-C 标准；Skill 是说明书+工具，与 MCP 互补，不是简化版。
       tag: 地基
     - id: workflow-agent
       term: Workflow vs Agent
@@ -348,10 +347,10 @@ capsule_extra:
     glossary_terms:
     - id: gt-agent
       term: Agent
-      plain: 多步自主决策+调工具；Week 2 封装 Skill 的前置概念。
+      plain: 多步自主决策+调工具（循环体）；Week 2 封装 Skill 的前置概念。
     - id: gt-harness
       term: Harness
-      plain: TRAE vs 简陋脚本——同一 GPT-4 不同骨架。
+      plain: 模型+工具表+记忆+循环——同一 GPT-4 不同骨架能力天差地别。
     - id: gt-mcp
       term: MCP
       plain: Model Context Protocol；写一个 Server 多客户端能插。
@@ -370,7 +369,7 @@ capsule_extra:
       - Harness 负责执行 Tool 并喂回结果。
     - - 同一 GPT-4，TRAE 智能体 和简陋脚本能力差异主要来自？
       - - 模型版本不同
-        - Harness（工具表、记忆、重试、日志）不同
+        - Harness（模型+工具表+记忆+循环）不同
         - 网络速度
       - 1
       - 骨架不同，能力天差地别——Week 2 练的就是 Harness/Skill。
@@ -449,7 +448,7 @@ quiz:
   - Agent 信任成本高——需要 Harness 和日志。
 - - MCP 是什么？
   - - 一种新的编程语言
-    - 给 AI 接工具/数据源的 USB-C 标准——Skill 是它的朴素版
+    - 给 AI 接工具/数据源的 USB-C 标准——Skill 与它互补，不是简化版
     - 只有 OpenAI 支持
   - 1
   - 标准接口让工具可复用。

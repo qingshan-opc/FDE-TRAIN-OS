@@ -1,6 +1,8 @@
 # 第 4 节 · 资源：编排指令 / 日志模板 / 排障速查
 
-## 1. 编排指令模板（发给 Agent，改尖括号即可用）
+> **分槽说明**：下面「编排指令」是发给**正在跑的 Agent / task_runner** 的运行指令；仓库脚手架与 HITL 实现请用本节 practice 里的 **编码任务** `prompts/05-long-task-hitl.md`。两者不要混成同一段粘贴。
+
+## 1. 编排指令模板（发给正在跑的 Agent，改尖括号即可用）
 
 ```text
 你现在按以下 workflow 执行，顺序不许变：
@@ -19,7 +21,12 @@
    HH:MM | 步骤 | 结果（成功数量/文件名/等待/批准/驳回）
 ```
 
-## 2. 执行日志模板（`runs/YYYYMMDD.md`）
+## 2. 编码脚手架（TRAE / 改仓库）
+
+整份粘贴教学包：[`prompts/05-long-task-hitl.md`](../../../teaching/week2-cockpit-agent/prompts/05-long-task-hitl.md)  
+目标：实现 `agent/task_runner.py`（goal≥3 turn + 确认闸 + approve/reject 证据）。不要把上一节「编排指令」整段塞进这个脚手架。
+
+## 3. 执行日志模板（`runs/YYYYMMDD.md`）
 
 ```markdown
 # 运行日志 2026-07-24
@@ -35,7 +42,7 @@
 
 三要素自查：每一行都能回答——**什么时候、谁/什么干的、干成了什么**。
 
-## 3. 排障速查
+## 4. 排障速查
 
 | 症状 | 大概率原因 | 修法 |
 |------|-----------|------|
@@ -45,7 +52,7 @@
 | 日志断行/缺步 | Agent 跳步执行了 | 指令里把「每步追加日志」放到步骤内，不是最后补 |
 | A 的输出 B 读不懂 | 数据流断点 | 用第 3 节对齐三查定位，改上游输出或加转换说明 |
 
-## 4. 延伸
+## 5. 延伸
 
 - 讲解图：`../../assets/diagrams/orchestration-confirm.svg`
 - 设计图纸：`docs/orchestration.md`（第 1 节产出）

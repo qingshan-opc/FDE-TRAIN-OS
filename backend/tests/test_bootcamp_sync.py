@@ -53,6 +53,23 @@ def test_week2_cockpit_prompts_project_into_local_prep():
     assert "驾驶舱" not in (pkg5.get("project_brief") or "")
 
 
+def test_week2_prompt_kind_splits_coach_vs_coding():
+    """Concept sections mark coach prompts; coding packs stay coding."""
+    pkg7 = build_day_package(7)
+    c1 = next(c for c in pkg7["learn"]["capsules"] if c["id"] == "c1")
+    c2 = next(c for c in pkg7["learn"]["capsules"] if c["id"] == "c2")
+    assert (c1.get("local_prep") or {}).get("prompt_kind") == "coding"
+    assert (c2.get("local_prep") or {}).get("prompt_kind") == "coach"
+
+    pkg10 = build_day_package(10)
+    c2 = next(c for c in pkg10["learn"]["capsules"] if c["id"] == "c2")
+    media = ((c2.get("media") or [{}])[0])
+    assert "human-confirm" in (media.get("object_key") or "")
+    c3 = next(c for c in pkg10["learn"]["capsules"] if c["id"] == "c3")
+    media3 = ((c3.get("media") or [{}])[0])
+    assert "multi-skill" in (media3.get("object_key") or "")
+
+
 def test_week1_copy_prompts_are_actionable_local_prep():
     """Most Week1 capsules expose local_prep with a checklist and/or copy prompt."""
     with_prep = 0

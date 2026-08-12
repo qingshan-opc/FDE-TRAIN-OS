@@ -26,11 +26,14 @@ router = APIRouter(tags=["billing"])
 init_schema()
 
 PayChannel = Literal["wechat", "alipay"]
+PayMode = Literal["auto", "native", "jsapi"]
 
 
 class CheckoutBody(BaseModel):
     offering_id: str
     channel: PayChannel = Field(default="wechat")
+    # auto: backend decides (jsapi when WeChat + openid available and client asks jsapi)
+    pay_mode: PayMode = Field(default="auto")
 
 
 def _channel_configured(channel: PayChannel) -> bool:
@@ -46,10 +49,41 @@ def _sync_by_channel(order: dict[str, Any]) -> str:
     return wechat_pay.sync_order_status(order["id"])
 
 
+def _checkout_payload(
+    *,
+    order: dict[str, Any],
+    channel: PayChannel,
+    pay_mode: str,
+    reused: bool,
+) -> dict[str, Any]:
+    code_url = order.get("code_url")
+    out: dict[str, Any] = {
+        "order_id": order["id"],
+        "out_trade_no": order["out_trade_no"],
+        "amount_fen": int(order["amount_fen"]),
+        "code_url": None if wechat_pay.is_jsapi_code_url(code_url) else code_url,
+        "pay_channel": channel,
+        "pay_mode": pay_mode,
+        "dev_mode": not _channel_configured(channel),
+        "status": order.get("status") or "pending",
+        "reused": reused,
+    }
+    if channel == "wechat" and pay_mode == "jsapi":
+        prepay_id = wechat_pay.prepay_id_from_code_url(code_url)
+        if prepay_id:
+            out["jsapi_params"] = wechat_pay.build_jsapi_pay_params(prepay_id)
+        elif FDE_ENV != "prod" and not _channel_configured(channel):
+            out["jsapi_params"] = wechat_pay.build_jsapi_pay_params(f"dev-{order['out_trade_no']}")
+    return out
+
+
 @router.post("/api/v1/billing/checkout")
 def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
     user = require_user(request)
     channel: PayChannel = body.channel or "wechat"
+    # Frontend sends pay_mode=jsapi inside WeChat; desktop keeps native QR.
+    want_jsapi = channel == "wechat" and body.pay_mode == "jsapi"
+
     with db_cursor() as cur:
         cur.execute(
             """
@@ -85,20 +119,36 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         )
         if cur.fetchone():
             raise HTTPException(409, "您已拥有该课程")
-        # Reuse recent pending order for the same pay channel
-        cur.execute(
-            """
-            SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel
-            FROM payment_orders
-            WHERE user_id=? AND offering_id=? AND status='pending'
-              AND COALESCE(pay_channel, 'wechat')=?
-              AND created_at > NOW() - INTERVAL '2 hours'
-              AND code_url IS NOT NULL AND code_url <> ''
-            ORDER BY created_at DESC
-            LIMIT 1
-            """,
-            (user.id, body.offering_id, channel),
-        )
+        # Reuse recent pending order for the same pay channel + same trade shape
+        if want_jsapi:
+            cur.execute(
+                """
+                SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel
+                FROM payment_orders
+                WHERE user_id=? AND offering_id=? AND status='pending'
+                  AND COALESCE(pay_channel, 'wechat')=?
+                  AND created_at > NOW() - INTERVAL '2 hours'
+                  AND code_url LIKE 'jsapi:%'
+                ORDER BY created_at DESC
+                LIMIT 1
+                """,
+                (user.id, body.offering_id, channel),
+            )
+        else:
+            cur.execute(
+                """
+                SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel
+                FROM payment_orders
+                WHERE user_id=? AND offering_id=? AND status='pending'
+                  AND COALESCE(pay_channel, 'wechat')=?
+                  AND created_at > NOW() - INTERVAL '2 hours'
+                  AND code_url IS NOT NULL AND code_url <> ''
+                  AND code_url NOT LIKE 'jsapi:%'
+                ORDER BY created_at DESC
+                LIMIT 1
+                """,
+                (user.id, body.offering_id, channel),
+            )
         pending = cur.fetchone()
 
     attr = get_user_attribution(user.id)
@@ -108,6 +158,8 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         ref = get_user_referral(user.id)
         if ref:
             referrer_user_id = ref.get("referrer_user_id")
+
+    pay_mode_out = "jsapi" if want_jsapi else "native"
 
     if pending:
         pending = dict(pending)
@@ -123,16 +175,7 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                     """,
                     (org_id, referrer_user_id, pending["id"]),
                 )
-        return {
-            "order_id": pending["id"],
-            "out_trade_no": pending["out_trade_no"],
-            "amount_fen": int(pending["amount_fen"]),
-            "code_url": pending.get("code_url"),
-            "pay_channel": channel,
-            "dev_mode": not _channel_configured(channel),
-            "status": pending.get("status") or "pending",
-            "reused": True,
-        }
+        return _checkout_payload(order=pending, channel=channel, pay_mode=pay_mode_out, reused=True)
 
     title = offering.get("title") or offering.get("course_title") or "FDE 课程"
     description = f"购买 {title}"
@@ -146,6 +189,38 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 description,
                 referrer_user_id=referrer_user_id,
             )
+            pay_mode_out = "native"
+        elif want_jsapi:
+            openid = wechat_pay.get_user_wx_mp_openid(user.id)
+            if not openid:
+                from services.wechat_mp import entry as mp_entry
+                from urllib.parse import quote
+
+                next_path = "/app/shop"
+                oauth_url = (
+                    f"/api/v1/auth/wechat/mp-entry?next={quote(next_path, safe='')}"
+                    if mp_entry.entry_configured()
+                    else None
+                )
+                raise HTTPException(
+                    status_code=409,
+                    detail={
+                        "code": "need_wechat_oauth",
+                        "message": "微信内支付需要先完成微信授权登录",
+                        "oauth_url": oauth_url,
+                    },
+                )
+            order = wechat_pay.create_payment_order(
+                user.id,
+                body.offering_id,
+                price,
+                org_id,
+                description,
+                referrer_user_id=referrer_user_id,
+                trade_type="jsapi",
+                openid=openid,
+            )
+            pay_mode_out = "jsapi"
         else:
             order = wechat_pay.create_payment_order(
                 user.id,
@@ -154,19 +229,16 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 org_id,
                 description,
                 referrer_user_id=referrer_user_id,
+                trade_type="native",
             )
+            pay_mode_out = "native"
+    except HTTPException:
+        raise
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
     except RuntimeError as exc:
         raise HTTPException(503, str(exc)) from exc
-    return {
-        "order_id": order["id"],
-        "out_trade_no": order["out_trade_no"],
-        "amount_fen": order["amount_fen"],
-        "code_url": order.get("code_url"),
-        "pay_channel": channel,
-        "dev_mode": not _channel_configured(channel),
-        "status": order.get("status"),
-        "reused": False,
-    }
+    return _checkout_payload(order=order, channel=channel, pay_mode=pay_mode_out, reused=False)
 
 
 @router.get("/api/v1/billing/orders/{order_id}")

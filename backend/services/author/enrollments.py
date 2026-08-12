@@ -506,12 +506,12 @@ def get_enrollment(enrollment_id: str, request: Request) -> dict[str, Any]:
         attachment_count = int((cur.fetchone() or {}).get("c") or 0)
 
         cur.execute(
-            """
+            f"""
             SELECT id, day, node_id, status, submission_id, created_at, resolved_at
             FROM mentor_reviews
             WHERE enrollment_id=? OR (learner_id=? AND camp_id=?)
             ORDER BY created_at DESC
-            LIMIT {ENROLLMENT_ACTIVITY_LIMIT}
+            LIMIT {int(ENROLLMENT_ACTIVITY_LIMIT)}
             """,
             (enrollment_id, uid, camp),
         )

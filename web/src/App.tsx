@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
 import { useAuth } from "./lib/auth";
 import { Skeleton } from "./components/Skeleton";
@@ -49,11 +49,15 @@ import { FinanceDashboard } from "./author/FinanceDashboard";
 function RequireAuth({
   children,
   roles,
+  portalKind,
 }: {
   children: ReactNode;
   roles?: Array<"learner" | "author" | "admin" | "partner" | "finance">;
+  /** If set, allow when server portals include this kind (or admin). */
+  portalKind?: "learner" | "author" | "partner" | "finance";
 }) {
-  const { user, loading, needsWxBind } = useAuth();
+  const { user, loading, needsWxBind, defaultHome, portals } = useAuth();
+  const location = useLocation();
   if (loading) {
     return (
       <div style={{ padding: 24 }}>
@@ -61,25 +65,29 @@ function RequireAuth({
       </div>
     );
   }
-  if (!user) return <Navigate to="/login" replace />;
-  if (needsWxBind && user.role === "learner") {
-    return <Navigate to="/login?bind=1" replace />;
+  if (!user) {
+    const next = `${location.pathname}${location.search || ""}`;
+    const q = new URLSearchParams();
+    if (next && next !== "/" && next !== "/login") q.set("next", next);
+    const qs = q.toString();
+    return <Navigate to={qs ? `/login?${qs}` : "/login"} replace />;
   }
-  if (roles && !roles.includes(user.role) && user.role !== "admin") {
-    return (
-      <Navigate
-        to={
-          user.role === "author" || user.role === "finance"
-            ? user.role === "finance"
-              ? "/author/finance"
-              : "/author"
-            : user.role === "partner"
-              ? "/partner"
-              : "/app"
-        }
-        replace
-      />
-    );
+  if (needsWxBind && (user.role === "learner" || user.role === "partner")) {
+    const next = `${location.pathname}${location.search || ""}`;
+    const q = new URLSearchParams({ bind: "1" });
+    if (next && next !== "/" && next !== "/login") q.set("next", next);
+    return <Navigate to={`/login?${q.toString()}`} replace />;
+  }
+  if (portalKind) {
+    const ok =
+      user.role === "admin" ||
+      (portals || []).some((p) => p.kind === portalKind) ||
+      (portalKind === "author" && (user.role === "author" || user.role === "finance"));
+    if (!ok) {
+      return <Navigate to={defaultHome || "/app/courses"} replace />;
+    }
+  } else if (roles && !roles.includes(user.role) && user.role !== "admin") {
+    return <Navigate to={defaultHome || "/app/courses"} replace />;
   }
   return <>{children}</>;
 }
@@ -146,7 +154,7 @@ export default function App() {
       <Route
         path="/app/invite"
         element={
-          <RequireAuth roles={["learner"]}>
+          <RequireAuth roles={["learner", "partner"]}>
             <LearnerReferral />
           </RequireAuth>
         }
@@ -170,8 +178,8 @@ export default function App() {
       <Route
         path="/app/shop"
         element={
-          // Authors/admins may also purchase (e.g. smoke-test payments); do not bounce to /author.
-          <RequireAuth roles={["learner", "author", "admin"]}>
+          // Authors/admins/partners may also purchase; do not bounce partners to /partner.
+          <RequireAuth roles={["learner", "author", "admin", "partner"]}>
             <CourseShop />
           </RequireAuth>
         }
@@ -179,7 +187,7 @@ export default function App() {
       <Route
         path="/partner"
         element={
-          <RequireAuth roles={["partner", "admin"]}>
+          <RequireAuth portalKind="partner">
             <PartnerHome />
           </RequireAuth>
         }
@@ -191,7 +199,7 @@ export default function App() {
       <Route
         path="/author"
         element={
-          <RequireAuth roles={["author", "admin", "finance"]}>
+          <RequireAuth portalKind="author" roles={["author", "admin", "finance"]}>
             <AuthorHome />
           </RequireAuth>
         }

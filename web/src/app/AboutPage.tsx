@@ -36,7 +36,7 @@ const STORY_BLOCKS = [
 ];
 
 export function AboutPage() {
-  const { user } = useAuth();
+  const { user, defaultHome } = useAuth();
   const [data, setData] = useState<LandingPayload>(FALLBACK);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function AboutPage() {
   }, []);
 
   const brandName = data.brand?.name || "青山在";
-  const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
+  const appHref = user ? defaultHome || "/app/courses" : data.cta?.app || "/app/courses";
   const about = data.about || FALLBACK.about;
 
   return (

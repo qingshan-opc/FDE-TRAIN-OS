@@ -1,4 +1,4 @@
-"""WeChat MP menu / in-WeChat OAuth entry — silent snsapi_base → session cookies."""
+"""WeChat MP menu / in-WeChat OAuth entry — snsapi_userinfo → session cookies + profile enrich."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ import requests
 from services.shared import db_cursor, now_iso
 from services.shared.config import FDE_PUBLIC_BASE_URL, WECHAT_APP_SECRET, WECHAT_PAY_APP_ID
 from services.wechat_mp import login as mp_login
+from services.wechat_mp import profile as mp_profile
 
 log = logging.getLogger("fde.wechat_mp.entry")
 
@@ -69,7 +70,8 @@ def create_oauth_authorize_url(*, next_path: str = "/app/courses") -> str:
             "appid": WECHAT_PAY_APP_ID,
             "redirect_uri": callback_url(),
             "response_type": "code",
-            "scope": "snsapi_base",
+            # 拉取昵称/头像（用户会看到授权页）；失败时仍可用 openid 登录
+            "scope": "snsapi_userinfo",
             "state": state,
         },
         quote_via=quote,
@@ -95,7 +97,7 @@ def _exchange_code(code: str) -> dict[str, Any]:
 
 
 def complete_oauth_entry(code: str, state: str) -> tuple[Any, str]:
-    """Exchange OAuth code → AuthUser + next_path."""
+    """Exchange OAuth code → AuthUser + next_path; best-effort profile enrich."""
     _ensure_next_col()
     with db_cursor() as cur:
         cur.execute(
@@ -112,7 +114,30 @@ def complete_oauth_entry(code: str, state: str) -> tuple[Any, str]:
     next_path = sanitize_next(row.get("next_path") if isinstance(row, dict) else None)
     token = _exchange_code(code)
     openid = str(token["openid"])
-    user = mp_login.resolve_or_create_user(openid)
+    nickname = None
+    headimgurl = None
+    access_token = str(token.get("access_token") or "")
+    if access_token:
+        info = mp_profile.fetch_sns_userinfo(access_token, openid)
+        nickname = (info.get("nickname") or "").strip() or None
+        headimgurl = (info.get("headimgurl") or "").strip() or None
+    user = mp_login.resolve_or_create_user(openid, nickname)
+    try:
+        mp_profile.apply_wechat_profile(user.id, nickname=nickname, headimgurl=headimgurl)
+        with db_cursor() as cur:
+            cur.execute("SELECT display_name FROM users WHERE id=?", (user.id,))
+            urow = cur.fetchone()
+        if urow and urow.get("display_name"):
+            from services.shared import AuthUser
+
+            user = AuthUser(
+                id=user.id,
+                email=user.email,
+                role=user.role,
+                display_name=urow.get("display_name"),
+            )
+    except Exception as exc:
+        log.warning("apply wechat profile failed user=%s: %s", user.id, exc)
     with db_cursor() as cur:
         cur.execute(
             """
@@ -122,13 +147,15 @@ def complete_oauth_entry(code: str, state: str) -> tuple[Any, str]:
             """,
             (user.id, now_iso(), state),
         )
-    # Role-aware default landing
-    if user.role == "partner" and next_path.startswith("/app/"):
-        next_path = "/partner"
+    if user.role == "partner" and next_path.startswith("/author"):
+        from services.auth.session_context import build_session_context
+
+        next_path = build_session_context(user)["default_home"]
     elif user.role == "finance" and next_path.startswith("/app/"):
         next_path = "/author/finance"
     elif user.role in ("author", "admin") and next_path.startswith("/app/"):
-        next_path = "/author"
+        # Staff may visit /app; keep next. Only rewrite clearly wrong partner-only paths — none.
+        pass
     return user, next_path
 
 

@@ -9,7 +9,6 @@ import {
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
-  SwapOutlined,
   BookOutlined,
   ProfileOutlined,
   HomeOutlined,
@@ -27,6 +26,7 @@ import { App as AntApp } from "antd";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo";
+import { PortalSwitchButtons } from "../components/PortalSwitchButtons";
 import { AuthorLayoutProvider } from "../lib/authorLayoutContext";
 import { useAuth } from "../lib/auth";
 
@@ -240,12 +240,13 @@ export function AuthorHome() {
                   <Button size="middle" onClick={() => nav("/app/shop")}>
                     选购课程
                   </Button>
-                  <Button size="middle" icon={<SwapOutlined />} onClick={() => nav("/app/courses")}>
-                    学员台
-                  </Button>
+                  <PortalSwitchButtons currentKind={["author", "finance"]} size="middle" />
                 </Space>
               ) : (
-                <Typography.Text type="secondary">财务人员</Typography.Text>
+                <Space size={8}>
+                  <PortalSwitchButtons currentKind={["author", "finance"]} size="middle" />
+                  <Typography.Text type="secondary">财务人员</Typography.Text>
+                </Space>
               )}
               <Dropdown
                 getPopupContainer={() => headerRef.current || document.body}

@@ -21,24 +21,20 @@ import {
 import { ApiError, authApi } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { BrandLogo } from "../components/BrandLogo";
+import { isWeChatBrowser, sanitizeAppNext, wechatMpEntryUrl } from "../lib/wechat";
 
 type Mode = "email" | "wechat" | "register" | "bind" | "reset";
 
 const REMEMBER_KEY = "fde_login_remember_email";
 
-function roleHome(role: string) {
-  if (role === "partner") return "/partner";
-  if (role === "finance") return "/author/finance";
-  if (role === "author" || role === "admin") return "/author";
-  return "/app/courses";
-}
-
 export function LoginPage() {
-  const { login, user, loading, refreshMe, needsWxBind, logout } = useAuth();
+  const { login, user, loading, refreshMe, needsWxBind, logout, defaultHome } = useAuth();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
   const inviteFromUrl = (searchParams.get("invite") || "").trim();
   const forceBind = searchParams.get("bind") === "1";
+  const nextFromUrl = sanitizeAppNext(searchParams.get("next"), "");
+  const inWeChat = isWeChatBrowser();
   const [mode, setMode] = useState<Mode>(
     forceBind ? "bind" : inviteFromUrl ? "register" : "email",
   );
@@ -77,15 +73,21 @@ export function LoginPage() {
   }, []);
 
   const goAfterAuth = useCallback(
-    async (role: string, needsBind?: boolean) => {
-      if (role === "learner" && needsBind) {
+    async (role: string, needsBind?: boolean, home?: string | null) => {
+      if ((role === "learner" || role === "partner") && needsBind) {
         setMode("bind");
         return;
       }
-      nav(roleHome(role), { replace: true });
+      const dest = nextFromUrl || home || defaultHome || "/app/courses";
+      nav(dest, { replace: true });
     },
-    [nav],
+    [nav, nextFromUrl, defaultHome],
   );
+
+  const redirectWeChatInAppLogin = useCallback(() => {
+    const next = nextFromUrl || "/app/shop";
+    window.location.href = wechatMpEntryUrl(next, inviteFromUrl || null);
+  }, [nextFromUrl, inviteFromUrl]);
 
   const startWxLogin = useCallback(async () => {
     setWxError(null);
@@ -93,6 +95,10 @@ export function LoginPage() {
     setWxImg(null);
     setWxState(null);
     stopPoll();
+    if (inWeChat) {
+      redirectWeChatInAppLogin();
+      return;
+    }
     try {
       const res = await authApi.wechatLoginQr();
       setWxContent(res.qr_content);
@@ -102,7 +108,7 @@ export function LoginPage() {
     } catch (err) {
       setWxError(err instanceof ApiError ? err.message : "无法生成微信登录码");
     }
-  }, [stopPoll]);
+  }, [stopPoll, inWeChat, redirectWeChatInAppLogin]);
 
   const startBindQr = useCallback(async () => {
     setWxError(null);
@@ -114,7 +120,7 @@ export function LoginPage() {
       const res = await authApi.wechatBindStart();
       if (res.already_bound || res.wx_bound) {
         const me = await refreshMe();
-        if (me?.user) nav(roleHome(me.user.role), { replace: true });
+        if (me?.user) nav(me.default_home || defaultHome || "/app/courses", { replace: true });
         return;
       }
       setBindTicket(res.ticket || null);
@@ -124,26 +130,22 @@ export function LoginPage() {
     } catch (err) {
       setWxError(err instanceof ApiError ? err.message : "无法生成绑定二维码");
     }
-  }, [nav, refreshMe, stopPoll]);
+  }, [nav, refreshMe, stopPoll, defaultHome]);
 
   useEffect(() => {
     if (loading) return;
-    if (user && needsWxBind && user.role === "learner") {
+    if (user && needsWxBind && (user.role === "learner" || user.role === "partner")) {
       setMode("bind");
       return;
     }
     if (!loading && user && !needsWxBind && mode !== "reset") {
-      if (user.role === "partner") {
-        nav("/partner", { replace: true });
-        return;
-      }
-      if (forceBind && user.role === "learner") {
+      if (forceBind && (user.role === "learner" || user.role === "partner")) {
         setMode("bind");
         return;
       }
-      nav(roleHome(user.role), { replace: true });
+      nav(nextFromUrl || defaultHome || "/app/courses", { replace: true });
     }
-  }, [loading, user, needsWxBind, nav, mode, forceBind]);
+  }, [loading, user, needsWxBind, nav, mode, forceBind, defaultHome, nextFromUrl]);
 
   useEffect(() => {
     registerForm.setFieldsValue({ display: "新学员" });
@@ -215,7 +217,7 @@ export function LoginPage() {
           stopPoll();
           const me = await refreshMe();
           if (me?.user) {
-            await goAfterAuth(me.user.role, me.needs_wx_bind);
+            await goAfterAuth(me.user.role, me.needs_wx_bind, me.default_home || st.redirect);
           } else {
             nav(st.redirect || "/app/courses", { replace: true });
           }
@@ -243,7 +245,7 @@ export function LoginPage() {
           stopPoll();
           message.success("微信绑定成功");
           const me = await refreshMe();
-          if (me?.user) nav(roleHome(me.user.role), { replace: true });
+          if (me?.user) nav(me.default_home || defaultHome || "/app/courses", { replace: true });
           return;
         }
         if (st.expired) {
@@ -297,7 +299,8 @@ export function LoginPage() {
       const me = await login(email, values.password, { remember });
       const role = me && "user" in me ? me.user.role : "learner";
       const needs = me && "needs_wx_bind" in me ? Boolean(me.needs_wx_bind) : false;
-      await goAfterAuth(role, needs);
+      const home = me && "default_home" in me ? me.default_home : undefined;
+      await goAfterAuth(role, needs, home);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "登录失败");
     } finally {
@@ -315,7 +318,7 @@ export function LoginPage() {
         (values.display || "").trim() || "学员",
       );
       await refreshMe();
-      await goAfterAuth(res.user.role, Boolean(res.needs_wx_bind));
+      await goAfterAuth(res.user.role, Boolean(res.needs_wx_bind), res.default_home);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "注册失败");
     } finally {
@@ -365,7 +368,9 @@ export function LoginPage() {
 
   const cardTitle =
     mode === "wechat"
-      ? "微信扫码登录"
+      ? inWeChat
+        ? "微信一键登录"
+        : "微信扫码登录"
       : mode === "register"
         ? "创建账号"
         : mode === "bind"
@@ -375,7 +380,9 @@ export function LoginPage() {
             : "欢迎回来";
   const cardSubtitle =
     mode === "wechat"
-      ? "手机微信扫码即可登录"
+      ? inWeChat
+        ? "即将跳转微信授权，无需扫码"
+        : "手机微信扫码即可登录"
       : mode === "register"
         ? inviteLink
           ? inviteLink.kind === "learner"
@@ -383,7 +390,9 @@ export function LoginPage() {
             : "机构邀请注册 · 完成后自动归属渠道"
           : "注册后需扫码绑定微信"
         : mode === "bind"
-          ? "邮箱账号须绑定服务号后才能进入学习中心"
+          ? inWeChat
+            ? "微信内请用下方授权完成绑定提示；邮箱账号绑定仍需扫服务号码"
+            : "邮箱账号须绑定服务号后才能进入学习中心"
           : mode === "reset"
             ? "扫码后验证码将发送到微信服务号"
             : "登录学习中心，继续你的课程";
@@ -502,6 +511,10 @@ export function LoginPage() {
                   onClick={() => {
                     setError(null);
                     setWxError(null);
+                    if (inWeChat) {
+                      redirectWeChatInAppLogin();
+                      return;
+                    }
                     setMode("wechat");
                   }}
                 >
@@ -532,37 +545,63 @@ export function LoginPage() {
 
           {(mode === "wechat" || mode === "bind" || (mode === "reset" && resetTicket && !resetCodeSent)) && (
             <div className="login-split__wx">
-              {wxContent ? (
-                <QRCode value={wxContent} size={168} />
-              ) : wxImg ? (
-                <img src={wxImg} alt="微信二维码" width={168} height={168} />
+              {mode === "wechat" && inWeChat ? (
+                <>
+                  <Alert
+                    type="info"
+                    showIcon
+                    message="检测到微信内打开"
+                    description="将直接唤起微信授权登录，无需再扫码。"
+                    style={{ width: "100%", marginBottom: 12 }}
+                  />
+                  <Button
+                    type="primary"
+                    block
+                    size="large"
+                    className="login-split__submit"
+                    icon={<WechatOutlined />}
+                    onClick={() => redirectWeChatInAppLogin()}
+                  >
+                    微信一键登录
+                  </Button>
+                </>
               ) : (
-                <Typography.Text type="secondary">正在生成二维码…</Typography.Text>
-              )}
-              <Typography.Text type="secondary" className="login-split__wx-hint">
-                {mode === "bind"
-                  ? "请用微信扫码关注服务号完成绑定"
-                  : mode === "reset"
-                    ? resetHint || "请用已绑定该账号的微信扫码收取验证码"
-                    : "请用手机微信扫码登录"}
-              </Typography.Text>
-              {wxWaiting && mode !== "reset" && (
-                <Typography.Text type="secondary">等待手机确认…</Typography.Text>
+                <>
+                  {wxContent ? (
+                    <QRCode value={wxContent} size={168} />
+                  ) : wxImg ? (
+                    <img src={wxImg} alt="微信二维码" width={168} height={168} />
+                  ) : (
+                    <Typography.Text type="secondary">正在生成二维码…</Typography.Text>
+                  )}
+                  <Typography.Text type="secondary" className="login-split__wx-hint">
+                    {mode === "bind"
+                      ? "请用微信扫码关注服务号完成绑定"
+                      : mode === "reset"
+                        ? resetHint || "请用已绑定该账号的微信扫码收取验证码"
+                        : "请用手机微信扫码登录"}
+                  </Typography.Text>
+                  {wxWaiting && mode !== "reset" && (
+                    <Typography.Text type="secondary">等待手机确认…</Typography.Text>
+                  )}
+                </>
               )}
               {wxError && <Alert type="warning" showIcon message={wxError} style={{ width: "100%" }} />}
               <div className="login-split__wx-actions">
-                <button
-                  type="button"
-                  className="login-split__sso-btn"
-                  onClick={() => {
-                    if (mode === "bind") void startBindQr();
-                    else if (mode === "reset") void onResetStart({ email: resetEmail });
-                    else void startWxLogin();
-                  }}
-                >
-                  <ReloadOutlined />
-                  刷新二维码
-                </button>
+                {!(mode === "wechat" && inWeChat) && (
+                  <button
+                    type="button"
+                    className="login-split__sso-btn"
+                    onClick={() => {
+                      if (mode === "bind") void startBindQr();
+                      else if (mode === "reset") void onResetStart({ email: resetEmail });
+                      else void startWxLogin();
+                    }}
+                  >
+                    <ReloadOutlined />
+                    刷新二维码
+                  </button>
+                )}
                 {mode === "bind" ? (
                   <button
                     type="button"

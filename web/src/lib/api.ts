@@ -47,6 +47,10 @@ function messageFromBody(body: unknown, fallback: string): string {
   if (!body || typeof body !== "object") return fallback;
   const detail = (body as { detail?: unknown }).detail;
   if (typeof detail === "string") return detail;
+  if (detail && typeof detail === "object" && !Array.isArray(detail) && "message" in detail) {
+    const msg = (detail as { message?: unknown }).message;
+    if (typeof msg === "string" && msg.trim()) return msg;
+  }
   if (Array.isArray(detail)) {
     return detail.map((d) => (typeof d === "object" && d && "msg" in d ? String((d as { msg: unknown }).msg) : String(d))).join("; ");
   }
@@ -193,6 +197,9 @@ type AuthSession = {
   camps: import("./types").Camp[];
   wx_bound?: boolean;
   needs_wx_bind?: boolean;
+  profile_incomplete?: boolean;
+  default_home?: string;
+  portals?: import("./types").AuthPortal[];
 };
 
 export const authApi = {
@@ -1404,16 +1411,30 @@ export const partnerAdminApi = {
 /** Billing */
 export const billingApi = {
   listOfferings: () => api<{ items: Record<string, unknown>[] }>("/api/v1/billing/offerings"),
-  checkout: (offering_id: string, channel: "wechat" | "alipay" = "wechat") =>
+  checkout: (
+    offering_id: string,
+    channel: "wechat" | "alipay" = "wechat",
+    pay_mode: "auto" | "native" | "jsapi" = "auto",
+  ) =>
     api<{
       order_id: string;
       out_trade_no: string;
       amount_fen: number;
-      code_url?: string;
+      code_url?: string | null;
       pay_channel?: string;
+      pay_mode?: "native" | "jsapi";
+      jsapi_params?: {
+        appId: string;
+        timeStamp: string;
+        nonceStr: string;
+        package: string;
+        signType: string;
+        paySign: string;
+      };
       dev_mode?: boolean;
       status: string;
-    }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id, channel } }),
+      reused?: boolean;
+    }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id, channel, pay_mode } }),
   getOrder: (orderId: string) => api<{ order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}`),
   syncOrder: (orderId: string) =>
     api<{ status: string; order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}/sync`, {
@@ -1441,7 +1462,11 @@ export const partnerApi = {
       csrf: string;
       user: import("./types").User;
       org_id: string;
+      camp_id?: string | null;
+      camps?: import("./types").Camp[];
       receiver?: PartnerReceiverStatus | null;
+      default_home?: string;
+      portals?: import("./types").AuthPortal[];
     }>("/api/v1/partner/auth/login", {
       method: "POST",
       body: { email, password },

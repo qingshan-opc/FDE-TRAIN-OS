@@ -31,6 +31,20 @@ export interface AuthMe {
   attribution?: UserAttribution | null;
   wx_bound?: boolean;
   needs_wx_bind?: boolean;
+  /** Learner still has placeholder name or no avatar */
+  profile_incomplete?: boolean;
+  /** Server-decided post-login home path */
+  default_home?: string;
+  /** Server-decided portal switch entries — render only these */
+  portals?: AuthPortal[];
+}
+
+export interface AuthPortal {
+  id: string;
+  label: string;
+  path: string;
+  kind: "learner" | "author" | "partner" | "finance" | string;
+  org_id?: string;
 }
 
 export type NodeKind = "learn" | "quiz" | "lab" | "project" | "review" | "unlock";
@@ -514,6 +528,10 @@ export interface LearnerProfile {
   identity_id_tail?: string | null;
   bio?: string | null;
   avatar_url?: string | null;
+  wx_nickname?: string | null;
+  profile_incomplete?: boolean;
+  needs_display_name?: boolean;
+  needs_avatar?: boolean;
   camps: Camp[];
 }
 

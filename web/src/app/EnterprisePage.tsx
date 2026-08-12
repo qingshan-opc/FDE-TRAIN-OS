@@ -35,7 +35,7 @@ const FALLBACK: LandingPayload = {
 const CN_IDX = ["壹", "贰", "叁", "肆", "伍", "陆"] as const;
 
 export function EnterprisePage() {
-  const { user } = useAuth();
+  const { user, defaultHome } = useAuth();
   const [data, setData] = useState<LandingPayload>(FALLBACK);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -102,7 +102,7 @@ export function EnterprisePage() {
   }, [data.enterprise]);
 
   const brandName = data.brand?.name || "青山在";
-  const appHref = user ? "/app/courses" : data.cta?.app || "/app/courses";
+  const appHref = user ? defaultHome || "/app/courses" : data.cta?.app || "/app/courses";
   const enterprise = data.enterprise || FALLBACK.enterprise!;
   const facts =
     enterprise.facts && enterprise.facts.length > 0 ? enterprise.facts : FALLBACK_FACTS;

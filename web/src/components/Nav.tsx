@@ -21,7 +21,7 @@ export function Nav({
   onHomework?: () => void;
   onPassport?: () => void;
 }) {
-  const { user, campId, camps, logout, switchCamp } = useAuth();
+  const { user, campId, camps, logout, switchCamp, portals, defaultHome } = useAuth();
   const nav = useNavigate();
   const toast = useToast();
   const [switching, setSwitching] = useState(false);
@@ -78,7 +78,7 @@ export function Nav({
       }`}
     >
       <div className="flex items-center gap-3 nav-workbench__brand">
-        <BrandLogo to={variant === "author" ? "/author" : "/app/courses"} name="青山在" />
+        <BrandLogo to={variant === "author" ? "/author" : defaultHome || "/app/courses"} name="青山在" />
         {variant !== "learner-workbench" && (
           <span className="rounded-full bg-fde-accent/10 px-2 py-0.5 text-xs font-medium text-fde-accent">
             {variant === "author" ? "教研台" : "学习平台"}
@@ -107,24 +107,18 @@ export function Nav({
           </select>
         )}
         {variant !== "learner-workbench" && campId && camps?.length <= 1 && <span className="font-mono">{campId}</span>}
-        {(user?.role === "author" || user?.role === "admin") && (
-          <button
-            type="button"
-            className="rounded-md px-2 py-1 hover:bg-fde-bg"
-            onClick={() => nav(variant === "author" ? "/app/courses" : "/author")}
-          >
-            {variant === "author" ? "学员台" : "教研台"}
-          </button>
-        )}
-        {user?.role === "finance" && (
-          <button
-            type="button"
-            className="rounded-md px-2 py-1 hover:bg-fde-bg"
-            onClick={() => nav("/author/finance")}
-          >
-            财务大屏
-          </button>
-        )}
+        {(portals || [])
+          .filter((p) => (variant === "author" ? p.kind !== "author" : p.kind !== "learner"))
+          .map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className="rounded-md px-2 py-1 hover:bg-fde-bg"
+              onClick={() => nav(p.path)}
+            >
+              {p.label}
+            </button>
+          ))}
         <div className="app-nav-user" ref={menuRef}>
           <button
             type="button"

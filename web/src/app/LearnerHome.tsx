@@ -19,6 +19,7 @@ import { dayLabel } from "../lib/dayLabel";
 import { dayTaskPath, primaryCtaLabel, resolveNextTarget, resolveTargetForDay } from "../lib/taskTargets";
 import { CourseIntro } from "./CourseIntro";
 import { parseWeekQuizNodeId, weekQuizNodeId, parseWeekCockpitHomeworkNodeId, weekCockpitHomeworkNodeId } from "../components/Tree";
+import { ProfileCompleteBanner } from "../components/ProfileCompleteBanner";
 
 type MobileTab = "course" | "content" | "task";
 
@@ -36,7 +37,7 @@ export function LearnerHome() {
   const nav = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
-  const { campId, loading: authLoading } = useAuth();
+  const { campId, loading: authLoading, profileIncomplete } = useAuth();
   const [days, setDays] = useState<DaySummary[]>([]);
   const [weeks, setWeeks] = useState(DEFAULT_WEEKS);
   const [dayPkg, setDayPkg] = useState<DayPackage | null>(null);
@@ -490,6 +491,10 @@ export function LearnerHome() {
             setMobileTab("content");
           }}
         />
+
+      <div style={{ padding: "8px 16px 0" }}>
+        <ProfileCompleteBanner incomplete={profileIncomplete} />
+      </div>
 
       <div className="mobile-tabs" role="tablist">
         {(

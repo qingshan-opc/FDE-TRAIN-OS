@@ -60,12 +60,22 @@ def _partner_org_id(user_id: str) -> str | None:
 
 
 def _require_partner(request: Request) -> tuple[AuthUser, str]:
+    """Partner APIs: org linkage via org_accounts (not frontend role)."""
+    from services.auth.session_context import list_partner_orgs
+
     user = require_user(request)
-    if user.role != "partner" and user.role != "admin":
-        raise HTTPException(403, "需要机构账号")
-    org_id = _partner_org_id(user.id)
-    if not org_id and user.role == "admin":
-        org_id = request.query_params.get("org_id")
+    orgs = list_partner_orgs(user.id)
+    requested = (request.query_params.get("org_id") or "").strip() or None
+    org_id: str | None = None
+    if requested:
+        if user.role == "admin" or any(o["id"] == requested for o in orgs):
+            org_id = requested
+        else:
+            raise HTTPException(403, "无权访问该机构")
+    elif orgs:
+        org_id = orgs[0]["id"]
+    elif user.role == "admin":
+        org_id = None
     if not org_id:
         raise HTTPException(403, "未关联机构")
     return user, org_id
@@ -73,6 +83,9 @@ def _require_partner(request: Request) -> tuple[AuthUser, str]:
 
 @router.post("/api/v1/partner/auth/login")
 def partner_login(body: PartnerLoginBody, request: Request, response: Response) -> dict[str, Any]:
+    from services.auth.session_context import attach_session_context
+    from services.shared import user_camps
+
     email = body.email.strip().lower()
     with db_cursor() as cur:
         cur.execute(
@@ -87,7 +100,9 @@ def partner_login(body: PartnerLoginBody, request: Request, response: Response) 
         row = cur.fetchone()
     if not row:
         user = authenticate(email, body.password)
-        if not user or user.role not in ("partner", "admin"):
+        if not user:
+            raise HTTPException(401, "邮箱或密码错误")
+        if user.role not in ("partner", "admin") and not _partner_org_id(user.id):
             raise HTTPException(401, "邮箱或密码错误")
     else:
         row = dict(row)
@@ -101,14 +116,17 @@ def partner_login(body: PartnerLoginBody, request: Request, response: Response) 
         )
     import secrets
 
+    # Partner-as-learner: attach camp when enrolled
+    camps = user_camps(user.id)
+    camp_id = camps[0]["id"] if camps else None
     sid, refresh = create_refresh_session(
         user.id,
-        None,
+        camp_id,
         user_agent=request.headers.get("user-agent"),
         ip=request.client.host if request.client else None,
         exclusive=True,
     )
-    access = create_access_token(user, None, session_id=sid)
+    access = create_access_token(user, camp_id, session_id=sid)
     csrf = secrets.token_urlsafe(24)
     _set_auth_cookies(response, access, refresh, csrf)
     org_id = _partner_org_id(user.id)
@@ -116,13 +134,18 @@ def partner_login(body: PartnerLoginBody, request: Request, response: Response) 
     receiver = None
     if org_id:
         receiver = wechat_bind.receiver_status(partners.get_organization(org_id))
-    return {
-        "token": access,
-        "csrf": csrf,
-        "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
-        "org_id": org_id,
-        "receiver": receiver,
-    }
+    return attach_session_context(
+        {
+            "token": access,
+            "csrf": csrf,
+            "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
+            "camp_id": camp_id,
+            "camps": user_camps(user.id),
+            "org_id": org_id,
+            "receiver": receiver,
+        },
+        user,
+    )
 
 
 @router.get("/api/v1/partner/dashboard")

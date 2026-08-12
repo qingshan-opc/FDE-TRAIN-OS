@@ -763,7 +763,20 @@ def my_profile(request: Request) -> dict[str, Any]:
     avatar_url = None
     masked_name = None
     id_tail = None
+    wx_nickname = None
     with db_cursor() as cur:
+        cur.execute("SELECT display_name, wx_nickname FROM users WHERE id=?", (user.id,))
+        urow = cur.fetchone()
+        if urow:
+            urow = dict(urow)
+            if urow.get("display_name"):
+                # Prefer DB name over token snapshot (may have been enriched after login)
+                user_display = urow.get("display_name")
+            else:
+                user_display = user.display_name or user.email
+            wx_nickname = urow.get("wx_nickname")
+        else:
+            user_display = user.display_name or user.email
         if _table_exists(cur, "identity_verifications"):
             cur.execute(
                 "SELECT * FROM identity_verifications WHERE user_id=? ORDER BY created_at DESC LIMIT 1",
@@ -783,9 +796,12 @@ def my_profile(request: Request) -> dict[str, Any]:
                 avatar_url = _first(d, "avatar_url", "avatar_key")
     if avatar_url and isinstance(avatar_url, str) and not avatar_url.startswith("http") and not avatar_url.startswith("/api/"):
         avatar_url = f"/api/v1/media/stream?object_key={avatar_url}"
+    from services.wechat_mp.profile import is_placeholder_display_name, profile_incomplete_for_user
+
+    incomplete = profile_incomplete_for_user(user.id, user_display)
     return {
         "id": user.id,
-        "display_name": user.display_name or user.email,
+        "display_name": user_display,
         "email": user.email,
         "role": user.role,
         "identity_status": identity_status,
@@ -793,6 +809,10 @@ def my_profile(request: Request) -> dict[str, Any]:
         "identity_id_tail": id_tail,
         "bio": bio,
         "avatar_url": avatar_url,
+        "wx_nickname": wx_nickname,
+        "profile_incomplete": incomplete,
+        "needs_display_name": is_placeholder_display_name(user_display),
+        "needs_avatar": not bool(avatar_url),
         "camps": user_camps(user.id),
     }
 

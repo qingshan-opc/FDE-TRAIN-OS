@@ -3,6 +3,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import { BrandLogo } from "../components/BrandLogo";
+import { PortalSwitchButtons } from "../components/PortalSwitchButtons";
 
 const { Header, Content } = Layout;
 
@@ -43,6 +44,7 @@ export function PartnerHome() {
           className="partner-topbar__menu"
         />
         <Space className="partner-topbar__user" size={10}>
+          <PortalSwitchButtons currentKind="partner" size="middle" />
           <span className="partner-topbar__email" title={userLabel}>
             {userLabel}
           </span>
@@ -50,8 +52,9 @@ export function PartnerHome() {
             size="middle"
             icon={<LogoutOutlined />}
             onClick={() => void logout().then(() => nav("/partner/login"))}
+            aria-label="退出"
           >
-            退出
+            <span className="partner-topbar__logout-text">退出</span>
           </Button>
         </Space>
       </Header>

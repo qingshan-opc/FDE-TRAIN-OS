@@ -25,7 +25,7 @@ init_schema()
 
 def _require_learner(request: Request) -> AuthUser:
     user = require_user(request)
-    if user.role not in ("learner",):
+    if user.role not in ("learner", "partner"):
         raise HTTPException(403, "需要学员账号")
     return user
 

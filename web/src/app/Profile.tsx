@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Alert } from "antd";
 import { meApi, ApiError } from "../lib/api";
 import { LearnerAccountLayout } from "../components/LearnerAccountLayout";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { useToast } from "../components/Toast";
+import { useAuth } from "../lib/auth";
 import {
   IconAccountCertificate,
   IconAccountIdentity,
@@ -24,6 +26,7 @@ function navUserLabel(profile: LearnerProfile): string {
 
 export function Profile() {
   const toast = useToast();
+  const { refreshMe } = useAuth();
   const fileRef = useRef<HTMLInputElement>(null);
   const [data, setData] = useState<LearnerProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,6 +59,12 @@ export function Profile() {
     try {
       const profile = await meApi.updateProfile({ display_name: displayName.trim() });
       setData(profile);
+      try {
+        sessionStorage.removeItem("fde_profile_complete_dismissed");
+      } catch {
+        /* ignore */
+      }
+      await refreshMe();
       toast.push("已保存", "success");
     } catch (err) {
       toast.push(err instanceof ApiError ? err.message : "保存失败", "error");
@@ -70,6 +79,12 @@ export function Profile() {
     try {
       const res = await meApi.uploadAvatar(file);
       setData(res.profile);
+      try {
+        sessionStorage.removeItem("fde_profile_complete_dismissed");
+      } catch {
+        /* ignore */
+      }
+      await refreshMe();
       toast.push("头像已更新", "success");
     } catch (err) {
       toast.push(err instanceof ApiError ? err.message : "上传失败", "error");
@@ -89,6 +104,21 @@ export function Profile() {
       ) : (
         <>
           <div className="profile-overview-grid">
+            {data.profile_incomplete && (
+              <Alert
+                type="info"
+                showIcon
+                style={{ gridColumn: "1 / -1", marginBottom: 0 }}
+                message="完善个人资料"
+                description={
+                  data.needs_display_name && data.needs_avatar
+                    ? "请设置中文昵称并上传头像。若刚从微信进入仍看到默认名，可能是微信未返回资料，请在此手动完善。"
+                    : data.needs_display_name
+                      ? "请设置一个中文显示名称，便于导航栏与证书展示。"
+                      : "请上传头像，完善个人主页展示。"
+                }
+              />
+            )}
             <section className="panel profile-base-panel">
               <h2 className="profile-section-title">
                 <IconSectionProfile className="profile-section-title__icon" />

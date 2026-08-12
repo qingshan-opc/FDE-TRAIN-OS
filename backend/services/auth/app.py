@@ -150,6 +150,8 @@ def _issue(
     *,
     remember: bool = False,
 ) -> dict[str, Any]:
+    from services.auth.session_context import attach_session_context, user_can_learn
+
     ttl = REMEMBER_TTL_SEC if remember else None
     sid, refresh = create_refresh_session(
         user.id,
@@ -164,15 +166,27 @@ def _issue(
     _set_auth_cookies(response, access, refresh, csrf, refresh_max_age=ttl)
     write_audit("auth.login", actor_id=user.id, camp_id=camp_id, ip=request.client.host if request.client else None)
     wx_bound = _wx_bound_for(user)
-    return {
-        "token": access,
-        "csrf": csrf,
-        "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
-        "camp_id": camp_id,
-        "camps": user_camps(user.id),
-        "wx_bound": wx_bound,
-        "needs_wx_bind": not wx_bound,
-    }
+    profile_incomplete = False
+    try:
+        from services.wechat_mp.profile import profile_incomplete_for_user
+
+        if user_can_learn(user.role) and user.role not in ("author", "admin"):
+            profile_incomplete = profile_incomplete_for_user(user.id, user.display_name)
+    except Exception:
+        profile_incomplete = False
+    return attach_session_context(
+        {
+            "token": access,
+            "csrf": csrf,
+            "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
+            "camp_id": camp_id,
+            "camps": user_camps(user.id),
+            "wx_bound": wx_bound,
+            "needs_wx_bind": not wx_bound,
+            "profile_incomplete": profile_incomplete,
+        },
+        user,
+    )
 
 
 def _resolve_camp_id(user: AuthUser, preferred: str | None = None) -> str | None:
@@ -199,11 +213,11 @@ def login(body: LoginBody, request: Request, response: Response) -> dict[str, An
         write_audit("auth.login_failed", details={"email": body.email}, ip=request.client.host if request.client else None)
         raise HTTPException(401, "邮箱或密码错误")
     camp_id = _resolve_camp_id(user, body.camp_id)
-    if camp_id and user.role == "learner":
+    if camp_id and user.role in ("learner", "partner"):
         _ensure_enrollment_record_safe(user.id, camp_id)
     issued = _issue(user, camp_id, response, request, remember=bool(body.remember))
     # 邮箱登录同样消费邀请 cookie（机构 / 学员推荐），与微信登录一致
-    if user.role == "learner":
+    if user.role in ("learner", "partner"):
         _try_bind_pending_invite(request, response, user.id)
     return issued
 
@@ -228,7 +242,6 @@ def wechat_login_status(
 ) -> dict[str, Any]:
     """Poll QR login; when done, set auth cookies and return user + redirect hint."""
     from services.wechat_mp import login as mp_login
-    from services.partner.app import _partner_org_id
     from services.partner import wechat_bind
     from services.partners import service as partners
 
@@ -255,39 +268,42 @@ def wechat_login_status(
     if not peek:
         return {"pending": True, "done": False, "expired": False}
 
-    if expect_role == "partner" and peek["role"] not in ("partner", "admin"):
-        return {
-            "pending": False,
-            "done": False,
-            "expired": False,
-            "error": "该微信未关联机构账号。请先用邮箱登录机构后台并扫码绑定收款微信。",
-        }
+    if expect_role == "partner":
+        from services.auth.session_context import list_partner_orgs
+
+        # Partner console QR: require org linkage (role may still be partner, or learner+org)
+        if peek["role"] not in ("partner", "admin") and not list_partner_orgs(str(peek["id"])):
+            return {
+                "pending": False,
+                "done": False,
+                "expired": False,
+                "error": "该微信未关联机构账号。请先用邮箱登录机构后台并扫码绑定收款微信。",
+            }
 
     user = mp_login.consume_login_user(state)
     if not user:
         return {"pending": True, "done": False, "expired": False}
 
-    camp_id = None if user.role == "partner" else _resolve_camp_id(user, None)
-    if camp_id and user.role == "learner":
+    from services.auth.session_context import build_session_context, list_partner_orgs
+
+    camp_id = _resolve_camp_id(user, None)
+    if camp_id and user.role in ("learner", "partner"):
         _ensure_enrollment_record_safe(user.id, camp_id)
     out = _issue(user, camp_id, response, request)
     _try_bind_pending_invite(request, response, user.id)
     write_audit("auth.wechat_login", actor_id=user.id, details={"role": user.role})
 
-    redirect = "/app/courses"
+    ctx = build_session_context(user)
+    redirect = str(ctx["default_home"])
     org_id = None
     receiver = None
-    if user.role == "partner":
-        org_id = _partner_org_id(user.id)
-        redirect = "/partner"
-        if org_id:
-            receiver = wechat_bind.receiver_status(partners.get_organization(org_id))
-            if receiver and not receiver.get("bound"):
-                redirect = "/partner?bind=1"
-    elif user.role == "finance":
-        redirect = "/author/finance"
-    elif user.role in ("author", "admin"):
-        redirect = "/author"
+    orgs = list_partner_orgs(user.id)
+    if orgs:
+        org_id = orgs[0]["id"]
+        receiver = wechat_bind.receiver_status(partners.get_organization(org_id))
+        # Partner-console QR login: if receiver unbound, nudge bind flow
+        if expect_role == "partner" and receiver and not receiver.get("bound"):
+            redirect = "/partner?bind=1"
 
     out.update(
         {
@@ -370,9 +386,9 @@ def _try_bind_pending_invite(request: Request, response: Response, user_id: str)
     if get_user_referral(user_id):
         response.delete_cookie(INVITE_PENDING_COOKIE, path="/")
         return False
-    # Only attribute learners via invite posters
+    # Only attribute learners (and partner-as-learner) via invite posters
     user = get_user_by_id(user_id)
-    if not user or user.role not in ("learner",):
+    if not user or user.role not in ("learner", "partner"):
         return False
     try:
         result = bind_any_invite_code(user_id, pending)
@@ -423,9 +439,14 @@ def wechat_mp_entry_callback(
         log.warning("mp-entry callback failed: %s", exc)
         return _mp_entry_error_html(str(exc)[:200])
 
-    camp_id = None if user.role == "partner" else _resolve_camp_id(user, None)
-    if camp_id and user.role == "learner":
+    camp_id = _resolve_camp_id(user, None)
+    if camp_id and user.role in ("learner", "partner"):
         _ensure_enrollment_record_safe(user.id, camp_id)
+    # Prefer OAuth next; fall back to server default_home if empty/invalid already sanitized
+    from services.auth.session_context import build_session_context
+
+    if not next_path:
+        next_path = build_session_context(user)["default_home"]
     # _issue sets cookies on response; we still need a RedirectResponse with those cookies
     out_resp = RedirectResponse(next_path, status_code=302)
     _issue(user, camp_id, out_resp, request)
@@ -613,16 +634,31 @@ def me(request: Request) -> dict[str, Any]:
 
     attribution = get_user_attribution(user.id)
     wx_bound = _wx_bound_for(user)
-    return {
-        "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
-        "camp_id": camp_id,
-        "camps": user_camps(user.id),
-        "csrf": request.cookies.get(CSRF_COOKIE),
-        "server_time": int(time.time()),
-        "attribution": attribution,
-        "wx_bound": wx_bound,
-        "needs_wx_bind": not wx_bound,
-    }
+    profile_incomplete = False
+    from services.auth.session_context import attach_session_context, user_can_learn
+
+    try:
+        from services.wechat_mp.profile import profile_incomplete_for_user
+
+        if user_can_learn(user.role) and user.role not in ("author", "admin"):
+            profile_incomplete = profile_incomplete_for_user(user.id, user.display_name)
+    except Exception:
+        profile_incomplete = False
+
+    return attach_session_context(
+        {
+            "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
+            "camp_id": camp_id,
+            "camps": user_camps(user.id),
+            "csrf": request.cookies.get(CSRF_COOKIE),
+            "server_time": int(time.time()),
+            "attribution": attribution,
+            "wx_bound": wx_bound,
+            "needs_wx_bind": not wx_bound,
+            "profile_incomplete": profile_incomplete,
+        },
+        user,
+    )
 
 
 @router.post("/api/v1/auth/wechat/bind-start", dependencies=[Depends(rate_limit("login"))])

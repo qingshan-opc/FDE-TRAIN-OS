@@ -73,7 +73,7 @@ function Chevron({ open }: { open: boolean }) {
 }
 
 export function Landing() {
-  const { user } = useAuth();
+  const { user, defaultHome } = useAuth();
   const [data, setData] = useState<LandingPayload>(FALLBACK);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [openDay, setOpenDay] = useState<string>("W1-D1");
@@ -84,7 +84,7 @@ export function Landing() {
   const painRef = useRef<HTMLElement | null>(null);
   const purchaseHref = user ? PURCHASE_PATH : LOGIN_PATH;
   const brandName = data.brand?.name || "青山在";
-  const appHref = data.cta?.app || "/app/courses";
+  const appHref = user ? defaultHome || "/app/courses" : data.cta?.app || "/app/courses";
 
   const outlineDays = useMemo(
     () =>

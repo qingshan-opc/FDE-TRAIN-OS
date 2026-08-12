@@ -1,4 +1,4 @@
-"""WeChat Pay v3 — Native QR checkout + notify."""
+"""WeChat Pay v3 — Native QR + JSAPI checkout + notify."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import requests
 
@@ -193,6 +193,57 @@ def validate_trade_against_order(order: dict, trade: dict) -> str | None:
     return None
 
 
+TradeType = Literal["native", "jsapi"]
+JSAPI_CODE_PREFIX = "jsapi:"
+
+
+def is_jsapi_code_url(code_url: str | None) -> bool:
+    return bool(code_url) and str(code_url).startswith(JSAPI_CODE_PREFIX)
+
+
+def prepay_id_from_code_url(code_url: str | None) -> str | None:
+    if not is_jsapi_code_url(code_url):
+        return None
+    return str(code_url)[len(JSAPI_CODE_PREFIX) :].strip() or None
+
+
+def build_jsapi_pay_params(prepay_id: str) -> dict[str, str]:
+    """RSA paySign package for WeixinJSBridge getBrandWCPayRequest."""
+    if not prepay_id:
+        raise ValueError("missing prepay_id")
+    if prepay_id.startswith("dev-") and not configured():
+        return {
+            "appId": WECHAT_PAY_APP_ID or "wx_dev",
+            "timeStamp": str(int(time.time())),
+            "nonceStr": uuid.uuid4().hex,
+            "package": f"prepay_id={prepay_id}",
+            "signType": "RSA",
+            "paySign": "DEV_SIGN",
+        }
+    ts = str(int(time.time()))
+    nonce = uuid.uuid4().hex
+    package = f"prepay_id={prepay_id}"
+    message = f"{WECHAT_PAY_APP_ID}\n{ts}\n{nonce}\n{package}\n"
+    return {
+        "appId": WECHAT_PAY_APP_ID,
+        "timeStamp": ts,
+        "nonceStr": nonce,
+        "package": package,
+        "signType": "RSA",
+        "paySign": _sign_message(message),
+    }
+
+
+def get_user_wx_mp_openid(user_id: str) -> str | None:
+    with db_cursor() as cur:
+        cur.execute("SELECT wx_mp_openid FROM users WHERE id=?", (user_id,))
+        row = cur.fetchone()
+    if not row:
+        return None
+    val = (dict(row).get("wx_mp_openid") or "").strip()
+    return val or None
+
+
 def create_payment_order(
     user_id: str,
     offering_id: str,
@@ -200,14 +251,19 @@ def create_payment_order(
     org_id: str | None,
     description: str,
     referrer_user_id: str | None = None,
+    *,
+    trade_type: TradeType = "native",
+    openid: str | None = None,
 ) -> dict[str, Any]:
+    if trade_type == "jsapi" and not (openid or "").strip():
+        raise ValueError("JSAPI 支付需要微信 openid")
     oid = f"po-{uuid.uuid4().hex[:16]}"
     out_trade_no = f"FDE{int(time.time())}{uuid.uuid4().hex[:8].upper()}"
     code_url = None
     status = "pending"
     if configured():
         notify_url = f"{FDE_PUBLIC_BASE_URL}/api/v1/billing/wechat/notify"
-        payload = {
+        payload: dict[str, Any] = {
             "appid": WECHAT_PAY_APP_ID,
             "mchid": WECHAT_PAY_MCH_ID,
             "description": description[:127],
@@ -217,10 +273,21 @@ def create_payment_order(
         }
         if WECHAT_PAY_PROFIT_SHARING:
             payload["settle_info"] = {"profit_sharing": True}
-        data = _request("POST", "/v3/pay/transactions/native", payload)
-        code_url = data.get("code_url")
+        if trade_type == "jsapi":
+            payload["payer"] = {"openid": (openid or "").strip()}
+            data = _request("POST", "/v3/pay/transactions/jsapi", payload)
+            prepay_id = (data.get("prepay_id") or "").strip()
+            if not prepay_id:
+                raise RuntimeError("微信 JSAPI 下单未返回 prepay_id")
+            code_url = f"{JSAPI_CODE_PREFIX}{prepay_id}"
+        else:
+            data = _request("POST", "/v3/pay/transactions/native", payload)
+            code_url = data.get("code_url")
     elif FDE_ENV != "prod":
-        code_url = f"dev://fde-pay/{out_trade_no}"
+        if trade_type == "jsapi":
+            code_url = f"{JSAPI_CODE_PREFIX}dev-{out_trade_no}"
+        else:
+            code_url = f"dev://fde-pay/{out_trade_no}"
     else:
         raise RuntimeError("微信支付未配置")
     with db_cursor() as cur:

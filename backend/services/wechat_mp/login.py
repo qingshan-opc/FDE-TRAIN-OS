@@ -193,6 +193,8 @@ def _find_partner_user_by_openid(openid: str) -> dict[str, Any] | None:
 
 
 def resolve_or_create_user(openid: str, nickname: str | None = None) -> AuthUser:
+    from services.wechat_mp.profile import is_placeholder_display_name
+
     _ensure_schema()
     with db_cursor() as cur:
         cur.execute(
@@ -201,10 +203,17 @@ def resolve_or_create_user(openid: str, nickname: str | None = None) -> AuthUser
         )
         row = cur.fetchone()
         if row:
-            if nickname and not row.get("display_name"):
+            row = dict(row)
+            if nickname and is_placeholder_display_name(row.get("display_name")):
                 cur.execute(
                     "UPDATE users SET display_name=?, wx_nickname=? WHERE id=?",
                     (nickname[:64], nickname[:64], row["id"]),
+                )
+                row["display_name"] = nickname[:64]
+            elif nickname:
+                cur.execute(
+                    "UPDATE users SET wx_nickname=? WHERE id=?",
+                    (nickname[:64], row["id"]),
                 )
             return AuthUser(
                 id=row["id"],

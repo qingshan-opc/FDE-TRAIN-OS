@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { App, Button, Form, Input, Select, Tag, Tooltip } from "antd";
+import { App, Button, Form, Input, Select, Space, Tag, Tooltip } from "antd";
 import { PlusOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { authorApi, ApiError } from "../../lib/api";
@@ -207,10 +207,8 @@ export function LearnerCourses() {
           {
             title: "操作",
             render: (_, r) => (
-              <>
-                <Button type="link">
-                  <Link to={`/author/learners/${r.id}`}>进度</Link>
-                </Button>
+              <Space size={4} wrap>
+                <Link to={`/author/learners/${encodeURIComponent(r.id)}`}>进度</Link>
                 <Button
                   type="link"
                   icon={<SafetyCertificateOutlined />}
@@ -245,7 +243,7 @@ export function LearnerCourses() {
                 >
                   {r.status === "dropped" ? "恢复" : "停用"}
                 </Button>
-              </>
+              </Space>
             ),
           },
         ]}

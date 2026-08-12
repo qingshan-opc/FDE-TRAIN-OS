@@ -10,7 +10,7 @@ import {
 } from "react";
 import { App } from "antd";
 import { ApiError, authApi, setSessionReplacedHandler } from "./api";
-import type { AuthMe, Camp, User } from "./types";
+import type { AuthMe, AuthPortal, Camp, User } from "./types";
 
 interface AuthState {
   user: User | null;
@@ -20,6 +20,9 @@ interface AuthState {
   error: string | null;
   wxBound: boolean;
   needsWxBind: boolean;
+  profileIncomplete: boolean;
+  defaultHome: string;
+  portals: AuthPortal[];
   login: (email: string, password: string, opts?: { campId?: string; remember?: boolean }) => Promise<AuthMe | void>;
   logout: () => Promise<void>;
   refreshMe: () => Promise<AuthMe | null>;
@@ -30,10 +33,21 @@ interface AuthState {
 const AuthContext = createContext<AuthState | null>(null);
 
 function learnerNeedsBind(role: string | undefined, wxBound: boolean | undefined, needsFlag: boolean | undefined) {
-  if (role !== "learner") return false;
+  // Partners are also learners for OA bind when server says needs_wx_bind
+  if (role !== "learner" && role !== "partner") return false;
   if (typeof needsFlag === "boolean") return needsFlag;
   if (typeof wxBound === "boolean") return !wxBound;
   return false;
+}
+
+function applyPortals(me: AuthMe): { defaultHome: string; portals: AuthPortal[] } {
+  const portals = Array.isArray(me.portals) ? me.portals : [];
+  const defaultHome =
+    (me.default_home || "").trim() ||
+    portals.find((p) => p.kind === "learner")?.path ||
+    portals[0]?.path ||
+    "/app/courses";
+  return { defaultHome, portals };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -45,15 +59,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [wxBound, setWxBound] = useState(true);
   const [needsWxBind, setNeedsWxBind] = useState(false);
+  const [profileIncomplete, setProfileIncomplete] = useState(false);
+  const [defaultHome, setDefaultHome] = useState("/app/courses");
+  const [portals, setPortals] = useState<AuthPortal[]>([]);
 
   const applyMe = useCallback((me: AuthMe) => {
     setUser(me.user);
     setCampId(me.camp_id);
     setCamps(me.camps || []);
-    const bound = me.wx_bound !== false && !me.needs_wx_bind;
     const needs = learnerNeedsBind(me.user.role, me.wx_bound, me.needs_wx_bind);
-    setWxBound(bound || me.user.role !== "learner");
+    setWxBound(!needs);
     setNeedsWxBind(needs);
+    setProfileIncomplete(
+      (me.user.role === "learner" || me.user.role === "partner") && Boolean(me.profile_incomplete),
+    );
+    const p = applyPortals(me);
+    setDefaultHome(p.defaultHome);
+    setPortals(p.portals);
   }, []);
 
   const clearSession = useCallback(() => {
@@ -62,6 +84,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCamps([]);
     setWxBound(true);
     setNeedsWxBind(false);
+    setProfileIncomplete(false);
+    setDefaultHome("/app/courses");
+    setPortals([]);
   }, []);
 
   const refreshMe = useCallback(async () => {
@@ -109,21 +134,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string, opts?: { campId?: string; remember?: boolean }) => {
     const res = await authApi.login(email, password, opts?.campId, opts?.remember);
-    setUser(res.user);
-    setCampId(res.camp_id);
-    setCamps(res.camps || []);
-    const needs = learnerNeedsBind(res.user.role, res.wx_bound, res.needs_wx_bind);
-    setWxBound(!needs);
-    setNeedsWxBind(needs);
-    setError(null);
-    return {
+    const me: AuthMe = {
       user: res.user,
       camp_id: res.camp_id,
       camps: res.camps || [],
       wx_bound: res.wx_bound,
       needs_wx_bind: res.needs_wx_bind,
-    } satisfies AuthMe;
-  }, []);
+      profile_incomplete: res.profile_incomplete,
+      default_home: res.default_home,
+      portals: res.portals,
+    };
+    applyMe(me);
+    setError(null);
+    return me;
+  }, [applyMe]);
 
   const logout = useCallback(async () => {
     try {
@@ -158,13 +182,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       error,
       wxBound,
       needsWxBind,
+      profileIncomplete,
+      defaultHome,
+      portals,
       login,
       logout,
       refreshMe,
       switchCamp,
       switchEnrollment,
     }),
-    [user, campId, camps, loading, error, wxBound, needsWxBind, login, logout, refreshMe, switchCamp, switchEnrollment],
+    [
+      user,
+      campId,
+      camps,
+      loading,
+      error,
+      wxBound,
+      needsWxBind,
+      profileIncomplete,
+      defaultHome,
+      portals,
+      login,
+      logout,
+      refreshMe,
+      switchCamp,
+      switchEnrollment,
+    ],
   );
 
   return createElement(AuthContext.Provider, { value }, children);

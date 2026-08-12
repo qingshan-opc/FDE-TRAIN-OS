@@ -10,7 +10,7 @@ type Mode = "wechat" | "email";
 
 export function PartnerLoginPage() {
   const nav = useNavigate();
-  const { user, loading, refreshMe } = useAuth();
+  const { user, loading, refreshMe, portals } = useAuth();
   const [form] = Form.useForm();
   const [mode, setMode] = useState<Mode>("wechat");
   const [submitting, setSubmitting] = useState(false);
@@ -45,10 +45,10 @@ export function PartnerLoginPage() {
   }, [stopWxPoll]);
 
   useEffect(() => {
-    if (!loading && user?.role === "partner") {
-      nav("/partner", { replace: true });
-    }
-  }, [loading, user, nav]);
+    if (loading || !user) return;
+    const partnerPath = (portals || []).find((p) => p.kind === "partner")?.path;
+    if (partnerPath) nav(partnerPath, { replace: true });
+  }, [loading, user, nav, portals]);
 
   useEffect(() => {
     if (mode === "wechat" && !user && !loading) void startWxLogin();
@@ -68,8 +68,9 @@ export function PartnerLoginPage() {
         }
         if (st.done) {
           stopWxPoll();
-          await refreshMe();
-          nav(st.redirect || "/partner", { replace: true });
+          const me = await refreshMe();
+          const partnerPath = (me?.portals || []).find((p) => p.kind === "partner")?.path;
+          nav(st.redirect || partnerPath || "/partner", { replace: true });
           return;
         }
         if (st.expired) {
@@ -92,7 +93,8 @@ export function PartnerLoginPage() {
       const res = await partnerApi.login(values.email.trim(), values.password);
       await refreshMe();
       const needBind = res.receiver && !res.receiver.bound;
-      nav(needBind ? "/partner?bind=1" : "/partner", { replace: true });
+      const partnerPath = (res.portals || []).find((p) => p.kind === "partner")?.path || "/partner";
+      nav(needBind ? "/partner?bind=1" : partnerPath, { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "登录失败");
     } finally {

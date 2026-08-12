@@ -18,7 +18,7 @@ const FALLBACK: LandingPayload = {
 };
 
 export function VerifyCertificate() {
-  const { user } = useAuth();
+  const { user, defaultHome } = useAuth();
   const nav = useNavigate();
   const { certId: routeCertId } = useParams();
   const [searchParams] = useSearchParams();
@@ -82,7 +82,7 @@ export function VerifyCertificate() {
   const publicOk = Boolean(publicResult?.valid);
   const notFound = publicSubmitted && publicResult && !publicOk && !hasChainPublic;
   const brandName = site.brand?.name || "青山在";
-  const appHref = user ? "/app/courses" : site.cta?.app || "/app/courses";
+  const appHref = user ? defaultHome || "/app/courses" : site.cta?.app || "/app/courses";
 
   const goToChainDetail = () => {
     if (txHash) {

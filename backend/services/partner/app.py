@@ -217,13 +217,24 @@ def partner_offerings(request: Request) -> dict[str, Any]:
             if vid:
                 cur.execute(
                     """
-                    SELECT day_index, title FROM course_modules
+                    SELECT day AS day_index, title
+                    FROM day_packages
                     WHERE course_version_id=?
-                    ORDER BY sort_order, day_index LIMIT 8
+                    ORDER BY day
                     """,
                     (vid,),
                 )
                 modules = [dict(r) for r in cur.fetchall()]
+                if not modules:
+                    cur.execute(
+                        """
+                        SELECT day_index, title FROM course_modules
+                        WHERE course_version_id=?
+                        ORDER BY sort_order, day_index
+                        """,
+                        (vid,),
+                    )
+                    modules = [dict(r) for r in cur.fetchall()]
             it["modules"] = modules
             it["module_count"] = len(modules)
             it["description"] = it.pop("course_description", None) or ""

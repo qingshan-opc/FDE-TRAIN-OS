@@ -349,17 +349,29 @@ def list_purchasable_offerings(request: Request) -> dict[str, Any]:
             vid = it.pop("course_version_id", None)
             modules: list[dict[str, Any]] = []
             if vid:
+                # Prefer day_packages (learner syllabus source of truth).
+                # Do not LIMIT — shop week-3 preview needs days 12–17+.
                 cur.execute(
                     """
-                    SELECT day_index, title
-                    FROM course_modules
+                    SELECT day AS day_index, title
+                    FROM day_packages
                     WHERE course_version_id=?
-                    ORDER BY sort_order, day_index
-                    LIMIT 12
+                    ORDER BY day
                     """,
                     (vid,),
                 )
                 modules = [dict(r) for r in cur.fetchall()]
+                if not modules:
+                    cur.execute(
+                        """
+                        SELECT day_index, title
+                        FROM course_modules
+                        WHERE course_version_id=?
+                        ORDER BY sort_order, day_index
+                        """,
+                        (vid,),
+                    )
+                    modules = [dict(r) for r in cur.fetchall()]
             it["modules"] = modules
             it["module_count"] = len(modules)
             # Prefer richer catalog description; thin migration stubs are OK for UI fallback

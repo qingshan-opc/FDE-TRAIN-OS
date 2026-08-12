@@ -33,7 +33,7 @@ export const SHOP_WEEKS = [
     title: "第三周",
     subtitle: "组织推动与 AI 落地",
     dayFrom: 12,
-    dayTo: 21,
+    dayTo: 17,
   },
 ] as const;
 

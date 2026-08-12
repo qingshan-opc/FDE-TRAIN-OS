@@ -154,7 +154,7 @@ export default function App() {
       <Route
         path="/app/invite"
         element={
-          <RequireAuth roles={["learner", "partner"]}>
+          <RequireAuth roles={["learner", "partner", "author", "admin"]}>
             <LearnerReferral />
           </RequireAuth>
         }

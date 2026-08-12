@@ -171,8 +171,8 @@ export function LearnerReferral() {
           <Alert
             type="info"
             showIcon
-            message="学员邀请分佣"
-            description="好友通过你的专属链接注册后计入邀请人数。佣金默认 20%；满 5 人升至 25%；满 10 人升至 30%。好友付费后按当前比例分账到你绑定的微信。"
+            message="邀请分佣"
+            description="好友通过你的专属链接注册后计入邀请人数。佣金默认 20%；满 5 人升至 25%；满 10 人升至 30%。好友付费后按当前比例分账到你绑定的微信。教研老师同样可发起个人邀请分佣。"
           />
 
           <Row gutter={[16, 16]}>

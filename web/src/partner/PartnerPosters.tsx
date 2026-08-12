@@ -164,7 +164,7 @@ export function PartnerPosters() {
         课程海报
       </Typography.Title>
       <Typography.Paragraph type="secondary">
-        学员微信扫码自动登录并进入选购；支付计入本机构。默认深蓝金主视觉，对齐 FDE Academy 营销页。
+        学员微信扫码自动登录并进入选购；支付计入本机构。四套均为深蓝金完整长图，差异在路径/成果/报价强调。
       </Typography.Paragraph>
 
       {!hasInvite ? (

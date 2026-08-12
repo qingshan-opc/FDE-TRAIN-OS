@@ -86,7 +86,8 @@ def resolve_learner_invite_code(code: str) -> dict[str, Any] | None:
             SELECT lic.*, u.display_name AS referrer_display_name, u.email AS referrer_email
             FROM learner_invite_codes lic
             JOIN users u ON u.id = lic.user_id
-            WHERE UPPER(lic.code)=? AND lic.status='active' AND u.role='learner'
+            WHERE UPPER(lic.code)=? AND lic.status='active'
+              AND u.role IN ('learner', 'partner', 'author', 'admin')
             """,
             (c,),
         )

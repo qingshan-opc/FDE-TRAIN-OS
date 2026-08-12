@@ -224,7 +224,7 @@ export function Profile() {
                   <span className="profile-status-card__link">查看证书</span>
                   </div>
                 </Link>
-                {data.role === "learner" ? (
+                {data.role === "learner" || data.role === "partner" || data.role === "author" || data.role === "admin" ? (
                   <Link to="/app/invite" className="profile-status-card">
                     <span className="profile-status-card__icon" aria-hidden>
                       <IconAccountInvite />

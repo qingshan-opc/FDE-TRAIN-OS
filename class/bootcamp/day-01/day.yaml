@@ -28,17 +28,11 @@ resources:
   kind: doc
   summary: 每个岗位接收什么、交付什么、下一步切换到谁
   url: /course-assets/bootcamp/day-01/section-02-software-flow/resources.md
-- id: project-selection-card
-  title: 速查卡 · 专业领域项目选题公式
-  kind: doc
-  summary: 专业领域 + 明确用户 + 高频问题 + 可视化结果
-  url: /course-assets/bootcamp/day-01/section-04-choose-project/resources.md
 capsule_extra:
   c1:
     resource_ids:
     - trae-download
     - day1-agent-pack
-    - project-selection-card
     media:
     - kind: video
       title: 口播课件 · 你不是从零开始
@@ -220,8 +214,6 @@ capsule_extra:
       - 提示词应该复制文件的哪一部分？
       template_resource_id: day1-agent-pack
   c4:
-    resource_ids:
-    - project-selection-card
     media:
     - kind: video
       title: 口播课件 · 从专业领域选择第一个项目
@@ -264,7 +256,6 @@ capsule_extra:
   c5:
     resource_ids:
     - agent-pm
-    - project-selection-card
     media:
     - kind: video
       title: 口播课件 · 与产品经理澄清需求

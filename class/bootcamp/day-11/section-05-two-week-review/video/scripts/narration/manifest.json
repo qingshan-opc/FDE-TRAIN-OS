@@ -1,38 +1,9 @@
 [
-  {
-    "id": "01-open",
-    "file": "01-open.txt"
-  },
-  {
-    "id": "02-cognitive-fold",
-    "file": "02-cognitive-fold.txt"
-  },
-  {
-    "id": "03-industry-map",
-    "file": "03-industry-map.txt"
-  },
-  {
-    "id": "04-orchestration-star",
-    "file": "04-orchestration-star.txt"
-  },
-  {
-    "id": "05-ten-days-enough",
-    "file": "05-ten-days-enough.txt"
-  },
-  {
-    "id": "06-roadmap",
-    "file": "06-roadmap.txt"
-  },
-  {
-    "id": "07-ninety-day",
-    "file": "07-ninety-day.txt"
-  },
-  {
-    "id": "08-choose-station",
-    "file": "08-choose-station.txt"
-  },
-  {
-    "id": "09-close",
-    "file": "09-close.txt"
-  }
+  { "id": "01-open", "file": "01-open.txt" },
+  { "id": "02-beginner-boundary", "file": "02-beginner-boundary.txt" },
+  { "id": "03-era-keeps-changing", "file": "03-era-keeps-changing.txt" },
+  { "id": "04-two-paths", "file": "04-two-paths.txt" },
+  { "id": "05-os-example", "file": "05-os-example.txt" },
+  { "id": "06-ask-ai", "file": "06-ask-ai.txt" },
+  { "id": "07-close", "file": "07-close.txt" }
 ]

@@ -73,7 +73,7 @@
 | `day10-c2-*.mp4` | `section-02-ten-evidences` | 十条证据：人话 + 仓库文件；驾驶舱「有更好」 |
 | `day10-c3-*.mp4` | `section-03-defense-prep` | |
 | `day10-c4-*.mp4` | `section-04-defense` | |
-| `day10-c5-*.mp4` | `section-05-two-week-review` | |
+| `day10-c5-*.mp4` | `section-05-two-week-review` | 入门不是终点；许愿→追问→动手；禁「毕业即精通」 |
 
 ## 片上禁用词（开录前再扫一眼 PPT 大字）
 

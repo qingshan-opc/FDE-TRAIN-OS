@@ -228,47 +228,47 @@ capsule_extra:
     - dg-v2-panorama
     - glossary
     knowledge_cards:
-    - id: final-review
-      term: final-review.md
-      plain: 两周复盘 + 行业地图自评（✓/△/✗ 带证据）+ 90 天自学路线。
+    - id: beginner-not-master
+      term: 入门不是精通
+      plain: 有后台、驾驶舱、能规划干活的智能体、关键步骤能审批——样子有了；AI 全景仍要持续学。
+      tag: 收官
+    - id: ai-study-partner
+      term: AI 是学习搭档
+      plain: 向它许愿 → 拿地图 → 盯一条追问 → 动手 → 再追问；答案仍要验收。
+      tag: 方法
+    - id: first-wish
+      term: 第一句许愿
+      plain: final-review 写三行：已有 / 还缺 / 今晚向 AI 发出的第一问。
       tag: 交付
-    - id: thought-knew
-      term: 我以为 → 我知道
-      plain: 三对认知翻转——训练营真正的个人收获。
-      tag: 复盘
-    - id: ninety-day
-      term: 90 天路线
-      plain: 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作——拒绝空话。
-      tag: 上路
     glossary_terms:
     - id: gt-fde
       term: FDE（Forward Deployed Engineer）
-      plain: 定方向 + 做验收 + 能派活给 AI——答辩通过后你就是这个角色。
+      plain: 定方向 + 做验收 + 能派活给 AI——答辩过了你就是这个角色；课停了学习系统才上线。
     quiz:
-    - - final-review.md 必须包含？
+    - - 第二周走完，比较诚实的定位是？
+      - - 已经精通 Agent
+        - 入门：能用工程化把应用做出来（后台/驾驶舱/智能体/闸）
+        - 可以不再学习
+      - 1
+      - 样子有了、链路通了，不等于吃透 AI 全景。
+    - - 课结束后继续学，优先哪两条？
+      - - 把所有热搜名词背完
+        - 盯靠谱官方/博主 + 把 AI 当学习搭档许愿追问
+        - 只问同事，不碰 AI
+      - 1
+      - 问人沟通成本高；问 AI 要地图、要追问，答案仍验收。
+    - - final-review.md 今晚必须写下的是？
       - - 只有感谢信
-        - 两周复盘 + 行业地图自评 + 90 天自学路线
+        - 已有 / 还缺 / 向 AI 发出的第一句许愿
         - 代码全文
       - 1
-      - 复盘是上路的第一步——不是写完就扔。
-    - - 行业地图自评每档必须？
-      - - 凭感觉
-        - 挂证据链接（文件路径或演示）
-        - 抄同学
-      - 1
-      - ✓/△/✗ 都要说得出为什么——和证据思维一致。
-    - - 90 天路线最低要求？
-      - - 「继续学习 AI」
-        - 可衡量目标 + 30/60/90 里程碑 + 本周第一个动作
-        - 买课清单
-      - 1
-      - 拒绝空话——第一个动作本周就要做。
+      - 听懂的标志是发出第一问，不是鼓掌。
     tools:
-    - name: 90 天路线模板
-      note: 目标 / 30d / 60d / 90d / 本周动作
+    - name: 许愿三行模板
+      note: 已有 / 还缺 / 第一问
     media:
     - kind: video
-      title: 口播课件 · 两周复盘
+      title: 口播课件 · 复盘与路线
       object_key: documents/shared/course-media/day10-c5-gate10.mp4
       poster_key: documents/shared/course-media/day10-c5-gate10-poster.jpg
       duration_sec: 87
@@ -323,10 +323,10 @@ quiz:
   - 互评是答辩组成部分。
 - - final-review.md 包含？
   - - 代码 dump
-    - 两周复盘 + 行业地图自评 + 90 天路线
+    - 入门边界（已有/还缺）+ 第一句许愿 + 本周动作
     - 只有感谢
   - 1
-  - 复盘 + 自评 + 上路计划——毕业交付物。
+  - 复盘是上路：承认入门，发出第一问。
 - - FDE 称号何时获得？
   - - Day 1 注册就有
     - 答辩通过后自然获得
@@ -344,7 +344,7 @@ quiz:
     - 「继续学习 AI」这类空话
     - 本周第一个动作
   - 1
-  - 可衡量 + 分阶段 + 本周就能做的第一步。
+  - 缺口要落到主题；今晚要有第一句许愿。
 - - 证据
   - - 部署 URL
     - Git 迭代史——能讲演进故事

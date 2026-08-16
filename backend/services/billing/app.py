@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 from typing import Any, Literal
+from urllib.parse import quote
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import PlainTextResponse
@@ -19,11 +21,13 @@ from services.billing import alipay_pay, profit_sharing, wechat_pay  # noqa: E40
 from services.partners.service import get_user_attribution  # noqa: E402
 from services.referral.service import get_user_referral  # noqa: E402
 from services.shared import db_cursor, init_schema  # noqa: E402
+from services.shared.auth_constants import JSAPI_OPENID_COOKIE  # noqa: E402
 from services.shared.config import FDE_ENV  # noqa: E402
 from services.shared.middleware import require_user  # noqa: E402
 
 router = APIRouter(tags=["billing"])
 init_schema()
+log = logging.getLogger("fde.billing")
 
 PayChannel = Literal["wechat", "alipay"]
 PayMode = Literal["auto", "native", "jsapi"]
@@ -49,12 +53,33 @@ def _sync_by_channel(order: dict[str, Any]) -> str:
     return wechat_pay.sync_order_status(order["id"])
 
 
+def _jsapi_payer_openid(request: Request) -> str | None:
+    val = (request.cookies.get(JSAPI_OPENID_COOKIE) or "").strip()
+    return val or None
+
+
+def _jsapi_oauth_url(next_path: str = "/app/shop") -> str:
+    return f"/api/v1/auth/wechat/jsapi-openid?next={quote(next_path or '/app/shop', safe='')}"
+
+
+def _need_jsapi_oauth() -> HTTPException:
+    return HTTPException(
+        status_code=409,
+        detail={
+            "code": "need_wechat_oauth",
+            "message": "微信内支付需要先用当前微信授权（不会切换登录账号）",
+            "oauth_url": _jsapi_oauth_url(),
+        },
+    )
+
+
 def _checkout_payload(
     *,
     order: dict[str, Any],
     channel: PayChannel,
     pay_mode: str,
     reused: bool,
+    payer_differs_from_login: bool = False,
 ) -> dict[str, Any]:
     code_url = order.get("code_url")
     out: dict[str, Any] = {
@@ -67,6 +92,7 @@ def _checkout_payload(
         "dev_mode": not _channel_configured(channel),
         "status": order.get("status") or "pending",
         "reused": reused,
+        "payer_differs_from_login": payer_differs_from_login,
     }
     if channel == "wechat" and pay_mode == "jsapi":
         prepay_id = wechat_pay.prepay_id_from_code_url(code_url)
@@ -86,6 +112,9 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         raise HTTPException(403, "支付宝暂未开放")
     # Frontend sends pay_mode=jsapi inside WeChat; desktop keeps native QR.
     want_jsapi = channel == "wechat" and body.pay_mode == "jsapi"
+    jsapi_openid: str | None = None
+    if want_jsapi:
+        wechat_pay._ensure_payer_openid_col()  # noqa: SLF001 — additive column before SELECT
 
     with db_cursor() as cur:
         cur.execute(
@@ -116,29 +145,43 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
             raise HTTPException(409, "您已购买该课程")
         cur.execute(
             """
-            SELECT 1 FROM enrollment_records WHERE user_id=? AND offering_id=?
+            SELECT 1 FROM enrollment_records WHERE user_id=? AND offering_id=? AND status='active'
             """,
             (user.id, body.offering_id),
         )
         if cur.fetchone():
             raise HTTPException(409, "您已拥有该课程")
-        # Reuse recent pending order only when amount still matches current offering price.
-        # Otherwise a price change (e.g. ¥1 → ¥1980) would keep charging the old QR/JSAPI amount.
-        if want_jsapi:
+        jsapi_openid = _jsapi_payer_openid(request) if want_jsapi else None
+        if want_jsapi and not jsapi_openid:
+            pending = None
+        elif want_jsapi:
             cur.execute(
                 """
-                SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel
+                UPDATE payment_orders
+                SET status='expired', updated_at=NOW()
+                WHERE user_id=? AND offering_id=? AND status='pending'
+                  AND COALESCE(pay_channel, 'wechat')=?
+                  AND code_url LIKE ?
+                  AND COALESCE(wx_payer_openid, '') <> ?
+                """,
+                (user.id, body.offering_id, channel, "jsapi:%", jsapi_openid),
+            )
+            cur.execute(
+                """
+                SELECT id, out_trade_no, amount_fen, code_url, status, org_id, referrer_user_id, pay_channel, wx_payer_openid
                 FROM payment_orders
                 WHERE user_id=? AND offering_id=? AND status='pending'
                   AND COALESCE(pay_channel, 'wechat')=?
                   AND amount_fen=?
                   AND created_at > NOW() - INTERVAL '2 hours'
                   AND code_url LIKE ?
+                  AND wx_payer_openid = ?
                 ORDER BY created_at DESC
                 LIMIT 1
                 """,
-                (user.id, body.offering_id, channel, price, "jsapi:%"),
+                (user.id, body.offering_id, channel, price, "jsapi:%", jsapi_openid),
             )
+            pending = cur.fetchone()
         else:
             cur.execute(
                 """
@@ -155,7 +198,7 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 """,
                 (user.id, body.offering_id, channel, price, "jsapi:%"),
             )
-        pending = cur.fetchone()
+            pending = cur.fetchone()
         # Invalidate stale pending rows for this offering whose amount no longer matches.
         cur.execute(
             """
@@ -175,6 +218,11 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
             referrer_user_id = ref.get("referrer_user_id")
 
     pay_mode_out = "jsapi" if want_jsapi else "native"
+    bound_openid = wechat_pay.get_user_wx_mp_openid(user.id) if want_jsapi else None
+    payer_differs = bool(jsapi_openid and bound_openid and jsapi_openid != bound_openid)
+
+    if want_jsapi and not jsapi_openid:
+        raise _need_jsapi_oauth()
 
     if pending:
         pending = dict(pending)
@@ -190,7 +238,13 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                     """,
                     (org_id, referrer_user_id, pending["id"]),
                 )
-        return _checkout_payload(order=pending, channel=channel, pay_mode=pay_mode_out, reused=True)
+        return _checkout_payload(
+            order=pending,
+            channel=channel,
+            pay_mode=pay_mode_out,
+            reused=True,
+            payer_differs_from_login=payer_differs,
+        )
 
     title = offering.get("title") or offering.get("course_title") or "FDE 课程"
     description = f"购买 {title}"
@@ -206,25 +260,13 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
             )
             pay_mode_out = "native"
         elif want_jsapi:
-            openid = wechat_pay.get_user_wx_mp_openid(user.id)
-            if not openid:
-                from services.wechat_mp import entry as mp_entry
-                from urllib.parse import quote
-
-                next_path = "/app/shop"
-                oauth_url = (
-                    f"/api/v1/auth/wechat/mp-entry?next={quote(next_path, safe='')}"
-                    if mp_entry.entry_configured()
-                    else None
-                )
-                raise HTTPException(
-                    status_code=409,
-                    detail={
-                        "code": "need_wechat_oauth",
-                        "message": "微信内支付需要先完成微信授权登录",
-                        "oauth_url": oauth_url,
-                    },
-                )
+            log.info(
+                "jsapi checkout user=%s payer=%s… bound=%s… match=%s",
+                user.id,
+                (jsapi_openid or "")[:8],
+                (bound_openid or "")[:8],
+                jsapi_openid == bound_openid,
+            )
             order = wechat_pay.create_payment_order(
                 user.id,
                 body.offering_id,
@@ -233,7 +275,7 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
                 description,
                 referrer_user_id=referrer_user_id,
                 trade_type="jsapi",
-                openid=openid,
+                openid=jsapi_openid,
             )
             pay_mode_out = "jsapi"
         else:
@@ -253,7 +295,13 @@ def checkout(body: CheckoutBody, request: Request) -> dict[str, Any]:
         raise HTTPException(400, str(exc)) from exc
     except RuntimeError as exc:
         raise HTTPException(503, str(exc)) from exc
-    return _checkout_payload(order=order, channel=channel, pay_mode=pay_mode_out, reused=False)
+    return _checkout_payload(
+        order=order,
+        channel=channel,
+        pay_mode=pay_mode_out,
+        reused=False,
+        payer_differs_from_login=payer_differs if pay_mode_out == "jsapi" else False,
+    )
 
 
 @router.get("/api/v1/billing/orders/{order_id}")
@@ -278,8 +326,7 @@ def sync_order(order_id: str, request: Request) -> dict[str, Any]:
         raise HTTPException(404, "订单不存在")
     status = _sync_by_channel(order)
     if (order.get("pay_channel") or "wechat") == "wechat":
-        profit_sharing.retry_pending_shares()
-        profit_sharing.sync_profit_share_statuses()
+        profit_sharing.tick()
     order = wechat_pay.get_payment_order(order_id)
     return {"status": status, "order": order}
 
@@ -342,7 +389,7 @@ def list_purchasable_offerings(request: Request) -> dict[str, Any]:
             )
             it["purchased"] = bool(cur.fetchone())
             cur.execute(
-                "SELECT 1 FROM enrollment_records WHERE user_id=? AND offering_id=?",
+                "SELECT 1 FROM enrollment_records WHERE user_id=? AND offering_id=? AND status='active'",
                 (user.id, it["id"]),
             )
             it["enrolled"] = bool(cur.fetchone())

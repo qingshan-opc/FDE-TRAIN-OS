@@ -37,9 +37,11 @@ def test_seed_creates_course_and_offering():
     with session_scope() as s:
         course = s.query(Course).filter(Course.slug == "fde-two-week").one_or_none()
         assert course is not None
+        assert course.title != "FDE 0期 v0.3"
         offering = s.get(CourseOffering, summary["offering_id"])
         assert offering is not None
         assert offering.camp_id == "camp-v03"
+        assert offering.title != "FDE 0期 v0.3"
 
 
 def _make_user(session, suffix: str) -> str:

@@ -97,6 +97,7 @@ config:
   CLAMAV_ENABLED: "0"
   DEEPSEEK_API_BASE: https://api.deepseek.com
   DEEPSEEK_MODEL: deepseek-v4-flash
+  WECHAT_PAY_SHARE_HOLD_DAYS: "7"
   RATE_LIMIT_LOGIN: 20/min
   RATE_LIMIT_UPLOAD: 30/min
   RATE_LIMIT_COACH_ASK: 30/min

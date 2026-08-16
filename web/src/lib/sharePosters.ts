@@ -592,7 +592,7 @@ async function composeAcademy(opts: SharePosterInput): Promise<string> {
   ctx.fillStyle = GOLD_SOFT;
   ctx.font = `800 18px ${FONT}`;
   ctx.textAlign = "center";
-  ctx.fillText("扫码咨询 / 选购", qx + qrPanelW / 2, y + blockH - 42);
+  ctx.fillText("扫码选购", qx + qrPanelW / 2, y + blockH - 42);
   ctx.textAlign = "start";
   y += blockH + 36;
 

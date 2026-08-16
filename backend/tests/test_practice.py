@@ -128,6 +128,41 @@ def test_save_and_load_practice_draft_then_submitted(learner):
     assert item2["submitted_at"] is not None
 
 
+def test_save_practice_merges_response_json(learner):
+    """Draft autosaves from local-prep and submit must not wipe sibling keys."""
+    from services.progress.app import PracticeIn, list_practice, save_practice
+
+    learner_id, camp_id = learner
+    req = _fake_request(learner_id, camp_id)
+
+    save_practice(
+        PracticeIn(
+            camp_id=camp_id,
+            day=1,
+            capsule_id="c1",
+            response_text="领域清单",
+            response_json={"professional_domain": "财务", "professional_domain_label": "财务"},
+            status="draft",
+        ),
+        req,
+    )
+    save_practice(
+        PracticeIn(
+            camp_id=camp_id,
+            day=1,
+            capsule_id="c1",
+            response_text="",
+            response_json={"local_prep_checked": [0, 1]},
+            status="draft",
+        ),
+        req,
+    )
+    item = list_practice(req, day=1, camp_id=camp_id)["items"][0]
+    assert item["response_text"] == "领域清单"
+    assert item["response_json"]["professional_domain"] == "财务"
+    assert item["response_json"]["local_prep_checked"] == [0, 1]
+
+
 def test_save_practice_is_idempotent_per_capsule(learner):
     """Repeated autosave calls for the same capsule overwrite one row rather
     than accumulating history — `UNIQUE (learner_id, camp_id, day, capsule_id)`."""

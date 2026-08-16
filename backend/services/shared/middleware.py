@@ -149,6 +149,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
                 "/api/v1/auth/refresh",
                 "/api/v1/partner/auth/login",
                 "/api/v1/billing/wechat/notify",
+                "/api/v1/billing/alipay/notify",
             )
         ):
             cookie_csrf = request.cookies.get(CSRF_COOKIE)

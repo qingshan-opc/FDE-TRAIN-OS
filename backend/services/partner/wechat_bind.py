@@ -258,7 +258,7 @@ def complete_bind(code: str, state: str) -> dict[str, Any]:
     except Exception as exc:
         log.warning("ensure receiver after bind failed: %s", exc)
     try:
-        profit_sharing.retry_pending_shares(limit=50)
+        profit_sharing.tick(limit=50)
     except Exception as exc:
         log.warning("retry pending shares after bind: %s", exc)
     return {

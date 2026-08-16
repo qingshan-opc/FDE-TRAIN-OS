@@ -111,7 +111,11 @@ export function PartnerLoginPage() {
           <BrandLogo name="青山在" to="/" variant="light" className="login-split__brand-logo" />
           <p className="login-split__tagline">青山在机构管理后台</p>
         </div>
-        <p className="login-split__hero-foot">查看渠道数据、课程海报与分账明细。请使用已开通的机构账号登录。</p>
+        <p className="login-split__hero-foot">
+          查看渠道数据、课程海报与分账明细。请使用已开通的机构账号登录。
+          <br />
+          还没有机构？请用运营发给你的开通码，从公众号「机构平台」进入。
+        </p>
       </aside>
 
       <main className="login-split__panel">
@@ -193,6 +197,9 @@ export function PartnerLoginPage() {
           )}
 
           <div className="login-split__switch">
+            <button type="button" className="login-split__link" onClick={() => nav("/partner/activate")}>
+              用开通码注册机构
+            </button>
             <button type="button" className="login-split__link" onClick={() => nav("/login")}>
               返回学员 / 教研登录
             </button>

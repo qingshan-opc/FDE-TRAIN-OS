@@ -25,4 +25,4 @@
 
 完成后生成 `DEPLOYMENT.md`，写清访问地址、启动停止、当前版本、健康检查、日志、备份、更新、回退和已知限制。
 
-最后提示学员切换回 `@产品经理`，读取 `PRD.md`、`test-report.md` 和 `DEPLOYMENT.md`，按最初业务目标完成最终验收。
+最后提示学员切换回 `@产品经理`，读取 `design/PRD.md`、`test-report.md` 和 `DEPLOYMENT.md`，按最初业务目标完成最终验收。

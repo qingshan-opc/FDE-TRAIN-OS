@@ -244,6 +244,11 @@ def get_user_wx_mp_openid(user_id: str) -> str | None:
     return val or None
 
 
+def _ensure_payer_openid_col() -> None:
+    with db_cursor() as cur:
+        cur.execute("ALTER TABLE payment_orders ADD COLUMN IF NOT EXISTS wx_payer_openid TEXT")
+
+
 def create_payment_order(
     user_id: str,
     offering_id: str,
@@ -257,6 +262,7 @@ def create_payment_order(
 ) -> dict[str, Any]:
     if trade_type == "jsapi" and not (openid or "").strip():
         raise ValueError("JSAPI 支付需要微信 openid")
+    _ensure_payer_openid_col()
     oid = f"po-{uuid.uuid4().hex[:16]}"
     out_trade_no = f"FDE{int(time.time())}{uuid.uuid4().hex[:8].upper()}"
     code_url = None
@@ -295,8 +301,8 @@ def create_payment_order(
             """
             INSERT INTO payment_orders
               (id, out_trade_no, user_id, offering_id, org_id, referrer_user_id,
-               amount_fen, status, code_url, pay_channel, created_at, updated_at)
-            VALUES (?,?,?,?,?,?,?,?,?,'wechat',?,?)
+               amount_fen, status, code_url, pay_channel, wx_payer_openid, created_at, updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?,'wechat',?,?,?)
             """,
             (
                 oid,
@@ -308,6 +314,7 @@ def create_payment_order(
                 amount_fen,
                 status,
                 code_url,
+                (openid or "").strip() or None if trade_type == "jsapi" else None,
                 now_iso(),
                 now_iso(),
             ),
@@ -403,6 +410,9 @@ def handle_notify(headers: dict, body: bytes) -> NotifyResult:
         data = _decrypt_resource(resource)
     except Exception as exc:
         return NotifyResult(ok=False, error=f"decrypt failed: {exc}")
+    event_type = str(payload.get("event_type") or "")
+    if event_type.startswith("REFUND") or data.get("refund_status") or data.get("refund_id"):
+        return apply_refund_notify(data)
     if data.get("trade_state") != "SUCCESS":
         return NotifyResult(ok=True)
     order = get_payment_order(data.get("out_trade_no", ""))
@@ -414,4 +424,61 @@ def handle_notify(headers: dict, body: bytes) -> NotifyResult:
     if err:
         return NotifyResult(ok=False, error=err)
     mark_order_paid(order["id"], data.get("transaction_id", ""))
+    return NotifyResult(ok=True, order_id=order["id"])
+
+
+def create_refund(order: dict[str, Any], *, out_refund_no: str, reason: str) -> dict[str, Any]:
+    if not configured():
+        raise RuntimeError("微信支付未配置")
+    amount_fen = int(order.get("amount_fen") or 0)
+    payload: dict[str, Any] = {
+        "out_trade_no": order["out_trade_no"],
+        "out_refund_no": out_refund_no,
+        "reason": (reason or "用户退款")[:80],
+        "notify_url": f"{FDE_PUBLIC_BASE_URL}/api/v1/billing/wechat/notify",
+        "amount": {"refund": amount_fen, "total": amount_fen, "currency": "CNY"},
+    }
+    return _request("POST", "/v3/refund/domestic/refunds", payload)
+
+
+def apply_refund_notify(data: dict[str, Any]) -> NotifyResult:
+    from services.billing import profit_sharing
+    from services.billing.refunds import finalize_refunded
+
+    status = str(data.get("refund_status") or data.get("status") or "").upper()
+    out_refund_no = data.get("out_refund_no") or ""
+    out_trade_no = data.get("out_trade_no") or ""
+    order = None
+    if out_refund_no:
+        with db_cursor() as cur:
+            cur.execute("SELECT * FROM payment_orders WHERE out_refund_no=?", (out_refund_no,))
+            row = cur.fetchone()
+            order = dict(row) if row else None
+    if not order and out_trade_no:
+        order = get_payment_order(out_trade_no)
+    if not order:
+        return NotifyResult(ok=False, error="refund order not found")
+    refund_id = data.get("refund_id")
+    refund_fen = None
+    amount = data.get("amount") or {}
+    if amount.get("refund") is not None:
+        try:
+            refund_fen = int(amount.get("refund") or 0)
+        except (TypeError, ValueError):
+            refund_fen = None
+    if status == "SUCCESS":
+        finalize_refunded(order["id"], refund_id=refund_id, refund_fen=refund_fen)
+        return NotifyResult(ok=True, order_id=order["id"])
+    if status in ("CLOSED", "ABNORMAL"):
+        with db_cursor() as cur:
+            cur.execute(
+                """
+                UPDATE payment_orders
+                SET status='paid', updated_at=?
+                WHERE id=? AND status='refunding'
+                """,
+                (now_iso(), order["id"]),
+            )
+        profit_sharing.restore_cancelled_share(order["id"])
+        return NotifyResult(ok=True, order_id=order["id"])
     return NotifyResult(ok=True, order_id=order["id"])

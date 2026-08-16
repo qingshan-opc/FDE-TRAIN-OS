@@ -21,6 +21,7 @@
 #    TAG=v0.7.2-20260803 ./scripts/deploy_dis_cloud.sh
 #
 # 分账：ConfigMap WECHAT_PAY_PROFIT_SHARING=1；机构 Partner 后台扫码绑定 PERSONAL_OPENID。
+# 账期：WECHAT_PAY_SHARE_HOLD_DAYS=7（支付成功冻结 7 天后再分账；期内可退，期满不可退）。
 # 公众号后台需配置网页授权域名 = FDE_PUBLIC_BASE_URL 的 host（如 fde.818cloud.com）。
 #
 # 扫码关注登录（服务器配置）：
@@ -30,6 +31,11 @@
 #   消息加解密：兼容模式或安全模式（服务端均支持）；明文也可
 #   路径：mp.weixin.qq.com → 设置与开发 → 基本配置 → 服务器配置 → 提交并启用
 #
+# 公众号菜单：
+#   学习中心 → 我的课程 / 选购课程
+#   官网
+#   机构平台 → https://fde.818cloud.com/api/v1/auth/wechat/mp-entry?next=/partner/activate
+#   发布：在 Pod 内 python /app/scripts/wechat_mp_create_menu.py
 # 公众号菜单「我的课程」：
 #   类型：跳转网页
 #   URL： https://fde.818cloud.com/api/v1/auth/wechat/mp-entry?next=/app/courses

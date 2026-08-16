@@ -231,8 +231,8 @@ export function Profile() {
                     </span>
                     <div className="profile-status-card__body">
                       <span className="profile-status-card__label">邀请分佣</span>
-                      <strong>邀请好友 · 阶梯佣金</strong>
-                      <p className="muted">默认 20%，邀 5 人 25%，邀 10 人 30%</p>
+                      <strong>邀请好友 · 30% 分润</strong>
+                      <p className="muted">好友通过邀请链接注册并付费，按 30% 分润</p>
                       <span className="profile-status-card__link">去邀请</span>
                     </div>
                   </Link>

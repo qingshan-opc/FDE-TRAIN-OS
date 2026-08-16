@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   Alert,
   Card,
@@ -23,20 +23,19 @@ import {
   downloadDataUrl,
   type PosterStyleId,
 } from "../lib/sharePosters";
-import { prefersLongPressSavePoster } from "../lib/wechat";
+import { prefersLongPressSavePoster, isWeChatBrowser, wechatBindOauthUrl } from "../lib/wechat";
+import { isMobilePhoneUa } from "../lib/device";
+import { profitShareStateLabel, SHARE_HOLD_COPY } from "../lib/billingLabels";
 import { POSTER_DEFAULT_SLOGAN, SHOP_HERO } from "./shopPitch";
-
-const TIER_HINTS = [
-  { min: 0, pct: 20, label: "默认" },
-  { min: 5, pct: 25, label: "邀请 5 人" },
-  { min: 10, pct: 30, label: "邀请 10 人" },
-];
 
 function fenYuan(fen: unknown): string {
   return (Number(fen || 0) / 100).toFixed(2);
 }
 
 export function LearnerReferral() {
+  const [params, setParams] = useSearchParams();
+  const inWeChat = isWeChatBrowser();
+  const onPhone = isMobilePhoneUa();
   const [data, setData] = useState<ReferralDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +74,18 @@ export function LearnerReferral() {
     return () => stopPoll();
   }, [load, stopPoll]);
 
+  useEffect(() => {
+    const flag = params.get("wx_bind");
+    if (!flag) return;
+    if (flag === "ok") {
+      message.success("微信绑定成功");
+      void load();
+    } else if (flag === "taken") message.error("这个微信已绑定其他账号，请换一个微信授权");
+    const next = new URLSearchParams(params);
+    next.delete("wx_bind");
+    setParams(next, { replace: true });
+  }, [params, setParams]);
+
   const copyLink = async () => {
     if (!data?.register_url) return;
     try {
@@ -96,10 +107,9 @@ export function LearnerReferral() {
         coverSrc: "/landing/hero.png",
         title: SHOP_HERO.title,
         priceLabel: "¥1,980",
-        issuerLabel: "个人邀请 · 扫码注册即记为好友邀请",
+        issuerLabel: "个人邀请",
         slogan: POSTER_DEFAULT_SLOGAN,
         qrCanvas,
-        scanHint: "好友扫码注册后计入你的邀请人数",
       });
       setPosterUrl(url);
     } catch (err) {
@@ -118,6 +128,14 @@ export function LearnerReferral() {
   }, [posterOpen, posterStyle, data?.register_url, rebuildPersonalPoster]);
 
   const startWechatBind = async () => {
+    if (inWeChat) {
+      window.location.href = wechatBindOauthUrl("/app/invite");
+      return;
+    }
+    if (onPhone) {
+      message.info("请在微信中打开本页，将弹出授权完成绑定");
+      return;
+    }
     setBindLoading(true);
     stopPoll();
     try {
@@ -162,7 +180,7 @@ export function LearnerReferral() {
   };
 
   return (
-    <LearnerAccountLayout title="邀请分佣" subtitle="邀请好友报名，按阶梯享受佣金">
+    <LearnerAccountLayout title="邀请分佣" subtitle="邀请好友报名，付费后 7 天到账">
       {loading ? (
         <Skeleton rows={10} />
       ) : error ? (
@@ -172,38 +190,25 @@ export function LearnerReferral() {
           <Alert
             type="info"
             showIcon
-            message="邀请分佣"
-            description="好友通过你的专属链接注册后计入邀请人数。佣金默认 20%；满 5 人升至 25%；满 10 人升至 30%。好友付费后按当前比例分账到你绑定的微信。教研老师同样可发起个人邀请分佣。"
+            message={SHARE_HOLD_COPY.personal.message}
+            description={SHARE_HOLD_COPY.personal.description}
           />
 
           <Row gutter={[16, 16]}>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={8}>
               <Card size="small">
                 <Statistic title="邀请人数" value={data.invite_count} />
               </Card>
             </Col>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={8}>
               <Card size="small">
-                <Statistic title="当前佣金" value={data.rate_percent} suffix="%" precision={0} />
+                <Statistic title="分润比例" value={data.rate_percent} suffix="%" precision={0} />
               </Card>
             </Col>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={8}>
               <Card size="small">
                 <Statistic
-                  title="下一档"
-                  value={
-                    data.next_tier
-                      ? `再邀 ${data.next_tier.invites_needed} 人 → ${data.next_tier.rate_percent}%`
-                      : "已满档 30%"
-                  }
-                  valueStyle={{ fontSize: 16 }}
-                />
-              </Card>
-            </Col>
-            <Col xs={12} md={6}>
-              <Card size="small">
-                <Statistic
-                  title="累计分账"
+                  title="累计已到账"
                   prefix="¥"
                   value={fenYuan(
                     (data.profit_shares || []).reduce((s, r) => s + Number(r.share_fen || 0), 0),
@@ -212,30 +217,6 @@ export function LearnerReferral() {
               </Card>
             </Col>
           </Row>
-
-          <Card size="small" title="佣金阶梯">
-            <Space wrap size="middle">
-              {TIER_HINTS.map((t) => {
-                const active = data.rate_percent >= t.pct && (t.min === 0 || data.invite_count >= t.min);
-                const current =
-                  data.rate_percent === t.pct &&
-                  (t.min === 10
-                    ? data.invite_count >= 10
-                    : t.min === 5
-                      ? data.invite_count >= 5 && data.invite_count < 10
-                      : data.invite_count < 5);
-                return (
-                  <Alert
-                    key={t.min}
-                    type={current ? "success" : active ? "info" : "warning"}
-                    showIcon
-                    style={{ margin: 0 }}
-                    message={`${t.label} · ${t.pct}%`}
-                  />
-                );
-              })}
-            </Space>
-          </Card>
 
           <Card size="small" title="我的邀请链接">
             <Space direction="vertical" style={{ width: "100%" }} size="middle">
@@ -336,7 +317,7 @@ export function LearnerReferral() {
                   type="warning"
                   showIcon
                   message="尚未绑定微信"
-                  description="未绑定前，好友付费后的分账会记为待处理。请扫码绑定微信后再收款。"
+                  description="未绑定前，好友付费后的佣金会记为「待绑定收款微信」。微信内打开会弹出授权绑定，满 7 天才会打到微信。"
                 />
               )}
               <Space wrap>
@@ -346,13 +327,13 @@ export function LearnerReferral() {
                   disabled={bindLoading}
                   onClick={() => void startWechatBind()}
                 >
-                  {bindLoading ? "生成中…" : data.receiver?.bound ? "重新绑定微信" : "扫码绑定微信"}
+                  {bindLoading ? "生成中…" : data.receiver?.bound ? "重新绑定微信" : inWeChat || onPhone ? "绑定微信" : "扫码绑定微信"}
                 </button>
                 <Link to="/app/profile" className="app-btn app-btn--ghost app-btn--sm">
                   返回个人中心
                 </Link>
               </Space>
-              {bindQr && (
+              {bindQr && !onPhone && !inWeChat && (
                 <div>
                   <div style={{ display: "flex", justifyContent: "center", padding: 12 }}>
                     <QRCode value={bindQr} size={200} />
@@ -384,7 +365,7 @@ export function LearnerReferral() {
             />
           </Card>
 
-          <Card size="small" title="分账明细">
+          <Card size="small" title="分账明细" extra={<Typography.Text type="secondary">满 7 天到账</Typography.Text>}>
             <Table
               size="small"
               rowKey="id"
@@ -409,7 +390,7 @@ export function LearnerReferral() {
                   title: "分账",
                   render: (_, r) => `¥${fenYuan(r.share_fen)}`,
                 },
-                { title: "状态", dataIndex: "wx_state" },
+                { title: "状态", dataIndex: "wx_state", render: (v: string) => profitShareStateLabel(v) },
                 { title: "时间", dataIndex: "created_at" },
               ]}
             />

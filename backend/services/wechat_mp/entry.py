@@ -19,6 +19,17 @@ log = logging.getLogger("fde.wechat_mp.entry")
 
 STATE_TTL_SEC = 15 * 60
 ALLOWED_NEXT_PREFIXES = ("/app/", "/partner", "/author", "/open", "/verify")
+# Poster QR is a static mp-entry URL. WeChat often reloads the callback after
+# a successful scan; treat that as replay instead of "expired".
+DEFAULT_SCAN_NEXT = "/app/shop"
+
+
+class OauthRestart(Exception):
+    """State missing/expired — caller should start a fresh WeChat authorize."""
+
+    def __init__(self, next_path: str):
+        self.next_path = sanitize_next(next_path) or DEFAULT_SCAN_NEXT
+        super().__init__("请重新扫码进入")
 
 
 def entry_configured() -> bool:
@@ -48,23 +59,10 @@ def _ensure_next_col() -> None:
     mp_login._ensure_schema()  # noqa: SLF001 — shared login schema
     with db_cursor() as cur:
         cur.execute("ALTER TABLE wechat_login_states ADD COLUMN IF NOT EXISTS next_path TEXT")
+        cur.execute("ALTER TABLE wechat_login_states ADD COLUMN IF NOT EXISTS purpose TEXT")
 
 
-def create_oauth_authorize_url(*, next_path: str = "/app/courses") -> str:
-    if not entry_configured():
-        raise RuntimeError("未配置公众号 AppID/AppSecret，无法网页授权登录")
-    _ensure_next_col()
-    state = secrets.token_urlsafe(16)
-    nxt = sanitize_next(next_path)
-    exp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() + STATE_TTL_SEC))
-    with db_cursor() as cur:
-        cur.execute(
-            """
-            INSERT INTO wechat_login_states (id, created_at, expires_at, status, next_path)
-            VALUES (?,?,?, 'pending', ?)
-            """,
-            (state, now_iso(), exp, nxt),
-        )
+def _authorize_url(state: str) -> str:
     query = urlencode(
         {
             "appid": WECHAT_PAY_APP_ID,
@@ -77,6 +75,48 @@ def create_oauth_authorize_url(*, next_path: str = "/app/courses") -> str:
         quote_via=quote,
     )
     return f"https://open.weixin.qq.com/connect/oauth2/authorize?{query}#wechat_redirect"
+
+
+def _state_expired(expires_at: Any) -> bool:
+    if expires_at is None:
+        return True
+    if hasattr(expires_at, "timestamp"):
+        return float(expires_at.timestamp()) <= time.time()
+    return False
+
+
+def create_oauth_authorize_url(*, next_path: str = "/app/courses", reuse_state: str | None = None) -> tuple[str, str]:
+    """Return (WeChat authorize URL, state id). Reuse a still-pending state when WeChat double-GETs the poster URL."""
+    if not entry_configured():
+        raise RuntimeError("未配置公众号 AppID/AppSecret，无法网页授权登录")
+    _ensure_next_col()
+    nxt = sanitize_next(next_path)
+    reused = (reuse_state or "").strip()
+    if reused:
+        with db_cursor() as cur:
+            cur.execute(
+                """
+                SELECT id FROM wechat_login_states
+                WHERE id=? AND consumed_at IS NULL AND expires_at > NOW()
+                  AND COALESCE(purpose, 'login') = 'login'
+                """,
+                (reused,),
+            )
+            row = cur.fetchone()
+            if row:
+                cur.execute("UPDATE wechat_login_states SET next_path=? WHERE id=?", (nxt, reused))
+                return _authorize_url(reused), reused
+    state = secrets.token_urlsafe(16)
+    exp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() + STATE_TTL_SEC))
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            INSERT INTO wechat_login_states (id, created_at, expires_at, status, next_path, purpose)
+            VALUES (?,?,?, 'pending', ?, 'login')
+            """,
+            (state, now_iso(), exp, nxt),
+        )
+    return _authorize_url(state), state
 
 
 def _exchange_code(code: str) -> dict[str, Any]:
@@ -97,21 +137,44 @@ def _exchange_code(code: str) -> dict[str, Any]:
 
 
 def complete_oauth_entry(code: str, state: str) -> tuple[Any, str]:
-    """Exchange OAuth code → AuthUser + next_path; best-effort profile enrich."""
+    """Exchange OAuth code → AuthUser + next_path; best-effort profile enrich.
+
+    WeChat in-app browser commonly reloads the callback URL after a successful
+    poster scan. A consumed state is replayed (re-issue session) instead of
+    showing 「授权已过期」.
+    """
+    from services.shared import get_user_by_id
+
     _ensure_next_col()
+    sid = (state or "").strip()
+    if not sid:
+        raise OauthRestart(DEFAULT_SCAN_NEXT)
     with db_cursor() as cur:
         cur.execute(
             """
-            SELECT id, next_path, status, expires_at, consumed_at
+            SELECT id, next_path, status, expires_at, consumed_at, user_id, purpose
             FROM wechat_login_states
-            WHERE id=? AND expires_at > NOW() AND consumed_at IS NULL
+            WHERE id=?
             """,
-            (state,),
+            (sid,),
         )
         row = cur.fetchone()
     if not row:
-        raise ValueError("授权已过期，请从公众号菜单重新进入")
+        raise OauthRestart(DEFAULT_SCAN_NEXT)
     next_path = sanitize_next(row.get("next_path") if isinstance(row, dict) else None)
+    purpose = ((row.get("purpose") if isinstance(row, dict) else None) or "login").strip()
+    if purpose in ("jsapi", "bind"):
+        raise OauthRestart(next_path or DEFAULT_SCAN_NEXT)
+    consumed = row.get("consumed_at")
+    uid = str(row.get("user_id") or "").strip()
+    if consumed and uid:
+        user = get_user_by_id(uid)
+        if user:
+            log.info("mp-entry callback replay state=%s user=%s next=%s", sid[:8], uid, next_path)
+            return user, next_path
+        raise OauthRestart(next_path)
+    if consumed or _state_expired(row.get("expires_at")):
+        raise OauthRestart(next_path)
     token = _exchange_code(code)
     openid = str(token["openid"])
     nickname = None

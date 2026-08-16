@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import html
 import logging
 import secrets
 import sys
 import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlencode
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request, Response
@@ -45,6 +47,11 @@ from services.shared.auth_constants import (  # noqa: E402
     CSRF_COOKIE,
     INVITE_PENDING_COOKIE,
     INVITE_PENDING_MAX_AGE,
+    JSAPI_OPENID_COOKIE,
+    JSAPI_OPENID_MAX_AGE,
+    JSAPI_OAUTH_STATE_COOKIE,
+    BIND_OAUTH_STATE_COOKIE,
+    MP_OAUTH_STATE_COOKIE,
     REFRESH_COOKIE,
     clear_auth_cookies,
     set_auth_cookies,
@@ -318,23 +325,137 @@ def wechat_login_status(
     return out
 
 
-def _mp_entry_error_html(message: str) -> HTMLResponse:
+def _wechat_login_fallback(next_path: str, *, reason: str = "off") -> RedirectResponse:
+    from services.wechat_mp import entry as mp_entry
+
+    nxt = mp_entry.sanitize_next(next_path) or "/app/shop"
+    query = urlencode({"next": nxt, "wx": reason})
+    return RedirectResponse(f"/login?{query}", status_code=302)
+
+
+def _mp_entry_error_html(message: str, *, next_path: str = "/app/shop") -> HTMLResponse:
+    from services.wechat_mp import entry as mp_entry
+
+    nxt = mp_entry.sanitize_next(next_path) or "/app/shop"
+    raw = (message or "").strip()
+    unconfigured = any(token in raw for token in ("AppID", "AppSecret", "未配置"))
+    if unconfigured:
+        title = "微信登录暂不可用"
+        detail = "当前环境还没开通微信授权。用邮箱登录即可继续看课。"
+    else:
+        title = "这次没进来"
+        detail = raw or "微信授权没有完成。可以再试一次，或改用邮箱登录。"
+    login_href = html.escape(f"/login?{urlencode({'next': nxt, 'wx': 'err'})}", quote=True)
+    retry_href = html.escape(f"/api/v1/auth/wechat/mp-entry?{urlencode({'next': nxt})}", quote=True)
+    safe_detail = html.escape(detail)
+    retry_block = (
+        ""
+        if unconfigured
+        else f'<a class="ghost" href="{retry_href}">再试一次微信</a>'
+    )
     body = f"""<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>进入失败</title>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>青山在 · {html.escape(title)}</title>
 <style>
-body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#0f172a;color:#e2e8f0;}}
-.card{{max-width:420px;margin:16vh auto;padding:28px 24px;background:#1e293b;border-radius:16px;text-align:center;}}
-h1{{font-size:20px;margin:0 0 12px;color:#f87171}}
-p{{line-height:1.6;color:#cbd5e1;font-size:15px}}
-a{{color:#2dd4bf}}
-</style></head>
-<body><div class="card">
-<h1>暂时无法进入</h1>
-<p>{message}</p>
-<p><a href="/login">去网页登录</a></p>
-</div></body></html>"""
+  :root {{
+    --paper: #eef3f2;
+    --sheet: #f7faf9;
+    --ink: #1c2321;
+    --mute: #5b6b67;
+    --pine: #0f766e;
+    --pine-deep: #0f2e2a;
+    --line: rgba(15, 46, 42, 0.12);
+  }}
+  * {{ box-sizing: border-box; }}
+  html, body {{ margin: 0; min-height: 100%; }}
+  body {{
+    min-height: 100svh;
+    font-family: "PingFang SC", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(80% 50% at 50% -10%, rgba(20, 184, 166, 0.16), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+  }}
+  .bar {{
+    height: 4px;
+    background: linear-gradient(90deg, var(--pine-deep), var(--pine));
+  }}
+  main {{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px calc(28px + env(safe-area-inset-bottom));
+  }}
+  .sheet {{
+    width: min(100%, 400px);
+    background: var(--sheet);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 18px 50px rgba(15, 46, 42, 0.08);
+  }}
+  .brand {{
+    font-family: "Noto Serif SC", "Songti SC", serif;
+    letter-spacing: 0.18em;
+    font-size: 13px;
+    color: var(--pine);
+    margin: 0 0 18px;
+  }}
+  h1 {{
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 0 0 10px;
+    font-weight: 650;
+  }}
+  p {{
+    margin: 0 0 22px;
+    color: var(--mute);
+    font-size: 15px;
+    line-height: 1.65;
+  }}
+  .actions {{ display: grid; gap: 10px; }}
+  a.primary, a.ghost {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+  }}
+  a.primary {{
+    background: var(--pine);
+    color: #f7faf9;
+  }}
+  a.ghost {{
+    background: transparent;
+    color: var(--pine-deep);
+    border: 1px solid var(--line);
+  }}
+</style>
+</head>
+<body>
+  <div class="bar"></div>
+  <main>
+    <div class="sheet">
+      <p class="brand">青山在</p>
+      <h1>{html.escape(title)}</h1>
+      <p>{safe_detail}</p>
+      <div class="actions">
+        <a class="primary" href="{login_href}">用邮箱登录</a>
+        {retry_block}
+      </div>
+    </div>
+  </main>
+</body>
+</html>"""
     return HTMLResponse(body, status_code=400)
 
 
@@ -404,20 +525,219 @@ def _try_bind_pending_invite(request: Request, response: Response, user_id: str)
         return False
 
 
+def _set_mp_oauth_state_cookie(resp: Response, state: str) -> None:
+    from services.wechat_mp import entry as mp_entry
+
+    resp.set_cookie(
+        MP_OAUTH_STATE_COOKIE,
+        state,
+        max_age=mp_entry.STATE_TTL_SEC,
+        httponly=True,
+        samesite="lax",
+        secure=_secure(),
+        path="/",
+    )
+
+
+def _restart_wechat_oauth(next_path: str) -> Response:
+    from services.wechat_mp import entry as mp_entry
+
+    try:
+        url, state = mp_entry.create_oauth_authorize_url(next_path=next_path)
+    except RuntimeError:
+        return _wechat_login_fallback(next_path, reason="off")
+    out = RedirectResponse(url, status_code=302)
+    _set_mp_oauth_state_cookie(out, state)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/oauth-ready")
+def wechat_oauth_ready() -> dict[str, bool]:
+    from services.wechat_mp import entry as mp_entry
+
+    return {"ready": mp_entry.entry_configured()}
+
+
 @router.get("/api/v1/auth/wechat/mp-entry")
 def wechat_mp_entry(
+    request: Request,
     next: str = "/app/courses",
     invite: str | None = None,
 ) -> Response:
     """公众号/海报入口：可选 invite → cookie，再跳转微信网页授权。"""
     from services.wechat_mp import entry as mp_entry
 
+    reuse = (request.cookies.get(MP_OAUTH_STATE_COOKIE) or "").strip() or None
     try:
-        url = mp_entry.create_oauth_authorize_url(next_path=next)
-    except RuntimeError as exc:
-        return _mp_entry_error_html(str(exc))
+        url, state = mp_entry.create_oauth_authorize_url(next_path=next, reuse_state=reuse)
+    except RuntimeError:
+        return _wechat_login_fallback(next, reason="off")
     out = RedirectResponse(url, status_code=302)
     _stash_invite_cookie(out, invite)
+    _set_mp_oauth_state_cookie(out, state)
+    return out
+
+
+def _set_jsapi_oauth_state_cookie(resp: Response, state: str) -> None:
+    from services.wechat_mp import entry as mp_entry
+
+    resp.set_cookie(
+        JSAPI_OAUTH_STATE_COOKIE,
+        state,
+        max_age=mp_entry.STATE_TTL_SEC,
+        httponly=True,
+        samesite="lax",
+        secure=_secure(),
+        path="/",
+    )
+
+
+def _restart_jsapi_oauth(next_path: str) -> Response:
+    from services.wechat_mp import jsapi_openid as jsapi_ox
+
+    try:
+        url, state = jsapi_ox.create_jsapi_authorize_url(next_path=next_path)
+    except RuntimeError:
+        return _wechat_login_fallback(next_path, reason="off")
+    out = RedirectResponse(url, status_code=302)
+    _set_jsapi_oauth_state_cookie(out, state)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/jsapi-openid")
+def wechat_jsapi_openid(request: Request, next: str = "/app/shop") -> Response:
+    """Silent snsapi_base — stamp current WeChat openid for JSAPI pay, keep login."""
+    from services.wechat_mp import jsapi_openid as jsapi_ox
+
+    reuse = (request.cookies.get(JSAPI_OAUTH_STATE_COOKIE) or "").strip() or None
+    try:
+        url, state = jsapi_ox.create_jsapi_authorize_url(next_path=next, reuse_state=reuse)
+    except RuntimeError:
+        return _wechat_login_fallback(next, reason="off")
+    out = RedirectResponse(url, status_code=302)
+    _set_jsapi_oauth_state_cookie(out, state)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/jsapi-openid/callback")
+def wechat_jsapi_openid_callback(
+    request: Request,
+    code: str | None = None,
+    state: str | None = None,
+) -> Response:
+    """OAuth callback — set payer cookie only. Never calls _issue()."""
+    from services.wechat_mp import entry as mp_entry
+    from services.wechat_mp import jsapi_openid as jsapi_ox
+
+    if not code or not state:
+        return _restart_jsapi_oauth("/app/shop")
+    try:
+        result = jsapi_ox.complete_jsapi_openid(code, state)
+    except mp_entry.OauthRestart as exc:
+        log.info("jsapi-openid callback restart next=%s", exc.next_path)
+        return _restart_jsapi_oauth(exc.next_path)
+    except Exception as exc:
+        log.warning("jsapi-openid callback failed: %s", exc)
+        return _mp_entry_error_html("请重新授权后再支付", next_path="/app/shop")
+
+    next_path = jsapi_ox.with_pay_flag(result.next_path)
+    out = RedirectResponse(next_path, status_code=302)
+    if result.openid:
+        out.set_cookie(
+            JSAPI_OPENID_COOKIE,
+            result.openid,
+            max_age=JSAPI_OPENID_MAX_AGE,
+            httponly=True,
+            samesite="lax",
+            secure=_secure(),
+            path="/",
+        )
+    out.delete_cookie(JSAPI_OAUTH_STATE_COOKIE, path="/")
+    return out
+
+
+def _set_bind_oauth_state_cookie(resp: Response, state: str) -> None:
+    from services.wechat_mp import entry as mp_entry
+
+    resp.set_cookie(
+        BIND_OAUTH_STATE_COOKIE,
+        state,
+        max_age=mp_entry.STATE_TTL_SEC,
+        httponly=True,
+        samesite="lax",
+        secure=_secure(),
+        path="/",
+    )
+
+
+def _restart_bind_oauth(next_path: str, user_id: str) -> Response:
+    from services.wechat_mp import bind_oauth as bind_ox
+
+    try:
+        url, state = bind_ox.create_bind_authorize_url(user_id=user_id, next_path=next_path)
+    except RuntimeError:
+        return _wechat_login_fallback(next_path, reason="off")
+    out = RedirectResponse(url, status_code=302)
+    _set_bind_oauth_state_cookie(out, state)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/bind-oauth")
+def wechat_bind_oauth(request: Request, next: str = "/app/invite") -> Response:
+    """In-WeChat authorize — bind current WeChat to the logged-in account, keep session."""
+    from services.wechat_mp import bind_oauth as bind_ox
+    from services.wechat_mp import bind_reset
+    from services.wechat_mp import entry as mp_entry
+
+    nxt = mp_entry.sanitize_next(next) or bind_ox.DEFAULT_NEXT
+    user = getattr(request.state, "user", None)
+    if not user:
+        q = urlencode({"next": nxt, "bind": "1"})
+        return RedirectResponse(f"/login?{q}", status_code=302)
+    if bind_reset.user_has_wx_openid(user.id):
+        return RedirectResponse(bind_ox.with_bind_flag(nxt, "ok"), status_code=302)
+    reuse = (request.cookies.get(BIND_OAUTH_STATE_COOKIE) or "").strip() or None
+    try:
+        url, state = bind_ox.create_bind_authorize_url(user_id=user.id, next_path=nxt, reuse_state=reuse)
+    except RuntimeError:
+        return _wechat_login_fallback(nxt, reason="off")
+    out = RedirectResponse(url, status_code=302)
+    _set_bind_oauth_state_cookie(out, state)
+    return out
+
+
+@router.get("/api/v1/auth/wechat/bind-oauth/callback")
+def wechat_bind_oauth_callback(
+    request: Request,
+    code: str | None = None,
+    state: str | None = None,
+) -> Response:
+    """OAuth callback — link openid onto the current user. Never calls _issue()."""
+    from services.wechat_mp import bind_oauth as bind_ox
+    from services.wechat_mp import entry as mp_entry
+
+    user = getattr(request.state, "user", None)
+    if not user:
+        return _wechat_login_fallback("/app/invite", reason="err")
+    if not code or not state:
+        return _restart_bind_oauth("/app/invite", user.id)
+    try:
+        result = bind_ox.complete_bind_oauth(code, state, user_id=user.id)
+    except bind_ox.OpenidTaken as exc:
+        out = RedirectResponse(bind_ox.with_bind_flag(exc.next_path, "taken"), status_code=302)
+        out.delete_cookie(BIND_OAUTH_STATE_COOKIE, path="/")
+        return out
+    except mp_entry.OauthRestart as exc:
+        log.info("bind-oauth callback restart next=%s", exc.next_path)
+        return _restart_bind_oauth(exc.next_path, user.id)
+    except Exception as exc:
+        log.warning("bind-oauth callback failed: %s", exc)
+        return _mp_entry_error_html("请重新授权绑定微信", next_path="/app/invite")
+
+    flag = "ok" if not result.conflict else "taken"
+    out = RedirectResponse(bind_ox.with_bind_flag(result.next_path, flag), status_code=302)
+    out.delete_cookie(BIND_OAUTH_STATE_COOKIE, path="/")
+    write_audit("auth.wechat_bind_oauth", actor_id=user.id, details={"next": result.next_path})
     return out
 
 
@@ -432,12 +752,15 @@ def wechat_mp_entry_callback(
     from services.wechat_mp import entry as mp_entry
 
     if not code or not state:
-        return _mp_entry_error_html("缺少微信授权参数，请从公众号菜单重新进入")
+        return _restart_wechat_oauth("/app/shop")
     try:
         user, next_path = mp_entry.complete_oauth_entry(code, state)
+    except mp_entry.OauthRestart as exc:
+        log.info("mp-entry callback restart next=%s", exc.next_path)
+        return _restart_wechat_oauth(exc.next_path)
     except Exception as exc:
         log.warning("mp-entry callback failed: %s", exc)
-        return _mp_entry_error_html(str(exc)[:200])
+        return _mp_entry_error_html("请重新扫码进入", next_path="/app/shop")
 
     camp_id = _resolve_camp_id(user, None)
     if camp_id and user.role in ("learner", "partner"):
@@ -451,6 +774,7 @@ def wechat_mp_entry_callback(
     out_resp = RedirectResponse(next_path, status_code=302)
     _issue(user, camp_id, out_resp, request)
     _try_bind_pending_invite(request, out_resp, user.id)
+    out_resp.delete_cookie(MP_OAUTH_STATE_COOKIE, path="/")
     write_audit("auth.wechat_mp_entry", actor_id=user.id, details={"next": next_path, "role": user.role})
     return out_resp
 
@@ -487,6 +811,10 @@ def claim_invite_link(code: str, response: Response) -> dict[str, Any]:
         out["org_name"] = ic.get("org_name") or ic.get("org_id")
     else:
         out["referrer_name"] = ic.get("referrer_display_name") or ic.get("referrer_email")
+        from services.wechat_mp.profile import decode_wechat_text
+
+        if out.get("referrer_name"):
+            out["referrer_name"] = decode_wechat_text(str(out["referrer_name"])) or out["referrer_name"]
     return out
 
 

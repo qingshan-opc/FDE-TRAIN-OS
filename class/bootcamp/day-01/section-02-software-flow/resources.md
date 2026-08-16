@@ -1,5 +1,7 @@
 # 第 2 节 · 六岗位交接速查卡
 
+打开图：[`role-handoff-map.svg`](./role-handoff-map.svg)
+
 ```text
 领域问题
 → 产品经理：PRD.md

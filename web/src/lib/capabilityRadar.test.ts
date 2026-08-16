@@ -35,7 +35,30 @@ describe("buildRecentActivity", () => {
     const items = buildRecentActivity([
       { kind: "lab", day: 2, node_id: "d2-lab", ts: new Date().toISOString() },
     ]);
-    expect(items[0].title).toContain("Lab");
-    expect(items[0].href).toContain("/app/day/2");
+    expect(items[0].title).toContain("第二天");
+    expect(items[0].subtitle).toContain("Lab");
+    expect(items[0].href).toBe("/app/day/2?node=d2-lab");
+  });
+
+  it("uses Chinese day titles and hides coach hashes", () => {
+    const items = buildRecentActivity(
+      [{ kind: "coach", day: 11, node_id: "coach-4203cd68490e", ts: new Date().toISOString() }],
+      6,
+      [{ day: 11, title: "收官：把智能体接到驾驶舱", project: "收官：把智能体接到驾驶舱" }],
+    );
+    expect(items[0].title).toBe("收官：把智能体接到驾驶舱");
+    expect(items[0].subtitle).toContain("教练辅导");
+    expect(items[0].subtitle).not.toContain("coach-");
+    expect(items[0].href).toBe("/app/day/11");
+  });
+
+  it("prefers project when package title is Day N", () => {
+    const items = buildRecentActivity(
+      [{ kind: "agent", day: 1, node_id: "d1-lab", ts: new Date().toISOString() }],
+      6,
+      [{ day: 1, title: "Day 1", project: "第一次指挥 AI 开发" }],
+    );
+    expect(items[0].title).toBe("第一次指挥 AI 开发");
+    expect(items[0].subtitle).not.toContain("d1-lab");
   });
 });

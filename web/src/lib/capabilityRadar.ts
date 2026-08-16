@@ -1,3 +1,4 @@
+import { dayLabel, learnerDayTitle } from "./dayLabel";
 import type { Passport } from "./types";
 
 export type RadarAxis = {
@@ -132,14 +133,36 @@ export type ActivityItem = {
 
 const KIND_LABEL: Record<string, string> = {
   lab: "完成 Lab 实训",
-  agent: "Agent 生成作业",
+  agent: "完成 Agent 作业",
   eval: "通过评测",
   quiz: "提交测验",
   practice: "完成随堂练习",
-  learn: "学习节点",
+  learn: "完成课节",
   capsule: "打开课节",
   submission: "提交作业",
+  coach: "教练辅导",
+  sim: "完成仿真实训",
 };
+
+export type ActivityDayCatalog = {
+  day: number;
+  title?: string | null;
+  project?: string | null;
+  nodes?: Array<{ id: string; title?: string | null }>;
+  capsules?: Array<{ id: string; title?: string | null }>;
+};
+
+function lookupDay(catalog: ActivityDayCatalog[] | undefined, day: number | undefined): ActivityDayCatalog | undefined {
+  if (day == null || !catalog?.length) return undefined;
+  return catalog.find((d) => d.day === day);
+}
+
+function lookupNodeTitle(dayRow: ActivityDayCatalog | undefined, nodeId: string | undefined): string {
+  if (!dayRow || !nodeId) return "";
+  const node = (dayRow.nodes || []).find((n) => n.id === nodeId);
+  const cap = (dayRow.capsules || []).find((c) => c.id === nodeId);
+  return (node?.title || cap?.title || "").trim();
+}
 
 /** Human-readable label for raw capability tags shown on the passport. */
 export function formatCapabilityTag(tag: string): string {
@@ -197,14 +220,31 @@ function relTime(iso?: string): string {
   return new Date(ts).toLocaleDateString("zh-CN", { month: "short", day: "numeric" });
 }
 
-export function buildRecentActivity(evidence: EvidenceItem[], limit = 6): ActivityItem[] {
+export function buildRecentActivity(
+  evidence: EvidenceItem[],
+  limit = 6,
+  catalog?: ActivityDayCatalog[],
+): ActivityItem[] {
   return evidence.slice(0, limit).map((row, i) => {
     const kind = String(row.kind || "learn");
     const day = typeof row.day === "number" ? row.day : undefined;
     const node = row.node_id ? String(row.node_id) : undefined;
-    const title = KIND_LABEL[kind] || "学习记录";
-    const subtitle = day ? `第 ${day} 课${node ? ` · ${node}` : ""}` : node || "学习平台";
-    const href = day && node ? `/app/day/${day}?node=${encodeURIComponent(node)}` : day ? `/app/day/${day}` : undefined;
+    const action = KIND_LABEL[kind] || "学习";
+    const dayRow = lookupDay(catalog, day);
+    const courseName = dayRow ? learnerDayTitle(dayRow) : day != null ? dayLabel(day) : "";
+    const nodeTitle = lookupNodeTitle(dayRow, node);
+    const title = courseName || nodeTitle || action;
+    const bits: string[] = [];
+    if (day != null) bits.push(dayLabel(day));
+    if (action && action !== title) bits.push(action);
+    if (nodeTitle && nodeTitle !== title && nodeTitle !== courseName) bits.push(nodeTitle);
+    const subtitle = bits.join(" · ") || action;
+    const linkNode = node && !/^coach-/i.test(node) && !/^[a-f0-9]{8,}$/i.test(node) ? node : undefined;
+    const href = day
+      ? linkNode
+        ? `/app/day/${day}?node=${encodeURIComponent(linkNode)}`
+        : `/app/day/${day}`
+      : undefined;
     return {
       id: String(row.ts || i),
       title,

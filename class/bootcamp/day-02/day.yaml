@@ -1,7 +1,7 @@
 day: 2
 project: 把 UI 原型变成能运行的前端
 project_brief: >-
-  学员承接 Day 1 已确认的 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html，
+  学员承接 Day 1 已确认的 design/PRD.md、design/design-spec.md、design/ui-flow.md 和 design/ui-prototype.html，
   在 TRAE 中手动切换 @前端，把交互原型实现为可直接运行的三文件前端；
   亲手检查页面、交互与四种数据状态，再切回 @UI 验收还原度，最后把 frontend-api-needs.md 交给 @后端。
   Day 2 的重点不是背代码，而是学会文件交接、分段指挥、运行验证、责任岗位修复和下游交付。
@@ -120,7 +120,7 @@ capsule_extra:
         本节只完成交接确认，不生成前端文件。请逐段操作，每段完成后再继续。
 
         【第 1 段｜切换 @前端并检查文件】
-        切换到 @前端，发送：请检查工作区根目录是否存在 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html。现在不要生成代码。缺少文件时只告诉我缺什么、应切回哪个岗位补齐。
+        切换到 @前端，发送：请检查 design/ 目录是否存在 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html。现在不要生成代码。缺少文件时只告诉我缺什么、应切回哪个岗位补齐。不要到工作区根目录寻找这些文件。
 
         【第 2 段｜五句复述】
         四份文件齐全。请用 5 句话复述：目标用户、页面范围、最重要操作、必须出现的数据状态、前端验收标准。输出后停止，等我确认。
@@ -243,7 +243,7 @@ capsule_extra:
         我已确认《前端实施清单》。请创建 frontend/index.html、frontend/styles.css、frontend/app.js。第一步只建立完整页面结构和文件引用，不加入复杂交互。完成后告诉我怎样直接打开页面，以及三个文件各自负责什么。
 
         【第 2 段｜按 UI 规范实现样式】
-        页面结构已能打开。请读取 design-spec.md 和 ui-prototype.html，把颜色、字号、间距、布局和按钮状态实现到 frontend/styles.css。不要改变 PRD 的页面范围。完成后列出 5 个可以肉眼核对的设计点。
+        页面结构已能打开。请读取 design/design-spec.md 和 design/ui-prototype.html，把颜色、字号、间距、布局和按钮状态实现到 frontend/styles.css。不要改变 PRD 的页面范围。完成后列出 5 个可以肉眼核对的设计点。
 
         【第 3 段｜加入真实可见交互】
         样式已确认。请读取 ui-flow.md，在 frontend/app.js 中实现原型要求的筛选、表单或主要按钮行为；演示数据集中写在文件顶部。每次操作都必须产生可见反馈，不连接真实后端。
@@ -382,7 +382,7 @@ capsule_extra:
         本节包含三次岗位切换，必须逐段完成。
 
         【第 1 段｜切换 @UI 复验】
-        切换到 @UI，发送：请读取 design-spec.md、ui-flow.md 和 frontend 目录中的三个文件。只验收，不直接修改。逐项输出“通过/不通过、文件依据、可量化差距、责任岗位”。
+        切换到 @UI，发送：请读取 design/design-spec.md、design/ui-flow.md 和 frontend 目录中的三个文件。只验收，不直接修改。逐项输出“通过/不通过、文件依据、可量化差距、责任岗位”。
 
         【第 2 段｜切回 @前端 修复】
         如有不通过项，切换到 @前端，发送：请只处理 UI 的问题清单，说明修改文件和复测方法。完成后我会再次切回 UI。然后回到 @UI 复验，直到全部通过。
@@ -391,7 +391,7 @@ capsule_extra:
         切换到 @前端，发送：请根据已通过的页面生成 frontend-api-needs.md。按页面或功能列出：展示所需字段、字段含义、用户提交内容、期待后端返回内容、加载/空数据/错误的展示方式。不要编造接口地址，不要写密钥。
 
         【第 4 段｜切换 @后端 接收】
-        切换到 @后端，发送：请先读取 PRD.md 和 frontend-api-needs.md，只复述你收到的业务规则、页面数据需求和需要确认的问题。现在不要开发接口，等我确认 Day3 开工。
+        切换到 @后端，发送：请先读取 design/PRD.md 和 frontend-api-needs.md，只复述你收到的业务规则、页面数据需求和需要确认的问题。现在不要开发接口，等我确认 Day3 开工。
 
         【第 5 段｜记录 Day2 交接】
         创建 day2-handoff-log.md，记录 UI → 前端 → UI → 前端 → 后端每次切换的输入文件、输出文件、验收结果和修改轮次。

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create / publish WeChat MP custom menu (我的课程).
+"""Create / publish WeChat MP custom menu.
 
 Usage (inside app container or with env set):
   python scripts/wechat_mp_create_menu.py
@@ -39,6 +39,7 @@ def main() -> int:
 
     entry = f"{BASE}/api/v1/auth/wechat/mp-entry?next={quote('/app/courses', safe='')}"
     shop = f"{BASE}/api/v1/auth/wechat/mp-entry?next={quote('/app/shop', safe='')}"
+    partner = f"{BASE}/api/v1/auth/wechat/mp-entry?next={quote('/partner/activate', safe='')}"
     body = {
         "button": [
             {
@@ -52,6 +53,11 @@ def main() -> int:
                 "type": "view",
                 "name": "官网",
                 "url": BASE + "/",
+            },
+            {
+                "type": "view",
+                "name": "机构平台",
+                "url": partner,
             },
         ]
     }

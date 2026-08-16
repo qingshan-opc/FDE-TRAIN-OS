@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import logging
 import sys
+import threading
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request, Response
@@ -73,6 +76,30 @@ _ROUTERS = [
     (wechat_mp_router, "FDE WeChat MP"),
 ]
 _SERVICE_TITLES = [title for _, title in _ROUTERS]
+_api_log = logging.getLogger("fde.api")
+
+
+@asynccontextmanager
+async def _lifespan(_app: FastAPI):
+    stop = threading.Event()
+
+    def _profit_share_loop() -> None:
+        if stop.wait(15):
+            return
+        while not stop.is_set():
+            try:
+                from services.billing import profit_sharing
+
+                profit_sharing.tick()
+            except Exception:
+                _api_log.exception("profit share tick failed")
+            stop.wait(60)
+
+    thread = threading.Thread(target=_profit_share_loop, name="profit-share-tick", daemon=True)
+    thread.start()
+    yield
+    stop.set()
+
 
 app = FastAPI(
     title="FDE Learning OS",
@@ -80,6 +107,7 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
+    lifespan=_lifespan,
 )
 app.add_middleware(
     CORSMiddleware,

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  Alert,
   Button,
   Card,
   Form,
   Input,
   InputNumber,
   Modal,
+  QRCode,
   Select,
   Space,
   Table,
@@ -13,8 +15,10 @@ import {
   Typography,
   message,
 } from "antd";
-import { partnerAdminApi, ApiError } from "../../lib/api";
+import { partnerAdminApi, partnerApi, ApiError } from "../../lib/api";
 import { buildOrgRegisterUrl } from "../../lib/inviteLink";
+import { SHARE_HOLD_COPY } from "../../lib/billingLabels";
+import { wechatMpEntryUrl } from "../../lib/wechat";
 
 type Org = Record<string, unknown> & {
   id: string;
@@ -36,9 +40,15 @@ export function ChannelSettings() {
   const [orgModal, setOrgModal] = useState(false);
   const [codeModal, setCodeModal] = useState(false);
   const [accountModal, setAccountModal] = useState(false);
+  const [activationModal, setActivationModal] = useState(false);
+  const [activationCodes, setActivationCodes] = useState<Record<string, unknown>[]>([]);
+  const [activateEntryUrl, setActivateEntryUrl] = useState(
+    () => `${window.location.origin}${wechatMpEntryUrl("/partner/activate")}`,
+  );
   const [form] = Form.useForm();
   const [codeForm] = Form.useForm();
   const [accountForm] = Form.useForm();
+  const [activationForm] = Form.useForm();
   const [tierRows, setTierRows] = useState<{ key: string; min_paid_users: number; rate_pct: number }[]>([]);
 
   const loadOrgs = useCallback(async () => {
@@ -54,6 +64,15 @@ export function ChannelSettings() {
       setLoading(false);
     }
   }, [selectedOrgId]);
+
+  const loadActivationCodes = useCallback(async () => {
+    try {
+      const res = await partnerAdminApi.listActivationCodes();
+      setActivationCodes(res.items || []);
+    } catch (err) {
+      message.error(err instanceof ApiError ? err.message : "加载开通码失败");
+    }
+  }, []);
 
   const loadOrgDetail = useCallback(async (orgId: string) => {
     try {
@@ -79,7 +98,14 @@ export function ChannelSettings() {
 
   useEffect(() => {
     void loadOrgs();
-  }, [loadOrgs]);
+    void loadActivationCodes();
+    void partnerApi
+      .activateEntry()
+      .then((res) => setActivateEntryUrl(res.entry_url))
+      .catch(() => {
+        /* keep relative fallback */
+      });
+  }, [loadOrgs, loadActivationCodes]);
 
   useEffect(() => {
     if (selectedOrgId) void loadOrgDetail(selectedOrgId);
@@ -132,6 +158,28 @@ export function ChannelSettings() {
     }
   };
 
+  const saveActivationCode = async () => {
+    const values = await activationForm.validateFields();
+    try {
+      const res = await partnerAdminApi.createActivationCode({
+        note: values.note || undefined,
+        code: values.code || undefined,
+      });
+      setActivationModal(false);
+      activationForm.resetFields();
+      void loadActivationCodes();
+      const code = String(res.activation_code?.code || "");
+      if (code) {
+        void navigator.clipboard.writeText(code);
+        message.success(`开通码 ${code} 已创建并复制`);
+      } else {
+        message.success("开通码已创建");
+      }
+    } catch (err) {
+      message.error(err instanceof ApiError ? err.message : "创建失败");
+    }
+  };
+
   const saveTiers = async () => {
     if (!selectedOrgId) return;
     try {
@@ -149,7 +197,93 @@ export function ChannelSettings() {
   return (
     <div>
       <Typography.Title level={4}>渠道与分账</Typography.Title>
-      <Typography.Paragraph type="secondary">管理机构、邀请码、分账阶梯（最高 30%）与归因明细</Typography.Paragraph>
+      <Typography.Paragraph type="secondary">管理机构、邀请码与归因明细。邀请链接分润默认 30%。</Typography.Paragraph>
+      <Alert
+        type="info"
+        showIcon
+        style={{ marginBottom: 16 }}
+        message={SHARE_HOLD_COPY.org.message}
+        description={SHARE_HOLD_COPY.org.description}
+      />
+
+      <Card size="small" title="机构开通" style={{ marginBottom: 16 }}>
+        <Typography.Paragraph type="secondary" style={{ marginBottom: 12 }}>
+          生成一次性开通码发给对应人员；对方从公众号「机构平台」或扫码进入，输入开通码即可成为机构账号。开通后邀请链接默认 30% 分润。
+        </Typography.Paragraph>
+        <Space align="start" size="large" wrap style={{ marginBottom: 16 }}>
+          <div style={{ textAlign: "center" }}>
+            <QRCode value={activateEntryUrl} size={140} />
+            <div style={{ marginTop: 8 }}>
+              <Button
+                size="small"
+                type="link"
+                onClick={() => {
+                  void navigator.clipboard.writeText(activateEntryUrl);
+                  message.success("开通入口链接已复制");
+                }}
+              >
+                复制开通链接
+              </Button>
+            </div>
+          </div>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <Typography.Paragraph style={{ marginBottom: 8 }} copyable={{ text: activateEntryUrl }}>
+              {activateEntryUrl}
+            </Typography.Paragraph>
+            <Button
+              type="primary"
+              onClick={() => {
+                activationForm.resetFields();
+                setActivationModal(true);
+              }}
+            >
+              生成开通码
+            </Button>
+          </div>
+        </Space>
+        <Table
+          size="small"
+          rowKey="id"
+          pagination={{ pageSize: 8 }}
+          dataSource={activationCodes}
+          columns={[
+            {
+              title: "开通码",
+              dataIndex: "code",
+              render: (v: string) => <Typography.Text className="mono">{v}</Typography.Text>,
+            },
+            { title: "备注", dataIndex: "note", render: (v) => v || "—" },
+            { title: "状态", dataIndex: "status" },
+            {
+              title: "兑换人",
+              key: "used",
+              render: (_, row) =>
+                row.used_by_name || row.used_by_email
+                  ? `${row.used_by_name || ""} ${row.used_by_email || ""}`.trim()
+                  : "—",
+            },
+            { title: "机构", dataIndex: "org_name", render: (v) => v || "—" },
+            { title: "创建时间", dataIndex: "created_at" },
+            {
+              title: "操作",
+              key: "copy",
+              render: (_, row) => (
+                <Button
+                  size="small"
+                  type="link"
+                  onClick={() => {
+                    void navigator.clipboard.writeText(String(row.code || ""));
+                    message.success("开通码已复制");
+                  }}
+                >
+                  复制码
+                </Button>
+              ),
+            },
+          ]}
+        />
+      </Card>
+
       <Space style={{ marginBottom: 16 }} wrap>
         <Select
           style={{ minWidth: 220 }}
@@ -159,7 +293,13 @@ export function ChannelSettings() {
           options={orgs.map((o) => ({ value: o.id, label: o.name }))}
           loading={loading}
         />
-        <Button type="primary" onClick={() => { form.resetFields(); setOrgModal(true); }}>
+        <Button
+          type="primary"
+          onClick={() => {
+            form.resetFields();
+            setOrgModal(true);
+          }}
+        >
           新建机构
         </Button>
         <Button
@@ -180,10 +320,22 @@ export function ChannelSettings() {
         >
           编辑机构 / 分账接收方
         </Button>
-        <Button disabled={!selectedOrgId} onClick={() => { codeForm.resetFields(); setCodeModal(true); }}>
+        <Button
+          disabled={!selectedOrgId}
+          onClick={() => {
+            codeForm.resetFields();
+            setCodeModal(true);
+          }}
+        >
           发邀请码
         </Button>
-        <Button disabled={!selectedOrgId} onClick={() => { accountForm.resetFields(); setAccountModal(true); }}>
+        <Button
+          disabled={!selectedOrgId}
+          onClick={() => {
+            accountForm.resetFields();
+            setAccountModal(true);
+          }}
+        >
           创建机构账号
         </Button>
       </Space>
@@ -333,7 +485,10 @@ export function ChannelSettings() {
         title={form.getFieldValue("id") ? "编辑机构" : "新建机构"}
         open={orgModal}
         onOk={() => void saveOrg()}
-        onCancel={() => { setOrgModal(false); form.resetFields(); }}
+        onCancel={() => {
+          setOrgModal(false);
+          form.resetFields();
+        }}
       >
         <Form form={form} layout="vertical" initialValues={{ wx_receiver_type: "PERSONAL_OPENID" }}>
           <Form.Item name="id" hidden>
@@ -380,7 +535,12 @@ export function ChannelSettings() {
         </Form>
       </Modal>
 
-      <Modal title="机构后台账号" open={accountModal} onOk={() => void saveAccount()} onCancel={() => setAccountModal(false)}>
+      <Modal
+        title="机构后台账号"
+        open={accountModal}
+        onOk={() => void saveAccount()}
+        onCancel={() => setAccountModal(false)}
+      >
         <Form form={accountForm} layout="vertical">
           <Form.Item name="email" label="邮箱" rules={[{ required: true, type: "email" }]}>
             <Input />
@@ -390,6 +550,22 @@ export function ChannelSettings() {
           </Form.Item>
           <Form.Item name="display_name" label="显示名">
             <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="生成机构开通码"
+        open={activationModal}
+        onOk={() => void saveActivationCode()}
+        onCancel={() => setActivationModal(false)}
+      >
+        <Form form={activationForm} layout="vertical">
+          <Form.Item name="note" label="备注（发给谁）">
+            <Input placeholder="如：张老师 / 杭州渠道" />
+          </Form.Item>
+          <Form.Item name="code" label="自定义码（可选，留空自动生成）">
+            <Input className="mono" placeholder="6–16 位大写字母数字" />
           </Form.Item>
         </Form>
       </Modal>

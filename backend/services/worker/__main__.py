@@ -354,9 +354,19 @@ def loop(poll_seconds: float = 1.0) -> None:
     setup_logging()
     init_schema()
     log.info("worker started AGENT_MODE=%s", AGENT_MODE)
+    last_share_tick = 0.0
     while True:
         job = queue.claim_next_job(list(HANDLERS.keys()))
         if not job:
+            now = time.time()
+            if now - last_share_tick >= 60:
+                last_share_tick = now
+                try:
+                    from services.billing import profit_sharing
+
+                    profit_sharing.tick()
+                except Exception:
+                    log.exception("profit share tick failed")
             time.sleep(poll_seconds)
             continue
         job_id = job["id"]

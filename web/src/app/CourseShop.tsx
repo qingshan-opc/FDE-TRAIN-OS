@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button, Collapse } from "antd";
 import { CheckCircleOutlined, CloseCircleOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { billingApi, ApiError } from "../lib/api";
@@ -8,6 +8,7 @@ import { PaymentModal } from "../components/PaymentModal";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { useToast } from "../components/Toast";
+import { isMobilePhoneUa } from "../lib/device";
 import {
   SHOP_DEFAULT_PITCH,
   SHOP_FIT,
@@ -47,6 +48,7 @@ function formatPrice(fen: number) {
 
 export function CourseShop() {
   const nav = useNavigate();
+  const [params, setParams] = useSearchParams();
   const toast = useToast();
   const [items, setItems] = useState<Offering[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -56,6 +58,7 @@ export function CourseShop() {
   const [payOfferingId, setPayOfferingId] = useState<string | null>(null);
   const [amountFen, setAmountFen] = useState(0);
   const [buyingId, setBuyingId] = useState<string | null>(null);
+  const autoPayRef = useRef(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -129,11 +132,29 @@ export function CourseShop() {
     setBuyingId(null);
   };
 
+  useEffect(() => {
+    if (autoPayRef.current) return;
+    if (params.get("pay") !== "1") return;
+    if (loading || !offering || owned) return;
+    autoPayRef.current = true;
+    setPayOfferingId(offering.id);
+    setAmountFen(offering.price_fen);
+    setPayOpen(true);
+    const next = new URLSearchParams(params);
+    next.delete("pay");
+    setParams(next, { replace: true });
+  }, [loading, offering, owned, params, setParams]);
+
   const onPaid = () => {
     setPayOpen(false);
     toast.push("支付成功，已开通课程", "success");
     void load();
-    nav("/app/courses");
+    // 手机继续留在选购页；电脑再进学习台
+    if (!isMobilePhoneUa()) {
+      nav("/app/courses");
+    } else {
+      toast.push("学习请用电脑打开 fde.818cloud.com", "info");
+    }
   };
 
   return (
@@ -251,7 +272,6 @@ export function CourseShop() {
               </blockquote>
             </section>
 
-            {/* spacer for sticky bar */}
             <div className="shop-bottom-spacer" aria-hidden />
           </>
         )}
@@ -267,8 +287,19 @@ export function CourseShop() {
             </span>
           </div>
           {owned ? (
-            <Button type="primary" size="large" className="shop-sticky-cta__btn" onClick={() => nav("/app/courses")}>
-              进入学习
+            <Button
+              type="primary"
+              size="large"
+              className="shop-sticky-cta__btn"
+              onClick={() => {
+                if (isMobilePhoneUa()) {
+                  toast.push("学习请用电脑浏览器打开 fde.818cloud.com", "info");
+                  return;
+                }
+                nav("/app/courses");
+              }}
+            >
+              {isMobilePhoneUa() ? "请用电脑学习" : "进入学习"}
             </Button>
           ) : (
             <Button

@@ -135,7 +135,7 @@ capsule_extra:
 
         【第 1 段｜检查六类输入】
 
-        请读取 PRD.md、API_Spec.md、DB_Schema.md、RUNBOOK.md、backend-acceptance.md 和 backend-handoff.md。现在不要执行测试。缺少文件时只说明缺什么、应回到哪个岗位补齐。
+        请读取 design/PRD.md、API_Spec.md、DB_Schema.md、RUNBOOK.md、backend-acceptance.md 和 backend-handoff.md。现在不要执行测试。缺少文件时只说明缺什么、应回到哪个岗位补齐。
 
 
         【第 2 段｜复述范围与风险】
@@ -518,7 +518,7 @@ capsule_extra:
 
         【第 6 段｜回产品经理终验】
 
-        @产品经理，请读取 PRD.md、test-report.md、DEPLOYMENT.md 和 day4-release-log.md。不要修改代码。请逐条核对目标用户、核心问题、第一版范围和验收标准，输出 final-acceptance.md。最后只给出“通过”或“不通过”及证据。
+        @产品经理，请读取 design/PRD.md、test-report.md、DEPLOYMENT.md 和 day4-release-log.md。不要修改代码。请逐条核对目标用户、核心问题、第一版范围和验收标准，输出 final-acceptance.md。最后只给出“通过”或“不通过”及证据。
 
         '
       checklist:

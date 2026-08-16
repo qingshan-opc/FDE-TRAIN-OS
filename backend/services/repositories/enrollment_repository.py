@@ -31,6 +31,8 @@ class EnrollmentRepository:
     ) -> EnrollmentRecord:
         existing = self.get_by_user_and_offering(user_id, offering_id)
         if existing:
+            if status and existing.status != status:
+                existing.status = status
             return existing
         rec = EnrollmentRecord(
             id=str(uuid4()), user_id=user_id, offering_id=offering_id, status=status
@@ -80,6 +82,7 @@ class EnrollmentRepository:
                     "course_version_id": version.id if version else None,
                     "course_id": course.id if course else None,
                     "course_title": course.title if course else offering.title,
+                    "cover_image": "/courses/fde-bootcamp-cover.jpg",
                 }
             )
         return out

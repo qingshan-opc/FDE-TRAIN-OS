@@ -10,11 +10,9 @@ import pytest
 def test_match_learner_rate_bps_tiers():
     from services.referral.service import LEARNER_REFERRAL_TIERS, match_learner_rate_bps
 
-    assert LEARNER_REFERRAL_TIERS == [(0, 2000), (5, 2500), (10, 3000)]
-    assert match_learner_rate_bps(0) == 2000
-    assert match_learner_rate_bps(4) == 2000
-    assert match_learner_rate_bps(5) == 2500
-    assert match_learner_rate_bps(9) == 2500
+    assert LEARNER_REFERRAL_TIERS == [(0, 3000)]
+    assert match_learner_rate_bps(0) == 3000
+    assert match_learner_rate_bps(4) == 3000
     assert match_learner_rate_bps(10) == 3000
     assert match_learner_rate_bps(100) == 3000
 

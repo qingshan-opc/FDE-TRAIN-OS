@@ -75,6 +75,15 @@ export interface CapsulePracticeSpec {
   required?: boolean;
 }
 
+/** Optional domain dropdown persisted as learner memory (Day 1 §1 → later prompts). */
+export interface CapsuleDomainPicker {
+  enabled?: boolean;
+  memory_key?: string;
+  label?: string;
+  options?: string[];
+  allow_other?: boolean;
+}
+
 /** Local Codex prep block — copy prompt + checklist before hands-on work. */
 export interface CapsuleLocalPrep {
   skill_id?: string;
@@ -83,6 +92,15 @@ export interface CapsuleLocalPrep {
   prompt_kind?: "coding" | "coach";
   checklist?: string[];
   template_resource_id?: string;
+  /** Button label for template_resource_id (default 下载任务模板). */
+  template_label?: string;
+  /** Heading above the step/prompt card. */
+  prompt_title?: string;
+  /** Hide the copy-to-clipboard action (manual steps, not a pasteable coding prompt). */
+  hide_copy?: boolean;
+  /** Resources shown at the top of 本地实操 (e.g. TRAE download). */
+  featured_resource_ids?: string[];
+  domain_picker?: CapsuleDomainPicker;
   suggested_questions?: string[];
 }
 
@@ -718,6 +736,7 @@ export interface EnrollmentRecord {
   course_version_id?: string;
   course_id?: string;
   course_title?: string;
+  cover_image?: string;
 }
 
 export interface CertificateItem {

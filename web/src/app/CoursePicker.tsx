@@ -5,7 +5,6 @@ import { useAuth } from "../lib/auth";
 import {
   buildCapabilityRadar,
   buildRecentActivity,
-  type ActivityItem,
   type EvidenceItem,
 } from "../lib/capabilityRadar";
 import { resolveNextTarget, summarizeProgress, type ProgressSummary } from "../lib/taskTargets";
@@ -16,16 +15,48 @@ import { CourseProgressRing } from "../components/CourseProgressRing";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { Empty } from "../components/Empty";
+import { CoursePosterArt } from "../components/CoursePosterArt";
 import { useToast } from "../components/Toast";
 
-const STATUS_LABEL: Record<string, string> = {
-  active: "进行中",
-  pending: "待激活",
-  completed: "已结业",
-  cancelled: "已取消",
-};
+const LEGACY_COURSE_TITLES = new Set(["FDE 0期 v0.3", "FDE 训练营"]);
+const PUBLIC_COURSE_TITLE = "企业AI项目实战训练营";
+const COURSE_POSTER_ORG = "青山在";
+const COURSE_POSTER_MENTOR = "零基础 · 企业 AI 落地陪跑";
 
-type CampProgress = ProgressSummary & { pendingTasks: number };
+function learnerCourseTitle(it: Pick<EnrollmentRecord, "course_title" | "offering_title">): string {
+  const raw = (it.course_title || it.offering_title || "").trim();
+  if (!raw || LEGACY_COURSE_TITLES.has(raw)) return PUBLIC_COURSE_TITLE;
+  return raw;
+}
+
+function learnerCourseSubtitle(it: Pick<EnrollmentRecord, "course_title" | "offering_title">): string | null {
+  const title = learnerCourseTitle(it);
+  const extra = (it.offering_title || "").trim();
+  if (!extra || extra === title || LEGACY_COURSE_TITLES.has(extra)) return null;
+  return extra;
+}
+
+function weekOfDay(day: number): number {
+  if (day <= 6) return 1;
+  if (day <= 11) return 2;
+  return 3;
+}
+
+function coursePosterMeta(progress: CampProgress | null, status: string): { weekLabel: string; pctLabel: string } {
+  if (status === "completed" || (progress && progress.pct >= 100)) {
+    return { weekLabel: "已结业", pctLabel: "进度 100%" };
+  }
+  if (status === "pending") {
+    return { weekLabel: "待激活", pctLabel: "尚未开始" };
+  }
+  if (!progress) {
+    return { weekLabel: "进行至第1周", pctLabel: "进度 0%" };
+  }
+  const week = weekOfDay(progress.currentDay || 1);
+  return { weekLabel: `进行至第${week}周`, pctLabel: `进度 ${progress.pct}%` };
+}
+
+type CampProgress = ProgressSummary & { pendingTasks: number; currentDay: number };
 
 function StatIcon({ children }: { children: ReactNode }) {
   return <span className="course-stat-icon">{children}</span>;
@@ -45,7 +76,7 @@ export function CoursePicker() {
   const [activeDays, setActiveDays] = useState<DaySummary[]>([]);
   const [passport, setPassport] = useState<Passport | null>(null);
   const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
-  const [recent, setRecent] = useState<ActivityItem[]>([]);
+  const [catalogDays, setCatalogDays] = useState<DaySummary[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -78,12 +109,19 @@ export function CoursePicker() {
       try {
         const campIds = [...new Set(items.map((it) => it.camp_id).filter(Boolean))] as string[];
         const progressMap: Record<string, CampProgress> = {};
+        const allDays: DaySummary[] = [];
         await Promise.all(
           campIds.map(async (campId) => {
             try {
               const res = await dayApi.list(campId);
               const summary = summarizeProgress(res.days, res.weeks);
-              progressMap[campId] = { ...summary, pendingTasks: summary.pending };
+              const open = (res.days || []).find((d) => !d.locked && (d.passed ?? 0) < (d.total ?? 1));
+              progressMap[campId] = {
+                ...summary,
+                pendingTasks: summary.pending,
+                currentDay: open?.day ?? (res.days || []).find((d) => !d.locked)?.day ?? 1,
+              };
+              allDays.push(...(res.days || []));
               if (!cancelled && activeEnrollment?.camp_id === campId) {
                 setActiveDays(res.days);
               }
@@ -92,7 +130,10 @@ export function CoursePicker() {
             }
           }),
         );
-        if (!cancelled) setProgressByCamp(progressMap);
+        if (!cancelled) {
+          setProgressByCamp(progressMap);
+          setCatalogDays(allDays);
+        }
 
         const [evRes, passRes] = await Promise.all([
           progressApi.evidence(user.id).catch(() => ({ items: [] as EvidenceItem[] })),
@@ -102,7 +143,6 @@ export function CoursePicker() {
         const evItems = (evRes.items || []) as EvidenceItem[];
         setEvidence(evItems);
         setPassport(passRes);
-        setRecent(buildRecentActivity(evItems, 6));
       } finally {
         if (!cancelled) setDashLoading(false);
       }
@@ -113,8 +153,14 @@ export function CoursePicker() {
   }, [user, items, activeEnrollment?.camp_id]);
 
   const radarAxes = useMemo(() => buildCapabilityRadar(passport, evidence), [passport, evidence]);
+  const recent = useMemo(
+    () => buildRecentActivity(evidence, 6, catalogDays.length ? catalogDays : activeDays),
+    [evidence, catalogDays, activeDays],
+  );
   const activeProgress = activeEnrollment?.camp_id ? progressByCamp[activeEnrollment.camp_id] : null;
   const nextTarget = useMemo(() => resolveNextTarget(activeDays), [activeDays]);
+  const spotlightTitle = activeEnrollment ? learnerCourseTitle(activeEnrollment) : "";
+  const spotlightSubtitle = activeEnrollment ? learnerCourseSubtitle(activeEnrollment) : null;
 
   const stats = useMemo(() => {
     const activeCourses = items.filter((it) => it.status === "active").length;
@@ -224,21 +270,12 @@ export function CoursePicker() {
               {activeEnrollment && (
                 <article className="course-spotlight">
                   <div className="course-spotlight-visual" aria-hidden>
-                    <div className="course-spotlight-orb course-spotlight-orb--a" />
-                    <div className="course-spotlight-orb course-spotlight-orb--b" />
-                    <div className="course-spotlight-grid" />
-                    {activeProgress && (
-                      <div className="course-spotlight-ring-wrap">
-                        <CourseProgressRing pct={activeProgress.pct} size={88} stroke={6} />
-                      </div>
-                    )}
+                    <CoursePosterArt variant="hero" />
                   </div>
                   <div className="course-spotlight-body">
                     <span className="course-feature-badge">继续学习</span>
-                    <h2>{activeEnrollment.course_title || activeEnrollment.offering_title || "未命名课程"}</h2>
-                    {activeEnrollment.offering_title && activeEnrollment.offering_title !== activeEnrollment.course_title && (
-                      <p className="course-spotlight-desc">{activeEnrollment.offering_title}</p>
-                    )}
+                    <h2>{spotlightTitle}</h2>
+                    {spotlightSubtitle && <p className="course-spotlight-desc">{spotlightSubtitle}</p>}
                     {activeProgress && (
                       <div className="course-spotlight-meta">
                         <span>
@@ -255,7 +292,6 @@ export function CoursePicker() {
                       <button type="button" className="btn-primary" onClick={onContinueActive}>
                         {nextTarget?.label ? `继续 · ${nextTarget.label}` : "进入课程工作台"}
                       </button>
-                      {activeEnrollment.camp_id && <span className="course-spotlight-camp">营期 {activeEnrollment.camp_id}</span>}
                     </div>
                   </div>
                 </article>
@@ -264,7 +300,7 @@ export function CoursePicker() {
               <div className="course-section-head">
                 <div>
                   <h2>我的课程</h2>
-                  <p className="muted">点击卡片切换营期并进入学习</p>
+                  <p className="muted">点击卡片进入学习</p>
                 </div>
                 <span className="course-section-count">{items.length} 门</span>
               </div>
@@ -274,39 +310,41 @@ export function CoursePicker() {
                   const active = it.enrollment_id === activeId;
                   const progress = it.camp_id ? progressByCamp[it.camp_id] : null;
                   const busy = switchingId === it.enrollment_id;
+                  const title = learnerCourseTitle(it);
+                  const poster = coursePosterMeta(progress, it.status);
                   return (
                     <article
                       key={it.enrollment_id}
-                      className={`course-card ${active ? "is-active" : ""} ${busy ? "is-busy" : ""}`}
+                      className={`course-poster ${active ? "is-active" : ""} ${busy ? "is-busy" : ""}`}
                     >
                       <button
                         type="button"
-                        className="course-card-hit"
+                        className="course-poster__hit"
                         disabled={busy}
                         onClick={() => void onEnter(it.enrollment_id)}
                       >
-                        <div className="course-card-top">
-                          <CourseProgressRing pct={progress?.pct ?? 0} size={42} stroke={4} />
-                          <div className="course-card-titles">
-                            <h3>{it.course_title || it.offering_title || "未命名课程"}</h3>
-                            {it.offering_title && it.offering_title !== it.course_title && (
-                              <p>{it.offering_title}</p>
-                            )}
+                        <div className="course-poster__cover">
+                          <CoursePosterArt variant="card" />
+                        </div>
+                        <div className="course-poster__body">
+                          <div className="course-poster__tags">
+                            {active && <span className="course-poster__now">当前学习</span>}
+                            <span className="course-poster__kind">训练营</span>
                           </div>
-                          {active && <span className="course-card-badge">当前</span>}
+                          <h3>{title}</h3>
+                          <p className="course-poster__org">{COURSE_POSTER_ORG}</p>
+                          <p className="course-poster__mentor">{COURSE_POSTER_MENTOR}</p>
+                          <div className="course-poster__foot">
+                            <span className={`course-poster__week${it.status === "completed" ? " is-done" : ""}`}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+                                <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                              </svg>
+                              {poster.weekLabel}
+                            </span>
+                            <span className="course-poster__pct">{busy ? "切换中…" : poster.pctLabel}</span>
+                          </div>
                         </div>
-                        <div className="course-card-meta">
-                          {it.camp_id && <span className="course-card-camp">{it.camp_id}</span>}
-                          <span className={`course-card-status course-card-status--${it.status}`}>
-                            {STATUS_LABEL[it.status] || it.status}
-                          </span>
-                        </div>
-                        {progress && (
-                          <p className="course-card-foot">
-                            进度 {progress.pct}% · 待办 {progress.pendingTasks}
-                          </p>
-                        )}
-                        <span className="course-card-enter">{busy ? "切换中…" : active ? "进入课程 →" : "开始学习 →"}</span>
                       </button>
                     </article>
                   );

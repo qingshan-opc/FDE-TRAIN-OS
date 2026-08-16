@@ -17,3 +17,19 @@ export function dayLabel(day: number): string {
 export function dayUnlockHint(prevDay: number): string {
   return `完成${dayLabel(prevDay)}后解锁`;
 }
+
+/** Prefer the Chinese project/README title over seed placeholders like "Day 1". */
+export function learnerDayTitle(day: {
+  day?: number;
+  title?: string | null;
+  project?: string | null;
+}): string {
+  const title = (day.title || "").trim();
+  const project = (day.project || "").trim();
+  const placeholder = !title || /^Day\s*\d+$/i.test(title);
+  if (project && placeholder) return project;
+  if (title && !placeholder) return title;
+  if (project) return project;
+  if (typeof day.day === "number" && Number.isFinite(day.day)) return dayLabel(day.day);
+  return title;
+}

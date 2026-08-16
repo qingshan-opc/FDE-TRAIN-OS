@@ -31,7 +31,43 @@ def test_build_day1_capsules_project_four_step_local_practice():
     for capsule in capsules:
         prep = capsule.get("local_prep") or {}
         assert prep.get("checklist")
-        # c1 is knowledge-only; later capsules carry hands-on prep (prompt optional).
+        # c1 is tool-prep + domain memory; later capsules carry TRAE copy prompts.
+
+    c1 = next(c for c in capsules if c["id"] == "c1")
+    prep1 = c1.get("local_prep") or {}
+    assert (prep1.get("featured_resource_ids") or [None])[0] == "trae-download"
+    assert (prep1.get("domain_picker") or {}).get("enabled") is True
+    assert "TRAE" in (prep1.get("checklist") or [""])[0]
+
+    c3 = next(c for c in capsules if c["id"] == "c3")
+    assert (c3.get("resource_ids") or []) == ["day1-agent-pack"]
+    prep3 = c3.get("local_prep") or {}
+    assert prep3.get("hide_copy") is True
+    assert prep3.get("template_label") == "下载提示词包"
+    assert "智能体团队" in (prep3.get("prompt_title") or "")
+
+    c4 = next(c for c in capsules if c["id"] == "c4")
+    assert c4.get("resource_ids") == []
+    prep4 = c4.get("local_prep") or {}
+    assert prep4.get("hide_copy") is True
+    assert "design/PROJECT_BRIEF.md" in (prep4.get("codex_prompt") or "")
+    assert "{{professional_domain}}" in (prep4.get("codex_prompt") or "")
+    assert "一次只问" in (prep4.get("codex_prompt") or "")
+    assert "在工作区根目录创建" not in (prep4.get("codex_prompt") or "")
+
+    c5 = next(c for c in capsules if c["id"] == "c5")
+    assert c5.get("resource_ids") == []
+    prep5 = c5.get("local_prep") or {}
+    assert prep5.get("hide_copy") is True
+    assert prep5.get("prompt_title") == "请按照流程文档操作"
+    assert not prep5.get("template_resource_id")
+    assert "design/PROJECT_BRIEF.md" in (prep5.get("codex_prompt") or "")
+    assert "design/PRD.md" in (prep5.get("codex_prompt") or "")
+
+    c6 = next(c for c in capsules if c["id"] == "c6")
+    prep6 = c6.get("local_prep") or {}
+    assert "design/ui-prototype.html" in (prep6.get("codex_prompt") or "")
+    assert "design/day1-handoff-log.md" in (prep6.get("codex_prompt") or "")
 
 
 def test_week2_cockpit_prompts_project_into_local_prep():

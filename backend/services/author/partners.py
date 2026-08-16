@@ -53,6 +53,12 @@ class PartnerAccountBody(BaseModel):
     display_name: str = "机构管理员"
 
 
+class ActivationCodeBody(BaseModel):
+    note: str | None = None
+    code: str | None = None
+    expires_at: str | None = None
+
+
 @router.get("/api/v1/author/partners/orgs")
 def list_orgs(request: Request) -> dict[str, Any]:
     require_author(request)
@@ -60,6 +66,34 @@ def list_orgs(request: Request) -> dict[str, Any]:
     for org in items:
         org["stats"] = partners.org_dashboard_stats(org["id"])
     return {"items": items}
+
+
+@router.get("/api/v1/author/partners/activation-codes")
+def list_activation_codes(request: Request) -> dict[str, Any]:
+    require_author(request)
+    return {"items": partners.list_activation_codes()}
+
+
+@router.post("/api/v1/author/partners/activation-codes")
+def create_activation_code(body: ActivationCodeBody, request: Request) -> dict[str, Any]:
+    user = require_author(request)
+    try:
+        item = partners.create_activation_code(
+            created_by=user.id,
+            note=body.note,
+            expires_at=body.expires_at,
+            code=body.code,
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    write_audit(
+        "partner.create_activation_code",
+        actor_id=user.id,
+        resource_type="partner_activation_code",
+        resource_id=item.get("id"),
+        details={"code": item.get("code")},
+    )
+    return {"activation_code": item}
 
 
 @router.post("/api/v1/author/partners/orgs")

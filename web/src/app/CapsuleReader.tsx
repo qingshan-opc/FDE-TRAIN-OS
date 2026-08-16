@@ -12,12 +12,19 @@ import type {
   NodeCompleteResult,
   NodeState,
 } from "../lib/types";
-import { resolveCapsuleResources } from "../lib/curriculum/capsuleResources";
+import { resolveCapsuleResources, resourceActionLabel, resourceDownloadName, resourceIsDownload } from "../lib/curriculum/capsuleResources";
 import {
   checklistItemsFromPrompt,
   normalizePractice,
   normalizeQuizQuestions,
 } from "../lib/curriculum/normalizeCapsule";
+import {
+  PROFESSIONAL_DOMAIN_CAPSULE_ID,
+  memoryFromPracticeJson,
+  memoryToPracticeJson,
+  readCachedDomain,
+  writeCachedDomain,
+} from "../lib/professionalDomain";
 import { ErrorState } from "../components/ErrorState";
 import { Empty } from "../components/Empty";
 import { CapsuleMediaStack } from "../components/CapsuleMedia";
@@ -397,23 +404,42 @@ function LearnBelowTabs({
         </div>
       )}
       {tab === "resources" && resources.length > 0 && (
-        <ul className="learn-resource-list" role="tabpanel">
-          {resources.map((r) => (
-            <li key={r.id} className="learn-resource-item">
-              <div>
-                <strong>{r.title}</strong>
-                {r.summary && <p className="muted">{r.summary}</p>}
-              </div>
-              {r.url ? (
-                <a href={r.url} target="_blank" rel="noreferrer">
-                  打开
-                </a>
-              ) : (
-                <span className="muted">{r.kind || "资料"}</span>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div role="tabpanel">
+          <ul className="learn-resource-list">
+            {resources.map((r) => (
+              <li key={r.id} className="learn-resource-item">
+                <div>
+                  <strong>{r.title}</strong>
+                  {r.summary && <p className="muted">{r.summary}</p>}
+                </div>
+                {r.url ? (
+                  <a
+                    href={r.url}
+                    {...(resourceIsDownload(r)
+                      ? { download: resourceDownloadName(r) || true }
+                      : { target: "_blank", rel: "noreferrer" })}
+                  >
+                    {resourceActionLabel(r)}
+                  </a>
+                ) : (
+                  <span className="muted">{r.kind || "资料"}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {resources
+            .filter((r) => (r.url || "").split("?")[0].toLowerCase().endsWith(".svg"))
+            .map((r) => (
+              <figure key={`${r.id}-preview`} className="learn-svg-preview">
+                <img src={r.url} alt={r.title} />
+                <figcaption>
+                  <a href={r.url} target="_blank" rel="noreferrer">
+                    新标签打开原图
+                  </a>
+                </figcaption>
+              </figure>
+            ))}
+        </div>
       )}
       {tab === "tools" && tools.length > 0 && (
         <ul className="learn-tool-list" role="tabpanel">
@@ -489,6 +515,7 @@ export function CapsuleReader({
   const practiceRef = useRef(practice);
   practiceRef.current = practice;
   const uiPersistRef = useRef<Record<string, CapsuleUiState>>({});
+  const lastOpenedCapsuleRef = useRef<string | null>(null);
 
   const openId = openCapsuleId !== undefined ? openCapsuleId : internalOpenId;
 
@@ -507,6 +534,7 @@ export function CapsuleReader({
   }, [read, onReadChange]);
 
   const openCapsule = (c: Capsule) => {
+    lastOpenedCapsuleRef.current = c.id;
     if (onOpenCapsuleIdChange) onOpenCapsuleIdChange(c.id);
     else setInternalOpenId(c.id);
     setReadAndNotify((prev) => (prev.has(c.id) ? prev : new Set(prev).add(c.id)));
@@ -521,11 +549,16 @@ export function CapsuleReader({
       });
   };
 
-  // External TOC click → open without resetting tab unnecessarily when same id
+  // Left-rail TOC only updates openCapsuleId. Reset to this capsule's video
+  // when the id actually changes; stay put if they re-click the same card.
   useEffect(() => {
     if (openCapsuleId == null) return;
     const c = capsules.find((x) => x.id === openCapsuleId);
     if (!c) return;
+    if (lastOpenedCapsuleRef.current !== c.id) {
+      lastOpenedCapsuleRef.current = c.id;
+      setStep("video");
+    }
     setReadAndNotify((prev) => (prev.has(c.id) ? prev : new Set(prev).add(c.id)));
     if (!user || !campId) return;
     void capsuleApi
@@ -545,6 +578,7 @@ export function CapsuleReader({
     setQuizAnswers({});
     setVisitedSteps({});
     setStep("video");
+    lastOpenedCapsuleRef.current = null;
 
     (async () => {
       if (!user || !campId) {
@@ -577,7 +611,13 @@ export function CapsuleReader({
         const practiceRes = await practiceApi.list({ camp_id: campId, day: day.day });
         for (const it of practiceRes.items) {
           const checked = new Set<number>();
-          const raw = (it.response_json || {}) as { checked?: number[]; quiz_answers?: Record<string, number> };
+          const raw = (it.response_json || {}) as {
+            checked?: number[];
+            quiz_answers?: Record<string, number>;
+            professional_domain?: string;
+            professional_domain_other?: string;
+            professional_domain_label?: string;
+          };
           if (Array.isArray(raw.checked)) raw.checked.forEach((i) => checked.add(Number(i)));
           pmap[it.capsule_id] = {
             text: it.response_text || "",
@@ -595,6 +635,8 @@ export function CapsuleReader({
             }
             if (Object.keys(mapped).length) restoredAnswers[it.capsule_id] = mapped;
           }
+          const domainMem = memoryFromPracticeJson(raw);
+          if (domainMem && campId) writeCachedDomain(campId, domainMem);
         }
       } catch {
         // degrade gracefully
@@ -665,14 +707,27 @@ export function CapsuleReader({
     const seq = (saveSeq.current[capsuleId] = (saveSeq.current[capsuleId] || 0) + 1);
     setPractice((prev) => ({ ...prev, [capsuleId]: { ...(prev[capsuleId] || prevState), text, checked, saving: true } }));
     try {
+      let existing: Record<string, unknown> = {};
+      try {
+        const listing = await practiceApi.list({ camp_id: campId, day: day.day });
+        existing =
+          (listing.items.find((it) => it.capsule_id === capsuleId)?.response_json as Record<string, unknown> | undefined) ||
+          {};
+      } catch {
+        /* keep empty merge base */
+      }
+      const cachedDomain =
+        capsuleId === PROFESSIONAL_DOMAIN_CAPSULE_ID ? readCachedDomain(campId) : null;
       const res = await practiceApi.save({
         camp_id: campId,
         day: day.day,
         capsule_id: capsuleId,
         response_text: responseText,
         response_json: {
+          ...existing,
           ...(isChecklist ? { checked: Array.from(checked) } : {}),
           quiz_answers: answers,
+          ...(cachedDomain ? memoryToPracticeJson(cachedDomain) : {}),
         },
         status,
         force_reopen: Boolean(opts?.reopen),
@@ -1022,20 +1077,24 @@ export function CapsuleReader({
                     <h4>
                       {active.lab && (active.lab as { sim_kind?: string }).sim_kind
                         ? "仿真实验台"
-                        : active.local_prep?.prompt_kind === "coach"
-                          ? "用学习教练提示词巩固概念"
-                          : active.local_prep?.codex_prompt?.trim()
-                            ? "在开发工具中完成本节任务"
-                            : "完成本节工具准备"}
+                        : active.local_prep?.template_resource_id === "day1-agent-pack"
+                          ? "在 TRAE 中创建六岗位团队"
+                          : active.local_prep?.prompt_kind === "coach"
+                            ? "用学习教练提示词巩固概念"
+                            : active.local_prep?.codex_prompt?.trim()
+                              ? "在开发工具中完成本节任务"
+                              : "完成本节工具准备"}
                     </h4>
                     <p>
                       {active.lab && (active.lab as { sim_kind?: string }).sim_kind
                         ? "进入服务器后，在黑色终端窗口内直接输入命令，按 Enter 执行。"
-                        : active.local_prep?.prompt_kind === "coach"
-                          ? "本节提示词用于出题考你、审草稿或模拟评委——不要整段丢给编码 AI 当写代码任务。"
-                          : active.local_prep?.codex_prompt?.trim()
-                            ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
-                            : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
+                        : active.local_prep?.template_resource_id === "day1-agent-pack"
+                          ? "先下载提示词包，再按步骤在 TRAE 中亲手创建；不要让 AI 替你创建团队。"
+                          : active.local_prep?.prompt_kind === "coach"
+                            ? "本节提示词用于出题考你、审草稿或模拟评委——不要整段丢给编码 AI 当写代码任务。"
+                            : active.local_prep?.codex_prompt?.trim()
+                              ? "平台给你任务边界、岗位对象和验收标准；你指挥对应 AI 员工，检查真实文件后再决定批准或返工。"
+                              : "按课程资源下载安装并逐项勾选；本节不需要向 AI 员工发送提示词。"}
                     </p>
                   </div>
                   {active.lab && (active.lab as { sim_kind?: string }).sim_kind ? (

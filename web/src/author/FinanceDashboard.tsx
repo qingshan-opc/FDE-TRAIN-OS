@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Card, Col, Row, Statistic, Table, Tag, Typography, Button, Space } from "antd";
+import { Alert, Card, Col, Row, Statistic, Table, Tag, Typography, Button, Space, Modal } from "antd";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -14,6 +14,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import { authorApi, ApiError } from "../lib/api";
 import { PageHeader, useErrorModal } from "../components/crud";
 import { Skeleton } from "../components/Skeleton";
+import { PROFIT_SHARE_STATE } from "../lib/billingLabels";
 
 type FinanceDash = {
   paid_orders: number;
@@ -47,6 +48,8 @@ type FinanceDash = {
     rate_bps?: number | null;
     wx_state?: string | null;
     error_message?: string | null;
+    refundable?: boolean;
+    status?: string;
   }>;
 };
 
@@ -63,12 +66,9 @@ function shortDate(iso: string) {
 }
 
 const STATE_TAG: Record<string, { color: string; label: string }> = {
-  finished: { color: "success", label: "已分账" },
-  processing: { color: "processing", label: "分账中" },
-  pending: { color: "warning", label: "待分账" },
-  pending_manual: { color: "warning", label: "待人工" },
-  failed: { color: "error", label: "失败" },
+  ...PROFIT_SHARE_STATE,
   refunded: { color: "default", label: "已退款" },
+  refunding: { color: "processing", label: "退款中" },
 };
 
 export function FinanceDashboard() {
@@ -100,6 +100,25 @@ export function FinanceDashboard() {
 
   useErrorModal(error, { title: "财务大屏加载失败", onRetry: () => void load() });
 
+  const onRefund = (orderId: string) => {
+    Modal.confirm({
+      title: "确认退款？",
+      content: "7 天账期内退款从冻结资金原路退回，课程权限将关闭，待分账会取消。",
+      okText: "退款",
+      okButtonProps: { danger: true },
+      cancelText: "取消",
+      onOk: async () => {
+        try {
+          await authorApi.refundOrder(orderId);
+          await load();
+        } catch (err) {
+          setError(err instanceof ApiError ? err.message : "退款失败");
+          throw err;
+        }
+      },
+    });
+  };
+
   const chartRows = useMemo(() => {
     if (!data) return [];
     const g = data.gross_trend_7d || [];
@@ -123,7 +142,7 @@ export function FinanceDashboard() {
     <div className="author-finance-dash">
       <PageHeader
         title="财务大屏"
-        description="全平台实时营收与渠道分账（每 15 秒刷新；退款订单不计入营收）"
+        description="支付后资金冻结 7 天再分账；7 天内可退款。退款订单不计入营收。"
         extra={
           <Space>
             {updatedAt ? <Typography.Text type="secondary">更新于 {updatedAt}</Typography.Text> : null}
@@ -153,7 +172,7 @@ export function FinanceDashboard() {
             </Col>
             <Col xs={12} md={6}>
               <Card size="small">
-                <Statistic title="分账中 / 待分" prefix="¥" precision={2} value={yuanNum(data.pending_share_fen)} valueStyle={{ color: "#d97706" }} />
+                <Statistic title="冻结 / 待分" prefix="¥" precision={2} value={yuanNum(data.pending_share_fen)} valueStyle={{ color: "#d97706" }} />
                 <Typography.Text type="secondary">{data.pending_share_count} 笔处理中</Typography.Text>
               </Card>
             </Col>
@@ -254,12 +273,23 @@ export function FinanceDashboard() {
                     {
                       title: "状态",
                       dataIndex: "wx_state",
-                      width: 100,
-                      render: (v: string | null) => {
-                        if (!v) return <Tag>未发起</Tag>;
-                        const meta = STATE_TAG[v] || { color: "default", label: v };
+                      width: 120,
+                      render: (v: string | null, r) => {
+                        const key = r.status === "refunded" || r.status === "refunding" ? r.status : v;
+                        if (!key) return <Tag>未发起</Tag>;
+                        const meta = STATE_TAG[key] || { color: "default", label: key };
                         return <Tag color={meta.color}>{meta.label}</Tag>;
                       },
+                    },
+                    {
+                      title: "",
+                      width: 72,
+                      render: (_, r) =>
+                        r.refundable ? (
+                          <Button type="link" size="small" danger onClick={() => onRefund(r.id)}>
+                            退款
+                          </Button>
+                        ) : null,
                     },
                   ]}
                 />

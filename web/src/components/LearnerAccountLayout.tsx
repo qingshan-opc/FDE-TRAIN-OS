@@ -53,6 +53,7 @@ export function LearnerAccountLayout({
     mainRef.current?.scrollTo({ top: 0, behavior: "instant" });
   };
   const PageIcon = PAGE_ICONS[pathname] || IconAccountProfile;
+  const nestedAccount = pathname === "/app/identity" || pathname === "/app/certificates";
 
   return (
     <div className="app-shell app-page-shell learner-account-shell">
@@ -91,6 +92,12 @@ export function LearnerAccountLayout({
           </aside>
           <main ref={mainRef} className="learner-account-main learner-account-card">
           <header className="learner-account-main__header">
+            {nestedAccount ? (
+              <Link to="/app/profile" className="learner-account-mobile-back" onClick={onNav}>
+                <IconAccountBack />
+                个人中心
+              </Link>
+            ) : null}
             <div className="learner-account-main__title-row">
               <span className="learner-account-main__title-icon" aria-hidden>
                 <PageIcon />

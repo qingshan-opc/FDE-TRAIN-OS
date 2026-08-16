@@ -30,6 +30,8 @@ export default defineConfig({
     host: "0.0.0.0",
     port: devPort,
     strictPort: true,
+    // Phone / WeChat on LAN may send a Host Vite 6 would otherwise block.
+    allowedHosts: true,
     hmr: {
       protocol: "ws",
       clientPort: devPort,

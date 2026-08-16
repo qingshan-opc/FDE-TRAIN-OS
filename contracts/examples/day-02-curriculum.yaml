@@ -46,7 +46,12 @@ learn:
     form: 认知+对比
     content_ref: class/bootcamp/day-02/section-01-prototype-vs-frontend/lesson.md
     content: （见本节 lesson.md）
-    practice: 按本节 practice.md 完成任务并达到完成标志。
+    practice: |-
+      下一节就要指挥前端去做页面了。原型里能提前确定清楚的，前端开工后返工就越少；如果还没确认，可以继续和 AI 对话调试，不必急着提交。
+
+      如果你已经确认生成的 UI 符合需求，请在下方输入一段确认，例如：
+
+      我已经确认 AI 生成的页面原型符合我的想法。
     resource_ids:
     - agent-frontend
     tools:

@@ -231,8 +231,12 @@ def save_practice(body: PracticeIn, request: Request) -> dict[str, Any]:
               (id, learner_id, camp_id, day, capsule_id, response_text, response_json, status, submitted_at, updated_at)
             VALUES (?,?,?,?,?,?,?::jsonb,?, CASE WHEN ?='submitted' THEN NOW() ELSE NULL END, NOW())
             ON CONFLICT (learner_id, camp_id, day, capsule_id) DO UPDATE
-              SET response_text=EXCLUDED.response_text,
-                  response_json=EXCLUDED.response_json,
+              SET response_text=CASE
+                    WHEN EXCLUDED.response_text = '' THEN practice_responses.response_text
+                    ELSE EXCLUDED.response_text
+                  END,
+                  response_json=COALESCE(practice_responses.response_json, '{}'::jsonb)
+                    || COALESCE(EXCLUDED.response_json, '{}'::jsonb),
                   status=CASE
                     WHEN EXCLUDED.status='submitted' THEN 'submitted'
                     WHEN practice_responses.status='submitted' AND ? = false THEN 'submitted'

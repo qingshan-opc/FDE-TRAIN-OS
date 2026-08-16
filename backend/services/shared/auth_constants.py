@@ -12,6 +12,12 @@ CSRF_COOKIE = "fde_csrf"
 CSRF_HEADER = "X-CSRF-Token"
 INVITE_PENDING_COOKIE = "fde_invite_pending"
 INVITE_PENDING_MAX_AGE = 1800
+MP_OAUTH_STATE_COOKIE = "fde_mp_oauth_state"
+# Current-WeChat openid for JSAPI pay — must NOT switch the login session.
+JSAPI_OPENID_COOKIE = "fde_wx_jsapi_openid"
+JSAPI_OAUTH_STATE_COOKIE = "fde_wx_jsapi_state"
+JSAPI_OPENID_MAX_AGE = 30 * 60
+BIND_OAUTH_STATE_COOKIE = "fde_wx_bind_state"
 
 
 def auth_cookie_secure() -> bool:
@@ -48,5 +54,12 @@ def set_auth_cookies(
 
 
 def clear_auth_cookies(resp: Response) -> None:
-    for name in (ACCESS_COOKIE, REFRESH_COOKIE, CSRF_COOKIE):
+    for name in (
+        ACCESS_COOKIE,
+        REFRESH_COOKIE,
+        CSRF_COOKIE,
+        JSAPI_OPENID_COOKIE,
+        JSAPI_OAUTH_STATE_COOKIE,
+        BIND_OAUTH_STATE_COOKIE,
+    ):
         resp.delete_cookie(name, path="/")

@@ -31,9 +31,10 @@ from services.repositories.progress_repository import ProgressRepository
 
 log = logging.getLogger("fde.seed_v2")
 
-from services.shared.config import DEFAULT_CAMP_ID
+from services.shared.config import DEFAULT_CAMP_ID, DEFAULT_CAMP_NAME, LEGACY_CAMP_DISPLAY_NAMES
 
 COURSE_SLUG = "fde-two-week"
+LEGACY_TITLES = set(LEGACY_CAMP_DISPLAY_NAMES)
 
 
 def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:
@@ -60,12 +61,14 @@ def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:
         enroll_repo = EnrollmentRepository(session)
         progress_repo = ProgressRepository(session)
 
-        # 1) course
+        # 1) course — public title, never the internal camp seed name
         course = course_repo.get_or_create_course(
             slug=COURSE_SLUG,
-            title=camp.name or "FDE 两周课",
-            description="FDE 两周训练营（由 camp-v03 迁移生成）",
+            title=DEFAULT_CAMP_NAME,
+            description="FDE 三周训练营：从 AI 增强型全栈原型，到企业项目实操与组织落地。",
         )
+        if course.title in LEGACY_TITLES:
+            course.title = DEFAULT_CAMP_NAME
         summary["course_id"] = course.id
 
         # 2) course_version selection:
@@ -130,6 +133,8 @@ def seed_domain_v2(camp_id: str = DEFAULT_CAMP_ID) -> dict[str, Any]:
             course_version_id=version_id,
             camp_id=camp_id,
         )
+        if offering.title in LEGACY_TITLES or offering.title == DEFAULT_CAMP_NAME:
+            offering.title = course.title
         current_pkgs = session.execute(
             text("SELECT COUNT(*) AS c FROM day_packages WHERE course_version_id = :cv"),
             {"cv": offering.course_version_id},

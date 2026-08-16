@@ -209,6 +209,8 @@ export const authApi = {
       body: { email, password, camp_id: camp_id || undefined, remember: Boolean(remember) },
       skipRefresh: true,
     }),
+  wechatOauthReady: () =>
+    api<{ ready: boolean }>("/api/v1/auth/wechat/oauth-ready", { skipRefresh: true }),
   wechatLoginQr: () =>
     api<{ state: string; qr_content: string; qr_url: string; expire_seconds: number }>(
       "/api/v1/auth/wechat/login-qr",
@@ -1198,6 +1200,7 @@ export const authorApi = {
         out_trade_no?: string;
         amount_fen: number;
         paid_at?: string;
+        status?: string;
         org_id?: string | null;
         org_name?: string | null;
         user_email?: string | null;
@@ -1205,8 +1208,16 @@ export const authorApi = {
         rate_bps?: number | null;
         wx_state?: string | null;
         error_message?: string | null;
+        refundable?: boolean;
+        refund_until?: string | null;
+        share_after_at?: string | null;
       }>;
     }>("/api/v1/author/finance/dashboard"),
+  refundOrder: (orderId: string, reason?: string) =>
+    api<{ ok: boolean; order: Record<string, unknown> }>(
+      `/api/v1/author/finance/orders/${encodeURIComponent(orderId)}/refund`,
+      { method: "POST", body: { reason: reason || "运营退款" } },
+    ),
   getSiteLanding: () => api<Record<string, unknown>>("/api/v1/author/site/landing"),
   patchSiteLanding: (body: Record<string, unknown>) =>
     api<Record<string, unknown>>("/api/v1/author/site/landing", { method: "PATCH", body }),
@@ -1406,6 +1417,13 @@ export const partnerAdminApi = {
       `/api/v1/author/partners/orgs/${encodeURIComponent(orgId)}/accounts`,
       { method: "POST", body },
     ),
+  listActivationCodes: () =>
+    api<{ items: Record<string, unknown>[] }>("/api/v1/author/partners/activation-codes"),
+  createActivationCode: (body: { note?: string; code?: string; expires_at?: string } = {}) =>
+    api<{ activation_code: Record<string, unknown> }>("/api/v1/author/partners/activation-codes", {
+      method: "POST",
+      body,
+    }),
 };
 
 /** Billing */
@@ -1434,7 +1452,12 @@ export const billingApi = {
       dev_mode?: boolean;
       status: string;
       reused?: boolean;
+      payer_differs_from_login?: boolean;
     }>("/api/v1/billing/checkout", { method: "POST", body: { offering_id, channel, pay_mode } }),
+  jsapiOauthUrl: (next = "/app/shop") => {
+    const q = new URLSearchParams({ next });
+    return `/api/v1/auth/wechat/jsapi-openid?${q.toString()}`;
+  },
   getOrder: (orderId: string) => api<{ order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}`),
   syncOrder: (orderId: string) =>
     api<{ status: string; order: Record<string, unknown> }>(`/api/v1/billing/orders/${encodeURIComponent(orderId)}/sync`, {
@@ -1471,6 +1494,20 @@ export const partnerApi = {
       method: "POST",
       body: { email, password },
       skipRefresh: true,
+    }),
+  activateEntry: () =>
+    api<{ entry_url: string; next: string }>("/api/v1/partner/activate/entry"),
+  activate: (code: string, org_name?: string) =>
+    api<{
+      org: Record<string, unknown>;
+      org_id: string;
+      invite_code?: string;
+      receiver?: PartnerReceiverStatus | null;
+      portals?: import("./types").AuthPortal[];
+      default_home?: string;
+    }>("/api/v1/partner/activate", {
+      method: "POST",
+      body: { code, org_name },
     }),
   dashboard: () =>
     api<{

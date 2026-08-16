@@ -21,8 +21,9 @@ export function resolveCapsuleResources(
 ): DayResource[] {
   const pool = dayResources || [];
   const inline = capsule.resources || [];
-  const ids = capsule.resource_ids || [];
-  const fromPool = ids.length ? pool.filter((r) => ids.includes(r.id)) : [];
+  const hasExplicitIds = Array.isArray(capsule.resource_ids);
+  const ids = hasExplicitIds ? capsule.resource_ids || [] : [];
+  const fromPool = hasExplicitIds ? pool.filter((r) => ids.includes(r.id)) : [];
   const seen = new Set<string>();
   const merged: DayResource[] = [];
   for (const r of [...inline, ...fromPool]) {
@@ -31,5 +32,25 @@ export function resolveCapsuleResources(
     merged.push(r);
   }
   if (merged.length) return merged;
+  if (hasExplicitIds) return [];
   return pool;
+}
+
+const DOWNLOAD_EXTS = [".zip", ".pdf", ".docx", ".xlsx", ".ppt", ".pptx"];
+
+export function resourceIsDownload(r: DayResource): boolean {
+  if ((r.kind || "").toLowerCase() === "download") return true;
+  const path = (r.url || "").split("?")[0].toLowerCase();
+  return DOWNLOAD_EXTS.some((ext) => path.endsWith(ext));
+}
+
+export function resourceActionLabel(r: DayResource): string {
+  return resourceIsDownload(r) ? "下载" : "打开";
+}
+
+export function resourceDownloadName(r: DayResource): string | undefined {
+  if (!resourceIsDownload(r) || !r.url) return undefined;
+  const path = r.url.split("?")[0];
+  const name = decodeURIComponent(path.split("/").pop() || "");
+  return name || undefined;
 }

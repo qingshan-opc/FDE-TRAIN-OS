@@ -233,6 +233,20 @@ def query_trade(out_trade_no: str) -> dict[str, Any]:
     return _gateway_post("alipay.trade.query", {"out_trade_no": out_trade_no})
 
 
+def create_refund(order: dict[str, Any], *, out_refund_no: str, reason: str) -> dict[str, Any]:
+    amount_fen = int(order.get("amount_fen") or 0)
+    yuan = f"{amount_fen / 100:.2f}"
+    return _gateway_post(
+        "alipay.trade.refund",
+        {
+            "out_trade_no": order["out_trade_no"],
+            "refund_amount": yuan,
+            "refund_reason": (reason or "用户退款")[:256],
+            "out_request_no": out_refund_no,
+        },
+    )
+
+
 def validate_trade_against_order(order: dict, trade: dict) -> str | None:
     paid = trade.get("total_amount") or trade.get("receipt_amount")
     if paid is not None:

@@ -94,8 +94,20 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
   const [devLoading, setDevLoading] = useState(false);
   const [paying, setPaying] = useState(false);
   const [oauthUrl, setOauthUrl] = useState<string | null>(null);
+  const [forceNative, setForceNative] = useState(false);
+  const [payerDiffers, setPayerDiffers] = useState(false);
+  const [jsapiMismatch, setJsapiMismatch] = useState(false);
   const timer = useRef<number | null>(null);
   const autoInvoked = useRef(false);
+  const oauthRedirected = useRef(false);
+
+  useEffect(() => {
+    if (open) return;
+    setForceNative(false);
+    setPayerDiffers(false);
+    setJsapiMismatch(false);
+    oauthRedirected.current = false;
+  }, [open]);
 
   const channelOptions = useMemo(() => {
     const opts: Array<{ label: ReactNode; value: PayChannel; disabled?: boolean }> = [
@@ -128,10 +140,11 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     if (!showAlipay && channel === "alipay") setChannel("wechat");
   }, [showAlipay, channel]);
 
-  // Reset + create order when modal opens or channel changes
+  // Reset + create order when modal opens or channel / native-fallback changes
   useEffect(() => {
     if (!open || !offeringId) return;
     const activeChannel: PayChannel = showAlipay ? channel : "wechat";
+    const useJsapi = inWeChat && activeChannel === "wechat" && !forceNative;
     let cancelled = false;
     autoInvoked.current = false;
     setStatus("pending");
@@ -141,12 +154,14 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     setCodeUrl(null);
     setJsapiParams(null);
     setOauthUrl(null);
-    setPayMode(inWeChat && activeChannel === "wechat" ? "jsapi" : "native");
+    setPayerDiffers(false);
+    setJsapiMismatch(false);
+    setPayMode(useJsapi ? "jsapi" : "native");
     setDevMode(false);
     setLoading(true);
     void (async () => {
       try {
-        const mode = inWeChat && activeChannel === "wechat" ? "jsapi" : "native";
+        const mode = useJsapi ? "jsapi" : "native";
         const res = await billingApi.checkout(offeringId, activeChannel, mode);
         if (cancelled) return;
         setOrderId(res.order_id);
@@ -157,6 +172,7 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
         setPayMode((res.pay_mode as "native" | "jsapi") || mode);
         setJsapiParams(res.jsapi_params || null);
         setDevMode(!!res.dev_mode);
+        setPayerDiffers(!!res.payer_differs_from_login);
       } catch (err) {
         if (cancelled) return;
         if (err instanceof ApiError) {
@@ -164,8 +180,8 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
           if (detail && typeof detail === "object" && detail !== null && "code" in detail) {
             const d = detail as { code?: string; message?: string; oauth_url?: string };
             if (d.code === "need_wechat_oauth") {
-              setOauthUrl(d.oauth_url || "/api/v1/auth/wechat/mp-entry?next=%2Fapp%2Fshop");
-              setError(d.message || "请先完成微信授权后再支付");
+              setOauthUrl(d.oauth_url || billingApi.jsapiOauthUrl("/app/shop"));
+              setError(d.message || "请先用当前微信授权后再支付");
               return;
             }
           }
@@ -180,7 +196,14 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
     return () => {
       cancelled = true;
     };
-  }, [open, offeringId, channel, inWeChat, showAlipay, amountFen]);
+  }, [open, offeringId, channel, inWeChat, showAlipay, amountFen, forceNative]);
+
+  useEffect(() => {
+    if (!open || !oauthUrl || !inWeChat || forceNative) return;
+    if (oauthRedirected.current) return;
+    oauthRedirected.current = true;
+    window.location.href = oauthUrl;
+  }, [open, oauthUrl, inWeChat, forceNative]);
 
   useEffect(() => {
     if (!open || !orderId) return;
@@ -218,7 +241,8 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
       } else if (result === "cancel") {
         setError("已取消支付，可再次点击下方按钮继续");
       } else {
-        setError("调起微信支付失败，请重试或改用电脑端扫码");
+        setJsapiMismatch(true);
+        setError("付款微信和刚才下单用的不是同一个号。请用当前微信重新授权，或改用收款码让家人代付。");
       }
     } finally {
       setPaying(false);
@@ -256,7 +280,9 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
         : "请使用支付宝扫一扫完成支付"
       : payMode === "jsapi"
         ? "正在调起微信支付…"
-        : "请使用微信扫一扫完成支付";
+        : inWeChat
+          ? "截图发给家人，或让另一部手机扫码代付。课程开通给当前登录账号。"
+          : "请使用微信扫一扫完成支付";
 
   return (
     <Modal
@@ -279,12 +305,20 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
           style={{ marginBottom: 16 }}
         />
       ) : null}
-      {inWeChat && (
+      {inWeChat && payMode === "jsapi" && !forceNative && (
         <Alert
           type="info"
           showIcon
           style={{ marginBottom: 12 }}
           message="检测到微信内打开：将直接调起微信支付，无需再扫码"
+        />
+      )}
+      {payerDiffers && payMode === "jsapi" && (
+        <Alert
+          type="warning"
+          showIcon
+          style={{ marginBottom: 12 }}
+          message="课程会开通给当前登录账号（右上角名字），不是给付款的这个微信。"
         />
       )}
       {error && <Alert type="error" message={error} showIcon style={{ marginBottom: 12 }} />}
@@ -297,8 +331,24 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
             window.location.href = oauthUrl;
           }}
         >
-          去微信授权后支付
+          用当前微信授权后支付
         </Button>
+      )}
+      {jsapiMismatch && (
+        <Space direction="vertical" style={{ width: "100%", marginBottom: 12 }}>
+          <Button
+            type="primary"
+            block
+            onClick={() => {
+              window.location.href = billingApi.jsapiOauthUrl("/app/shop");
+            }}
+          >
+            用当前微信重新授权
+          </Button>
+          <Button block onClick={() => setForceNative(true)}>
+            改用收款码（可让家人代付）
+          </Button>
+        </Space>
       )}
       {status === "paid" ? (
         <Alert type="success" message="支付成功，正在刷新课程…" showIcon />
@@ -331,6 +381,11 @@ export function PaymentModal({ open, offeringId, amountFen, onClose, onPaid }: P
           <Button type="primary" block loading={paying} onClick={() => void launchJsapi()}>
             {paying ? "调起支付中…" : "立即支付"}
           </Button>
+          {inWeChat && !jsapiMismatch && (
+            <Button type="link" block onClick={() => setForceNative(true)}>
+              改用收款码（可让家人代付）
+            </Button>
+          )}
         </Space>
       ) : codeUrl && !codeUrl.startsWith("dev://") && !codeUrl.startsWith("jsapi:") ? (
         <div

@@ -2377,7 +2377,7 @@ def _platform_finance_snapshot() -> dict[str, Any]:
     try:
         from services.billing import profit_sharing
 
-        profit_sharing.sync_profit_share_statuses(limit=30)
+        profit_sharing.tick(limit=30)
     except Exception:
         pass
     with db_cursor() as cur:
@@ -2395,10 +2395,10 @@ def _platform_finance_snapshot() -> dict[str, Any]:
             """
             SELECT
               COALESCE(SUM(CASE WHEN wx_state='finished' THEN share_fen ELSE 0 END),0) AS shared_fen,
-              COALESCE(SUM(CASE WHEN wx_state IN ('pending','processing') THEN share_fen ELSE 0 END),0) AS pending_share_fen,
+              COALESCE(SUM(CASE WHEN wx_state IN ('held','pending','processing','pending_manual','submitting') THEN share_fen ELSE 0 END),0) AS pending_share_fen,
               COALESCE(SUM(CASE WHEN wx_state='failed' THEN share_fen ELSE 0 END),0) AS failed_share_fen,
               COUNT(*) FILTER (WHERE wx_state='finished') AS finished_count,
-              COUNT(*) FILTER (WHERE wx_state IN ('pending','processing')) AS pending_count,
+              COUNT(*) FILTER (WHERE wx_state IN ('held','pending','processing','pending_manual','submitting')) AS pending_count,
               COUNT(*) FILTER (WHERE wx_state='failed') AS failed_count
             FROM profit_share_orders
             """
@@ -2433,7 +2433,7 @@ def _platform_finance_snapshot() -> dict[str, Any]:
                    COUNT(DISTINCT po.id) AS paid_orders,
                    COALESCE(SUM(po.amount_fen),0) AS gross_fen,
                    COALESCE(SUM(CASE WHEN ps.wx_state='finished' THEN ps.share_fen ELSE 0 END),0) AS shared_fen,
-                   COALESCE(SUM(CASE WHEN ps.wx_state IN ('pending','processing') THEN ps.share_fen ELSE 0 END),0) AS pending_share_fen
+                   COALESCE(SUM(CASE WHEN ps.wx_state IN ('held','pending','processing','pending_manual','submitting') THEN ps.share_fen ELSE 0 END),0) AS pending_share_fen
             FROM organizations o
             LEFT JOIN payment_orders po ON po.org_id=o.id AND po.status='paid'
             LEFT JOIN profit_share_orders ps ON ps.payment_order_id=po.id
@@ -2445,19 +2445,26 @@ def _platform_finance_snapshot() -> dict[str, Any]:
         orgs = [dict(r) for r in cur.fetchall()]
         cur.execute(
             """
-            SELECT po.id, po.out_trade_no, po.amount_fen, po.paid_at, po.org_id,
+            SELECT po.id, po.out_trade_no, po.amount_fen, po.paid_at, po.org_id, po.status,
                    o.name AS org_name, u.email AS user_email,
-                   ps.share_fen, ps.rate_bps, ps.wx_state, ps.error_message
+                   ps.share_fen, ps.rate_bps, ps.wx_state, ps.error_message, ps.share_after_at
             FROM payment_orders po
             LEFT JOIN organizations o ON o.id = po.org_id
             LEFT JOIN users u ON u.id = po.user_id
             LEFT JOIN profit_share_orders ps ON ps.payment_order_id = po.id
-            WHERE po.status='paid'
+            WHERE po.status IN ('paid','refunding','refunded')
             ORDER BY po.paid_at DESC NULLS LAST
             LIMIT 50
             """
         )
         recent = [dict(r) for r in cur.fetchall()]
+    from services.billing import refunds as refund_mod
+
+    for row in recent:
+        probe = {"id": row.get("id"), "status": row.get("status"), "paid_at": row.get("paid_at")}
+        ok, _ = refund_mod.refund_eligibility(probe)
+        row["refundable"] = bool(ok)
+        row["refund_until"] = refund_mod.refund_until_iso(probe)
     dates = _last_n_date_strings(7)
     gross_map = {str(r["d"]): {"gross_fen": int(r["gross_fen"] or 0), "orders": int(r["orders"] or 0)} for r in gross_rows}
     share_map = {str(r["d"]): {"shared_fen": int(r["shared_fen"] or 0), "shares": int(r["shares"] or 0)} for r in share_rows}
@@ -2748,6 +2755,37 @@ def author_finance_dashboard(request: Request) -> dict[str, Any]:
     snap = _platform_finance_snapshot()
     write_audit("author.finance.dashboard", actor_id=user.id)
     return {"ok": True, **snap}
+
+
+class FinanceRefundBody(BaseModel):
+    reason: str = Field(default="运营退款", max_length=80)
+
+
+@router.post("/api/v1/author/finance/orders/{order_id}/refund")
+def author_finance_refund(order_id: str, request: Request, body: FinanceRefundBody | None = None) -> dict[str, Any]:
+    user = require_finance_staff(request)
+    from services.billing import refunds as refund_mod
+    from services.billing.wechat_pay import get_payment_order
+
+    order = get_payment_order(order_id)
+    if not order:
+        raise HTTPException(404, "订单不存在")
+    try:
+        updated = refund_mod.request_refund(
+            order_id,
+            reason=(body.reason if body else "运营退款") or "运营退款",
+            actor_id=user.id,
+        )
+    except refund_mod.RefundError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    write_audit(
+        "author.finance.refund",
+        actor_id=user.id,
+        resource_type="payment_order",
+        resource_id=order_id,
+        details={"status": updated.get("status")},
+    )
+    return {"ok": True, "order": updated}
 
 
 app.include_router(router)

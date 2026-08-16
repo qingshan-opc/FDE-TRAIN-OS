@@ -40,6 +40,11 @@ class PartnerLoginBody(BaseModel):
     password: str
 
 
+class PartnerActivateBody(BaseModel):
+    code: str
+    org_name: str | None = None
+
+
 def _set_auth_cookies(resp: Response, access: str, refresh: str, csrf: str) -> None:
     set_auth_cookies(resp, access, refresh, csrf)
 
@@ -148,6 +153,55 @@ def partner_login(body: PartnerLoginBody, request: Request, response: Response) 
     )
 
 
+@router.post("/api/v1/partner/activate")
+def partner_activate(body: PartnerActivateBody, request: Request) -> dict[str, Any]:
+    """Redeem a one-time activation code → create org for current WeChat/user session."""
+    from services.auth.session_context import attach_session_context
+
+    user = require_user(request)
+    try:
+        result = partners.activate_partner_with_code(
+            user_id=user.id,
+            code=body.code,
+            org_name=body.org_name,
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    write_audit(
+        "partner.activate",
+        actor_id=user.id,
+        resource_type="organization",
+        resource_id=result.get("org_id"),
+        details={"code": result.get("activation_code"), "invite_code": result.get("invite_code")},
+    )
+    org_id = str(result.get("org_id") or "")
+    receiver = wechat_bind.receiver_status(partners.get_organization(org_id)) if org_id else None
+    return attach_session_context(
+        {
+            "org": result.get("org"),
+            "org_id": org_id,
+            "invite_code": result.get("invite_code"),
+            "receiver": receiver,
+            "user": {"id": user.id, "email": user.email, "role": user.role, "display_name": user.display_name},
+        },
+        user,
+    )
+
+
+@router.get("/api/v1/partner/activate/entry")
+def partner_activate_entry() -> dict[str, Any]:
+    """Public entry URL + QR target for partner activation (mp-entry)."""
+    from urllib.parse import quote
+
+    base = FDE_PUBLIC_BASE_URL.rstrip("/")
+    next_path = "/partner/activate"
+    entry_url = (
+        f"{base}/api/v1/auth/wechat/mp-entry"
+        f"?next={quote(next_path, safe='')}"
+    )
+    return {"entry_url": entry_url, "next": next_path}
+
+
 @router.get("/api/v1/partner/dashboard")
 def dashboard(request: Request) -> dict[str, Any]:
     user, org_id = _require_partner(request)
@@ -155,7 +209,7 @@ def dashboard(request: Request) -> dict[str, Any]:
     if not org:
         raise HTTPException(404, "机构不存在")
     try:
-        profit_sharing.sync_profit_share_statuses(limit=20)
+        profit_sharing.tick(limit=20)
     except Exception:
         pass
     stats = partners.org_dashboard_stats(org_id)
@@ -280,7 +334,7 @@ def partner_invites(request: Request) -> dict[str, Any]:
 def partner_profit_shares(request: Request) -> dict[str, Any]:
     _, org_id = _require_partner(request)
     try:
-        profit_sharing.sync_profit_share_statuses(limit=20)
+        profit_sharing.tick(limit=20)
     except Exception:
         pass
     with db_cursor() as cur:

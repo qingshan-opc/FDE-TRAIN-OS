@@ -32,8 +32,8 @@
 
 - 能按顺序说出产品经理、UI、前端、后端、测试、运维六个岗位，并说清每次交接的文件；
 - TRAE 中已创建六个岗位智能体，并能通过 `@岗位名称` 手动切换；
-- 项目来自学员熟悉的专业领域，工作区存在 `PROJECT_BRIEF.md`；
-- `PRD.md` 已经学员明确确认，含目标用户、核心问题、第一版范围和可衡量验收标准；
-- 工作区存在 `design-spec.md`、`ui-flow.md` 和可直接打开的 `ui-prototype.html`；
+- 项目来自学员熟悉的专业领域，工作区存在 `design/PROJECT_BRIEF.md`；
+- `design/PRD.md` 已经学员明确确认，含目标用户、核心问题、第一版范围和可衡量验收标准；
+- 工作区存在 `design/design-spec.md`、`design/ui-flow.md` 和可直接打开的 `design/ui-prototype.html`；
 - 已完成“产品经理 → UI → 产品经理”的交接与复验，并在 `day1-handoff-log.md` 中留下记录；
 - 日级知识确认 6 题中答对至少 4 题，错题已查看解析。

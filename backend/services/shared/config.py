@@ -127,6 +127,13 @@ FDE_PUBLIC_BASE_URL = os.getenv("FDE_PUBLIC_BASE_URL", FDE_INTERNAL_BASE).rstrip
 WECHAT_PAY_SKIP_VERIFY = os.getenv("WECHAT_PAY_SKIP_VERIFY", "0") == "1"
 # Merchant must have WeChat profit-sharing permission before enabling.
 WECHAT_PAY_PROFIT_SHARING = os.getenv("WECHAT_PAY_PROFIT_SHARING", "0") == "1"
+# Days to keep WeChat funds frozen before profit-sharing / unfreeze.
+# WeChat 普通商户 freeze max is 30 days — keep a 1-day buffer.
+try:
+    WECHAT_PAY_SHARE_HOLD_DAYS = int(os.getenv("WECHAT_PAY_SHARE_HOLD_DAYS", "7"))
+except ValueError:
+    WECHAT_PAY_SHARE_HOLD_DAYS = 7
+WECHAT_PAY_SHARE_HOLD_DAYS = max(0, min(WECHAT_PAY_SHARE_HOLD_DAYS, 29))
 # AppSecret for the same AppID as WECHAT_PAY_APP_ID (公众号/开放平台网页授权换 openid)
 WECHAT_APP_SECRET = os.getenv("WECHAT_APP_SECRET", "")
 # 公众号服务器配置（扫码关注登录）：Token + EncodingAESKey（43 位）
@@ -152,9 +159,11 @@ PARTNER_DEMO_PASSWORD = os.getenv("FDE_PARTNER_DEMO_PASSWORD", "partner1234")
 
 # Camp / curriculum identifiers (single source of truth)
 DEFAULT_CAMP_ID = os.getenv("FDE_DEFAULT_CAMP_ID", "camp-v03")
+DEFAULT_CAMP_NAME = os.getenv("FDE_DEFAULT_CAMP_NAME", "FDE 训练营")
 CURRICULUM_VERSION_TAG = os.getenv("FDE_CURRICULUM_VERSION_TAG", "v0.7")
 SEED_VERSION_TAGS = [t.strip() for t in os.getenv("FDE_SEED_VERSION_TAGS", "v0.7,fde-v07").split(",") if t.strip()]
 CAMP_VERSION_LABEL = os.getenv("FDE_CAMP_VERSION_LABEL", "v0.3")
+LEGACY_CAMP_DISPLAY_NAMES = ("FDE 0期 v0.3",)
 
 # Object storage key prefixes
 COURSE_MEDIA_SHARED_PREFIX = "documents/shared/course-media/"

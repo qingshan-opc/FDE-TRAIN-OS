@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
 import { useAuth } from "./lib/auth";
+import { isWeChatBrowser } from "./lib/wechat";
 import { Skeleton } from "./components/Skeleton";
+import { WeChatBindRedirect } from "./components/WeChatBindRedirect";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Landing } from "./app/Landing";
 import { EnterprisePage } from "./app/EnterprisePage";
@@ -43,10 +45,12 @@ import { ChannelSettings } from "./author/settings/ChannelSettings";
 import { PricingSettings } from "./author/settings/PricingSettings";
 import { CourseShop } from "./app/CourseShop";
 import { PartnerLoginPage } from "./partner/PartnerLogin";
+import { PartnerActivatePage } from "./partner/PartnerActivate";
 import { PartnerHome } from "./partner/PartnerHome";
 import { PartnerDashboard, PartnerShares } from "./partner/PartnerDashboard";
 import { PartnerPosters } from "./partner/PartnerPosters";
 import { FinanceDashboard } from "./author/FinanceDashboard";
+import { RequireDesktopLearn } from "./app/DesktopLearnGate";
 
 function RequireAuth({
   children,
@@ -76,6 +80,9 @@ function RequireAuth({
   }
   if (needsWxBind && (user.role === "learner" || user.role === "partner")) {
     const next = `${location.pathname}${location.search || ""}`;
+    if (isWeChatBrowser()) {
+      return <WeChatBindRedirect next={next} />;
+    }
     const q = new URLSearchParams({ bind: "1" });
     if (next && next !== "/" && next !== "/login") q.set("next", next);
     return <Navigate to={`/login?${q.toString()}`} replace />;
@@ -106,6 +113,7 @@ export default function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/partner/login" element={<PartnerLoginPage />} />
+      <Route path="/partner/activate" element={<PartnerActivatePage />} />
       <Route path="/verify" element={<VerifyCertificate />} />
       <Route path="/verify/:certId" element={<VerifyCertificate />} />
       <Route path="/chain" element={<ChainExplorer />} />
@@ -117,7 +125,9 @@ export default function App() {
         path="/app"
         element={
           <RequireAuth>
-            <LearnerHome />
+            <RequireDesktopLearn>
+              <LearnerHome />
+            </RequireDesktopLearn>
           </RequireAuth>
         }
       />
@@ -125,7 +135,9 @@ export default function App() {
         path="/app/day/:day"
         element={
           <RequireAuth>
-            <LearnerHome />
+            <RequireDesktopLearn>
+              <LearnerHome />
+            </RequireDesktopLearn>
           </RequireAuth>
         }
       />
@@ -133,7 +145,9 @@ export default function App() {
         path="/app/sim/:day/:capsuleId"
         element={
           <RequireAuth>
-            <CapsuleSimLabPage />
+            <RequireDesktopLearn>
+              <CapsuleSimLabPage />
+            </RequireDesktopLearn>
           </RequireAuth>
         }
       />
@@ -141,7 +155,9 @@ export default function App() {
         path="/app/courses"
         element={
           <RequireAuth>
-            <CoursePicker />
+            <RequireDesktopLearn>
+              <CoursePicker />
+            </RequireDesktopLearn>
           </RequireAuth>
         }
       />

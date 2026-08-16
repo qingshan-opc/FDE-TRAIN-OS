@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import { BrandLogo } from "./BrandLogo";
 import { LearnerContextBar } from "./LearnerContextBar";
+import { LearnerTabBar } from "./LearnerTabBar";
 import { useToast } from "./Toast";
+import { isMobilePhoneUa } from "../lib/device";
 
 function navUserLabel(user: { display_name?: string; email?: string } | null | undefined): string {
   if (!user) return "学员";
@@ -70,17 +72,28 @@ export function Nav({
   };
 
   const userLabel = navUserLabel(user);
+  const showTabBar = variant === "learner";
 
   return (
-    <header
-      className={`sticky top-0 z-[100] flex h-[var(--nav-h)] items-center border-b border-fde-border bg-white/90 px-4 backdrop-blur-md${
-        variant === "learner-workbench" ? " nav-workbench" : " justify-between"
-      }`}
-    >
+    <>
+      <header
+        className={`sticky top-0 z-[100] flex h-[var(--nav-h)] items-center border-b border-fde-border bg-white/90 px-4 backdrop-blur-md${
+          variant === "learner-workbench" ? " nav-workbench" : " justify-between"
+        }`}
+      >
       <div className="flex items-center gap-3 nav-workbench__brand">
-        <BrandLogo to={variant === "author" ? "/author" : defaultHome || "/app/courses"} name="青山在" />
+        <BrandLogo
+          to={
+            variant === "author"
+              ? "/author"
+              : isMobilePhoneUa()
+                ? "/app/shop"
+                : defaultHome || "/app/courses"
+          }
+          name="青山在"
+        />
         {variant !== "learner-workbench" && (
-          <span className="rounded-full bg-fde-accent/10 px-2 py-0.5 text-xs font-medium text-fde-accent">
+          <span className="app-nav-badge rounded-full bg-fde-accent/10 px-2 py-0.5 text-xs font-medium text-fde-accent">
             {variant === "author" ? "教研台" : "学习平台"}
           </span>
         )}
@@ -106,7 +119,9 @@ export function Nav({
             ))}
           </select>
         )}
-        {variant !== "learner-workbench" && campId && camps?.length <= 1 && <span className="font-mono">{campId}</span>}
+        {variant === "author" && campId && (camps?.length ?? 0) <= 1 && (
+          <span className="font-mono">{campId}</span>
+        )}
         {(portals || [])
           .filter((p) => (variant === "author" ? p.kind !== "author" : p.kind !== "learner"))
           .map((p) => (
@@ -175,6 +190,10 @@ export function Nav({
                     去做作业
                   </button>
                 )}
+                <button type="button" role="menuitem" className="app-nav-user-item" onClick={() => goTo("/app/shop")}>
+                  <NavIconShop />
+                  选购课程
+                </button>
                 <button type="button" role="menuitem" className="app-nav-user-item" onClick={() => goTo("/app/profile")}>
                   <NavIconUser />
                   个人中心
@@ -197,7 +216,9 @@ export function Nav({
           )}
         </div>
       </div>
-    </header>
+      </header>
+      {showTabBar ? <LearnerTabBar /> : null}
+    </>
   );
 }
 
@@ -206,6 +227,15 @@ function NavIconUser() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
       <circle cx="12" cy="8" r="4" />
       <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+    </svg>
+  );
+}
+
+function NavIconShop() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+      <path d="M6 8h12l-1 12H7L6 8z" />
+      <path d="M9 8V7a3 3 0 0 1 6 0v1" />
     </svg>
   );
 }

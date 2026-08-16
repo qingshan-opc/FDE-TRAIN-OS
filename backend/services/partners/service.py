@@ -141,7 +141,7 @@ def match_commission_rate_bps(org_id: str, paid_users_before: int) -> int:
             (org_id, paid_users_before),
         )
         row = cur.fetchone()
-        return int(row["rate_bps"]) if row else 0
+        return int(row["rate_bps"]) if row else 3000
 
 
 def validate_tier_rate(rate_bps: int) -> None:
@@ -303,7 +303,7 @@ def org_dashboard_stats(org_id: str) -> dict[str, Any]:
         cur.execute(
             """
             SELECT COALESCE(SUM(share_fen),0) AS s FROM profit_share_orders
-            WHERE org_id=? AND wx_state IN ('pending','processing')
+            WHERE org_id=? AND wx_state IN ('held','pending','processing','pending_manual','submitting')
             """,
             (org_id,),
         )
@@ -337,3 +337,257 @@ def list_org_attributions(org_id: str, limit: int = 100) -> list[dict[str, Any]]
             (org_id, limit),
         )
         return [dict(r) for r in cur.fetchall()]
+
+
+ACTIVATION_CODE_RE = re.compile(r"^[A-Z0-9]{6,16}$")
+
+
+def _gen_activation_code() -> str:
+    # Avoid ambiguous chars (0/O, 1/I)
+    alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    from secrets import choice
+
+    return "".join(choice(alphabet) for _ in range(8))
+
+
+def list_activation_codes(limit: int = 100) -> list[dict[str, Any]]:
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT pac.*,
+                   u.email AS used_by_email,
+                   u.display_name AS used_by_name,
+                   o.name AS org_name
+            FROM partner_activation_codes pac
+            LEFT JOIN users u ON u.id = pac.used_by
+            LEFT JOIN organizations o ON o.id = pac.org_id
+            ORDER BY pac.created_at DESC
+            LIMIT ?
+            """,
+            (limit,),
+        )
+        return [dict(r) for r in cur.fetchall()]
+
+
+def create_activation_code(
+    *,
+    created_by: str | None,
+    note: str | None = None,
+    expires_at: str | None = None,
+    code: str | None = None,
+) -> dict[str, Any]:
+    raw = normalize_code(code) if code else _gen_activation_code()
+    if not ACTIVATION_CODE_RE.match(raw):
+        raise ValueError("开通码格式无效（6–16 位大写字母数字）")
+    aid = f"pac-{uuid4().hex[:12]}"
+    with db_cursor() as cur:
+        cur.execute("SELECT id FROM partner_activation_codes WHERE UPPER(code)=?", (raw,))
+        if cur.fetchone():
+            if code:
+                raise ValueError("开通码已存在")
+            for _ in range(8):
+                raw = _gen_activation_code()
+                cur.execute("SELECT id FROM partner_activation_codes WHERE UPPER(code)=?", (raw,))
+                if not cur.fetchone():
+                    break
+            else:
+                raise ValueError("无法生成唯一开通码")
+        cur.execute(
+            """
+            INSERT INTO partner_activation_codes (
+              id, code, note, status, max_uses, used_count, expires_at, created_by, created_at
+            ) VALUES (?,?,?,?,1,0,?,?,?)
+            """,
+            (aid, raw, (note or "").strip() or None, "active", expires_at, created_by, now_iso()),
+        )
+        cur.execute("SELECT * FROM partner_activation_codes WHERE id=?", (aid,))
+        row = cur.fetchone()
+        return dict(row) if row else {}
+
+
+def get_activation_code(code: str) -> dict[str, Any] | None:
+    c = normalize_code(code)
+    if not c:
+        return None
+    with db_cursor() as cur:
+        cur.execute(
+            "SELECT * FROM partner_activation_codes WHERE UPPER(code)=?",
+            (c,),
+        )
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+
+def user_has_org_account(user_id: str) -> bool:
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT 1
+            FROM org_accounts oa
+            JOIN users u ON LOWER(u.email) = LOWER(oa.email)
+            WHERE u.id=? AND oa.status='active'
+            LIMIT 1
+            """,
+            (user_id,),
+        )
+        return bool(cur.fetchone())
+
+
+def _unique_invite_code(cur: Any, preferred: str) -> str:
+    code = preferred
+    for _ in range(8):
+        cur.execute("SELECT 1 FROM invite_codes WHERE UPPER(code)=?", (code,))
+        if not cur.fetchone():
+            return code
+        code = f"P{uuid4().hex[:10].upper()}"
+    raise RuntimeError("unable to allocate unique invite code")
+
+
+def activate_partner_with_code(
+    *,
+    user_id: str,
+    code: str,
+    org_name: str | None = None,
+) -> dict[str, Any]:
+    """Redeem a one-time activation code: create org + org_accounts for this user.
+
+    Keeps users.role unchanged (learner stays learner) so learning portal remains.
+    """
+    if user_has_org_account(user_id):
+        raise ValueError("已是机构账号")
+
+    pac = get_activation_code(code)
+    if not pac:
+        raise ValueError("开通码无效")
+    if pac.get("status") != "active":
+        raise ValueError("开通码已失效")
+    max_uses = int(pac.get("max_uses") or 1)
+    used_count = int(pac.get("used_count") or 0)
+    if used_count >= max_uses:
+        raise ValueError("开通码已使用")
+    if pac.get("expires_at"):
+        from datetime import datetime, timezone
+
+        exp = pac["expires_at"]
+        if hasattr(exp, "timestamp") and exp.timestamp() < datetime.now(timezone.utc).timestamp():
+            raise ValueError("开通码已过期")
+
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            SELECT id, email, display_name, password_hash, wx_mp_openid, wx_nickname, role
+            FROM users WHERE id=?
+            """,
+            (user_id,),
+        )
+        user = cur.fetchone()
+        if not user:
+            raise ValueError("用户不存在")
+        user = dict(user)
+        email = str(user.get("email") or "").strip()
+        if not email:
+            raise ValueError("账号缺少邮箱，无法开通机构")
+        pw = user.get("password_hash")
+        if not pw:
+            raise ValueError("账号状态异常，请联系运营")
+
+        # Re-check race: another redeem may have completed
+        cur.execute(
+            """
+            SELECT 1 FROM org_accounts oa
+            WHERE LOWER(oa.email)=LOWER(?) AND oa.status='active'
+            LIMIT 1
+            """,
+            (email,),
+        )
+        if cur.fetchone():
+            raise ValueError("已是机构账号")
+
+        # Lock activation row
+        cur.execute(
+            """
+            SELECT * FROM partner_activation_codes
+            WHERE id=? AND status='active'
+            FOR UPDATE
+            """,
+            (pac["id"],),
+        )
+        locked = cur.fetchone()
+        if not locked:
+            raise ValueError("开通码已失效")
+        locked = dict(locked)
+        if int(locked.get("used_count") or 0) >= int(locked.get("max_uses") or 1):
+            raise ValueError("开通码已使用")
+
+        display = (user.get("display_name") or user.get("wx_nickname") or email.split("@")[0] or "机构").strip()
+        name = (org_name or "").strip() or f"{display[:40]}的机构"
+        oid = f"org-u-{uuid4().hex[:12]}"
+        openid = (user.get("wx_mp_openid") or "").strip() or None
+        nickname = (user.get("wx_nickname") or "").strip() or None
+        ts = now_iso()
+
+        cur.execute(
+            """
+            INSERT INTO organizations (
+              id, name, status, contact_name, contact_email,
+              wx_receiver_type, wx_receiver_account, wx_receiver_name,
+              created_at, updated_at
+            ) VALUES (?,?,?,?,?,?,?,?,?,?)
+            """,
+            (
+                oid,
+                name,
+                "active",
+                display[:64],
+                email,
+                "PERSONAL_OPENID" if openid else None,
+                openid,
+                nickname or (display if openid else None),
+                ts,
+                ts,
+            ),
+        )
+        oa_id = f"oa-{uuid4().hex[:12]}"
+        cur.execute(
+            """
+            INSERT INTO org_accounts (id, org_id, email, password_hash, display_name, status, created_at)
+            VALUES (?,?,?,?,?,?,?)
+            """,
+            (oa_id, oid, email, pw, display[:64], "active", ts),
+        )
+        # Default commission: 30% for invite-link attributed orders
+        cur.execute(
+            """
+            INSERT INTO commission_tiers (id, org_id, min_paid_users, rate_bps, created_at)
+            VALUES (?,?,?,?,?)
+            """,
+            (f"ct-{uuid4().hex[:12]}", oid, 0, 3000, ts),
+        )
+        preferred = f"P{re.sub(r'[^A-Za-z0-9]', '', user_id).upper()[:10]}" or f"P{uuid4().hex[:10].upper()}"
+        invite = _unique_invite_code(cur, preferred if CODE_RE.match(preferred) else f"P{uuid4().hex[:10].upper()}")
+        cur.execute(
+            """
+            INSERT INTO invite_codes (
+              id, org_id, code, offering_id, status, max_uses, used_count, expires_at, created_by, created_at
+            ) VALUES (?,?,?,?,?,?,0,?,?,?)
+            """,
+            (f"ic-{uuid4().hex[:12]}", oid, invite, None, "active", None, None, user_id, ts),
+        )
+        new_used = int(locked.get("used_count") or 0) + 1
+        new_status = "used" if new_used >= int(locked.get("max_uses") or 1) else "active"
+        cur.execute(
+            """
+            UPDATE partner_activation_codes
+            SET used_count=?, status=?, used_by=?, used_at=?, org_id=?
+            WHERE id=?
+            """,
+            (new_used, new_status, user_id, ts, oid, pac["id"]),
+        )
+
+    org = get_organization(oid) or {}
+    return {
+        "org": org,
+        "org_id": oid,
+        "invite_code": invite,
+        "activation_code": normalize_code(code),
+    }

@@ -25,9 +25,9 @@ resources:
   url: /course-assets/bootcamp/day-01/agent-prompts/02-ui.md
 - id: role-handoff-map
   title: 速查卡 · 六岗位交接地图
-  kind: doc
+  kind: diagram
   summary: 每个岗位接收什么、交付什么、下一步切换到谁
-  url: /course-assets/bootcamp/day-01/section-02-software-flow/resources.md
+  url: /course-assets/bootcamp/day-01/section-02-software-flow/role-handoff-map.svg
 capsule_extra:
   c1:
     resource_ids:
@@ -72,6 +72,27 @@ capsule_extra:
         - 因为后端永远不重要
       - 1
       - 原型让小白快速看到成果并验证方向，后续再由前端、后端、测试和运维逐步把它变成真实系统。
+    local_prep:
+      skill_id: fde-local-prep
+      template_resource_id: trae-download
+      featured_resource_ids:
+      - trae-download
+      domain_picker:
+        enabled: true
+        memory_key: professional_domain
+        label: 我最熟悉的专业领域
+        options:
+        - 财务
+        - HR
+        - 运营
+        - 销售
+        - 教育
+        allow_other: true
+      checklist:
+      - 已在上方课程资源处下载 TRAE 国内版，并完成安装与登录
+      - 已选择自己真正熟悉的专业领域
+      - 已写下该领域的典型用户、常看数据和一条能判断对错的业务规则
+      - 能用一句话说出：我负责领域判断和验收，AI 负责技术执行
   c2:
     resource_ids:
     - role-handoff-map
@@ -129,8 +150,6 @@ capsule_extra:
   c3:
     resource_ids:
     - day1-agent-pack
-    - agent-pm
-    - agent-ui
     media:
     - kind: video
       title: 口播课件 · 在 TRAE 创建六岗位团队
@@ -213,7 +232,11 @@ capsule_extra:
       - 为什么要关闭“可被其他智能体调用”？
       - 提示词应该复制文件的哪一部分？
       template_resource_id: day1-agent-pack
+      template_label: 下载提示词包
+      prompt_title: 请按照以下步骤，完成智能体团队的创建。
+      hide_copy: true
   c4:
+    resource_ids: []
     media:
     - kind: video
       title: 口播课件 · 从专业领域选择第一个项目
@@ -253,9 +276,71 @@ capsule_extra:
         - 因为系统以后不能接真实数据
       - 1
       - 第一阶段先验证方向和界面，避免把个人信息或企业敏感数据直接交给工具。
+    local_prep:
+      skill_id: fde-local-prep
+      prompt_title: 请按以下步骤，用追问生成 PROJECT_BRIEF.md
+      hide_copy: true
+      codex_prompt: |+
+        先在 TRAE 对话框切换到 @产品经理。下面必须逐段发送：每段完成、出现等待点后再继续。现在不要生成 PRD。
+
+        【第 1 段｜锁定领域，一次只问 1 题】
+
+        我的专业领域是{{professional_domain}}。一个适合今天的方向例如：{{domain_example}}。
+
+        现在不要生成任何文档。请用小白能听懂的话，一次只问我 1 个问题；每题给一个结合「{{professional_domain}}」的回答示例。我回答后请先用我的原意复述，再问下一题。
+
+        请先问：在{{professional_domain}}里，谁会每天打开这个页面？（只选一类主要用户）
+
+        【第 2 段｜按清单追问，仍一次一题】
+
+        请继续一次只问一题，直到问清下面全部项。缺哪项就问哪项，不要跳着问，不要一次抛出多题，不要生成文档。
+        1. 主要使用者（一类人）
+        2. 当前怎样工作（用哪些表、群、口头催）
+        3. 最痛的一个问题（反复发生、能判断对错）
+        4. 需要展示的数据或状态（只写类型和规则，不要真实敏感数据）
+        5. 第一版必须做（一个核心问题，三到五个页面区块）
+        6. 第一版暂时不做
+        7. 我希望看到的结果
+
+        【第 3 段｜确认后再写项目卡】
+
+        请先用不超过半页复述：专业领域、用户、痛点、第一版范围。输出后停止，等我回复“可以生成项目卡”。
+
+        【第 4 段｜保存到 design/PROJECT_BRIEF.md】
+
+        我回复“可以生成项目卡”后，先创建 design 目录（若还不存在），再保存 design/PROJECT_BRIEF.md。不要写到工作区根目录，也不要提前创建 frontend、backend 或其他工程目录。严格使用下面结构，用我确认过的内容填写，不要添加我没说过的功能：
+
+        # 项目名称
+
+        ## 我的专业领域
+
+        ## 主要使用者
+
+        ## 当前工作流程
+
+        ## 最痛的一个问题
+
+        ## 需要展示的数据或状态
+
+        ## 第一版必须做
+
+        ## 第一版暂时不做
+
+        ## 我希望看到的结果
+
+        项目名称必须能让外行人听出“给谁用、解决什么问题”。只写数据类型和业务规则，不写真实姓名、电话、身份证、密码或公司敏感明细。最后写一句：下一岗位仍是产品经理，下一节将读取 design/PROJECT_BRIEF.md 生成 design/PRD.md。
+      checklist:
+      - 已切换到 @产品经理
+      - 产品经理一次只问一个问题，并在每次回答后复述
+      - 已回复“可以生成项目卡”
+      - 已创建 design 目录，且 design/PROJECT_BRIEF.md 存在
+      - 项目名称能看出给谁用、解决什么问题
+      suggested_questions:
+      - 我想不到项目怎么办？
+      - 产品经理一次问了很多问题怎么办？
+      - 项目名称太空泛怎么办？
   c5:
-    resource_ids:
-    - agent-pm
+    resource_ids: []
     media:
     - kind: video
       title: 口播课件 · 与产品经理澄清需求
@@ -297,12 +382,14 @@ capsule_extra:
       - AI 可以整理需求，但最终确认做什么、不做什么以及怎样算合格，仍由学员负责。
     local_prep:
       skill_id: fde-local-prep
+      prompt_title: 请按照流程文档操作
+      hide_copy: true
       codex_prompt: '先在 TRAE 对话框切换到 @产品经理。下面内容必须逐段发送，每段完成并出现等待点后再继续。
 
 
         【第 1 段｜介绍领域，不生成文档】
 
-        我熟悉的专业领域是〈财务 / HR / 运营 / 销售 / 教育 / 其他〉。请先读取 PROJECT_BRIEF.md。现在不要生成 PRD。用小白能听懂的话，一次只问我 1 个问题；每题给一个回答示例，我回答后请先复述，再问下一题。
+        我熟悉的专业领域是〈财务 / HR / 运营 / 销售 / 教育 / 其他〉。请先读取 design/PROJECT_BRIEF.md。现在不要生成 PRD。用小白能听懂的话，一次只问我 1 个问题；每题给一个回答示例，我回答后请先复述，再问下一题。
 
 
         【第 2 段｜检查是否问全】
@@ -317,7 +404,7 @@ capsule_extra:
 
         【第 4 段｜生成正式 PRD】
 
-        我回复“确认需求”后，请生成并保存完整 PRD.md。不要添加摘要中没有确认的功能。最后写明：下一岗位是 UI，需要读取 PRD.md。
+        我回复“确认需求”后，请生成并保存完整 design/PRD.md。不要写到工作区根目录。不要添加摘要中没有确认的功能。最后写明：下一岗位是 UI，需要读取 design/PRD.md。
 
         '
       checklist:
@@ -325,12 +412,11 @@ capsule_extra:
       - 产品经理一次只问一个问题，并在每次回答后复述确认
       - 需求摘要覆盖用户、问题、数据、流程、范围和验收标准
       - 已由学员本人回复“确认需求”
-      - 工作区根目录存在 PRD.md
+      - 已创建 design 目录，且 design/PRD.md 存在
       suggested_questions:
       - 产品经理一次问了很多问题怎么办？
       - 我不知道验收标准怎么写怎么办？
       - 产品经理加入了我没说过的功能怎么办？
-      template_resource_id: agent-pm
   c6:
     resource_ids:
     - agent-ui
@@ -381,7 +467,7 @@ capsule_extra:
 
         【第 1 段｜切换 @UI 并复述需求】
 
-        切换到 @UI，发送：请读取 PRD.md。先用 5 句话复述目标用户、核心问题、主要操作、页面范围和验收标准。现在不要生成原型，等我确认理解一致。
+        切换到 @UI，发送：请读取 design/PRD.md。先用 5 句话复述目标用户、核心问题、主要操作、页面范围和验收标准。现在不要生成原型，等我确认理解一致。不要到工作区根目录寻找 PRD。
 
 
         【第 2 段｜UI 逐题确认设计】
@@ -391,26 +477,26 @@ capsule_extra:
 
         【第 3 段｜UI 生成交付物】
 
-        请先展示页面结构和操作路径，等我回复“确认页面方案”后，再生成 design-spec.md、ui-flow.md 和可直接打开的 ui-prototype.html。只用演示数据，不连接真实后端。
+        请先展示页面结构和操作路径，等我回复“确认页面方案”后，再生成 design/design-spec.md、design/ui-flow.md 和可直接打开的 design/ui-prototype.html。全部放在 design 目录，不要写到工作区根目录。只用演示数据，不连接真实后端。
 
 
         【第 4 段｜回到 @产品经理验收】
 
-        切换回 @产品经理，发送：请读取 PRD.md、design-spec.md、ui-flow.md 和 ui-prototype.html，按原始需求逐条输出“通过/不通过、对应需求、责任岗位”。不要直接修改 UI 文件。
+        切换回 @产品经理，发送：请读取 design/PRD.md、design/design-spec.md、design/ui-flow.md 和 design/ui-prototype.html，按原始需求逐条输出“通过/不通过、对应需求、责任岗位”。不要直接修改 UI 文件。
 
 
         【第 5 段｜不通过时迭代】
 
-        如有不通过项，切回 @UI，只处理产品经理列出的问题；完成后再次回到 @产品经理复验。全部通过后，把三次切换和验收结果写入 day1-handoff-log.md。
+        如有不通过项，切回 @UI，只处理产品经理列出的问题；完成后再次回到 @产品经理复验。全部通过后，把三次切换和验收结果写入 design/day1-handoff-log.md。
 
         '
       checklist:
       - UI 已先复述 PRD，学员确认后才开始设计
-      - 工作区存在 design-spec.md、ui-flow.md、ui-prototype.html
-      - ui-prototype.html 可直接打开并产生可见交互
+      - design 目录存在 design-spec.md、ui-flow.md、ui-prototype.html
+      - design/ui-prototype.html 可直接打开并产生可见交互
       - 已切换回 @产品经理按 PRD 验收
       - 不通过项已回到 @UI 修改并完成复验
-      - day1-handoff-log.md 记录了岗位、输入、输出和验收结果
+      - design/day1-handoff-log.md 记录了岗位、输入、输出和验收结果
       suggested_questions:
       - UI 没读 PRD 就直接生成页面怎么办？
       - 原型可以使用真实公司数据吗？

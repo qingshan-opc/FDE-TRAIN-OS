@@ -15,6 +15,8 @@
 
 创建后通过 `@岗位名称` 手动切换。六岗位之间通过工作区文件交接，不让智能体自动互相调用。
 
+Day 1 按渐进式披露只使用 `design/` 目录：`PROJECT_BRIEF.md`、`PRD.md`、`design-spec.md`、`ui-flow.md`、`ui-prototype.html` 都写在 `design/` 下，不要堆在工作区根目录。`frontend/`、`backend/` 留给后续课节再创建。
+
 ```text
 @产品经理 → @UI → @产品经理验收 UI
 → @前端 → @后端 → @测试

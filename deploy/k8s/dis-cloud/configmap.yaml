@@ -30,6 +30,7 @@ data:
   DEEPSEEK_API_BASE: https://api.deepseek.com
   DEEPSEEK_MODEL: deepseek-v4-flash
   WECHAT_PAY_PROFIT_SHARING: "1"
+  WECHAT_PAY_SHARE_HOLD_DAYS: "7"
   FDE_DATA_DIR: /data
   FDE_WORKSPACE_ROOT: /data/workspaces
   FDE_ARTIFACT_ROOT: /data/artifacts

@@ -17,6 +17,7 @@ import {
   message,
 } from "antd";
 import { partnerApi, ApiError, type PartnerReceiverStatus } from "../lib/api";
+import { profitShareStateLabel, SHARE_HOLD_COPY } from "../lib/billingLabels";
 import { Skeleton } from "../components/Skeleton";
 import { ErrorState } from "../components/ErrorState";
 import { fenYuan, formatPartnerTime, partnerIdentity, shortenId } from "./format";
@@ -154,9 +155,17 @@ export function PartnerDashboard() {
           {String(data.org.name || "机构看板")}
         </Typography.Title>
         <Typography.Paragraph type="secondary" className="partner-dash__lead">
-          分账比例由平台运营配置。归因学员付费后，将分账至本机构绑定的个人微信。
+          分账比例由平台运营配置。学员通过本机构邀请链接注册并付费后计入渠道。
         </Typography.Paragraph>
       </div>
+
+      <Alert
+        type="info"
+        showIcon
+        style={{ marginBottom: 12 }}
+        message={SHARE_HOLD_COPY.org.message}
+        description={SHARE_HOLD_COPY.org.description}
+      />
 
       <Card size="small" className="partner-dash__bind">
         <Space direction="vertical" style={{ width: "100%" }} size="middle">
@@ -165,7 +174,7 @@ export function PartnerDashboard() {
               type="warning"
               showIcon
               message="尚未绑定微信收款账号"
-              description="请使用个人微信扫码授权。仅当学员通过本机构邀请链接注册并付费时，才会向该微信分账。"
+              description="请使用个人微信扫码授权。学员通过本机构邀请链接注册并付费后，满 7 天分账到该微信。"
             />
           )}
           {bound && (
@@ -211,7 +220,7 @@ export function PartnerDashboard() {
         </Col>
         <Col xs={12} md={6}>
           <Card size="small" className="partner-dash__stat">
-            <Statistic title="已分账" value={fenYuan(s.shared_fen)} prefix="¥" />
+            <Statistic title="已到账" value={fenYuan(s.shared_fen)} prefix="¥" />
           </Card>
         </Col>
       </Row>
@@ -369,7 +378,12 @@ export function PartnerShares() {
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
 
   return (
-    <Card title="分账明细" size="small" className="partner-dash__list-card">
+    <Card
+      title="分账明细"
+      extra={<Typography.Text type="secondary">满 7 天到账</Typography.Text>}
+      size="small"
+      className="partner-dash__list-card"
+    >
       {items.length === 0 ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无分账记录" />
       ) : isMobile ? (
@@ -378,7 +392,7 @@ export function PartnerShares() {
             <article key={String(row.id)} className="partner-mobile-item">
               <div className="partner-mobile-item__head">
                 <div className="partner-mobile-item__title">¥{fenYuan(row.share_fen)}</div>
-                <div className="partner-mobile-item__badge">{String(row.wx_state || "—")}</div>
+                <div className="partner-mobile-item__badge">{profitShareStateLabel(String(row.wx_state || ""))}</div>
               </div>
               <div className="partner-mobile-item__sub" title={String(row.user_email || "")}>
                 {shortenId(String(row.user_email || "—"), 28)}
@@ -436,7 +450,7 @@ export function PartnerShares() {
               align: "right",
               render: (_, r) => `¥${fenYuan(r.share_fen)}`,
             },
-            { title: "状态", dataIndex: "wx_state", width: 100 },
+            { title: "状态", dataIndex: "wx_state", width: 160, render: (v: string) => profitShareStateLabel(v) },
             {
               title: "时间",
               dataIndex: "created_at",

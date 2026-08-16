@@ -39,3 +39,15 @@ export function wechatMpEntryUrl(nextPath: string, invite?: string | null): stri
   if (invite && invite.trim()) q.set("invite", invite.trim());
   return `/api/v1/auth/wechat/mp-entry?${q.toString()}`;
 }
+
+/** Silent JSAPI payer oauth — does not switch the logged-in account. */
+export function wechatJsapiOpenidUrl(nextPath = "/app/shop"): string {
+  const next = sanitizeAppNext(nextPath, "/app/shop");
+  return `/api/v1/auth/wechat/jsapi-openid?next=${encodeURIComponent(next)}`;
+}
+
+/** Bind current WeChat to the logged-in account — does not switch login. */
+export function wechatBindOauthUrl(nextPath = "/app/invite"): string {
+  const next = sanitizeAppNext(nextPath, "/app/invite");
+  return `/api/v1/auth/wechat/bind-oauth?next=${encodeURIComponent(next)}`;
+}

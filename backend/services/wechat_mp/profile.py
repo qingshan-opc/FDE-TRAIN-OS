@@ -17,6 +17,24 @@ log = logging.getLogger("fde.wechat_mp.profile")
 PLACEHOLDER_NAMES = frozenset({"", "微信用户", "学员", "用户", "分销收款"})
 
 
+def decode_wechat_text(value: str | None) -> str:
+    """Repair WeChat sns/userinfo nicknames that arrived as Latin-1 mojibake (e.g. å¾é¹ → 徐鸿)."""
+    text = (value or "").strip()
+    if not text:
+        return ""
+    has_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in text)
+    has_latin1 = any("\u00c0" <= ch <= "\u00ff" for ch in text)
+    if has_cjk or not has_latin1:
+        return text
+    try:
+        repaired = text.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+    if any("\u4e00" <= ch <= "\u9fff" for ch in repaired):
+        return repaired.strip()
+    return text
+
+
 def is_placeholder_display_name(name: str | None) -> bool:
     n = (name or "").strip()
     if not n:
@@ -39,6 +57,8 @@ def fetch_sns_userinfo(access_token: str, openid: str) -> dict[str, Any]:
         if data.get("errcode"):
             log.warning("sns/userinfo failed: %s", data)
             return {}
+        if isinstance(data, dict) and data.get("nickname"):
+            data["nickname"] = decode_wechat_text(str(data.get("nickname")))
         return data if isinstance(data, dict) else {}
     except Exception as exc:
         log.warning("sns/userinfo request failed: %s", exc)
@@ -139,7 +159,7 @@ def apply_wechat_profile(
     Never overwrites a non-placeholder display_name or an existing avatar.
     """
     changed: dict[str, Any] = {"display_name": False, "avatar": False}
-    nick = (nickname or "").strip()[:64] or None
+    nick = decode_wechat_text(nickname)[:64] or None
 
     with db_cursor() as cur:
         cur.execute("SELECT display_name, wx_nickname FROM users WHERE id=?", (user_id,))
@@ -148,6 +168,12 @@ def apply_wechat_profile(
         return changed
     row = dict(row)
     current_name = row.get("display_name")
+    repaired_current = decode_wechat_text(current_name)
+    if repaired_current and repaired_current != (current_name or "").strip():
+        with db_cursor() as cur:
+            cur.execute("UPDATE users SET display_name=? WHERE id=?", (repaired_current[:64], user_id))
+        current_name = repaired_current
+        changed["display_name"] = True
 
     if nick:
         with db_cursor() as cur:

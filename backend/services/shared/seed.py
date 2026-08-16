@@ -15,14 +15,17 @@ from services.shared.config import (
     ADMIN_PASSWORD,
     AUTHOR_EMAIL,
     AUTHOR_PASSWORD,
+    CAMP_VERSION_LABEL,
     CURRICULUM_VERSION_TAG,
     DEFAULT_CAMP_ID,
+    DEFAULT_CAMP_NAME,
     DEMO_EMAIL,
     DEMO_PASSWORD,
     FINANCE_EMAIL,
     FINANCE_PASSWORD,
     LEARNER_EMAIL,
     LEARNER_PASSWORD,
+    LEGACY_CAMP_DISPLAY_NAMES,
     LINGZHI_API_KEY,
     PARTNER_DEMO_EMAIL,
     PARTNER_DEMO_PASSWORD,
@@ -59,7 +62,26 @@ def seed_defaults() -> None:
         if not cur.fetchone():
             cur.execute(
                 "INSERT INTO camps (id, name, version, invite_code, lingzhi_api_key, created_at) VALUES (?,?,?,?,?,?)",
-                (DEFAULT_CAMP_ID, "FDE 0期 v0.3", "v0.3", "FDE-DEMO", LINGZHI_API_KEY or None, now_iso()),
+                (DEFAULT_CAMP_ID, DEFAULT_CAMP_NAME, CAMP_VERSION_LABEL, "FDE-DEMO", LINGZHI_API_KEY or None, now_iso()),
+            )
+        placeholders = ",".join("?" * len(LEGACY_CAMP_DISPLAY_NAMES))
+        cur.execute(
+            f"UPDATE camps SET name=? WHERE name IN ({placeholders})",
+            (DEFAULT_CAMP_NAME, *LEGACY_CAMP_DISPLAY_NAMES),
+        )
+        cur.execute("SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='courses'")
+        if cur.fetchone():
+            cur.execute(
+                f"UPDATE courses SET title=? WHERE title IN ({placeholders})",
+                (DEFAULT_CAMP_NAME, *LEGACY_CAMP_DISPLAY_NAMES),
+            )
+        cur.execute(
+            "SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='course_offerings'"
+        )
+        if cur.fetchone():
+            cur.execute(
+                f"UPDATE course_offerings SET title=? WHERE title IN ({placeholders})",
+                (DEFAULT_CAMP_NAME, *LEGACY_CAMP_DISPLAY_NAMES),
             )
         if not SEED_DEMO_USERS:
             return

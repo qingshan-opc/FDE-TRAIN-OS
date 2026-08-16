@@ -33,7 +33,12 @@ def _require_referrer(request: Request) -> AuthUser:
 
 def _register_url(code: str) -> str:
     base = FDE_PUBLIC_BASE_URL.rstrip("/")
-    return f"{base}/login?invite={quote(str(code).strip(), safe='')}"
+    raw = str(code or "").strip()
+    return (
+        f"{base}/api/v1/auth/wechat/mp-entry"
+        f"?next={quote('/app/shop', safe='')}"
+        f"&invite={quote(raw, safe='')}"
+    )
 
 
 @router.get("/api/v1/me/referral")

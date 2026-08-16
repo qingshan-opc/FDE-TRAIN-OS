@@ -8,7 +8,7 @@ from uuid import uuid4
 from services.partners.service import MAX_RATE_BPS, normalize_code
 from services.shared import db_cursor, now_iso
 
-LEARNER_REFERRAL_TIERS: list[tuple[int, int]] = [(0, 2000), (5, 2500), (10, 3000)]
+LEARNER_REFERRAL_TIERS: list[tuple[int, int]] = [(0, 3000)]
 
 
 def match_learner_rate_bps(invite_count: int) -> int:

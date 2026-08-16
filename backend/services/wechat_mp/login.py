@@ -193,7 +193,9 @@ def _find_partner_user_by_openid(openid: str) -> dict[str, Any] | None:
 
 
 def resolve_or_create_user(openid: str, nickname: str | None = None) -> AuthUser:
-    from services.wechat_mp.profile import is_placeholder_display_name
+    from services.wechat_mp.profile import decode_wechat_text, is_placeholder_display_name
+
+    nickname = decode_wechat_text(nickname) or None
 
     _ensure_schema()
     with db_cursor() as cur:
@@ -204,6 +206,13 @@ def resolve_or_create_user(openid: str, nickname: str | None = None) -> AuthUser
         row = cur.fetchone()
         if row:
             row = dict(row)
+            repaired_name = decode_wechat_text(row.get("display_name"))
+            if repaired_name and repaired_name != (row.get("display_name") or "").strip():
+                cur.execute(
+                    "UPDATE users SET display_name=? WHERE id=?",
+                    (repaired_name[:64], row["id"]),
+                )
+                row["display_name"] = repaired_name[:64]
             if nickname and is_placeholder_display_name(row.get("display_name")):
                 cur.execute(
                     "UPDATE users SET display_name=?, wx_nickname=? WHERE id=?",
